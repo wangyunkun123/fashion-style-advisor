@@ -1,0 +1,7 @@
+{
+  "_comment": "旧配置，密钥已失效并移除",
+  "model": "doubao-seedream-5-0-lite-260128",
+  "api_url": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+  "size": "2048x2048",
+  "max_images": 4
+}

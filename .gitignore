@@ -1,0 +1,29 @@
+# OS files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Sensitive - 密钥文件不提交
+.env
+*.local.json
+config/seedream.local.json
+
+# Claude
+.claude/

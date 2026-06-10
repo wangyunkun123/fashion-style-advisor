@@ -41,7 +41,7 @@
 
 ## Git
 - Remote: `git@github.com:wangyunkun123/fashion-style-advisor.git` (SSH)
-- Web: https://github.com/wangyunkun123/fashion-style-advisor (private)
+- Web: https://github.com/wangyunkun123/fashion-style-advisor (public)
 - 用户说"同步"时执行 sync.sh
 
 ## 回答规范

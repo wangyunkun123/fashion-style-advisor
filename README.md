@@ -27,6 +27,7 @@ Fashion/
 │       └── generated/         # AI 生成效果图
 ├── tools/
 │   ├── generate.py            # Seedream 生图脚本
+│   ├── composite.py           # 单品标注合成工具
 │   └── notify.py              # Server酱微信推送脚本
 └── archive/                   # 🗄️ 历史版本（不再使用）
 ```

@@ -479,11 +479,6 @@ def composite(ai_path, placed_items, output_path):
             label_img, (lx, ly) = draw_label(
                 label_data, px - 8, py + th // 2, font_id, font_name, anchor="left"
             )
-        elif edge == 'top':
-            # 标签在缩略图下方
-            label_img, (lx, ly) = draw_label(
-                label_data, px + tw // 2, py + th + 6, font_id, font_name, anchor="below"
-            )
         elif edge == 'bottom':
             # 标签在缩略图上方
             label_img, (lx, ly) = draw_label(
@@ -507,9 +502,6 @@ def composite(ai_path, placed_items, output_path):
         elif edge == 'right':
             start = (px, py + th // 2)
             end = (lx + label_img.width, ly + label_img.height // 2)
-        elif edge == 'top':
-            start = (px + tw // 2, py + th)
-            end = (lx + label_img.width // 2, ly)
         elif edge == 'bottom':
             start = (px + tw // 2, py)
             end = (lx + label_img.width // 2, ly + label_img.height)

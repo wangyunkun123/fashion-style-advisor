@@ -17,6 +17,7 @@
 - `config/seedream.json` — 火山引擎 Seedream API 配置 + Server酱 SendKey
 - `tools/generate.py` — Seedream 生图脚本
 - `tools/notify.py` — 微信推送脚本（Server酱）
+- `系统升级建议.md` — 功能优化建议池，有新想法随时追加
 
 ## 操作指令
 当用户说以下关键词时，执行对应操作：
@@ -24,6 +25,7 @@
 - **"生成效果图"** → 调用 Seedream API 生图 → git push → 调用 tools/notify.py 微信推送（完整流程自动执行）
 - **"同步"/"推送"** → 执行 `bash sync.sh` 推送到 GitHub
 - **"添加新衣服"** → 将图片放入 wardrobe 对应目录，更新服装档案.md 表格
+- **"新想法"/"优化建议"** → 记录到 `系统升级建议.md`，按分类追加，标注日期和优先级
 
 ## API 配置
 - 火山引擎 Ark API: `https://ark.cn-beijing.volces.com/api/plan/v3/images/generations`

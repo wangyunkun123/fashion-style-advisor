@@ -8,6 +8,7 @@
 ```
 Fashion/
 ├── README.md                  # 本文件
+├── 系统升级建议.md              # 功能优化建议池
 ├── sync.sh                    # 一键同步到 GitHub
 ├── config/
 │   └── seedream.json          # 火山引擎 Seedream API 配置

@@ -24,7 +24,7 @@
 ## 操作指令
 - **"推荐穿搭"** → 读取 wardrobe + 天气，给出搭配方案
 - **"生成效果图"** → 完整流程：Seedream生图 → 同步抠图 → composite_v2排版 → git push → 微信推送
-- **"排版"/"合成"** → 运行 `python3 tools/composite_v2.py` 生成 `_方案1.jpg`
+- **"排版"/"合成"** → 运行 `python3 tools/composite_v2.py` 生成 `_直角画册.jpg`
 - **"同步"/"推送"** → 执行 `bash sync.sh` 推送到 GitHub
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing
 - **"新想法"/"优化建议"** → 记录到 `系统升级建议.md`
@@ -37,7 +37,7 @@ python3 tools/enhance_clothing.py --force  # rembg抠图+精修 → wardrobe/enh
 ```
 排版时自动优先使用抠图PNG，回退到增强JPG。
 
-## 排版标准 (composite_v2.py 方案1)
+## 排版标准 (composite_v2.py 直角画册)
 - **风格**：ACOC Lookbook 网格风 — 直角矩形、1px浅灰边框、无圆角无阴影
 - **字体**：Didot (英文标题) + 宋体 (中文) + Georgia/STHeiti (正文)
 - **配色**：豆包视觉API提取AI生图主色调 → COLOR PALETTE 色块
@@ -47,7 +47,7 @@ python3 tools/enhance_clothing.py --force  # rembg抠图+精修 → wardrobe/enh
 ## 生图完整流程
 1. Seedream API 生图 → `outfits/<日期>_<风格>/generated/`
 2. 同步抠图：服装档案映射 → 复制 `_cutout.png` 到 `outfits/.../items/`
-3. `python3 tools/composite_v2.py` → 生成 `_方案1.jpg`
+3. `python3 tools/composite_v2.py` → 生成 `_直角画册.jpg`
 4. `git add -A && git commit && git push`
 5. `python3 tools/notify.py <标题> <GitHub Raw URL> <单品列表>`
 

@@ -25,7 +25,8 @@ Fashion/
 │       ├── prompts/           # 生图提示词
 │       └── generated/         # AI 生成效果图
 ├── tools/
-│   └── generate.py            # Seedream 生图脚本
+│   ├── generate.py            # Seedream 生图脚本
+│   └── notify.py              # Server酱微信推送脚本
 └── archive/                   # 🗄️ 历史版本（不再使用）
 ```
 
@@ -33,9 +34,19 @@ Fashion/
 
 ### 用法
 1. **"推荐穿搭"** → AI 读取 wardrobe + 天气 → 搭配推荐
-2. **"生成效果图"** → AI 调用 config/seedream.json → 火山引擎生图
-3. **"同步"** → 自动执行 sync.sh → 推送到 GitHub
+2. **"生成效果图"** → AI 调用火山引擎 Seedream API 生图 → 保存到 outfits/
+3. **"同步"/"推送"** → 执行 sync.sh 推送到 GitHub
 4. **"添加新衣服"** → AI 更新 wardrobe/ 目录 + 服装档案.md
+
+### 微信推送
+生成效果图后自动通过 **Server酱** 推送到微信，实时收到穿搭效果图通知：
+- 推送脚本：`tools/notify.py`
+- 密钥存储：`config/seedream.local.json`（**已 gitignore，不提交到公开仓库**）
+- 公开配置：`config/seedream.json`（仅含模型名、API 地址，无密钥）
+
+```bash
+python3 tools/notify.py "穿搭名称" "GitHub图片URL" "单品1" "单品2" ...
+```
 
 ### 生图模型
 - **Model**: `doubao-seedream-5.0-lite` (火山引擎 Ark API)

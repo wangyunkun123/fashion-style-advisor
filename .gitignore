@@ -6,7 +6,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
-临时*
+*（用完删除）*
 *.swp
 *.swo
 

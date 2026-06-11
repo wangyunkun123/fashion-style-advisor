@@ -205,28 +205,40 @@ def composite(ai_path,items,output_path):
                 draw.text((rx+16,ty),f'· {kw}',font=f_item,fill=(110,110,108))
                 ty+=36
     # 底部：配色色块 — 从抠图衣服提取颜色（省token）
-    # 底部：配色色块 — 豆包视觉识别
+    # 底部：配色色块 — 豆包视觉识别（缓存结果）
+    cache_file=os.path.join(os.path.dirname(output_path),'.color_cache.json')
     top_colors=[]
-    try:
-        ai_tiny=ai_img.resize((int(ai_w*0.3),int(ai_h*0.3)),Image.LANCZOS).convert('RGB')
-        buf=io.BytesIO(); ai_tiny.save(buf,format='JPEG',quality=70)
-        b64=base64.b64encode(buf.getvalue()).decode('utf-8')
-        payload={'model':'doubao-seed-2.0-code','messages':[{'role':'user','content':[
-            {'type':'image_url','image_url':{'url':f'data:image/jpeg;base64,{b64}'}},
-            {'type':'text','text':'列出这套穿搭的主要5个颜色，用Hex格式每行一个'}
-        ]}],'max_tokens':2000,'temperature':0}
-        data=json.dumps(payload).encode('utf-8')
-        req=urllib.request.Request('https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions',
-            data=data,headers={'Content-Type':'application/json',
-            'Authorization':'Bearer ark-73c10b0a-0549-47fa-9811-39d37b6e452f-a7ac6'})
-        with urllib.request.urlopen(req,timeout=60) as resp:
-            result=json.loads(resp.read().decode('utf-8'))
-            import re as re2
-            hexes=re2.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
-            for h in hexes[:5]:
-                h=h.lstrip('#')
-                top_colors.append((int(h[0:2],16),int(h[2:4],16),int(h[4:6],16)))
-    except: pass
+    # 读缓存
+    if os.path.exists(cache_file):
+        try:
+            cached=json.loads(open(cache_file).read())
+            top_colors=[tuple(c) for c in cached]
+        except: pass
+    # 无缓存则调API
+    if not top_colors:
+        try:
+            ai_tiny=ai_img.resize((int(ai_w*0.3),int(ai_h*0.3)),Image.LANCZOS).convert('RGB')
+            buf=io.BytesIO(); ai_tiny.save(buf,format='JPEG',quality=70)
+            b64=base64.b64encode(buf.getvalue()).decode('utf-8')
+            payload={'model':'doubao-seed-2.0-code','messages':[{'role':'user','content':[
+                {'type':'image_url','image_url':{'url':f'data:image/jpeg;base64,{b64}'}},
+                {'type':'text','text':'列出这套穿搭的主要5个颜色，用Hex格式每行一个'}
+            ]}],'max_tokens':2000,'temperature':0}
+            data=json.dumps(payload).encode('utf-8')
+            req=urllib.request.Request('https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions',
+                data=data,headers={'Content-Type':'application/json',
+                'Authorization':'Bearer ark-73c10b0a-0549-47fa-9811-39d37b6e452f-a7ac6'})
+            with urllib.request.urlopen(req,timeout=60) as resp:
+                result=json.loads(resp.read().decode('utf-8'))
+                import re as re2
+                hexes=re2.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
+                for h in hexes[:5]:
+                    h=h.lstrip('#')
+                    top_colors.append((int(h[0:2],16),int(h[2:4],16),int(h[4:6],16)))
+            # 写缓存
+            if top_colors:
+                open(cache_file,'w').write(json.dumps(top_colors))
+        except: pass
     if not top_colors:
         top_colors=[(40,40,38),(180,180,178),(120,120,118),(220,220,218),(80,80,78)]
     swatch_y=canvas_h-60; swatch_x=cw

@@ -26,5 +26,8 @@ venv/
 *.local.json
 config/seedream.local.json
 
+# 自动生成的增强图片（可重新生成）
+wardrobe/enhanced/
+
 # Claude
 .claude/

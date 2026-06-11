@@ -4,7 +4,7 @@
 将 AI 生成的效果图与原始单品图片合成，在身体对应位置贴上缩略图+标签
 """
 import os, sys, re, glob
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 # ===== 路径配置 =====
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,24 +25,33 @@ def find_font(size=16):
     print("⚠️  未找到中文字体，使用默认字体（中文可能显示为方块）")
     return ImageFont.load_default()
 
-# ===== 品类→身体区域映射 =====
-# zone_name -> (anchor_x%, anchor_y%, thumb_size_px, label_side)
-# label_side: 'left'=标签在缩略图左侧, 'bottom'=标签在下方
-CATEGORY_ZONE = {
-    "HAT-":   {"zone": "head",        "cx": 0.50, "cy": 0.08, "size": 140},
-    "SUN-":   {"zone": "head",        "cx": 0.50, "cy": 0.06, "size": 130},
-    "JK-":    {"zone": "upper_top",   "cx": 0.24, "cy": 0.20, "size": 180},
-    "TS-":    {"zone": "upper_body",  "cx": 0.24, "cy": 0.33, "size": 180},
-    "LS-":    {"zone": "upper_body",  "cx": 0.24, "cy": 0.33, "size": 180},
-    "SHIRT-": {"zone": "upper_body",  "cx": 0.24, "cy": 0.33, "size": 180},
-    "TANK-":  {"zone": "upper_body",  "cx": 0.24, "cy": 0.33, "size": 180},
-    "SH-":    {"zone": "lower_body",  "cx": 0.24, "cy": 0.58, "size": 180},
-    "PT-":    {"zone": "lower_body",  "cx": 0.24, "cy": 0.58, "size": 180},
-    "SHOE-":  {"zone": "feet",       "cx": 0.26, "cy": 0.87, "size": 160},
-    "SOCK-":  {"zone": "feet",       "cx": 0.26, "cy": 0.83, "size": 140},
-    "BAG-":   {"zone": "side_right", "cx": 0.82, "cy": 0.40, "size": 160},
-    "ACC-":   {"zone": "wrist",      "cx": 0.16, "cy": 0.45, "size": 120},
+# ===== 品类→边缘布局映射 =====
+# edge: 贴靠哪条边; order: 越小越靠上/左(-1=最高优先级)
+# size: 缩略图基准像素; 权重越大的品类占用空间越多
+CATEGORY_CONFIG = {
+    # 头部配饰 → 两侧，不挡脸
+    "HAT-":   {"edge": "left",   "size": 240, "order": -1},
+    "SUN-":   {"edge": "right",  "size": 160, "order": -1},
+    # 核心大件 → 左侧，按穿着顺序排列
+    "JK-":    {"edge": "left",   "size": 340, "order": 0},
+    "TS-":    {"edge": "left",   "size": 320, "order": 1},
+    "LS-":    {"edge": "left",   "size": 320, "order": 1},
+    "SHIRT-": {"edge": "left",   "size": 320, "order": 1},
+    "TANK-":  {"edge": "left",   "size": 320, "order": 1},
+    "SH-":    {"edge": "left",   "size": 320, "order": 2},
+    "PT-":    {"edge": "left",   "size": 320, "order": 2},
+    # 配件
+    "ACC-":   {"edge": "left",   "size": 160, "order": 3},
+    # 包 → 右侧
+    "BAG-":   {"edge": "right",  "size": 280, "order": 1},
+    # 鞋袜 → 底部
+    "SHOE-":  {"edge": "bottom", "size": 320, "order": 0},
+    "SOCK-":  {"edge": "bottom", "size": 200, "order": 1},
 }
+
+# 页面边距
+EDGE_PAD = 16
+TITLE_H = 50
 
 
 def find_latest_outfit():
@@ -173,27 +182,32 @@ def find_item_image(items_dir, item):
     return None
 
 
-def get_zone_info(prefix):
-    """获取品类的区域信息"""
-    if prefix in CATEGORY_ZONE:
-        return CATEGORY_ZONE[prefix]
-    # 回退查找
-    for key, val in CATEGORY_ZONE.items():
+def get_item_config(prefix):
+    """获取品类的布局配置"""
+    if prefix in CATEGORY_CONFIG:
+        return CATEGORY_CONFIG[prefix]
+    for key, val in CATEGORY_CONFIG.items():
         if key.startswith(prefix[:2]):
             return val
-    return {"zone": "unknown", "cx": 0.50, "cy": 0.50, "size": 140}
+    return {"edge": "left", "size": 240, "order": 99}
 
 
 def create_thumbnail(img_path, thumb_size):
     """
     创建圆角缩略图，带白边框和阴影
+    - 自动校正 EXIF 旋转
+    - 保持原始宽高比（衣物已在衣橱中统一为正向）
     返回 RGBA PIL Image
     """
     img = Image.open(img_path)
+
+    # EXIF 自动旋转（衣物已经 auto_orient.py 处理过方向）
+    img = ImageOps.exif_transpose(img)
+
     if img.mode not in ('RGB', 'RGBA'):
         img = img.convert('RGBA')
 
-    # 缩放保持宽高比
+    # 缩放保持宽高比（长边适配 thumb_size）
     w, h = img.size
     ratio = thumb_size / max(w, h)
     new_w, new_h = int(w * ratio), int(h * ratio)
@@ -256,111 +270,149 @@ def create_thumbnail(img_path, thumb_size):
 
 def assign_positions(items, ai_width, ai_height):
     """
-    为每个单品计算在 AI 图上的锚点位置
-    同区域多件物品自动错开
-
-    返回: [{item, thumb_img, anchor_x, anchor_y, label_x, label_y}]
+    边缘布局：利用人物四周空间展示服装
+    - 帽子 → 左侧最上（头部左侧）
+    - 外套/上衣/下装 → 左侧垂直排列（核心大件）
+    - 墨镜 → 右侧最上（头部右侧）
+    - 包 → 右侧
+    - 鞋袜 → 底部水平排列
     """
-    # 按区域分组
-    zones = {}
+    edges = {"left": [], "right": [], "bottom": []}
+
     for item in items:
-        zone_info = get_zone_info(item['prefix'])
-        zone_name = zone_info['zone']
-        if zone_name not in zones:
-            zones[zone_name] = {'items': [], 'info': zone_info}
-        zones[zone_name]['items'].append(item)
-        zones[zone_name]['info'] = zone_info  # 用最后一个的配置
+        cfg = get_item_config(item['prefix'])
+        edge = cfg['edge']
+        edges[edge].append({
+            'item': item,
+            'size': cfg['size'],
+            'order': cfg['order'],
+        })
+
+    for edge in edges:
+        edges[edge].sort(key=lambda x: (x['order'], x['item']['id']))
 
     placed = []
+    usable_top = TITLE_H + EDGE_PAD
+    usable_bottom = ai_height - EDGE_PAD
+    usable_height = usable_bottom - usable_top
+    usable_width = ai_width - EDGE_PAD * 2
 
-    # 同区域多 item 偏移策略
-    for zone_name, group in zones.items():
-        zone_items = group['items']
-        info = group['info']
-        base_cx = int(ai_width * info['cx'])
-        base_cy = int(ai_height * info['cy'])
+    # 标签估算高度（根据字号动态）
+    label_est = 60
 
-        n = len(zone_items)
+    def layout_vertical(items_list, edge_name, usable_h):
+        """垂直排列：均匀分布 + 自动压缩"""
+        if not items_list:
+            return []
+        result = []
+        est_heights = [it['size'] + label_est for it in items_list]
+        total = sum(est_heights)
+        if total > usable_h:
+            scale = usable_h / total
+            for i, it in enumerate(items_list):
+                it['size'] = max(120, int(it['size'] * scale))
+                est_heights[i] = it['size'] + label_est
+            total = sum(est_heights)
+        spacing = max(8, (usable_h - total) / (len(items_list) + 1))
+        cur_y = usable_top + spacing
 
-        for i, item in enumerate(zone_items):
-            item_info = get_zone_info(item['prefix'])
-            thumb_size = item_info['size']
-
-            # 多件时垂直偏移
-            if n > 1:
-                spacing = thumb_size + 20
-                offset_y = (i - (n - 1) / 2) * spacing
+        for it in items_list:
+            if edge_name == 'left':
+                px = EDGE_PAD
             else:
-                offset_y = 0
-
-            anchor_x = base_cx
-            anchor_y = base_cy + int(offset_y)
-
-            # 确保不超出图片边界
-            half = thumb_size // 2 + 6  # 含边距
-            anchor_x = max(half, min(ai_width - half, anchor_x))
-            anchor_y = max(half, min(ai_height - half, anchor_y))
-
-            placed.append({
-                'item': item,
-                'thumb_size': thumb_size,
-                'anchor_x': anchor_x,
-                'anchor_y': anchor_y,
+                # 右边缘：预估宽度 ≈ 高度的 60%（衣物竖图通常 3:4~2:3）
+                est_w = int(it['size'] * 0.65)
+                px = ai_width - EDGE_PAD - est_w
+            py = int(cur_y)
+            result.append({
+                'item': it['item'], 'thumb_size': it['size'],
+                'paste_x': px, 'paste_y': py, 'edge': edge_name,
             })
+            cur_y += it['size'] + label_est + spacing
+        return result
+
+    def layout_horizontal(items_list, usable_w):
+        """底部水平排列"""
+        if not items_list:
+            return []
+        result = []
+        est_widths = [it['size'] + label_est for it in items_list]
+        total = sum(est_widths)
+        if total > usable_w:
+            scale = usable_w / total
+            for i, it in enumerate(items_list):
+                it['size'] = max(120, int(it['size'] * scale))
+                est_widths[i] = it['size'] + label_est
+            total = sum(est_widths)
+        spacing = max(8, (usable_w - total) / (len(items_list) + 1))
+        cur_x = EDGE_PAD + spacing
+
+        for it in items_list:
+            py = usable_bottom - it['size']
+            result.append({
+                'item': it['item'], 'thumb_size': it['size'],
+                'paste_x': int(cur_x), 'paste_y': py, 'edge': 'bottom',
+            })
+            cur_x += it['size'] + label_est + spacing
+        return result
+
+    placed.extend(layout_vertical(edges['left'], 'left', usable_height))
+    placed.extend(layout_vertical(edges['right'], 'right', usable_height))
+    placed.extend(layout_horizontal(edges['bottom'], usable_width))
 
     return placed
 
 
-def draw_label(draw, text, x, y, font_id, font_name, max_width=200):
+def draw_label(text, x, y, font_id, font_name, anchor="below"):
     """
-    绘制半透明标签：黑底白字圆角 pill
-    返回标签底部 y 坐标
+    绘制半透明标签 pill
+    anchor: "below"=标签在点下方, "above"=标签在点上方,
+            "right"=在点右侧, "left"=在点左侧
+    返回: (label_image, (paste_x, paste_y))
     """
-    # 测量文字大小
-    bbox_id = draw.textbbox((0, 0), text['id'], font=font_id)
+    bbox_id = ImageDraw.Draw(Image.new('RGBA', (1, 1))).textbbox((0, 0), text['id'], font=font_id)
     tw_id = bbox_id[2] - bbox_id[0]
     th_id = bbox_id[3] - bbox_id[1]
 
-    bbox_name = draw.textbbox((0, 0), text['name'], font=font_name)
+    bbox_name = ImageDraw.Draw(Image.new('RGBA', (1, 1))).textbbox((0, 0), text['name'], font=font_name)
     tw_name = bbox_name[2] - bbox_name[0]
     th_name = bbox_name[3] - bbox_name[1]
 
-    # 两行之间的间距
     gap = 2
     text_w = max(tw_id, tw_name)
     text_h = th_id + th_name + gap
-
-    # Pill 背景尺寸
-    pad_x, pad_y = 10, 6
+    pad_x, pad_y = 12, 7
     pill_w = text_w + pad_x * 2
     pill_h = text_h + pad_y * 2
 
-    pill_x = x - pill_w // 2
-    pill_y = y
-
-    # 绘制半透明黑底
     overlay = Image.new('RGBA', (pill_w, pill_h), (0, 0, 0, 0))
     pill_draw = ImageDraw.Draw(overlay)
     pill_draw.rounded_rectangle(
         [(0, 0), (pill_w - 1, pill_h - 1)],
-        radius=8, fill=(0, 0, 0, 170)
+        radius=8, fill=(0, 0, 0, 180)
     )
-
-    # ID 行（白色加粗效果通过大字号实现）
     id_x = pill_w // 2 - tw_id // 2
     pill_draw.text((id_x, pad_y), text['id'], font=font_id, fill=(255, 255, 255, 255))
-
-    # 名称行
     name_x = pill_w // 2 - tw_name // 2
     pill_draw.text((name_x, pad_y + th_id + gap), text['name'], font=font_name, fill=(220, 220, 220, 255))
 
-    # 合成到主 draw
-    # 这里需要返回 overlay 和位置，因为 draw 不能直接 alpha composite
-    return overlay, (pill_x, pill_y), pill_h
+    # 计算标签放置位置
+    if anchor == "below":
+        lx, ly = x - pill_w // 2, y
+    elif anchor == "above":
+        lx, ly = x - pill_w // 2, y - pill_h
+    elif anchor == "right":
+        lx, ly = x, y - pill_h // 2
+    elif anchor == "left":
+        lx, ly = x - pill_w, y - pill_h // 2
+    else:
+        lx, ly = x - pill_w // 2, y
+
+    return overlay, (lx, ly)
 
 
 def composite(ai_path, placed_items, output_path):
-    """主合成函数"""
+    """主合成函数：边缘布局 + 缩略图 + 标签"""
     print(f"\n🖼️  加载 AI 效果图: {os.path.basename(ai_path)}")
     ai_img = Image.open(ai_path)
     if ai_img.mode != 'RGBA':
@@ -368,34 +420,33 @@ def composite(ai_path, placed_items, output_path):
     ai_w, ai_h = ai_img.size
     print(f"   尺寸: {ai_w}x{ai_h}")
 
-    # 准备字体
-    font_id = find_font(15)
-    font_name = find_font(12)
-    font_title = find_font(22)
+    # 准备字体（放大以适应更大的缩略图）
+    font_id = find_font(18)
+    font_name = find_font(14)
+    font_title = find_font(24)
 
     # 创建标注层
     overlay = Image.new('RGBA', (ai_w, ai_h), (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
 
-    # ===== 绘制标题栏 =====
-    title_h = 50
-    title_bg = Image.new('RGBA', (ai_w, title_h), (0, 0, 0, 150))
+    # ===== 标题栏 =====
+    title_bg = Image.new('RGBA', (ai_w, TITLE_H), (0, 0, 0, 160))
     overlay.paste(title_bg, (0, 0), title_bg)
-    overlay_draw.text((24, 12), '单品标注', font=font_title, fill=(255, 255, 255, 240))
+    overlay_draw.text((24, 10), '单品标注', font=font_title, fill=(255, 255, 255, 240))
 
-    # ===== 处理每个单品 =====
+    # ===== 确定 items 目录 =====
     items_dir = os.path.join(os.path.dirname(ai_path), '..', 'items')
     if not os.path.exists(items_dir):
-        # ai_path 可能在 generated/ 下，items/ 在上层
         items_dir = os.path.join(os.path.dirname(os.path.dirname(ai_path)), 'items')
 
     print(f"📦 单品目录: {items_dir}")
 
-    for i, placed in enumerate(placed_items):
+    for placed in placed_items:
         item = placed['item']
         thumb_size = placed['thumb_size']
-        anchor_x = placed['anchor_x']
-        anchor_y = placed['anchor_y']
+        paste_x = placed['paste_x']
+        paste_y = placed['paste_y']
+        edge = placed['edge']
 
         # 查找单品图片
         img_path = find_item_image(items_dir, item)
@@ -403,50 +454,74 @@ def composite(ai_path, placed_items, output_path):
             print(f"   ⚠️  未找到 {item['id']} 的图片，跳过")
             continue
 
-        print(f"   ✅ {item['id']} {item['name']} → {os.path.basename(img_path)}")
+        print(f"   ✅ {item['id']} {item['name'][:15]} → {os.path.basename(img_path)} ({thumb_size}px)")
 
         # 创建缩略图
         thumb = create_thumbnail(img_path, thumb_size)
         tw, th = thumb.size
 
-        # 粘贴缩略图（锚点为中心）
-        paste_x = anchor_x - tw // 2
-        paste_y = anchor_y - th // 2
+        # 粘贴缩略图
+        px = max(2, min(ai_w - tw - 2, paste_x))
+        py = max(2, min(ai_h - th - 2, paste_y))
+        overlay.paste(thumb, (px, py), thumb)
 
-        # 边界检查
-        paste_x = max(0, min(ai_w - tw, paste_x))
-        paste_y = max(0, min(ai_h - th, paste_y))
+        # 标签文本
+        label_data = {'id': item['id'], 'name': item['name'][:14]}
 
-        overlay.paste(thumb, (paste_x, paste_y), thumb)
+        # 根据边缘决定标签位置
+        if edge == 'left':
+            # 标签在缩略图右侧（指向人物）
+            label_img, (lx, ly) = draw_label(
+                label_data, px + tw + 8, py + th // 2, font_id, font_name, anchor="right"
+            )
+        elif edge == 'right':
+            # 标签在缩略图左侧（指向人物）
+            label_img, (lx, ly) = draw_label(
+                label_data, px - 8, py + th // 2, font_id, font_name, anchor="left"
+            )
+        elif edge == 'top':
+            # 标签在缩略图下方
+            label_img, (lx, ly) = draw_label(
+                label_data, px + tw // 2, py + th + 6, font_id, font_name, anchor="below"
+            )
+        elif edge == 'bottom':
+            # 标签在缩略图上方
+            label_img, (lx, ly) = draw_label(
+                label_data, px + tw // 2, py - 6, font_id, font_name, anchor="above"
+            )
+        else:
+            label_img, (lx, ly) = draw_label(
+                label_data, px + tw // 2, py + th + 6, font_id, font_name, anchor="below"
+            )
 
-        # 绘制标签（在缩略图下方）
-        label_data = {
-            'id': item['id'],
-            'name': item['name'][:12]  # 限制长度
-        }
-        label_img, (lx, ly), label_h = draw_label(
-            overlay_draw, label_data,
-            anchor_x, paste_y + th + 6,
-            font_id, font_name
-        )
-        # 标签边界检查
+        # 边界钳制
         lx = max(2, min(ai_w - label_img.width - 2, lx))
         ly = max(2, min(ai_h - label_img.height - 2, ly))
         overlay.paste(label_img, (lx, ly), label_img)
 
-        # 绘制标注小圆点（连接缩略图和标签的视觉锚点）
-        dot_r = 5
-        dot_x, dot_y = anchor_x, paste_y + th + 3
-        overlay_draw.ellipse(
-            [(dot_x - dot_r, dot_y - dot_r), (dot_x + dot_r, dot_y + dot_r)],
-            fill=(255, 255, 255, 180)
-        )
+        # 连接线：从缩略图边缘到标签
+        line_color = (255, 255, 255, 100)
+        if edge == 'left':
+            start = (px + tw, py + th // 2)
+            end = (lx, ly + label_img.height // 2)
+        elif edge == 'right':
+            start = (px, py + th // 2)
+            end = (lx + label_img.width, ly + label_img.height // 2)
+        elif edge == 'top':
+            start = (px + tw // 2, py + th)
+            end = (lx + label_img.width // 2, ly)
+        elif edge == 'bottom':
+            start = (px + tw // 2, py)
+            end = (lx + label_img.width // 2, ly + label_img.height)
+        else:
+            start = (px + tw // 2, py + th)
+            end = (lx + label_img.width // 2, ly)
+        overlay_draw.line([start, end], fill=line_color, width=1)
 
     # ===== 合成 =====
     result = Image.alpha_composite(ai_img, overlay)
     result_rgb = result.convert('RGB')
 
-    # 确保输出目录存在
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     result_rgb.save(output_path, 'JPEG', quality=92)
 
@@ -503,7 +578,7 @@ def main():
     print(f"\n📍 位置分配（共 {len(placed)} 件）:")
     for p in placed:
         item = p['item']
-        print(f"   ▸ {item['id']} [{item['category']}] → ({p['anchor_x']}, {p['anchor_y']}) size={p['thumb_size']}")
+        print(f"   ▸ {item['id']} [{item['category']}] → {p['edge']}边 ({p['paste_x']}, {p['paste_y']}) {p['thumb_size']}px")
 
     # 确定输出路径
     ai_dir = os.path.dirname(ai_path)

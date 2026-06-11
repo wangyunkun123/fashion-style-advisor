@@ -22,27 +22,27 @@
 - `devlog/` — 每日开发日志，按 `YYYY-MM-DD.md` 命名
 
 ## 操作指令
-当用户说以下关键词时，执行对应操作：
 - **"推荐穿搭"** → 读取 wardrobe + 天气，给出搭配方案
-- **"生成效果图"** → 调用 Seedream API 生图 → git push → 调用 tools/notify.py 微信推送（完整流程自动执行）
+- **"生成效果图"** → 完整流程：Seedream生图 → composite排版 → git push → 微信推送
+- **"排版"/"合成"** → 仅运行 `python3 tools/composite.py` 生成卡片排版图
 - **"同步"/"推送"** → 执行 `bash sync.sh` 推送到 GitHub
-- **"添加新衣服"** → 将图片放入 wardrobe 对应目录，更新服装档案.md 表格
-- **"标注单品"/"合成标注图"** → 运行 `python3 tools/composite.py` 生成标注版效果图
-- **"新想法"/"优化建议"** → 记录到 `系统升级建议.md`，按分类追加，标注日期和优先级
+- **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing
+- **"新想法"/"优化建议"** → 记录到 `系统升级建议.md`
 
-## API 配置
-- 火山引擎 Ark API: `https://ark.cn-beijing.volces.com/api/plan/v3/images/generations`
-- Model: `doubao-seedream-5.0-lite`
-- Size: 2048x2048
-- 配置: `config/seedream.json`
-- 微信推送: Server酱 `SCT362418...` (sctapi.ftqq.com)
+## 图片处理管线
+新衣服入库需依次运行：
+```bash
+python3 tools/auto_orient.py          # 1. AI 检测方向并修正
+python3 tools/enhance_clothing.py --force  # 2. 抠图 + 精修
+```
+处理后生成 `wardrobe/enhanced/` 下的抠图 PNG 和增强 JPG，排版时自动调用。
 
-### 生图完整流程
-1. 调用 Seedream API 生成穿搭图
-2. 图片保存到 `outfits/<日期>_<风格>/generated/`
-3. `git add -A && git commit && git push`
-4. 调用 `python3 tools/notify.py <标题> <GitHub Raw URL> <单品列表>`
-5. 用户微信实时收到效果图通知
+## 生图完整流程
+1. 调用 Seedream API 生成穿搭图 → `outfits/<日期>_<风格>/generated/`
+2. 同步抠图：从服装档案映射原始文件名 → 复制 `_cutout.png` 到 `outfits/.../items/`
+3. 运行 `python3 tools/composite.py` 生成 `_排版.jpg`
+4. `git add -A && git commit && git push`
+5. 调用 `python3 tools/notify.py <标题> <GitHub Raw URL> <单品列表>`
 
 ## 双模型工作流
 - **DeepSeek-V4（当前对话模型）**：负责逻辑推理、功能设计、代码开发、日常对话

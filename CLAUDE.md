@@ -43,6 +43,12 @@
 4. 调用 `python3 tools/notify.py <标题> <GitHub Raw URL> <单品列表>`
 5. 用户微信实时收到效果图通知
 
+## 双模型工作流
+- **DeepSeek-V4（当前对话模型）**：负责逻辑推理、功能设计、代码开发、日常对话
+- **Doubao-Seed-2.0-Code（API 调用）**：负责视觉类工作——识别衣服、判断朝向、打标签、图片理解等
+- 视觉任务直接在代码中调用豆包 API，无需切换模型
+- API 配置：`POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions`，model=`doubao-seed-2.0-code`，key 见 `config/seedream.local.json`
+
 ## Git
 - Remote: `git@github.com:wangyunkun123/fashion-style-advisor.git` (SSH)
 - Web: https://github.com/wangyunkun123/fashion-style-advisor (public)

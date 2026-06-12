@@ -418,7 +418,7 @@ fetch('/api/task/'+tid).then(r=>r.json()).then(d=>{
 if(!d){el.innerHTML='⚠️ 任务已过期';return}
 if(d.status==='done'){
 var h=esc(d.result||'完成').replace(/\n/g,'<br>');
-if(d.image_url)h+='<br><img src="'+esc(d.image_url)+'" onerror="this.src=\\'/api/image?f='+encodeURIComponent(d.image_path||'')+'\\'">';
+if(d.image_url)h+='<br><img src="'+esc(d.image_url)+'" style="max-width:100%;border-radius:8px;margin-top:8px">';
 el.innerHTML=h;el.querySelector('.bar')?.remove();
 }else if(d.status==='error'){
 el.innerHTML='❌ '+esc(d.message);el.classList.add('error');el.querySelector('.bar')?.remove();

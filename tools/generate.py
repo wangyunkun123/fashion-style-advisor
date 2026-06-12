@@ -137,7 +137,8 @@ def main():
     if len(sys.argv) > 1:
         keyword = sys.argv[1]
         dirs = sorted([d for d in os.listdir(OUTFIT_BASE)
-                       if os.path.isdir(os.path.join(OUTFIT_BASE, d)) and keyword in d])
+                       if os.path.isdir(os.path.join(OUTFIT_BASE, d)) and keyword in d],
+                      key=lambda d: os.path.getctime(os.path.join(OUTFIT_BASE, d)))
         if dirs:
             outfit_dir = os.path.join(OUTFIT_BASE, dirs[-1])
             print(f"🔍 关键词匹配: {dirs[-1]}")

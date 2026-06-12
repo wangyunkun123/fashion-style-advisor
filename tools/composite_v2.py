@@ -73,8 +73,8 @@ def parse(d):
     with open(md,encoding='utf-8') as f: lines=f.readlines()
     in_sec,items=False,[]
     for line in lines:
-        if '穿搭方案' in line: in_sec=True; continue
-        if in_sec and line.strip().startswith('##') and '穿搭方案' not in line: break
+        if '穿搭方案' in line or '单品清单' in line: in_sec=True; continue
+        if in_sec and line.strip().startswith('##') and '穿搭方案' not in line and '单品清单' not in line: break
         if not in_sec: continue
         s=line.strip()
         if not s.startswith('|') or '---' in s: continue
@@ -260,7 +260,8 @@ def main():
         if not os.path.isabs(d): d=os.path.join(BASE_DIR,'..',d)
         d=os.path.abspath(d)
     else:
-        dirs=sorted([x for x in os.listdir(OUTFIT_BASE) if os.path.isdir(os.path.join(OUTFIT_BASE,x)) and not x.startswith('.')])
+        dirs=sorted([x for x in os.listdir(OUTFIT_BASE) if os.path.isdir(os.path.join(OUTFIT_BASE,x)) and not x.startswith('.')],
+                   key=lambda x: os.path.getctime(os.path.join(OUTFIT_BASE, x)))
         d=os.path.join(OUTFIT_BASE,dirs[-1]) if dirs else None
     if not d or not os.path.exists(d): print("❌"); sys.exit(1)
     items=parse(d); ai=find_ai(d)

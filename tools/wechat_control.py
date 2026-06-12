@@ -171,8 +171,9 @@ def get_github_raw_url(file_path):
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
 
 def find_latest_composite():
-    """找到最新生成的排版合成图（按文件修改时间）"""
+    """找到最新生成的排版合成图（优先当日，按文件修改时间）"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
+    today = time.strftime('%Y-%m-%d')
     candidates = []
     for d in os.listdir(outfit_base):
         dp = os.path.join(outfit_base, d)
@@ -183,10 +184,17 @@ def find_latest_composite():
                 if '_方案' in f and f.endswith('.jpg'):
                     fp = os.path.join(root, f)
                     candidates.append(fp)
-    if candidates:
-        candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-        return candidates[0]
-    return None
+    if not candidates:
+        return None
+    # 优先当日合成图
+    today_candidates = [c for c in candidates if today in c]
+    if today_candidates:
+        today_candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+        return today_candidates[0]
+    # 兜底：全局最新（但打印警告）
+    candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+    log(f"⚠️ 未找到当日排版图，使用最近期: {os.path.basename(candidates[0])}", "WARN")
+    return candidates[0]
 
 def get_todays_used_items():
     """获取今日已用单品清单"""
@@ -279,9 +287,7 @@ def run_pipeline(style_hint, task_id=None):
 
 ⚡ 豆包提示词.txt 必须放在 豆包生图/ 目录内！
 
-完成后执行: python3 tools/generate.py {style_hint}
-
-❌ 不要运行 composite_v2.py、notify.py 或做任何推送。"""
+❌ 不要运行 generate.py、composite_v2.py、notify.py 或做任何推送。"""
 
     try:
         out1 = run_cli(['claude', '-p', prompt], timeout=600)

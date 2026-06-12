@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import re
+import shutil
 import subprocess
 import threading
 import time
@@ -47,6 +48,28 @@ if not SENDKEY:
     print("❌ 未配置 wechat_sendkey")
     log("未配置 wechat_sendkey", "FATAL")
     sys.exit(1)
+
+API_KEY = config.get('api_key', '')
+API_CHAT_URL = 'https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions'
+CHAT_MODEL = 'doubao-seed-2.0-code'
+
+# ── 品类到目录/前缀映射 ──────────────────────────────────
+# wardrobe.md 品类 → 目录名 → 豆包生图前缀
+CATEGORY_MAP = {
+    '短袖上衣': {'dir': '短袖上衣', 'prefix': '上衣'},
+    '长袖上衣': {'dir': '长袖上衣', 'prefix': '上衣'},
+    '衬衣':     {'dir': '衬衣',     'prefix': '上衣'},
+    '背心':     {'dir': '背心',     'prefix': '上衣'},
+    '外套':     {'dir': '外套',     'prefix': '外套'},
+    '长裤':     {'dir': '长裤',     'prefix': '下装'},
+    '短裤':     {'dir': '短裤',     'prefix': '下装'},
+    '鞋子':     {'dir': '鞋子',     'prefix': '鞋子'},
+    '帽子':     {'dir': '帽子',     'prefix': '帽子'},
+    '包':       {'dir': '包',       'prefix': '包'},
+    '墨镜':     {'dir': '墨镜',     'prefix': '墨镜'},
+    '手部配饰': {'dir': '手部配饰', 'prefix': '配饰'},
+    '袜子':     {'dir': '袜子',     'prefix': '袜子'},
+}
 
 # ── 任务管理器 ────────────────────────────────────────
 class TaskManager:
@@ -241,6 +264,198 @@ def format_outfit_summary(outfit_md_path):
     except:
         return ''
 
+# ── 衣柜解析 ──────────────────────────────────────────
+def parse_wardrobe():
+    """解析 wardrobe/服装档案.md → {ID: {category, filename, color, name}}"""
+    wardrobe_md = os.path.join(PROJECT_DIR, 'wardrobe', '服装档案.md')
+    items = {}
+    current_category = None
+    with open(wardrobe_md, 'r') as f:
+        for line in f:
+            line = line.rstrip()
+            # 匹配品类标题
+            m = re.match(r'^## (.+)', line)
+            if m:
+                current_category = m.group(1).strip()
+                continue
+            # 匹配表格行: | ID | filename | color | ... | ... | remarks |
+            m = re.match(
+                r'^\|\s*(\w+-\d+)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|',
+                line
+            )
+            if m and current_category:
+                item_id = m.group(1)
+                filename = m.group(2).strip()
+                color = m.group(3).strip()
+                # 提取单品名（从备注或颜色+品类推断）
+                name = f"{color}{current_category.replace('上衣','').replace('下装','')}"
+                items[item_id] = {
+                    'category': current_category,
+                    'filename': filename,
+                    'color': color,
+                    'name': name,
+                }
+    return items
+
+def get_wardrobe_summary():
+    """获取衣柜摘要文本（给 AI 的上下文）"""
+    wardrobe_md = os.path.join(PROJECT_DIR, 'wardrobe', '服装档案.md')
+    with open(wardrobe_md, 'r') as f:
+        content = f.read()
+    # 去掉 frontmatter 和说明段落，保留表格
+    lines = content.split('\n')
+    summary = []
+    in_table_section = False
+    for line in lines:
+        if line.startswith('## ') or line.startswith('|'):
+            in_table_section = True
+        if line.startswith('## 服装档案总结'):
+            break
+        if in_table_section:
+            summary.append(line)
+    return '\n'.join(summary)
+
+def call_doubao_chat(messages, max_tokens=4096, timeout=120):
+    """调用 doubao-seed-2.0-code 聊天 API"""
+    payload = json.dumps({
+        'model': CHAT_MODEL,
+        'messages': messages,
+        'max_tokens': max_tokens,
+        'temperature': 0.7,
+    }).encode('utf-8')
+    req = urllib.request.Request(API_CHAT_URL, data=payload, headers={
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': f'Bearer {API_KEY}',
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            result = json.loads(resp.read().decode('utf-8'))
+        content = result['choices'][0]['message']['content']
+        return content
+    except Exception as e:
+        log(f"豆包 API 调用失败: {e}", "ERROR")
+        raise
+
+def extract_json(text):
+    """从 AI 回复中提取 JSON 对象"""
+    # 尝试直接解析
+    try:
+        return json.loads(text)
+    except:
+        pass
+    # 提取 ```json ... ``` 代码块
+    m = re.search(r'```(?:json)?\s*\n?(.*?)\n?```', text, re.DOTALL)
+    if m:
+        try:
+            return json.loads(m.group(1))
+        except:
+            pass
+    # 提取 { ... } 块
+    m = re.search(r'\{.*\}', text, re.DOTALL)
+    if m:
+        try:
+            return json.loads(m.group(0))
+        except:
+            pass
+    return None
+
+def execute_outfit_plan(plan, today, style_hint):
+    """根据 AI 方案创建目录、写入文件、复制图片"""
+    wardrobe = parse_wardrobe()
+    outfit_dir = os.path.join(PROJECT_DIR, 'outfits', f'{today}_{style_hint}')
+    shengtu_dir = os.path.join(outfit_dir, '豆包生图')
+    items_dir = os.path.join(outfit_dir, 'items')
+
+    # 创建目录
+    os.makedirs(shengtu_dir, exist_ok=True)
+    os.makedirs(items_dir, exist_ok=True)
+
+    items = plan.get('items', [])
+    item_ids = [it['id'] for it in items]
+
+    # ── 1. 写入 outfit.md ──
+    items_table = '\n'.join(
+        f"| {it['category']} | **{it['id']}** | {it['name']} | {it['color']} |"
+        for it in items
+    )
+    outfit_md = f"""---
+date: {today}
+scene: {style_hint}
+weather: {plan.get('weather_note', '晴/多云，22-34°C')}
+style: {plan.get('style', style_hint)}
+---
+
+# {today} {style_hint}
+
+## 单品清单
+
+| 品类 | ID | 单品 | 颜色 |
+|------|-----|------|------|
+{items_table}
+
+## 搭配理由
+
+{plan.get('reasoning', '')}
+
+## 配色逻辑
+
+{plan.get('color_logic', '')}
+
+## 风格关键词
+
+{plan.get('keywords', style_hint)}
+"""
+    with open(os.path.join(outfit_dir, 'outfit.md'), 'w') as f:
+        f.write(outfit_md)
+
+    # ── 2. 写入豆包提示词.txt ──
+    seedream_prompt = plan.get('seedream_prompt', '')
+    with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
+        f.write(seedream_prompt)
+
+    # ── 3. 复制人物照片 ──
+    person_photo = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
+    if os.path.exists(person_photo):
+        shutil.copy2(person_photo, os.path.join(shengtu_dir, '人物_IMG_8493.jpg'))
+
+    # ── 4. 复制参考图到豆包生图/ ──
+    for it in items:
+        item_id = it['id']
+        w = wardrobe.get(item_id)
+        if not w:
+            log(f"⚠️ 找不到衣柜档案: {item_id}", "WARN")
+            continue
+        cat_info = CATEGORY_MAP.get(w['category'])
+        if not cat_info:
+            log(f"⚠️ 未知品类映射: {w['category']}", "WARN")
+            continue
+        src_dir = os.path.join(PROJECT_DIR, 'wardrobe', cat_info['dir'])
+        src_file = os.path.join(src_dir, w['filename'])
+        if not os.path.exists(src_file):
+            # 尝试在其他目录找
+            log(f"⚠️ 找不到源文件: {src_file}", "WARN")
+            continue
+        prefix = cat_info['prefix']
+        dst_name = f"{prefix}_{w['filename']}"
+        shutil.copy2(src_file, os.path.join(shengtu_dir, dst_name))
+
+    # ── 5. 复制抠图到 items/ ──
+    for it in items:
+        item_id = it['id']
+        w = wardrobe.get(item_id)
+        if not w:
+            continue
+        base = os.path.splitext(w['filename'])[0]
+        cutout_name = f"{base}_cutout.png"
+        cutout_src = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', cutout_name)
+        if os.path.exists(cutout_src):
+            shutil.copy2(cutout_src, os.path.join(items_dir, cutout_name))
+        else:
+            log(f"⚠️ 抠图不存在: {cutout_name}", "WARN")
+
+    log(f"✅ 穿搭方案已创建: {outfit_dir}")
+    return outfit_dir
+
 def find_outfit_dir(style_hint):
     """根据风格名找到对应的 outfit 目录（按创建时间，最新优先）"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
@@ -255,7 +470,7 @@ def find_outfit_dir(style_hint):
     return None
 
 def run_pipeline(style_hint, task_id=None):
-    """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送"""
+    """完整生图管线: API穿搭分析 → Seedream生图 → 排版 → 推送"""
     log(f"🚀 管线启动: {style_hint}")
     log_lines = []
 
@@ -271,30 +486,64 @@ def run_pipeline(style_hint, task_id=None):
 
     progress('🤖 Step 1/4: AI 分析穿搭方案...')
 
-    prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
+    # ── 构建衣柜上下文 ──
+    wardrobe_summary = get_wardrobe_summary()
 
-根据 wardrobe/服装档案.md，为「{style_hint}」推荐一套全新穿搭。
+    system_prompt = """你是一位专攻亚洲男性穿搭的 AI 时尚顾问。用户会提供完整衣柜档案和场景需求，你需要推荐一套全新穿搭方案。
+
+要求：
+1. 仔细分析场景需求（运动/休闲/通勤/约会等）
+2. 避开用户已使用的单品
+3. 考虑颜色搭配、风格统一、体型修饰
+4. 输出严格的 JSON 格式，不要包含任何其他文字
+
+输出 JSON 格式：
+{
+  "weather_note": "天气描述",
+  "style": "风格标签",
+  "items": [
+    {"category": "上衣", "id": "TS-xxx", "name": "单品描述", "color": "颜色"}
+  ],
+  "reasoning": "搭配理由（100-200字）",
+  "color_logic": "配色逻辑",
+  "keywords": "风格关键词",
+  "seedream_prompt": "英文 Seedream 生图提示词，描述一个30岁亚洲男性179cm偏瘦白皙，穿着上述服装的全身照，高质量写真风格"
+}
+
+注意：
+- 必须包含上衣和下装
+- 鞋子、帽子、包、袜子、墨镜等配饰根据场景酌情添加
+- seedream_prompt 必须是英文，详细描述服装细节和场景氛围"""
+
+    user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
+
+为「{style_hint}」推荐一套全新穿搭。
 
 ❌ 今日已使用以下单品，严禁再次使用: {used_str}
 必须从未使用的单品中选择，确保上衣、下装、鞋子不与今日任何一套重复。
 
-操作步骤:
-1. 创建 outfits/{today}_{style_hint}/ 目录
-2. 写入 outfit.md（含单品ID、搭配理由、配色逻辑、风格关键词）
-3. 在 outfits/.../豆包生图/ 目录下放入：人物照片(profile/photos/IMG_8493.jpg)、上衣、下装、鞋子、配饰的参考图（从 wardrobe/ 对应单品目录复制）
-4. 在 outfits/.../豆包生图/ 目录下写入 豆包提示词.txt（Seedream生图英文提示词）
-5. 创建 outfits/.../items/ 目录，从 wardrobe/enhanced/ 复制对应单品 _cutout.png 抠图
+以下是完整衣柜档案：
+---
+{wardrobe_summary}
+---
 
-⚡ 豆包提示词.txt 必须放在 豆包生图/ 目录内！
-
-❌ 不要运行 generate.py、composite_v2.py、notify.py 或做任何推送。"""
+请输出 JSON 格式的穿搭方案。"""
 
     try:
-        out1 = run_cli(['claude', '-p', prompt], timeout=600)
-        # 提取关键信息
-        if out1:
-            key = out1[:300]
-            progress(f'✅ 穿搭方案已创建\n{key}')
+        # 调用 API 获取穿搭方案
+        content = call_doubao_chat([
+            {'role': 'system', 'content': system_prompt},
+            {'role': 'user', 'content': user_prompt},
+        ], max_tokens=4096, timeout=180)
+
+        plan = extract_json(content)
+        if not plan:
+            log(f"API 返回无法解析为 JSON:\n{content[:500]}", "ERROR")
+            raise ValueError("AI 穿搭分析返回格式异常，请重试")
+
+        # 执行文件操作
+        outfit_dir = execute_outfit_plan(plan, today, style_hint)
+        progress(f'✅ 穿搭方案已创建')
 
         progress('🎨 Step 2/4: Seedream AI 生图中...')
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=120)
@@ -302,11 +551,7 @@ def run_pipeline(style_hint, task_id=None):
             progress(f'✅ Seedream 生图完成\n{out2[:300]}')
 
         progress('🖼️ Step 3/4: 排版合成中...')
-        outfit_dir = find_outfit_dir(style_hint)
-        if outfit_dir:
-            out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
-        else:
-            out3 = run_cli(['python3', 'tools/composite_v2.py'], timeout=120)
+        out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
         if out3:
             progress(f'✅ 排版完成\n{out3[:300]}')
 

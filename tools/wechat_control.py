@@ -156,21 +156,48 @@ def get_todays_used_items():
             used.extend(ids)
     return list(set(used))
 
+CAT_EMOJI = {
+    '上衣': '👕', '内搭': '👕', 'T恤': '👕', '短袖': '👕', '长袖': '👕',
+    '衬衫': '👔', '外套': '🧥', '外层': '🧥', '外搭': '🧥', '夹克': '🧥',
+    '下装': '👖', '裤子': '👖', '短裤': '🩳', '鞋子': '👟', '鞋': '👟',
+    '包': '🎒', '帽子': '🧢', '墨镜': '🕶️', '配饰': '⌚', '手表': '⌚',
+    '袜子': '🧦', '手串': '📿',
+}
+
 def format_outfit_summary(outfit_md_path):
-    """从 outfit.md 提取穿搭摘要"""
+    """从 outfit.md 提取穿搭摘要，输出微信推送格式"""
     try:
         with open(outfit_md_path, 'r') as f:
             content = f.read()
-        # 匹配表格行: | 任意标签 | **ID** 或 ID | 名称 | 可选...
-        # 兼容 emoji/中文标签、加粗/非加粗、3列/4列
+        # 匹配表格行: | 品类 | ID | 名称 | ...
         items = re.findall(
-            r'^\|\s*[^|]*?\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\||$)',
+            r'^\|\s*([^|]+?)\s*\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\||$)',
             content, re.MULTILINE
         )
-        lines = [f"{item_id} {name.strip()}" for item_id, name in items]
+        lines = []
+        for cat, item_id, name in [(c.strip(), i, n.strip()) for c, i, n in items]:
+            emoji = ''
+            for key, val in CAT_EMOJI.items():
+                if key in cat:
+                    emoji = val
+                    break
+            lines.append(f"- {emoji} **{item_id}** {name}" if emoji else f"- **{item_id}** {name}")
         return '\n'.join(lines) if lines else ''
     except:
         return ''
+
+def find_outfit_dir(style_hint):
+    """根据风格名找到对应的 outfit 目录（按创建时间，最新的优先）"""
+    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
+    candidates = []
+    for d in os.listdir(outfit_base):
+        dp = os.path.join(outfit_base, d)
+        if os.path.isdir(dp) and style_hint in d:
+            candidates.append((dp, os.path.getctime(dp)))
+    if candidates:
+        candidates.sort(key=lambda x: x[1], reverse=True)
+        return candidates[0][0]
+    return None
 
 def run_pipeline(style_hint):
     """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送效果图"""
@@ -180,7 +207,8 @@ def run_pipeline(style_hint):
     used_items = get_todays_used_items()
     used_str = '、'.join(used_items) if used_items else '无'
 
-    # Step 1: Claude 推荐搭配 + 创建所有文件 + 调用生图和排版
+    # Step 1: Claude 推荐 + 创建档案 + 运行 generate.py
+    # 注意: composite_v2.py 由我们在这里显式调用，不交给 claude
     prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
 根据 wardrobe/服装档案.md，为「{style_hint}」推荐一套全新穿搭。
@@ -197,16 +225,20 @@ def run_pipeline(style_hint):
 
 ⚡ 豆包提示词.txt 必须放在 豆包生图/ 目录内！
 
-完成后依次执行:
-  python3 tools/generate.py {style_hint}
-  python3 tools/composite_v2.py
-  git add -A && git commit -m "🎨 {style_hint}" && git push
+完成后执行: python3 tools/generate.py {style_hint}
 
-❌ 不要运行 notify.py 或做任何推送，推送由外部管线处理。"""
+❌ 不要运行 composite_v2.py、notify.py 或做任何推送。"""
 
     run_cli(['claude', '-p', prompt], timeout=600)
 
-    # Step 2: 推送最终效果图到微信
+    # Step 2: 显式调用 composite_v2.py（指定正确目录）
+    outfit_dir = find_outfit_dir(style_hint)
+    if outfit_dir:
+        run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
+    else:
+        run_cli(['python3', 'tools/composite_v2.py'], timeout=120)
+
+    # Step 3: 推送最终效果图到微信
     composite = find_latest_composite()
     if composite and os.path.exists(composite):
         run_cli(['git', 'add', '-A'], timeout=30)
@@ -216,10 +248,10 @@ def run_pipeline(style_hint):
         github_url = get_github_raw_url(composite)
 
         # 读取 outfit.md 获取穿搭详情
-        outfit_dir = os.path.dirname(composite)
+        comp_dir = os.path.dirname(composite)
         if '_方案' in os.path.basename(composite):
-            outfit_dir = os.path.dirname(outfit_dir)  # 上身效果子目录
-        outfit_md = os.path.join(outfit_dir, 'outfit.md')
+            comp_dir = os.path.dirname(comp_dir)
+        outfit_md = os.path.join(comp_dir, 'outfit.md')
         summary = format_outfit_summary(outfit_md)
 
         content = f"![效果图]({github_url})\n\n"

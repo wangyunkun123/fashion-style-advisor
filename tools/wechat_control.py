@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """
-微信远程控制服务 — 通过 Server酱 Turbo Webhook 接收微信指令，操控穿搭生成
+穿搭助手 — 手机远程控制服务
 
 架构:
-  微信(手机) → Server酱 → Webhook回调(POST) → 本服务(HTTP) → Claude CLI/脚本 → Server酱推送 → 微信
+  手机浏览器 → HTML面板(ngrok) → HTTP服务 → Claude CLI + 脚本管线 → Server酱推送效果图 → 微信
 
-依赖: 纯 Python 标准库，无需 pip install
-启动: python3 tools/wechat_control.py [--port 8765]
-穿透: ngrok http 8765  (另开终端)
-
-Server酱控制台配置 Webhook URL: https://xxx.ngrok-free.app/webhook
+依赖: 纯 Python 标准库
+启动: bash tools/start_wechat_control.sh
 """
 
 import json
@@ -19,8 +16,6 @@ import re
 import subprocess
 import threading
 import time
-import hashlib
-import hmac
 import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -33,20 +28,15 @@ with open(CONFIG_FILE, 'r') as f:
     config = json.load(f)
 
 SENDKEY = config.get('wechat_sendkey', '')
-WEBHOOK_SECRET = config.get('webhook_secret', SENDKEY)  # 默认用 sendkey 做签名
-
 if not SENDKEY:
     print("❌ 未配置 wechat_sendkey，请在 config/seedream.local.json 中设置")
     sys.exit(1)
 
 # ── Server酱推送 ──────────────────────────────────────
-def push_wechat(title, content="", openid=""):
-    """推送到微信，可选指定 openid 实现双向回复"""
+def push_wechat(title, content=""):
+    """推送到微信"""
     url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
     payload = {"title": title, "desp": content}
-    if openid:
-        payload["openid"] = openid
-
     data = json.dumps(payload).encode('utf-8')
     req = urllib.request.Request(url, data=data, headers={
         'Content-Type': 'application/json;charset=utf-8'
@@ -77,43 +67,34 @@ def run_cli(args, cwd=PROJECT_DIR, timeout=300):
             return f"❌ 执行失败 (code={result.returncode})\n{err[:800] if err else out[:800]}"
         return out if out else "✅ 执行完成（无文本输出）"
     except subprocess.TimeoutExpired:
-        return "⏰ 命令超时（超过 5 分钟），请稍后重试"
+        return "⏰ 命令超时，请稍后重试"
     except FileNotFoundError as e:
         return f"❌ 命令未找到: {e}"
 
 def match_command(message):
-    """
-    从用户消息中识别指令，返回 (action, extra)
-    action: 'recommend' | 'generate' | 'sync' | 'status' | 'help' | 'unknown'
-    extra: 附加参数（如风格名称）
-    """
+    """从用户消息中识别指令 → (action, extra)"""
     msg = message.strip()
     if not msg:
         return ('help', '')
 
-    # 帮助
-    if re.search(r'^(帮助|help|功能|命令|菜单|\\?)$', msg, re.I):
+    if re.search(r'^(帮助|help|功能|命令|菜单|\?)$', msg, re.I):
         return ('help', '')
 
-    # 同步/推送
-    if re.search(r'^(同步|推送|push|上传|上传到)', msg, re.I):
+    if re.search(r'^(同步|推送|push|上传)$', msg, re.I):
         return ('sync', '')
 
-    # 状态
     if re.search(r'^(状态|status|情况|检查)$', msg, re.I):
         return ('status', '')
 
-    # 生成效果图
     m = re.search(r'(?:生成|效果图|生图|来一张|画一张)(?:[：:\s]*(.+))?', msg)
     if m:
         style = (m.group(1) or '').strip()
         return ('generate', style)
 
-    # 推荐穿搭
     if re.search(r'推荐|穿搭|穿什么|怎么穿|搭配|今天穿', msg):
         return ('recommend', msg)
 
-    # 默认：尝试作为风格名称来生成
+    # 中文短文本默认当作风格名
     if len(msg) <= 20 and re.search(r'[一-鿿]', msg):
         return ('generate', msg)
 
@@ -124,21 +105,19 @@ HELP_TEXT = """📱 **穿搭助手 - 远程指令菜单**
 | 指令 | 说明 |
 |------|------|
 | **推荐穿搭** | AI 分析天气+衣柜，推荐今日搭配 |
-| **生成 风格名** | 生图完整流程（效果图→排版→推送）|
-| **效果图** | 同上，使用默认风格 |
+| **生成 风格名** | 完整生图流程 |
 | **同步** | 推送到 GitHub |
-| **状态** | 查看项目文件状态 |
+| **状态** | 查看文件状态 |
 | **帮助** | 显示本菜单 |
 
 💡 示例:
   • "推荐穿搭"
   • "生成 日系清凉休闲"
-  • "效果图"
-  • "同步"
-"""
+  • "同步\""""
 
+# ── 管线核心 ──────────────────────────────────────────
 def get_github_raw_url(file_path):
-    """根据本地文件路径推断 GitHub Raw URL"""
+    """本地路径 → GitHub Raw URL"""
     rel = os.path.relpath(file_path, PROJECT_DIR)
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
 
@@ -149,11 +128,9 @@ def find_latest_composite():
         dp = os.path.join(outfit_base, d)
         if not os.path.isdir(dp) or d.startswith('.'):
             continue
-        # 先在根目录找
         for f in sorted(os.listdir(dp), reverse=True):
             if '_方案' in f and f.endswith('.jpg'):
                 return os.path.join(dp, f)
-        # 再找上身效果子目录
         for sub in ['上身效果', 'generated']:
             sp = os.path.join(dp, sub)
             if os.path.isdir(sp):
@@ -162,50 +139,46 @@ def find_latest_composite():
                         return os.path.join(sp, f)
     return None
 
-def run_pipeline(style_hint, openid):
-    """完整生图管线: 推荐 → 生图 → 排版 → 推送。只发开始和结束两条通知。"""
+def run_pipeline(style_hint):
+    """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送效果图"""
     print(f"🚀 启动管线: {style_hint}")
 
-    # Step 1: Claude 推荐搭配 + 创建所有文件
+    # Step 1: Claude 推荐搭配 + 创建所有文件 + 调用生图和排版
     prompt = f"""根据 wardrobe/服装档案.md 和当前天气（北京6月中旬），为「{style_hint}」推荐一套完整穿搭并完成以下操作：
 
 1. 创建 outfits/2026-06-12_{style_hint}/ 目录
 2. 写入 outfit.md（含单品ID、搭配理由、配色逻辑、风格关键词）
-3. 在 outfits/.../豆包生图/ 目录下放入：人物照片(profile/photos/IMG_8493.jpg)、上衣、下装、鞋子、以及配饰的参考图（从 wardrobe/ 对应的单品目录复制原图）
-4. 在 outfits/.../豆包生图/ 目录下写入 豆包提示词.txt（Seedream生图英文提示词，描述完整穿搭上身效果）
+3. 在 outfits/.../豆包生图/ 目录下放入：人物照片(profile/photos/IMG_8493.jpg)、上衣、下装、鞋子、配饰的参考图（从 wardrobe/ 对应单品目录复制）
+4. 在 outfits/.../豆包生图/ 目录下写入 豆包提示词.txt（Seedream生图英文提示词）
 5. 创建 outfits/.../items/ 目录，从 wardrobe/enhanced/ 复制对应单品 _cutout.png 抠图
 
-⚡ 重要：豆包提示词.txt 必须放在 豆包生图/ 目录内！
+⚡ 豆包提示词.txt 必须放在 豆包生图/ 目录内！
 
-完成后用 python3 tools/generate.py {style_hint} 调用 Seedream 生图。
-生图完成后用 python3 tools/composite_v2.py 生成直角画册。
-最后 git add -A && git commit && git push。"""
+完成后依次执行:
+  python3 tools/generate.py {style_hint}
+  python3 tools/composite_v2.py
+  git add -A && git commit -m "🎨 {style_hint}" && git push"""
 
     run_cli(['claude', '-p', prompt], timeout=600)
 
-    # 找到生成的结果图片
+    # Step 2: 推送最终效果图到微信
     composite = find_latest_composite()
-
     if composite and os.path.exists(composite):
-        # 推送到 GitHub 获取 URL
         run_cli(['git', 'add', '-A'], timeout=30)
         run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
         run_cli(['git', 'push'], timeout=60)
 
         github_url = get_github_raw_url(composite)
-        # 只发一条最终结果，包含效果图
         push_wechat(
             f"👔 {style_hint}",
-            f"![效果图]({github_url})\n\n🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)",
-            openid
+            f"![效果图]({github_url})\n\n🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
         )
         return f"✅ 完成\n{github_url}"
     else:
-        push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志", openid)
-        return "⚠️ 未找到 _直角画册.jpg"
+        push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志")
+        return "⚠️ 未找到排版图"
 
-
-def execute_action(action, extra, openid):
+def execute_action(action, extra):
     """执行指令并返回结果文本"""
     print(f"  📋 执行指令: {action} | 参数: {extra}")
 
@@ -221,13 +194,12 @@ def execute_action(action, extra, openid):
         return f"📂 分支: {branch_output}\n📋 文件状态:\n{status_output if status_output else '(干净)'}"
 
     elif action == 'recommend':
-        # 后台执行，先回复"处理中"
-        threading.Thread(target=run_pipeline, args=(extra if extra else "今日穿搭", openid), daemon=True).start()
+        threading.Thread(target=run_pipeline, args=(extra if extra else "今日穿搭",), daemon=True).start()
         return "🤔 正在生成搭配方案，完成后推送效果图到微信..."
 
     elif action == 'generate':
         style = extra if extra else "日系 city boy"
-        threading.Thread(target=run_pipeline, args=(style, openid), daemon=True).start()
+        threading.Thread(target=run_pipeline, args=(style,), daemon=True).start()
         return f"🎨 正在生成「{style}」效果图，完成后推送..."
 
     elif action == 'unknown':
@@ -235,7 +207,6 @@ def execute_action(action, extra, openid):
 
     return "❌ 未知错误"
 
-# ── HTTP Webhook 处理器 ──────────────────────────────
 # ── 手机控制面板 HTML ──────────────────────────────────
 MOBILE_PANEL_HTML = """<!DOCTYPE html>
 <html lang="zh">
@@ -276,10 +247,10 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <a class="btn" href="/cmd?t=状态"><span class="icon">📊</span>查看状态<span class="tag">检查</span></a>
 </div>
 <div class="custom">
-<input type="text" id="cmd" placeholder="输入指令…如：生成 韩系简约" autocomplete="off">
+<input type="text" id="cmd" placeholder="输入风格名…如：韩系简约" autocomplete="off">
 <button onclick="send()">发送</button>
 </div>
-<div class="footer"><span>🔗 ngrok 远程</span><span>📱 收藏到主屏幕</span></div>
+<div class="footer"><span>📱 添加到主屏幕</span><span>🔗 ngrok 远程</span></div>
 </div>
 <script>
 function send(){var t=document.getElementById('cmd').value.trim();if(t)location.href='/cmd?t='+encodeURIComponent(t)}
@@ -288,20 +259,26 @@ document.getElementById('cmd').addEventListener('keydown',function(e){if(e.key==
 </body>
 </html>"""
 
+# ── HTTP 处理器 ───────────────────────────────────────
 class WebhookHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        """健康检查 + 手机控制面板 + URL触发"""
+        """控制面板 / 健康检查 / URL触发"""
         from urllib.parse import urlparse, parse_qs
 
         parsed = urlparse(self.path)
 
-        # URL 触发命令：/cmd?t=推荐穿搭
+        # 手机控制面板
+        if parsed.path in ('/', ''):
+            self._html_resp(200, MOBILE_PANEL_HTML)
+            return
+
+        # URL 命令触发: /cmd?t=推荐穿搭
         if parsed.path == '/cmd':
             qs = parse_qs(parsed.query)
             msg = qs.get('t', [''])[0] or qs.get('text', [''])[0]
             if msg:
-                thread = threading.Thread(target=self._process_and_reply, args=(msg, ''), daemon=True)
+                thread = threading.Thread(target=self._process, args=(msg,), daemon=True)
                 thread.start()
                 self._html_resp(200, f"""<!DOCTYPE html><html lang="zh"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -311,104 +288,40 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#f5f0eb;disp
 .card{{background:#fff;border:1px solid #e0d8d0;padding:30px 24px;text-align:center;max-width:360px;width:90%}}
 h2{{font-size:20px;margin-bottom:6px}} .st{{color:#9b8c7c;font-size:14px;margin-bottom:20px}}
 .cmd{{background:#f9f6f3;border:1px solid #e0d8d0;padding:12px;border-radius:4px;font-size:16px;margin:16px 0;color:#3a3028}}
-.note{{color:#9b8c7c;font-size:13px;margin-top:16px}}
-a{{color:#6b5e4f}}
+.note{{color:#9b8c7c;font-size:13px;margin-top:16px}} a{{color:#6b5e4f}}
 </style></head><body>
 <div class="card"><h2>👔 穿搭助手</h2><div class="st">指令已提交，后台处理中</div>
-<div class="cmd">📨 {msg}</div><div class="note">结果将推送到微信<br>也可稍后访问 <a href="/">控制面板</a></div>
+<div class="cmd">📨 {msg}</div><div class="note">效果图将推送到微信<br><a href="/">← 返回控制面板</a></div>
 </div></body></html>""")
             else:
                 self._json_resp(400, {"error": "缺少 t 参数，如 /cmd?t=推荐穿搭"})
             return
 
-        # 手机控制面板 HTML
-        if parsed.path == '/' or parsed.path == '':
-            self._html_resp(200, MOBILE_PANEL_HTML)
-            return
-
-        # 健康检查 JSON
+        # 健康检查
         if parsed.path == '/health':
-            self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手 Webhook", "time": time.strftime("%H:%M:%S")})
+            self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手", "time": time.strftime("%H:%M:%S")})
             return
 
         self._json_resp(404, {"error": "not found"})
 
-    def do_POST(self):
-        """接收 Server酱 Webhook 回调"""
-        if self.path != '/webhook':
-            self._json_resp(404, {"error": "webhook endpoint is /webhook"})
-            return
-
-        try:
-            # 读取请求体
-            content_length = int(self.headers.get('Content-Length', 0))
-            raw_body = self.rfile.read(content_length)
-            body = json.loads(raw_body.decode('utf-8'))
-
-            print(f"\n📩 [{time.strftime('%H:%M:%S')}] 收到微信消息: {body.get('message', '(空)')[:100]}")
-
-            # 验证签名（可选）
-            sign = self.headers.get('X-Sct-Signature', '')
-            if sign and WEBHOOK_SECRET:
-                expected = hmac.new(
-                    WEBHOOK_SECRET.encode(), raw_body, hashlib.sha256
-                ).hexdigest()
-                if not hmac.compare_digest(sign, expected):
-                    print("  ⚠️  签名验证失败")
-                    self._json_resp(403, {"error": "invalid signature"})
-                    return
-
-            # 提取消息和 openid
-            message = body.get('message', '').strip()
-            openid = body.get('openid', '')
-
-            if not message:
-                self._json_resp(200, {"code": 0, "msg": "empty message ignored"})
-                return
-
-            # 后台处理（立即返回 200，避免 Server酱 超时）
-            thread = threading.Thread(
-                target=self._process_and_reply,
-                args=(message, openid),
-                daemon=True
-            )
-            thread.start()
-
-            self._json_resp(200, {"code": 0, "msg": "processing"})
-
-        except json.JSONDecodeError:
-            print("  ⚠️  请求体不是有效 JSON")
-            self._json_resp(400, {"error": "invalid json"})
-        except Exception as e:
-            print(f"  ❌ 处理出错: {e}")
-            self._json_resp(500, {"error": str(e)})
-
-    def _process_and_reply(self, message, openid):
+    def _process(self, message):
         """后台线程：解析指令 → 执行 → 推送结果"""
         action, extra = match_command(message)
-        print(f"  🎯 识别意图: {action} | 参数: {extra}")
+        print(f"  🎯 意图: {action} | 参数: {extra}")
 
-        result = execute_action(action, extra, openid)
+        result = execute_action(action, extra)
 
-        # 截断过长内容（微信推送有长度限制）
         if len(result) > 1500:
-            result = result[:1500] + "\n\n... (内容过长已截断，完整结果请查看 GitHub)"
+            result = result[:1500] + "\n\n... (内容过长已截断)"
 
-        # 推送结果回微信
         title_map = {
-            'recommend': '👔 穿搭推荐',
-            'generate': '🎨 效果图生成',
-            'sync': '📤 同步结果',
-            'status': '📊 项目状态',
-            'help': '📋 指令菜单',
-            'unknown': '🤔 指令识别',
+            'recommend': '👔 穿搭推荐', 'generate': '🎨 效果图生成',
+            'sync': '📤 同步结果', 'status': '📊 项目状态',
+            'help': '📋 指令菜单', 'unknown': '🤔 指令识别',
         }
-        title = title_map.get(action, '📢 执行结果')
-
-        push_wechat(title, result, openid)
+        push_wechat(title_map.get(action, '📢 执行结果'), result)
 
     def _json_resp(self, code, data):
-        """发送 JSON 响应"""
         body = json.dumps(data, ensure_ascii=False).encode('utf-8')
         self.send_response(code)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -417,7 +330,6 @@ a{{color:#6b5e4f}}
         self.wfile.write(body)
 
     def _html_resp(self, code, html):
-        """发送 HTML 响应"""
         body = html.encode('utf-8')
         self.send_response(code)
         self.send_header('Content-Type', 'text/html; charset=utf-8')
@@ -426,10 +338,9 @@ a{{color:#6b5e4f}}
         self.wfile.write(body)
 
     def log_message(self, format, *args):
-        """自定义日志格式"""
         print(f"  🌐 {args[0]}" if args else "")
 
-# ── 启动服务器 ────────────────────────────────────────
+# ── 启动 ──────────────────────────────────────────────
 def main():
     port = 8765
     args = sys.argv[1:]
@@ -443,30 +354,19 @@ def main():
 
     server = HTTPServer(('0.0.0.0', port), WebhookHandler)
 
-    print("=" * 60)
-    print("👔 Fashion 穿搭助手 — 微信远程控制服务")
-    print("=" * 60)
-    print(f"  📡 HTTP Webhook 服务: http://0.0.0.0:{port}/webhook")
-    print(f"  ❤️  健康检查: http://localhost:{port}/health")
-    print("-" * 60)
-    print("  📱 下一步操作:")
-    print(f"     1. 另开终端运行: ngrok http {port}")
-    print(f"     2. 复制 ngrok 提供的 https URL")
-    print(f"     3. 去 Server酱控制台配置 Webhook URL:")
-    print(f"        https://sct.ftqq.com/  →  消息通道  →  Webhook")
-    print(f"     4. Webhook URL 填: https://xxx.ngrok-free.app/webhook")
-    print("-" * 60)
+    print("=" * 55)
+    print("👔 Fashion 穿搭助手 — 手机远程控制")
+    print("=" * 55)
+    print(f"  📡 服务: http://0.0.0.0:{port}")
+    print(f"  ❤️  健康: http://localhost:{port}/health")
+    print(f"  📱 面板: http://localhost:{port}/")
+    print("-" * 55)
+    print(f"  启动 ngrok: ngrok http {port}")
+    print(f"  手机访问 ngrok 提供的 https URL 即可")
+    print("-" * 55)
 
-    # 启动时发送上线通知（带 openid 支持，让用户可以回复）
-    push_wechat(
-        "🟢 穿搭助手已上线",
-        "回复以下指令开始操控:\n"
-        "• **推荐穿搭** — 获取今日搭配方案\n"
-        "• **生成 风格名** — 生成效果图\n"
-        "• **同步** — 推送到 GitHub\n"
-        "• **帮助** — 查看完整菜单",
-    )
-    print("  📤 已推送上线通知到微信\n")
+    push_wechat("🟢 穿搭助手已上线", "手机打开控制面板即可远程操控")
+    print("  📤 已推送上线通知\n")
 
     try:
         server.serve_forever()

@@ -16,8 +16,10 @@
 - `outfits/` — 按 `日期_场景` 组织每日穿搭
 - `config/seedream.json` — 火山引擎 Seedream API 配置 + Server酱 SendKey
 - `tools/generate.py` — Seedream 生图脚本
-- `tools/composite.py` — 单品标注合成，在效果图上贴原图缩略图
+- `tools/composite_v2.py` — ACOC 直角画册排版
 - `tools/notify.py` — 微信推送脚本（Server酱）
+- `tools/wechat_control.py` — 手机远程控制服务（HTML面板 + ngrok穿透）
+- `tools/start_wechat_control.sh` — 远程控制一键启动脚本
 - `系统升级建议.md` — 功能优化建议池，有新想法随时追加
 - `devlog/` — 每日开发日志，按 `YYYY-MM-DD.md` 命名
 
@@ -61,6 +63,13 @@ python3 tools/enhance_clothing.py --force  # rembg抠图+精修 → wardrobe/enh
 - Remote: `git@github.com:wangyunkun123/fashion-style-advisor.git` (SSH)
 - Web: https://github.com/wangyunkun123/fashion-style-advisor (public)
 - 用户说"同步"时执行 sync.sh
+
+## 手机远程控制
+- **启动**: `bash tools/start_wechat_control.sh` 或手动 `python3 tools/wechat_control.py 8765` + `ngrok http 8765`
+- **使用**: 手机浏览器打开 ngrok 提供的 https URL → 点击按钮或输入风格名 → 1-2分钟后微信收到效果图
+- **流程**: 推荐搭配 → Seedream生图 → composite_v2排版 → git push → 微信推送效果图
+- **端口**: 8765
+- **权限**: 已在 `.claude/settings.local.json` 预授权 Write/Edit/Bash，无需每步确认
 
 ## 回答规范
 - 始终用中文回答

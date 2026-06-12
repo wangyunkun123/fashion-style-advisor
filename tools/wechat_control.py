@@ -137,61 +137,64 @@ HELP_TEXT = """📱 **穿搭助手 - 远程指令菜单**
   • "同步"
 """
 
-def run_pipeline(style_hint, openid):
-    """完整生图管线: 推荐 → 生图 → 抠图同步 → 排版 → 推送"""
-    results = []
+def get_github_raw_url(file_path):
+    """根据本地文件路径推断 GitHub Raw URL"""
+    rel = os.path.relpath(file_path, PROJECT_DIR)
+    return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
 
-    # Step 1: Claude 推荐搭配 + 创建穿搭档案
-    push_wechat("🤔 Step 1/5 AI 推荐搭配中...", f"风格: {style_hint}", openid)
-    prompt = f"根据 wardrobe/服装档案.md 和当前天气（北京6月中旬），为「{style_hint}」推荐一套完整穿搭。\n要求：\n1. 创建 outfits/当天日期_{style_hint}/ 目录\n2. 写入 outfit.md（含单品ID、搭配理由、配色逻辑）\n3. 从 wardrobe/enhanced/ 复制对应单品的抠图到 outfits/.../items/\n4. 从 profile/photos/ 复制用户照片\n5. 创建 outfits/.../豆包生图/ 目录并放入参考图\n6. 写入 豆包提示词.txt（Seedream 生图提示词）\n完成后报告创建的目录路径。"
-    step1 = run_cli(['claude', '-p', prompt], timeout=300)
-    results.append(f"[Step1 推荐] {step1[:200] if step1 else '完成'}")
-
-    # Step 2: Seedream AI 生图
-    push_wechat("🎨 Step 2/5 Seedream AI 生图中...", "调用火山引擎 Seedream API，约 30-60 秒", openid)
-    step2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=120)
-    results.append(f"[Step2 生图] {step2[:200] if step2 else '完成'}")
-
-    # Step 3: 同步抠图
-    push_wechat("✂️ Step 3/5 同步抠图中...", "", openid)
-    # 找到最新的outfit目录，从wardrobe复制cutout
+def find_latest_composite():
+    """找到最新生成的 _直角画册.jpg"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    outfit_dirs = sorted([d for d in os.listdir(outfit_base)
-                          if os.path.isdir(os.path.join(outfit_base, d)) and not d.startswith('.')])
-    if outfit_dirs:
-        latest_outfit = os.path.join(outfit_base, outfit_dirs[-1])
-        items_dir = os.path.join(latest_outfit, 'items')
-        wardrobe_enhanced = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
-        if os.path.exists(wardrobe_enhanced):
-            copied = 0
-            for f in os.listdir(wardrobe_enhanced):
-                if f.endswith('_cutout.png'):
-                    src = os.path.join(wardrobe_enhanced, f)
-                    dst = os.path.join(items_dir, f)
-                    if not os.path.exists(dst):
-                        run_cli(['cp', src, dst], timeout=10)
-                        copied += 1
-            results.append(f"[Step3 抠图] 复制 {copied} 张")
+    for d in sorted(os.listdir(outfit_base), reverse=True):
+        dp = os.path.join(outfit_base, d)
+        if not os.path.isdir(dp) or d.startswith('.'):
+            continue
+        for f in sorted(os.listdir(dp), reverse=True):
+            if f.endswith('_直角画册.jpg'):
+                return os.path.join(dp, f)
+    return None
+
+def run_pipeline(style_hint, openid):
+    """完整生图管线: 推荐 → 生图 → 排版 → 推送。只发开始和结束两条通知。"""
+    print(f"🚀 启动管线: {style_hint}")
+
+    # Step 1: Claude 推荐搭配 + 创建所有文件
+    prompt = f"""根据 wardrobe/服装档案.md 和当前天气（北京6月中旬），为「{style_hint}」推荐一套完整穿搭并完成以下操作：
+
+1. 创建 outfits/2026-06-12_{style_hint}/ 目录
+2. 写入 outfit.md（含单品ID、搭配理由、配色逻辑、风格关键词）
+3. 在 outfits/.../豆包生图/ 目录下放入：人物照片(profile/photos/IMG_8493.jpg)、上衣、下装、鞋子、以及配饰的参考图（从 wardrobe/ 对应的单品目录复制原图）
+4. 在 outfits/.../豆包生图/ 目录下写入 豆包提示词.txt（Seedream生图英文提示词，描述完整穿搭上身效果）
+5. 创建 outfits/.../items/ 目录，从 wardrobe/enhanced/ 复制对应单品 _cutout.png 抠图
+
+⚡ 重要：豆包提示词.txt 必须放在 豆包生图/ 目录内！
+
+完成后用 python3 tools/generate.py {style_hint} 调用 Seedream 生图。
+生图完成后用 python3 tools/composite_v2.py 生成直角画册。
+最后 git add -A && git commit && git push。"""
+
+    run_cli(['claude', '-p', prompt], timeout=600)
+
+    # 找到生成的结果图片
+    composite = find_latest_composite()
+
+    if composite and os.path.exists(composite):
+        # 推送到 GitHub 获取 URL
+        run_cli(['git', 'add', '-A'], timeout=30)
+        run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
+        run_cli(['git', 'push'], timeout=60)
+
+        github_url = get_github_raw_url(composite)
+        # 只发一条最终结果，包含效果图
+        push_wechat(
+            f"👔 {style_hint}",
+            f"![效果图]({github_url})\n\n🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)",
+            openid
+        )
+        return f"✅ 完成\n{github_url}"
     else:
-        results.append("[Step3 抠图] 未找到outfit目录")
-
-    # Step 4: 排版合成
-    push_wechat("🖼️ Step 4/5 排版合成中...", "composite_v2 直角画册", openid)
-    step4 = run_cli(['python3', 'tools/composite_v2.py'], timeout=120)
-    results.append(f"[Step4 排版] {step4[:200] if step4 else '完成'}")
-
-    # Step 5: Git 推送 + 微信通知
-    push_wechat("📤 Step 5/5 同步 GitHub...", "", openid)
-    run_cli(['git', 'add', '-A'], timeout=30)
-    run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控生成'], timeout=30)
-    step5 = run_cli(['git', 'push'], timeout=60)
-    results.append(f"[Step5 推送] {step5[:200] if step5 else '完成'}")
-
-    # 发送最终通知
-    push_wechat(f"✅ 生成完成！{style_hint}",
-                f"完整管线已执行：\n" + "\n".join(results[-4:]), openid)
-
-    return "\n".join(results)
+        push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志", openid)
+        return "⚠️ 未找到 _直角画册.jpg"
 
 
 def execute_action(action, extra, openid):
@@ -210,11 +213,14 @@ def execute_action(action, extra, openid):
         return f"📂 分支: {branch_output}\n📋 文件状态:\n{status_output if status_output else '(干净)'}"
 
     elif action == 'recommend':
-        return run_pipeline(extra if extra else "今日穿搭", openid)
+        # 后台执行，先回复"处理中"
+        threading.Thread(target=run_pipeline, args=(extra if extra else "今日穿搭", openid), daemon=True).start()
+        return "🤔 正在生成搭配方案，完成后推送效果图到微信..."
 
     elif action == 'generate':
         style = extra if extra else "日系 city boy"
-        return run_pipeline(style, openid)
+        threading.Thread(target=run_pipeline, args=(style, openid), daemon=True).start()
+        return f"🎨 正在生成「{style}」效果图，完成后推送..."
 
     elif action == 'unknown':
         return f"🤔 未识别的指令: 「{extra}」\n\n{HELP_TEXT}"

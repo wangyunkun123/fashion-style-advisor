@@ -122,21 +122,21 @@ def get_github_raw_url(file_path):
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
 
 def find_latest_composite():
-    """找到最新生成的排版合成图"""
+    """找到最新生成的排版合成图（按文件修改时间）"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    for d in sorted(os.listdir(outfit_base), reverse=True):
+    candidates = []
+    for d in os.listdir(outfit_base):
         dp = os.path.join(outfit_base, d)
         if not os.path.isdir(dp) or d.startswith('.'):
             continue
-        for f in sorted(os.listdir(dp), reverse=True):
-            if '_方案' in f and f.endswith('.jpg'):
-                return os.path.join(dp, f)
-        for sub in ['上身效果', 'generated']:
-            sp = os.path.join(dp, sub)
-            if os.path.isdir(sp):
-                for f in sorted(os.listdir(sp), reverse=True):
-                    if '_方案' in f and f.endswith('.jpg'):
-                        return os.path.join(sp, f)
+        for root, _, files in os.walk(dp):
+            for f in files:
+                if '_方案' in f and f.endswith('.jpg'):
+                    fp = os.path.join(root, f)
+                    candidates.append(fp)
+    if candidates:
+        candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+        return candidates[0]
     return None
 
 def get_todays_used_items():

@@ -161,8 +161,12 @@ def format_outfit_summary(outfit_md_path):
     try:
         with open(outfit_md_path, 'r') as f:
             content = f.read()
-        # 提取穿搭方案表格行
-        items = re.findall(r'\|\s*(👕|👔|🧥|👖|🩳|👟|🎒|🧢|🕶️|⌚|🧦)\s*\|\s*\*\*(\S+)\*\*\s*\|\s*(.+?)\s*\|', content)
+        # 匹配表格行: | emoji label | **ID** 或 ID | name | ...
+        # 兼容加粗和非加粗两种格式
+        items = re.findall(
+            r'\|\s*(👕|👔|🧥|👖|🩳|👟|🎒|🧢|🕶️|⌚|🧦|📿)\s+[^\|]*?\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\|.*)?$',
+            content, re.MULTILINE
+        )
         lines = [f"{emoji} {item_id} {name.strip()}" for emoji, item_id, name in items]
         return '\n'.join(lines) if lines else ''
     except:
@@ -181,8 +185,8 @@ def run_pipeline(style_hint):
 
 根据 wardrobe/服装档案.md，为「{style_hint}」推荐一套全新穿搭。
 
-⚠️ 今日已使用的单品: {used_str}
-请避开这些已用的单品，选择不同的搭配组合。
+❌ 今日已使用以下单品，严禁再次使用: {used_str}
+必须从未使用的单品中选择，确保上衣、下装、鞋子不与今日任何一套重复。
 
 操作步骤:
 1. 创建 outfits/{today}_{style_hint}/ 目录

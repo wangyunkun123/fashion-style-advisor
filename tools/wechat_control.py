@@ -687,12 +687,21 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes progress{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+#history-bar:active{background:#f0ebe0}
+.history-card{background:#fff;border:1px solid #e0d8d0;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.history-card:active{background:#faf8f5}
+.history-card .detail{display:none;margin-top:6px;font-size:13px;line-height:1.5}
+.history-card .detail img{max-width:100%;border-radius:6px;margin-top:6px}
 </style>
 </head>
 <body>
 <div id="app">
 <div class="header"><h1>👔 穿搭助手</h1><div class="sub">AI STYLE ADVISOR</div></div>
 <div id="messages"></div>
+<div id="history-bar" style="flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;cursor:pointer;padding:8px 18px;font-size:13px;color:#5c4d3c;display:flex;align-items:center;gap:6px;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleHistoryBar()">
+<span id="history-icon">▶</span> <span>📋 历史记录</span> <span id="history-count" style="font-size:11px;color:#9b8c7c"></span>
+</div>
+<div id="history-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:40vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 14px"></div>
 <div class="input-bar">
 <div class="chips" id="chips">
 <span class="chip" data-cmd="推荐穿搭">🧠 推荐</span>
@@ -759,34 +768,43 @@ var c=e.target.closest('.chip');if(c){input.value=c.dataset.cmd;send()}
 // 欢迎消息
 addMsg('assistant','👋 你好！我是穿搭助手<br><br>试试输入:<br>• <b>推荐穿搭</b> — AI推荐+生图<br>• <b>生成 日系休闲</b> — 完整流程<br>• <b>状态</b> — 查看项目状态<br>• <b>同步</b> — 推送GitHub');
 
-// 加载历史记录
-(function loadHistory(){
-fetch('/api/history?n=10').then(function(r){return r.json()}).then(function(data){
-if(!data||!data.length)return;
-var d=document.createElement('div');
-d.className='msg assistant';
-d.style.background='transparent';d.style.border='none';d.style.padding='4px 14px';
-var h='<div style="font-size:11px;color:#9b8c7c;margin-bottom:8px;letter-spacing:1px">━━ 📋 历史记录 ━━</div>';
-data.forEach(function(e){
-var statusEmoji=e.status==='done'?'✅':'❌';
-h+='<div style="background:#fff;border:1px solid #e0d8d0;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer" onclick="toggleHistory(this)" data-img="'+esc(e.image_url||'')+'" data-result="'+esc(e.result||'')+'">';
-h+='<div style="font-size:14px;font-weight:600">'+statusEmoji+' '+esc(e.style)+'</div>';
-h+='<div style="font-size:11px;color:#9b8c7c;margin-top:2px">'+esc(e.time)+'</div>';
-h+='<div class="history-detail" style="display:none;margin-top:6px;font-size:13px;line-height:1.5"></div>';
-h+='</div>';
-});
-d.innerHTML=h;msgs.insertBefore(d,msgs.firstChild);
-})})();
+// ── 历史栏 ──
+var historyPanel=document.getElementById('history-panel');
+var historyIcon=document.getElementById('history-icon');
+var historyCount=document.getElementById('history-count');
+var historyOpen=false;
 
-function toggleHistory(el){
-var detail=el.querySelector('.history-detail');
-if(detail.style.display==='none'){
-var img=el.dataset.img,result=el.dataset.result;
-var h=result.replace(/\n/g,'<br>');
-if(img)h+='<br><img src="'+img+'" style="max-width:100%;border-radius:6px;margin-top:6px">';
-detail.innerHTML=h;detail.style.display='block';
-}else{detail.style.display='none'}
+function loadHistoryBar(){
+fetch('/api/history?n=20').then(function(r){return r.json()}).then(function(data){
+if(!data||!data.length){historyCount.textContent='(暂无)';return}
+historyCount.textContent='('+data.length+'条)';
+var h='';
+data.forEach(function(e){
+var emoji=e.status==='done'?'✅':'❌';
+h+='<div class="history-card" onclick="toggleCard(this)" data-img="'+esc(e.image_url||'')+'" data-result="'+esc(e.result||'')+'">';
+h+='<div style="font-size:14px;font-weight:600">'+emoji+' '+esc(e.style)+'</div>';
+h+='<div style="font-size:11px;color:#9b8c7c;margin-top:2px">'+esc(e.time)+'</div>';
+h+='<div class="detail"></div></div>';
+});
+historyPanel.innerHTML=h;
+})}
+
+function toggleHistoryBar(){
+historyOpen=!historyOpen;
+historyPanel.style.display=historyOpen?'block':'none';
+historyIcon.textContent=historyOpen?'▼':'▶';
+if(historyOpen)loadHistoryBar();
 }
+
+function toggleCard(el){
+var detail=el.querySelector('.detail');
+if(detail.style.display==='block'){detail.style.display='none';return}
+var img=el.dataset.img,result=el.dataset.result;
+var h=result.replace(/\\n/g,'<br>');
+if(img)h+='<br><img src="'+img+'" loading="lazy">';
+detail.innerHTML=h;detail.style.display='block';
+}
+
 </script>
 </body>
 </html>"""

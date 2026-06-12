@@ -139,14 +139,53 @@ def find_latest_composite():
                         return os.path.join(sp, f)
     return None
 
+def get_todays_used_items():
+    """获取今日已用单品清单，避免重复推荐"""
+    today = time.strftime('%Y-%m-%d')
+    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
+    used = []
+    for d in sorted(os.listdir(outfit_base)):
+        if not d.startswith(today):
+            continue
+        md = os.path.join(outfit_base, d, 'outfit.md')
+        if os.path.exists(md):
+            with open(md, 'r') as f:
+                content = f.read()
+            # 提取所有 ID
+            ids = re.findall(r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+)', content)
+            used.extend(ids)
+    return list(set(used))
+
+def format_outfit_summary(outfit_md_path):
+    """从 outfit.md 提取穿搭摘要"""
+    try:
+        with open(outfit_md_path, 'r') as f:
+            content = f.read()
+        # 提取穿搭方案表格行
+        items = re.findall(r'\|\s*(👕|👔|🧥|👖|🩳|👟|🎒|🧢|🕶️|⌚|🧦)\s*\|\s*\*\*(\S+)\*\*\s*\|\s*(.+?)\s*\|', content)
+        lines = [f"{emoji} {item_id} {name.strip()}" for emoji, item_id, name in items]
+        return '\n'.join(lines) if lines else ''
+    except:
+        return ''
+
 def run_pipeline(style_hint):
     """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送效果图"""
     print(f"🚀 启动管线: {style_hint}")
 
-    # Step 1: Claude 推荐搭配 + 创建所有文件 + 调用生图和排版
-    prompt = f"""根据 wardrobe/服装档案.md 和当前天气（北京6月中旬），为「{style_hint}」推荐一套完整穿搭并完成以下操作：
+    today = time.strftime('%Y-%m-%d')
+    used_items = get_todays_used_items()
+    used_str = '、'.join(used_items) if used_items else '无'
 
-1. 创建 outfits/2026-06-12_{style_hint}/ 目录
+    # Step 1: Claude 推荐搭配 + 创建所有文件 + 调用生图和排版
+    prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
+
+根据 wardrobe/服装档案.md，为「{style_hint}」推荐一套全新穿搭。
+
+⚠️ 今日已使用的单品: {used_str}
+请避开这些已用的单品，选择不同的搭配组合。
+
+操作步骤:
+1. 创建 outfits/{today}_{style_hint}/ 目录
 2. 写入 outfit.md（含单品ID、搭配理由、配色逻辑、风格关键词）
 3. 在 outfits/.../豆包生图/ 目录下放入：人物照片(profile/photos/IMG_8493.jpg)、上衣、下装、鞋子、配饰的参考图（从 wardrobe/ 对应单品目录复制）
 4. 在 outfits/.../豆包生图/ 目录下写入 豆包提示词.txt（Seedream生图英文提示词）
@@ -171,10 +210,20 @@ def run_pipeline(style_hint):
         run_cli(['git', 'push'], timeout=60)
 
         github_url = get_github_raw_url(composite)
-        push_wechat(
-            f"👔 {style_hint}",
-            f"![效果图]({github_url})\n\n🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-        )
+
+        # 读取 outfit.md 获取穿搭详情
+        outfit_dir = os.path.dirname(composite)
+        if '_方案' in os.path.basename(composite):
+            outfit_dir = os.path.dirname(outfit_dir)  # 上身效果子目录
+        outfit_md = os.path.join(outfit_dir, 'outfit.md')
+        summary = format_outfit_summary(outfit_md)
+
+        content = f"![效果图]({github_url})\n\n"
+        if summary:
+            content += f"**单品清单**\n{summary}\n\n"
+        content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
+
+        push_wechat(f"👔 {style_hint}", content)
         return f"✅ 完成\n{github_url}"
     else:
         push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志")
@@ -369,6 +418,14 @@ def main():
     print(f"  启动 ngrok: ngrok http {port}")
     print(f"  手机访问 ngrok 提供的 https URL 即可")
     print("-" * 55)
+
+    push_wechat(
+        "🟢 穿搭助手已上线",
+        "手机打开控制面板即可开始操控\n\n"
+        "• 点击预设按钮或输入风格名\n"
+        "• 1-2分钟后微信收到效果图"
+    )
+    print("  📤 已推送上线通知\n")
 
     try:
         server.serve_forever()

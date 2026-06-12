@@ -143,15 +143,23 @@ def get_github_raw_url(file_path):
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
 
 def find_latest_composite():
-    """找到最新生成的 _直角画册.jpg"""
+    """找到最新生成的排版合成图"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
     for d in sorted(os.listdir(outfit_base), reverse=True):
         dp = os.path.join(outfit_base, d)
         if not os.path.isdir(dp) or d.startswith('.'):
             continue
+        # 先在根目录找
         for f in sorted(os.listdir(dp), reverse=True):
-            if f.endswith('_直角画册.jpg'):
+            if '_方案' in f and f.endswith('.jpg'):
                 return os.path.join(dp, f)
+        # 再找上身效果子目录
+        for sub in ['上身效果', 'generated']:
+            sp = os.path.join(dp, sub)
+            if os.path.isdir(sp):
+                for f in sorted(os.listdir(sp), reverse=True):
+                    if '_方案' in f and f.endswith('.jpg'):
+                        return os.path.join(sp, f)
     return None
 
 def run_pipeline(style_hint, openid):

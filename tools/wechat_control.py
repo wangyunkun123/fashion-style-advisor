@@ -52,6 +52,7 @@ class TaskManager:
                 'result': '',
                 'image_path': '',
                 'image_url': '',
+                'log': '',
                 'created_at': time.time()
             }
         return tid
@@ -234,16 +235,19 @@ def find_outfit_dir(style_hint):
 def run_pipeline(style_hint, task_id=None):
     """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送"""
     print(f"🚀 启动管线: {style_hint}")
+    log_lines = []
 
     def progress(msg):
+        print(f"  📍 {msg}")
         if task_id:
-            tasks.update(task_id, status='running', message=msg)
+            log_lines.append(msg)
+            tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
 
     today = time.strftime('%Y-%m-%d')
     used_items = get_todays_used_items()
     used_str = '、'.join(used_items) if used_items else '无'
 
-    progress('正在 AI 分析穿搭方案...')
+    progress('🤖 Step 1/4: AI 分析穿搭方案...')
 
     prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
@@ -266,23 +270,34 @@ def run_pipeline(style_hint, task_id=None):
 ❌ 不要运行 composite_v2.py、notify.py 或做任何推送。"""
 
     try:
-        run_cli(['claude', '-p', prompt], timeout=600)
+        out1 = run_cli(['claude', '-p', prompt], timeout=600)
+        # 提取关键信息
+        if out1:
+            key = out1[:300]
+            progress(f'✅ 穿搭方案已创建\n{key}')
 
-        progress('正在 Seedream 生图（约1分钟）...')
+        progress('🎨 Step 2/4: Seedream AI 生图中...')
+        out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=120)
+        if out2:
+            progress(f'✅ Seedream 生图完成\n{out2[:300]}')
 
+        progress('🖼️ Step 3/4: 排版合成中...')
         outfit_dir = find_outfit_dir(style_hint)
         if outfit_dir:
-            run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
+            out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
         else:
-            run_cli(['python3', 'tools/composite_v2.py'], timeout=120)
+            out3 = run_cli(['python3', 'tools/composite_v2.py'], timeout=120)
+        if out3:
+            progress(f'✅ 排版完成\n{out3[:300]}')
 
-        progress('正在推送 GitHub...')
-
+        progress('📤 Step 4/4: 推送 GitHub...')
         composite = find_latest_composite()
         if composite and os.path.exists(composite):
             run_cli(['git', 'add', '-A'], timeout=30)
             run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
-            run_cli(['git', 'push'], timeout=60)
+            out4 = run_cli(['git', 'push'], timeout=60)
+            if out4:
+                progress(f'✅ 推送完成\n{out4[:300]}')
 
             github_url = get_github_raw_url(composite)
             comp_dir = os.path.dirname(composite)
@@ -292,10 +307,10 @@ def run_pipeline(style_hint, task_id=None):
             summary = format_outfit_summary(outfit_md)
             result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
-            # 更新任务状态
             if task_id:
-                tasks.update(task_id, status='done', message='完成',
-                             result=result_text, image_path=composite, image_url=github_url)
+                tasks.update(task_id, status='done', message='✅ 全部完成',
+                             result=result_text, image_path=composite, image_url=github_url,
+                             log='\n'.join(log_lines))
 
             # 微信备份推送
             content = f"![效果图]({github_url})\n\n"
@@ -305,11 +320,11 @@ def run_pipeline(style_hint, task_id=None):
             push_wechat(f"👔 {style_hint}", content)
         else:
             if task_id:
-                tasks.update(task_id, status='error', message='未找到排版图')
+                tasks.update(task_id, status='error', message='未找到排版图', log='\n'.join(log_lines))
             push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志")
     except Exception as e:
         if task_id:
-            tasks.update(task_id, status='error', message=str(e)[:200])
+            tasks.update(task_id, status='error', message=str(e)[:200], log='\n'.join(log_lines))
         push_wechat(f"❌ {style_hint} 生成失败", str(e)[:500])
 
 def execute_action(action, extra, task_id=None):
@@ -418,12 +433,16 @@ fetch('/api/task/'+tid).then(r=>r.json()).then(d=>{
 if(!d){el.innerHTML='⚠️ 任务已过期';return}
 if(d.status==='done'){
 var h=esc(d.result||'完成').replace(/\n/g,'<br>');
+if(d.log)h+='<details style="margin-top:8px;font-size:12px;color:#9b8c7c"><summary>📋 操作日志</summary><pre style="white-space:pre-wrap;margin-top:4px">'+esc(d.log)+'</pre></details>';
 if(d.image_url)h+='<br><img src="'+esc(d.image_url)+'" style="max-width:100%;border-radius:8px;margin-top:8px">';
 el.innerHTML=h;el.querySelector('.bar')?.remove();
 }else if(d.status==='error'){
-el.innerHTML='❌ '+esc(d.message);el.classList.add('error');el.querySelector('.bar')?.remove();
+var eh=esc(d.message);if(d.log)eh+='<details style="margin-top:8px;font-size:12px;color:#9b8c7c"><summary>📋 操作日志</summary><pre style="white-space:pre-wrap;margin-top:4px">'+esc(d.log)+'</pre></details>';
+el.innerHTML='❌ '+eh;el.classList.add('error');el.querySelector('.bar')?.remove();
 }else{
-el.innerHTML='<span class="spinner"></span>'+esc(d.message||'处理中...')+'<div class="bar"><div></div></div>';
+var mh='<span class="spinner"></span>'+esc(d.message||'处理中...');
+if(d.log)mh+='<div style="font-size:12px;color:#9b8c7c;margin-top:6px;line-height:1.4">'+esc(d.log).replace(/\n/g,'<br>')+'</div>';
+el.innerHTML=mh+'<div class="bar"><div></div></div>';
 if(n<MAX_POLLS)setTimeout(function(){pollTask(tid,el,n+1)},POLL_INTERVAL);
 else el.innerHTML='⏰ 任务超时，请查看微信通知';
 }
@@ -483,7 +502,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 return
             tasks.cleanup()
             # 返回安全字段
-            safe = {k: task[k] for k in ('id', 'status', 'message', 'result', 'image_path', 'image_url')}
+            safe = {k: task[k] for k in ('id', 'status', 'message', 'result', 'image_path', 'image_url', 'log')}
             self._json_resp(200, safe)
             return
 

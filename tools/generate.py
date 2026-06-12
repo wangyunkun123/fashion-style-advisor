@@ -55,7 +55,7 @@ def collect_key_images(doubao_dir):
         if f.startswith("人物_") and f.lower().endswith(('.jpg','.jpeg','.png')):
             images.append(os.path.join(doubao_dir, f))
             break
-    for prefix in ['上衣_', '下装_', '鞋子_']:
+    for prefix in ['上衣_', '外搭_', '下装_', '鞋子_']:
         for f in sorted(os.listdir(doubao_dir)):
             if f.startswith(prefix) and f.lower().endswith(('.jpg','.jpeg','.png')):
                 images.append(os.path.join(doubao_dir, f))

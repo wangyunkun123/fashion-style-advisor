@@ -153,10 +153,10 @@ def execute_action(action, extra, openid):
         return f"📂 分支: {branch_output}\n📋 文件状态:\n{status_output if status_output else '(干净)'}"
 
     elif action == 'recommend':
-        # 调用 Claude 进行穿搭推荐
-        prompt = f"根据 wardrobe/服装档案.md 和当前天气（北京6月中旬），推荐一套适合今天的穿搭。给出单品ID和搭配理由，简洁回复，200字以内。用户消息: {extra}"
-        push_wechat("🤔 AI 正在思考穿搭...", "请稍等 15-30 秒", openid)
-        return run_cli(['claude', '-p', prompt], timeout=120)
+        # 推荐 + 自动生成效果图
+        push_wechat("🤔 正在推荐并生成效果图...", "AI 分析衣柜 + Seedream 生图 + 排版，约需 1-2 分钟", openid)
+        prompt = f"先根据 wardrobe/服装档案.md 和当前天气（北京6月中旬）简短推荐一套今日穿搭（含单品ID），然后立刻生成该穿搭的效果图。注意：必须执行完整生图流程（推荐搭配 → 生成效果图 → 排版 → 同步）。用户消息: {extra}"
+        return run_cli(['claude', '-p', prompt], timeout=360)
 
     elif action == 'generate':
         # 完整生成流程
@@ -204,7 +204,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <div class="panel">
 <div class="header"><h1>👔 穿搭助手</h1><div class="sub">FASHION STYLE ADVISOR · REMOTE</div></div>
 <div class="btns">
-<a class="btn" href="/cmd?t=推荐穿搭"><span class="icon">🧠</span>推荐穿搭<span class="tag">AI 分析</span></a>
+<a class="btn" href="/cmd?t=推荐穿搭"><span class="icon">🧠</span>推荐+生图<span class="tag">搭配→出图 全流程</span></a>
 <a class="btn" href="/cmd?t=生成效果图"><span class="icon">🎨</span>生成效果图<span class="tag">完整流程</span></a>
 <a class="btn" href="/cmd?t=生成 日系清凉休闲"><span class="icon">🏖️</span>生成 日系清凉休闲<span class="tag">一键</span></a>
 <a class="btn" href="/cmd?t=同步"><span class="icon">📤</span>同步到 GitHub<span class="tag">推送</span></a>

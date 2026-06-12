@@ -6,16 +6,12 @@
 - 核心大件大卡片 / 配饰小贴纸
 - 自动提取生图主色调作为点缀色
 """
-import os, sys, re, glob, json, base64, urllib.request, io
+import os, sys, re, glob
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTFIT_BASE = os.path.join(BASE_DIR, '..', 'outfits')
 WARDROBE_ENHANCED = os.path.join(BASE_DIR, '..', 'wardrobe', 'enhanced')
-
-ARK_KEY = 'ark-73c10b0a-0549-47fa-9811-39d37b6e452f-a7ac6'
-ARK_URL = 'https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions'
-ARK_MODEL = 'doubao-seed-2.0-code'
 
 FONT_PATHS = ['/System/Library/Fonts/STHeiti Medium.ttc','/System/Library/Fonts/STHeiti Light.ttc','/System/Library/Fonts/Hiragino Sans GB.ttc']
 CATEGORY_ORDER = ["HAT-","SUN-","JK-","TS-","LS-","SHIRT-","TANK-","SH-","PT-","ACC-","BAG-","SHOE-","SOCK-"]
@@ -244,37 +240,6 @@ def render_card(img_path, base_size, accent_color, prefix=''):
     )
     card.paste(bd, (0, 0), bd)
 
-    return card
-
-    card = Image.new('RGBA', (card_w, card_h), (0, 0, 0, 0))
-
-    # 阴影
-    sh = Image.new('RGBA', (card_w, card_h), (0, 0, 0, 0))
-    ImageDraw.Draw(sh).rounded_rectangle(
-        [(4, 6), (card_w-5, card_h-5)], radius=14, fill=(0, 0, 0, 18)
-    )
-    card.paste(sh.filter(ImageFilter.GaussianBlur(radius=8)), (0, 0), sh)
-
-    # 纯白底
-    white_w, white_h = card_w - 6, card_h - 6
-    white = Image.new('RGBA', (white_w, white_h), (255, 255, 255, 255))
-    wm = Image.new('L', (white_w, white_h), 0)
-    ImageDraw.Draw(wm).rounded_rectangle(
-        [(2, 2), (white_w-3, white_h-3)], radius=12, fill=255
-    )
-    white.putalpha(wm)
-    card.paste(white, (3, 3), white)
-
-    # 贴衣服
-    card.paste(img, (pad, pad), img)
-
-    # 边框
-    bd = Image.new('RGBA', (card_w, card_h), (0, 0, 0, 0))
-    ImageDraw.Draw(bd).rounded_rectangle(
-        [(4, 4), (card_w-5, card_h-5)], radius=11,
-        outline=accent_color + (140,), width=2
-    )
-    card.paste(bd, (0, 0), bd)
 
     return card
 

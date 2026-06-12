@@ -481,40 +481,7 @@ style: {plan.get('style', style_hint)}
     log(f"✅ 穿搭方案已创建: {outfit_dir}")
     return outfit_dir
 
-def find_outfit_dir(style_hint):
-    """根据风格名找到对应的 outfit 目录（按创建时间，最新优先）"""
-    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    candidates = []
-    for d in os.listdir(outfit_base):
-        dp = os.path.join(outfit_base, d)
-        if os.path.isdir(dp) and style_hint in d:
-            candidates.append((dp, os.path.getctime(dp)))
-    if candidates:
-        candidates.sort(key=lambda x: x[1], reverse=True)
-        return candidates[0][0]
-    return None
-
-def run_pipeline(style_hint, task_id=None):
-    """完整生图管线: API穿搭分析 → Seedream生图 → 排版 → 推送"""
-    log(f"🚀 管线启动: {style_hint}")
-    log_lines = []
-
-    def progress(msg):
-        log(f"📍 {msg}")
-        if task_id:
-            log_lines.append(msg)
-            tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
-
-    today = time.strftime('%Y-%m-%d')
-    used_items = get_todays_used_items()
-    used_str = '、'.join(used_items) if used_items else '无'
-
-    progress('🤖 Step 1/4: AI 分析穿搭方案...')
-
-    # ── 构建衣柜上下文 ──
-    wardrobe_summary = get_wardrobe_summary()
-
-    system_prompt = """你是一位专攻亚洲男性穿搭的 AI 时尚顾问。用户会提供完整衣柜档案和场景需求，你需要推荐一套全新穿搭方案。
+OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾问。用户会提供完整衣柜档案和场景需求，你需要推荐一套全新穿搭方案。
 
 要求：
 1. 仔细分析场景需求（运动/休闲/通勤/约会等）
@@ -539,6 +506,29 @@ def run_pipeline(style_hint, task_id=None):
 - 必须包含上衣和下装
 - 鞋子、帽子、包、袜子、墨镜等配饰根据场景酌情添加
 - seedream_prompt 必须是英文，详细描述服装细节和场景氛围"""
+
+
+def run_pipeline(style_hint, task_id=None):
+    """完整生图管线: API穿搭分析 → Seedream生图 → 排版 → 推送"""
+    log(f"🚀 管线启动: {style_hint}")
+    log_lines = []
+
+    def progress(msg):
+        log(f"📍 {msg}")
+        if task_id:
+            log_lines.append(msg)
+            tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
+
+    today = time.strftime('%Y-%m-%d')
+    used_items = get_todays_used_items()
+    used_str = '、'.join(used_items) if used_items else '无'
+
+    progress('🤖 Step 1/4: AI 分析穿搭方案...')
+
+    # ── 构建衣柜上下文 ──
+    wardrobe_summary = get_wardrobe_summary()
+
+    system_prompt = OUTFIT_SYSTEM_PROMPT
 
     user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
@@ -626,6 +616,13 @@ def run_pipeline(style_hint, task_id=None):
             tasks.update(task_id, status='error', message=str(e)[:200], log='\n'.join(log_lines))
         push_wechat(f"❌ {style_hint} 生成失败", str(e)[:500])
 
+def _start_async_pipeline(action, extra):
+    """启动异步穿搭管线，返回 task_id"""
+    tid = tasks.create()
+    style = extra if extra else "今日穿搭"
+    threading.Thread(target=run_pipeline, args=(style, tid), daemon=True).start()
+    return tid
+
 def execute_action(action, extra, task_id=None):
     """执行指令并返回结果"""
     log(f"指令: {action} | {extra}")
@@ -639,12 +636,10 @@ def execute_action(action, extra, task_id=None):
         branch_output = run_cli(['git', 'branch', '--show-current'], timeout=10)
         return f"📂 分支: {branch_output}\n📋 状态:\n{status_output if status_output else '(干净)'}"
     elif action == 'recommend':
-        style = extra if extra else "今日穿搭"
-        threading.Thread(target=run_pipeline, args=(style, task_id), daemon=True).start()
+        _start_async_pipeline(action, extra)
         return None  # 异步，结果通过 task 轮询
     elif action == 'generate':
-        style = extra if extra else "日系 city boy"
-        threading.Thread(target=run_pipeline, args=(style, task_id), daemon=True).start()
+        _start_async_pipeline(action, extra)
         return None
     elif action == 'unknown':
         return f"🤔 未识别的指令: 「{extra}」\n\n{HELP_TEXT}"
@@ -828,9 +823,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             if msg:
                 action, extra = match_command(msg)
                 if action in ('generate', 'recommend'):
-                    tid = tasks.create()
-                    style = extra if extra else "今日穿搭"
-                    threading.Thread(target=run_pipeline, args=(style, tid), daemon=True).start()
+                    tid = _start_async_pipeline(action, extra)
                     self._html_resp(200, REDIRECT_HTML)
                 else:
                     result = execute_action(action, extra)
@@ -936,9 +929,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             log(f"💬 聊天: {action} | {extra}")
 
             if action in ('generate', 'recommend'):
-                tid = tasks.create()
-                style = extra if extra else "今日穿搭"
-                threading.Thread(target=run_pipeline, args=(style, tid), daemon=True).start()
+                tid = _start_async_pipeline(action, extra)
                 self._json_resp(200, {"task_id": tid})
             else:
                 result = execute_action(action, extra)

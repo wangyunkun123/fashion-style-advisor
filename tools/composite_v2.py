@@ -6,6 +6,13 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTFIT_BASE = os.path.join(BASE_DIR, '..', 'outfits')
 WARDROBE_ENHANCED = os.path.join(BASE_DIR, '..', 'wardrobe', 'enhanced')
+CONFIG_FILE = os.path.join(BASE_DIR, '..', 'config', 'seedream.local.json')
+def _get_ark_key():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            return json.load(f).get('api_key', '')
+    return os.environ.get('ARK_API_KEY', '')
+
 BASE_DIR_FONTS = os.path.dirname(os.path.abspath(__file__))
 FONTS = {
     # 时尚杂志标题 — Didot (Vogue同款) + Cormorant Garamond
@@ -27,7 +34,6 @@ def font(size, style='body_cn'):
         if os.path.exists(fp): return ImageFont.truetype(fp, size)
     return ImageFont.load_default()
 CAT_ORDER = ["HAT-","SUN-","JK-","TS-","LS-","SHIRT-","TANK-","SH-","PT-","ACC-","BAG-","SHOE-","SOCK-"]
-LABELS = list('ABCDEFGH')
 
 def prep(path, prefix, w, h):
     img=Image.open(path); img=ImageOps.exif_transpose(img)
@@ -99,11 +105,6 @@ def find_img(dd,item):
     base=os.path.splitext(orig)[0]
     for p in [os.path.join(dd,base+'_cutout.png'),os.path.join(WARDROBE_ENHANCED,orig),os.path.join(dd,orig)]:
         if os.path.exists(p): return p
-
-def draw_label(draw,x,y,letter,sz=34):
-    draw.rectangle([(x,y),(x+sz-1,y+sz-1)],fill=(60,60,58))
-    f=font(22,'title_en'); tw=draw.textbbox((0,0),letter,f)[2]
-    draw.text((x+(sz-tw)//2,y+3),letter,font=f,fill=(255,255,255))
 
 def parse_style_info(outfit_dir):
     """从outfit.md提取风格关键词"""
@@ -227,11 +228,10 @@ def composite(ai_path,items,output_path):
             data=json.dumps(payload).encode('utf-8')
             req=urllib.request.Request('https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions',
                 data=data,headers={'Content-Type':'application/json',
-                'Authorization':'Bearer ark-73c10b0a-0549-47fa-9811-39d37b6e452f-a7ac6'})
+                'Authorization':'Bearer '+_get_ark_key()})
             with urllib.request.urlopen(req,timeout=60) as resp:
                 result=json.loads(resp.read().decode('utf-8'))
-                import re as re2
-                hexes=re2.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
+                hexes=re.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
                 for h in hexes[:5]:
                     h=h.lstrip('#')
                     top_colors.append((int(h[0:2],16),int(h[2:4],16),int(h[4:6],16)))

@@ -11,9 +11,19 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WARDROBE = os.path.join(BASE_DIR, '..', 'wardrobe')
 LOCAL_CONFIG = os.path.join(BASE_DIR, '..', 'config', 'seedream.local.json')
 
-API_KEY = "ark-73c10b0a-0549-47fa-9811-39d37b6e452f-a7ac6"
+API_KEY = None
 API_URL = "https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions"
 MODEL = "doubao-seed-2.0-code"
+
+def _load_api_key():
+    global API_KEY
+    if API_KEY:
+        return
+    if os.path.exists(LOCAL_CONFIG):
+        with open(LOCAL_CONFIG, 'r') as f:
+            API_KEY = json.load(f).get('api_key', '')
+    if not API_KEY:
+        API_KEY = os.environ.get('ARK_API_KEY', '')
 
 def encode_image(path, max_size=1024):
     """将图片编码为 base64，先缩放以节省 token"""
@@ -36,6 +46,7 @@ def ask_orientation(image_path):
     调用豆包视觉模型判断衣服朝向
     返回: '上' | '下' | '左' | '右' | None(失败)
     """
+    _load_api_key()
     b64 = encode_image(image_path)
 
     payload = {

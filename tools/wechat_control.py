@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 CONFIG_FILE = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
 LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
+HISTORY_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_history.json')
 
 # ── 日志 ────────────────────────────────────────────
 def log(msg, level='INFO'):
@@ -135,6 +136,24 @@ def push_wechat(title, content=""):
     except Exception as e:
         log(f"推送失败: {e}", "ERROR")
         return None
+
+# ── 历史记录 ──────────────────────────────────────────
+def load_history():
+    """加载操作历史"""
+    try:
+        with open(HISTORY_FILE, 'r') as f:
+            return json.load(f)
+    except:
+        return []
+
+def save_history(entry):
+    """追加一条历史记录（保留最近200条）"""
+    history = load_history()
+    history.insert(0, entry)
+    if len(history) > 200:
+        history = history[:200]
+    with open(HISTORY_FILE, 'w') as f:
+        json.dump(history, f, ensure_ascii=False, indent=2)
 
 # ── 命令执行 ──────────────────────────────────────────
 def run_cli(args, cwd=PROJECT_DIR, timeout=300):
@@ -583,6 +602,15 @@ def run_pipeline(style_hint, task_id=None):
                              result=result_text, image_path=composite, image_url=github_url,
                              log='\n'.join(log_lines))
 
+            # 保存历史记录
+            save_history({
+                'time': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'style': style_hint,
+                'status': 'done',
+                'image_url': github_url,
+                'result': result_text,
+            })
+
             # 微信备份推送
             content = f"![效果图]({github_url})\n\n"
             if summary:
@@ -730,6 +758,35 @@ var c=e.target.closest('.chip');if(c){input.value=c.dataset.cmd;send()}
 
 // 欢迎消息
 addMsg('assistant','👋 你好！我是穿搭助手<br><br>试试输入:<br>• <b>推荐穿搭</b> — AI推荐+生图<br>• <b>生成 日系休闲</b> — 完整流程<br>• <b>状态</b> — 查看项目状态<br>• <b>同步</b> — 推送GitHub');
+
+// 加载历史记录
+(function loadHistory(){
+fetch('/api/history?n=10').then(function(r){return r.json()}).then(function(data){
+if(!data||!data.length)return;
+var d=document.createElement('div');
+d.className='msg assistant';
+d.style.background='transparent';d.style.border='none';d.style.padding='4px 14px';
+var h='<div style="font-size:11px;color:#9b8c7c;margin-bottom:8px;letter-spacing:1px">━━ 📋 历史记录 ━━</div>';
+data.forEach(function(e){
+var statusEmoji=e.status==='done'?'✅':'❌';
+h+='<div style="background:#fff;border:1px solid #e0d8d0;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer" onclick="toggleHistory(this)" data-img="'+esc(e.image_url||'')+'" data-result="'+esc(e.result||'')+'">';
+h+='<div style="font-size:14px;font-weight:600">'+statusEmoji+' '+esc(e.style)+'</div>';
+h+='<div style="font-size:11px;color:#9b8c7c;margin-top:2px">'+esc(e.time)+'</div>';
+h+='<div class="history-detail" style="display:none;margin-top:6px;font-size:13px;line-height:1.5"></div>';
+h+='</div>';
+});
+d.innerHTML=h;msgs.insertBefore(d,msgs.firstChild);
+})})();
+
+function toggleHistory(el){
+var detail=el.querySelector('.history-detail');
+if(detail.style.display==='none'){
+var img=el.dataset.img,result=el.dataset.result;
+var h=result.replace(/\n/g,'<br>');
+if(img)h+='<br><img src="'+img+'" style="max-width:100%;border-radius:6px;margin-top:6px">';
+detail.innerHTML=h;detail.style.display='block';
+}else{detail.style.display='none'}
+}
 </script>
 </body>
 </html>"""
@@ -817,6 +874,19 @@ class WebhookHandler(BaseHTTPRequestHandler):
         # 日志查看（实时刷新 HTML）
         if parsed.path == '/log/live':
             self._html_resp(200, LOG_LIVE_HTML)
+            return
+
+        # 历史记录 API
+        if parsed.path == '/api/history':
+            qs = parse_qs(parsed.query)
+            n = int(qs.get('n', ['50'])[0])
+            history = load_history()
+            self._json_resp(200, history[:n])
+            return
+
+        # 电脑端历史查看页面
+        if parsed.path == '/history':
+            self._html_resp(200, HISTORY_HTML)
             return
 
         # 健康检查
@@ -915,6 +985,59 @@ if(lines.length!==lastLen){lastLen=lines.length;window.scrollTo(0,document.body.
 }
 refresh();
 setInterval(refresh,3000);
+</script>
+</body>
+</html>"""
+
+HISTORY_HTML = """<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📋 操作历史</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f0eb;color:#3a3028;font-family:-apple-system,'PingFang SC',sans-serif;padding:16px;max-width:700px;margin:0 auto}
+h1{font-size:20px;margin-bottom:4px;letter-spacing:1px}
+.sub{font-size:12px;color:#9b8c7c;margin-bottom:20px}
+.card{background:#fff;border:1px solid #e0d8d0;border-radius:8px;padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+.card .thumb{width:72px;height:72px;border-radius:4px;object-fit:cover;flex-shrink:0;background:#f0ebe0;border:1px solid #e0d8d0}
+.card .info{flex:1;min-width:0}
+.card .style{font-size:16px;font-weight:600;margin-bottom:4px}
+.card .meta{font-size:12px;color:#9b8c7c;margin-bottom:4px}
+.card .items{font-size:13px;color:#5c4d3c;line-height:1.5}
+.card .status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:6px}
+.status-done{background:#e8f0e0;color:#5a7d3a}
+.status-error{background:#fce8e8;color:#c04040}
+.empty{text-align:center;padding:40px;color:#9b8c7c;font-size:14px}
+#refresh{font-size:11px;color:#9b8c7c;text-align:right;margin-bottom:8px}
+</style>
+</head>
+<body>
+<h1>📋 手机端操作历史</h1>
+<div class="sub">每次远程操控的穿搭推荐记录</div>
+<div id="refresh">⏱ 自动刷新</div>
+<div id="list">加载中...</div>
+<script>
+function load(){
+fetch('/api/history?n=50').then(r=>r.json()).then(function(data){
+var el=document.getElementById('list');
+if(!data.length){el.innerHTML='<div class="empty">暂无操作记录<br><small>用手机发送第一条指令吧</small></div>';return}
+var h='';
+data.forEach(function(e){
+var statusCls=e.status==='done'?'status-done':'status-error';
+var statusText=e.status==='done'?'✅ 成功':'❌ 失败';
+var thumb=e.image_url?'<img class="thumb" src="'+esc(e.image_url)+'" loading="lazy">':'<div class="thumb"></div>';
+var items=e.result||'';
+// 提取单品行
+var itemLines=items.match(/\\*\\*\\w+-\\d+\\*\\*[^\\n]*/g)||[];
+var itemHtml=itemLines.length?itemLines.join('<br>') : items.substring(0,100);
+h+='<div class="card">'+thumb+'<div class="info"><div class="style">'+esc(e.style)+'<span class="status '+statusCls+'">'+statusText+'</span></div><div class="meta">'+esc(e.time)+'</div><div class="items">'+itemHtml+'</div></div></div>';
+});
+el.innerHTML=h;
+document.getElementById('refresh').textContent='⏱ 更新于 '+new Date().toLocaleTimeString();
+})
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+load();
+setInterval(load,15000);
 </script>
 </body>
 </html>"""

@@ -214,10 +214,10 @@ def get_github_raw_url(file_path):
     cache_buster = int(time.time())
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}?t={cache_buster}"
 
-def find_latest_composite():
+def find_latest_composite(date_str=None):
     """找到最新生成的排版合成图（优先当日，按文件修改时间）"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    today = time.strftime('%Y-%m-%d')
+    today = date_str or time.strftime('%Y-%m-%d')
     candidates = []
     for d in os.listdir(outfit_base):
         dp = os.path.join(outfit_base, d)
@@ -571,7 +571,7 @@ def run_pipeline(style_hint, task_id=None):
             progress(f'✅ 排版完成\n{out3[:300]}')
 
         progress('📤 Step 4/4: 推送 GitHub...')
-        composite = find_latest_composite()
+        composite = find_latest_composite(today)
         if composite and os.path.exists(composite):
             run_cli(['git', 'add', '-A'], timeout=30)
             run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)

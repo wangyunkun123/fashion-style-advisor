@@ -24,6 +24,19 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 CONFIG_FILE = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
+LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
+
+# ── 日志 ────────────────────────────────────────────
+def log(msg, level='INFO'):
+    """写日志到文件 + stdout"""
+    ts = time.strftime('%H:%M:%S')
+    line = f"[{ts}] [{level}] {msg}"
+    print(line)
+    try:
+        with open(LOG_FILE, 'a') as f:
+            f.write(line + '\n')
+    except:
+        pass
 
 # ── 加载配置 ──────────────────────────────────────────
 with open(CONFIG_FILE, 'r') as f:
@@ -31,7 +44,8 @@ with open(CONFIG_FILE, 'r') as f:
 
 SENDKEY = config.get('wechat_sendkey', '')
 if not SENDKEY:
-    print("❌ 未配置 wechat_sendkey，请在 config/seedream.local.json 中设置")
+    print("❌ 未配置 wechat_sendkey")
+    log("未配置 wechat_sendkey", "FATAL")
     sys.exit(1)
 
 # ── 任务管理器 ────────────────────────────────────────
@@ -90,13 +104,13 @@ def push_wechat(title, content=""):
         with urllib.request.urlopen(req, timeout=15) as resp:
             result = json.loads(resp.read().decode('utf-8'))
             if result.get('code') == 0:
-                print(f"  ✅ 推送成功: {title}")
+                log(f"推送成功: {title}")
                 return result
             else:
-                print(f"  ⚠️  推送返回: {result.get('message', 'unknown')}")
+                log(f"推送返回异常: {result.get('message', 'unknown')}", "WARN")
                 return result
     except Exception as e:
-        print(f"  ❌ 推送失败: {e}")
+        log(f"推送失败: {e}", "ERROR")
         return None
 
 # ── 命令执行 ──────────────────────────────────────────
@@ -234,11 +248,11 @@ def find_outfit_dir(style_hint):
 
 def run_pipeline(style_hint, task_id=None):
     """完整生图管线: 推荐 → Seedream生图 → 排版 → 推送"""
-    print(f"🚀 启动管线: {style_hint}")
+    log(f"🚀 管线启动: {style_hint}")
     log_lines = []
 
     def progress(msg):
-        print(f"  📍 {msg}")
+        log(f"📍 {msg}")
         if task_id:
             log_lines.append(msg)
             tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
@@ -329,7 +343,7 @@ def run_pipeline(style_hint, task_id=None):
 
 def execute_action(action, extra, task_id=None):
     """执行指令并返回结果"""
-    print(f"  📋 执行指令: {action} | 参数: {extra}")
+    log(f"指令: {action} | {extra}")
 
     if action == 'help':
         return HELP_TEXT
@@ -531,6 +545,23 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self.wfile.write(data)
             return
 
+        # 日志查看（纯文本，可 curl）
+        if parsed.path == '/log':
+            qs = parse_qs(parsed.query)
+            n = int(qs.get('n', ['200'])[0])
+            try:
+                with open(LOG_FILE, 'r') as f:
+                    all_lines = f.readlines()
+                self._text_resp(200, ''.join(all_lines[-n:]) if all_lines else '(日志为空)')
+            except FileNotFoundError:
+                self._text_resp(200, '(日志文件尚未创建)')
+            return
+
+        # 日志查看（实时刷新 HTML）
+        if parsed.path == '/log/live':
+            self._html_resp(200, LOG_LIVE_HTML)
+            return
+
         # 健康检查
         if parsed.path == '/health':
             self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手", "time": time.strftime("%H:%M:%S")})
@@ -557,7 +588,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 return
 
             action, extra = match_command(message)
-            print(f"  💬 聊天: {action} | {extra}")
+            log(f"💬 聊天: {action} | {extra}")
 
             if action in ('generate', 'recommend'):
                 tid = tasks.create()
@@ -586,13 +617,50 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _text_resp(self, code, text):
+        body = text.encode('utf-8')
+        self.send_response(code)
+        self.send_header('Content-Type', 'text/plain; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def log_message(self, format, *args):
-        print(f"  🌐 {args[0]}" if args else "")
+        pass  # 禁用默认HTTP日志，改用自定义log函数
 
 REDIRECT_HTML = """<!DOCTYPE html><html lang="zh"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="refresh" content="0;url=/">
 <title>穿搭助手</title></head><body></body></html>"""
+
+LOG_LIVE_HTML = """<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📋 操作日志</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1815;color:#c8c0b4;font-family:'SF Mono',Menlo,monospace;font-size:12px;padding:12px}
+#log{white-space:pre-wrap;line-height:1.5}
+#status{color:#8b7a64;margin-bottom:8px;font-size:11px}
+</style>
+</head>
+<body>
+<div id="status">🟢 实时监控中... <span id="count"></span></div>
+<pre id="log">加载中...</pre>
+<script>
+var lastLen=0;
+function refresh(){
+fetch('/log?n=100').then(r=>r.text()).then(function(t){
+document.getElementById('log').textContent=t;
+var lines=t.split('\n').filter(function(l){return l});
+document.getElementById('count').textContent=lines.length+' 行';
+if(lines.length!==lastLen){lastLen=lines.length;window.scrollTo(0,document.body.scrollHeight)}
+})
+}
+refresh();
+setInterval(refresh,3000);
+</script>
+</body>
+</html>"""
 
 # ── 启动 ──────────────────────────────────────────────
 def main():
@@ -608,12 +676,10 @@ def main():
 
     server = HTTPServer(('0.0.0.0', port), WebhookHandler)
 
-    print("=" * 55)
-    print("👔 Fashion 穿搭助手 — 交互式聊天")
-    print("=" * 55)
-    print(f"  📡 服务: http://0.0.0.0:{port}")
-    print(f"  💬 面板: http://localhost:{port}/")
-    print("-" * 55)
+    log("=" * 55)
+    log("👔 Fashion 穿搭助手 — 交互式聊天")
+    log(f"📡 服务: http://0.0.0.0:{port}")
+    log(f"💬 面板: http://localhost:{port}/")
 
     push_wechat(
         "🟢 穿搭助手已上线",
@@ -621,12 +687,12 @@ def main():
         "• 输入指令即可交互\n"
         "• 1-2分钟后收到效果图"
     )
-    print("  📤 已推送上线通知\n")
+    log("📤 已推送上线通知")
 
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n👋 服务已关闭")
+        log("👋 服务已关闭")
         server.server_close()
 
 if __name__ == '__main__':

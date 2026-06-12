@@ -157,7 +157,9 @@ def run_pipeline(style_hint):
 完成后依次执行:
   python3 tools/generate.py {style_hint}
   python3 tools/composite_v2.py
-  git add -A && git commit -m "🎨 {style_hint}" && git push"""
+  git add -A && git commit -m "🎨 {style_hint}" && git push
+
+❌ 不要运行 notify.py 或做任何推送，推送由外部管线处理。"""
 
     run_cli(['claude', '-p', prompt], timeout=600)
 
@@ -305,17 +307,20 @@ h2{{font-size:20px;margin-bottom:6px}} .st{{color:#9b8c7c;font-size:14px;margin-
         self._json_resp(404, {"error": "not found"})
 
     def _process(self, message):
-        """后台线程：解析指令 → 执行 → 推送结果"""
+        """后台线程：解析指令 → 执行 → 需要时推送结果"""
         action, extra = match_command(message)
         print(f"  🎯 意图: {action} | 参数: {extra}")
 
         result = execute_action(action, extra)
 
+        # generate/recommend 由 run_pipeline 自行推送最终效果图，这里不重复推送
+        if action in ('generate', 'recommend'):
+            return
+
         if len(result) > 1500:
             result = result[:1500] + "\n\n... (内容过长已截断)"
 
         title_map = {
-            'recommend': '👔 穿搭推荐', 'generate': '🎨 效果图生成',
             'sync': '📤 同步结果', 'status': '📊 项目状态',
             'help': '📋 指令菜单', 'unknown': '🤔 指令识别',
         }
@@ -364,9 +369,6 @@ def main():
     print(f"  启动 ngrok: ngrok http {port}")
     print(f"  手机访问 ngrok 提供的 https URL 即可")
     print("-" * 55)
-
-    push_wechat("🟢 穿搭助手已上线", "手机打开控制面板即可远程操控")
-    print("  📤 已推送上线通知\n")
 
     try:
         server.serve_forever()

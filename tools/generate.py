@@ -4,7 +4,7 @@ Seedream API 自动生图
 通过火山引擎 API 调用 Seedream 5.0 Lite 模型生成穿搭效果图
 """
 
-import os, json, base64, urllib.request, time, io
+import os, sys, json, base64, urllib.request, time, io
 from PIL import Image
 
 # ===== 加载配置 =====
@@ -133,7 +133,16 @@ def main():
     print("🎨 Seedream API 自动生图")
     print("=" * 60)
 
-    outfit_dir = find_latest_outfit()
+    outfit_dir = None
+    if len(sys.argv) > 1:
+        keyword = sys.argv[1]
+        dirs = sorted([d for d in os.listdir(OUTFIT_BASE)
+                       if os.path.isdir(os.path.join(OUTFIT_BASE, d)) and keyword in d])
+        if dirs:
+            outfit_dir = os.path.join(OUTFIT_BASE, dirs[-1])
+            print(f"🔍 关键词匹配: {dirs[-1]}")
+    if not outfit_dir:
+        outfit_dir = find_latest_outfit()
     if not outfit_dir:
         print("❌ 未找到穿搭文件夹")
         return

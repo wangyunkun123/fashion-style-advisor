@@ -191,7 +191,9 @@ HELP_TEXT = """📱 **穿搭助手 - 指令菜单**
 # ── 管线核心 ──────────────────────────────────────────
 def get_github_raw_url(file_path):
     rel = os.path.relpath(file_path, PROJECT_DIR)
-    return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}"
+    # 加时间戳避免浏览器/GitHub CDN 缓存旧图
+    cache_buster = int(time.time())
+    return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}?t={cache_buster}"
 
 def find_latest_composite():
     """找到最新生成的排版合成图（优先当日，按文件修改时间）"""
@@ -366,9 +368,11 @@ def execute_outfit_plan(plan, today, style_hint):
     shengtu_dir = os.path.join(outfit_dir, '豆包生图')
     items_dir = os.path.join(outfit_dir, 'items')
 
-    # 创建目录
-    os.makedirs(shengtu_dir, exist_ok=True)
-    os.makedirs(items_dir, exist_ok=True)
+    # 创建目录（已存在则清理旧文件避免污染）
+    for d in [shengtu_dir, items_dir]:
+        if os.path.exists(d):
+            shutil.rmtree(d)
+        os.makedirs(d, exist_ok=True)
 
     items = plan.get('items', [])
     item_ids = [it['id'] for it in items]

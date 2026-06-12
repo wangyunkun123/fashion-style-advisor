@@ -439,7 +439,7 @@ style: {plan.get('style', style_hint)}
         dst_name = f"{prefix}_{w['filename']}"
         shutil.copy2(src_file, os.path.join(shengtu_dir, dst_name))
 
-    # ── 5. 复制抠图到 items/ ──
+    # ── 5. 复制抠图到 items/（加 ID 前缀以匹配 composite_v2 的 find_img）──
     for it in items:
         item_id = it['id']
         w = wardrobe.get(item_id)
@@ -448,8 +448,10 @@ style: {plan.get('style', style_hint)}
         base = os.path.splitext(w['filename'])[0]
         cutout_name = f"{base}_cutout.png"
         cutout_src = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', cutout_name)
+        # 必须以 ID_ 前缀命名，composite_v2 的 find_img() 才能匹配
+        dst_name = f"{item_id}_{cutout_name}"
         if os.path.exists(cutout_src):
-            shutil.copy2(cutout_src, os.path.join(items_dir, cutout_name))
+            shutil.copy2(cutout_src, os.path.join(items_dir, dst_name))
         else:
             log(f"⚠️ 抠图不存在: {cutout_name}", "WARN")
 

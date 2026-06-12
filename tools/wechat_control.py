@@ -161,13 +161,13 @@ def format_outfit_summary(outfit_md_path):
     try:
         with open(outfit_md_path, 'r') as f:
             content = f.read()
-        # 匹配表格行: | emoji label | **ID** 或 ID | name | ...
-        # 兼容加粗和非加粗两种格式
+        # 匹配表格行: | 任意标签 | **ID** 或 ID | 名称 | 可选...
+        # 兼容 emoji/中文标签、加粗/非加粗、3列/4列
         items = re.findall(
-            r'\|\s*(👕|👔|🧥|👖|🩳|👟|🎒|🧢|🕶️|⌚|🧦|📿)\s+[^\|]*?\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\|.*)?$',
+            r'^\|\s*[^|]*?\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\||$)',
             content, re.MULTILINE
         )
-        lines = [f"{emoji} {item_id} {name.strip()}" for emoji, item_id, name in items]
+        lines = [f"{item_id} {name.strip()}" for item_id, name in items]
         return '\n'.join(lines) if lines else ''
     except:
         return ''

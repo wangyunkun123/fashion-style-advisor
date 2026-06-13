@@ -9,29 +9,23 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - `config/seedream.local.json` — API 密钥 + Server酱 SendKey（不提交 Git）
 
 ## 风格库
-- `styles/` — 8个风格指纹定义（JSON）
-- `wardrobe/tags/` — 76件服装结构化标签（JSON）
-- `wardrobe/tags/SCORE_CACHE.json` — 608组风格兼容度缓存
-- `tools/style_matcher.py` — 风格匹配引擎
-- `config/style_defaults.json` — 天气-场合-风格默认映射
+- `styles_universal/` — 49风格百科（知识层）：文化/历史/品牌/名人/秀场/图片
+- `styles/` — 8风格指纹（匹配层）：五层评分引擎
+- `wardrobe/tags/` — 76件服装结构化标签 + 608组评分缓存
+- `config/style_defaults.json` — 天气-场合-风格映射
 
-### 风格匹配流程
-```
-风格指定 → python3 tools/style_matcher.py <style_id> → 候选单品排名
-       → python3 tools/style_matcher.py <style_id> <品类> → 某品类筛选
-未指定   → python3 tools/style_matcher.py --auto <温度> <天气> <场合> → 自动推荐
-```
+### 风格库操作
+| 操作 | 命令 |
+|------|------|
+| 研究风格 | `python3 tools/style_research.py <style_id>` |
+| 发现新趋势 | `python3 tools/style_research.py --discover` |
+| 查看覆盖 | `python3 tools/style_research.py --list` |
+| 搜集图片 | `python3 tools/style_image_scout.py <style_id>` |
+| 浏览图库 | `open styles_universal/references/gallery.html` |
+| 风格排名 | `python3 tools/style_matcher.py <style_id>` |
+| 自动推荐 | `python3 tools/style_matcher.py --auto <温度> <天气> <场合>` |
 
-## 通用风格百科
-- `styles_universal/` — 41+风格百科全书（文化/历史/品牌/名人/秀场）
-- `styles_universal/categories.json` — 五维风格分类体系
-- `tools/style_research.py` — 风格研究代理（自学习系统）
-
-### 风格研究操作
-- **"研究风格"** → `python3 tools/style_research.py <style_id>` 生成研究提示词
-- **"发现新风格"** → `python3 tools/style_research.py --discover`
-- **"风格列表"** → `python3 tools/style_research.py --list`
-- **"充实风格"** → `python3 tools/style_research.py --enrich <style_id>`
+> 📖 完整操作手册: `styles_universal/README.md`
 
 ## 操作指令
 - **"推荐穿搭"** → 读取 wardrobe + 天气 → 风格匹配筛选 → 给出搭配方案

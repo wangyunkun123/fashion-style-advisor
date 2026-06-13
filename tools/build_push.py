@@ -131,7 +131,7 @@ def load_outfit_data(outfit_dir):
         data['date'] = m.group(1)
 
     # 提取风格
-    m = re.search(r'风格[：:]\s*(.+)', text)
+    m = re.search(r'风格.*?[：:]\s*(.+)', text)
     if m:
         data['style_raw'] = m.group(1).strip()
 
@@ -172,12 +172,12 @@ def match_style_id(outfit_data):
 
     # 从已有的 style_id 映射
     name_to_id = {
-        '日系CityBoy': 'japanese_city_boy', '日系 City Boy': 'japanese_city_boy',
-        'Clean Fit': 'clean_fit', 'clean_fit': 'clean_fit',
+        '日系CityBoy': 'japanese_city_boy', '日系 City Boy': 'japanese_city_boy', '日系': 'japanese_city_boy',
+        'CleanFit': 'clean_fit', 'Clean Fit': 'clean_fit', 'clean_fit': 'clean_fit',
         '轻熟休闲': 'smart_casual', '轻熟': 'smart_casual',
-        '运动休闲': 'athleisure_sport', '运动': 'athleisure_sport',
+        '运动休闲': 'athleisure_sport', '运动': 'athleisure_sport', 'Athleisure': 'athleisure_sport',
         '韩系简约': 'korean_minimal', '韩系': 'korean_minimal',
-        '度假休闲': 'resort_vacation', '度假': 'resort_vacation',
+        '度假休闲': 'resort_vacation', '度假': 'resort_vacation', 'Resort': 'resort_vacation',
         '街头潮流': 'streetwear', '街头': 'streetwear',
         '国风质感': 'chinese_heritage_luxe',
     }

@@ -125,4 +125,7 @@ msg = f'''📊 风格库月度报告 — $(date '+%Y年%m月')
 push_wechat('📊 风格库月度报告', msg)
 " >> "$LOG" 2>&1
 
+# ── 6. 月度回访检查 ──
+echo "[$(date '+%Y-%m-%d %H:%M')] 📞 月度回访检查..." >> "$LOG"
+python3 tools/monthly_checkin.py >> "$LOG" 2>&1
 echo "[$(date '+%Y-%m-%d %H:%M')] 🎉 月度自动学习完成" >> "$LOG"

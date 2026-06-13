@@ -284,6 +284,10 @@ def build_push(outfit_dir):
     analysis = analyze_weather(wdata) if wdata else None
     if analysis:
         header_lines.append(weather_line(analysis))
+        # 天气预警紧跟在天气行下面
+        advice = weather_advice(analysis)
+        if advice:
+            header_lines.extend(advice)
     elif data.get('weather'):
         header_lines.append(f"🌤 {data['weather']}")
     parts.append('\n\n'.join(header_lines))
@@ -338,12 +342,6 @@ def build_push(outfit_dir):
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
     if color_logic:
         parts.append(f"━━━ 🎨 配色 ━━━\n\n{color_logic}")
-
-    # ━━━ 天气提醒 ━━━
-    if analysis:
-        advice = weather_advice(analysis)
-        if advice:
-            parts.append("━━━ ⚠️ 天气提醒 ━━━\n\n" + '\n\n'.join(advice))
 
     # ━━━ 换个风格 ━━━
     alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]

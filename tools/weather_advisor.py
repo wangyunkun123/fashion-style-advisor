@@ -91,7 +91,7 @@ def analyze_weather(data):
         risks.append({'level': 'cold', 'label': '低温', 'advice': '多层叠穿+保暖外套+围巾手套'})
     if humidity > 80 and temp > 25:
         risks.append({'level': 'humid', 'label': '闷热', 'advice': '速干面料+宽松剪裁+浅色系'})
-    if '雨' in weather_zh or '雪' in weather_zh:
+    if any(kw in weather_zh for kw in ['雨', '雪', '雷', '暴']):
         risks.append({'level': 'rain', 'label': weather_zh, 'advice': '防水外套+深色下装+防滑鞋底'})
 
     # 日内天气变化检测
@@ -135,7 +135,7 @@ def weather_advice(analysis):
     for r in analysis.get('risks', []):
         advice.append(f"⚠️ {r['label']}预警：{r['advice']}")
     if analysis.get('volatile'):
-        advice.append('🌪 今日天气多变，建议准备备用方案')
+        advice.append('🌪 今日天气多变，建议准备备用穿搭方案')
     return advice
 
 

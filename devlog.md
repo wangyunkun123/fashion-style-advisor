@@ -84,3 +84,67 @@
 - templates/rating.html — 移动端评分页面
 - tools/rating_analyzer.py — 偏好分析引擎
 - outfits/*/rating.json — 评分数据(.gitignore)
+
+---
+
+## 2026-06-13: Phase 2 全面完工 — 审美系统上线
+
+### 核心交付
+
+**服装标签库**
+- 76件 Claude 视觉识别 + 结构化 JSON
+- 22品牌识别：Adidas(5) Uniqlo(4) Nike(3) HLA(3) 等
+- 每件含颜色向量/廓形/面料/图案/品牌/身形修饰
+
+**通用风格百科 (双层架构)**
+- 49风格百科（文化史/美学/品牌/名人/秀场/趋势），9地域全覆盖
+- 416张参考图（杂志/秀场/街拍/名人/社交），HTML浏览页
+- 8风格个人指纹（五层匹配引擎）+ 608组预计算评分缓存
+
+**推送系统**
+- 双版智能推送：🅰️简约版(无评分) 🅱️百科版(带评分+风格故事+单品解释+配色+参考图+备选)
+- 首次推送双版+引导语，用户点击选择偏好
+- 月度自动回访：30天(模式切换推荐) → 31天(后悔提醒) → 60天(再确认)
+- 精准天气系统：实时API + 中文翻译 + 风险预警(暴雨/大风/高温/闷热)
+- jsDelivr CDN解决GitHub Raw国内慢问题
+
+**用户打分系统**
+- 三级评分：⭐⭐⭐满意→增加推荐 ⭐⭐一般→累积分析 ⭐失望→二级反馈
+- 移动端评分页面 + /rate HTTP端点
+- 偏好分析引擎：月度报告(满意度分布/风格偏好/单品Top5/中立模式分析/1星原因)
+
+**自学习系统**
+- 月度自动：发现新趋势 + 充实5旧风格 + 图片URL校验 + 月度报告 + 微信推送
+- 定时：每月1日 9:07 (Cron durable)
+
+**项目优化**
+- 清理冗余文件：composite.py tag_remap.py tag_compare.py 8个_discover.md 等
+- 项目文件从~200精简到核心工具链
+- CLAUDE.md + 系统升级建议.md 完整文档化
+
+### 工具清单
+| 工具 | 用途 |
+|------|------|
+| style_matcher.py | 五层风格匹配引擎 |
+| style_scorer.py | 全量打分+缓存 |
+| style_research.py | 风格研究代理(自学习) |
+| style_image_scout.py | 图片搜集代理 |
+| generate_encyclopedia_html.py | 百科HTML生成 |
+| build_push.py | 智能推送(双版+偏好+评分) |
+| weather_advisor.py | 精准天气顾问 |
+| rating_analyzer.py | 偏好分析引擎 |
+| monthly_checkin.py | 月度回访 |
+| auto_learn.sh | 月度自动学习 |
+| sync_items.py | 抠图同步 |
+| composite_v2.py | 排版合成 |
+| generate.py | Seedream生图 |
+| wechat_control.py | HTTP服务+手机远程 |
+
+### 数据文件
+| 文件 | 说明 |
+|------|------|
+| wardrobe/tags/*.json | 76件服装标签 |
+| wardrobe/tags/SCORE_CACHE.json | 608组评分缓存 |
+| styles_universal/ | 49风格百科+图片 |
+| config/push_preference.json | 推送偏好 |
+| config/style_defaults.json | 天气-场合映射 |

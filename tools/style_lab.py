@@ -1352,11 +1352,14 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
             shutil.copy2(src, os.path.join(shengtu_dir, f'{prefix}_{filename}'))
             copied_prefixes.add(prefix)
 
-    # ── 5. 抠图 → items/ ──
+    # ── 5. 抠图 → items/（无抠图时回退原始图）──
     for item in all_items:
         cid = item['clothing_id']
+        cat = item.get('category', '')
         enhanced_dir = os.path.join(PROJ_DIR, 'wardrobe', 'enhanced')
         found = False
+
+        # 5a. 先找抠图
         if os.path.exists(enhanced_dir):
             for fname in os.listdir(enhanced_dir):
                 if fname.startswith(cid + '_') and fname.endswith('_cutout.png'):
@@ -1364,6 +1367,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
                     found = True
                     break
         if not found:
+            # 5b. 从已有 outfits 中找
             for od in os.listdir(os.path.join(PROJ_DIR, 'outfits')):
                 odir = os.path.join(PROJ_DIR, 'outfits', od, 'items')
                 if not os.path.isdir(odir):
@@ -1375,6 +1379,18 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
                         break
                 if found:
                     break
+        if not found:
+            # 5c. 回退：用原始 wardrobe 图片
+            filename = wardrobe_index.get(cid)
+            if filename:
+                cat_dir = CATEGORY_DIR_MAP.get(cat, '')
+                src = os.path.join(PROJ_DIR, 'wardrobe', cat_dir, filename)
+                if os.path.exists(src):
+                    base = os.path.splitext(filename)[0]
+                    ext = os.path.splitext(filename)[1]
+                    dst_name = f"{cid}_{base}{ext}"
+                    shutil.copy2(src, os.path.join(items_dir, dst_name))
+                    found = True
 
     # ── 6. 豆包生图 ──
     try:

@@ -1316,10 +1316,13 @@ def _generate_seedream_image(outfit_dir, shengtu_dir, shangao_dir):
     print(f"  [B线] Seedream 生图完成: {len(img_data)} bytes")
 
 
-def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, weather_cond='晴'):
+def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, weather_cond='晴',
+                          appeal=None, narrative=None, encyc=None, all_clothing=None):
     """
     为 B线探索穿搭创建完整的 outfit 目录结构，运行生图+排版管线。
     返回: (outfit_dir, composite_jpg_path, cdn_url) 或 (None, None, None)
+
+    接受预计算数据（appeal, narrative, encyc）避免重复计算。
     """
     import shutil
     import subprocess
@@ -1351,7 +1354,8 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 
     all_items = [anchor_item] + [c['item'] for c in companions[:5]]
     wardrobe_index = _load_wardrobe_index()
-    appeal = analyze_item_appeal(anchor_item)
+    if appeal is None:
+        appeal = analyze_item_appeal(anchor_item)
 
     # ── 1. outfit.md ──
     items_table_lines = []
@@ -1371,8 +1375,8 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         )
 
     # 风格笔记（composite_v2 parse_style_info 读取每行作为 STYLE NOTES）
-    # 从探索叙事中提取关键信息
-    encyc = load_encyclopedia(style_id) if style_id else None
+    if encyc is None and style_id:
+        encyc = load_encyclopedia(style_id)
     style_desc = encyc.get('one_liner', '') if encyc else ''
     if not style_desc:
         style_desc = f'{style_name}风格穿搭'
@@ -1418,7 +1422,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 
 ## 探索叙事
 
-{generate_exploration_narrative(direction, anchor_item, companions)}
+{narrative if narrative else generate_exploration_narrative(direction, anchor_item, companions)}
 
 ## 风格笔记
 

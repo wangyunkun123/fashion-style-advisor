@@ -294,12 +294,21 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     B = '\n\n'  # 段落间双换行
     parts = []
 
+    # ━━━ 天气（只取一次，全函数复用）━━━
+    wdata = fetch_weather('Beijing')
+    analysis = analyze_weather(wdata) if wdata else None
+    temp_high = analysis['forecast']['max'] if analysis else 30
+    weather_cond = analysis['current']['desc'] if analysis else '晴'
+
     # ━━━ B线决策 ━━━
     is_bline = False
     is_bold = False
     boldness = 'micro'
     exploration_outfit = None
     comfort_zone = None
+    bline_appeal = None       # 缓存：避免 prepare_bline_outfit 重复计算
+    bline_narrative = None    # 缓存：避免重复生成叙事
+    bline_encyc = None        # 缓存：避免重复加载百科
 
     if STYLE_LAB_AVAILABLE:
         state = load_lab_state()
@@ -308,47 +317,33 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             is_bold = (force_boldness == 'bold') or (force_boldness is None and should_use_bold(state))
             boldness = 'bold' if is_bold else 'micro'
 
-        # B线：执行探索式推荐
         if is_bline:
             try:
                 all_clothing = load_all_clothing()
                 comfort_zone = get_user_comfort_zone()
 
-                # 1. 找锚点单品（按策略差异化）
                 anchor_strategy = 'bold' if is_bold else 'micro'
                 anchors = find_anchor_items(state, min_statement_score=0.15, max_wear_count=2,
                                             count=5, strategy=anchor_strategy, comfort_zone=comfort_zone)
                 if anchors:
                     anchor_data = anchors[0]
                     anchor_item = anchor_data['item']
-
-                    # 2. 解读锚点
-                    appeal = analyze_item_appeal(anchor_item)
-
-                    # 3. 生成探索方向
-                    # 提取天气信息（如果有实时天气）
-                    wdata_bt = fetch_weather('Beijing')
-                    analysis_bt = analyze_weather(wdata_bt) if wdata_bt else None
-                    temp_high = analysis_bt['forecast']['max'] if analysis_bt else 30
-                    cond = analysis_bt['current']['desc'] if analysis_bt else '晴'
+                    bline_appeal = analyze_item_appeal(anchor_item)
 
                     directions = generate_exploration_directions(
-                        anchor_item, temp_high, cond, '日常', boldness, comfort_zone
+                        anchor_item, temp_high, weather_cond, '日常', boldness, comfort_zone
                     )
 
                     if directions:
                         direction = directions[0]
-
-                        # 4. 匹配同伴
-                        companions = find_companions(anchor_item, direction, all_clothing, temp_high, cond)
-
-                        # 5. 组装方案
+                        companions = find_companions(anchor_item, direction, all_clothing, temp_high, weather_cond)
                         exploration_outfit = assemble_exploratory_outfit(direction, anchor_item, companions)
-
-                        # 用探索目标的 style_id 替换原有的
                         style_id = direction['target_style_id']
+                        # 预加载百科（避免 prepare_bline_outfit 重复加载）
+                        bline_encyc = load_encyclopedia(style_id)
+                        # 预生成探索叙事
+                        bline_narrative = generate_exploration_narrative(direction, anchor_item, companions)
             except Exception as e:
-                # B线失败时降级为 A线
                 is_bline = False
                 is_bold = False
                 exploration_outfit = None
@@ -374,12 +369,9 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         f"👔 {outfit_name}{line_tag}",
         f"📅 {data.get('date', '')}",
     ]
-    # 优先用实时天气，回退到md中的天气
-    wdata = fetch_weather('Beijing')
-    analysis = analyze_weather(wdata) if wdata else None
+    # 优先用实时天气，回退到md中的天气（已在函数顶部 fetch）
     if analysis:
         header_lines.append(weather_line(analysis))
-        # 天气预警紧跟在天气行下面
         advice = weather_advice(analysis)
         if advice:
             header_lines.extend(advice)
@@ -395,15 +387,12 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             anchor = exploration_outfit['anchor_item']
             companions = exploration_outfit.get('companions', [])
             direction = exploration_outfit['direction']
-            # 提取天气
-            wdata_bt = fetch_weather('Beijing')
-            analysis_bt = analyze_weather(wdata_bt) if wdata_bt else None
-            temp_high = analysis_bt['forecast']['max'] if analysis_bt else 30
-            cond = analysis_bt['current']['desc'] if analysis_bt else '晴'
 
             print(f"  [B线] 启动生图管线... 锚点: {anchor['clothing_id']}")
             outfit_dir, img_path, cdn_url = prepare_bline_outfit(
-                anchor, companions, direction, temp_high, cond
+                anchor, companions, direction, temp_high, weather_cond,
+                appeal=bline_appeal, narrative=bline_narrative, encyc=bline_encyc,
+                all_clothing=all_clothing if is_bline else None
             )
             if img_path and cdn_url:
                 parts.append(f"![风格实验室效果图]({cdn_url})")
@@ -442,7 +431,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         name = f"{anchor.get('brand', {}).get('name', '')} {anchor['color']['hue_name']}"
         emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
         item_lines.append(f"{emoji} **{name}** ⭐ 锚点单品\n`{cid}` · 表现力 {exploration_outfit['direction'].get('anchor_score','?')}分")
-        item_lines.append(f"*{analyze_item_appeal(anchor).get('visual_signature', '')} · 探索基点*")
+        item_lines.append(f"*{bline_appeal.get('visual_signature', '') if bline_appeal else ''} · 探索基点*")
 
         # 同伴单品
         for comp in exploration_outfit.get('companions', [])[:5]:
@@ -457,11 +446,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n\n'.join(item_lines))
 
         # ━━━ 风格实验室叙事 ━━━
-        narrative = generate_exploration_narrative(
-            exploration_outfit['direction'],
-            exploration_outfit['anchor_item'],
-            exploration_outfit.get('companions', [])
-        )
+        narrative = bline_narrative or ''
         if narrative:
             parts.append("━━━ 🧪 风格实验室 ━━━\n\n" + narrative)
 
@@ -501,19 +486,13 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
     # ━━━ 今天也适合（动态生成）━━━
     if STYLE_LAB_AVAILABLE:
-        # 获取天气上下文
-        wdata_alt = fetch_weather('Beijing')
-        analysis_alt = analyze_weather(wdata_alt) if wdata_alt else None
-        temp_alt = analysis_alt['forecast']['max'] if analysis_alt else 30
-        cond_alt = analysis_alt['current']['desc'] if analysis_alt else '晴'
-
         alt_items = generate_alt_section(
             primary_line=('B' if is_bline else 'A'),
             is_bline=is_bline,
             is_bold=is_bold,
             primary_style_id=style_id,
-            weather_temp=temp_alt,
-            weather_cond=cond_alt,
+            weather_temp=temp_high,
+            weather_cond=weather_cond,
             occasion='日常',
             comfort_zone=comfort_zone,
         )

@@ -1237,6 +1237,85 @@ def _load_wardrobe_index():
     return index
 
 
+def _generate_seedream_image(outfit_dir, shengtu_dir, shangao_dir):
+    """直调 Seedream API 生图，不依赖 generate.py 的关键词查找"""
+    import base64, urllib.request
+
+    # 加载提示词
+    prompt_file = os.path.join(shengtu_dir, '豆包提示词.txt')
+    if not os.path.exists(prompt_file):
+        raise FileNotFoundError(f"提示词文件不存在: {prompt_file}")
+    with open(prompt_file, 'r', encoding='utf-8') as f:
+        prompt = f.read().strip()
+
+    # 收集参考图（人物 + 上衣/外搭 + 下装 + 鞋子）
+    ref_images = []
+    for prefix in ['人物_', '上衣_', '外搭_', '下装_', '鞋子_']:
+        for fname in sorted(os.listdir(shengtu_dir)):
+            if fname.startswith(prefix) and fname.lower().endswith(('.jpg', '.jpeg', '.png')):
+                path = os.path.join(shengtu_dir, fname)
+                try:
+                    from PIL import Image
+                    img = Image.open(path)
+                    if img.mode in ('RGBA', 'P'):
+                        img = img.convert('RGB')
+                    img.thumbnail((1024, 1024), Image.LANCZOS)
+                    import io
+                    buf = io.BytesIO()
+                    img.save(buf, 'JPEG', quality=70)
+                    b64 = base64.b64encode(buf.getvalue()).decode()
+                    ref_images.append(f'data:image/jpeg;base64,{b64}')
+                except Exception:
+                    pass
+                break  # 每种前缀只取一张
+        if len(ref_images) >= 4:
+            break
+
+    # 加载 API 配置
+    cfg_path = os.path.join(PROJ_DIR, 'config', 'seedream.local.json')
+    with open(cfg_path, 'r') as f:
+        api_key = json.load(f)['api_key']
+
+    seedream_cfg_path = os.path.join(PROJ_DIR, 'config', 'seedream.json')
+    if os.path.exists(seedream_cfg_path):
+        with open(seedream_cfg_path, 'r') as f:
+            seedream_cfg = json.load(f)
+    else:
+        seedream_cfg = {'model': 'doubao-seedream-5.0-lite', 'size': '2048x2048', 'max_images': 4}
+
+    # 调用 API
+    payload = {
+        'model': seedream_cfg.get('model', 'doubao-seedream-5.0-lite'),
+        'prompt': prompt,
+        'size': seedream_cfg.get('size', '2048x2048'),
+        'response_format': 'url',
+        'watermark': False,
+        'max_images': 1,
+    }
+    if ref_images:
+        payload['reference_images'] = ref_images[:4]
+
+    req = urllib.request.Request(
+        'https://ark.cn-beijing.volces.com/api/plan/v3/images/generations',
+        data=json.dumps(payload).encode(),
+        headers={
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {api_key}',
+        },
+    )
+
+    resp = json.loads(urllib.request.urlopen(req, timeout=180).read())
+    img_url = resp['data'][0]['url']
+
+    # 下载结果
+    img_data = urllib.request.urlopen(img_url, timeout=60).read()
+    output_path = os.path.join(shangao_dir, '上身效果_1.png')
+    with open(output_path, 'wb') as f:
+        f.write(img_data)
+
+    print(f"  [B线] Seedream 生图完成: {len(img_data)} bytes")
+
+
 def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, weather_cond='晴'):
     """
     为 B线探索穿搭创建完整的 outfit 目录结构，运行生图+排版管线。
@@ -1415,14 +1494,9 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
                     shutil.copy2(src, os.path.join(items_dir, dst_name))
                     found = True
 
-    # ── 6. 豆包生图 ──
+    # ── 6. 豆包生图（直调 API，不依赖 generate.py 的关键词查找）──
     try:
-        result = subprocess.run(
-            [sys.executable, os.path.join(BASE_DIR, 'generate.py'), style_name],
-            cwd=PROJ_DIR, capture_output=True, text=True, timeout=180
-        )
-        if result.returncode != 0:
-            print(f"  [B线] 生图警告: {result.stderr[-200:]}")
+        _generate_seedream_image(outfit_dir, shengtu_dir, shangao_dir)
     except Exception as e:
         print(f"  [B线] 生图失败: {e}")
         img_path, cdn_url = compose_bline_outfit(anchor_item, companions, dir_name[:30])

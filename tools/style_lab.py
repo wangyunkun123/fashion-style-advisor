@@ -1359,11 +1359,23 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         cid = item['clothing_id']
         cat = item.get('category', '')
         color = item.get('color', {}).get('hue_name', '')
+        brand = item.get('brand', {}).get('name', '')
+        if brand and brand != '未知':
+            item_name = f'{brand} {color}{cat}'
+        else:
+            item_name = f'{color}{cat}'
         # ⚠️ ⭐ 不能放在 ID 列，否则 composite_v2 的 parse() 会把 ⭐ 读入 ID → 找不到文件
         marker = ' ⭐锚点' if cid == anchor_id else ''
         items_table_lines.append(
-            f"| {cat} | **{cid}** | {color} | {appeal['visual_signature'][:30]}{marker} |"
+            f"| {cat} | **{cid}** | {item_name} | {appeal['visual_signature'][:30]}{marker} |"
         )
+
+    # 风格关键词（composite_v2 parse_style_info 从 ## 风格关键词 小节读取）
+    style_tags = f'{style_name}'
+    if boldness == 'leap':
+        style_tags += ', 大胆跨界, 风格实验'
+    else:
+        style_tags += ', 微调探索, 风格实验'
 
     outfit_md = f"""# {style_name} B线探索穿搭
 
@@ -1373,7 +1385,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 - **探索模式**: {bold_tag} {'大胆跨界' if boldness == 'leap' else '微调探索'}
 
 ## 单品清单
-| 品类 | ID | 颜色 | 选品理由 |
+| 品类 | ID | 单品 | 选品理由 |
 |------|-----|------|----------|
 {chr(10).join(items_table_lines)}
 
@@ -1383,7 +1395,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 
 ## 风格关键词
 
-{style_name}, 风格实验室, 探索推荐
+{style_tags}
 """
     with open(os.path.join(outfit_dir, 'outfit.md'), 'w', encoding='utf-8') as f:
         f.write(outfit_md)

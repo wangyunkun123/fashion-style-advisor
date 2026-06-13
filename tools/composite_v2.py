@@ -112,14 +112,44 @@ def parse_style_info(outfit_dir):
     if not os.path.exists(md): return []
     with open(md,encoding='utf-8') as f: text=f.read()
     keywords=[]
+
+    # 策略1：优先匹配 "## 风格关键词" 小节内容
+    in_kw_section = False
     for line in text.split('\n'):
-        if '风格关键词' in line or '风格' in line:
-            # 提取冒号后的内容
-            m=re.search(r'[：:]\s*(.+)',line)
+        if '风格关键词' in line:
+            in_kw_section = True
+            # 同行冒号后的内容
+            m = re.search(r'[：:]\s*(.+)', line)
             if m:
-                for kw in re.split(r'[、,，/]',m.group(1)):
-                    kw=kw.strip().replace('**','')
-                    if kw and len(kw)<15: keywords.append(kw)
+                for kw in re.split(r'[、,，/]', m.group(1)):
+                    kw = kw.strip().replace('**', '')
+                    if kw and len(kw) < 20:
+                        keywords.append(kw)
+            continue
+        if in_kw_section:
+            if line.strip().startswith('##') or line.strip().startswith('---'):
+                break
+            s = line.strip().lstrip('- ').strip()
+            if s:
+                for kw in re.split(r'[、,，/]', s):
+                    kw = kw.strip().replace('**', '')
+                    if kw and len(kw) < 20:
+                        keywords.append(kw)
+
+    # 策略2：回退——从 "风格" 元数据行提取（去括号）
+    if not keywords:
+        for line in text.split('\n'):
+            if '风格' in line and '风格关键词' not in line and '风格故事' not in line:
+                m = re.search(r'[：:]\s*(.+)', line)
+                if m:
+                    val = m.group(1)
+                    val = re.sub(r'[（(][^）)]*[）)]', '', val).strip()
+                    for kw in re.split(r'[、,，/]', val):
+                        kw = kw.strip().replace('**', '')
+                        if kw and len(kw) < 20:
+                            keywords.append(kw)
+                    break
+
     return keywords[:5]
 
 def composite(ai_path,items,output_path):

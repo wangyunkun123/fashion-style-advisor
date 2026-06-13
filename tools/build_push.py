@@ -100,7 +100,7 @@ def load_encyclopedia(style_id):
     return {
         'one_liner': one_liner, 'origin': origin, 'quote': quote,
         'brands': brands, 'icons': icons,
-        'encyclopedia_url': f'{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
+        'encyclopedia_url': f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
     }
 
 
@@ -287,20 +287,8 @@ def build_push(outfit_dir):
             story.append(encyc['origin'])
         if encyc.get('quote'):
             story.append(f"💬 {encyc['quote']}")
-        # 小红书风格百科卡片
-        card_parts = []
-        if encyc.get('one_liner'):
-            card_parts.append(f"🎯 {encyc['one_liner']}")
-        if encyc.get('brands'):
-            brand_names = [b['name'] for b in encyc['brands'][:4]]
-            card_parts.append(f"🏷️ {', '.join(brand_names)}")
-        if encyc.get('icons'):
-            icon_names = [i['name'] for i in encyc['icons'][:3]]
-            card_parts.append(f"🌟 {', '.join(icon_names)}")
         if encyc.get('encyclopedia_url'):
-            card_parts.append(f"🔗 完整百科：{encyc['encyclopedia_url']}")
-        if card_parts:
-            story.append('📚 关于' + style_name + '\n' + '\n'.join(card_parts))
+            story.append(f"📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
         if story:
             parts.append("━━━ 📖 风格故事 ━━━\n\n" + '\n\n'.join(story))
 
@@ -337,7 +325,7 @@ def build_push(outfit_dir):
 
     # ━━━ 换个风格 ━━━
     alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-    alt_names = [f"[{n}]({CDN_BASE}/styles_universal/{i}/encyclopedia.html)" for i,n in alt_styles if i != style_id]
+    alt_names = [f"[{n}](https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{i}/encyclopedia.html)" for i,n in alt_styles if i != style_id]
     parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
     return B.join(parts), style_name, outfit_name

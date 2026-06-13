@@ -19,6 +19,18 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 # jsDelivr base for encyclopedia links
 CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
 
+# 推送偏好设置 URL
+def get_push_base_url():
+    """从配置获取推送服务器地址"""
+    cfg_path = os.path.join(PROJ_DIR, 'config', 'seedream.local.json')
+    if os.path.exists(cfg_path):
+        try:
+            with open(cfg_path, 'r') as f:
+                return json.load(f).get('push_base_url', 'http://localhost:8765')
+        except:
+            pass
+    return 'http://localhost:8765'
+
 # 天气模块
 sys.path.insert(0, os.path.join(BASE_DIR))
 try:
@@ -448,8 +460,10 @@ def main():
             print("=" * 50)
             print(rich_content)
         else:
-            r1 = push_wechat(f'🅰️ {push_title}', simple_content + '\n\n---\n💡 回复"简单"仅收此类推送 | 回复"百科"收深度版')
-            r2 = push_wechat(f'🅱️ {push_title}', rich_content + '\n\n---\n💡 回复"简单"仅收此类推送 | 回复"百科"收深度版')
+            base = get_push_base_url()
+            footer = f'\n\n---\n💡 选择推送模式：[🅰️ 简约版]({base}/setpref?mode=simple) | [🅱️ 百科版]({base}/setpref?mode=rich) | [双版]({base}/setpref?mode=both)'
+            r1 = push_wechat(f'🅰️ {push_title}', simple_content + footer)
+            r2 = push_wechat(f'🅱️ {push_title}', rich_content + footer)
             if r1 and r2:
                 print(f"✅ 双版本已推送")
             else:

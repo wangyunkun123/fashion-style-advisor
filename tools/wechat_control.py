@@ -838,6 +838,23 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 self._json_resp(400, {"error": "缺少 t 参数"})
             return
 
+        # 推送偏好设置（从微信链接点击触发）
+        if parsed.path == '/setpref':
+            qs = parse_qs(parsed.query)
+            mode = qs.get('mode', ['both'])[0]
+            if mode in ('simple', 'rich', 'both'):
+                pref_file = os.path.join(PROJECT_DIR, 'config', 'push_preference.json')
+                os.makedirs(os.path.dirname(pref_file), exist_ok=True)
+                import json as _json
+                with open(pref_file, 'w') as f:
+                    _json.dump({'mode': mode, 'updated': time.strftime('%Y-%m-%d %H:%M')}, f, ensure_ascii=False, indent=2)
+                names = {'simple': '🅰️ 简约版', 'rich': '🅱️ 百科版', 'both': '🅰️+🅱️ 双版'}
+                self._html_resp(200, f"<html><body style='font-family:sans-serif;padding:40px;text-align:center;background:#f5f0eb'><h2>✅ 推送偏好已设置</h2><p style='font-size:24px;margin:20px'>{names.get(mode, mode)}</p><p style='color:#999'>下次推送将按此偏好发送</p><p><a href='/'>返回控制面板</a></p></body></html>")
+                log(f"推送偏好已设置为: {mode}")
+            else:
+                self._json_resp(400, {"error": "mode 必须是 simple/rich/both"})
+            return
+
         # 任务轮询
         if parsed.path.startswith('/api/task/'):
             tid = parsed.path.split('/')[-1]

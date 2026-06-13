@@ -37,21 +37,22 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 ## 微信推送
 项目提供两套推送方案，新用户可按需选择。
 
-### 🅰️ 简约版（快速推送）
-仅标题+品名+效果图，信息密度低，适合快速通知/预览。
-```python
-from tools.wechat_control import push_wechat
-push_wechat("今日穿搭", "上衣 TS-011\n下装 PT-001\n![图](url)")
+## 微信推送
+首次推送同时发送两个版本，用户可自行选择偏好。之后按偏好推送。
+
+```bash
+# 首次（发送两版） → 用户选择偏好
+python3 tools/build_push.py <outfit_dir>           # 默认双版
+python3 tools/build_push.py --set simple|rich|both  # 保存偏好
 ```
 
-### 🅱️ 百科版（深度推送）
-风格故事+单品解释+参考图+配色+天气预警+备选风格，适合深度穿搭分享。
-```bash
-python3 tools/build_push.py <outfit_dir>
-```
+### 🅰️ 简约版
+仅标题+品名+效果图，信息密度低。
+### 🅱️ 百科版
+天气预警+风格故事+单品解释+参考图+配色+备选风格。
 模板：标题/日期/天气/预警 → 效果图 → 风格故事+百科链接 → 单品详解 → 风格参考图 → 配色 → 备选风格
 
-> 完整生图流程：修改 outfit.md → `python3 tools/generate.py <关键词>` → `python3 tools/sync_items.py <dir>` → `python3 tools/composite_v2.py <dir>` → `git push` → `python3 tools/build_push.py <dir>`
+> 完整生图流程：`outfit.md` → `generate.py` → `sync_items.py` → `composite_v2.py` → `git push` → `build_push.py`
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing

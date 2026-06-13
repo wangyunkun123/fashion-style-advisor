@@ -7,7 +7,7 @@
   python3 tools/build_push.py <outfit_dir> --preview   仅预览，不推送
 """
 
-import os, sys, json, re, random, glob
+import os, sys, json, re, random, glob, time
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.join(BASE_DIR, '..')
@@ -355,9 +355,61 @@ def build_push(outfit_dir):
 # 3. 命令行
 # ============================================================
 
+PREF_FILE = os.path.join(PROJ_DIR, 'config', 'push_preference.json')
+
+def get_preference():
+    """读取用户推送偏好"""
+    if os.path.exists(PREF_FILE):
+        try:
+            with open(PREF_FILE, 'r') as f:
+                return json.load(f).get('mode', 'both')
+        except:
+            pass
+    return 'both'  # 默认首次推送两个版本
+
+def set_preference(mode):
+    """保存用户推送偏好"""
+    os.makedirs(os.path.dirname(PREF_FILE), exist_ok=True)
+    with open(PREF_FILE, 'w') as f:
+        json.dump({'mode': mode, 'updated': time.strftime('%Y-%m-%d %H:%M')}, f, ensure_ascii=False)
+
+
+def build_simple(outfit_dir):
+    """生成简约版推送内容"""
+    data = load_outfit_data(outfit_dir)
+    if not data:
+        return None, None, None
+    outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
+    lines = [f"👔 {outfit_name}", f"📅 {data.get('date','')}"]
+    if data.get('weather'):
+        lines.append(f"🌤 {data['weather']}")
+    # 单品
+    for it in data['items']:
+        lines.append(f"{it['id']} {it['name']}")
+    # 效果图
+    ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
+    if not ai_paths:
+        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
+    if ai_paths:
+        rel = os.path.relpath(ai_paths[0], PROJ_DIR)
+        lines.append(f"![效果图]({CDN_BASE}/{rel})")
+    return '\n\n'.join(lines), '简约版', outfit_name
+
+
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 tools/build_push.py <outfit_dir> [--preview]")
+        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both]")
+        print("  偏好设置: python3 tools/build_push.py --set simple|rich|both")
+        return
+
+    # 设置偏好
+    if sys.argv[1] == '--set':
+        if len(sys.argv) > 2 and sys.argv[2] in ('simple', 'rich', 'both'):
+            set_preference(sys.argv[2])
+            print(f"✅ 推送偏好已设为: {sys.argv[2]}")
+        else:
+            print(f"当前偏好: {get_preference()}")
+            print("用法: --set simple|rich|both")
         return
 
     outfit_dir = sys.argv[1]
@@ -366,32 +418,67 @@ def main():
     outfit_dir = os.path.abspath(outfit_dir)
 
     preview = '--preview' in sys.argv
+    force_mode = None
+    for arg in sys.argv[2:]:
+        if arg in ('--simple', '--rich', '--both'):
+            force_mode = arg.lstrip('--')
 
-    content, style_name, outfit_name = build_push(outfit_dir)
-    if content is None:
-        print(f"❌ {style_name}")
-        return
+    mode = force_mode or get_preference()
 
-    push_title = outfit_name if outfit_name else style_name
+    sys.path.insert(0, os.path.join(BASE_DIR))
+    from wechat_control import push_wechat
 
-    if preview:
-        print("=" * 50)
-        print("📱 推送预览")
-        print("=" * 50)
-        print(content)
-        print("\n" + "=" * 50)
-        print(f"✅ 预览完成。使用以下命令发送:")
-        print(f'   python3 -c "import sys; sys.path.insert(0,\'tools\'); from wechat_control import push_wechat; push_wechat(\'{push_title}\', open(\'/tmp/push_content.txt\').read())"')
-        with open('/tmp/push_content.txt', 'w') as f:
-            f.write(content)
-    else:
-        sys.path.insert(0, os.path.join(BASE_DIR))
-        from wechat_control import push_wechat
-        result = push_wechat(push_title, content)
-        if result:
-            print(f"✅ 推送成功 (pushid={result.get('data',{}).get('pushid','?')})")
+    if mode == 'both':
+        # 发送两个版本
+        rich_content, rich_name, outfit_name = build_push(outfit_dir)
+        simple_content, _, _ = build_simple(outfit_dir)
+        if not rich_content or not simple_content:
+            print("❌ 生成失败")
+            return
+
+        push_title = outfit_name if outfit_name else '穿搭推荐'
+
+        if preview:
+            print("=" * 50)
+            print("📱 简约版预览")
+            print("=" * 50)
+            print(simple_content)
+            print("\n" + "=" * 50)
+            print("📱 百科版预览")
+            print("=" * 50)
+            print(rich_content)
         else:
-            print("❌ 推送失败")
+            r1 = push_wechat(f'🅰️ {push_title}', simple_content + '\n\n---\n💡 回复"简单"仅收此类推送 | 回复"百科"收深度版')
+            r2 = push_wechat(f'🅱️ {push_title}', rich_content + '\n\n---\n💡 回复"简单"仅收此类推送 | 回复"百科"收深度版')
+            if r1 and r2:
+                print(f"✅ 双版本已推送")
+            else:
+                print("❌ 推送失败")
+
+    elif mode == 'simple':
+        content, _, outfit_name = build_simple(outfit_dir)
+        if content is None:
+            print("❌ 生成失败"); return
+        push_title = outfit_name if outfit_name else '穿搭推荐'
+        if preview:
+            print(content)
+        else:
+            push_wechat(push_title, content)
+            print("✅ 简约版已推送")
+
+    elif mode == 'rich':
+        content, style_name, outfit_name = build_push(outfit_dir)
+        if content is None:
+            print(f"❌ {style_name}"); return
+        push_title = outfit_name if outfit_name else style_name
+        if preview:
+            print("=" * 50)
+            print("📱 百科版预览")
+            print("=" * 50)
+            print(content)
+        else:
+            push_wechat(push_title, content)
+            print("✅ 百科版已推送")
 
 
 if __name__ == '__main__':

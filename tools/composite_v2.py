@@ -124,14 +124,14 @@ def parse_style_info(outfit_dir):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m:
                     v = m.group(1).strip().replace('**', '')
-                    if v and len(v) <= 30:
+                    if v and len(v) <= 38:
                         notes.append(v)
                 continue
             if in_section:
                 if line.strip().startswith('##') or line.strip().startswith('---'):
                     break
                 s = line.strip().lstrip('- ').strip()
-                if s and len(s) <= 30:
+                if s and len(s) <= 38:
                     notes.append(s)
         if notes:
             return notes[:5]

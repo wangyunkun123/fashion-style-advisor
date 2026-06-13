@@ -287,8 +287,20 @@ def build_push(outfit_dir):
             story.append(encyc['origin'])
         if encyc.get('quote'):
             story.append(f"💬 {encyc['quote']}")
+        # 小红书风格百科卡片
+        card_parts = []
+        if encyc.get('one_liner'):
+            card_parts.append(f"🎯 {encyc['one_liner']}")
+        if encyc.get('brands'):
+            brand_names = [b['name'] for b in encyc['brands'][:4]]
+            card_parts.append(f"🏷️ {', '.join(brand_names)}")
+        if encyc.get('icons'):
+            icon_names = [i['name'] for i in encyc['icons'][:3]]
+            card_parts.append(f"🌟 {', '.join(icon_names)}")
         if encyc.get('encyclopedia_url'):
-            story.append(f"📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
+            card_parts.append(f"🔗 完整百科：{encyc['encyclopedia_url']}")
+        if card_parts:
+            story.append('📚 关于' + style_name + '\n' + '\n'.join(card_parts))
         if story:
             parts.append("━━━ 📖 风格故事 ━━━\n\n" + '\n\n'.join(story))
 

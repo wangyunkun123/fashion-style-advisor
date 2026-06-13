@@ -32,7 +32,21 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"推送穿搭"** → `python3 tools/build_push.py <outfit_dir>` — 百科增强推送（冷知识+单品解释+配色+备选风格）
 - **"风格排名"** → `python3 tools/style_matcher.py <style_id>`
 - **"风格矩阵"** → `python3 tools/style_scorer.py --matrix`
-- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → build_push推送
+- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → 微信推送
+
+### 微信推送说明
+项目提供两套推送方案，可根据场景选择：
+
+**简约版** — 仅标题+品名+效果图，信息密度低，适合快速浏览
+```python
+python3 -c "from tools.wechat_control import push_wechat; push_wechat('标题', '内容')"
+```
+
+**百科版** — 风格故事+单品解释+配色+参考图+备选风格，信息密度高，适合深度穿搭分享
+```bash
+python3 tools/build_push.py <outfit_dir>
+```
+模板结构：标题信息 → 效果图 → 风格故事(小红书卡片) → 今日搭配 → 风格参考图 → 配色 → 备选风格
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing

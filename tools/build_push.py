@@ -357,6 +357,41 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     acc_items = [it for it in data['items'] if it['score'] == '—' or not it['score']]
     style_name = style.get('name_zh', '日系CityBoy') if style else '今日推荐'
 
+    # ━━━ A线风格笔记（无则生成并重跑排版）━━━
+    if not is_bline:
+        md_path = os.path.join(outfit_dir, 'outfit.md')
+        with open(md_path, 'r') as f:
+            md_text = f.read()
+        if '风格笔记' not in md_text:
+            # 从风格指纹提取关键特征
+            style_desc = ''
+            if encyc:
+                style_desc = encyc.get('one_liner', '')[:24]
+            if not style_desc and style:
+                style_desc = style.get('description', '')[:24]
+            silhouette = style.get('fingerprint', {}).get('silhouette', {}) if style else {}
+            color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '') if style else ''
+            # 提取穿法要点
+            wear_tips = []
+            for it in data.get('items', [])[:2]:
+                r = it.get('reason', '')
+                if r:
+                    wear_tips.append(r[:20])
+            # 生成简洁笔记（每条尽量短以利卡片展示）
+            notes = []
+            notes.append(f'- {style_name}：{style_desc}' if style_desc else f'- {style_name}风格')
+            if color_logic:
+                notes.append(f'- {color_logic[:24]}')
+            for tip in wear_tips:
+                notes.append(f'- {tip}')
+            notes_str = '\n'.join(notes)
+            with open(md_path, 'a') as f:
+                f.write(f'\n## 风格笔记\n\n{notes_str}\n')
+            # 重跑排版
+            import subprocess
+            subprocess.run([sys.executable, os.path.join(BASE_DIR, 'composite_v2.py'), outfit_dir],
+                          cwd=PROJ_DIR, capture_output=True, timeout=60)
+
     # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
 

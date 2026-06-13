@@ -124,14 +124,14 @@ def parse_style_info(outfit_dir):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m:
                     v = m.group(1).strip().replace('**', '')
-                    if v and len(v) <= 18:
+                    if v:
                         notes.append(v)
                 continue
             if in_section:
                 if line.strip().startswith('##') or line.strip().startswith('---'):
                     break
                 s = line.strip().lstrip('- ').strip()
-                if s and len(s) <= 18:
+                if s:
                     notes.append(s)
         if notes:
             return notes[:5]
@@ -180,7 +180,7 @@ def parse_style_info(outfit_dir):
                 reason = cells[4]  # B线表格第5列是选品理由
             else:
                 continue
-            if reason and reason not in ('选品理由', '') and len(reason) <= 18:
+            if reason and reason not in ('选品理由', '') and True:  # no length limit (wrapping)
                 reasons.append(reason)
     # 取前2条作为风格提示
     for r in reasons[:2]:
@@ -188,6 +188,23 @@ def parse_style_info(outfit_dir):
             notes.append(r)
 
     return notes[:5]
+
+
+def wrap_text(text, font, max_width):
+    """中文按字符换行"""
+    lines = []
+    current = ''
+    for ch in text:
+        test = current + ch
+        if font.getbbox(test)[2] <= max_width:
+            current = test
+        else:
+            if current:
+                lines.append(current)
+            current = ch
+    if current:
+        lines.append(current)
+    return lines or [text]
 
 def composite(ai_path,items,output_path):
     ai_img=Image.open(ai_path).convert('RGB'); ai_w,ai_h=ai_img.size
@@ -266,12 +283,15 @@ def composite(ai_path,items,output_path):
         canvas.paste((255,255,255),(rx,ry,rx+cell_w,ry+info_h))
         draw.rectangle([(rx,ry),(rx+cell_w-1,ry+info_h-1)],outline=(189,189,184),width=BORDER)
         ty=ry+20
+        NOTE_PAD=28; NOTE_MAX_W=cell_w-NOTE_PAD-16
         if style_kw:
-            draw.text((rx+16,ty),'STYLE NOTES',font=f_mini,fill=(140,140,138))
+            draw.text((rx+NOTE_PAD,ty),'STYLE NOTES',font=f_mini,fill=(140,140,138))
             ty+=36
             for kw in style_kw:
-                draw.text((rx+16,ty),f'· {kw}',font=f_item,fill=(110,110,108))
-                ty+=36
+                for wline in wrap_text(f'· {kw}', f_item, NOTE_MAX_W):
+                    if ty+36>top_y+ai_display_h-10: break
+                    draw.text((rx+NOTE_PAD,ty),wline,font=f_item,fill=(110,110,108))
+                    ty+=36
     # 底部：配色色块 — 从抠图衣服提取颜色（省token）
     # 底部：配色色块 — 豆包视觉识别（缓存结果）
     cache_file=os.path.join(os.path.dirname(output_path),'.color_cache.json')

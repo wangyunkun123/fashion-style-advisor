@@ -103,4 +103,26 @@ $(grep '覆盖率' /tmp/image_coverage.txt)
 EOF
 
 echo "[$(date '+%Y-%m-%d %H:%M')] ✅ 月度报告: $REPORT" >> "$LOG"
+
+# ── 5. 微信推送通知 ──
+echo "[$(date '+%Y-%m-%d %H:%M')] 📲 发送推送..." >> "$LOG"
+DISCOVER_COUNT=$(grep -c "关键词" styles_universal/discover_prompt.txt 2>/dev/null || echo "?")
+ENRICH_STR=$(echo "$ENRICH_LIST" | tr '\n' ' ')
+BROKEN_COUNT=$(grep -c "_broken" styles_universal/*/references/images.json 2>/dev/null || echo "0")
+
+python3 -c "
+import sys; sys.path.insert(0, 'tools')
+from wechat_control import push_wechat
+msg = f'''📊 风格库月度报告 — $(date '+%Y年%m月')
+
+📡 发现新趋势: ${DISCOVER_COUNT}个候选
+📝 充实旧风格: ${ENRICH_STR}
+🖼️ 图片URL: ${BROKEN_COUNT}个失效已标记
+
+👉 打开 styles_universal/discover_prompt.txt 审核新趋势
+👉 打开 styles_universal/references/_auto_learn.log 看详情
+👉 运行 python3 tools/style_research.py --list 看完整状态'''
+push_wechat('📊 风格库月度报告', msg)
+" >> "$LOG" 2>&1
+
 echo "[$(date '+%Y-%m-%d %H:%M')] 🎉 月度自动学习完成" >> "$LOG"

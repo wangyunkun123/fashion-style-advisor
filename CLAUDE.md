@@ -22,6 +22,17 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 未指定   → python3 tools/style_matcher.py --auto <温度> <天气> <场合> → 自动推荐
 ```
 
+## 通用风格百科
+- `styles_universal/` — 41+风格百科全书（文化/历史/品牌/名人/秀场）
+- `styles_universal/categories.json` — 五维风格分类体系
+- `tools/style_research.py` — 风格研究代理（自学习系统）
+
+### 风格研究操作
+- **"研究风格"** → `python3 tools/style_research.py <style_id>` 生成研究提示词
+- **"发现新风格"** → `python3 tools/style_research.py --discover`
+- **"风格列表"** → `python3 tools/style_research.py --list`
+- **"充实风格"** → `python3 tools/style_research.py --enrich <style_id>`
+
 ## 操作指令
 - **"推荐穿搭"** → 读取 wardrobe + 天气 → 风格匹配筛选 → 给出搭配方案
 - **"风格排名"** → `python3 tools/style_matcher.py <style_id>`

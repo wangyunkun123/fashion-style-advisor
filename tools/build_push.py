@@ -463,9 +463,9 @@ def main():
             base = get_push_base_url()
             outfit_id = os.path.basename(outfit_dir)
             rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
-            simple_desc = '不想费心，每天一套穿好就走 👌'
-            rich_desc = '想跟AI一起探索风格，越穿越懂自己 🧠✨'
-            footer = f'\n\n---\n{rate_link}\n💡 选择推送模式：\n[🅰️ {simple_desc}]({base}/setpref?mode=simple) | [🅱️ {rich_desc}]({base}/setpref?mode=rich)'
+            simple_desc = '🅰️ 简约版：不想费心，每天一套穿好就走 👌'
+            rich_desc = '🅱️ 百科版：想跟AI一起探索风格，越穿越懂自己 🧠✨'
+            footer = f'\n\n---\n{rate_link}\n💡 选择推送模式：\n[{simple_desc}]({base}/setpref?mode=simple)\n[{rich_desc}]({base}/setpref?mode=rich)'
             r1 = push_wechat(f'🅰️ {push_title}', simple_content + footer)
             r2 = push_wechat(f'🅱️ {push_title}', rich_content + footer)
             if r1 and r2:

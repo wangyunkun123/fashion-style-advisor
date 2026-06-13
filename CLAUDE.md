@@ -36,19 +36,20 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → build_push推送
 
 ## 微信推送
-首次同时发双版，用户点击链接选择偏好，之后按偏好推送。
+首次双版+引导语，用户点击选择。简约版去评分，百科版带评分。月度自动回访。
 
-| 版本 | 内容 | 场景 |
-|------|------|------|
-| 🅰️ 简约版 | 标题+天气+单品+效果图 | 快速通知 |
-| 🅱️ 百科版 | +风格故事+单品解释+参考图+配色+备选 | 深度分享 |
+| 版本 | 引导语 | 评分 | 月度回访 |
+|------|--------|------|---------|
+| 🅰️ 简约版 | 不想费心，每天一套穿好就走 👌 | ❌ | 30天→"想继续躺平？" |
+| 🅱️ 百科版 | 想跟AI一起探索风格，越穿越懂自己 🧠✨ | ✅ | 30天→"AI学会你了，换简约？" |
+| 31天 | 后悔提醒：想改回上一版？ |
+| 60天 | 再确认：还是喜欢现在的方式？ |
 
 ```bash
-python3 tools/build_push.py <outfit_dir>              # 推送到微信（按偏好）
-python3 tools/build_push.py <dir> --both               # 强制双版
+python3 tools/build_push.py <outfit_dir>              # 按偏好推送
 python3 tools/build_push.py --set simple|rich|both     # 设置偏好
+python3 tools/monthly_checkin.py                       # 月度回访（auto_learn.sh自动调用）
 ```
-> 用户也可通过微信消息底部的链接点击设置，无需命令行。需要 ngrok 运行中。
 > 完整生图流程：`outfit.md` → `generate.py` → `sync_items.py` → `composite_v2.py` → `git push` → `build_push.py`
 
 ## 用户打分

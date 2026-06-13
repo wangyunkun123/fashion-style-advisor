@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_yama",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（Vogue/Brand/杂志 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：《GO OUT》杂志 + 山系品牌造型特辑",
+      "images": [
+        {
+          "url": "https://qdymag.com/news/698",
+          "caption": "《秋刀魚》杂志 — Yuta 专访：都會與山野間的自在穿梭",
+          "source": "秋刀魚 サンマ"
+        },
+        {
+          "url": "https://www.popdaily.com.tw/style/1548690",
+          "caption": "山系穿搭完全指南 — 起源、重點、搭配範本",
+          "source": "PopDaily 波波黛莉"
+        },
+        {
+          "url": "https://mensuno.hk/fashion/男生的山系穿搭要怎樣才時尚？5個日系風outdoor造型配襯示範及入手單品推介",
+          "caption": "5個日系山系Outdoor造型配襯示範 — men's uno HK 编辑大片",
+          "source": "men's uno Hong Kong"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "White Mountaineering/nanamica/and wander 秀场与品牌展示",
+      "images": [
+        {
+          "url": "https://models.com/work/various-shows-white-mountaineering-ss-25-mens-show/2285447",
+          "caption": "White Mountaineering 2025春夏男装秀 — 户外机能 x 时装",
+          "source": "Models.com"
+        },
+        {
+          "url": "https://snkrdunk.com/en/magazine/2024/07/02/white-mountaineering-ss25-umbro-reebok-ecco-release-date-price/",
+          "caption": "White Mountaineering SS25 — Umbro/Reebok/ECCO 联名秀场图",
+          "source": "SNKRDUNK Magazine"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai",
+          "caption": "Sacai 2026春夏男装秀 — 户外元素 x 日系解构",
+          "source": "Vogue Runway"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "日系山系风格名人穿示范例",
+      "images": [
+        {
+          "url": "https://www.juksy.com/article/137913",
+          "caption": "山下智久 5種穿搭風格 — 从街头到山系户外演变",
+          "source": "JUKSY 街星"
+        },
+        {
+          "url": "https://www.marieclaire.com.tw/fashion/news/91240",
+          "caption": "山下智久设计 Onitsuka Tiger 联名鞋款 — 沙丘色户外灵感",
+          "source": "Marie Claire"
+        },
+        {
+          "url": "https://55688.juksy.com/55688/article/137913",
+          "caption": "山下智久现身台北街头 — 山P的山系私服穿搭解析",
+          "source": "JUKSY 街星"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "东京户外风街拍 + 小红书山系穿搭博主",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
+          "caption": "TokyoFashion 东京街拍 — Outdoor/机能风街拍合集",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://www.blog.popchill.com/post/japanesestyle",
+          "caption": "2024日系穿搭全解析 — 山系/森系/好嫁系对比 + 街拍图",
+          "source": "PopChill"
+        },
+        {
+          "url": "https://jianghu.taobao.com/detail/47730_79505661",
+          "caption": "山系风格起源与穿搭指南 — 东京街头山系穿搭实测",
+          "source": "淘宝江湖"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram/Pinterest/微信公众号 山系穿搭灵感",
+      "images": [
+        {
+          "url": "https://sneaker.de/en/news/nanamica-spring-summer-2025-lookbook",
+          "caption": "nanamica 2025春夏 Lookbook — 山系美学标杆品牌造型集",
+          "source": "Sneaker.de"
+        },
+        {
+          "url": "https://dancewax.net/2025/07/01/nanamica-unveils-fall-winter-2025-collection-inspired-by-ocean-and-sustainability/",
+          "caption": "nanamica 2025秋冬系列 — 海洋灵感可持续山系设计",
+          "source": "Dancewax"
+        },
+        {
+          "url": "https://www.trendhunter.com/trends/nanamica-3",
+          "caption": "Heartwarming Life-Tech Apparel — nanamica 品牌解读",
+          "source": "TrendHunter"
+        }
+      ]
+    }
+  }
+}

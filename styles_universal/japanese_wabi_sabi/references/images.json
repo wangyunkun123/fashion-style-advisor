@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_wabi_sabi",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（品牌Lookbook/秀场/街拍 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：Yohji Yamamoto/Comme des Garcons 品牌造型特辑",
+      "images": [
+        {
+          "url": "https://www.tokyoweekender.com/art_and_culture/fashion/the-eternal-vision-of-yohji-yamamoto/",
+          "caption": "Yohji Yamamoto 永恒愿景 — 2018-2025 男装档案大片",
+          "source": "Tokyo Weekender"
+        },
+        {
+          "url": "https://paternaldamnation.com/how-to-style-japanese-inspired-clothing/",
+          "caption": "How to Style Japanese Inspired Clothing — 日系侘寂穿搭指南",
+          "source": "Paternal Damnation"
+        },
+        {
+          "url": "https://harrods.com/en-an/designers/yohji-yamamoto",
+          "caption": "Harrods Yohji Yamamoto — 侘寂美学男装精选图集",
+          "source": "Harrods"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "Yohji Yamamoto/Issey Miyake/Comme des Garcons 秀场",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto",
+          "caption": "Yohji Yamamoto 2026秋冬男装秀 — 侘寂黑色解构",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/yohji-yamamoto",
+          "caption": "Yohji Yamamoto 2026春夏男装秀 — 宽松不对称美学",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://kendam.com/news/fashion-shows/yohji-yamamoto-fall-winter-2026-27-men-runway",
+          "caption": "Yohji Yamamoto 2026秋冬秀场 — 42张高清图",
+          "source": "Kendam"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "日系侘寂极简风格名人穿搭",
+      "images": [
+        {
+          "url": "https://www.world-wrist-watch.com/zh-Hans/Article/16005",
+          "caption": "山下智久 — 极简私服穿搭哲学「不费力时尚」",
+          "source": "世界腕表"
+        },
+        {
+          "url": "https://www.juksy.com/article/137913",
+          "caption": "山下智久穿搭进化史 —「留白」极简美学私服示范",
+          "source": "JUKSY 街星"
+        },
+        {
+          "url": "https://www.marieclaire.com.tw/fashion/news/91240",
+          "caption": "山下智久 Onitsuka Tiger 设计 — 极简日式工艺美学",
+          "source": "Marie Claire"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "东京代官山/青山 极简风格街拍",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/brands/yohji-yamamoto/",
+          "caption": "TokyoFashion Yohji Yamamoto 品牌街拍 — 黑色极简穿搭合集",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://tokyofashion.com/tag/monochrome-fashion/",
+          "caption": "Monochrome Fashion — 东京单色极简时尚街拍",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows",
+          "caption": "Vogue 东京2024秋冬街拍 — 极简/解构风格合集",
+          "source": "Vogue Runway"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram/Pinterest 侘寂极简穿搭灵感",
+      "images": [
+        {
+          "url": "https://www.ssense.com/en-tz/men/designers/tanaka",
+          "caption": "Tanaka — 前 Uniqlo/Yohji 设计师的侘寂极简男装线",
+          "source": "SSENSE"
+        },
+        {
+          "url": "https://en.pinkoi.com/product/wXyvqBHU",
+          "caption": "无感官 (No Sence) — 日式侘寂棉麻拼接衬衫",
+          "source": "Pinkoi"
+        },
+        {
+          "url": "https://theshopyohjiyamamoto.com/de/blogs/news/yohji-yamamoto-pour-homme-2026-spring-summer-collection",
+          "caption": "Yohji Yamamoto 2026春夏 Lookbook — 官方造型写真",
+          "source": "THE SHOP Yohji Yamamoto"
+        }
+      ]
+    }
+  }
+}

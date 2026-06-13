@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_techwear",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（品牌Lookbook/秀场/电商 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：Hypebeast/GQ/Highsnobiety 机能风造型特辑",
+      "images": [
+        {
+          "url": "https://hypebeast.com/2025/8/y-3-fall-winter-2025-fw25-tennis-campaign-adidas-lookbook-collection-release-info",
+          "caption": "Y-3 2025秋冬系列 — 网球 x 日系机能美学",
+          "source": "Hypebeast"
+        },
+        {
+          "url": "https://hypebeast.cn/2024/1/y-3-fall-winter-2024-collection-lookbook",
+          "caption": "Y-3 2024秋冬 Lookbook — 山本耀司 adidas 机能风",
+          "source": "Hypebeast CN"
+        },
+        {
+          "url": "https://voidline.co.uk/products/noragi-techwear",
+          "caption": "Noragi Techwear Jacket — 日式野良着 x 都市忍者机能",
+          "source": "Voidline"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "Acronym/Nike ACG/Y-3 等机能品牌展示",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto",
+          "caption": "Yohji Yamamoto 2026秋冬男装 — 深色机能层次美学",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai",
+          "caption": "Sacai 2026春夏男装 — 机能解构 x 多口袋设计",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://kendam.com/news/fashion-shows/yohji-yamamoto-fall-winter-2026-27-men-runway",
+          "caption": "Yohji Yamamoto 2026秋冬秀场 — 暗黑机能风42图",
+          "source": "Kendam"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "日系机能风名人穿搭代表",
+      "images": [
+        {
+          "url": "https://www.gq.com.tw/tag/greg-han-hsu-許光漢",
+          "caption": "许光汉 GQ台湾 — 机能/暗黑风格穿搭大片",
+          "source": "GQ Taiwan"
+        },
+        {
+          "url": "https://www.vogue.com.tw/article/best-dressed-2025",
+          "caption": "Vogue台湾 2025最佳穿搭 — 许光汉等明星机能风造型",
+          "source": "Vogue Taiwan"
+        },
+        {
+          "url": "https://markandlona.us/zh-hans/pages/ambassador-takuya-kimura-2026ss-wearing-vol-4",
+          "caption": "木村拓哉 2026春夏 — 机能运动风品牌大片",
+          "source": "Mark & Lona"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "东京涉谷/原宿 机能风街拍",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/tag/harajuku-guys/",
+          "caption": "Harajuku Guys — 原宿暗黑/机能风男生街拍",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
+          "caption": "Tokyo Street Snaps — 东京街拍（含机能风）",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://vogue.sg/tokyo-fashion-week-fall-winter-2024-street-style/",
+          "caption": "Vogue SG 东京2024秋冬时装周街拍 — 机能风合集",
+          "source": "Vogue Singapore"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram/Pinterest 机能风穿搭灵感",
+      "images": [
+        {
+          "url": "https://www.offwrld-techwear.com/collections/men-techwear",
+          "caption": "Offwrld Techwear — 日系都市忍者/赛博朋克机能风穿搭集",
+          "source": "Offwrld Techwear"
+        },
+        {
+          "url": "https://techwearofficial.com/products/japanese-style-summer-loose-pleated-short-sleeve-shirt",
+          "caption": "Japanese Style Summer Pleated Shirt — 日式褶皱机能短袖",
+          "source": "Techwear Official"
+        },
+        {
+          "url": "https://voidline.co.uk/products/kurosenshi-黒戦士-urban-cyperpunk-hoodie",
+          "caption": "Kurosenshi 黒戦士 Urban Cyberpunk Hoodie — 日系机能忍者风",
+          "source": "Voidline"
+        }
+      ]
+    }
+  }
+}

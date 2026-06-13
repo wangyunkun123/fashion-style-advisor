@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_amekaji",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（品牌Lookbook/杂志/街拍 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：《Lightning》《CLUTCH》等日本复古男装杂志",
+      "images": [
+        {
+          "url": "https://japonista.com/blogs/news/what-is-exactly-amekaji",
+          "caption": "What Is Amekaji? — 日系阿美咔叽完整风格指南（含穿搭图集）",
+          "source": "Japonista"
+        },
+        {
+          "url": "https://shopfront.app/aesthetics/amekaji/",
+          "caption": "Amekaji Aesthetic — 定义、标志单品与风格标签",
+          "source": "Shopfront"
+        },
+        {
+          "url": "https://www.ferbena.com/what-is-amekaji-why-i-think-this-japanese-fashion-trend-is-about-to-blow-up-in-2026.html",
+          "caption": "Amekaji 2026趋势预测 — 日系美式复古穿搭全解析",
+          "source": "Ferbena"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "阿美咔叽风格较少走秀，主要参考 Junya Watanabe/Visvim 等品牌",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/junya-watanabe",
+          "caption": "Junya Watanabe 2026春夏男装秀 — 美式工装 x 日系解构",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://kendam.com/news/fashion-shows/junya-watanabe-fall-winter-2025-26-men-runway",
+          "caption": "Junya Watanabe 2025秋冬男装 — 经典美式复古 × Dandy叛逆",
+          "source": "Kendam"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2025-ready-to-wear/junya-watanabe",
+          "caption": "Junya Watanabe 2025秋冬女装 — 美式复古工装元素参考",
+          "source": "Vogue Runway"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "阿美咔叽风格名人穿搭代表",
+      "images": [
+        {
+          "url": "https://lifestyle.inquirer.net/545219/amekaji-manila-kiichiro-shibue/",
+          "caption": "Kiichiro Shibue — 大阪造型师的阿美咔叽穿搭哲学",
+          "source": "Inquirer Lifestyle"
+        },
+        {
+          "url": "https://vogue.ph/fashion/amekaji-spirit-subculture-history-and-character/",
+          "caption": "Amekaji Philippines 社群 — 复古工装迷真实穿搭",
+          "source": "Vogue Philippines"
+        },
+        {
+          "url": "https://www.esquiremag.ph/style/fashion/the-best-dressed-men-of-2025-a7970-20251230-dyn",
+          "caption": "2025最佳穿搭男性 — 含阿美咔叽风格穿搭案例",
+          "source": "Esquire Philippines"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "东京原宿/下北泽/代官山 阿美咔叽街拍",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
+          "caption": "TokyoFashion 东京街拍 — 复古/工装/美式风格街拍合集",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://www.spot.ph/arts-culture/arts-culture-peopleparties/110831/amekaji-the-style-taking-over-the-closets-of-modern-manile-os-a2962-20250112-lfrm2",
+          "caption": "Amekaji征服马尼拉 — 亚洲街头阿美咔叽实拍图集",
+          "source": "Spot.ph"
+        },
+        {
+          "url": "https://web-japan.org/trends/fashion/fas060616.html",
+          "caption": "Shibuya Men Change Style — 涩谷男生穿搭变迁（含阿美咔叽）",
+          "source": "Trends in Japan"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram/Pinterest 阿美咔叽穿搭灵感",
+      "images": [
+        {
+          "url": "https://hypebeast.com/2024/12/visvim-ss25-dissertation-on-quality-we-choose-spring-summer-2025-lookbook-collection-release-info",
+          "caption": "visvim 2025春夏 Lookbook — 「品质论文」系列阿美咔叽标杆",
+          "source": "Hypebeast"
+        },
+        {
+          "url": "https://www.ssense.com/zh-tj/men/designers/f-lagstuf-f",
+          "caption": "F-LAGSTUF-F — 新一代阿美咔叽 x 90年代滑板音乐风格",
+          "source": "SSENSE"
+        },
+        {
+          "url": "https://aesthetics.fandom.com/wiki/Amekaji",
+          "caption": "Amekaji Wiki — 风格定义、品牌图谱、穿搭图例",
+          "source": "Aesthetics Wiki"
+        }
+      ]
+    }
+  }
+}

@@ -60,11 +60,13 @@ def check_and_send(dry_run=False):
                 prefs.setdefault('checkin_done', []).append('day30')
                 save_prefs(prefs)
 
-    # 31天额外请求：也发一次60天风格的回访
+    # 31天额外请求：后悔了提醒
     if 31 <= days < 60 and 'day31' not in done and 'day60' not in done:
-        msg = ("📊 穿搭服务用了两个月，对现在的推荐模式满意吗？\n\n"
-               "可以随时换回另一种风格 📦\n\n"
-               f"[🔄 切换模式]({base}/setpref?mode={mode})")
+        other = 'rich' if mode == 'simple' else 'simple'
+        other_name = '百科版' if other == 'rich' else '简约版'
+        msg = ("🤔 后悔了？想改回上一版？\n\n"
+               f"点一下就能切回{other_name} 📦\n\n"
+               f"[🔄 切回{other_name}]({base}/setpref?mode={other})")
         if not dry_run:
             prefs.setdefault('checkin_done', []).append('day31')
             save_prefs(prefs)

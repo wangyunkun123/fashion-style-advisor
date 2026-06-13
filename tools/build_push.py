@@ -461,7 +461,10 @@ def main():
             print(rich_content)
         else:
             base = get_push_base_url()
-            footer = f'\n\n---\n💡 选择推送模式：[🅰️ 简约版]({base}/setpref?mode=simple) | [🅱️ 百科版]({base}/setpref?mode=rich) | [双版]({base}/setpref?mode=both)'
+            base = get_push_base_url()
+            outfit_id = os.path.basename(outfit_dir)
+            rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
+            footer = f'\n\n---\n{rate_link}\n💡 推送偏好：[🅰️简约]({base}/setpref?mode=simple) | [🅱️百科]({base}/setpref?mode=rich)'
             r1 = push_wechat(f'🅰️ {push_title}', simple_content + footer)
             r2 = push_wechat(f'🅱️ {push_title}', rich_content + footer)
             if r1 and r2:
@@ -474,10 +477,13 @@ def main():
         if content is None:
             print("❌ 生成失败"); return
         push_title = outfit_name if outfit_name else '穿搭推荐'
+        base = get_push_base_url()
+        outfit_id = os.path.basename(outfit_dir)
+        rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
         if preview:
             print(content)
         else:
-            push_wechat(push_title, content)
+            push_wechat(push_title, content + rate_footer)
             print("✅ 简约版已推送")
 
     elif mode == 'rich':
@@ -485,13 +491,16 @@ def main():
         if content is None:
             print(f"❌ {style_name}"); return
         push_title = outfit_name if outfit_name else style_name
+        base = get_push_base_url()
+        outfit_id = os.path.basename(outfit_dir)
+        rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
         if preview:
             print("=" * 50)
             print("📱 百科版预览")
             print("=" * 50)
             print(content)
         else:
-            push_wechat(push_title, content)
+            push_wechat(push_title, content + rate_footer)
             print("✅ 百科版已推送")
 
 

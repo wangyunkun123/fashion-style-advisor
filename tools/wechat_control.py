@@ -855,6 +855,42 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 self._json_resp(400, {"error": "mode 必须是 simple/rich/both"})
             return
 
+        # 穿搭评分页面
+        if parsed.path == '/rate' and self.command != 'POST':
+            template_path = os.path.join(PROJECT_DIR, 'templates', 'rating.html')
+            if os.path.exists(template_path):
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    self._html_resp(200, f.read())
+            else:
+                self._json_resp(404, {"error": "template not found"})
+            return
+
+        # 评分 API
+        if parsed.path.startswith('/api/outfit/'):
+            from urllib.parse import unquote
+            import json as _json
+            parts = [p for p in parsed.path.split('/') if p]
+            oid = unquote(parts[-1]) if len(parts) > 2 else 'unknown'
+            if not oid: oid = urlParams.get('id',['unknown'])[0] if 'id' in urlParams else 'unknown'
+            outfit_dir = os.path.join(PROJECT_DIR, 'outfits', oid) if oid != 'unknown' else None
+            if outfit_dir and os.path.exists(outfit_dir):
+                md = os.path.join(outfit_dir, 'outfit.md')
+                if os.path.exists(md):
+                    with open(md,'r') as f: txt = f.read()
+                    import re
+                    items = []
+                    for line in txt.split('\n'):
+                        m = re.match(r'^\|\s*[^|]*\|\s*\*?\*?(\w+-\d+)\*?\*?\s*\|\s*(.+?)\s*\|', line)
+                        if m: items.append({'id': m.group(1), 'name': m.group(2).strip()})
+                    style_m = re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)', txt)
+                    date_m = re.search(r'(\d{4}-\d{2}-\d{2})', oid)
+                    self._json_resp(200, {'outfit': oid.split('_',1)[-1] if '_' in oid else oid, 'style': (style_m.group(1) or style_m.group(2)).strip() if style_m else '', 'date': date_m.group(1) if date_m else '', 'items': items})
+                else:
+                    self._json_resp(200, {'outfit': oid, 'style': '', 'date': '', 'items': []})
+            else:
+                self._json_resp(200, {'outfit': oid, 'style': '', 'date': '', 'items': []})
+            return
+
         # 任务轮询
         if parsed.path.startswith('/api/task/'):
             tid = parsed.path.split('/')[-1]
@@ -957,6 +993,18 @@ class WebhookHandler(BaseHTTPRequestHandler):
             else:
                 result = execute_action(action, extra)
                 self._json_resp(200, {"result": result, "action": action})
+        elif parsed.path == '/rate':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try: data = json.loads(body)
+            except: self._json_resp(400, {"error": "invalid json"}); return
+            oid = data.get('outfit_id', 'unknown')
+            d = os.path.join(PROJECT_DIR, 'outfits', oid)
+            if not os.path.exists(d): self._json_resp(404, {"error": "outfit not found"}); return
+            with open(os.path.join(d, 'rating.json'), 'w') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            log(f"⭐ 评分: {oid} → {data.get('rating','?')}星")
+            self._json_resp(200, {"status": "ok"})
         else:
             self._json_resp(404, {"error": "not found"})
 

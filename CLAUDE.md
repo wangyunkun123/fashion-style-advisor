@@ -33,11 +33,13 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"新想法"** → 记录到 `系统升级建议.md`
 
 ## 生图完整流程
-1. Seedream API 生图 → `outfits/<日期>_<风格>/generated/`
-2. 同步抠图：服装档案映射 → 复制 `_cutout.png` 到 `outfits/.../items/`
+1. Seedream API 生图 → `outfits/<日期>_<风格>/豆包生图/`
+2. **同步抠图**：`python3 tools/sync_items.py <dir>` → 自动复制 `_cutout.png` 并命名为 `{ID}_{名称}_cutout.png`
 3. `python3 tools/composite_v2.py <dir>` → 生成 `_直角画册.jpg`
 4. `git add -A && git commit && git push`
 5. `wechat_control.py` 内 `push_wechat()` 推送效果图
+
+> ⚠️ items/ 文件名必须为 `{ID}_{名称}_cutout.png` 格式（如 `SHIRT-004_黑白格纹长袖衬衫_cutout.png`），否则 composite_v2 找不到衣服。用 `sync_items.py` 自动处理。
 
 ## 手机远程控制
 - 启动：`bash tools/start_wechat_control.sh`

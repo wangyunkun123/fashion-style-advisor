@@ -35,23 +35,19 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → 微信推送
 
 ## 微信推送
-项目提供两套推送方案，新用户可按需选择。
+首次同时发双版，用户点击链接选择偏好，之后按偏好推送。
 
-## 微信推送
-首次推送同时发送两个版本，用户可自行选择偏好。之后按偏好推送。
+| 版本 | 内容 | 场景 |
+|------|------|------|
+| 🅰️ 简约版 | 标题+天气+单品+效果图 | 快速通知 |
+| 🅱️ 百科版 | +风格故事+单品解释+参考图+配色+备选 | 深度分享 |
 
 ```bash
-# 首次（发送两版） → 用户选择偏好
-python3 tools/build_push.py <outfit_dir>           # 默认双版
-python3 tools/build_push.py --set simple|rich|both  # 保存偏好
+python3 tools/build_push.py <outfit_dir>              # 推送到微信（按偏好）
+python3 tools/build_push.py <dir> --both               # 强制双版
+python3 tools/build_push.py --set simple|rich|both     # 设置偏好
 ```
-
-### 🅰️ 简约版
-仅标题+品名+效果图，信息密度低。
-### 🅱️ 百科版
-天气预警+风格故事+单品解释+参考图+配色+备选风格。
-模板：标题/日期/天气/预警 → 效果图 → 风格故事+百科链接 → 单品详解 → 风格参考图 → 配色 → 备选风格
-
+> 用户也可通过微信消息底部的链接点击设置，无需命令行。需要 ngrok 运行中。
 > 完整生图流程：`outfit.md` → `generate.py` → `sync_items.py` → `composite_v2.py` → `git push` → `build_push.py`
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`

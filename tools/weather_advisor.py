@@ -28,6 +28,36 @@ def fetch_weather(location='Beijing'):
         return None
 
 
+# 天气描述中英映射 + 对应图标
+WEATHER_MAP = {
+    'sunny': ('晴', '☀️'), 'clear': ('晴', '☀️'),
+    'partly cloudy': ('多云', '⛅'), 'cloudy': ('阴', '☁️'),
+    'overcast': ('阴', '☁️'), 'mist': ('雾', '🌫️'), 'fog': ('雾', '🌫️'),
+    'haze': ('霾', '🌫️'), 'smoky': ('霾', '🌫️'),
+    'rain': ('雨', '🌧️'), 'light rain': ('小雨', '🌦️'),
+    'moderate rain': ('中雨', '🌧️'), 'heavy rain': ('大雨', '🌧️'),
+    'thunderstorm': ('雷暴', '⛈️'), 'rain with thunderstorm': ('雷暴', '⛈️'),
+    'thunder': ('雷暴', '⛈️'),
+    'snow': ('雪', '❄️'), 'light snow': ('小雪', '🌨️'),
+    'heavy snow': ('大雪', '❄️'), 'sleet': ('雨夹雪', '🌨️'),
+    'drizzle': ('毛毛雨', '🌦️'),
+    'wind': ('大风', '💨'), 'windy': ('大风', '💨'),
+    'hot': ('炎热', '🔥'), 'cold': ('寒冷', '🥶'),
+}
+
+
+def translate_weather(desc_en):
+    """翻译天气描述 + 返回对应图标"""
+    key = desc_en.lower().strip()
+    if key in WEATHER_MAP:
+        return WEATHER_MAP[key]
+    # 模糊匹配
+    for k, v in WEATHER_MAP.items():
+        if k in key:
+            return v
+    return (desc_en, '🌤')
+
+
 def analyze_weather(data):
     """分析天气数据，返回穿搭相关建议"""
     if not data:
@@ -39,7 +69,8 @@ def analyze_weather(data):
     temp = int(current.get('temp_C', 25))
     humidity = int(current.get('humidity', 50))
     wind_speed = int(current.get('windspeedKmph', 10))
-    weather_desc = current.get('weatherDesc', [{}])[0].get('value', '晴')
+    desc_en = current.get('weatherDesc', [{}])[0].get('value', 'Clear')
+    weather_zh, weather_icon = translate_weather(desc_en)
     precipitation = float(current.get('precipMM', 0))
     uv_index = int(current.get('uvIndex', 3))
 
@@ -60,8 +91,8 @@ def analyze_weather(data):
         risks.append({'level': 'cold', 'label': '低温', 'advice': '多层叠穿+保暖外套+围巾手套'})
     if humidity > 80 and temp > 25:
         risks.append({'level': 'humid', 'label': '闷热', 'advice': '速干面料+宽松剪裁+浅色系'})
-    if '雨' in weather_desc or '雪' in weather_desc:
-        risks.append({'level': 'rain', 'label': weather_desc, 'advice': '防水外套+深色下装+防滑鞋底'})
+    if '雨' in weather_zh or '雪' in weather_zh:
+        risks.append({'level': 'rain', 'label': weather_zh, 'advice': '防水外套+深色下装+防滑鞋底'})
 
     # 日内天气变化检测
     volatile = False
@@ -74,11 +105,11 @@ def analyze_weather(data):
 
     return {
         'current': {'temp': temp, 'humidity': humidity, 'wind': wind_speed,
-                    'desc': weather_desc, 'precip': precipitation, 'uv': uv_index},
+                    'desc': weather_zh, 'icon': weather_icon, 'precip': precipitation, 'uv': uv_index},
         'forecast': {'max': max_temp, 'min': min_temp},
         'risks': risks,
         'volatile': volatile,
-        'summary': f'{weather_desc} {temp}°C 湿度{humidity}%',
+        'summary': f'{weather_zh} {temp}°C 湿度{humidity}%',
     }
 
 
@@ -88,7 +119,7 @@ def weather_line(analysis):
         return ''
     c = analysis['current']
     f = analysis['forecast']
-    parts = [f"🌤 {c['desc']} {c['temp']}°C (↓{f['min']}°C ↑{f['max']}°C)"]
+    parts = [f"{c.get('icon', '🌤')} {c['desc']} {c['temp']}°C (↓{f['min']}°C ↑{f['max']}°C)"]
     if c['wind'] > 20:
         parts.append(f"💨 风力{c['wind']}km/h")
     if c['humidity'] > 75:

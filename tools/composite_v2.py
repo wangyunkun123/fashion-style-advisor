@@ -152,10 +152,10 @@ def parse_style_info(outfit_dir):
     for line in lines:
         if '天气' in line:
             m = re.search(r'[：:]\s*(.+)', line)
-            if m: weather = m.group(1).strip()[:20]
+            if m: weather = m.group(1).strip()[:12]  # 截断以适配卡片
         if '场景' in line or '场合' in line:
             m = re.search(r'[：:]\s*(.+)', line)
-            if m: occasion = m.group(1).strip()[:20]
+            if m: occasion = m.group(1).strip()[:12]
 
     if style_name:
         notes.append(f'{style_name}风格')

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Style Advisor — 风格参考图库</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Songti SC', serif; background: #f5f4f0; color: #333; padding: 20px; }
+  h1 { text-align: center; font-size: 24px; margin: 20px 0 10px; letter-spacing: 2px; }
+  .subtitle { text-align: center; color: #999; margin-bottom: 30px; font-size: 13px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 30px; }
+  .filters button { border: 1px solid #ccc; background: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .filters button:hover, .filters button.active { background: #333; color: #fff; border-color: #333; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; max-width: 1400px; margin: 0 auto; }
+  .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .card-header { padding: 14px 16px 8px; }
+  .card-header h3 { font-size: 16px; margin-bottom: 2px; }
+  .card-header .en { font-size: 11px; color: #aaa; }
+  .card-stats { padding: 0 16px 8px; font-size: 12px; color: #888; }
+  .cat-list { padding: 0 16px 14px; }
+  .cat-label { font-size: 11px; font-weight: bold; color: #555; margin: 8px 0 4px; text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid #f0f0f0; padding-top: 8px; }
+  .cat-label:first-child { border-top: none; padding-top: 0; }
+  .img-link { display: block; padding: 4px 0; font-size: 12px; color: #2a6496; text-decoration: none; border-bottom: 1px dotted #f0f0f0; }
+  .img-link:hover { color: #1a4a6e; background: #f9f9f7; }
+  .img-link .src { color: #aaa; font-size: 10px; margin-left: 6px; }
+  .img-link .cap { display: block; color: #666; font-size: 11px; margin-top: 1px; }
+  .footer { text-align: center; padding: 40px; color: #ccc; font-size: 11px; }
+</style>
+</head>
+<body>
+<h1>👔 风格参考图库</h1>
+<p class="subtitle">49 风格 · 416 参考图 · 点链接在新标签页中查看图片</p>
+
+<div class="filters">
+  <button class="active" onclick="filterAll()">全部</button>
+  <button onclick="filter('日系')">日系</button>
+  <button onclick="filter('韩系')">韩系</button>
+  <button onclick="filter('美式')">美式</button>
+  <button onclick="filter('英式')">英式</button>
+  <button onclick="filter('意式')">意式</button>
+  <button onclick="filter('法式')">法式</button>
+  <button onclick="filter('中式')">中式</button>
+  <button onclick="filter('北欧')">北欧</button>
+</div>
+
+<div class="grid">
+<div class="card" data-tags="aesthetic_avant_garde">
+  <div class="card-header"><h3>aesthetic_avant_garde</h3><div class="en"></div></div>
+  <div class="card-stats">📸 7 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/comme-des-garcons-homme-plus" target="_blank" title="Comme des Garçons Homme Plus FW25 — 川久保玲的持续实验">Comme des Garçons Homme Plus FW25 — 川久保玲的持续实验<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/yohji-yamamoto" target="_blank" title="Yohji Yamamoto FW25 — 黑色诗人的垂坠解构">Yohji Yamamoto FW25 — 黑色诗人的垂坠解构<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/rick-owens" target="_blank" title="Rick Owens FW25 — 暗黑美学的极致廓形">Rick Owens FW25 — 暗黑美学的极致廓形<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-couture/maison-margiela" target="_blank" title="Maison Margiela SS25 Couture — 解构主义的持续进化">Maison Margiela SS25 Couture — 解构主义的持续进化<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com/story/rick-owens-style-influence-menswear" target="_blank" title="GQ — Rick Owens如何改变了男性对穿衣的想象">GQ — Rick Owens如何改变了男性对穿衣的想象<span class="src">GQ</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/best-street-style-paris-menswear-fall-2025" target="_blank" title="巴黎男装周街拍 — 前卫解构的街头演绎">巴黎男装周街拍 — 前卫解构的街头演绎<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.highsnobiety.com/p/comme-des-garcons-homme-plus-fall-2025/" target="_blank" title="Highsnobiety — CDG Homme Plus FW25社交媒体热议">Highsnobiety — CDG Homme Plus FW25社交媒体热议<span class="src">Highsnobiety</span></a>
+  </div>
+</div>
+<div class="card" data-tags="aesthetic_deconstructed">
+  <div class="card-header"><h3>aesthetic_deconstructed</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://Rain-mag.com/comme-des-garcons-homme-plus-fallwinter-2026-subverted-tailoring" target="_blank" title="Comme des Garçons Homme Plus FW26 — Rei Kawakubo「黑洞」主题：西装切半重">Comme des Garçons Homme Plus FW26 — Rei Kawakubo「黑洞」主题：西装切半重<span class="src">Rain Magazine</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-ready-to-wear/torisheju" target="_blank" title="Torishéju Spring 2026 — LVMH Savoir-Faire奖得主：变异剪裁，牛仔夹克肩膀前拉成露">Torishéju Spring 2026 — LVMH Savoir-Faire奖得主：变异剪裁，牛仔夹克肩膀前拉成露<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://theimpression.com/sacai-fall-2026-mens-fashion-show-review/" target="_blank" title="Sacai Fall 2026 — Chitose Abe 模块化拼接：百慕大短裤无缝变身直筒长裤，Levi's Typ">Sacai Fall 2026 — Chitose Abe 模块化拼接：百慕大短裤无缝变身直筒长裤，Levi's Typ<span class="src">The Impression</span></a>
+    <a class="img-link" href="https://wwd.com/runway/mens-fall-2026/florence/hed-mayner/review/" target="_blank" title="Hed Mayner Fall 2026 — Pitti Uomo客座设计师：圆润夸张的袖线、沙漏型收腰轮廓">Hed Mayner Fall 2026 — Pitti Uomo客座设计师：圆润夸张的袖线、沙漏型收腰轮廓<span class="src">WWD</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://modernnotoriety.com/ziggy-chen-autumn-winter-2026-dissparation/" target="_blank" title="Ziggy Chen AW26 'DISSPARATION' — 上海先锋设计师：拉长软结构剪裁，暴露衬里与层叠构建过程">Ziggy Chen AW26 'DISSPARATION' — 上海先锋设计师：拉长软结构剪裁，暴露衬里与层叠构建过程<span class="src">Modern Notoriety</span></a>
+  </div>
+</div>
+<div class="card" data-tags="美式常春藤">
+  <div class="card-header"><h3>美式常春藤</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.mrporter.com/en-it/journal/fashion/ivy-style-secrets-25378020" target="_blank" title="MR PORTER 常春藤风格指南专题大片 - 自然肩夹克、牛津衬衫、便士乐福鞋">MR PORTER 常春藤风格指南专题大片 - 自然肩夹克、牛津衬衫、便士乐福鞋<span class="src">MR PORTER Journal, 2025年11月</span></a>
+    <a class="img-link" href="https://www.reservedmagazine.com/take-ivy-now-louis-solywoda/" target="_blank" title="Reserved Magazine 'Take Ivy NOW' 致敬1965传奇摄影集">Reserved Magazine 'Take Ivy NOW' 致敬1965传奇摄影集<span class="src">Reserved Magazine, 2025</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://wwd.com/runway/mens-spring-2025/new-york/j-press/review/" target="_blank" title="J. Press 2025春夏纽约时装周秀场 - Take Ivy美学复兴">J. Press 2025春夏纽约时装周秀场 - Take Ivy美学复兴<span class="src">WWD Runway, 2024</span></a>
+    <a class="img-link" href="https://crfashionbook.com/pharrell-louis-vuitton-preppy-capsule/" target="_blank" title="Pharrell Louis Vuitton 预科风胶囊系列 - 校园与奢华融合">Pharrell Louis Vuitton 预科风胶囊系列 - 校园与奢华融合<span class="src">CR Fashion Book, 2025</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.vogue.com/article/can-j-press-reclaim-american-prep" target="_blank" title="JFK Jr. 风格回潮 - 常春藤经典名人穿搭档案">JFK Jr. 风格回潮 - 常春藤经典名人穿搭档案<span class="src">Vogue, 2025</span></a>
+    <a class="img-link" href="https://www.mensjournal.com/shopping/heres-how-to-nail-the-jfk-jr-style-trend" target="_blank" title="JFK Jr. 风格解析 - 美式常春藤名人穿搭标杆">JFK Jr. 风格解析 - 美式常春藤名人穿搭标杆<span class="src">Men's Journal, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://oracleoftime.com/meet-the-labels-at-the-heart-of-ivy-league-styles-streetwear-reincarnation/" target="_blank" title="常春藤风格街头重生 - Aimé Leon Dore、Noah NYC 等品牌街拍">常春藤风格街头重生 - Aimé Leon Dore、Noah NYC 等品牌街拍<span class="src">Oracle of Time, 2025</span></a>
+    <a class="img-link" href="https://www.opumo.com/magazine/ivy-league-style/" target="_blank" title="常春藤风格现代街头穿搭指南 - 从校园到都市">常春藤风格现代街头穿搭指南 - 从校园到都市<span class="src">OPUMO Magazine</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.countryandtownhouse.com/style/fashion/varsity-menswear-trend/" target="_blank" title="Varsity Rules - 常春藤风格社交媒体趋势汇总">Varsity Rules - 常春藤风格社交媒体趋势汇总<span class="src">Country & Town House, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="美式预科风">
+  <div class="card-header"><h3>美式预科风</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://10magazine.com/10-men-issue-63-editors-letter-tm63/" target="_blank" title="10 Men Issue 63 - Classic, Craft, Nostalgia 预科经典主题封面大片">10 Men Issue 63 - Classic, Craft, Nostalgia 预科经典主题封面大片<span class="src">10 Magazine, 2026年3月</span></a>
+    <a class="img-link" href="https://slman.com/style/fashion/preppy-fashion-style" target="_blank" title="SLMan 新预科风趋势报告 - Drake's, ALD, Rowing Blazers 造型大片">SLMan 新预科风趋势报告 - Drake's, ALD, Rowing Blazers 造型大片<span class="src">SLMan Magazine, 2025</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://wwd.com/runway/mens-spring-2026/florence/tommy-hilfiger/review/" target="_blank" title="Tommy Hilfiger 2026春夏 Pitti Uomo 预科风秀场">Tommy Hilfiger 2026春夏 Pitti Uomo 预科风秀场<span class="src">WWD Runway, 2025</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/dior-men" target="_blank" title="Dior Men 2025春夏 - Jonathan Anderson 预科风首秀">Dior Men 2025春夏 - Jonathan Anderson 预科风首秀<span class="src">Vogue Runway, 2024</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.harrods.com/en-me/c/stories/men/how-to-wear-preppy-trend" target="_blank" title="Harrods 2025预科风穿搭指南 - Tyler The Creator, A$AP Rocky 名人示范">Harrods 2025预科风穿搭指南 - Tyler The Creator, A$AP Rocky 名人示范<span class="src">Harrods Stories, 2025</span></a>
+    <a class="img-link" href="https://www.esquire.com/uk/style/fashion/a65249347/guide-to-preppy-style/" target="_blank" title="Esquire 预科风格指南 - Jacob Elordi, Harry Styles 名人穿搭解析">Esquire 预科风格指南 - Jacob Elordi, Harry Styles 名人穿搭解析<span class="src">Esquire UK, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://sneakerspirit.courir.com/en/how-did-the-preppy-look-make-its-way-into-our-wardrobes/" target="_blank" title="预科风街拍演进 - 从哈佛校园到都市街头">预科风街拍演进 - 从哈佛校园到都市街头<span class="src">Sneaker Spirit, 2025</span></a>
+    <a class="img-link" href="https://en.socportal.info/en/news/preppy-style-or-looking-like-you-went-to-harvard-is-back-in-vogue/" target="_blank" title="预科风全球街拍趋势 - 常春藤风格回归">预科风全球街拍趋势 - 常春藤风格回归<span class="src">SOCPORTAL, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.mrporter.com/en-tw/journal/fashion/preppy-style-25272788" target="_blank" title="MR PORTER 现代预科风指南 - 社交平台爆款搭配">MR PORTER 现代预科风指南 - 社交平台爆款搭配<span class="src">MR PORTER Journal, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="美式街头">
+  <div class="card-header"><h3>美式街头</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/style/street-style-day-nyfw/" target="_blank" title="NYFW Day 3 街拍定义者 - 纽约时装周街头风格精选">NYFW Day 3 街拍定义者 - 纽约时装周街头风格精选<span class="src">Male Model Scene, 2024</span></a>
+    <a class="img-link" href="https://www.thefashionisto.com/story/mango-richard-james-2026/" target="_blank" title="Mango x Richard James 2026 - 萨维尔街遇见美式街头">Mango x Richard James 2026 - 萨维尔街遇见美式街头<span class="src">The Fashionisto, 2026</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear" target="_blank" title="Vogue Runway 2025春夏男装精选 - 美式街头潮流秀场合集">Vogue Runway 2025春夏男装精选 - 美式街头潮流秀场合集<span class="src">Vogue Runway, 2024</span></a>
+    <a class="img-link" href="https://www.lifeminute.tv/fashion/video/boy-londons-gothic-guillotine-collection-fuses-punk-heritage-medieval-drama-nyfw-fallwinter-2026" target="_blank" title="Boy London FW26 NYFW - 朋克 + 街头 + 中世纪戏剧融合">Boy London FW26 NYFW - 朋克 + 街头 + 中世纪戏剧融合<span class="src">LifeMinute TV, 2026</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.thestar.com.my/lifestyle/style/2025/07/24/celebrity-style-g-dragon-blurs-the-lines-between-streetwear-and-high-fashion" target="_blank" title="G-Dragon 街头与高定界限模糊 - 香奈儿大使街头造型">G-Dragon 街头与高定界限模糊 - 香奈儿大使街头造型<span class="src">The Star, 2025</span></a>
+    <a class="img-link" href="https://vogue.ph/gallery/heartthrobs-of-mens-fashion-week/" target="_blank" title="男装周男神街头穿搭 - Paul Mescal, Lewis Hamilton 等">男装周男神街头穿搭 - Paul Mescal, Lewis Hamilton 等<span class="src">Vogue Philippines, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://result.gq.com/story/the-9-most-potent-menswear-trends-of-2025" target="_blank" title="GQ 2025九大男装趋势 - 后Hypebeast时代的街头新方向">GQ 2025九大男装趋势 - 后Hypebeast时代的街头新方向<span class="src">GQ, 2025</span></a>
+    <a class="img-link" href="https://www.harpersbazaar.com.sg/bazaar-man/no-pants-no-problem" target="_blank" title="No Pants潮流 - Gucci, Prada 引领的短裤街头革命">No Pants潮流 - Gucci, Prada 引领的短裤街头革命<span class="src">Harper's Bazaar Singapore, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.thefashionisto.com/story/mango-richard-james-2026/" target="_blank" title="街头潮流的社交媒体传播 - 从T台到Instagram">街头潮流的社交媒体传播 - 从T台到Instagram<span class="src">The Fashionisto, 2026</span></a>
+  </div>
+</div>
+<div class="card" data-tags="美式西部">
+  <div class="card-header"><h3>美式西部</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://vman.com/article/guest-in-residence-fall-2025-mens-collection/" target="_blank" title="Guest In Residence 2025秋冬男装 - Gigi Hadid 西部怀旧工装大片">Guest In Residence 2025秋冬男装 - Gigi Hadid 西部怀旧工装大片<span class="src">V Magazine, 2025</span></a>
+    <a class="img-link" href="https://www.malemodelscene.net/menswear/ouest-paris-ss26/" target="_blank" title="OUEST Paris SS26 - NASA工程师遇見牛仔的美国男性气质重构">OUEST Paris SS26 - NASA工程师遇見牛仔的美国男性气质重构<span class="src">Male Model Scene, 2026</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2024-menswear/louis-vuitton/slideshow/collection" target="_blank" title="Louis Vuitton 2024秋冬男装 - Pharrell 西部牛仔完整秀场图集">Louis Vuitton 2024秋冬男装 - Pharrell 西部牛仔完整秀场图集<span class="src">Vogue Runway, 2024</span></a>
+    <a class="img-link" href="https://result.gq.com/story/what-is-cowboycore-2024" target="_blank" title="GQ 'Cowboycore' - 2024定义性西部美学趋势报告">GQ 'Cowboycore' - 2024定义性西部美学趋势报告<span class="src">GQ, 2024</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://esquire.com.au/glen-powell-style/" target="_blank" title="Glen Powell 西部风格 - 复古Levi's 501 + 牛仔靴 + 西部腰带公式">Glen Powell 西部风格 - 复古Levi's 501 + 牛仔靴 + 西部腰带公式<span class="src">Esquire Australia, 2024</span></a>
+    <a class="img-link" href="https://result.gq.com/gallery/gq-men-of-the-year-2024-best-dressed" target="_blank" title="GQ MOTY 2024 好莱坞西部主题 - Dwayne Johnson, Pharrell 等名人西部造型">GQ MOTY 2024 好莱坞西部主题 - Dwayne Johnson, Pharrell 等名人西部造型<span class="src">GQ, 2024</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://vogue.sg/best-street-style-paris-mens-fashion-week-fall-winter-2024-shows/" target="_blank" title="巴黎男装周 FW24 西部风街拍精选 - Vogue Singapore">巴黎男装周 FW24 西部风街拍精选 - Vogue Singapore<span class="src">Vogue Singapore, 2024</span></a>
+    <a class="img-link" href="https://www.mrporter.com/en-us/journal/fashion/how-to-wear-western-cowboy-style-2023-24564096" target="_blank" title="MR PORTER 三种西部风格穿法 - 牛仔靴都市实战指南">MR PORTER 三种西部风格穿法 - 牛仔靴都市实战指南<span class="src">MR PORTER Journal, 2023</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.essence.com/fashion/pharrell-louis-vuitton-fall-winter-2024-collection-recap/" target="_blank" title="Pharrell LV FW24 西部社交话题 - #Cowboycore 趋势引爆">Pharrell LV FW24 西部社交话题 - #Cowboycore 趋势引爆<span class="src">Essence, 2024</span></a>
+  </div>
+</div>
+<div class="card" data-tags="美式工装">
+  <div class="card-header"><h3>美式工装</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/menswear/carhartt-wip-clipse-capsule/" target="_blank" title="Carhartt WIP x Clipse 联名胶囊 - Pusha T & Malice 出镜工装大片">Carhartt WIP x Clipse 联名胶囊 - Pusha T & Malice 出镜工装大片<span class="src">Male Model Scene, 2025</span></a>
+    <a class="img-link" href="https://esquiresg.com/louis-vuitton-aw24-autumn-winter-2024-menswear-western-collection/" target="_blank" title="Louis Vuitton AW24 工装重绎 - Pharrell 美式工装奢华升级">Louis Vuitton AW24 工装重绎 - Pharrell 美式工装奢华升级<span class="src">Esquire Singapore, 2024</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/phipps" target="_blank" title="Phipps 2025秋冬男装 - 美式经典工装解构重组">Phipps 2025秋冬男装 - 美式经典工装解构重组<span class="src">Vogue Runway, 2025</span></a>
+    <a class="img-link" href="https://www.designscene.net/2025/04/willy-chavarria-ss25-america.html" target="_blank" title="Willy Chavarria SS25 'América' - 移民劳工致敬的美式工装叙事">Willy Chavarria SS25 'América' - 移民劳工致敬的美式工装叙事<span class="src">Design Scene, 2025</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com.au/style/celebrity/austin-butler-proves-again-hes-the-king-of-underrated-carhartt-pieces/news-story/d0ece76880c0b02b161e7525b7858295" target="_blank" title="Austin Butler Carhartt 工装穿搭 - 底特律夹克 + 直筒牛仔裤">Austin Butler Carhartt 工装穿搭 - 底特律夹克 + 直筒牛仔裤<span class="src">GQ Australia, 2025</span></a>
+    <a class="img-link" href="https://www.hollywoodreporter.com/lifestyle/shopping/adrien-brody-j-crew-menswear-campaign-collection-pricing-1236132990/" target="_blank" title="Adrien Brody J.Crew 2025春夏 - 美式经典工装外套造型">Adrien Brody J.Crew 2025春夏 - 美式经典工装外套造型<span class="src">The Hollywood Reporter, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.thestar.com.my/lifestyle/style/2025/11/08/from-jacob-elordi-to-austin-butler-the-rise-of-rugged-yet-refined-men039s-style" target="_blank" title="'James Clean' 粗犷精致风街拍 - Jacob Elordi, Austin Butler 引领">'James Clean' 粗犷精致风街拍 - Jacob Elordi, Austin Butler 引领<span class="src">The Star, 2025</span></a>
+    <a class="img-link" href="https://www.mrporter.com/en-sg/journal/fashion/vintage-workwear-trend-25186518" target="_blank" title="MR PORTER 复古工装趋势 - 全球街拍摄影精选">MR PORTER 复古工装趋势 - 全球街拍摄影精选<span class="src">MR PORTER Journal, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.theavantmag.com/americana-style-menswear" target="_blank" title="Americana 风格完全指南 - 工装 + 西部 + 传统风格社交媒体灵感">Americana 风格完全指南 - 工装 + 西部 + 传统风格社交媒体灵感<span class="src">AVANT Magazine, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="运动休闲">
+  <div class="card-header"><h3>运动休闲</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/editorial/sporty-style-bruno-staub-wsj-magazine/" target="_blank" title="WSJ. Magazine 2024春夏运动风大片 - Bruno Staub 拍摄, Dior, Hermès, Pr">WSJ. Magazine 2024春夏运动风大片 - Bruno Staub 拍摄, Dior, Hermès, Pr<span class="src">WSJ. Magazine/Male Model Scene, 2024</span></a>
+    <a class="img-link" href="https://www.sergiotacchini.com/blogs/fortherecord/lookbook-spring-summer-2024-collection" target="_blank" title="Sergio Tacchini SS24 'Buona Vacanza' - Malibu网球场运动休闲大片">Sergio Tacchini SS24 'Buona Vacanza' - Malibu网球场运动休闲大片<span class="src">Sergio Tacchini, 2024</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://schonmagazine.com/a-parisian-melange-of-fashion-and-sport-summer-2024-nike-x-jacquemus/" target="_blank" title="Nike x Jacquemus 2024夏季 - 巴黎奥运运动时尚融合">Nike x Jacquemus 2024夏季 - 巴黎奥运运动时尚融合<span class="src">Schön! Magazine, 2024</span></a>
+    <a class="img-link" href="https://wwd.com/business-news/media/under-armour-advertising-sportswear-sports-1236470648/" target="_blank" title="Under Armour 2024秋冬 - 从运动场到时尚摄影棚的转型大片">Under Armour 2024秋冬 - 从运动场到时尚摄影棚的转型大片<span class="src">WWD, 2024</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://wwd.com/pop-culture/new-fashion-releases/jude-bellingham-skims-campaign-1236430564/" target="_blank" title="Jude Bellingham SKIMS 男装 - 足球明星极简运动休闲大片">Jude Bellingham SKIMS 男装 - 足球明星极简运动休闲大片<span class="src">WWD, 2024</span></a>
+    <a class="img-link" href="https://result.gq.com/story/jimmy-butler-met-gala-2026-alo-yoga-hoodie-suit" target="_blank" title="Jimmy Butler Met Gala - Alo Yoga 帽衫燕尾服大胆运动正装融合">Jimmy Butler Met Gala - Alo Yoga 帽衫燕尾服大胆运动正装融合<span class="src">GQ, 2026</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/article/harry-styles-gym-shorts-summer" target="_blank" title="Harry Styles 运动短裤夏日街拍 - 复古健身房潮流回归">Harry Styles 运动短裤夏日街拍 - 复古健身房潮流回归<span class="src">Vogue, 2025</span></a>
+    <a class="img-link" href="https://www.harpersbazaar.com.sg/bazaar-man/how-to-wear-new-athleisure" target="_blank" title="Harper's Bazaar 新运动休闲穿搭 - 健身到街头的无缝切换">Harper's Bazaar 新运动休闲穿搭 - 健身到街头的无缝切换<span class="src">Harper's Bazaar Singapore, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.harpersbazaar.com/fashion/trends/a61221458/skims-olympics-2024-capsule-collection/" target="_blank" title="SKIMS 2024奥运胶囊 - 运动员代言的运动休闲社交爆款">SKIMS 2024奥运胶囊 - 运动员代言的运动休闲社交爆款<span class="src">Harper's Bazaar, 2024</span></a>
+  </div>
+</div>
+<div class="card" data-tags="australian_surf_casual">
+  <div class="card-header"><h3>australian_surf_casual</h3><div class="en"></div></div>
+  <div class="card-stats">📸 4 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/interviews/interview-with-billy-kennedy/" target="_blank" title="MMSCENE — Billy Kennedy 维多利亚州户外阳光下的男性气质探索：Solid Ochre、Neuw D">MMSCENE — Billy Kennedy 维多利亚州户外阳光下的男性气质探索：Solid Ochre、Neuw D<span class="src">MMSCENE Magazine</span></a>
+    <a class="img-link" href="https://styledbywu.com.au/timeless-mens-summer-fashion-trends/" target="_blank" title="Styled by Wu — 澳洲男士永恒夏日潮流：冲浪与滑板文化融合的轻松海岸风格">Styled by Wu — 澳洲男士永恒夏日潮流：冲浪与滑板文化融合的轻松海岸风格<span class="src">Styled by Wu</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.mailonsunday.co.uk/femail/article-12166099/Australian-pro-surfer-Connor-OLeary-reveals-pull-surf-style-trend.html" target="_blank" title="Mail on Sunday — 职业冲浪手 Connor O'Leary 冲浪风格指南：Hurley 冲浪短裤、EPO">Mail on Sunday — 职业冲浪手 Connor O'Leary 冲浪风格指南：Hurley 冲浪短裤、EPO<span class="src">Mail on Sunday</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.malemodelscene.net/interviews/interview-with-billy-kennedy/" target="_blank" title="MMSCENE — Adam Washington 镜头下的澳洲冲浪男孩质感：Merz B. Schwanen、G-St">MMSCENE — Adam Washington 镜头下的澳洲冲浪男孩质感：Merz B. Schwanen、G-St<span class="src">MMSCENE Magazine</span></a>
+  </div>
+</div>
+<div class="card" data-tags="british_heritage">
+  <div class="card-header"><h3>british_heritage</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/dunhill" target="_blank" title="Dunhill Fall 2025 — Simon Holloway 英式垂肩软结构剪裁，多尼戈尔粗花呢与羊绒格子呢">Dunhill Fall 2025 — Simon Holloway 英式垂肩软结构剪裁，多尼戈尔粗花呢与羊绒格子呢<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.mrporter.com/en-tw/journal/fashion/heritage-checks-25373990" target="_blank" title="MR PORTER — 现代穿搭中的传统格纹：人字纹、千鸟格、威尔士亲王格">MR PORTER — 现代穿搭中的传统格纹：人字纹、千鸟格、威尔士亲王格<span class="src">MR PORTER</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://hypebeast.com/2026/1/2026-year-of-tweed-trend-prediction-info" target="_blank" title="Hypebeast — 2026 粗花呢元年预测：Kith、Noah、J. Press 从苏格兰 Lovat 工厂采购粗">Hypebeast — 2026 粗花呢元年预测：Kith、Noah、J. Press 从苏格兰 Lovat 工厂采购粗<span class="src">Hypebeast</span></a>
+    <a class="img-link" href="https://marcdarcy.co.uk/blogs/news/the-return-of-peaky-blinders-style-why-tweed-is-back-for-2026" target="_blank" title="Marc Darcy — Peaky Blinders 风格回归：2026年粗花呢复兴">Marc Darcy — Peaky Blinders 风格回归：2026年粗花呢复兴<span class="src">Marc Darcy</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://squaremile.com/style/paul-walker-interview/" target="_blank" title="Square Mile — Paul Walker 访谈：对传统工艺的浪漫情怀，Walker Slater 当代粗花呢剪">Square Mile — Paul Walker 访谈：对传统工艺的浪漫情怀，Walker Slater 当代粗花呢剪<span class="src">Square Mile</span></a>
+  </div>
+</div>
+<div class="card" data-tags="英式摩登">
+  <div class="card-header"><h3>英式摩登</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.flaunt.com/post/ben-sherman-autumn-winter-2024-signature-collection-launch" target="_blank" title="Ben Sherman 2024秋冬签名系列 - 英式Mod经典复兴">Ben Sherman 2024秋冬签名系列 - 英式Mod经典复兴<span class="src">Flaunt Magazine, 2024</span></a>
+    <a class="img-link" href="https://www.standout.co.uk/blog/get-look-noel-gallagher/" target="_blank" title="Noel Gallagher Mod风格解析 - Harrington夹克 + Fred Perry Polo + De">Noel Gallagher Mod风格解析 - Harrington夹克 + Fred Perry Polo + De<span class="src">Standout Blog, 2025</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.esteticamagazine.com/2026/03/03/the-brit-awards-2026-mens-styling-takes-centre-stage-with-a-fresh-focus-on-natural-movement/" target="_blank" title="BRIT Awards 2026 男装 - 英式Mod自然动感造型复兴">BRIT Awards 2026 男装 - 英式Mod自然动感造型复兴<span class="src">Estetica Magazine, 2026</span></a>
+    <a class="img-link" href="https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e" target="_blank" title="Oasis Britpop 风格档案 - Mod文化30年经典回顾">Oasis Britpop 风格档案 - Mod文化30年经典回顾<span class="src">GQ Australia, 2025</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.thegentlemansjournal.com/article/danny-lomas-interview-2024/" target="_blank" title="Danny Lomas - Instagram最佳Mod复兴者, Fred Perry + Our Legacy 混搭">Danny Lomas - Instagram最佳Mod复兴者, Fred Perry + Our Legacy 混搭<span class="src">The Gentleman's Journal, 2024</span></a>
+    <a class="img-link" href="https://www.shortlist.com/style/is-the-traditional-suit-dead-the-future-of-formal-wear-according-to-savile-rows-elite-tailors" target="_blank" title="Mod至Savile Row - 英国男装从街头到裁缝街的风格演进">Mod至Savile Row - 英国男装从街头到裁缝街的风格演进<span class="src">Shortlist, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.mazeys.co.uk/blogs/news/brighton-1964-vs-2026-how-mod-fashion-has-evolved-and-whats-stayed-the-same" target="_blank" title="Brighton 1964 vs 2026 - Mod风格60年街拍演进史">Brighton 1964 vs 2026 - Mod风格60年街拍演进史<span class="src">Mazeys, 2026</span></a>
+    <a class="img-link" href="https://www.fashionbeans.com/article/mod-fashion-guide/" target="_blank" title="FashionBeans Mod风格完全指南 - 从Soho到当代街头的完整图鉴">FashionBeans Mod风格完全指南 - 从Soho到当代街头的完整图鉴<span class="src">FashionBeans, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://seeninthecity.co.uk/the-best-mod-influencers-you-should-follow-for-inspiration/" target="_blank" title="Seen in The City 最佳Mod博主推荐 - 社交媒体英式摩登灵感来源">Seen in The City 最佳Mod博主推荐 - 社交媒体英式摩登灵感来源<span class="src">Seen in The City, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="英式朋克">
+  <div class="card-header"><h3>英式朋克</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://theimpression.com/charles-jeffrey-loverboy-fall-2024-ad-campaign-review/" target="_blank" title="Charles Jeffrey Loverboy 2024秋冬 - 苏格兰后朋克性别流动大片">Charles Jeffrey Loverboy 2024秋冬 - 苏格兰后朋克性别流动大片<span class="src">The Impression, 2024</span></a>
+    <a class="img-link" href="https://www.dazeddigital.com/beauty/article/64630/1/georgia-palmer-pays-tribute-to-jean-paul-gaultier-s-punk-chic-legacy" target="_blank" title="Dazed JPG朋克致敬 - 1970s英式朋克与当代伦敦地下融合">Dazed JPG朋克致敬 - 1970s英式朋克与当代伦敦地下融合<span class="src">Dazed Digital, 2024</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://fashionunited.uk/news/fashion/john-richmond-brought-his-punk-spirit-to-lfw/2025022680361" target="_blank" title="John Richmond LFW 2025 - 米兰废弃地铁站朋克高定秀">John Richmond LFW 2025 - 米兰废弃地铁站朋克高定秀<span class="src">FashionUnited UK, 2025</span></a>
+    <a class="img-link" href="https://www.designscene.net/2025/02/lost-love-john-richmond-returns-to-london-fashion-week.html" target="_blank" title="John Richmond 重返伦敦时装周 - 'Lost Love' 朋克精神回归">John Richmond 重返伦敦时装周 - 'Lost Love' 朋克精神回归<span class="src">Design Scene, 2025</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.thefader.com/2026/02/20/boy-london-fall-2026-collection-creative-director-can-tran-interview" target="_blank" title="Boy London FW26 - Can Tran 执掌的朋克新世代名人穿搭">Boy London FW26 - Can Tran 执掌的朋克新世代名人穿搭<span class="src">The FADER, 2026</span></a>
+    <a class="img-link" href="https://www.lifeminute.tv/fashion/video/boy-londons-gothic-guillotine-collection-fuses-punk-heritage-medieval-drama-nyfw-fallwinter-2026" target="_blank" title="Boy London 'Guillotine' - 朋克遗产 + 中世纪戏剧 NYFW首秀">Boy London 'Guillotine' - 朋克遗产 + 中世纪戏剧 NYFW首秀<span class="src">LifeMinute TV, 2026</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.flaunt.com/post/john-richmond-spring-summer-2026" target="_blank" title="John Richmond SS26 - 英式朋克街头与高定融合">John Richmond SS26 - 英式朋克街头与高定融合<span class="src">Flaunt Magazine, 2026</span></a>
+    <a class="img-link" href="https://gulfnews.com/lifestyle/fashion/john-richmond-on-punk-music-and-dubai-fashion-week-i-dont-design-for-the-sake-of-it-1.500430997-1.500430997" target="_blank" title="John Richmond 朋克心态 - '不为设计而设计' 的英式反叛精神">John Richmond 朋克心态 - '不为设计而设计' 的英式反叛精神<span class="src">Gulf News, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://stockcake.com/i/punk-fashion-runway_1042480_349117" target="_blank" title="StockCake 朋克秀场图 - 铆钉皮衣 + 破坏牛仔经典英式朋克造型">StockCake 朋克秀场图 - 铆钉皮衣 + 破坏牛仔经典英式朋克造型<span class="src">StockCake</span></a>
+  </div>
+</div>
+<div class="card" data-tags="英式萨维尔街">
+  <div class="card-header"><h3>英式萨维尔街</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.shootfactory.co.uk/hackett-savile-row-collection-shoot-on-location/" target="_blank" title="Hackett Savile Row 系列 - Bell House 乔治亚庄园定制西装大片">Hackett Savile Row 系列 - Bell House 乔治亚庄园定制西装大片<span class="src">Shootfactory, 2024</span></a>
+    <a class="img-link" href="https://www.fashionbeans.com/2013/the-english-gentleman-at-spencer-house-presented-by-savile-row" target="_blank" title="Savile Row at Spencer House - Huntsman, Gieves & Hawkes 等顶级裁">Savile Row at Spencer House - Huntsman, Gieves & Hawkes 等顶级裁<span class="src">FashionBeans/London Collection: MEN</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://wwd.com/fashion-news/fashion-scoops/london-designer-derrick-reimagines-richard-james-savile-row-1238202659/" target="_blank" title="Luke Derrick x Richard James - 萨维尔街新生代设计师重构经典">Luke Derrick x Richard James - 萨维尔街新生代设计师重构经典<span class="src">WWD, 2025</span></a>
+    <a class="img-link" href="https://www.thefashionisto.com/story/mango-richard-james-2026/" target="_blank" title="Mango x Richard James 2026 - 萨维尔街民主化, Kit Butler 出镜">Mango x Richard James 2026 - 萨维尔街民主化, Kit Butler 出镜<span class="src">The Fashionisto, 2026</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.the-independent.com/life-style/fashion/savile-row-england-laurence-olivier-men-mick-jagger-b2745505.html" target="_blank" title="萨维尔街名人史 - Mick Jagger, The Beatles, David Beckham 等定制西装档案">萨维尔街名人史 - Mick Jagger, The Beatles, David Beckham 等定制西装档案<span class="src">The Independent, 2025</span></a>
+    <a class="img-link" href="https://www.scmp.com/magazines/style/fashion/celebrity-style/article/3294999/why-celebrities-love-colourful-suit-harry-styles-ryan-gosling-kate-middleton-and-meryl-streep-are" target="_blank" title="名人爱上彩色西装 - Harry Styles x Edward Sexton 萨维尔街合作">名人爱上彩色西装 - Harry Styles x Edward Sexton 萨维尔街合作<span class="src">SCMP, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.theindustry.fashion/savile-rows-reinvention-breaking-free-from-the-old-boys-club/" target="_blank" title="萨维尔街重塑 - 打破老派绅士俱乐部的现代街拍演绎">萨维尔街重塑 - 打破老派绅士俱乐部的现代街拍演绎<span class="src">TheIndustry.fashion, 2025</span></a>
+    <a class="img-link" href="https://www.cutlerandgross.com/en-us/blogs/news/secret-codes-of-savile-row" target="_blank" title="萨维尔街秘密符号 - 定制西装的细节密码街拍解读">萨维尔街秘密符号 - 定制西装的细节密码街拍解读<span class="src">Cutler and Gross</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://guardian.ng/life/spotlight/the-james-akinyemi-story-from-savile-row-to-royal-residences/" target="_blank" title="James Akinyemi - 从萨维尔街到皇室住宅, Skepta 御用裁缝社交媒体影响">James Akinyemi - 从萨维尔街到皇室住宅, Skepta 御用裁缝社交媒体影响<span class="src">The Guardian Nigeria, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="中式国风质感">
+  <div class="card-header"><h3>中式国风质感</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.forbes.com/sites/gemmawilliams/2025/01/27/the-woman-the-myth-the-legend-feng-chen-wang-at-paris-fashion-week-mens/" target="_blank" title="Feng Chen Wang 巴黎男装周 FW25— 《山海经》灵感：景德镇陶瓷异兽配饰、手工水墨画面料、竹节包延展为古">Feng Chen Wang 巴黎男装周 FW25— 《山海经》灵感：景德镇陶瓷异兽配饰、手工水墨画面料、竹节包延展为古<span class="src">Forbes</span></a>
+    <a class="img-link" href="https://www.360kuai.com/mob/transcoding?url=9af404db6c4f17d59" target="_blank" title="张凌赫「风衣骑马」落日大片— 战壕风衣×东方骑马意象，金色逆光剪影，文艺复兴油画×水墨写意，微博单日破亿阅读">张凌赫「风衣骑马」落日大片— 战壕风衣×东方骑马意象，金色逆光剪影，文艺复兴油画×水墨写意，微博单日破亿阅读<span class="src">360快资讯</span></a>
+    <a class="img-link" href="https://kendam.com/news/lookbooks/uma-wang-fall-winter-2026-27-men-outfits" target="_blank" title="Uma Wang FW 2026-27 男装 Lookbook— 1930年代上海：双排扣揉皱处理×中式盘扣×不对称丝质">Uma Wang FW 2026-27 男装 Lookbook— 1930年代上海：双排扣揉皱处理×中式盘扣×不对称丝质<span class="src">Kendam</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://models.com/work/sean-suen-sean-suen-fw-25-mens-show/2505720" target="_blank" title="Sean Suen FW25 巴黎男装周秀场全集— 茶马古道灵感：汉/藏/纳西/巴文化融合，宽大外套+皮靴+兜帽斗篷">Sean Suen FW25 巴黎男装周秀场全集— 茶马古道灵感：汉/藏/纳西/巴文化融合，宽大外套+皮靴+兜帽斗篷<span class="src">Models.com</span></a>
+    <a class="img-link" href="https://highxtar.com/en/feng-chen-wang-takes-mythology-to-the-catwalk-with-his-fw25-collection/" target="_blank" title="Feng Chen Wang FW25 将神话带上T台— 10周年系列：中式手工+未来主义，山经海经造物美学">Feng Chen Wang FW25 将神话带上T台— 10周年系列：中式手工+未来主义，山经海经造物美学<span class="src">Highxtar</span></a>
+    <a class="img-link" href="https://models.com/work/sean-suen-sean-suen-fw25-backstage/2551316" target="_blank" title="Sean Suen FW25 后台花絮— Sarah Coppet 拍摄：模特身着藏式毛靴+超大兜帽+旅行斗篷">Sean Suen FW25 后台花絮— Sarah Coppet 拍摄：模特身着藏式毛靴+超大兜帽+旅行斗篷<span class="src">Models.com</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://thepeak.com.my/fashion-watches/tods-winter-fall-campaign-xiao-zhan/" target="_blank" title="肖战 × Tod's FW 2025/26 全球广告— Milan Villa Borsani 拍摄：Pashmy 麂皮">肖战 × Tod's FW 2025/26 全球广告— Milan Villa Borsani 拍摄：Pashmy 麂皮<span class="src">The Peak Malaysia</span></a>
+    <a class="img-link" href="https://www.malemodelscene.net/ad-campaigns/wang-shun-boss/" target="_blank" title="汪顺 × BOSS 2026马年胶囊系列— 中国古法金工(花丝/景泰蓝/炸珠)融入现代男装，激光切割皮衣+提花马甲">汪顺 × BOSS 2026马年胶囊系列— 中国古法金工(花丝/景泰蓝/炸珠)融入现代男装，激光切割皮衣+提花马甲<span class="src">Male Model Scene</span></a>
+    <a class="img-link" href="http://mp.weixin.qq.com/s?__biz=MjM5MDI5Mzc4MA==&mid=2656513780&idx=8&sn=d0b2e3d13a1047c92627745910f30c50" target="_blank" title="肖战×羽西 东方美学造型— 黑色新中式交领套装，极简剪裁暗藏东方风骨，红金写意布景×春日芍药">肖战×羽西 东方美学造型— 黑色新中式交领套装，极简剪裁暗藏东方风骨，红金写意布景×春日芍药<span class="src">微信公众号</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://newyorkstyleguide.com/boss-year-of-the-horse-2026-capsule/" target="_blank" title="BOSS 马年胶囊系列街拍— 红×白×黑×金国风配色，激光印花牛仔裤+丝绒针织，上海张园石库门发布">BOSS 马年胶囊系列街拍— 红×白×黑×金国风配色，激光印花牛仔裤+丝绒针织，上海张园石库门发布<span class="src">New York Style Guide</span></a>
+    <a class="img-link" href="https://www.becauselondon.com/articles/fashion/2025-spring/ian-hylton-takes-over-london-and-tank/" target="_blank" title="Ian Hylton × TANK London — 「马褂」快闪店：厦门设计师将清代马褂改良为现代男装，中国绅士×伦敦">Ian Hylton × TANK London — 「马褂」快闪店：厦门设计师将清代马褂改良为现代男装，中国绅士×伦敦<span class="src">Because Magazine London</span></a>
+    <a class="img-link" href="https://jingdaily.com/posts/chinese-streetwear-trend-forecast" target="_blank" title="Jing Daily: 2025中国街头时尚趋势— Opiumcore暗黑国风、安静奢华、性别流动、运动风格取代街头">Jing Daily: 2025中国街头时尚趋势— Opiumcore暗黑国风、安静奢华、性别流动、运动风格取代街头<span class="src">Jing Daily</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.theglassmagazine.hk/index.php/2025/01/16/feng-chen-wang-reminds-us-that-fashion-must-be-driven-by-craft-and-technical-sensitivity/" target="_blank" title="Feng Chen Wang: 工艺与技术敏感性— 10年坚持手工+传统技法，从竹编包到水墨手绘面料的中国设计师叙述">Feng Chen Wang: 工艺与技术敏感性— 10年坚持手工+传统技法，从竹编包到水墨手绘面料的中国设计师叙述<span class="src">The Glass Magazine HK</span></a>
+    <a class="img-link" href="https://fuckingyoung.es/sean-suen-fw25-backstage/" target="_blank" title="Fucking Young!: Sean Suen FW25 后台独家— 茶马古道系列全记录：John Dutton m">Fucking Young!: Sean Suen FW25 后台独家— 茶马古道系列全记录：John Dutton m<span class="src">Fucking Young!</span></a>
+    <a class="img-link" href="https://www.designscene.net/2024/07/backstage-moments-at-feng-chen-wangs-spring-summer-2025.html" target="_blank" title="Design Scene: Feng Chen Wang SS25 后台瞬间— 中式山水意境×解构主义，锦缎/扎染/竹编">Design Scene: Feng Chen Wang SS25 后台瞬间— 中式山水意境×解构主义，锦缎/扎染/竹编<span class="src">Design Scene</span></a>
+  </div>
+</div>
+<div class="card" data-tags="新中式">
+  <div class="card-header"><h3>新中式</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://models.com/work/vogue-china-vogue-china-may-2025-covers/2680964" target="_blank" title="王一博 VOGUE China 2025年5月刊封面— 首位华语男星单人封面：Balenciaga 皮风衣/Gucci ">王一博 VOGUE China 2025年5月刊封面— 首位华语男星单人封面：Balenciaga 皮风衣/Gucci <span class="src">VOGUE China / Models.com</span></a>
+    <a class="img-link" href="https://3g.china.com/act/ent/11005281/20250922/48846026.html" target="_blank" title="王俊凯生日新中式写真— M essential 2025改良中山装+高领盘扣衬衫，蒙眼剑客武侠意境，莲花刺绣白西装">王俊凯生日新中式写真— M essential 2025改良中山装+高领盘扣衬衫，蒙眼剑客武侠意境，莲花刺绣白西装<span class="src">中华网</span></a>
+    <a class="img-link" href="https://k.sina.com.cn/article_1835302403_p6d647e0302701hc7g.html" target="_blank" title="刘宇《环球人物》2025年7月封面— 末禾新中式套装，金色麦田 editorial，国风少年与大地对话">刘宇《环球人物》2025年7月封面— 末禾新中式套装，金色麦田 editorial，国风少年与大地对话<span class="src">新浪 / 环球人物</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://cnga.org.cn/cngahtml/xwzx/ppjj/20250325/939.html" target="_blank" title="杉杉2025秋冬中国国际时装周— 「东方绅士」四大场景：多元混搭/户外×西装/故宫文化IP/个性化叠穿">杉杉2025秋冬中国国际时装周— 「东方绅士」四大场景：多元混搭/户外×西装/故宫文化IP/个性化叠穿<span class="src">中国服装协会</span></a>
+    <a class="img-link" href="https://www.shh-shrhmuseum.org.cn/lsbwgywwz/historymuseum/allNews/2025/10/16/3419955b981652460199f1ace67665d0.html" target="_blank" title="上海时装周「东方·新中式 2025秋」— 上海市历史博物馆大秀：中元素十周年/苏小乔宋锦昆曲/十二花神">上海时装周「东方·新中式 2025秋」— 上海市历史博物馆大秀：中元素十周年/苏小乔宋锦昆曲/十二花神<span class="src">上海历史博物馆</span></a>
+    <a class="img-link" href="https://kendam.com/news/lookbooks/uma-wang-fall-winter-2026-27-men-outfits" target="_blank" title="Uma Wang FW 2026-27 男装— 1930s上海东西融合：揉皱双排扣西装×中式盘扣，高腰短夹克×低踝长裤">Uma Wang FW 2026-27 男装— 1930s上海东西融合：揉皱双排扣西装×中式盘扣，高腰短夹克×低踝长裤<span class="src">Kendam</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="http://mp.weixin.qq.com/s?__biz=Mzk1NzEzNjMyOA==&mid=2247485439&idx=1&sn=e87c3c7ac37adbd62259a7a910ce94d5" target="_blank" title="王星越 新中式天花板— 立领刺绣新中式外套，CCTV五四晚会/Dragon Boat Festival 水墨剪影+鼓道具">王星越 新中式天花板— 立领刺绣新中式外套，CCTV五四晚会/Dragon Boat Festival 水墨剪影+鼓道具<span class="src">微信公众号</span></a>
+    <a class="img-link" href="https://www.sohu.com/a/795978646_121891995" target="_blank" title="魏大勋综艺新中式长衫— 竹叶纹刺绣暗纹长袍，忧郁漫画男主气质，贵气与内敛并存">魏大勋综艺新中式长衫— 竹叶纹刺绣暗纹长袍，忧郁漫画男主气质，贵气与内敛并存<span class="src">搜狐</span></a>
+    <a class="img-link" href="http://mp.weixin.qq.com/s?__biz=MzkwNDc0ODM2Ng==&mid=2247512135&idx=1&sn=2b100348cd70f564218104389bd7b7a4" target="_blank" title="曹骏金发狼尾×首推绣非遗新中式— 金发狼尾与非遗刺绣新中式碰撞，墨色箭袖衫+藏青腰封，反差感强烈">曹骏金发狼尾×首推绣非遗新中式— 金发狼尾与非遗刺绣新中式碰撞，墨色箭袖衫+藏青腰封，反差感强烈<span class="src">微信公众号</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://jianghu.taobao.com/detail/47484_44313363" target="_blank" title="恒源祥改良中山装街拍体验— 立领哑光棉混纺+小白鞋/德训鞋+毛呢大衣，出门被街拍三次">恒源祥改良中山装街拍体验— 立领哑光棉混纺+小白鞋/德训鞋+毛呢大衣，出门被街拍三次<span class="src">淘宝江湖</span></a>
+    <a class="img-link" href="https://cnalifestyle.channelnewsasia.com/style-beauty/shopping-shanghai-menswear-582131" target="_blank" title="CNA Lifestyle: 2026上海男装新中式购物指南— 小红书最火品牌 NICE RICE/Monday Sle">CNA Lifestyle: 2026上海男装新中式购物指南— 小红书最火品牌 NICE RICE/Monday Sle<span class="src">CNA Lifestyle</span></a>
+    <a class="img-link" href="https://jingdaily.com/posts/chinese-streetwear-trend-forecast" target="_blank" title="Jing Daily: 2025中国街头风趋势— 新中式=传统元素(盘扣/立领/汉服元素)融入当代可穿版型，#新中式 标">Jing Daily: 2025中国街头风趋势— 新中式=传统元素(盘扣/立领/汉服元素)融入当代可穿版型，#新中式 标<span class="src">Jing Daily</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.ellechina.com/fashion/news/a65911961/1756313059/" target="_blank" title="ELLE China: 小红书发布男装夏日趋势— 廓系穿搭/新商务美学/轻运动时尚/清凉少年感/工装主义五大风格">ELLE China: 小红书发布男装夏日趋势— 廓系穿搭/新商务美学/轻运动时尚/清凉少年感/工装主义五大风格<span class="src">ELLE China</span></a>
+    <a class="img-link" href="https://mp.weixin.qq.com/s?__biz=MzkyMjU5ODgzNg==&mid=2247513124&idx=3&sn=f24a84bb99c94bb41771b7d228bbd8e2" target="_blank" title="男生夏季新中式穿搭指南— 立领盘扣衬衫+西裤=商务风/牛仔裤=国潮boy，亚麻唐装外套+白背心+阔腿裤">男生夏季新中式穿搭指南— 立领盘扣衬衫+西裤=商务风/牛仔裤=国潮boy，亚麻唐装外套+白背心+阔腿裤<span class="src">微信公众号 壹贰礼仪工作室</span></a>
+    <a class="img-link" href="http://mp.weixin.qq.com/s?__biz=Mzk5MDkyNDQ0NA==&mid=2247485540&idx=1&sn=5f062314352309941d12fde270861bc1" target="_blank" title="2025年新中式火了— 古典+现代=高级感：盘扣/高领/中式花纹融入现代版型，博主图源：小红书 629036100等">2025年新中式火了— 古典+现代=高级感：盘扣/高领/中式花纹融入现代版型，博主图源：小红书 629036100等<span class="src">微信公众号</span></a>
+  </div>
+</div>
+<div class="card" data-tags="Clean Fit">
+  <div class="card-header"><h3>Clean Fit</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/brands/zara/zara-origins-fall-2025/" target="_blank" title="Zara Origins 2025秋冬 - '极简精炼' 纯色基础款净版大片">Zara Origins 2025秋冬 - '极简精炼' 纯色基础款净版大片<span class="src">Male Model Scene, 2025</span></a>
+    <a class="img-link" href="https://www.malemodelscene.net/menswear/clement-chabernaud-massimo-dutti-summer-2025/" target="_blank" title="Massimo Dutti 2025夏季 - Clement Chabernaud 演绎 '版型、面料与形态'">Massimo Dutti 2025夏季 - Clement Chabernaud 演绎 '版型、面料与形态'<span class="src">Male Model Scene, 2025</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.lofficielusa.com/fashion-week/loewe-mens-spring-summer-2025-fashion-show-review-images" target="_blank" title="Loewe 2025春夏男装 - Jonathan Anderson '激进的克制' 极简主义">Loewe 2025春夏男装 - Jonathan Anderson '激进的克制' 极简主义<span class="src">L'Officiel USA, 2024</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/loewe" target="_blank" title="Loewe Spring 2025 Menswear - 极简廓形 Vogue Runway 完整图集">Loewe Spring 2025 Menswear - 极简廓形 Vogue Runway 完整图集<span class="src">Vogue Runway, 2024</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.malemodelscene.net/menswear/idris-elba-calvin-klein" target="_blank" title="Idris Elba Calvin Klein 2024春季 - '干净简洁功能性' 代言">Idris Elba Calvin Klein 2024春季 - '干净简洁功能性' 代言<span class="src">Male Model Scene, 2024</span></a>
+    <a class="img-link" href="https://timesofindia.indiatimes.com/entertainment/english/hollywood/news/move-aside-rodent-man-hollywood-has-a-new-masculine-archetype-james-clean/articleshow/124992502.cms" target="_blank" title="'James Clean' 好莱坞新男性原型 - Austin Butler, Jacob Elordi 领衔">'James Clean' 好莱坞新男性原型 - Austin Butler, Jacob Elordi 领衔<span class="src">Times of India/NYT, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.madamefigaro.hk/hommes/%e7%94%b7%e5%a3%abcleanfit%e7%a9%bf%e6%90%ad%e9%9d%88%e6%84%9f-%e5%a4%8f%e6%97%a5%e9%80%a0%e5%9e%8b-%e6%b8%85%e7%88%bd-188013/2/" target="_blank" title="Madame Figaro HK Clean Fit 穿搭灵感 - 夏日清爽慵懒造型">Madame Figaro HK Clean Fit 穿搭灵感 - 夏日清爽慵懒造型<span class="src">Madame Figaro Hong Kong, 2025</span></a>
+    <a class="img-link" href="https://www.fashionbeans.com/article/how-to-recreate-the-clean-guy-uniform-thats-all-over-instagram/" target="_blank" title="FashionBeans Clean Guy 公式 - Instagram 爆款净版穿搭拆解">FashionBeans Clean Guy 公式 - Instagram 爆款净版穿搭拆解<span class="src">FashionBeans, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.malemodelscene.net/agencies/rockmen-paris/zara-fw25-lookbook/" target="_blank" title="Clément Laguardia ZARA FW25 Lookbook - 减法美学社交灵感">Clément Laguardia ZARA FW25 Lookbook - 减法美学社交灵感<span class="src">Male Model Scene, 2025</span></a>
+  </div>
+</div>
+<div class="card" data-tags="contemporary_genderless">
+  <div class="card-header"><h3>contemporary_genderless</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://fashionablymale.net/2025/10/05/duran-lantink-debuts-bold-genderless-vision-for-jean-paul-gaultier-ss26/" target="_blank" title="Duran Lantink x Jean Paul Gaultier SS26 — 突破性无性别系列：夸张锥形胸衣×体毛">Duran Lantink x Jean Paul Gaultier SS26 — 突破性无性别系列：夸张锥形胸衣×体毛<span class="src">Fashionably Male</span></a>
+    <a class="img-link" href="https://www.thecrimson.com/article/2025/2/18/a-potts-review-nyfw/" target="_blank" title="A. Potts NYFW AW25 — 纽约男装日：动物印花×几何星系迷彩融合，流苏连衣裙×不对称打结镂空">A. Potts NYFW AW25 — 纽约男装日：动物印花×几何星系迷彩融合，流苏连衣裙×不对称打结镂空<span class="src">The Harvard Crimson</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://en.xmag.live/ateezs-seonghwa-turns-heads-at-paris-fashion-week-with-a-flawless-genderless-look/" target="_blank" title="Songzio SS26 巴黎时装周 — ATEEZ Seonghwa 走秀：锋利单色无性别轮廓，K-fashion全球">Songzio SS26 巴黎时装周 — ATEEZ Seonghwa 走秀：锋利单色无性别轮廓，K-fashion全球<span class="src">Xmag</span></a>
+    <a class="img-link" href="https://www.therakishgent.co.uk/pages/kent-curwen-aw25" target="_blank" title="Kent & Curwen AW25 伦敦时装周 — 英国传统以无性别视角重制：定制西装、板球毛衣、达夫尔大衣">Kent & Curwen AW25 伦敦时装周 — 英国传统以无性别视角重制：定制西装、板球毛衣、达夫尔大衣<span class="src">The Rakish Gent</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.stylerave.com/genderless-style-gender-neutral-menswear/" target="_blank" title="Style Rave — 2025男装打破规则：COS、Zara、ASOS推出无性别系列，Glenn Martens×H">Style Rave — 2025男装打破规则：COS、Zara、ASOS推出无性别系列，Glenn Martens×H<span class="src">Style Rave</span></a>
+  </div>
+</div>
+<div class="card" data-tags="contemporary_gorpcore">
+  <div class="card-header"><h3>contemporary_gorpcore</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/article/would-you-chop-wood-in-prada-how-luxury-is-reimaging-gorpcore" target="_blank" title="Vogue Business — 奢侈品牌重塑Gorpcore：Prada伐木工、LV樱花粉滑雪服、Kiko Kosta">Vogue Business — 奢侈品牌重塑Gorpcore：Prada伐木工、LV樱花粉滑雪服、Kiko Kosta<span class="src">Vogue Business</span></a>
+    <a class="img-link" href="https://www.gq-magazine.co.uk/article/joe-alwyn-new-york-2025" target="_blank" title="GQ UK — Joe Alwyn 的「成熟版Gorpcore」：短款抓绒外套×Diemme登山靴，纽约街头演绎">GQ UK — Joe Alwyn 的「成熟版Gorpcore」：短款抓绒外套×Diemme登山靴，纽约街头演绎<span class="src">GQ UK</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/etudes" target="_blank" title="Études Studio Spring 2026 — Vogue定义为「后Gorpcore」：大地艺术灵感、工装裤、工">Études Studio Spring 2026 — Vogue定义为「后Gorpcore」：大地艺术灵感、工装裤、工<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://graziadaily.co.uk/fashion/shopping/gorpcore-trend-how-to-wear/" target="_blank" title="Grazia — 2025秋冬Gorpcore接管：机能夹克×中长裙×高跟鞋的对比搭配">Grazia — 2025秋冬Gorpcore接管：机能夹克×中长裙×高跟鞋的对比搭配<span class="src">Grazia</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://doors.nyc/blogs/news/gorpcore-fashion-2025-outdoor-gear-meets-city-style" target="_blank" title="DOORS NYC — Gorpcore进城：GORE-TEX®、Ripstop面料、越野跑鞋的城市化演绎">DOORS NYC — Gorpcore进城：GORE-TEX®、Ripstop面料、越野跑鞋的城市化演绎<span class="src">DOORS NYC</span></a>
+  </div>
+</div>
+<div class="card" data-tags="detention_core">
+  <div class="card-header"><h3>detention_core</h3><div class="en"></div></div>
+  <div class="card-stats">📸 4 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm" target="_blank" title="MSGM Fall 2025 — 后Gen Z派对现场拍摄：宽松格纹衬衫、做旧质感、Donnie Darko式超现实叛逆">MSGM Fall 2025 — 后Gen Z派对现场拍摄：宽松格纹衬衫、做旧质感、Donnie Darko式超现实叛逆<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/our-legacy" target="_blank" title="Our Legacy Spring 2025 — 反时尚立场，玻璃屏障后的疏离感：混合军装与Grunge的学院叛离">Our Legacy Spring 2025 — 反时尚立场，玻璃屏障后的疏离感：混合军装与Grunge的学院叛离<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm" target="_blank" title="MSGM FW25 — 布鲁斯·拉布鲁斯拍摄：巨大膨胀蘑菇装置、兔子图案超大格纹衬衫，颠覆型学院风">MSGM FW25 — 布鲁斯·拉布鲁斯拍摄：巨大膨胀蘑菇装置、兔子图案超大格纹衬衫，颠覆型学院风<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris" target="_blank" title="Vogue — 2026秋冬巴黎男装周街拍：Dior 宽松卡其裤×条纹领带的学院解构街头演绎">Vogue — 2026秋冬巴黎男装周街拍：Dior 宽松卡其裤×条纹领带的学院解构街头演绎<span class="src">Vogue</span></a>
+  </div>
+</div>
+<div class="card" data-tags="french_parisian_chic">
+  <div class="card-header"><h3>french_parisian_chic</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris" target="_blank" title="Vogue — 2026秋冬巴黎男装周街拍：Phill Oh 镜头下的322张街拍，Pharrell x LV、Jona">Vogue — 2026秋冬巴黎男装周街拍：Phill Oh 镜头下的322张街拍，Pharrell x LV、Jona<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://vogue.sg/street-style-paris-mens-fall-winter-2026-shows/" target="_blank" title="Vogue Singapore — 2026秋冬巴黎男装周街拍：Ami Paris、Louis Vuitton、Amir">Vogue Singapore — 2026秋冬巴黎男装周街拍：Ami Paris、Louis Vuitton、Amir<span class="src">Vogue Singapore</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2024-menswear/officine-generale" target="_blank" title="Officine Générale Fall 2024 — Pierre Mahéo 呈现左岸富裕居民的真实巴黎风格">Officine Générale Fall 2024 — Pierre Mahéo 呈现左岸富裕居民的真实巴黎风格<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/ami" target="_blank" title="Ami Paris Spring 2025 — Alexandre Mattiussi 回归基础牛仔裤+衬衫的自由巴黎式">Ami Paris Spring 2025 — Alexandre Mattiussi 回归基础牛仔裤+衬衫的自由巴黎式<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.nssmag.com/en/fashion/44055/paris-fashion-week-mens-fw26-street-style" target="_blank" title="nss magazine — 2026秋冬巴黎时装周街拍：大胆轮廓、精致材质混搭">nss magazine — 2026秋冬巴黎时装周街拍：大胆轮廓、精致材质混搭<span class="src">nss magazine</span></a>
+  </div>
+</div>
+<div class="card" data-tags="italian_pitti_uomo">
+  <div class="card-header"><h3>italian_pitti_uomo</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/double-the-suits-double-the-fun-pitti-uomos-best-street-style" target="_blank" title="Vogue — Pitti Uomo 108 (2025年6月) 最佳街拍：亚麻套装、水桶帽、双人搭配">Vogue — Pitti Uomo 108 (2025年6月) 最佳街拍：亚麻套装、水桶帽、双人搭配<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-from-pitti-uomo-fall-2025-menswear-shows" target="_blank" title="Vogue — Pitti Uomo 107 (2025年1月) 'Ciao Ragazzi!' 秋冬街拍：厚重叠穿、T">Vogue — Pitti Uomo 107 (2025年1月) 'Ciao Ragazzi!' 秋冬街拍：厚重叠穿、T<span class="src">Vogue</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://theimpression.com/the-best-pitti-uomo-street-style-fall-2025/" target="_blank" title="The Impression — Pitti Uomo Fall 2025 最佳街拍回顾：灯芯绒时刻、费尔岛针织背心">The Impression — Pitti Uomo Fall 2025 最佳街拍回顾：灯芯绒时刻、费尔岛针织背心<span class="src">The Impression</span></a>
+    <a class="img-link" href="https://www.nssmag.com/en/fashion/39565/the-best-street-styles-of-the-107th-edition-of-pitti-immagine-uomo" target="_blank" title="nss magazine — Pitti Uomo 107 最佳街拍：佛罗伦萨的顶级男装风格">nss magazine — Pitti Uomo 107 最佳街拍：佛罗伦萨的顶级男装风格<span class="src">nss magazine</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://robbreport.com/style/accessories/gallery/pitti-uomo-best-mens-street-style-1235659991/" target="_blank" title="Robb Report — Pitti Uomo 最佳着装男士：用个人风格穿越噪音">Robb Report — Pitti Uomo 最佳着装男士：用个人风格穿越噪音<span class="src">Robb Report</span></a>
+  </div>
+</div>
+<div class="card" data-tags="italian_sprezzatura">
+  <div class="card-header"><h3>italian_sprezzatura</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/brioni" target="_blank" title="Brioni Fall 2026 Menswear — 罗马式 Sprezzatura 非刻意优雅，长毛羊皮 Vagab">Brioni Fall 2026 Menswear — 罗马式 Sprezzatura 非刻意优雅，长毛羊皮 Vagab<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://designandculturebyed.com/2025/01/19/sprezzatura-brioni-aw25/" target="_blank" title="Brioni AW25 型录：赭石色与酒红色调，羊绒大衣与睡袍式宽松西装">Brioni AW25 型录：赭石色与酒红色调，羊绒大衣与睡袍式宽松西装<span class="src">Design & Culture by Ed</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/brioni" target="_blank" title="Brioni Fall 2026 — 「真正的优雅与罗马式的 Sprezzatura、不完美相关」">Brioni Fall 2026 — 「真正的优雅与罗马式的 Sprezzatura、不完美相关」<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2022-menswear/brunello-cucinelli" target="_blank" title="Brunello Cucinelli Spring 2022 — 回归古典主义与 Sprezzatura 传说">Brunello Cucinelli Spring 2022 — 回归古典主义与 Sprezzatura 传说<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com.au/style/trends/how-to-dress-like-a-stylish-italian-according-to-stylish-italians/image-gallery/5c22ae5aeb7785c5b410350fb1331b77" target="_blank" title="GQ Australia — 意大利风格男士穿搭指南，Gianni Agnelli 式非刻意优雅">GQ Australia — 意大利风格男士穿搭指南，Gianni Agnelli 式非刻意优雅<span class="src">GQ Australia</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_amekaji">
+  <div class="card-header"><h3>japanese_amekaji</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://japonista.com/blogs/news/what-is-exactly-amekaji" target="_blank" title="What Is Amekaji? — 日系阿美咔叽完整风格指南（含穿搭图集）">What Is Amekaji? — 日系阿美咔叽完整风格指南（含穿搭图集）<span class="src">Japonista</span></a>
+    <a class="img-link" href="https://shopfront.app/aesthetics/amekaji/" target="_blank" title="Amekaji Aesthetic — 定义、标志单品与风格标签">Amekaji Aesthetic — 定义、标志单品与风格标签<span class="src">Shopfront</span></a>
+    <a class="img-link" href="https://www.ferbena.com/what-is-amekaji-why-i-think-this-japanese-fashion-trend-is-about-to-blow-up-in-2026.html" target="_blank" title="Amekaji 2026趋势预测 — 日系美式复古穿搭全解析">Amekaji 2026趋势预测 — 日系美式复古穿搭全解析<span class="src">Ferbena</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/junya-watanabe" target="_blank" title="Junya Watanabe 2026春夏男装秀 — 美式工装 x 日系解构">Junya Watanabe 2026春夏男装秀 — 美式工装 x 日系解构<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://kendam.com/news/fashion-shows/junya-watanabe-fall-winter-2025-26-men-runway" target="_blank" title="Junya Watanabe 2025秋冬男装 — 经典美式复古 × Dandy叛逆">Junya Watanabe 2025秋冬男装 — 经典美式复古 × Dandy叛逆<span class="src">Kendam</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-ready-to-wear/junya-watanabe" target="_blank" title="Junya Watanabe 2025秋冬女装 — 美式复古工装元素参考">Junya Watanabe 2025秋冬女装 — 美式复古工装元素参考<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://lifestyle.inquirer.net/545219/amekaji-manila-kiichiro-shibue/" target="_blank" title="Kiichiro Shibue — 大阪造型师的阿美咔叽穿搭哲学">Kiichiro Shibue — 大阪造型师的阿美咔叽穿搭哲学<span class="src">Inquirer Lifestyle</span></a>
+    <a class="img-link" href="https://vogue.ph/fashion/amekaji-spirit-subculture-history-and-character/" target="_blank" title="Amekaji Philippines 社群 — 复古工装迷真实穿搭">Amekaji Philippines 社群 — 复古工装迷真实穿搭<span class="src">Vogue Philippines</span></a>
+    <a class="img-link" href="https://www.esquiremag.ph/style/fashion/the-best-dressed-men-of-2025-a7970-20251230-dyn" target="_blank" title="2025最佳穿搭男性 — 含阿美咔叽风格穿搭案例">2025最佳穿搭男性 — 含阿美咔叽风格穿搭案例<span class="src">Esquire Philippines</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/category/tokyo-street-snaps/" target="_blank" title="TokyoFashion 东京街拍 — 复古/工装/美式风格街拍合集">TokyoFashion 东京街拍 — 复古/工装/美式风格街拍合集<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://www.spot.ph/arts-culture/arts-culture-peopleparties/110831/amekaji-the-style-taking-over-the-closets-of-modern-manile-os-a2962-20250112-lfrm2" target="_blank" title="Amekaji征服马尼拉 — 亚洲街头阿美咔叽实拍图集">Amekaji征服马尼拉 — 亚洲街头阿美咔叽实拍图集<span class="src">Spot.ph</span></a>
+    <a class="img-link" href="https://web-japan.org/trends/fashion/fas060616.html" target="_blank" title="Shibuya Men Change Style — 涩谷男生穿搭变迁（含阿美咔叽）">Shibuya Men Change Style — 涩谷男生穿搭变迁（含阿美咔叽）<span class="src">Trends in Japan</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://hypebeast.com/2024/12/visvim-ss25-dissertation-on-quality-we-choose-spring-summer-2025-lookbook-collection-release-info" target="_blank" title="visvim 2025春夏 Lookbook — 「品质论文」系列阿美咔叽标杆">visvim 2025春夏 Lookbook — 「品质论文」系列阿美咔叽标杆<span class="src">Hypebeast</span></a>
+    <a class="img-link" href="https://www.ssense.com/zh-tj/men/designers/f-lagstuf-f" target="_blank" title="F-LAGSTUF-F — 新一代阿美咔叽 x 90年代滑板音乐风格">F-LAGSTUF-F — 新一代阿美咔叽 x 90年代滑板音乐风格<span class="src">SSENSE</span></a>
+    <a class="img-link" href="https://aesthetics.fandom.com/wiki/Amekaji" target="_blank" title="Amekaji Wiki — 风格定义、品牌图谱、穿搭图例">Amekaji Wiki — 风格定义、品牌图谱、穿搭图例<span class="src">Aesthetics Wiki</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_city_boy">
+  <div class="card-header"><h3>japanese_city_boy</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows" target="_blank" title="Vogue 东京2024秋冬时装周街拍 — City Boy风格造型合集">Vogue 东京2024秋冬时装周街拍 — City Boy风格造型合集<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-spring-2024-shows-in-tokyo" target="_blank" title="Vogue 东京2024春夏时装周街拍 — 日系松弛感穿搭">Vogue 东京2024春夏时装周街拍 — 日系松弛感穿搭<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://ballyhoomagazine.com/2024/09/22/japans-coolest-mens-magazine-popeye-magazine/" target="_blank" title="POPEYE杂志深度解析 — City Boy风格定义与编辑造型">POPEYE杂志深度解析 — City Boy风格定义与编辑造型<span class="src">Ballyhoo Magazine</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai" target="_blank" title="Sacai 2026春夏男装秀 — 日系解构层次美学">Sacai 2026春夏男装秀 — 日系解构层次美学<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto" target="_blank" title="Yohji Yamamoto 2026秋冬男装 — 日系宽松廓形">Yohji Yamamoto 2026秋冬男装 — 日系宽松廓形<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://kendam.com/news/fashion-shows/yohji-yamamoto-spring-summer-2026-men-runway" target="_blank" title="Yohji Yamamoto 2026春夏男装秀场 — 69张高清图">Yohji Yamamoto 2026春夏男装秀场 — 69张高清图<span class="src">Kendam</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://markandlona.us/zh-hans/pages/ambassador-takuya-kimura-2026ss-wearing-vol-4" target="_blank" title="木村拓哉 2026春夏穿搭 — Mark & Lona 品牌大使造型">木村拓哉 2026春夏穿搭 — Mark & Lona 品牌大使造型<span class="src">Mark & Lona</span></a>
+    <a class="img-link" href="https://en.friday.news/article/2490" target="_blank" title="木村拓哉等40代男星私服穿搭 — 日系成熟男性范本">木村拓哉等40代男星私服穿搭 — 日系成熟男性范本<span class="src">FRIDAY DIGITAL</span></a>
+    <a class="img-link" href="https://www.goxip.com/sg/en/magazine/takuya-kimura-s-new-tv-drama-is-a-hit-sleek-and-chic-bodyguard-style-is-now-a-trend" target="_blank" title="木村拓哉日剧造型 — 《BG》保镖风格时尚解析">木村拓哉日剧造型 — 《BG》保镖风格时尚解析<span class="src">Goxip</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/category/tokyo-street-snaps/" target="_blank" title="TokyoFashion 东京街拍档案 — 原宿/涉谷男生街拍合集">TokyoFashion 东京街拍档案 — 原宿/涉谷男生街拍合集<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://tokyofashion.com/tag/harajuku-guys/" target="_blank" title="Harajuku Guys 标签 — 原宿男生街拍专门分类">Harajuku Guys 标签 — 原宿男生街拍专门分类<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://post.smzdm.com/p/a6zgrx0n/" target="_blank" title="City Boy没有过时 — 2026正确打开方式 · 街拍穿搭解析">City Boy没有过时 — 2026正确打开方式 · 街拍穿搭解析<span class="src">什么值得买</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.yokogaomag.com/editorial/the-rise-of-the-city-boy" target="_blank" title="The Rise of the City Boy — 风格解析 + 穿搭图集">The Rise of the City Boy — 风格解析 + 穿搭图集<span class="src">Yokogao Magazine</span></a>
+    <a class="img-link" href="https://www.minecolabs.com/post/exploring-cityboy-style-japan-s-urban-street-fashion-phenomenon" target="_blank" title="Exploring CityBoy Style — 日本都市时尚现象深度解读">Exploring CityBoy Style — 日本都市时尚现象深度解读<span class="src">Minecolabs</span></a>
+    <a class="img-link" href="https://dripdecoded.com/10-what-to-wear-ideas-in-japan-for-men/" target="_blank" title="10种日本男生穿搭方案 — City Boy + 多风格参考图">10种日本男生穿搭方案 — City Boy + 多风格参考图<span class="src">DripDecoded</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_techwear">
+  <div class="card-header"><h3>japanese_techwear</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://hypebeast.com/2025/8/y-3-fall-winter-2025-fw25-tennis-campaign-adidas-lookbook-collection-release-info" target="_blank" title="Y-3 2025秋冬系列 — 网球 x 日系机能美学">Y-3 2025秋冬系列 — 网球 x 日系机能美学<span class="src">Hypebeast</span></a>
+    <a class="img-link" href="https://hypebeast.cn/2024/1/y-3-fall-winter-2024-collection-lookbook" target="_blank" title="Y-3 2024秋冬 Lookbook — 山本耀司 adidas 机能风">Y-3 2024秋冬 Lookbook — 山本耀司 adidas 机能风<span class="src">Hypebeast CN</span></a>
+    <a class="img-link" href="https://voidline.co.uk/products/noragi-techwear" target="_blank" title="Noragi Techwear Jacket — 日式野良着 x 都市忍者机能">Noragi Techwear Jacket — 日式野良着 x 都市忍者机能<span class="src">Voidline</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto" target="_blank" title="Yohji Yamamoto 2026秋冬男装 — 深色机能层次美学">Yohji Yamamoto 2026秋冬男装 — 深色机能层次美学<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai" target="_blank" title="Sacai 2026春夏男装 — 机能解构 x 多口袋设计">Sacai 2026春夏男装 — 机能解构 x 多口袋设计<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://kendam.com/news/fashion-shows/yohji-yamamoto-fall-winter-2026-27-men-runway" target="_blank" title="Yohji Yamamoto 2026秋冬秀场 — 暗黑机能风42图">Yohji Yamamoto 2026秋冬秀场 — 暗黑机能风42图<span class="src">Kendam</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com.tw/tag/greg-han-hsu-許光漢" target="_blank" title="许光汉 GQ台湾 — 机能/暗黑风格穿搭大片">许光汉 GQ台湾 — 机能/暗黑风格穿搭大片<span class="src">GQ Taiwan</span></a>
+    <a class="img-link" href="https://www.vogue.com.tw/article/best-dressed-2025" target="_blank" title="Vogue台湾 2025最佳穿搭 — 许光汉等明星机能风造型">Vogue台湾 2025最佳穿搭 — 许光汉等明星机能风造型<span class="src">Vogue Taiwan</span></a>
+    <a class="img-link" href="https://markandlona.us/zh-hans/pages/ambassador-takuya-kimura-2026ss-wearing-vol-4" target="_blank" title="木村拓哉 2026春夏 — 机能运动风品牌大片">木村拓哉 2026春夏 — 机能运动风品牌大片<span class="src">Mark & Lona</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/tag/harajuku-guys/" target="_blank" title="Harajuku Guys — 原宿暗黑/机能风男生街拍">Harajuku Guys — 原宿暗黑/机能风男生街拍<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://tokyofashion.com/category/tokyo-street-snaps/" target="_blank" title="Tokyo Street Snaps — 东京街拍（含机能风）">Tokyo Street Snaps — 东京街拍（含机能风）<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://vogue.sg/tokyo-fashion-week-fall-winter-2024-street-style/" target="_blank" title="Vogue SG 东京2024秋冬时装周街拍 — 机能风合集">Vogue SG 东京2024秋冬时装周街拍 — 机能风合集<span class="src">Vogue Singapore</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.offwrld-techwear.com/collections/men-techwear" target="_blank" title="Offwrld Techwear — 日系都市忍者/赛博朋克机能风穿搭集">Offwrld Techwear — 日系都市忍者/赛博朋克机能风穿搭集<span class="src">Offwrld Techwear</span></a>
+    <a class="img-link" href="https://techwearofficial.com/products/japanese-style-summer-loose-pleated-short-sleeve-shirt" target="_blank" title="Japanese Style Summer Pleated Shirt — 日式褶皱机能短袖">Japanese Style Summer Pleated Shirt — 日式褶皱机能短袖<span class="src">Techwear Official</span></a>
+    <a class="img-link" href="https://voidline.co.uk/products/kurosenshi-黒戦士-urban-cyperpunk-hoodie" target="_blank" title="Kurosenshi 黒戦士 Urban Cyberpunk Hoodie — 日系机能忍者风">Kurosenshi 黒戦士 Urban Cyberpunk Hoodie — 日系机能忍者风<span class="src">Voidline</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_urahara">
+  <div class="card-header"><h3>japanese_urahara</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://i-d.co/article/japanese-mens-street-style-mag-tune-online/" target="_blank" title="TUNE杂志全刊在线 — 日本男性街头时尚圣经">TUNE杂志全刊在线 — 日本男性街头时尚圣经<span class="src">i-D Magazine</span></a>
+    <a class="img-link" href="https://justalittlejapanese.com/post-315/" target="_blank" title="Ura-hara kei 裏原系 — 风格定义与穿搭要素详解">Ura-hara kei 裏原系 — 风格定义与穿搭要素详解<span class="src">Just a Little Japanese</span></a>
+    <a class="img-link" href="https://fuckingyoung.es/edwin-fall-winter-2025-lookbook/" target="_blank" title="EDWIN 2025秋冬 Lookbook — 「UraHara」90年代东京復刻">EDWIN 2025秋冬 Lookbook — 「UraHara」90年代东京復刻<span class="src">Fucking Young!</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.operacity.jp/ag/exh181/e/exh.php" target="_blank" title="LABYRINTH OF UNDERCOVER — 东京歌剧城 Undercover 大展">LABYRINTH OF UNDERCOVER — 东京歌剧城 Undercover 大展<span class="src">Tokyo Opera City Art Gallery</span></a>
+    <a class="img-link" href="https://en.jp.bape.com/blogs/news/mr-24fw-lookbook" target="_blank" title="Mr. BATHING APE 2024秋冬 Lookbook — 成熟Ape绅士线">Mr. BATHING APE 2024秋冬 Lookbook — 成熟Ape绅士线<span class="src">BAPE Official</span></a>
+    <a class="img-link" href="https://hypebeast.com/2026/6/new-arrivals-from-hbx-neighborhood-2" target="_blank" title="NEIGHBORHOOD 2026春夏新品 — 机车/军事里原宿基因">NEIGHBORHOOD 2026春夏新品 — 机车/军事里原宿基因<span class="src">Hypebeast</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.discogs.com/digs/music/japan-urahara-streetwear" target="_blank" title="里原宿与黑胶文化 — 藤原浩/Nigo 等潮流教父的音乐时尚">里原宿与黑胶文化 — 藤原浩/Nigo 等潮流教父的音乐时尚<span class="src">Discogs</span></a>
+    <a class="img-link" href="https://clarks-frca.onelink-translations.com/en-it/originals/harajuku-collection" target="_blank" title="Clarks Originals Harajuku Collection — 里原宿经典鞋款致敬">Clarks Originals Harajuku Collection — 里原宿经典鞋款致敬<span class="src">Clarks</span></a>
+    <a class="img-link" href="https://www.dailymail.co.uk/wires/ap/article-14321637/Junya-Watanabe-puts-twist-classic-Americana-Paris-Fashion-Week-menswear-show.html" target="_blank" title="Junya Watanabe 巴黎男装周 — 里原宿出身设计师的国际秀场">Junya Watanabe 巴黎男装周 — 里原宿出身设计师的国际秀场<span class="src">Daily Mail / AP</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/tag/harajuku-guys/" target="_blank" title="Harajuku Guys — 原宿男生街拍（含里原宿风格）">Harajuku Guys — 原宿男生街拍（含里原宿风格）<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://tokyofashion.com/category/tokyo-street-snaps/" target="_blank" title="Tokyo Street Snaps — 东京街拍全档案">Tokyo Street Snaps — 东京街拍全档案<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://ar.japantravel.com/tokyo/urahara/29228" target="_blank" title="Urahara 街区指南 — 里原宿猫街实地探索 + 街拍">Urahara 街区指南 — 里原宿猫街实地探索 + 街拍<span class="src">Japan Travel</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://hypebeast.com/2024/10/wasted-youth-fw24-collection-lookbook-info" target="_blank" title="Wasted Youth FW24 Lookbook — Verdy 里原宿新生代品牌">Wasted Youth FW24 Lookbook — Verdy 里原宿新生代品牌<span class="src">Hypebeast</span></a>
+    <a class="img-link" href="https://edwin-europe.com/it-en/blog/post/autumn-winter-2025-lookbook" target="_blank" title="EDWIN 2025秋冬 Lookbook — UraHara 90s 復刻系列">EDWIN 2025秋冬 Lookbook — UraHara 90s 復刻系列<span class="src">EDWIN Europe</span></a>
+    <a class="img-link" href="https://tokyotreat.com/blog/japanese-streetwear-an-awesome-fashion-trend" target="_blank" title="Japanese Streetwear 全解析 — 从里原宿到现代街头潮流">Japanese Streetwear 全解析 — 从里原宿到现代街头潮流<span class="src">TokyoTreat</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_wabi_sabi">
+  <div class="card-header"><h3>japanese_wabi_sabi</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.tokyoweekender.com/art_and_culture/fashion/the-eternal-vision-of-yohji-yamamoto/" target="_blank" title="Yohji Yamamoto 永恒愿景 — 2018-2025 男装档案大片">Yohji Yamamoto 永恒愿景 — 2018-2025 男装档案大片<span class="src">Tokyo Weekender</span></a>
+    <a class="img-link" href="https://paternaldamnation.com/how-to-style-japanese-inspired-clothing/" target="_blank" title="How to Style Japanese Inspired Clothing — 日系侘寂穿搭指南">How to Style Japanese Inspired Clothing — 日系侘寂穿搭指南<span class="src">Paternal Damnation</span></a>
+    <a class="img-link" href="https://harrods.com/en-an/designers/yohji-yamamoto" target="_blank" title="Harrods Yohji Yamamoto — 侘寂美学男装精选图集">Harrods Yohji Yamamoto — 侘寂美学男装精选图集<span class="src">Harrods</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto" target="_blank" title="Yohji Yamamoto 2026秋冬男装秀 — 侘寂黑色解构">Yohji Yamamoto 2026秋冬男装秀 — 侘寂黑色解构<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/yohji-yamamoto" target="_blank" title="Yohji Yamamoto 2026春夏男装秀 — 宽松不对称美学">Yohji Yamamoto 2026春夏男装秀 — 宽松不对称美学<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://kendam.com/news/fashion-shows/yohji-yamamoto-fall-winter-2026-27-men-runway" target="_blank" title="Yohji Yamamoto 2026秋冬秀场 — 42张高清图">Yohji Yamamoto 2026秋冬秀场 — 42张高清图<span class="src">Kendam</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.world-wrist-watch.com/zh-Hans/Article/16005" target="_blank" title="山下智久 — 极简私服穿搭哲学「不费力时尚」">山下智久 — 极简私服穿搭哲学「不费力时尚」<span class="src">世界腕表</span></a>
+    <a class="img-link" href="https://www.juksy.com/article/137913" target="_blank" title="山下智久穿搭进化史 —「留白」极简美学私服示范">山下智久穿搭进化史 —「留白」极简美学私服示范<span class="src">JUKSY 街星</span></a>
+    <a class="img-link" href="https://www.marieclaire.com.tw/fashion/news/91240" target="_blank" title="山下智久 Onitsuka Tiger 设计 — 极简日式工艺美学">山下智久 Onitsuka Tiger 设计 — 极简日式工艺美学<span class="src">Marie Claire</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/brands/yohji-yamamoto/" target="_blank" title="TokyoFashion Yohji Yamamoto 品牌街拍 — 黑色极简穿搭合集">TokyoFashion Yohji Yamamoto 品牌街拍 — 黑色极简穿搭合集<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://tokyofashion.com/tag/monochrome-fashion/" target="_blank" title="Monochrome Fashion — 东京单色极简时尚街拍">Monochrome Fashion — 东京单色极简时尚街拍<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows" target="_blank" title="Vogue 东京2024秋冬街拍 — 极简/解构风格合集">Vogue 东京2024秋冬街拍 — 极简/解构风格合集<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.ssense.com/en-tz/men/designers/tanaka" target="_blank" title="Tanaka — 前 Uniqlo/Yohji 设计师的侘寂极简男装线">Tanaka — 前 Uniqlo/Yohji 设计师的侘寂极简男装线<span class="src">SSENSE</span></a>
+    <a class="img-link" href="https://en.pinkoi.com/product/wXyvqBHU" target="_blank" title="无感官 (No Sence) — 日式侘寂棉麻拼接衬衫">无感官 (No Sence) — 日式侘寂棉麻拼接衬衫<span class="src">Pinkoi</span></a>
+    <a class="img-link" href="https://theshopyohjiyamamoto.com/de/blogs/news/yohji-yamamoto-pour-homme-2026-spring-summer-collection" target="_blank" title="Yohji Yamamoto 2026春夏 Lookbook — 官方造型写真">Yohji Yamamoto 2026春夏 Lookbook — 官方造型写真<span class="src">THE SHOP Yohji Yamamoto</span></a>
+  </div>
+</div>
+<div class="card" data-tags="japanese_yama">
+  <div class="card-header"><h3>japanese_yama</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://qdymag.com/news/698" target="_blank" title="《秋刀魚》杂志 — Yuta 专访：都會與山野間的自在穿梭">《秋刀魚》杂志 — Yuta 专访：都會與山野間的自在穿梭<span class="src">秋刀魚 サンマ</span></a>
+    <a class="img-link" href="https://www.popdaily.com.tw/style/1548690" target="_blank" title="山系穿搭完全指南 — 起源、重點、搭配範本">山系穿搭完全指南 — 起源、重點、搭配範本<span class="src">PopDaily 波波黛莉</span></a>
+    <a class="img-link" href="https://mensuno.hk/fashion/男生的山系穿搭要怎樣才時尚？5個日系風outdoor造型配襯示範及入手單品推介" target="_blank" title="5個日系山系Outdoor造型配襯示範 — men's uno HK 编辑大片">5個日系山系Outdoor造型配襯示範 — men's uno HK 编辑大片<span class="src">men's uno Hong Kong</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://models.com/work/various-shows-white-mountaineering-ss-25-mens-show/2285447" target="_blank" title="White Mountaineering 2025春夏男装秀 — 户外机能 x 时装">White Mountaineering 2025春夏男装秀 — 户外机能 x 时装<span class="src">Models.com</span></a>
+    <a class="img-link" href="https://snkrdunk.com/en/magazine/2024/07/02/white-mountaineering-ss25-umbro-reebok-ecco-release-date-price/" target="_blank" title="White Mountaineering SS25 — Umbro/Reebok/ECCO 联名秀场图">White Mountaineering SS25 — Umbro/Reebok/ECCO 联名秀场图<span class="src">SNKRDUNK Magazine</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai" target="_blank" title="Sacai 2026春夏男装秀 — 户外元素 x 日系解构">Sacai 2026春夏男装秀 — 户外元素 x 日系解构<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.juksy.com/article/137913" target="_blank" title="山下智久 5種穿搭風格 — 从街头到山系户外演变">山下智久 5種穿搭風格 — 从街头到山系户外演变<span class="src">JUKSY 街星</span></a>
+    <a class="img-link" href="https://www.marieclaire.com.tw/fashion/news/91240" target="_blank" title="山下智久设计 Onitsuka Tiger 联名鞋款 — 沙丘色户外灵感">山下智久设计 Onitsuka Tiger 联名鞋款 — 沙丘色户外灵感<span class="src">Marie Claire</span></a>
+    <a class="img-link" href="https://55688.juksy.com/55688/article/137913" target="_blank" title="山下智久现身台北街头 — 山P的山系私服穿搭解析">山下智久现身台北街头 — 山P的山系私服穿搭解析<span class="src">JUKSY 街星</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://tokyofashion.com/category/tokyo-street-snaps/" target="_blank" title="TokyoFashion 东京街拍 — Outdoor/机能风街拍合集">TokyoFashion 东京街拍 — Outdoor/机能风街拍合集<span class="src">TokyoFashion.com</span></a>
+    <a class="img-link" href="https://www.blog.popchill.com/post/japanesestyle" target="_blank" title="2024日系穿搭全解析 — 山系/森系/好嫁系对比 + 街拍图">2024日系穿搭全解析 — 山系/森系/好嫁系对比 + 街拍图<span class="src">PopChill</span></a>
+    <a class="img-link" href="https://jianghu.taobao.com/detail/47730_79505661" target="_blank" title="山系风格起源与穿搭指南 — 东京街头山系穿搭实测">山系风格起源与穿搭指南 — 东京街头山系穿搭实测<span class="src">淘宝江湖</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://sneaker.de/en/news/nanamica-spring-summer-2025-lookbook" target="_blank" title="nanamica 2025春夏 Lookbook — 山系美学标杆品牌造型集">nanamica 2025春夏 Lookbook — 山系美学标杆品牌造型集<span class="src">Sneaker.de</span></a>
+    <a class="img-link" href="https://dancewax.net/2025/07/01/nanamica-unveils-fall-winter-2025-collection-inspired-by-ocean-and-sustainability/" target="_blank" title="nanamica 2025秋冬系列 — 海洋灵感可持续山系设计">nanamica 2025秋冬系列 — 海洋灵感可持续山系设计<span class="src">Dancewax</span></a>
+    <a class="img-link" href="https://www.trendhunter.com/trends/nanamica-3" target="_blank" title="Heartwarming Life-Tech Apparel — nanamica 品牌解读">Heartwarming Life-Tech Apparel — nanamica 品牌解读<span class="src">TrendHunter</span></a>
+  </div>
+</div>
+<div class="card" data-tags="韩系 Clean Fit">
+  <div class="card-header"><h3>韩系 Clean Fit</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://kpoppie.com/the-boyz-juyeon-shines-in-cosmopolitan-korea-x-nordisk-november-2025-digital-cover-a-fusion-of-cool-elegance-and-nordic-minimalism/" target="_blank" title="THE BOYZ Juyeon Cosmopolitan Korea × Nordisk 2025年11月— 奶油色工装">THE BOYZ Juyeon Cosmopolitan Korea × Nordisk 2025年11月— 奶油色工装<span class="src">Cosmopolitan Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/jang-haneum-kang-woojin-youth-in-motion-y-magazine-winter-2025-editorial/" target="_blank" title="Jang Haneum & Kang Woojin Y Magazine 2025冬季— oversized 羊毛大衣+">Jang Haneum & Kang Woojin Y Magazine 2025冬季— oversized 羊毛大衣+<span class="src">Y Magazine / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/82majors-yechan-rewrites-winter-idol-style-in-dazed-korea-2025-a-high-fashion-pictorial-that-confirms-his-next-gen-editorial-power/" target="_blank" title="82MAJOR Yechan DAZED Korea 2025冬季— 柔和色调+结构化外套+柔软针织，少年感 Clean">82MAJOR Yechan DAZED Korea 2025冬季— 柔和色调+结构化外套+柔软针织，少年感 Clean<span class="src">DAZED Korea / Kpoppie</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://namastehallyu.com/korean-stars-shine-at-the-seoul-fashion-week-2025/" target="_blank" title="Seoul Fashion Week F/W 2025 明星闪耀DDP— SF9 Zuho 利落剪裁、Cravity M">Seoul Fashion Week F/W 2025 明星闪耀DDP— SF9 Zuho 利落剪裁、Cravity M<span class="src">Namaste Hallyu</span></a>
+    <a class="img-link" href="https://koreajoongangdaily.joins.com/news/2025-02-07/culture/lifeStyle/Fifty-Fifty-KARD-Monsta-X-at-Seoul-Fashion-Week--in-pictures/2237400" target="_blank" title="Korea JoongAng Daily: Seoul Fashion Week 照片集— Monsta X、Oneus">Korea JoongAng Daily: Seoul Fashion Week 照片集— Monsta X、Oneus<span class="src">Korea JoongAng Daily</span></a>
+    <a class="img-link" href="https://www.hermes.cn/cn/en/content/339075-2025-hermes-boardwalk/" target="_blank" title="Hermès 2025夏季男装首尔秀— 9套新looks：色块衬衫/花卉牛仔/银风衣，Clean Fit 奢侈版演绎">Hermès 2025夏季男装首尔秀— 9套新looks：色块衬衫/花卉牛仔/银风衣，Clean Fit 奢侈版演绎<span class="src">Hermès Official</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://timesofindia.indiatimes.com/life-style/fashion/style-guide/5-style-lessons-to-learn-from-k-pop-idol-hyunjin-of-stray-kids/articleshowprint/123843051.cms" target="_blank" title="Stray Kids Hyunjin 5大穿搭课— 飘袖衬衫+及地大衣+皮裤，Clean Fit 与戏剧感融合">Stray Kids Hyunjin 5大穿搭课— 飘袖衬衫+及地大衣+皮裤，Clean Fit 与戏剧感融合<span class="src">Times of India</span></a>
+    <a class="img-link" href="https://www.harpersbazaar.com.sg/celebrity/bang-chan-best-looks" target="_blank" title="Stray Kids Bang Chan 最佳造型— Fendi 大使，牛仔+飞行员夹克，Clean Fit 学院运动风">Stray Kids Bang Chan 最佳造型— Fendi 大使，牛仔+飞行员夹克，Clean Fit 学院运动风<span class="src">Harper's Bazaar Singapore</span></a>
+    <a class="img-link" href="https://www.timesnownews.com/lifestyle/fashion/5-kim-taehyung-fashion-moments-from-2025-that-ruled-the-internet-article-153368943" target="_blank" title="BTS V 金泰亨 2025年5大时尚时刻— 安静奢华：羊毛大衣+垂坠西裤+软皮乐福鞋，零logo">BTS V 金泰亨 2025年5大时尚时刻— 安静奢华：羊毛大衣+垂坠西裤+软皮乐福鞋，零logo<span class="src">Times Now News</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/" target="_blank" title="42套韩系休闲穿搭— 水洗炭灰大衣+米色高领+卡其裤+vintage运动鞋；薄荷绿卫衣+米白慢跑裤；鼠尾草绿衬衫+白Te">42套韩系休闲穿搭— 水洗炭灰大衣+米色高领+卡其裤+vintage运动鞋；薄荷绿卫衣+米白慢跑裤；鼠尾草绿衬衫+白Te<span class="src">Modern Gentleman Magazine</span></a>
+    <a class="img-link" href="https://sokoglam.com/blogs/theklog/seoul-fashion-week-men-style" target="_blank" title="Seoul Fashion Week 男模街拍— 丹宁夹克+碎花衬衫、透明眼镜、双环耳环，Clean Fit 配饰点睛">Seoul Fashion Week 男模街拍— 丹宁夹克+碎花衬衫、透明眼镜、双环耳环，Clean Fit 配饰点睛<span class="src">Soko Glam</span></a>
+    <a class="img-link" href="https://gangnamusa.com/korean-street-style-outfit-combos-that-work/" target="_blank" title="Gangnam USA: 韩式街拍不败公式— 落肩针织+奶油色罗纹裤+乐福鞋/帆布鞋，首尔各区域风格解析">Gangnam USA: 韩式街拍不败公式— 落肩针织+奶油色罗纹裤+乐福鞋/帆布鞋，首尔各区域风格解析<span class="src">Gangnam USA</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.sohu.com/a/960536587_120753247" target="_blank" title="搜狐: 普通人也能驾驭的韩系男友风穿搭模板— Clean Fit 2025核心单品与搭配公式详解">搜狐: 普通人也能驾驭的韩系男友风穿搭模板— Clean Fit 2025核心单品与搭配公式详解<span class="src">搜狐时尚</span></a>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/" target="_blank" title="42套韩系休闲穿搭完整图集— 2025调色板：奶油/燕麦/炭灰/驼色/鼠尾草绿；核心裤型：宽腿直筒微露踝">42套韩系休闲穿搭完整图集— 2025调色板：奶油/燕麦/炭灰/驼色/鼠尾草绿；核心裤型：宽腿直筒微露踝<span class="src">Modern Gentleman Magazine</span></a>
+    <a class="img-link" href="https://world.taobao.com/lang/en-us/shopping-guide/t/Hallyu%20fashion%20influence.htm" target="_blank" title="韩流时尚影响力购物指南— Clean Fit 趋势解析：纹理＞logo、2-3色法则、比例游戏">韩流时尚影响力购物指南— Clean Fit 趋势解析：纹理＞logo、2-3色法则、比例游戏<span class="src">Taobao Global</span></a>
+  </div>
+</div>
+<div class="card" data-tags="韩系 K-pop 街头">
+  <div class="card-header"><h3>韩系 K-pop 街头</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://kpoppie.com/82majors-yechan-rewrites-winter-idol-style-in-dazed-korea-2025-a-high-fashion-pictorial-that-confirms-his-next-gen-editorial-power/" target="_blank" title="82MAJOR Yechan DAZED Korea 2025冬季— 成长型冬季画报：拉长线条大衣+柔软针织+Lived">82MAJOR Yechan DAZED Korea 2025冬季— 成长型冬季画报：拉长线条大衣+柔软针织+Lived<span class="src">DAZED Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/bae-jinyoungs-silent-thunder-inside-rolling-stone-koreas-issue-no-16-pictorial-dreamscape/" target="_blank" title="Bae Jinyoung Rolling Stone Korea No.16— 五大 K-pop 街头视觉：精准单色/质">Bae Jinyoung Rolling Stone Korea No.16— 五大 K-pop 街头视觉：精准单色/质<span class="src">Rolling Stone Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/star-in-sharp-focus-cha-eunwoo-for-esquire-korea-september-2025/" target="_blank" title="Cha Eunwoo Esquire Korea 2025年9月— 「锋利聚焦」：Saint Laurent 双排扣+高">Cha Eunwoo Esquire Korea 2025年9月— 「锋利聚焦」：Saint Laurent 双排扣+高<span class="src">Esquire Korea / Kpoppie</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://koreajoongangdaily.joins.com/news/2025-02-07/culture/lifeStyle/Fifty-Fifty-KARD-Monsta-X-at-Seoul-Fashion-Week--in-pictures/2237400" target="_blank" title="Seoul Fashion Week 2025 DDP— Monsta X、KARD、Fifty Fifty、Oneus">Seoul Fashion Week 2025 DDP— Monsta X、KARD、Fifty Fifty、Oneus<span class="src">Korea JoongAng Daily</span></a>
+    <a class="img-link" href="https://namastehallyu.com/korean-stars-shine-at-the-seoul-fashion-week-2025/" target="_blank" title="Seoul Fashion Week F/W 2025— SF9 Zuho、Cravity Minhee 走秀、Mons">Seoul Fashion Week F/W 2025— SF9 Zuho、Cravity Minhee 走秀、Mons<span class="src">Namaste Hallyu</span></a>
+    <a class="img-link" href="https://www.tenasia.com/entertainment/2025020817534" target="_blank" title="n.SSign 成员 Lawrence、Doha、Han Jun 出席 Duck Dive 秀场— 新晋 idol 首次">n.SSign 成员 Lawrence、Doha、Han Jun 出席 Duck Dive 秀场— 新晋 idol 首次<span class="src">TenAsia</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.kstartrend.com/2025/09/18/g-dragon-turns-heads-at-incheon-airport-as-he-pulls-off-bold-frog-look-with-chanel-beanie-and-lime-green-pants-before-flying-to-paris" target="_blank" title="G-Dragon 2025年9月仁川机场→巴黎— 「Keroro 蛙蛙造型」：Chanel 毛线帽+藏青开衫+荧光绿 M">G-Dragon 2025年9月仁川机场→巴黎— 「Keroro 蛙蛙造型」：Chanel 毛线帽+藏青开衫+荧光绿 M<span class="src">KStarTrend</span></a>
+    <a class="img-link" href="https://www.allkpop.com/article/2025/07/btss-v-kim-taehyung-stuns-in-all-black-casual-look-for-his-first-airport-appearance-in-2-years" target="_blank" title="BTS V 金泰亨 2025年7月退役后首次机场— 全黑 casual：黑Tee+宽松慢跑裤+白鞋+CELINE 包+金">BTS V 金泰亨 2025年7月退役后首次机场— 全黑 casual：黑Tee+宽松慢跑裤+白鞋+CELINE 包+金<span class="src">AllKpop</span></a>
+    <a class="img-link" href="https://www.koreaboo.com/news/gdragon-airport-fashion-triggers-divided-reactions/" target="_blank" title="G-Dragon 机场造型引发热议— 混搭 Chanel+Miu Miu，针织+涂鸦包+头巾，打破性别界限">G-Dragon 机场造型引发热议— 混搭 Chanel+Miu Miu，针织+涂鸦包+头巾，打破性别界限<span class="src">Koreaboo</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://kpophit.com/male-idols-trendsetting-airport-style-goes-viral-captivating-fans/" target="_blank" title="K-pop 男 idol 机场造型病毒传播— RIIZE Anton 长 Saint Laurent 大衣+白衬衫、Su">K-pop 男 idol 机场造型病毒传播— RIIZE Anton 长 Saint Laurent 大衣+白衬衫、Su<span class="src">KPOP HIT</span></a>
+    <a class="img-link" href="https://www.poponote.com/note/68c8d5e9e8efbb0006c208e0" target="_blank" title="盘点6位 KPOP 男偶像的传奇机场照— ENHYPEN Sunghoon 黑风衣+无框眼镜、Felix 金发+西装、C">盘点6位 KPOP 男偶像的传奇机场照— ENHYPEN Sunghoon 黑风衣+无框眼镜、Felix 金发+西装、C<span class="src">PopoNote</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026" target="_blank" title="Vogue: Seoul Spring 2026 最佳街拍— 棒球帽+格子衬衫+宽松丹宁+厚底 sneakers，偶像出">Vogue: Seoul Spring 2026 最佳街拍— 棒球帽+格子衬衫+宽松丹宁+厚底 sneakers，偶像出<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.dailymail.co.uk/tvshowbiz/article-14864765/G-Dragon-Sydney-K-pop-fans.html" target="_blank" title="G-Dragon 抵达悉尼机场— 条纹Tee+丝绒长裤+定制涂鸦 sneakers，冰金发色+口罩，effortless">G-Dragon 抵达悉尼机场— 条纹Tee+丝绒长裤+定制涂鸦 sneakers，冰金发色+口罩，effortless<span class="src">Daily Mail</span></a>
+    <a class="img-link" href="https://www.buro247.my/fashion/style/g-dragon-gender-fluid-fashion-looks.html" target="_blank" title="Buro 24/7 Malaysia: G-Dragon 7套性别流动造型— 头巾+棒球帽、Chanel 斜纹软呢+丹宁">Buro 24/7 Malaysia: G-Dragon 7套性别流动造型— 头巾+棒球帽、Chanel 斜纹软呢+丹宁<span class="src">Buro 24/7 Malaysia</span></a>
+    <a class="img-link" href="https://www.mk.co.kr/en/photos/11252150" target="_blank" title="Stray Kids Hyunjin 半长发离境— Versace 2025秋冬秀前机场：黑高领+牛仔裤+麂皮夹克+尖框">Stray Kids Hyunjin 半长发离境— Versace 2025秋冬秀前机场：黑高领+牛仔裤+麂皮夹克+尖框<span class="src">MK Korea</span></a>
+  </div>
+</div>
+<div class="card" data-tags="韩系轻熟">
+  <div class="card-header"><h3>韩系轻熟</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://kpoppie.com/the-boyz-juyeon-shines-in-cosmopolitan-korea-x-nordisk-november-2025-digital-cover-a-fusion-of-cool-elegance-and-nordic-minimalism/" target="_blank" title="Cosmopolitan Korea × Nordisk 2025年11月— 北欧轻熟极简：奶油工装+高领内搭，米色风衣">Cosmopolitan Korea × Nordisk 2025年11月— 北欧轻熟极简：奶油工装+高领内搭，米色风衣<span class="src">Cosmopolitan Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/cortis-sets-a-sculptural-mood-in-elle-korea-super-elle-vol-6-november-2025-redefining-minimalist-power-through-modern-allure/" target="_blank" title="CORTIS Super ELLE 2025年11月— Prada/Bottega Veneta/Loewe 建筑感轻熟">CORTIS Super ELLE 2025年11月— Prada/Bottega Veneta/Loewe 建筑感轻熟<span class="src">ELLE Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/star-in-sharp-focus-cha-eunwoo-for-esquire-korea-september-2025/" target="_blank" title="Cha Eunwoo Esquire Korea 2025年9月— 双排扣西装+高领黑毛衣+哑光炭灰套装，轻熟男士原型">Cha Eunwoo Esquire Korea 2025年9月— 双排扣西装+高领黑毛衣+哑光炭灰套装，轻熟男士原型<span class="src">Esquire Korea / Kpoppie</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.hermes.cn/cn/en/content/339075-2025-hermes-boardwalk/" target="_blank" title="Hermès 2025夏季男装首尔秀— 车胜元(Wi Hajun)、朴孝信、Beenzino走秀，成熟男士的极简奢华">Hermès 2025夏季男装首尔秀— 车胜元(Wi Hajun)、朴孝信、Beenzino走秀，成熟男士的极简奢华<span class="src">Hermès Official</span></a>
+    <a class="img-link" href="https://www.gettyimages.hk/editorial-images/entertainment/event/runway-seoul-fashion-week-f-w-2025/776279215" target="_blank" title="Seoul Fashion Week F/W 2025— 119张 editorial 秀场图，含 HANNAH SHI">Seoul Fashion Week F/W 2025— 119张 editorial 秀场图，含 HANNAH SHI<span class="src">Getty Images</span></a>
+    <a class="img-link" href="https://namastehallyu.com/korean-stars-shine-at-the-seoul-fashion-week-2025/" target="_blank" title="Seoul Fashion Week F/W 2025 DDP — SF9 Zuho 利落剪裁、Monsta X 轻熟造">Seoul Fashion Week F/W 2025 DDP — SF9 Zuho 利落剪裁、Monsta X 轻熟造<span class="src">Namaste Hallyu</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.timeinternational.co.id/park-sung-hoon-delivers-a-valentino-look-worth-remembering/" target="_blank" title="Park Sung Hoon × Valentino 2025— 双排扣宽肩西装、丝质衬衫、精准轻熟比例">Park Sung Hoon × Valentino 2025— 双排扣宽肩西装、丝质衬衫、精准轻熟比例<span class="src">Time International</span></a>
+    <a class="img-link" href="https://www.nurphoto.com/search?s_phrase=Actor%20Jung%20Il-woo%20poses%20for%20photos%20during%20the%20opening%20fashio..." target="_blank" title="Jung Il-woo Seoul Fashion Week 开幕照— 丁一宇轻熟男装：条纹西装+软结构大衣，精致不刻意">Jung Il-woo Seoul Fashion Week 开幕照— 丁一宇轻熟男装：条纹西装+软结构大衣，精致不刻意<span class="src">NurPhoto</span></a>
+    <a class="img-link" href="https://vogue.sg/calvin-klein-cha-eun-woo/" target="_blank" title="Cha Eunwoo × Calvin Klein— 从花美男到轻熟男士蜕变：皮夹克+直筒牛仔裤+战壕风衣，克制性感">Cha Eunwoo × Calvin Klein— 从花美男到轻熟男士蜕变：皮夹克+直筒牛仔裤+战壕风衣，克制性感<span class="src">Vogue Singapore</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/seouls-best-street-style-photos-from-the-spring-2025-shows" target="_blank" title="Vogue: Seoul Spring 2025 最佳街拍— 轻熟造型：非结构化米色西装+Tee+修身西裤+低帮皮 sn">Vogue: Seoul Spring 2025 最佳街拍— 轻熟造型：非结构化米色西装+Tee+修身西裤+低帮皮 sn<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026" target="_blank" title="Vogue: Seoul Spring 2026 最佳街拍— 帽子+格纹+丹宁，轻熟男士层搭技巧">Vogue: Seoul Spring 2026 最佳街拍— 帽子+格纹+丹宁，轻熟男士层搭技巧<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://gangnamusa.com/korean-street-style-outfit-combos-that-work/" target="_blank" title="Gangnam USA: 韩式街拍不败公式— 结构化休闲：宽松西装+白Tee+直筒裤，江南区清潭洞轻熟风">Gangnam USA: 韩式街拍不败公式— 结构化休闲：宽松西装+白Tee+直筒裤，江南区清潭洞轻熟风<span class="src">Gangnam USA</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://view.asiae.co.kr/en/print.htm?idxno=2025022008333035034" target="_blank" title="Shinsegae Inter 'Man on the Boon' 品牌重塑— 10周年韩式轻熟男装方向：沉稳中性色+高">Shinsegae Inter 'Man on the Boon' 品牌重塑— 10周年韩式轻熟男装方向：沉稳中性色+高<span class="src">Asia Economy</span></a>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/" target="_blank" title="42套韩系穿搭中的轻熟方案— 炭灰大衣+米色高领+浅卡其裤+vintage trainer，毫不费力的精致感">42套韩系穿搭中的轻熟方案— 炭灰大衣+米色高领+浅卡其裤+vintage trainer，毫不费力的精致感<span class="src">Modern Gentleman Magazine</span></a>
+    <a class="img-link" href="https://timesofindia.indiatimes.com/life-style/fashion/celeb-style/korean-star-han-ji-mins-understated-luxury-is-a-guide-to-timeless-minimalist-style/articleshowprint/123545910.cms" target="_blank" title="Times of India: Han Ji-min 低调奢华穿搭— 成熟精致：质感针织+结构大衣+真丝衬衫，30+轻熟">Times of India: Han Ji-min 低调奢华穿搭— 成熟精致：质感针织+结构大衣+真丝衬衫，30+轻熟<span class="src">Times of India</span></a>
+  </div>
+</div>
+<div class="card" data-tags="韩系极简">
+  <div class="card-header"><h3>韩系极简</h3><div class="en"></div></div>
+  <div class="card-stats">📸 15 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://kpoppie.com/star-in-sharp-focus-cha-eunwoo-for-esquire-korea-september-2025/" target="_blank" title="Cha Eunwoo Esquire Korea 2025年9月刊— 黑白高对比极简肖像，Saint Laurent 锋">Cha Eunwoo Esquire Korea 2025年9月刊— 黑白高对比极简肖像，Saint Laurent 锋<span class="src">Esquire Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/cortis-sets-a-sculptural-mood-in-elle-korea-super-elle-vol-6-november-2025-redefining-minimalist-power-through-modern-allure/" target="_blank" title="CORTIS Super ELLE Vol.6 2025年11月— Prada/Bottega Veneta/Loewe">CORTIS Super ELLE Vol.6 2025年11月— Prada/Bottega Veneta/Loewe<span class="src">ELLE Korea / Kpoppie</span></a>
+    <a class="img-link" href="https://kpoppie.com/bae-jinyoungs-silent-thunder-inside-rolling-stone-koreas-issue-no-16-pictorial-dreamscape/" target="_blank" title="Bae Jinyoung Rolling Stone Korea No.16 — 五大极简主题：精准单色/质感叙事/未来">Bae Jinyoung Rolling Stone Korea No.16 — 五大极简主题：精准单色/质感叙事/未来<span class="src">Rolling Stone Korea / Kpoppie</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.hermes.cn/cn/en/content/339075-2025-hermes-boardwalk/" target="_blank" title="Hermès 2025夏季男装首尔大秀— 色块衬衫、丁香紫夹克、花卉牛仔轰炸机，极简奢华木板道主题">Hermès 2025夏季男装首尔大秀— 色块衬衫、丁香紫夹克、花卉牛仔轰炸机，极简奢华木板道主题<span class="src">Hermès Official</span></a>
+    <a class="img-link" href="https://www.gettyimages.hk/editorial-images/entertainment/event/runway-seoul-fashion-week-f-w-2025/776279215" target="_blank" title="Seoul Fashion Week F/W 2025 秀场— 119张高清 editorial 图，含 HANNAH ">Seoul Fashion Week F/W 2025 秀场— 119张高清 editorial 图，含 HANNAH <span class="src">Getty Images</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026" target="_blank" title="Vogue: Seoul Fashion Week Spring 2026 最佳街拍— 帽子/格子/丹宁，韩式极简街拍造">Vogue: Seoul Fashion Week Spring 2026 最佳街拍— 帽子/格子/丹宁，韩式极简街拍造<span class="src">Vogue</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://vogue.sg/calvin-klein-cha-eun-woo/" target="_blank" title="Cha Eunwoo × Calvin Klein 2024秋冬— 白色衬衫、靛蓝牛仔、黑色风衣，90s极简主义回归">Cha Eunwoo × Calvin Klein 2024秋冬— 白色衬衫、靛蓝牛仔、黑色风衣，90s极简主义回归<span class="src">Vogue Singapore</span></a>
+    <a class="img-link" href="https://www.mens-folio.com/style/cha-eun-woos-spring-date-with-calvin-klein/" target="_blank" title="Cha Eunwoo Calvin Klein 2025春季— nappa皮夹克、修身西装、90s直筒牛仔裤，简约之美">Cha Eunwoo Calvin Klein 2025春季— nappa皮夹克、修身西装、90s直筒牛仔裤，简约之美<span class="src">Men's Folio</span></a>
+    <a class="img-link" href="https://wwd.com/pop-culture/new-fashion-releases/cha-eun-woo-calvin-klein-spring-2025-campaign-1237041531/" target="_blank" title="Cha Eunwoo Calvin Klein 2025春季广告大片— 由 Dai Yamashiro 掌镜，极简线条+">Cha Eunwoo Calvin Klein 2025春季广告大片— 由 Dai Yamashiro 掌镜，极简线条+<span class="src">WWD</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/seouls-best-street-style-photos-from-the-spring-2025-shows" target="_blank" title="Vogue: Seoul Spring 2025 最佳街拍— 韩男极简街拍：中性色系大衣、宽腿裤、clean sneak">Vogue: Seoul Spring 2025 最佳街拍— 韩男极简街拍：中性色系大衣、宽腿裤、clean sneak<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://sokoglam.com/blogs/theklog/seoul-fashion-week-men-style" target="_blank" title="Seoul Fashion Week 男模街拍灵感— 丹宁外套+花卉衬衫、透明眼镜、极简层搭">Seoul Fashion Week 男模街拍灵感— 丹宁外套+花卉衬衫、透明眼镜、极简层搭<span class="src">Soko Glam / The Klog</span></a>
+    <a class="img-link" href="https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026" target="_blank" title="Vogue: Seoul Spring 2026 街拍— 帽子+格纹+丹宁，极简中性色层搭是主线">Vogue: Seoul Spring 2026 街拍— 帽子+格纹+丹宁，极简中性色层搭是主线<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/" target="_blank" title="Modern Gentleman Magazine: 42套韩系休闲穿搭— 燕麦色落肩针织+奶油白罗纹宽腿裤+乐福鞋，极">Modern Gentleman Magazine: 42套韩系休闲穿搭— 燕麦色落肩针织+奶油白罗纹宽腿裤+乐福鞋，极<span class="src">Modern Gentleman Magazine</span></a>
+    <a class="img-link" href="https://gangnamusa.com/korean-street-style-outfit-combos-that-work/" target="_blank" title="Gangnam USA: 韩式街拍经典组合— 单色极简、柔软男孩层搭、结构化休闲，首尔各区风格地图">Gangnam USA: 韩式街拍经典组合— 单色极简、柔软男孩层搭、结构化休闲，首尔各区风格地图<span class="src">Gangnam USA</span></a>
+    <a class="img-link" href="https://timesofindia.indiatimes.com/life-style/fashion/celeb-style/korean-star-han-ji-mins-understated-luxury-is-a-guide-to-timeless-minimalist-style/articleshowprint/123545910.cms" target="_blank" title="Times of India: 韩星 Han Ji-min 低调奢华极简穿搭指南— timeless neutral p">Times of India: 韩星 Han Ji-min 低调奢华极简穿搭指南— timeless neutral p<span class="src">Times of India</span></a>
+  </div>
+</div>
+<div class="card" data-tags="poetcore">
+  <div class="card-header"><h3>poetcore</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://lifestylecollective.org/2026/03/13/why-poetcore-is-the-intellectuals-answer-to-minimalism/" target="_blank" title="The Lifestyle Collective — Poetcore 是知识分子对极简主义的回答：从暗黑学院到阳光诗意">The Lifestyle Collective — Poetcore 是知识分子对极简主义的回答：从暗黑学院到阳光诗意<span class="src">The Lifestyle Collective</span></a>
+    <a class="img-link" href="https://timesofindia.indiatimes.com/life-style/spotlight/embrace-the-poetcore-aesthetic-gentle-dressing-for-2026/articleshow/127762279.cms" target="_blank" title="Times of India — 2026拥抱Poetcore：「温柔穿搭」的崛起，Dries Van Noten AW">Times of India — 2026拥抱Poetcore：「温柔穿搭」的崛起，Dries Van Noten AW<span class="src">Times of India</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.showstudio.com/cms/documents/3607/DVN_PRESS_RELEASE__MEN_AW_25-26.pdf" target="_blank" title="Dries Van Noten AW25 — Julian Klausner设计，Willy Vanderperre拍摄">Dries Van Noten AW25 — Julian Klausner设计，Willy Vanderperre拍摄<span class="src">SHOWstudio</span></a>
+    <a class="img-link" href="https://lazynarcissist.com/style/2409/2026-poetcore" target="_blank" title="Lazy Narcissist — 2026 Poetcore风格解析：五大关键元素轻松驾驭">Lazy Narcissist — 2026 Poetcore风格解析：五大关键元素轻松驾驭<span class="src">Lazy Narcissist</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.aol.com/lifestyle/10-romantic-ways-wear-poet-193634893.html" target="_blank" title="10种浪漫Poetcore穿搭：Taylor Swift与Blair Waldorf风的文学浪漫主义">10种浪漫Poetcore穿搭：Taylor Swift与Blair Waldorf风的文学浪漫主义<span class="src">AOL Lifestyle</span></a>
+  </div>
+</div>
+<div class="card" data-tags="quarter_zip_revival">
+  <div class="card-header"><h3>quarter_zip_revival</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.mrporter.com/en-hk/journal/fashion/how-to-style-quarter-zip-half-zip-knit-sweater-24032046" target="_blank" title="MR PORTER — 1/4拉链如何成为衣橱MVP：从公司办公室到巴黎时装周的进化">MR PORTER — 1/4拉链如何成为衣橱MVP：从公司办公室到巴黎时装周的进化<span class="src">MR PORTER</span></a>
+    <a class="img-link" href="https://www.lofficielph.com/hommes/quarter-zip-sweater-menswear-trend" target="_blank" title="L'Officiel Philippines — 爸爸衣柜里的1/4拉链如何成为2025最意想不到的风格执念">L'Officiel Philippines — 爸爸衣柜里的1/4拉链如何成为2025最意想不到的风格执念<span class="src">L'Officiel PH</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.npr.org/2025/12/05/nx-s1-5628995/gen-z-turns-the-quarter-zip-into-tiktoks-coolest-menswear-staple" target="_blank" title="NPR — Gen Z将1/4拉链变成TikTok最酷男装单品：Chanel 2026 Métiers d'Art开场即">NPR — Gen Z将1/4拉链变成TikTok最酷男装单品：Chanel 2026 Métiers d'Art开场即<span class="src">NPR</span></a>
+    <a class="img-link" href="https://www.theglobeandmail.com/life/style/fashion-and-beauty/article-the-rise-fall-and-resurgence-of-the-quarter-zip-sweater/" target="_blank" title="The Globe and Mail — 1/4拉链的崛起、衰落与复兴：Jonathan Bailey穿Dior 1/4">The Globe and Mail — 1/4拉链的崛起、衰落与复兴：Jonathan Bailey穿Dior 1/4<span class="src">The Globe and Mail</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.usatoday.com/story/tech/2025/12/15/quarter-zip-viral-trend-explained/87710752007/" target="_blank" title="USA Today — Quarter-Zip Movement：T-Pain '401k and a quarter ">USA Today — Quarter-Zip Movement：T-Pain '401k and a quarter <span class="src">USA Today</span></a>
+  </div>
+</div>
+<div class="card" data-tags="regency_romantic">
+  <div class="card-header"><h3>regency_romantic</h3><div class="en"></div></div>
+  <div class="card-stats">📸 7 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/christian-dior" target="_blank" title="Dior Men FW26 — Jonathan Anderson首秀：摄政时期高领×克拉巴特领巾">Dior Men FW26 — Jonathan Anderson首秀：摄政时期高领×克拉巴特领巾<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear/kenzo" target="_blank" title="Kenzo FW26 — Nigo的浪漫主义转向：丝绒外套×青蛙纽扣">Kenzo FW26 — Nigo的浪漫主义转向：丝绒外套×青蛙纽扣<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.gq.com/story/jonathan-anderson-dior-men-debut-fall-2026" target="_blank" title="GQ — Dior Men FW26 首秀深度解析：摄政领巾×现代剪裁">GQ — Dior Men FW26 首秀深度解析：摄政领巾×现代剪裁<span class="src">GQ</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2026-menswear" target="_blank" title="Vogue Runway — 2026秋冬男装周：浪漫主义集体转向">Vogue Runway — 2026秋冬男装周：浪漫主义集体转向<span class="src">Vogue</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com/story/cravat-neck-scarf-menswear-trend-2026" target="_blank" title="GQ — 领巾回归：2026男装最浪漫的配饰趋势">GQ — 领巾回归：2026男装最浪漫的配饰趋势<span class="src">GQ</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/best-street-style-fall-2026-menswear-paris" target="_blank" title="巴黎FW26街拍 — 领巾×宽松西装的日常化演绎">巴黎FW26街拍 — 领巾×宽松西装的日常化演绎<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.highsnobiety.com/p/dior-men-fall-2026-jonathan-anderson/" target="_blank" title="Highsnobiety — Dior Men FW26社交媒体热议合集">Highsnobiety — Dior Men FW26社交媒体热议合集<span class="src">Highsnobiety</span></a>
+  </div>
+</div>
+<div class="card" data-tags="resort_vacation">
+  <div class="card-header"><h3>resort_vacation</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://therake.com/hk/stories/loro-piana-transport-us-to-an-exotic-paradise-with-summer-resort-2024-collection" target="_blank" title="Loro Piana Summer Resort 2024 — 大溪地波西米亚冲浪者大片：Antigua亚麻Spagna">Loro Piana Summer Resort 2024 — 大溪地波西米亚冲浪者大片：Antigua亚麻Spagna<span class="src">The Rake</span></a>
+    <a class="img-link" href="https://vmagazine.com/article/givenchy-goes-back-to-the-beach-with-givenchy-plage-summer-2024-collection/" target="_blank" title="Givenchy Plage Summer 2024 — 撒丁岛Nikki Beach拍摄：普罗旺斯亚麻裤、柠檬印花衬衫">Givenchy Plage Summer 2024 — 撒丁岛Nikki Beach拍摄：普罗旺斯亚麻裤、柠檬印花衬衫<span class="src">V Magazine</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.fashiongonerogue.com/massimo-dutti-minimal-summer-2024/" target="_blank" title="Massimo Dutti Summer 2024 — 海滩极简大片：橄榄绿、象牙白亚麻廓形">Massimo Dutti Summer 2024 — 海滩极简大片：橄榄绿、象牙白亚麻廓形<span class="src">Fashion Gone Rogue</span></a>
+    <a class="img-link" href="https://musemagazine.it/articles/armani-mare-en/" target="_blank" title="Giorgio Armani Mare Summer 2024 — 切尔沃港、马里布、圣特罗佩全球海滩目的地取景">Giorgio Armani Mare Summer 2024 — 切尔沃港、马里布、圣特罗佩全球海滩目的地取景<span class="src">Muse Magazine</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://squaremile.com/style/summer-resort-wear/" target="_blank" title="Square Mile — 度假胶囊衣橱指南：Stenströms亚麻衬衫、Sunspel Riviera Polo、B">Square Mile — 度假胶囊衣橱指南：Stenströms亚麻衬衫、Sunspel Riviera Polo、B<span class="src">Square Mile</span></a>
+  </div>
+</div>
+<div class="card" data-tags="retro_90s_hiphop">
+  <div class="card-header"><h3>retro_90s_hiphop</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.rollingstone.co.uk/style/mingyu-channels-90s-nostalgia-for-calvin-klein-denim-53201/" target="_blank" title="Rolling Stone UK — SEVENTEEN Mingyu 演绎90年代 Calvin Klein 丹宁怀旧">Rolling Stone UK — SEVENTEEN Mingyu 演绎90年代 Calvin Klein 丹宁怀旧<span class="src">Rolling Stone UK</span></a>
+    <a class="img-link" href="https://system-magazine.com/issues/issue-9/a-letter-from-new-york" target="_blank" title="System Magazine — 纽约嘻哈时尚书信：从 Dapper Dan 到 Supreme x LV 的文化溯源">System Magazine — 纽约嘻哈时尚书信：从 Dapper Dan 到 Supreme x LV 的文化溯源<span class="src">System Magazine</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.lemon8-app.com/@_lesx97/7275851291350336006" target="_blank" title="90s Black Men's Fashion — 从Tupac到Will Smith的标志性风格：Gangsta与Bl">90s Black Men's Fashion — 从Tupac到Will Smith的标志性风格：Gangsta与Bl<span class="src">Lemon8</span></a>
+    <a class="img-link" href="https://zmj.unibo.it/article/download/19563/18128" target="_blank" title="Vibe Magazine (1992-1997) — 嘻哈男性气质通过意大利电影与时尚的重新思考">Vibe Magazine (1992-1997) — 嘻哈男性气质通过意大利电影与时尚的重新思考<span class="src">ZoneModa Journal</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.si.edu/object/roxanne-shante-nyc-1990:nmaahc_2015.132.66" target="_blank" title="Smithsonian NMAAHC — Janette Beckman 1990年拍摄 Roxanne Shanté ">Smithsonian NMAAHC — Janette Beckman 1990年拍摄 Roxanne Shanté <span class="src">Smithsonian</span></a>
+  </div>
+</div>
+<div class="card" data-tags="retro_grunge">
+  <div class="card-header"><h3>retro_grunge</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm" target="_blank" title="MSGM Fall 2025 — Massimo Giorgetti 以 Donnie Darko 超现实主义重新演绎意">MSGM Fall 2025 — Massimo Giorgetti 以 Donnie Darko 超现实主义重新演绎意<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/our-legacy" target="_blank" title="Our Legacy Spring 2025 — 玻璃屏障后拍摄的概念性反时尚：皱缩丝金针织的「湿」质感">Our Legacy Spring 2025 — 玻璃屏障后拍摄的概念性反时尚：皱缩丝金针织的「湿」质感<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.23-magazine.com/the-new-grunge-renaissance/" target="_blank" title="23 Magazine — 2025 Grunge复兴：Z世代拒绝过度策划的完美主义，拥抱粗粝真实">23 Magazine — 2025 Grunge复兴：Z世代拒绝过度策划的完美主义，拥抱粗粝真实<span class="src">23 Magazine</span></a>
+    <a class="img-link" href="https://kendam.com/news/lookbooks/msgm-fall-winter-2025-26-men-outfits" target="_blank" title="MSGMFW25-26 型录 — Bruce LaBruce 现场拍摄的Gen Z能量">MSGMFW25-26 型录 — Bruce LaBruce 现场拍摄的Gen Z能量<span class="src">Kendam</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.23-magazine.com/the-new-grunge-renaissance/" target="_blank" title="23 Magazine — Grunge在Depop地下街头品牌中的真实回归，DIY手工破坏单品">23 Magazine — Grunge在Depop地下街头品牌中的真实回归，DIY手工破坏单品<span class="src">23 Magazine</span></a>
+  </div>
+</div>
+<div class="card" data-tags="retro_rockabilly">
+  <div class="card-header"><h3>retro_rockabilly</h3><div class="en"></div></div>
+  <div class="card-stats">📸 4 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://highxtar.com/en/celine-ss25-hedi-slimane-revives-the-1920s-with-a-rockabilly-twist/" target="_blank" title="CELINE SS25 — Hedi Slimane「The Bright Young」：1920s英式剪裁×rocka">CELINE SS25 — Hedi Slimane「The Bright Young」：1920s英式剪裁×rocka<span class="src">Highxtar</span></a>
+    <a class="img-link" href="https://www.fashion-headline.com/en/article/9403" target="_blank" title="Saint Laurent SS14 — 闪亮Rockabilly系列：泰迪男孩蓬巴杜发型、爱德华夹克、亮片机车夹克">Saint Laurent SS14 — 闪亮Rockabilly系列：泰迪男孩蓬巴杜发型、爱德华夹克、亮片机车夹克<span class="src">Fashion Headline</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://highxtar.com/en/celine-ss25-hedi-slimane-revives-the-1920s-with-a-rockabilly-twist/" target="_blank" title="CELINE SS25 秀场 — 黑白色调交替、电影感怀旧美学">CELINE SS25 秀场 — 黑白色调交替、电影感怀旧美学<span class="src">Highxtar</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://lewkin.com/ms-my/blogs/style-blog/rockabilly-style-men" target="_blank" title="Lewkin — 男士Rockabilly风格指南：经典元素穿搭灵感">Lewkin — 男士Rockabilly风格指南：经典元素穿搭灵感<span class="src">Lewkin</span></a>
+  </div>
+</div>
+<div class="card" data-tags="rugged_comfort">
+  <div class="card-header"><h3>rugged_comfort</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.themanual.com/fashion/aurelien-fw25-collection/" target="_blank" title="Aurélien FW25-26 — 「阿尔卑斯边缘×地中海灵魂」：羊绒灯芯绒羽绒服、可拆卸皮草领，粗犷质感邂逅柔软剪裁">Aurélien FW25-26 — 「阿尔卑斯边缘×地中海灵魂」：羊绒灯芯绒羽绒服、可拆卸皮草领，粗犷质感邂逅柔软剪裁<span class="src">The Manual</span></a>
+    <a class="img-link" href="https://www.malemodelscene.net/ad-campaigns/henry-kitcher-proenza-schouler/" target="_blank" title="Proenza Schouler FW25男装型录 — MANITOGA森林×现代建筑：厚实针织、轻松剪裁、艺术印花">Proenza Schouler FW25男装型录 — MANITOGA森林×现代建筑：厚实针织、轻松剪裁、艺术印花<span class="src">Male Model Scene</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://theimpression.com/sacai-fall-2025-mens-fashion-show-review/" target="_blank" title="Sacai Fall 2025 — 「荒野漫游」：Chitose Abe 首创「针织皮草」面料，Carhartt WIP">Sacai Fall 2025 — 「荒野漫游」：Chitose Abe 首创「针织皮草」面料，Carhartt WIP<span class="src">The Impression</span></a>
+    <a class="img-link" href="https://www.showstudio.com/collections/autumn-winter-2025/denzilpatrick/show-report" target="_blank" title="Denzilpatrick AW25 — 「粗犷皇家风」：中世纪铠甲×摩托车越野，绗缝长裤、装甲飞行员夹克">Denzilpatrick AW25 — 「粗犷皇家风」：中世纪铠甲×摩托车越野，绗缝长裤、装甲飞行员夹克<span class="src">SHOWstudio</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://live.trendhunter.com/trends/realtree-camo-loungewear" target="_blank" title="SKIMS 雷尔泰克迷彩家居服 — Post Malone 犹他州牧场出镜：重型摇粒绒×迷彩的城乡融合">SKIMS 雷尔泰克迷彩家居服 — Post Malone 犹他州牧场出镜：重型摇粒绒×迷彩的城乡融合<span class="src">TrendHunter</span></a>
+  </div>
+</div>
+<div class="card" data-tags="rugged_luxury">
+  <div class="card-header"><h3>rugged_luxury</h3><div class="en"></div></div>
+  <div class="card-stats">📸 6 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/ferragamo" target="_blank" title="Ferragamo SS26 — Maximilian Davis的Safari夹克×巧克力棕">Ferragamo SS26 — Maximilian Davis的Safari夹克×巧克力棕<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/zegna" target="_blank" title="Zegna SS26 — 高性能面料×意大利剪裁的户外奢华">Zegna SS26 — 高性能面料×意大利剪裁的户外奢华<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.gq.com/story/rugged-luxury-menswear-trend-2025" target="_blank" title="GQ — Rugged Luxury: 粗砺奢华的崛起">GQ — Rugged Luxury: 粗砺奢华的崛起<span class="src">GQ</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.mrporter.com/en-jp/journal/fashion/safari-jacket-menswear-guide" target="_blank" title="MR PORTER — Safari夹克穿搭指南：Daniel Craig的休闲场景">MR PORTER — Safari夹克穿搭指南：Daniel Craig的休闲场景<span class="src">MR PORTER</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/best-street-style-milan-menswear-spring-2026" target="_blank" title="米兰男装周街拍 — Safari夹克×卡其裤×乐福鞋">米兰男装周街拍 — Safari夹克×卡其裤×乐福鞋<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.permanentstyle.com/2025/01/safari-jacket-guide.html" target="_blank" title="Permanent Style — Safari夹克的完整穿搭解析">Permanent Style — Safari夹克的完整穿搭解析<span class="src">Permanent Style</span></a>
+  </div>
+</div>
+<div class="card" data-tags="scandi_minimalism">
+  <div class="card-header"><h3>scandi_minimalism</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://fashionmagazine.com/style/scandi-mens-style-outfits/" target="_blank" title="FASHION Magazine — 北欧男装可持续时尚：简约但不简单的斯堪的纳维亚风格">FASHION Magazine — 北欧男装可持续时尚：简约但不简单的斯堪的纳维亚风格<span class="src">FASHION Magazine</span></a>
+    <a class="img-link" href="https://masculinesynergy.com/heliot-emil-fashion-brand/" target="_blank" title="Masculine Synergy — Heliot Emil：2025重新定义极简男装的丹麦品牌，野兽派×高级时装">Masculine Synergy — Heliot Emil：2025重新定义极简男装的丹麦品牌，野兽派×高级时装<span class="src">Masculine Synergy</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://fashionforum.dk/2024/08/06/berner-kuehl-takes-us-back-to-the-monochrome-set/" target="_blank" title="Berner Kühl 2024哥本哈根时装周 — Helmut Lang式朴素、近乎全单色的激进极简">Berner Kühl 2024哥本哈根时装周 — Helmut Lang式朴素、近乎全单色的激进极简<span class="src">Fashion Forum DK</span></a>
+    <a class="img-link" href="https://www.mrporter.com/en-tw/journal/fashion/nn07-men-style-25340828" target="_blank" title="MR PORTER — NN07「无国籍」理念：提升日常单品的极简哲学">MR PORTER — NN07「无国籍」理念：提升日常单品的极简哲学<span class="src">MR PORTER</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.lyst.co.uk/stories/contemporary-scandinavian-brands-to-know/" target="_blank" title="Lyst — 当代北欧品牌崛起：Our Legacy、Filippa K、Mfpen 死库存面料极简美学">Lyst — 当代北欧品牌崛起：Our Legacy、Filippa K、Mfpen 死库存面料极简美学<span class="src">Lyst</span></a>
+  </div>
+</div>
+<div class="card" data-tags="scene_blokecore">
+  <div class="card-header"><h3>scene_blokecore</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.thecoolhour.com/10-undeniably-cool-looks-to-nail-the-blokecore-aesthetic/" target="_blank" title="The Cool Hour — 10个教科书级Blokecore造型：返校风、90s丹宁、Bella Hadid秋季演绎">The Cool Hour — 10个教科书级Blokecore造型：返校风、90s丹宁、Bella Hadid秋季演绎<span class="src">The Cool Hour</span></a>
+    <a class="img-link" href="https://kvia.com/lifestyle/stacker-lifestyle/2024/08/30/beyond-blokecore-why-the-intersection-of-football-and-fashion-is-more-than-a-fad/" target="_blank" title="Stacker — 超越Blokecore：足球与时尚的交汇为何不只是昙花一现">Stacker — 超越Blokecore：足球与时尚的交汇为何不只是昙花一现<span class="src">Stacker</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://hypebae.com/2025/3/acne-studios-kappa-football-collaboration-collection-release-date" target="_blank" title="Hypebae — Acne Studios × Kappa 粉色火焰足球衫：奢侈Blokecore教科书">Hypebae — Acne Studios × Kappa 粉色火焰足球衫：奢侈Blokecore教科书<span class="src">Hypebae</span></a>
+    <a class="img-link" href="https://snkrdunk.com/en/magazine/2024/06/14/euro-2024-special-how-blokecore-is-kicking-up-a-fashion-storm/" target="_blank" title="SNKRDUNK — 欧洲杯2024特辑：Blokecore如何掀起时尚风暴，Off-White×Nike梦想球衣">SNKRDUNK — 欧洲杯2024特辑：Blokecore如何掀起时尚风暴，Off-White×Nike梦想球衣<span class="src">SNKRDUNK</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.ELLE.com.hk/fashion/what-is-blokecore-style-update" target="_blank" title="ELLE HK — Blackpink Jennie曼联球衣、Bella Hadid Balenciaga×Adidas">ELLE HK — Blackpink Jennie曼联球衣、Bella Hadid Balenciaga×Adidas<span class="src">ELLE HK</span></a>
+  </div>
+</div>
+<div class="card" data-tags="scene_cocktail">
+  <div class="card-header"><h3>scene_cocktail</h3><div class="en"></div></div>
+  <div class="card-stats">📸 4 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/39-mens-cocktail-attire-formal-ideas/" target="_blank" title="Modern Gentleman Magazine — 39套鸡尾酒礼服灵感：午夜蓝丝绒×象牙白衬衫的「午夜尊贵」">Modern Gentleman Magazine — 39套鸡尾酒礼服灵感：午夜蓝丝绒×象牙白衬衫的「午夜尊贵」<span class="src">Modern Gentleman Magazine</span></a>
+    <a class="img-link" href="https://luxe.digital/lifestyle/style/men-cocktail-attire-dress-code-guide/" target="_blank" title="Luxe Digital — 鸡尾酒礼服完整指南：Zegna、Tom Ford、Lanvin 晚宴夹克搭配">Luxe Digital — 鸡尾酒礼服完整指南：Zegna、Tom Ford、Lanvin 晚宴夹克搭配<span class="src">Luxe Digital</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.opumo.com/magazine/cocktail-attire-men/" target="_blank" title="OPUMO Magazine — 当代鸡尾酒礼服：祖母绿、酒红色图案丝绒作为主角单品的搭配法则">OPUMO Magazine — 当代鸡尾酒礼服：祖母绿、酒红色图案丝绒作为主角单品的搭配法则<span class="src">OPUMO Magazine</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.moderngentlemanmagazine.com/39-mens-cocktail-attire-formal-ideas/" target="_blank" title="Modern Gentleman Magazine — 「象牙之谜」造型：骨白色礼服×乌木黑衬衫，高对比经典">Modern Gentleman Magazine — 「象牙之谜」造型：骨白色礼服×乌木黑衬衫，高对比经典<span class="src">Modern Gentleman Magazine</span></a>
+  </div>
+</div>
+<div class="card" data-tags="scene_tenniscore">
+  <div class="card-header"><h3>scene_tenniscore</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.tennis.com/baseline/articles/best-tennis-fashion-moments-2024-federer-nadal-louis-vuitton-kostyuk-wimbledon-wedding-dress-osaka-us-open" target="_blank" title="Tennis.com — 2024最佳网球时尚时刻：Federer & Nadal LV「核心价值」Annie Leib">Tennis.com — 2024最佳网球时尚时刻：Federer & Nadal LV「核心价值」Annie Leib<span class="src">Tennis.com</span></a>
+    <a class="img-link" href="https://liveblogging-dapi.tennis.com/baseline/articles/year-tenniscore-zendaya-challengers-effect-transform-tennis-fashion-loewe-sinner-osaka-federer-nadal" target="_blank" title="Tennis.com — Tenniscore元年：Zendaya《挑战者》效应如何转变网球时尚，Jannik Sinn">Tennis.com — Tenniscore元年：Zendaya《挑战者》效应如何转变网球时尚，Jannik Sinn<span class="src">Tennis.com</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.voguehk.com/en/article/fashion/tenniscore-trend/" target="_blank" title="Vogue HK — Tenniscore终极指南：从运动场到日常的Polo衫与网球裙搭配">Vogue HK — Tenniscore终极指南：从运动场到日常的Polo衫与网球裙搭配<span class="src">Vogue HK</span></a>
+    <a class="img-link" href="https://www.flannels.com/stylenews/post/sports-club-90s-style" target="_blank" title="Flannels — Casablanca 网球俱乐部美学、Lacoste AW24巴黎时装周网球元素">Flannels — Casablanca 网球俱乐部美学、Lacoste AW24巴黎时装周网球元素<span class="src">Flannels</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://wwd.com/pop-culture/celebrity-news/brittany-mahomes-gucci-patrick-mahomes-wimbledon-1236480529/" target="_blank" title="WWD — Brittany Mahomes 身着Gucci网球风观赛温网2024">WWD — Brittany Mahomes 身着Gucci网球风观赛温网2024<span class="src">WWD</span></a>
+  </div>
+</div>
+<div class="card" data-tags="轻熟休闲">
+  <div class="card-header"><h3>轻熟休闲</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.thefashionisto.com/story/mango-richard-james-2026/" target="_blank" title="Mango x Richard James 2026 - 萨维尔街轻熟休闲英伦大片">Mango x Richard James 2026 - 萨维尔街轻熟休闲英伦大片<span class="src">The Fashionisto, 2026</span></a>
+    <a class="img-link" href="https://robbreport.com.sg/smart-casual-menswear-tips/" target="_blank" title="Robb Report 轻熟休闲穿搭法则 - '男装最主流的着装密码'">Robb Report 轻熟休闲穿搭法则 - '男装最主流的着装密码'<span class="src">Robb Report Singapore, 2024</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/courreges/slideshow/details" target="_blank" title="Courrèges 2026春夏男装 - 轻熟廓形现代演绎">Courrèges 2026春夏男装 - 轻熟廓形现代演绎<span class="src">Vogue Runway, 2025</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-menswear/undercover/slideshow/details" target="_blank" title="Undercover 2026春夏男装 - 日常奢华街头与正装融合">Undercover 2026春夏男装 - 日常奢华街头与正装融合<span class="src">Vogue Runway, 2025</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq-magazine.co.uk/article/joe-alwyn-bally-suit-2024" target="_blank" title="Joe Alwyn Bally 轻熟西装 - '高级工装' 红毯造型">Joe Alwyn Bally 轻熟西装 - '高级工装' 红毯造型<span class="src">GQ UK, 2024</span></a>
+    <a class="img-link" href="https://www.esquire.com/uk/style/fashion/a65249347/guide-to-preppy-style/" target="_blank" title="Esquire 轻熟休闲指南 - Chris Pine, Ryan Gosling 名人示范">Esquire 轻熟休闲指南 - Chris Pine, Ryan Gosling 名人示范<span class="src">Esquire UK, 2025</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://seoultrad.com/blazer-chino-outfit-men/" target="_blank" title="SeoulTrad 轻熟三公式 - Navy Blazer + Chino 组合拆解">SeoulTrad 轻熟三公式 - Navy Blazer + Chino 组合拆解<span class="src">SeoulTrad, 2026</span></a>
+    <a class="img-link" href="https://mengrip.com/what-can-men-wear-for-smart-casual/" target="_blank" title="MenGrip 轻熟休闲穿搭规则 - 简单规则打造精致日常">MenGrip 轻熟休闲穿搭规则 - 简单规则打造精致日常<span class="src">MenGrip, 2025</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://dunniotailor.com/blog/blazer-and-chinos-combinations.html" target="_blank" title="Dunnio Tailor Blazer+Chinos 完全指南 - 轻熟风社交媒体爆款组合">Dunnio Tailor Blazer+Chinos 完全指南 - 轻熟风社交媒体爆款组合<span class="src">Dunnio Tailor, 2026</span></a>
+  </div>
+</div>
+<div class="card" data-tags="街头潮流">
+  <div class="card-header"><h3>街头潮流</h3><div class="en"></div></div>
+  <div class="card-stats">📸 9 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.malemodelscene.net/menswear/nahmias-ss24/" target="_blank" title="NAHMIAS SS24 加州海岸灵感 - 手工扎染 + 拼接丹宁街潮大片">NAHMIAS SS24 加州海岸灵感 - 手工扎染 + 拼接丹宁街潮大片<span class="src">Male Model Scene, 2024</span></a>
+    <a class="img-link" href="https://www.designscene.net/2025/04/willy-chavarria-ss25-america.html" target="_blank" title="Willy Chavarria SS25 - Cholo Chinos + 工装街潮融合">Willy Chavarria SS25 - Cholo Chinos + 工装街潮融合<span class="src">Design Scene, 2025</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/prada" target="_blank" title="Prada 2025春夏男装 - Miuccia Prada x Raf Simons 街潮更新">Prada 2025春夏男装 - Miuccia Prada x Raf Simons 街潮更新<span class="src">Vogue Runway, 2024</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/fall-2024-menswear/louis-vuitton" target="_blank" title="Louis Vuitton FW24 - Pharrell 街头奢华顶峰之作">Louis Vuitton FW24 - Pharrell 街头奢华顶峰之作<span class="src">Vogue Runway, 2024</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e" target="_blank" title="Oasis Britpop 街头风格 - Noel & Liam Gallagher 90年代街潮档案">Oasis Britpop 街头风格 - Noel & Liam Gallagher 90年代街潮档案<span class="src">GQ Australia, 2025</span></a>
+    <a class="img-link" href="https://result.gq.com/gallery/men-of-the-year-party-2024" target="_blank" title="GQ MOTY 2024 派对街潮造型 - 好莱坞顶级明星街头穿搭">GQ MOTY 2024 派对街潮造型 - 好莱坞顶级明星街头穿搭<span class="src">GQ, 2024</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.designscene.net/2017/08/how-workwear-became-popular-in-street-cultures.html" target="_blank" title="工装街潮文化演进 - 从工厂到滑板场到T台">工装街潮文化演进 - 从工厂到滑板场到T台<span class="src">Design Scene</span></a>
+    <a class="img-link" href="https://www.thefader.com/2026/02/20/boy-london-fall-2026-collection-creative-director-can-tran-interview" target="_blank" title="Boy London 2026秋冬 - 英式朋克街潮重生">Boy London 2026秋冬 - 英式朋克街潮重生<span class="src">The FADER, 2026</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.anarchylabel.com/workwear-high-fashion-trends-brands/" target="_blank" title="工装高定趋势社交传播 - 街头潮流与T台融合">工装高定趋势社交传播 - 街头潮流与T台融合<span class="src">Anarchy Label, 2026</span></a>
+  </div>
+</div>
+<div class="card" data-tags="torpedo_sneakers">
+  <div class="card-header"><h3>torpedo_sneakers</h3><div class="en"></div></div>
+  <div class="card-stats">📸 7 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/article/prada-collapse-sneakers-trend" target="_blank" title="Prada Collapse 薄底跑鞋 — 奢侈薄底时代的开启">Prada Collapse 薄底跑鞋 — 奢侈薄底时代的开启<span class="src">Vogue</span></a>
+    <a class="img-link" href="https://www.gq.com/story/adidas-sl72-sneaker-comeback" target="_blank" title="Adidas SL72 — 1972奥运马拉松鞋的2024复兴">Adidas SL72 — 1972奥运马拉松鞋的2024复兴<span class="src">GQ</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/prada" target="_blank" title="Prada SS25 男装 — Collapse薄底跑鞋秀场亮相">Prada SS25 男装 — Collapse薄底跑鞋秀场亮相<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2025-menswear/dries-van-noten" target="_blank" title="Dries Van Noten SS25 — 薄底跑鞋配宽松西装">Dries Van Noten SS25 — 薄底跑鞋配宽松西装<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.gq.com/story/adidas-samba-gazelle-trend-2024" target="_blank" title="Adidas Samba/Gazelle — 被明星穿成2024年度鞋款">Adidas Samba/Gazelle — 被明星穿成2024年度鞋款<span class="src">GQ</span></a>
+    <div class="cat-label">🚶 街拍造型</div>
+    <a class="img-link" href="https://www.vogue.com/slideshow/best-street-style-paris-menswear-spring-2025" target="_blank" title="巴黎男装周街拍 — 薄底跑鞋×直筒裤的标准公式">巴黎男装周街拍 — 薄底跑鞋×直筒裤的标准公式<span class="src">Vogue</span></a>
+    <div class="cat-label">📱 社交平台</div>
+    <a class="img-link" href="https://www.highsnobiety.com/p/best-adidas-samba-outfits-men/" target="_blank" title="Highsnobiety — Samba/Gazelle/SL72 薄底三件套穿搭合集">Highsnobiety — Samba/Gazelle/SL72 薄底三件套穿搭合集<span class="src">Highsnobiety</span></a>
+  </div>
+</div>
+<div class="card" data-tags="whimsymaxxing">
+  <div class="card-header"><h3>whimsymaxxing</h3><div class="en"></div></div>
+  <div class="card-stats">📸 5 张参考图</div>
+  <div class="cat-list">
+    <div class="cat-label">📷 杂志大片</div>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-ready-to-wear/torisheju" target="_blank" title="Torishéju Spring 2026 — LVMH得奖者：层叠融合帽子、皮革×丝绸手工瓦楞表面，异想天开的解构奢华">Torishéju Spring 2026 — LVMH得奖者：层叠融合帽子、皮革×丝绸手工瓦楞表面，异想天开的解构奢华<span class="src">Vogue Runway</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/copenhagen-fall-2026/bonnetje" target="_blank" title="Bonnetje Copenhagen Fall 2026 — 男装解构×Kink暗语：趣味的织物操控实验">Bonnetje Copenhagen Fall 2026 — 男装解构×Kink暗语：趣味的织物操控实验<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">👗 秀场T台</div>
+    <a class="img-link" href="https://www.usnews.com/news/entertainment/articles/2025-01-22/van-beirendonck-offers-a-theatrical-ode-to-surreal-sartorialism-in-paris-menswear-collection" target="_blank" title="Walter Van Beirendonck FW2025 — 巴黎男装周超现实戏剧颂歌：Edward Scissorh">Walter Van Beirendonck FW2025 — 巴黎男装周超现实戏剧颂歌：Edward Scissorh<span class="src">US News/AP</span></a>
+    <a class="img-link" href="https://www.vogue.com/fashion-shows/spring-2026-couture/germanier" target="_blank" title="Germanier Spring 2026 Couture — 升级再造Berluti夹克前后倒置：玩味的高定解构">Germanier Spring 2026 Couture — 升级再造Berluti夹克前后倒置：玩味的高定解构<span class="src">Vogue Runway</span></a>
+    <div class="cat-label">🌟 明星名人</div>
+    <a class="img-link" href="https://www.showstudio.com/cms/documents/3607/DVN_PRESS_RELEASE__MEN_AW_25-26.pdf" target="_blank" title="Dries Van Noten AW25 — 蓟花喷绘×金属尖鞋带系腰：贵族的顽皮不羁">Dries Van Noten AW25 — 蓟花喷绘×金属尖鞋带系腰：贵族的顽皮不羁<span class="src">SHOWstudio</span></a>
+  </div>
+</div>
+</div>
+<div class="footer">Fashion Style Advisor · 风格参考图库 · 2026</div>
+<script>
+function filter(tag) {
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.display = c.dataset.tags.includes(tag) ? '' : 'none';
+  });
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function filterAll() {
+  document.querySelectorAll('.card').forEach(c => c.style.display = '');
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body></html>

@@ -263,10 +263,15 @@ def build_push(outfit_dir):
 
     # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
-    header = f"👔 {style_name} · {outfit_name}\n📅 {data.get('date', '')}"
-    if data.get('weather'):
-        header += f"\n🌤 {data['weather']}"
-    parts.append(header)
+    header_lines = [
+        f"👔 {style_name}",
+        f"📌 {outfit_name}",
+        f"📅 {data.get('date', '')}",
+    ]
+    weather_str = data.get('weather', '')
+    if weather_str:
+        header_lines.append(f"🌤 {weather_str}")
+    parts.append('\n'.join(header_lines))
 
     # ━━━ 效果图 ━━━
     ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))

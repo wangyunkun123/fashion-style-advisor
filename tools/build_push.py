@@ -306,13 +306,13 @@ def build_push(outfit_dir):
             e = {'HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍'}.get(it['id'].split('-')[0],'🔹')
             item_lines.append(f"{e} {it['name']} `{it['id']}`")
     if item_lines:
-        parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n'.join(item_lines))
+        parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n\n'.join(item_lines))
 
     # ━━━ 参考图片 ━━━
     ref_imgs = get_random_images(style_id, 3)
     if ref_imgs:
         rlines = [f"📸 [{i['caption']}]({i['url']}) — {i['source']}" for i in ref_imgs]
-        parts.append("━━━ 📸 风格参考图 ━━━\n\n" + '\n'.join(rlines))
+        parts.append("━━━ 📸 风格参考图 ━━━\n\n" + '\n\n'.join(rlines))
 
     # ━━━ 配色 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')

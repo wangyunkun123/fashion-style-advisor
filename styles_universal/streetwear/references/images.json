@@ -1,0 +1,79 @@
+{
+  "style_id": "streetwear",
+  "style_name": "街头潮流",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/menswear/nahmias-ss24/",
+          "caption": "NAHMIAS SS24 加州海岸灵感 - 手工扎染 + 拼接丹宁街潮大片",
+          "source": "Male Model Scene, 2024"
+        },
+        {
+          "url": "https://www.designscene.net/2025/04/willy-chavarria-ss25-america.html",
+          "caption": "Willy Chavarria SS25 - Cholo Chinos + 工装街潮融合",
+          "source": "Design Scene, 2025"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/prada",
+          "caption": "Prada 2025春夏男装 - Miuccia Prada x Raf Simons 街潮更新",
+          "source": "Vogue Runway, 2024"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2024-menswear/louis-vuitton",
+          "caption": "Louis Vuitton FW24 - Pharrell 街头奢华顶峰之作",
+          "source": "Vogue Runway, 2024"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e",
+          "caption": "Oasis Britpop 街头风格 - Noel & Liam Gallagher 90年代街潮档案",
+          "source": "GQ Australia, 2025"
+        },
+        {
+          "url": "https://result.gq.com/gallery/men-of-the-year-party-2024",
+          "caption": "GQ MOTY 2024 派对街潮造型 - 好莱坞顶级明星街头穿搭",
+          "source": "GQ, 2024"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://www.designscene.net/2017/08/how-workwear-became-popular-in-street-cultures.html",
+          "caption": "工装街潮文化演进 - 从工厂到滑板场到T台",
+          "source": "Design Scene"
+        },
+        {
+          "url": "https://www.thefader.com/2026/02/20/boy-london-fall-2026-collection-creative-director-can-tran-interview",
+          "caption": "Boy London 2026秋冬 - 英式朋克街潮重生",
+          "source": "The FADER, 2026"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.anarchylabel.com/workwear-high-fashion-trends-brands/",
+          "caption": "工装高定趋势社交传播 - 街头潮流与T台融合",
+          "source": "Anarchy Label, 2026"
+        }
+      ]
+    }
+  }
+}

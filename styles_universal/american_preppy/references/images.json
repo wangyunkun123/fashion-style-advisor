@@ -1,0 +1,79 @@
+{
+  "style_id": "american_preppy",
+  "style_name": "美式预科风",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://10magazine.com/10-men-issue-63-editors-letter-tm63/",
+          "caption": "10 Men Issue 63 - Classic, Craft, Nostalgia 预科经典主题封面大片",
+          "source": "10 Magazine, 2026年3月"
+        },
+        {
+          "url": "https://slman.com/style/fashion/preppy-fashion-style",
+          "caption": "SLMan 新预科风趋势报告 - Drake's, ALD, Rowing Blazers 造型大片",
+          "source": "SLMan Magazine, 2025"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://wwd.com/runway/mens-spring-2026/florence/tommy-hilfiger/review/",
+          "caption": "Tommy Hilfiger 2026春夏 Pitti Uomo 预科风秀场",
+          "source": "WWD Runway, 2025"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/dior-men",
+          "caption": "Dior Men 2025春夏 - Jonathan Anderson 预科风首秀",
+          "source": "Vogue Runway, 2024"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.harrods.com/en-me/c/stories/men/how-to-wear-preppy-trend",
+          "caption": "Harrods 2025预科风穿搭指南 - Tyler The Creator, A$AP Rocky 名人示范",
+          "source": "Harrods Stories, 2025"
+        },
+        {
+          "url": "https://www.esquire.com/uk/style/fashion/a65249347/guide-to-preppy-style/",
+          "caption": "Esquire 预科风格指南 - Jacob Elordi, Harry Styles 名人穿搭解析",
+          "source": "Esquire UK, 2025"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://sneakerspirit.courir.com/en/how-did-the-preppy-look-make-its-way-into-our-wardrobes/",
+          "caption": "预科风街拍演进 - 从哈佛校园到都市街头",
+          "source": "Sneaker Spirit, 2025"
+        },
+        {
+          "url": "https://en.socportal.info/en/news/preppy-style-or-looking-like-you-went-to-harvard-is-back-in-vogue/",
+          "caption": "预科风全球街拍趋势 - 常春藤风格回归",
+          "source": "SOCPORTAL, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.mrporter.com/en-tw/journal/fashion/preppy-style-25272788",
+          "caption": "MR PORTER 现代预科风指南 - 社交平台爆款搭配",
+          "source": "MR PORTER Journal, 2025"
+        }
+      ]
+    }
+  }
+}

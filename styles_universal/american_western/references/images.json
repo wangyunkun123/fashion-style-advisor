@@ -1,0 +1,79 @@
+{
+  "style_id": "american_western",
+  "style_name": "美式西部",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://vman.com/article/guest-in-residence-fall-2025-mens-collection/",
+          "caption": "Guest In Residence 2025秋冬男装 - Gigi Hadid 西部怀旧工装大片",
+          "source": "V Magazine, 2025"
+        },
+        {
+          "url": "https://www.malemodelscene.net/menswear/ouest-paris-ss26/",
+          "caption": "OUEST Paris SS26 - NASA工程师遇見牛仔的美国男性气质重构",
+          "source": "Male Model Scene, 2026"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2024-menswear/louis-vuitton/slideshow/collection",
+          "caption": "Louis Vuitton 2024秋冬男装 - Pharrell 西部牛仔完整秀场图集",
+          "source": "Vogue Runway, 2024"
+        },
+        {
+          "url": "https://result.gq.com/story/what-is-cowboycore-2024",
+          "caption": "GQ 'Cowboycore' - 2024定义性西部美学趋势报告",
+          "source": "GQ, 2024"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://esquire.com.au/glen-powell-style/",
+          "caption": "Glen Powell 西部风格 - 复古Levi's 501 + 牛仔靴 + 西部腰带公式",
+          "source": "Esquire Australia, 2024"
+        },
+        {
+          "url": "https://result.gq.com/gallery/gq-men-of-the-year-2024-best-dressed",
+          "caption": "GQ MOTY 2024 好莱坞西部主题 - Dwayne Johnson, Pharrell 等名人西部造型",
+          "source": "GQ, 2024"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://vogue.sg/best-street-style-paris-mens-fashion-week-fall-winter-2024-shows/",
+          "caption": "巴黎男装周 FW24 西部风街拍精选 - Vogue Singapore",
+          "source": "Vogue Singapore, 2024"
+        },
+        {
+          "url": "https://www.mrporter.com/en-us/journal/fashion/how-to-wear-western-cowboy-style-2023-24564096",
+          "caption": "MR PORTER 三种西部风格穿法 - 牛仔靴都市实战指南",
+          "source": "MR PORTER Journal, 2023"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.essence.com/fashion/pharrell-louis-vuitton-fall-winter-2024-collection-recap/",
+          "caption": "Pharrell LV FW24 西部社交话题 - #Cowboycore 趋势引爆",
+          "source": "Essence, 2024"
+        }
+      ]
+    }
+  }
+}

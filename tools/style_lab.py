@@ -1352,22 +1352,43 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
             shutil.copy2(src, os.path.join(shengtu_dir, f'{prefix}_{filename}'))
             copied_prefixes.add(prefix)
 
-    # ── 5. 抠图 → items/（无抠图时回退原始图）──
+    # ── 5. 抠图 → items/（使用服装档案 ID 映射）──
+    ENHANCED_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'enhanced')
+    # 构建 ID → enhanced cutout 文件名映射（与 sync_items.py 相同逻辑）
+    id_to_cutout = {}
+    for cid, filename in wardrobe_index.items():
+        base = os.path.splitext(filename)[0]
+        cutout_name = f'{base}_cutout.png'
+        cutout_path = os.path.join(ENHANCED_DIR, cutout_name)
+        if os.path.exists(cutout_path):
+            id_to_cutout[cid] = cutout_name
+        else:
+            # 模糊匹配：日期模式
+            date_match = re.search(r'(\d{8})_(\d{4})_(\d{2})_(\d{3})', filename)
+            if date_match:
+                pattern = f"{date_match.group(1)}_{date_match.group(2)}"
+                for fname in os.listdir(ENHANCED_DIR) if os.path.exists(ENHANCED_DIR) else []:
+                    if pattern in fname and fname.endswith('_cutout.png'):
+                        id_to_cutout[cid] = fname
+                        break
+
     for item in all_items:
         cid = item['clothing_id']
         cat = item.get('category', '')
-        enhanced_dir = os.path.join(PROJ_DIR, 'wardrobe', 'enhanced')
         found = False
 
-        # 5a. 先找抠图
-        if os.path.exists(enhanced_dir):
-            for fname in os.listdir(enhanced_dir):
-                if fname.startswith(cid + '_') and fname.endswith('_cutout.png'):
-                    shutil.copy2(os.path.join(enhanced_dir, fname), os.path.join(items_dir, fname))
-                    found = True
-                    break
+        # a. 用 ID 映射从 enhanced/ 复制抠图
+        if cid in id_to_cutout:
+            cutout_name = id_to_cutout[cid]
+            src = os.path.join(ENHANCED_DIR, cutout_name)
+            if os.path.exists(src):
+                # 保持原名但加 ID 前缀
+                dst_name = f"{cid}_{cutout_name}"
+                shutil.copy2(src, os.path.join(items_dir, dst_name))
+                found = True
+
         if not found:
-            # 5b. 从已有 outfits 中找
+            # b. 从已有 outfits 中找
             for od in os.listdir(os.path.join(PROJ_DIR, 'outfits')):
                 odir = os.path.join(PROJ_DIR, 'outfits', od, 'items')
                 if not os.path.isdir(odir):
@@ -1379,8 +1400,9 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
                         break
                 if found:
                     break
+
         if not found:
-            # 5c. 回退：用原始 wardrobe 图片
+            # c. 回退：用原始 wardrobe 图片
             filename = wardrobe_index.get(cid)
             if filename:
                 cat_dir = CATEGORY_DIR_MAP.get(cat, '')

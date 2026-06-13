@@ -54,7 +54,7 @@ def prep(path, prefix, w, h):
     scale=min(iw/ow,ih/oh)*0.82; nw,nh=int(ow*scale),int(oh*scale)
     if img.mode!='RGBA': img=img.convert('RGBA')
     img=img.resize((nw,nh),Image.LANCZOS)
-    fixed={'HAT-':0,'JK-':10,'TS-':-10,'LS-':-8,'SHIRT-':-8,'TANK-':-8}.get(prefix)
+    fixed={'HAT-':0,'JK-':0,'TS-':-10,'LS-':-8,'SHIRT-':-8,'TANK-':-8}.get(prefix)
     if fixed is not None and fixed!=0: img=img.rotate(fixed,expand=True,resample=Image.BICUBIC)
     elif fixed is None:
         xs,ys=[],[]

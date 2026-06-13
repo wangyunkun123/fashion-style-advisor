@@ -19,7 +19,7 @@ A线(安全推荐) 与 B线(探索推荐) 以 3:1 比例交替运行。
   python3 tools/style_lab.py --explore TS-002 32 晴 日常
 """
 
-import os, sys, json, glob, re
+import os, sys, json, glob, re, urllib.parse
 from datetime import datetime
 from collections import defaultdict
 
@@ -1535,10 +1535,12 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         print(f"  [B线] Git push 失败: {e}")
 
     rel = os.path.relpath(composite_jpg, PROJ_DIR)
+    # URL 编码中文路径
+    encoded_rel = urllib.parse.quote(rel, safe='/')
     if commit_hash:
-        cdn_url = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit_hash}/{rel}'
+        cdn_url = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit_hash}/{encoded_rel}'
     else:
-        cdn_url = f'{CDN_BASE}/{rel}'
+        cdn_url = f'{CDN_BASE}/{encoded_rel}'
 
     return outfit_dir, composite_jpg, cdn_url
 

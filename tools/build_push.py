@@ -136,7 +136,7 @@ def load_outfit_data(outfit_dir):
         data['style_raw'] = m.group(1).strip()
 
     # 提取天气
-    m = re.search(r'天气[：:]\s*(.+)', text)
+    m = re.search(r'天气.*?[：:]\s*(.+)', text)
     if m:
         data['weather'] = m.group(1).strip()
 

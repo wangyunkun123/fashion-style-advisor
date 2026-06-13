@@ -644,7 +644,80 @@
       "formality": "ultra_casual",
       "scene": "outdoor",
       "aesthetic": "romantic"
+    },
+    "poetcore": {
+      "name_zh": "诗人美学",
+      "name_en": "Poetcore",
+      "parent": "french",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "romantic"
+    },
+    "whimsymaxxing": {
+      "name_zh": "趣乐极繁",
+      "name_en": "Whimsymaxxing",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "avant_garde"
+    },
+    "rugged_comfort": {
+      "name_zh": "粗砺舒适",
+      "name_en": "Rugged Comfort",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "retro"
+    },
+    "detention_core": {
+      "name_zh": "叛逆学长风",
+      "name_en": "Detention-Core",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "retro"
+    },
+    "quarter_zip_revival": {
+      "name_zh": "1/4拉链复兴",
+      "name_en": "Quarter-Zip Revival",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "workplace",
+      "aesthetic": "retro"
+    },
+    "torpedo_sneakers": {
+      "name_zh": "薄底跑鞋风",
+      "name_en": "Torpedo Sneakers",
+      "parent": "italian",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal"
+    },
+    "regency_romantic": {
+      "name_zh": "摄政浪漫风",
+      "name_en": "Regency Romantic",
+      "parent": "british",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "romantic"
+    },
+    "rugged_luxury": {
+      "name_zh": "粗砺奢华",
+      "name_en": "Rugged Luxury",
+      "parent": "italian",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "outdoor",
+      "aesthetic": "retro"
     }
   },
-  "_total_styles": 41
+  "_total_styles": 49,
+  "_discover_note": "2026-06-13 自动发现新增8个2025-2026新兴风格: Poetcore, Whimsymaxxing, Rugged Comfort, Detention-Core, Quarter-Zip Revival, Torpedo Sneakers, Regency Romantic, Rugged Luxury"
 }

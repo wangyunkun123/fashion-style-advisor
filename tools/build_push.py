@@ -254,24 +254,19 @@ def build_push(outfit_dir):
     style_id = match_style_id(data) or 'japanese_city_boy'
     encyc = load_encyclopedia(style_id)
     style = load_style_fingerprint(style_id)
-
-    # 取主单品（有评分的）
     main_items = [it for it in data['items'] if it['score'] and it['score'] != '—']
     acc_items = [it for it in data['items'] if it['score'] == '—' or not it['score']]
-
-    # 构建推送
-    S = '\n\n'  # 段落分隔
-    lines = []
     style_name = style.get('name_zh', '日系CityBoy') if style else '今日推荐'
 
-    # ━━━ 标题 ━━━
+    B = '\n\n'  # 段落间双换行
+    parts = []
+
+    # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
-    lines.append(f"👔 {style_name} · {outfit_name}")
-    date_str = data.get('date', '')
-    lines.append(f"📅 {date_str}")
-    weather_str = data.get('weather', '')
-    if weather_str:
-        lines.append(f"🌤 {weather_str}")
+    header = f"👔 {style_name} · {outfit_name}\n📅 {data.get('date', '')}"
+    if data.get('weather'):
+        header += f"\n🌤 {data['weather']}"
+    parts.append(header)
 
     # ━━━ 效果图 ━━━
     ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
@@ -279,72 +274,57 @@ def build_push(outfit_dir):
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
     if ai_paths:
         rel = os.path.relpath(ai_paths[0], PROJ_DIR)
-        lines.append(f"![效果图]({CDN_BASE}/{rel})")
+        parts.append(f"![效果图]({CDN_BASE}/{rel})")
 
     # ━━━ 风格故事 ━━━
-    story_parts = []
-    if encyc and encyc.get('origin'):
-        story_parts.append(encyc['origin'])
-    if encyc and encyc.get('quote'):
-        story_parts.append(f"💬 {encyc['quote']}")
-    if encyc and encyc.get('encyclopedia_url'):
-        story_parts.append(f"📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
-    if story_parts:
-        lines.append(f"━━━ 📖 风格故事 ━━━\n" + '\n\n'.join(story_parts))
+    if encyc:
+        story = []
+        if encyc.get('origin'):
+            story.append(encyc['origin'])
+        if encyc.get('quote'):
+            story.append(f"💬 {encyc['quote']}")
+        if encyc.get('encyclopedia_url'):
+            story.append(f"📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
+        if story:
+            parts.append("━━━ 📖 风格故事 ━━━\n\n" + '\n\n'.join(story))
 
     # ━━━ 今日搭配 ━━━
     item_lines = []
     for it in main_items:
-        cid = it['id']
-        name = it['name']
+        cid = it['id']  ;  name = it['name']
         score_info = get_item_score(cid, style_id)
         score = score_info['score'] if score_info else '?'
-
         key_reason = get_key_item_reason(cid, style_id)
-        emoji_map = {'SHIRT': '👔', 'TS': '👕', 'LS': '🧥', 'JK': '🧥', 'PT': '👖',
-                     'SH': '🩳', 'SHOE': '👟', 'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒',
-                     'SUN': '🕶️', 'ACC': '💍', 'TANK': '🎽'}
-        emoji = emoji_map.get(cid.split('-')[0], '👔')
-
+        emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
         reason = key_reason or it.get('reason', '')
         score_str = f"{score}分" if isinstance(score, int) else str(score)
-        item_lines.append(f"{emoji} **{name}**")
-        item_lines.append(f"`{cid}` · 匹配度 {score_str}")
+        item_lines.append(f"{emoji} **{name}**\n`{cid}` · 匹配度 {score_str}")
         if reason:
             item_lines.append(f"💡 {reason}")
-
     if acc_items:
         for it in acc_items:
-            emoji_map2 = {'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒', 'SUN': '🕶️', 'ACC': '💍'}
-            emoji = emoji_map2.get(it['id'].split('-')[0], '🔹')
-            item_lines.append(f"{emoji} {it['name']} `{it['id']}`")
-
-    lines.append(f"━━━ 👔 今日搭配 ━━━\n" + '\n'.join(item_lines))
+            e = {'HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍'}.get(it['id'].split('-')[0],'🔹')
+            item_lines.append(f"{e} {it['name']} `{it['id']}`")
+    if item_lines:
+        parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n'.join(item_lines))
 
     # ━━━ 参考图片 ━━━
     ref_imgs = get_random_images(style_id, 3)
     if ref_imgs:
-        img_lines = []
-        for i, img in enumerate(ref_imgs):
-            img_lines.append(f"📸 [{img['caption']}]({img['url']}) — {img['source']}")
-        lines.append(f"━━━ 📸 风格参考图 ━━━\n" + '\n'.join(img_lines))
+        rlines = [f"📸 [{i['caption']}]({i['url']}) — {i['source']}" for i in ref_imgs]
+        parts.append("━━━ 📸 风格参考图 ━━━\n\n" + '\n'.join(rlines))
 
     # ━━━ 配色 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
     if color_logic:
-        lines.append(f"━━━ 🎨 配色 ━━━\n{color_logic}")
+        parts.append(f"━━━ 🎨 配色 ━━━\n\n{color_logic}")
 
     # ━━━ 换个风格 ━━━
-    alt_styles = [('korean_minimal', '韩系简约'), ('clean_fit', 'Clean Fit'),
-                  ('smart_casual', '轻熟休闲'), ('athleisure_sport', '运动休闲')]
-    alt_names = []
-    for alt_id, alt_name in alt_styles:
-        if alt_id != style_id:
-            alt_names.append(f"[{alt_name}]({CDN_BASE}/styles_universal/{alt_id}/encyclopedia.md)")
-    lines.append(f"━━━ 🔄 今天也适合 ━━━\n" + ' · '.join(alt_names[:3]))
+    alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
+    alt_names = [f"[{n}]({CDN_BASE}/styles_universal/{i}/encyclopedia.md)" for i,n in alt_styles if i != style_id]
+    parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
-    content = '\n\n'.join(lines)
-    return content, style_name
+    return B.join(parts), style_name
 
 
 # ============================================================

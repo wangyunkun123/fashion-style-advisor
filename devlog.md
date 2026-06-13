@@ -69,3 +69,18 @@
 用户指定风格 → style_matcher 排名 → 候选单品 → 搭配推荐
 未指定风格 → auto_suggest(天气,场合) → 自动匹配 → 搭配推荐
 ```
+
+
+## 2026-06-13: 用户打分系统上线
+
+### 设计
+三级评分：⭐⭐⭐满意 → ⭐⭐一般 → ⭐失望(二级反馈)
+系统：templates/rating.html + wechat_control.py /rate端点 + rating_analyzer.py
+
+### 测试结果
+10套穿搭评分验证：正确识别日系City Boy为偏好风格(3.0/3)，Clean Fit为中性(1.8/3)，度假/街头为不匹配(1.0/3)
+
+### 核心文件
+- templates/rating.html — 移动端评分页面
+- tools/rating_analyzer.py — 偏好分析引擎
+- outfits/*/rating.json — 评分数据(.gitignore)

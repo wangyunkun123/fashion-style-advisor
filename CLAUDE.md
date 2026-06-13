@@ -32,7 +32,8 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"推送穿搭"** → `python3 tools/build_push.py <outfit_dir>` — 百科增强推送（冷知识+单品解释+配色+备选风格）
 - **"风格排名"** → `python3 tools/style_matcher.py <style_id>`
 - **"风格矩阵"** → `python3 tools/style_scorer.py --matrix`
-- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → 微信推送
+- **"分析偏好"** → `python3 tools/rating_analyzer.py --report`
+- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → build_push推送
 
 ## 微信推送
 首次同时发双版，用户点击链接选择偏好，之后按偏好推送。
@@ -49,6 +50,21 @@ python3 tools/build_push.py --set simple|rich|both     # 设置偏好
 ```
 > 用户也可通过微信消息底部的链接点击设置，无需命令行。需要 ngrok 运行中。
 > 完整生图流程：`outfit.md` → `generate.py` → `sync_items.py` → `composite_v2.py` → `git push` → `build_push.py`
+
+## 用户打分
+推送底部自动带评分链接。三级评分 + 偏好学习。
+
+| 评分 | 含义 | 系统动作 |
+|------|------|---------|
+| ⭐⭐⭐ | 满意 | 增加该风格权重 + 单品优先级提升 |
+| ⭐⭐ | 一般 | 累积≥3次后分析重合点，降低频率 |
+| ⭐ | 失望 | 弹出二级反馈(风格/场景/搭配/单品) → 标记为不推荐 |
+
+```bash
+python3 tools/rating_analyzer.py --report    # 月度偏好报告
+python3 tools/rating_analyzer.py --summary   # 简要统计
+```
+数据存储在 `outfits/<id>/rating.json`（已加入 .gitignore），不提交到 Git。
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing

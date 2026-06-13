@@ -1395,17 +1395,19 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
     else:
         wear_tip = '以锚点单品为视觉焦点'
 
-    # 构造风格笔记（每条 ≤ 38 字符）
-    anchor_tip = claude_tip[:24] + '..' if len(claude_tip) > 26 else claude_tip
-    anchor_note = f'锚点 {anchor_id}：{anchor_tip}' if anchor_tip else f'锚点：{anchor_color}{anchor_cat}'
-    if len(anchor_note) > 38:
-        anchor_note = anchor_note[:36] + '..'
+    # 构造风格笔记（每条 ≤ 18 字符，适配 composite 卡片宽度）
+    anchor_tip_short = claude_tip[:12] + '..' if len(claude_tip) > 14 else claude_tip
+    anchor_note = f'锚点{anchor_id}：{anchor_tip_short}' if anchor_tip_short else f'锚点：{anchor_color}{anchor_cat}'
+    if len(anchor_note) > 18:
+        anchor_note = anchor_note[:16] + '..'
+
+    bold_label = '大胆跨界' if boldness == 'leap' else '微调探索'
 
     style_notes_lines = [
-        f'- {style_name}：{style_desc[:26]}',
+        f'- {style_name}：{style_desc[:12]}',
         f'- {anchor_note}',
         f'- 穿法：{wear_tip}',
-        f'- {bold_tag} {"大胆跨界" if boldness == "leap" else "微调探索"}',
+        f'- [{bold_label}] 新方向尝试',
     ]
 
     outfit_md = f"""# {style_name} B线探索穿搭

@@ -124,14 +124,14 @@ def parse_style_info(outfit_dir):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m:
                     v = m.group(1).strip().replace('**', '')
-                    if v and len(v) <= 38:
+                    if v and len(v) <= 18:
                         notes.append(v)
                 continue
             if in_section:
                 if line.strip().startswith('##') or line.strip().startswith('---'):
                     break
                 s = line.strip().lstrip('- ').strip()
-                if s and len(s) <= 38:
+                if s and len(s) <= 18:
                     notes.append(s)
         if notes:
             return notes[:5]
@@ -164,8 +164,8 @@ def parse_style_info(outfit_dir):
     if occasion:
         notes.append(f'{occasion}穿搭')
 
-    # 从单品表格提取关键单品名
-    item_names = []
+    # 从单品表格提取风格提示（选品理由列）
+    reasons = []
     in_table = False
     for line in lines:
         if '单品清单' in line:
@@ -174,12 +174,18 @@ def parse_style_info(outfit_dir):
             break
         if in_table and line.startswith('|') and '---' not in line:
             cells = [c.strip().replace('**', '') for c in line.split('|')]
-            if len(cells) >= 4:
-                name = cells[3]
-                if name and name not in ('单品', '名称', '') and len(name) < 15:
-                    item_names.append(name)
-    if item_names:
-        notes.append(f'核心单品：{"、".join(item_names[:3])}')
+            if len(cells) >= 6:
+                reason = cells[5]  # A线表格第6列是选品理由
+            elif len(cells) >= 5:
+                reason = cells[4]  # B线表格第5列是选品理由
+            else:
+                continue
+            if reason and reason not in ('选品理由', '') and len(reason) <= 18:
+                reasons.append(reason)
+    # 取前2条作为风格提示
+    for r in reasons[:2]:
+        if r not in notes:
+            notes.append(r)
 
     return notes[:5]
 

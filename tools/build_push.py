@@ -264,14 +264,13 @@ def build_push(outfit_dir):
     # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
     header_lines = [
-        f"👔 {style_name}",
         f"📌 {outfit_name}",
         f"📅 {data.get('date', '')}",
     ]
     weather_str = data.get('weather', '')
     if weather_str:
         header_lines.append(f"🌤 {weather_str}")
-    parts.append('\n'.join(header_lines))
+    parts.append('\n\n'.join(header_lines))
 
     # ━━━ 效果图 ━━━
     ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
@@ -329,7 +328,7 @@ def build_push(outfit_dir):
     alt_names = [f"[{n}]({CDN_BASE}/styles_universal/{i}/encyclopedia.md)" for i,n in alt_styles if i != style_id]
     parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
-    return B.join(parts), style_name
+    return B.join(parts), style_name, outfit_name
 
 
 # ============================================================
@@ -348,10 +347,12 @@ def main():
 
     preview = '--preview' in sys.argv
 
-    content, style_name = build_push(outfit_dir)
+    content, style_name, outfit_name = build_push(outfit_dir)
     if content is None:
         print(f"❌ {style_name}")
         return
+
+    push_title = outfit_name if outfit_name else style_name
 
     if preview:
         print("=" * 50)
@@ -359,16 +360,14 @@ def main():
         print("=" * 50)
         print(content)
         print("\n" + "=" * 50)
-        print("✅ 预览完成。使用以下命令发送:")
-        print(f'   python3 -c "import sys; sys.path.insert(0,\'tools\'); from wechat_control import push_wechat; push_wechat(\'{style_name}\', open(\'/tmp/push_content.txt\').read())"')
-        # Save for easy copy
+        print(f"✅ 预览完成。使用以下命令发送:")
+        print(f'   python3 -c "import sys; sys.path.insert(0,\'tools\'); from wechat_control import push_wechat; push_wechat(\'{push_title}\', open(\'/tmp/push_content.txt\').read())"')
         with open('/tmp/push_content.txt', 'w') as f:
             f.write(content)
     else:
         sys.path.insert(0, os.path.join(BASE_DIR))
         from wechat_control import push_wechat
-        title = f'👔 {style_name}'
-        result = push_wechat(title, content)
+        result = push_wechat(push_title, content)
         if result:
             print(f"✅ 推送成功 (pushid={result.get('data',{}).get('pushid','?')})")
         else:

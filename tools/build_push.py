@@ -19,6 +19,14 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 # jsDelivr base for encyclopedia links
 CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
 
+# 天气模块
+sys.path.insert(0, os.path.join(BASE_DIR))
+try:
+    from weather_advisor import fetch_weather, analyze_weather, weather_line, weather_advice
+except ImportError:
+    weather_line = weather_advice = analyze_weather = None
+    def fetch_weather(loc): return None
+
 
 # ============================================================
 # 1. 内容提取
@@ -268,12 +276,16 @@ def build_push(outfit_dir):
     # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
     header_lines = [
-        f"📌 {outfit_name}",
+        f"👔 {outfit_name}",
         f"📅 {data.get('date', '')}",
     ]
-    weather_str = data.get('weather', '')
-    if weather_str:
-        header_lines.append(f"🌤 {weather_str}")
+    # 优先用实时天气，回退到md中的天气
+    wdata = fetch_weather('Beijing')
+    analysis = analyze_weather(wdata) if wdata else None
+    if analysis:
+        header_lines.append(weather_line(analysis))
+    elif data.get('weather'):
+        header_lines.append(f"🌤 {data['weather']}")
     parts.append('\n\n'.join(header_lines))
 
     # ━━━ 效果图 ━━━
@@ -326,6 +338,12 @@ def build_push(outfit_dir):
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
     if color_logic:
         parts.append(f"━━━ 🎨 配色 ━━━\n\n{color_logic}")
+
+    # ━━━ 天气提醒 ━━━
+    if analysis:
+        advice = weather_advice(analysis)
+        if advice:
+            parts.append("━━━ ⚠️ 天气提醒 ━━━\n\n" + '\n\n'.join(advice))
 
     # ━━━ 换个风格 ━━━
     alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]

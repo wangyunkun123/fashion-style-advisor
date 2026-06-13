@@ -40,6 +40,7 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 5. `wechat_control.py` 内 `push_wechat()` 推送效果图
 
 > ⚠️ items/ 文件名必须为 `{ID}_{名称}_cutout.png` 格式（如 `SHIRT-004_黑白格纹长袖衬衫_cutout.png`），否则 composite_v2 找不到衣服。用 `sync_items.py` 自动处理。
+> ⚠️ 微信推送图片必须用 jsDelivr CDN URL（`cdn.jsdelivr.net/gh/...`），不能用 GitHub Raw（`raw.githubusercontent.com` 国内慢/被阻断）。`push_wechat()` 已内置自动转换。
 
 ## 手机远程控制
 - 启动：`bash tools/start_wechat_control.sh`

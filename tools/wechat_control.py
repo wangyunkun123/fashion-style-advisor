@@ -117,7 +117,13 @@ tasks = TaskManager()
 
 # ── Server酱推送 ──────────────────────────────────────
 def push_wechat(title, content=""):
-    """推送到微信"""
+    """推送到微信。自动将 GitHub Raw URL 转换为 jsDelivr CDN（国内访问更快）"""
+    # 自动转换 GitHub Raw → jsDelivr CDN
+    content = re.sub(
+        r'https://raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/(.+)',
+        r'https://cdn.jsdelivr.net/gh/\1/\2@\3/\4',
+        content
+    )
     url = f"https://sctapi.ftqq.com/{SENDKEY}.send"
     payload = {"title": title, "desp": content}
     data = json.dumps(payload).encode('utf-8')

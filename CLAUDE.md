@@ -29,9 +29,10 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 
 ## 操作指令
 - **"推荐穿搭"** → 读取 wardrobe + 天气 → 风格匹配筛选 → 给出搭配方案
+- **"推送穿搭"** → `python3 tools/build_push.py <outfit_dir>` — 百科增强推送（冷知识+单品解释+配色+备选风格）
 - **"风格排名"** → `python3 tools/style_matcher.py <style_id>`
 - **"风格矩阵"** → `python3 tools/style_scorer.py --matrix`
-- **"生成效果图"** → 完整流程：Seedream生图 → 同步抠图 → composite_v2排版 → git push → 微信推送
+- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → build_push推送
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing

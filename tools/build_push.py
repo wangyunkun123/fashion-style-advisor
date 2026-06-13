@@ -1,0 +1,327 @@
+#!/usr/bin/env python3
+"""
+推送文案生成器 — 结合风格库百科数据，生成带冷知识/单品解释/备选风格的丰富推送。
+
+用法:
+  python3 tools/build_push.py <outfit_dir>
+  python3 tools/build_push.py <outfit_dir> --preview   仅预览，不推送
+"""
+
+import os, sys, json, re, random, glob
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJ_DIR = os.path.join(BASE_DIR, '..')
+STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
+STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
+TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
+CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
+
+# jsDelivr base for encyclopedia links
+CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
+
+
+# ============================================================
+# 1. 内容提取
+# ============================================================
+
+def load_encyclopedia(style_id):
+    """从百科中提取冷知识"""
+    path = os.path.join(STYLES_UNI_DIR, style_id, 'encyclopedia.md')
+    if not os.path.exists(path):
+        return None
+    with open(path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    # 提取一句话定义
+    one_liner = ''
+    for line in text.split('\n'):
+        if '一句话定义' in line:
+            m = re.search(r'[：:]\s*(.+)', line)
+            if m:
+                one_liner = m.group(1).strip()
+            break
+
+    # 提取趣味冷知识（截短到适合推送）
+    origin = ''
+    in_origin = False
+    for line in text.split('\n'):
+        if '### 起源' in line or '## 📜' in line:
+            in_origin = True
+            continue
+        if in_origin and line.strip() and not line.startswith('#') and not line.startswith('>'):
+            candidate = line.strip().lstrip('- ').strip()
+            if len(candidate) > 30:
+                # 只取前140字，适合手机屏
+                if len(candidate) > 140:
+                    origin = candidate[:140] + '...'
+                else:
+                    origin = candidate
+                break
+
+    # 提取名人引用
+    quote = ''
+    for line in text.split('\n'):
+        if line.strip().startswith('>') and len(line) > 20:
+            quote = line.strip().lstrip('> ').strip()
+            if '：' in quote or '——' in quote or '"' in quote:
+                break
+
+    return {
+        'one_liner': one_liner,
+        'origin': origin,
+        'quote': quote,
+        'encyclopedia_url': f'{CDN_BASE}/styles_universal/{style_id}/encyclopedia.md',
+    }
+
+
+def load_style_fingerprint(style_id):
+    """从个人指纹中取配色逻辑"""
+    path = os.path.join(STYLES_DIR, f'{style_id}.json')
+    if not os.path.exists(path):
+        return {}
+    with open(path, 'r', encoding='utf-8')  as f:
+        return json.load(f)
+
+
+def load_outfit_data(outfit_dir):
+    """解析穿搭目录"""
+    # 读取 outfit.md
+    md_path = os.path.join(outfit_dir, 'outfit.md')
+    if not os.path.exists(md_path):
+        return None
+
+    with open(md_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    data = {'items': [], 'style_id': None, 'weather': '', 'date': ''}
+
+    # 提取日期
+    m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(outfit_dir))
+    if m:
+        data['date'] = m.group(1)
+
+    # 提取风格
+    m = re.search(r'风格[：:]\s*(.+)', text)
+    if m:
+        data['style_raw'] = m.group(1).strip()
+
+    # 提取天气
+    m = re.search(r'天气[：:]\s*(.+)', text)
+    if m:
+        data['weather'] = m.group(1).strip()
+
+    # 提取单品表格
+    in_table = False
+    for line in text.split('\n'):
+        s = line.strip()
+        if '单品清单' in s:
+            in_table = True
+            continue
+        if in_table and s.startswith('##'):
+            break
+        if not in_table or not s.startswith('|') or '---' in s:
+            continue
+        cells = [c.strip().replace('**', '') for c in s.split('|')]
+        if len(cells) < 5:
+            continue
+        cid = cells[2]
+        if not re.match(r'^[A-Z]+-\d+', cid):
+            continue
+        name = cells[3]
+        score_text = cells[4]
+        reason = cells[5] if len(cells) > 5 else ''
+        data['items'].append({'id': cid, 'name': name, 'score': score_text, 'reason': reason})
+
+    return data
+
+
+def match_style_id(outfit_data):
+    """从 outfits 目录名或内容推断 style_id"""
+    dirname = os.path.basename(os.path.dirname(outfit_data.get('_dir', ''))
+                               if isinstance(outfit_data, dict) else '')
+
+    # 从已有的 style_id 映射
+    name_to_id = {
+        '日系CityBoy': 'japanese_city_boy', '日系 City Boy': 'japanese_city_boy',
+        'Clean Fit': 'clean_fit', 'clean_fit': 'clean_fit',
+        '轻熟休闲': 'smart_casual', '轻熟': 'smart_casual',
+        '运动休闲': 'athleisure_sport', '运动': 'athleisure_sport',
+        '韩系简约': 'korean_minimal', '韩系': 'korean_minimal',
+        '度假休闲': 'resort_vacation', '度假': 'resort_vacation',
+        '街头潮流': 'streetwear', '街头': 'streetwear',
+        '国风质感': 'chinese_heritage_luxe',
+    }
+    for name, sid in name_to_id.items():
+        if name in dirname:
+            return sid
+    return None
+
+
+def get_item_score(cid, style_id):
+    """从缓存取单品风格分"""
+    if not os.path.exists(CACHE_FILE):
+        return None
+    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+        cache = json.load(f)
+    item_cache = cache.get(cid, {})
+    style_cache = item_cache.get(style_id, {})
+    score = style_cache.get('score', 0)
+    breakdown = style_cache.get('breakdown', {})
+    return {'score': score, 'breakdown': breakdown}
+
+
+def get_key_item_reason(cid, style_id):
+    """检查某件衣服是否为关键单品，返回原因"""
+    style = load_style_fingerprint(style_id)
+    if not style:
+        return None
+    cat = cid.split('-')[0] + '-'
+    for ki in style.get('key_items', []):
+        if ki.get('category_code') == cat:
+            return ki.get('reason', '')
+    return None
+
+
+# ============================================================
+# 2. 推送构建
+# ============================================================
+
+def build_push(outfit_dir):
+    """主函数：生成丰富推送内容"""
+    data = load_outfit_data(outfit_dir)
+    if not data:
+        return None, "无法解析 outfit.md"
+
+    style_id = match_style_id(data) or 'japanese_city_boy'
+    encyc = load_encyclopedia(style_id)
+    style = load_style_fingerprint(style_id)
+
+    # 取主单品（有评分的）
+    main_items = [it for it in data['items'] if it['score'] and it['score'] != '—']
+    acc_items = [it for it in data['items'] if it['score'] == '—' or not it['score']]
+
+    # 构建推送
+    lines = []
+    style_name = style.get('name_zh', '日系CityBoy') if style else '今日推荐'
+
+    # ━━━ 标题 ━━━
+    outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
+    lines.append(f"👔 {style_name} · {outfit_name}")
+    weather_str = data.get('weather', '')
+    date_str = data.get('date', '')
+    lines.append(f"🌤 {date_str} {weather_str}" if weather_str else f"📅 {date_str}")
+
+    # ━━━ 效果图（提前） ━━━
+    ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
+    if not ai_paths:
+        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
+    if ai_paths:
+        rel = os.path.relpath(ai_paths[0], PROJ_DIR)
+        img_url = f'{CDN_BASE}/{rel}'
+        lines.append(f"\n![效果图]({img_url})")
+
+    # ━━━ 今日风格故事 ━━━
+    lines.append(f"\n━━━ 📖 {style_name} 风格故事 ━━━")
+    if encyc and encyc.get('origin'):
+        lines.append(encyc['origin'])
+    if encyc and encyc.get('quote'):
+        lines.append(f"\n💬 \"{encyc['quote']}\"")
+    # 了解更多链接
+    if encyc and encyc.get('encyclopedia_url'):
+        lines.append(f"\n📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
+
+    # ━━━ 今日搭配 ━━━
+    lines.append(f"\n━━━ 👔 今日搭配 ━━━")
+    for it in main_items:
+        cid = it['id']
+        name = it['name']
+        score_info = get_item_score(cid, style_id)
+        score = score_info['score'] if score_info else '?'
+
+        # 获取关键单品原因
+        key_reason = get_key_item_reason(cid, style_id)
+        emoji = {'SHIRT': '👔', 'TS': '👕', 'LS': '🧥', 'JK': '🧥', 'PT': '👖',
+                 'SH': '🩳', 'SHOE': '👟', 'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒',
+                 'SUN': '🕶️', 'ACC': '💍', 'TANK': '🎽'}.get(cid.split('-')[0], '👔')
+
+        reason = key_reason or it.get('reason', '')
+        score_str = f"{score}分" if isinstance(score, int) else score
+        reason_str = f" — {reason}" if reason else ''
+        lines.append(f"{emoji} {name} ({cid}·{score_str}){reason_str}")
+
+    if acc_items:
+        lines.append('')
+        for it in acc_items:
+            emoji = {'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒', 'SUN': '🕶️', 'ACC': '💍'}.get(it['id'][:3], '🔹')
+            lines.append(f"{emoji} {it['name']} ({it['id']})")
+
+    # ━━━ 配色逻辑 ━━━
+    color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
+    if color_logic:
+        lines.append(f"\n━━━ 🎨 今日配色 ━━━")
+        lines.append(color_logic)
+
+    # ━━━ 换个风格 ━━━
+    lines.append(f"\n━━━ 🔄 今天也适合 ━━━")
+    # 从已知备选中随机推荐
+    alt_styles = [
+        ('korean_minimal', '韩系简约'),
+        ('clean_fit', 'Clean Fit'),
+        ('smart_casual', '轻熟休闲'),
+        ('athleisure_sport', '运动休闲'),
+    ]
+    alt_names = []
+    for alt_id, alt_name in alt_styles:
+        if alt_id != style_id:
+            alt_names.append(f"[{alt_name}]({CDN_BASE}/styles_universal/{alt_id}/encyclopedia.md)")
+    lines.append(' · '.join(alt_names[:3]))
+
+    content = '\n'.join(lines)
+    return content, style_name
+
+
+# ============================================================
+# 3. 命令行
+# ============================================================
+
+def main():
+    if len(sys.argv) < 2:
+        print("用法: python3 tools/build_push.py <outfit_dir> [--preview]")
+        return
+
+    outfit_dir = sys.argv[1]
+    if not os.path.isabs(outfit_dir):
+        outfit_dir = os.path.join(PROJ_DIR, outfit_dir)
+    outfit_dir = os.path.abspath(outfit_dir)
+
+    preview = '--preview' in sys.argv
+
+    content, style_name = build_push(outfit_dir)
+    if content is None:
+        print(f"❌ {style_name}")
+        return
+
+    if preview:
+        print("=" * 50)
+        print("📱 推送预览")
+        print("=" * 50)
+        print(content)
+        print("\n" + "=" * 50)
+        print("✅ 预览完成。使用以下命令发送:")
+        print(f'   python3 -c "import sys; sys.path.insert(0,\'tools\'); from wechat_control import push_wechat; push_wechat(\'{style_name}\', open(\'/tmp/push_content.txt\').read())"')
+        # Save for easy copy
+        with open('/tmp/push_content.txt', 'w') as f:
+            f.write(content)
+    else:
+        sys.path.insert(0, os.path.join(BASE_DIR))
+        from wechat_control import push_wechat
+        title = f'👔 {style_name}'
+        result = push_wechat(title, content)
+        if result:
+            print(f"✅ 推送成功 (pushid={result.get('data',{}).get('pushid','?')})")
+        else:
+            print("❌ 推送失败")
+
+
+if __name__ == '__main__':
+    main()

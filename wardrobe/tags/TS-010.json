@@ -43,8 +43,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
-    "wear_count": 0,
-    "last_worn": null,
+    "wear_count": 1,
+    "last_worn": "2026-06-14T00:35:59.798869",
     "claude_fit_comment": "横条纹设计在视觉上略微增加身形宽度,米白底色显白,合身剪裁对小肚子无特殊遮盖",
     "_statement_score": 0.2
   }

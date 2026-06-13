@@ -25,7 +25,7 @@ CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main
 # ============================================================
 
 def load_encyclopedia(style_id):
-    """从百科中提取冷知识"""
+    """从百科中提取冷知识、名人、品牌信息"""
     path = os.path.join(STYLES_UNI_DIR, style_id, 'encyclopedia.md')
     if not os.path.exists(path):
         return None
@@ -51,7 +51,6 @@ def load_encyclopedia(style_id):
         if in_origin and line.strip() and not line.startswith('#') and not line.startswith('>'):
             candidate = line.strip().lstrip('- ').strip()
             if len(candidate) > 30:
-                # 只取前140字，适合手机屏
                 if len(candidate) > 140:
                     origin = candidate[:140] + '...'
                 else:
@@ -66,10 +65,41 @@ def load_encyclopedia(style_id):
             if '：' in quote or '——' in quote or '"' in quote:
                 break
 
+    # 提取品牌代表（从品牌章节取前3个核心品牌）
+    brands = []
+    in_brands = False
+    for line in text.split('\n'):
+        if '## 🏷️' in line or '代表品牌' in line:
+            in_brands = True
+            continue
+        if in_brands and line.startswith('##'):
+            break
+        if in_brands:
+            m = re.match(r'^- \*\*(.+?)\*\*.*?[—]\s*(.+)$', line)
+            if m:
+                brands.append({'name': m.group(1).strip(), 'desc': m.group(2).strip()[:60]})
+            if len(brands) >= 3:
+                break
+
+    # 提取风格偶像（取前2个）
+    icons = []
+    in_icons = False
+    for line in text.split('\n'):
+        if '## 👤' in line or '风格偶像' in line:
+            in_icons = True
+            continue
+        if in_icons and line.startswith('##'):
+            break
+        if in_icons:
+            m = re.match(r'^\|\s*\*\*(.+?)\*\*\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|', line)
+            if m:
+                icons.append({'name': m.group(1).strip(), 'role': m.group(2).strip(), 'why': m.group(3).strip()[:60]})
+            if len(icons) >= 2:
+                break
+
     return {
-        'one_liner': one_liner,
-        'origin': origin,
-        'quote': quote,
+        'one_liner': one_liner, 'origin': origin, 'quote': quote,
+        'brands': brands, 'icons': icons,
         'encyclopedia_url': f'{CDN_BASE}/styles_universal/{style_id}/encyclopedia.md',
     }
 
@@ -207,11 +237,13 @@ def build_push(outfit_dir):
     # ━━━ 标题 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
     lines.append(f"👔 {style_name} · {outfit_name}")
-    weather_str = data.get('weather', '')
     date_str = data.get('date', '')
-    lines.append(f"🌤 {date_str} {weather_str}" if weather_str else f"📅 {date_str}")
+    weather_str = data.get('weather', '')
+    lines.append(f"📅 {date_str}")
+    if weather_str:
+        lines.append(f"🌤 {weather_str}")
 
-    # ━━━ 效果图（提前） ━━━
+    # ━━━ 效果图 ━━━
     ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
     if not ai_paths:
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
@@ -220,15 +252,16 @@ def build_push(outfit_dir):
         img_url = f'{CDN_BASE}/{rel}'
         lines.append(f"\n![效果图]({img_url})")
 
-    # ━━━ 今日风格故事 ━━━
-    lines.append(f"\n━━━ 📖 {style_name} 风格故事 ━━━")
+    # ━━━ 风格故事 ━━━
+    lines.append(f"\n━━━ 📖 风格故事 ━━━")
     if encyc and encyc.get('origin'):
         lines.append(encyc['origin'])
+        lines.append('')
     if encyc and encyc.get('quote'):
-        lines.append(f"\n💬 \"{encyc['quote']}\"")
-    # 了解更多链接
+        lines.append(f"💬 {encyc['quote']}")
+        lines.append('')
     if encyc and encyc.get('encyclopedia_url'):
-        lines.append(f"\n📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
+        lines.append(f"📚 [了解更多：{style_name}完整百科]({encyc['encyclopedia_url']})")
 
     # ━━━ 今日搭配 ━━━
     lines.append(f"\n━━━ 👔 今日搭配 ━━━")
@@ -238,38 +271,51 @@ def build_push(outfit_dir):
         score_info = get_item_score(cid, style_id)
         score = score_info['score'] if score_info else '?'
 
-        # 获取关键单品原因
         key_reason = get_key_item_reason(cid, style_id)
-        emoji = {'SHIRT': '👔', 'TS': '👕', 'LS': '🧥', 'JK': '🧥', 'PT': '👖',
-                 'SH': '🩳', 'SHOE': '👟', 'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒',
-                 'SUN': '🕶️', 'ACC': '💍', 'TANK': '🎽'}.get(cid.split('-')[0], '👔')
+        emoji_map = {'SHIRT': '👔', 'TS': '👕', 'LS': '🧥', 'JK': '🧥', 'PT': '👖',
+                     'SH': '🩳', 'SHOE': '👟', 'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒',
+                     'SUN': '🕶️', 'ACC': '💍', 'TANK': '🎽'}
+        emoji = emoji_map.get(cid.split('-')[0], '👔')
 
         reason = key_reason or it.get('reason', '')
-        score_str = f"{score}分" if isinstance(score, int) else score
-        reason_str = f" — {reason}" if reason else ''
-        lines.append(f"{emoji} {name} ({cid}·{score_str}){reason_str}")
+        score_str = f"{score}分" if isinstance(score, int) else str(score)
+        lines.append(f"{emoji} **{name}**")
+        lines.append(f"   `{cid}` · 匹配度 {score_str}")
+        if reason:
+            lines.append(f"   💡 {reason}")
+        lines.append('')
 
     if acc_items:
-        lines.append('')
         for it in acc_items:
             emoji = {'HAT': '🧢', 'SOCK': '🧦', 'BAG': '🎒', 'SUN': '🕶️', 'ACC': '💍'}.get(it['id'][:3], '🔹')
-            lines.append(f"{emoji} {it['name']} ({it['id']})")
+            lines.append(f"{emoji} {it['name']} `{it['id']}`")
+        lines.append('')
+
+    # ━━━ 品牌/名人和鸣 ━━━
+    has_brands = encyc and encyc.get('brands')
+    has_icons = encyc and encyc.get('icons')
+    if has_brands or has_icons:
+        lines.append(f"━━━ 🌟 品牌 & 名人 ━━━")
+        if has_brands:
+            for b in encyc['brands']:
+                lines.append(f"🏷️ **{b['name']}** — {b['desc']}")
+            lines.append('')
+        if has_icons:
+            for ic in encyc['icons']:
+                lines.append(f"👤 **{ic['name']}** · {ic['role']} — {ic['why']}")
+            lines.append('')
 
     # ━━━ 配色逻辑 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
     if color_logic:
-        lines.append(f"\n━━━ 🎨 今日配色 ━━━")
+        lines.append(f"━━━ 🎨 配色 ━━━")
         lines.append(color_logic)
+        lines.append('')
 
     # ━━━ 换个风格 ━━━
-    lines.append(f"\n━━━ 🔄 今天也适合 ━━━")
-    # 从已知备选中随机推荐
-    alt_styles = [
-        ('korean_minimal', '韩系简约'),
-        ('clean_fit', 'Clean Fit'),
-        ('smart_casual', '轻熟休闲'),
-        ('athleisure_sport', '运动休闲'),
-    ]
+    lines.append(f"━━━ 🔄 今天也适合 ━━━")
+    alt_styles = [('korean_minimal', '韩系简约'), ('clean_fit', 'Clean Fit'),
+                  ('smart_casual', '轻熟休闲'), ('athleisure_sport', '运动休闲')]
     alt_names = []
     for alt_id, alt_name in alt_styles:
         if alt_id != style_id:

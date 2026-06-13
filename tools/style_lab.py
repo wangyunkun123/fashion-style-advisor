@@ -1370,12 +1370,33 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
             f"| {cat} | **{cid}** | {item_name} | {appeal['visual_signature'][:30]}{marker} |"
         )
 
-    # 风格关键词（composite_v2 parse_style_info 从 ## 风格关键词 小节读取）
-    style_tags = f'{style_name}'
-    if boldness == 'leap':
-        style_tags += ', 大胆跨界, 风格实验'
+    # 风格笔记（composite_v2 parse_style_info 读取每行作为 STYLE NOTES）
+    # 从探索叙事中提取关键信息
+    encyc = load_encyclopedia(style_id) if style_id else None
+    style_desc = encyc.get('one_liner', '') if encyc else ''
+    if not style_desc:
+        style_desc = f'{style_name}风格穿搭'
+
+    anchor_color = anchor_item.get('color', {}).get('hue_name', '')
+    anchor_cat = anchor_item.get('category', '')
+    claude_tip = anchor_item.get('meta', {}).get('claude_fit_comment', '')
+    if len(claude_tip) > 30:
+        claude_tip = claude_tip[:28] + '..'
+
+    silhouette = anchor_item.get('silhouette', {})
+    if silhouette.get('fit') == '宽松':
+        wear_tip = '上宽下窄，直筒/锥形下装'
+    elif silhouette.get('fit') == '合身':
+        wear_tip = '外搭宽松层次，制造对比'
     else:
-        style_tags += ', 微调探索, 风格实验'
+        wear_tip = '以锚点单品为视觉焦点'
+
+    style_notes_lines = [
+        f'- {style_name}：{style_desc[:26]}',
+        f'- 锚点 {anchor_id}：{claude_tip}' if claude_tip else f'- 锚点：{anchor_color}{anchor_cat}',
+        f'- 穿法：{wear_tip}',
+        f'- {bold_tag} {"大胆跨界尝试" if boldness == "leap" else "微调探索新方向"}',
+    ]
 
     outfit_md = f"""# {style_name} B线探索穿搭
 
@@ -1393,9 +1414,9 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 
 {generate_exploration_narrative(direction, anchor_item, companions)}
 
-## 风格关键词
+## 风格笔记
 
-{style_tags}
+{chr(10).join(style_notes_lines)}
 """
     with open(os.path.join(outfit_dir, 'outfit.md'), 'w', encoding='utf-8') as f:
         f.write(outfit_md)

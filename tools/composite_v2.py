@@ -107,50 +107,81 @@ def find_img(dd,item):
         if os.path.exists(p): return p
 
 def parse_style_info(outfit_dir):
-    """从outfit.md提取风格关键词"""
+    """从outfit.md提取风格笔记（每行一条，用于 STYLE NOTES）"""
     md=os.path.join(outfit_dir,'outfit.md')
     if not os.path.exists(md): return []
     with open(md,encoding='utf-8') as f: text=f.read()
-    keywords=[]
+    lines=text.split('\n')
+    notes=[]
 
-    # 策略1：优先匹配 "## 风格关键词" 小节内容
-    in_kw_section = False
-    for line in text.split('\n'):
-        if '风格关键词' in line:
-            in_kw_section = True
-            # 同行冒号后的内容
-            m = re.search(r'[：:]\s*(.+)', line)
-            if m:
-                for kw in re.split(r'[、,，/]', m.group(1)):
-                    kw = kw.strip().replace('**', '')
-                    if kw and len(kw) < 20:
-                        keywords.append(kw)
-            continue
-        if in_kw_section:
-            if line.strip().startswith('##') or line.strip().startswith('---'):
-                break
-            s = line.strip().lstrip('- ').strip()
-            if s:
-                for kw in re.split(r'[、,，/]', s):
-                    kw = kw.strip().replace('**', '')
-                    if kw and len(kw) < 20:
-                        keywords.append(kw)
-
-    # 策略2：回退——从 "风格" 元数据行提取（去括号）
-    if not keywords:
-        for line in text.split('\n'):
-            if '风格' in line and '风格关键词' not in line and '风格故事' not in line:
+    # 策略1：读取 "## 风格笔记" 或 "## 风格关键词" 小节（每行一条笔记）
+    for section_tag in ['风格笔记', '风格关键词']:
+        in_section = False
+        for line in lines:
+            if section_tag in line:
+                in_section = True
+                # 同行冒号后的内容作为第一条
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m:
-                    val = m.group(1)
-                    val = re.sub(r'[（(][^）)]*[）)]', '', val).strip()
-                    for kw in re.split(r'[、,，/]', val):
-                        kw = kw.strip().replace('**', '')
-                        if kw and len(kw) < 20:
-                            keywords.append(kw)
+                    v = m.group(1).strip().replace('**', '')
+                    if v and len(v) <= 30:
+                        notes.append(v)
+                continue
+            if in_section:
+                if line.strip().startswith('##') or line.strip().startswith('---'):
                     break
+                s = line.strip().lstrip('- ').strip()
+                if s and len(s) <= 30:
+                    notes.append(s)
+        if notes:
+            return notes[:5]
 
-    return keywords[:5]
+    # 策略2：回退——从元数据组装
+    # 提取风格名
+    style_name = ''
+    for line in lines:
+        if '风格' in line and '关键词' not in line and '故事' not in line and '笔记' not in line:
+            m = re.search(r'[：:]\s*(.+)', line)
+            if m:
+                style_name = re.sub(r'[（(][^）)]*[）)]', '', m.group(1)).strip()
+                break
+
+    # 提取天气/场景
+    weather = ''
+    occasion = ''
+    for line in lines:
+        if '天气' in line:
+            m = re.search(r'[：:]\s*(.+)', line)
+            if m: weather = m.group(1).strip()[:20]
+        if '场景' in line or '场合' in line:
+            m = re.search(r'[：:]\s*(.+)', line)
+            if m: occasion = m.group(1).strip()[:20]
+
+    if style_name:
+        notes.append(f'{style_name}风格')
+    if weather:
+        notes.append(f'适合{weather}')
+    if occasion:
+        notes.append(f'{occasion}穿搭')
+
+    # 从单品表格提取关键单品名
+    item_names = []
+    in_table = False
+    for line in lines:
+        if '单品清单' in line:
+            in_table = True; continue
+        if in_table and (line.startswith('##') or line.startswith('---')):
+            break
+        if in_table and line.startswith('|') and '---' not in line:
+            cells = [c.strip().replace('**', '') for c in line.split('|')]
+            if len(cells) >= 4:
+                name = cells[3]
+                if name and name not in ('单品', '名称', '') and len(name) < 15:
+                    item_names.append(name)
+    if item_names:
+        notes.append(f'核心单品：{"、".join(item_names[:3])}')
+
+    return notes[:5]
 
 def composite(ai_path,items,output_path):
     ai_img=Image.open(ai_path).convert('RGB'); ai_w,ai_h=ai_img.size

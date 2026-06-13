@@ -65,8 +65,8 @@ def analyze(ratings):
     total = len(ratings)
     by_score = Counter(r['rating'] for r in ratings)
     by_style = defaultdict(lambda: {'total': 0, 'ratings': [], 'avg': 0})
-    items_liked = defaultdict(int)
-    items_disliked = defaultdict(int)
+    items_liked = Counter()
+    items_disliked = Counter()
 
     for r in ratings:
         sid = r.get('style_id', 'unknown')
@@ -103,7 +103,7 @@ def analyze(ratings):
         'by_style': dict(by_style),
         'items_liked': dict(items_liked.most_common(10)),
         'items_disliked': dict(items_disliked.most_common(5)),
-        'feedback_reasons': dict(feedback_reasons),
+        'feedback_reasons': feedback_reasons,
     }
 
 
@@ -170,7 +170,7 @@ def generate_report():
 
     lines.append("")
     lines.append("━━━ 👔 最爱单品 Top 5 ━━━")
-    for iid, cnt in analysis['items_liked'][:5]:
+    for iid, cnt in list(analysis['items_liked'].items())[:5]:
         tag_path = os.path.join(TAGS_DIR, f'{iid}.json')
         name = iid
         if os.path.exists(tag_path):
@@ -182,7 +182,7 @@ def generate_report():
     if analysis['items_disliked']:
         lines.append("")
         lines.append("━━━ ⚠️ 需注意的单品 ━━━")
-        for iid, cnt in analysis['items_disliked'][:3]:
+        for iid, cnt in list(analysis['items_disliked'].items())[:3]:
             lines.append(f"  {'👎':4s} {iid} — {cnt}次不满意")
 
     lines.append("")

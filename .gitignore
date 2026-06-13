@@ -31,3 +31,4 @@ wardrobe/enhanced/
 
 # Claude
 .claude/
+outfits/*/rating.json

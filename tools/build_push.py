@@ -131,9 +131,9 @@ def load_outfit_data(outfit_dir):
         data['date'] = m.group(1)
 
     # 提取风格
-    m = re.search(r'风格.*?[：:]\s*(.+)', text)
+    m = re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)', text)
     if m:
-        data['style_raw'] = m.group(1).strip()
+        data['style_raw'] = (m.group(1) or m.group(2)).strip()
 
     # 提取天气
     m = re.search(r'天气.*?[：:]\s*(.+)', text)
@@ -165,12 +165,8 @@ def load_outfit_data(outfit_dir):
     return data
 
 
-def match_style_id(outfit_data):
+def match_style_id(outfit_data, outfit_dir):
     """从 outfits 目录名或内容推断 style_id"""
-    dirname = os.path.basename(os.path.dirname(outfit_data.get('_dir', ''))
-                               if isinstance(outfit_data, dict) else '')
-
-    # 从已有的 style_id 映射
     name_to_id = {
         '日系CityBoy': 'japanese_city_boy', '日系 City Boy': 'japanese_city_boy', '日系': 'japanese_city_boy',
         'CleanFit': 'clean_fit', 'Clean Fit': 'clean_fit', 'clean_fit': 'clean_fit',
@@ -181,8 +177,16 @@ def match_style_id(outfit_data):
         '街头潮流': 'streetwear', '街头': 'streetwear',
         '国风质感': 'chinese_heritage_luxe',
     }
+    # 先从 outfit.md 风格字段匹配
+    style_raw = outfit_data.get('style_raw', '')
+    if style_raw:
+        for name, sid in name_to_id.items():
+            if name.lower().replace(' ', '') in style_raw.lower().replace(' ', ''):
+                return sid
+    # 再从目录名匹配
+    dirname = os.path.basename(outfit_dir)
     for name, sid in name_to_id.items():
-        if name in dirname:
+        if name.lower().replace(' ', '') in dirname.lower().replace(' ', ''):
             return sid
     return None
 
@@ -251,7 +255,7 @@ def build_push(outfit_dir):
     if not data:
         return None, "无法解析 outfit.md"
 
-    style_id = match_style_id(data) or 'japanese_city_boy'
+    style_id = match_style_id(data, outfit_dir) or 'japanese_city_boy'
     encyc = load_encyclopedia(style_id)
     style = load_style_fingerprint(style_id)
     main_items = [it for it in data['items'] if it['score'] and it['score'] != '—']

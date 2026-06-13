@@ -366,9 +366,11 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             # 从风格指纹提取关键特征
             style_desc = ''
             if encyc:
-                style_desc = encyc.get('one_liner', '')[:24]
+                style_desc = encyc.get('one_liner', '')
             if not style_desc and style:
-                style_desc = style.get('description', '')[:24]
+                style_desc = style.get('description', '')
+            # 取前20字作为简述
+            style_desc = style_desc[:20] if style_desc else ''
             silhouette = style.get('fingerprint', {}).get('silhouette', {}) if style else {}
             color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '') if style else ''
             # 提取穿法要点

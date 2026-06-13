@@ -1,7 +1,12 @@
 {
-  "total_recommendations": 0,
-  "bline_count": 0,
-  "bold_count": 0,
-  "last_recommendation_time": null,
-  "items_worn": {}
+  "total_recommendations": 1,
+  "bline_count": 1,
+  "bold_count": 1,
+  "last_recommendation_time": "2026-06-14T00:53:22.182178",
+  "items_worn": {
+    "JK-005": 1,
+    "TS-005": 1,
+    "PT-005": 1,
+    "SHOE-009": 1
+  }
 }

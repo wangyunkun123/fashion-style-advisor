@@ -1523,16 +1523,22 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         return outfit_dir, img_path, cdn_url
 
     # ── 9. Git push ──
+    commit_hash = None
     try:
         subprocess.run(['git', 'add', '-A'], cwd=PROJ_DIR, capture_output=True, timeout=30)
         subprocess.run(['git', 'commit', '-m', f'{bold_tag} B线探索: {style_name} ({today})'],
                        cwd=PROJ_DIR, capture_output=True, timeout=30)
         subprocess.run(['git', 'push'], cwd=PROJ_DIR, capture_output=True, timeout=60)
+        result = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=PROJ_DIR, capture_output=True, text=True, timeout=10)
+        commit_hash = result.stdout.strip()[:7]
     except Exception as e:
         print(f"  [B线] Git push 失败: {e}")
 
     rel = os.path.relpath(composite_jpg, PROJ_DIR)
-    cdn_url = f'{CDN_BASE}/{rel}'
+    if commit_hash:
+        cdn_url = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit_hash}/{rel}'
+    else:
+        cdn_url = f'{CDN_BASE}/{rel}'
 
     return outfit_dir, composite_jpg, cdn_url
 

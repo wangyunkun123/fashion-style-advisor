@@ -1,0 +1,23 @@
+{
+  "style_id": "regency_romantic",
+  "_last_updated": "2026-06-13", "_status": "collected",
+  "categories": {
+    "editorial": {"label": "杂志大片", "images": [
+      {"url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/christian-dior", "caption": "Dior Men FW26 — Jonathan Anderson首秀：摄政时期高领×克拉巴特领巾", "source": "Vogue Runway"},
+      {"url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/kenzo", "caption": "Kenzo FW26 — Nigo的浪漫主义转向：丝绒外套×青蛙纽扣", "source": "Vogue Runway"}
+    ]},
+    "runway": {"label": "秀场T台", "images": [
+      {"url": "https://www.gq.com/story/jonathan-anderson-dior-men-debut-fall-2026", "caption": "GQ — Dior Men FW26 首秀深度解析：摄政领巾×现代剪裁", "source": "GQ"},
+      {"url": "https://www.vogue.com/fashion-shows/fall-2026-menswear", "caption": "Vogue Runway — 2026秋冬男装周：浪漫主义集体转向", "source": "Vogue"}
+    ]},
+    "celebrity": {"label": "明星名人", "images": [
+      {"url": "https://www.gq.com/story/cravat-neck-scarf-menswear-trend-2026", "caption": "GQ — 领巾回归：2026男装最浪漫的配饰趋势", "source": "GQ"}
+    ]},
+    "streetstyle": {"label": "街拍造型", "images": [
+      {"url": "https://www.vogue.com/slideshow/best-street-style-fall-2026-menswear-paris", "caption": "巴黎FW26街拍 — 领巾×宽松西装的日常化演绎", "source": "Vogue"}
+    ]},
+    "social": {"label": "社交平台", "images": [
+      {"url": "https://www.highsnobiety.com/p/dior-men-fall-2026-jonathan-anderson/", "caption": "Highsnobiety — Dior Men FW26社交媒体热议合集", "source": "Highsnobiety"}
+    ]}
+  }
+}

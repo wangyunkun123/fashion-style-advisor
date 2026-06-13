@@ -1,0 +1,53 @@
+{
+  "style_id": "rugged_comfort",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "粗砺舒适 Rugged Comfort：户外粗犷与居家舒适的融合，关键词 - 羊羔绒内衬皮夹克、厚针织绞花毛衣、帆布工装裤、雷尔泰克迷彩、Carhartt混搭",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.themanual.com/fashion/aurelien-fw25-collection/",
+          "caption": "Aurélien FW25-26 — 「阿尔卑斯边缘×地中海灵魂」：羊绒灯芯绒羽绒服、可拆卸皮草领，粗犷质感邂逅柔软剪裁",
+          "source": "The Manual",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.malemodelscene.net/ad-campaigns/henry-kitcher-proenza-schouler/",
+          "caption": "Proenza Schouler FW25男装型录 — MANITOGA森林×现代建筑：厚实针织、轻松剪裁、艺术印花",
+          "source": "Male Model Scene",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://theimpression.com/sacai-fall-2025-mens-fashion-show-review/",
+          "caption": "Sacai Fall 2025 — 「荒野漫游」：Chitose Abe 首创「针织皮草」面料，Carhartt WIP帆布×针织拼接",
+          "source": "The Impression",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.showstudio.com/collections/autumn-winter-2025/denzilpatrick/show-report",
+          "caption": "Denzilpatrick AW25 — 「粗犷皇家风」：中世纪铠甲×摩托车越野，绗缝长裤、装甲飞行员夹克",
+          "source": "SHOWstudio",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://live.trendhunter.com/trends/realtree-camo-loungewear",
+          "caption": "SKIMS 雷尔泰克迷彩家居服 — Post Malone 犹他州牧场出镜：重型摇粒绒×迷彩的城乡融合",
+          "source": "TrendHunter",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

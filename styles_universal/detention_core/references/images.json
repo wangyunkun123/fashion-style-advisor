@@ -1,0 +1,47 @@
+{
+  "style_id": "detention_core",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "叛逆学长风 Detention Core：推翻学院规则的暗黑学院变体，关键词 - 校服西装解构、松垮领带、未系扣衬衫、运动鞋混搭制服、反叛感",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm",
+          "caption": "MSGM Fall 2025 — 后Gen Z派对现场拍摄：宽松格纹衬衫、做旧质感、Donnie Darko式超现实叛逆",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/our-legacy",
+          "caption": "Our Legacy Spring 2025 — 反时尚立场，玻璃屏障后的疏离感：混合军装与Grunge的学院叛离",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm",
+          "caption": "MSGM FW25 — 布鲁斯·拉布鲁斯拍摄：巨大膨胀蘑菇装置、兔子图案超大格纹衬衫，颠覆型学院风",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris",
+          "caption": "Vogue — 2026秋冬巴黎男装周街拍：Dior 宽松卡其裤×条纹领带的学院解构街头演绎",
+          "source": "Vogue",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

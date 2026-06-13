@@ -1,0 +1,53 @@
+{
+  "style_id": "whimsymaxxing",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "趣乐极繁 Whimsymaxxing：TikTok 2025新兴趋势，以最大化的趣味元素对抗极简，关键词 - 色彩碰撞、趣味印花、混搭叠穿、童趣配件、非对称层次",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-ready-to-wear/torisheju",
+          "caption": "Torishéju Spring 2026 — LVMH得奖者：层叠融合帽子、皮革×丝绸手工瓦楞表面，异想天开的解构奢华",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/copenhagen-fall-2026/bonnetje",
+          "caption": "Bonnetje Copenhagen Fall 2026 — 男装解构×Kink暗语：趣味的织物操控实验",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.usnews.com/news/entertainment/articles/2025-01-22/van-beirendonck-offers-a-theatrical-ode-to-surreal-sartorialism-in-paris-menswear-collection",
+          "caption": "Walter Van Beirendonck FW2025 — 巴黎男装周超现实戏剧颂歌：Edward Scissorhands解构西装、骷髅与毛毛虫雕塑",
+          "source": "US News/AP",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-couture/germanier",
+          "caption": "Germanier Spring 2026 Couture — 升级再造Berluti夹克前后倒置：玩味的高定解构",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.showstudio.com/cms/documents/3607/DVN_PRESS_RELEASE__MEN_AW_25-26.pdf",
+          "caption": "Dries Van Noten AW25 — 蓟花喷绘×金属尖鞋带系腰：贵族的顽皮不羁",
+          "source": "SHOWstudio",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

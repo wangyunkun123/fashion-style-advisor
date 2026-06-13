@@ -1,0 +1,53 @@
+{
+  "style_id": "resort_vacation",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "度假休闲 Resort Vacation：意式/法式里维埃拉风情，关键词 - 亚麻衬衫、双排扣亚麻西装、百慕大短裤、草帽、皮凉鞋",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://therake.com/hk/stories/loro-piana-transport-us-to-an-exotic-paradise-with-summer-resort-2024-collection",
+          "caption": "Loro Piana Summer Resort 2024 — 大溪地波西米亚冲浪者大片：Antigua亚麻Spagna夹克、宽大百慕大短裤",
+          "source": "The Rake",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://vmagazine.com/article/givenchy-goes-back-to-the-beach-with-givenchy-plage-summer-2024-collection/",
+          "caption": "Givenchy Plage Summer 2024 — 撒丁岛Nikki Beach拍摄：普罗旺斯亚麻裤、柠檬印花衬衫、日本泡泡纱",
+          "source": "V Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.fashiongonerogue.com/massimo-dutti-minimal-summer-2024/",
+          "caption": "Massimo Dutti Summer 2024 — 海滩极简大片：橄榄绿、象牙白亚麻廓形",
+          "source": "Fashion Gone Rogue",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://musemagazine.it/articles/armani-mare-en/",
+          "caption": "Giorgio Armani Mare Summer 2024 — 切尔沃港、马里布、圣特罗佩全球海滩目的地取景",
+          "source": "Muse Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://squaremile.com/style/summer-resort-wear/",
+          "caption": "Square Mile — 度假胶囊衣橱指南：Stenströms亚麻衬衫、Sunspel Riviera Polo、Brunello Cucinelli双排扣",
+          "source": "Square Mile",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

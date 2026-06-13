@@ -1,0 +1,53 @@
+{
+  "style_id": "italian_pitti_uomo",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "Pitti Uomo 佛罗伦萨男装展街拍风格：全球最顶级的男装街拍盛会，关键词 - 双排扣、强结构西装、花呢格纹、领带配饰",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/double-the-suits-double-the-fun-pitti-uomos-best-street-style",
+          "caption": "Vogue — Pitti Uomo 108 (2025年6月) 最佳街拍：亚麻套装、水桶帽、双人搭配",
+          "source": "Vogue",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-from-pitti-uomo-fall-2025-menswear-shows",
+          "caption": "Vogue — Pitti Uomo 107 (2025年1月) 'Ciao Ragazzi!' 秋冬街拍：厚重叠穿、Tabi靴",
+          "source": "Vogue",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://theimpression.com/the-best-pitti-uomo-street-style-fall-2025/",
+          "caption": "The Impression — Pitti Uomo Fall 2025 最佳街拍回顾：灯芯绒时刻、费尔岛针织背心",
+          "source": "The Impression",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.nssmag.com/en/fashion/39565/the-best-street-styles-of-the-107th-edition-of-pitti-immagine-uomo",
+          "caption": "nss magazine — Pitti Uomo 107 最佳街拍：佛罗伦萨的顶级男装风格",
+          "source": "nss magazine",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://robbreport.com/style/accessories/gallery/pitti-uomo-best-mens-street-style-1235659991/",
+          "caption": "Robb Report — Pitti Uomo 最佳着装男士：用个人风格穿越噪音",
+          "source": "Robb Report",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

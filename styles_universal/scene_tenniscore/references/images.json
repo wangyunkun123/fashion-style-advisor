@@ -1,0 +1,53 @@
+{
+  "style_id": "scene_tenniscore",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "Tenniscore 网球风：运动俱乐部美学，关键词 - Polo衫、百褶短裤/裙、白色网球袜、复古球拍、Lacoste、Casablanca",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.tennis.com/baseline/articles/best-tennis-fashion-moments-2024-federer-nadal-louis-vuitton-kostyuk-wimbledon-wedding-dress-osaka-us-open",
+          "caption": "Tennis.com — 2024最佳网球时尚时刻：Federer & Nadal LV「核心价值」Annie Leibovitz大片",
+          "source": "Tennis.com",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://liveblogging-dapi.tennis.com/baseline/articles/year-tenniscore-zendaya-challengers-effect-transform-tennis-fashion-loewe-sinner-osaka-federer-nadal",
+          "caption": "Tennis.com — Tenniscore元年：Zendaya《挑战者》效应如何转变网球时尚，Jannik Sinner × Gucci",
+          "source": "Tennis.com",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.voguehk.com/en/article/fashion/tenniscore-trend/",
+          "caption": "Vogue HK — Tenniscore终极指南：从运动场到日常的Polo衫与网球裙搭配",
+          "source": "Vogue HK",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.flannels.com/stylenews/post/sports-club-90s-style",
+          "caption": "Flannels — Casablanca 网球俱乐部美学、Lacoste AW24巴黎时装周网球元素",
+          "source": "Flannels",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://wwd.com/pop-culture/celebrity-news/brittany-mahomes-gucci-patrick-mahomes-wimbledon-1236480529/",
+          "caption": "WWD — Brittany Mahomes 身着Gucci网球风观赛温网2024",
+          "source": "WWD",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

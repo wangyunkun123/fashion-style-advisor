@@ -1,0 +1,53 @@
+{
+  "style_id": "british_heritage",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "英式传统 Heritage：粗花呢、人字纹、猎装元素、萨维尔街剪裁，2026年粗花呢强势回归",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/dunhill",
+          "caption": "Dunhill Fall 2025 — Simon Holloway 英式垂肩软结构剪裁，多尼戈尔粗花呢与羊绒格子呢",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.mrporter.com/en-tw/journal/fashion/heritage-checks-25373990",
+          "caption": "MR PORTER — 现代穿搭中的传统格纹：人字纹、千鸟格、威尔士亲王格",
+          "source": "MR PORTER",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://hypebeast.com/2026/1/2026-year-of-tweed-trend-prediction-info",
+          "caption": "Hypebeast — 2026 粗花呢元年预测：Kith、Noah、J. Press 从苏格兰 Lovat 工厂采购粗花呢",
+          "source": "Hypebeast",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://marcdarcy.co.uk/blogs/news/the-return-of-peaky-blinders-style-why-tweed-is-back-for-2026",
+          "caption": "Marc Darcy — Peaky Blinders 风格回归：2026年粗花呢复兴",
+          "source": "Marc Darcy",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://squaremile.com/style/paul-walker-interview/",
+          "caption": "Square Mile — Paul Walker 访谈：对传统工艺的浪漫情怀，Walker Slater 当代粗花呢剪裁",
+          "source": "Square Mile",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "style_id": "aesthetic_avant_garde",
+  "_last_updated": "2026-06-13", "_status": "collected",
+  "categories": {
+    "editorial": {"label": "杂志大片", "images": [
+      {"url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/comme-des-garcons-homme-plus", "caption": "Comme des Garçons Homme Plus FW25 — 川久保玲的持续实验", "source": "Vogue Runway"},
+      {"url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/yohji-yamamoto", "caption": "Yohji Yamamoto FW25 — 黑色诗人的垂坠解构", "source": "Vogue Runway"}
+    ]},
+    "runway": {"label": "秀场T台", "images": [
+      {"url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/rick-owens", "caption": "Rick Owens FW25 — 暗黑美学的极致廓形", "source": "Vogue Runway"},
+      {"url": "https://www.vogue.com/fashion-shows/spring-2025-couture/maison-margiela", "caption": "Maison Margiela SS25 Couture — 解构主义的持续进化", "source": "Vogue Runway"}
+    ]},
+    "celebrity": {"label": "明星名人", "images": [
+      {"url": "https://www.gq.com/story/rick-owens-style-influence-menswear", "caption": "GQ — Rick Owens如何改变了男性对穿衣的想象", "source": "GQ"}
+    ]},
+    "streetstyle": {"label": "街拍造型", "images": [
+      {"url": "https://www.vogue.com/slideshow/best-street-style-paris-menswear-fall-2025", "caption": "巴黎男装周街拍 — 前卫解构的街头演绎", "source": "Vogue"}
+    ]},
+    "social": {"label": "社交平台", "images": [
+      {"url": "https://www.highsnobiety.com/p/comme-des-garcons-homme-plus-fall-2025/", "caption": "Highsnobiety — CDG Homme Plus FW25社交媒体热议", "source": "Highsnobiety"}
+    ]}
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "style_id": "french_parisian_chic",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "法式巴黎 Chic：不经意的优雅，关键词 - 工装夹克、宽腿裤、软肩双排扣、麂皮乐福鞋、低调奢华",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris",
+          "caption": "Vogue — 2026秋冬巴黎男装周街拍：Phill Oh 镜头下的322张街拍，Pharrell x LV、Jonathan Anderson x Dior",
+          "source": "Vogue",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://vogue.sg/street-style-paris-mens-fall-winter-2026-shows/",
+          "caption": "Vogue Singapore — 2026秋冬巴黎男装周街拍：Ami Paris、Louis Vuitton、Amiri 前排明星",
+          "source": "Vogue Singapore",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2024-menswear/officine-generale",
+          "caption": "Officine Générale Fall 2024 — Pierre Mahéo 呈现左岸富裕居民的真实巴黎风格",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/ami",
+          "caption": "Ami Paris Spring 2025 — Alexandre Mattiussi 回归基础牛仔裤+衬衫的自由巴黎式漫不经心",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.nssmag.com/en/fashion/44055/paris-fashion-week-mens-fw26-street-style",
+          "caption": "nss magazine — 2026秋冬巴黎时装周街拍：大胆轮廓、精致材质混搭",
+          "source": "nss magazine",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

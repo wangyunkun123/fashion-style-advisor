@@ -1,0 +1,47 @@
+{
+  "style_id": "retro_rockabilly",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "复古摇滚 Rockabilly：1950s 美国摇滚文化，关键词 - 皮夹克、卷边牛仔裤、蓬巴杜发型、红色方巾、creepers鞋",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://highxtar.com/en/celine-ss25-hedi-slimane-revives-the-1920s-with-a-rockabilly-twist/",
+          "caption": "CELINE SS25 — Hedi Slimane「The Bright Young」：1920s英式剪裁×rockabilly态度，条纹西装搭配康乃馨胸针",
+          "source": "Highxtar",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.fashion-headline.com/en/article/9403",
+          "caption": "Saint Laurent SS14 — 闪亮Rockabilly系列：泰迪男孩蓬巴杜发型、爱德华夹克、亮片机车夹克",
+          "source": "Fashion Headline",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://highxtar.com/en/celine-ss25-hedi-slimane-revives-the-1920s-with-a-rockabilly-twist/",
+          "caption": "CELINE SS25 秀场 — 黑白色调交替、电影感怀旧美学",
+          "source": "Highxtar",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://lewkin.com/ms-my/blogs/style-blog/rockabilly-style-men",
+          "caption": "Lewkin — 男士Rockabilly风格指南：经典元素穿搭灵感",
+          "source": "Lewkin",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

@@ -100,7 +100,7 @@ def load_encyclopedia(style_id):
     return {
         'one_liner': one_liner, 'origin': origin, 'quote': quote,
         'brands': brands, 'icons': icons,
-        'encyclopedia_url': f'{CDN_BASE}/styles_universal/{style_id}/encyclopedia.md',
+        'encyclopedia_url': f'{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
     }
 
 
@@ -337,7 +337,7 @@ def build_push(outfit_dir):
 
     # ━━━ 换个风格 ━━━
     alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-    alt_names = [f"[{n}]({CDN_BASE}/styles_universal/{i}/encyclopedia.md)" for i,n in alt_styles if i != style_id]
+    alt_names = [f"[{n}]({CDN_BASE}/styles_universal/{i}/encyclopedia.html)" for i,n in alt_styles if i != style_id]
     parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
     return B.join(parts), style_name, outfit_name

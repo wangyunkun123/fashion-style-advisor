@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松藏青卫衣可增加上半身体量感与肩宽,深色显瘦且衬肤色,侧边条纹设计增添细节"
+    "claude_fit_comment": "宽松藏青卫衣可增加上半身体量感与肩宽,深色显瘦且衬肤色,侧边条纹设计增添细节",
+    "_statement_score": 0.35
   }
 }

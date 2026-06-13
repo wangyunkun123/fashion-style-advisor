@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "立领冲锋衣式训练夹克带肩部拼色设计可增加肩宽与体量感,黑色主体显瘦,适合偏瘦体型"
+    "claude_fit_comment": "立领冲锋衣式训练夹克带肩部拼色设计可增加肩宽与体量感,黑色主体显瘦,适合偏瘦体型",
+    "_statement_score": 0.5
   }
 }

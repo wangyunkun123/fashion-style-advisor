@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "合身POLO款型干净利落,焦糖色温暖显白,但版型贴身对小肚子无遮盖作用"
+    "claude_fit_comment": "合身POLO款型干净利落,焦糖色温暖显白,但版型贴身对小肚子无遮盖作用",
+    "_statement_score": 0.45
   }
 }

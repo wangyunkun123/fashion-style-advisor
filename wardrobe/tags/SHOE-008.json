@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "红白拼色复古帆布鞋个性鲜明,适合休闲穿搭点缀,色彩较跳跃需注意整体搭配平衡"
+    "claude_fit_comment": "红白拼色复古帆布鞋个性鲜明,适合休闲穿搭点缀,色彩较跳跃需注意整体搭配平衡",
+    "_statement_score": 0.55
   }
 }

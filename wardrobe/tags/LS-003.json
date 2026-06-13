@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "合身薄针织衫线条干净,绿色清新衬肤色,但对小肚子无遮盖效果"
+    "claude_fit_comment": "合身薄针织衫线条干净,绿色清新衬肤色,但对小肚子无遮盖效果",
+    "_statement_score": 0.25
   }
 }

@@ -44,9 +44,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "核雕纹理手串质感粗犷,棕褐色温暖显白,适合作为休闲造型的复古配饰点缀"
+    "claude_fit_comment": "核雕纹理手串质感粗犷,棕褐色温暖显白,适合作为休闲造型的复古配饰点缀",
+    "_statement_score": 0.4
   }
 }

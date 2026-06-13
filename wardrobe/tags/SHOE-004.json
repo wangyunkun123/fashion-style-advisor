@@ -46,6 +46,7 @@
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "经典帆布鞋卡其驼色温和耐看,白色鞋头点缀显白,适合日常休闲搭配"
+    "claude_fit_comment": "经典帆布鞋卡其驼色温和耐看,白色鞋头点缀显白,适合日常休闲搭配",
+    "_statement_score": 0.05
   }
 }

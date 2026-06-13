@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "小方格衬衫细节精致,黑白配色显白且耐看,合身剪裁适合休闲偏精致场合"
+    "claude_fit_comment": "小方格衬衫细节精致,黑白配色显白且耐看,合身剪裁适合休闲偏精致场合",
+    "_statement_score": 0.35
   }
 }

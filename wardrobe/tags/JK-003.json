@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "经典黑色皮质棒球服版型干净利落,黑色显瘦但合身剪裁对小肚子修饰有限"
+    "claude_fit_comment": "经典黑色皮质棒球服版型干净利落,黑色显瘦但合身剪裁对小肚子修饰有限",
+    "_statement_score": 0.35
   }
 }

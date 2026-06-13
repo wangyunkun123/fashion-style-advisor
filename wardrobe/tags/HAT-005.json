@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "双面拼色发带/围脖功能性强,适合运动或户外场景增添细节层次"
+    "claude_fit_comment": "双面拼色发带/围脖功能性强,适合运动或户外场景增添细节层次",
+    "_statement_score": 0.35
   }
 }

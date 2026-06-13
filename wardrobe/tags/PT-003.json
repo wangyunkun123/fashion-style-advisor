@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "灯芯绒束脚运动裤宽松保暖,侧边条纹设计拉长腿部视觉比例,适合偏瘦体型日常穿搭"
+    "claude_fit_comment": "灯芯绒束脚运动裤宽松保暖,侧边条纹设计拉长腿部视觉比例,适合偏瘦体型日常穿搭",
+    "_statement_score": 0.4
   }
 }

@@ -46,6 +46,7 @@
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "落肩宽松运动版型可显著增加上半身体量感与肩宽,适合偏瘦体型"
+    "claude_fit_comment": "落肩宽松运动版型可显著增加上半身体量感与肩宽,适合偏瘦体型",
+    "_statement_score": 0.05
   }
 }

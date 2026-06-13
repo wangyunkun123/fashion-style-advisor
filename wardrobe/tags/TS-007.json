@@ -42,9 +42,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "球迷版速干球衣合身剪裁加鲜艳红色,对瘦小肚体型修饰有限,更适合运动休闲场合"
+    "claude_fit_comment": "球迷版速干球衣合身剪裁加鲜艳红色,对瘦小肚体型修饰有限,更适合运动休闲场合",
+    "_statement_score": 0.5
   }
 }

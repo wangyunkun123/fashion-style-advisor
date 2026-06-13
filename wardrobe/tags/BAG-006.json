@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "卡其色机能双肩包带挂件设计,户外风格鲜明,适合休闲或徒步场景"
+    "claude_fit_comment": "卡其色机能双肩包带挂件设计,户外风格鲜明,适合休闲或徒步场景",
+    "_statement_score": 0.3
   }
 }

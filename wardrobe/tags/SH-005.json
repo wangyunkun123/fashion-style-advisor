@@ -43,6 +43,7 @@
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松运动短裤功能性强,卡其灰色低调耐脏,增加下半身体量感适合运动场合"
+    "claude_fit_comment": "宽松运动短裤功能性强,卡其灰色低调耐脏,增加下半身体量感适合运动场合",
+    "_statement_score": 0.05
   }
 }

@@ -46,6 +46,7 @@
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "黑色网眼运动背包轻便透气,适合运动或户外场景使用"
+    "claude_fit_comment": "黑色网眼运动背包轻便透气,适合运动或户外场景使用",
+    "_statement_score": 0.1
   }
 }

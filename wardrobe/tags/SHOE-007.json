@@ -41,9 +41,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "经典小麦色工装靴秋冬保暖耐穿,厚重靴型可平衡偏瘦腿型的纤细感"
+    "claude_fit_comment": "经典小麦色工装靴秋冬保暖耐穿,厚重靴型可平衡偏瘦腿型的纤细感",
+    "_statement_score": 0.45
   }
 }

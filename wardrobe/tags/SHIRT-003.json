@@ -45,6 +45,7 @@
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "黑色合身衬衫显瘦利落,适合商务休闲场合,但合身剪裁对小肚子无遮盖"
+    "claude_fit_comment": "黑色合身衬衫显瘦利落,适合商务休闲场合,但合身剪裁对小肚子无遮盖",
+    "_statement_score": 0.0
   }
 }

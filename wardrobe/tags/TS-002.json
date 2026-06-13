@@ -41,9 +41,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松夏威夷衬衫剪裁可为瘦长身材增加体量感,大面积印花进一步增加视觉宽度"
+    "claude_fit_comment": "宽松夏威夷衬衫剪裁可为瘦长身材增加体量感,大面积印花进一步增加视觉宽度",
+    "_statement_score": 0.3
   }
 }

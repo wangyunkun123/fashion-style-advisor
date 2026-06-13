@@ -43,9 +43,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "墨绿色复古桶包有运动质感，适合轻熟休闲搭配，需手动补充（Claude 未识别此件）"
+    "claude_fit_comment": "墨绿色复古桶包有运动质感，适合轻熟休闲搭配，需手动补充（Claude 未识别此件）",
+    "_statement_score": 0.45
   }
 }

@@ -41,9 +41,10 @@
   ],
   "meta": {
     "is_key_piece": false,
-    "is_statement_piece": false,
+    "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "深藏青底色配密集大叶印花可有效转移视线、遮盖小肚子,藏青色衬肤色"
+    "claude_fit_comment": "深藏青底色配密集大叶印花可有效转移视线、遮盖小肚子,藏青色衬肤色",
+    "_statement_score": 0.6
   }
 }

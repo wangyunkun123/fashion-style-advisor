@@ -1,0 +1,71 @@
+{
+  "style_id": "korean_minimal",
+  "name_zh": "韩系简约",
+  "name_en": "Korean Minimal",
+  "description": "强调「上宽下窄」比例，柔和浅色系为主（薄荷绿、浅蓝、米白），衬衫单穿是核心穿法。适合偏白肤色，给人干净温柔的印象。比Clean Fit多一分柔和，比日系少一分宽松。",
+  "category": "日常休闲",
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["宽松"],
+      "acceptable": ["合身"],
+      "rejected": ["紧身", "廓形"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["冷色", "中性"],
+      "allowed_hues": ["浅蓝", "薄荷绿", "米白", "浅灰", "卡其", "白", "淡粉", "灰"],
+      "max_saturation": "低饱和",
+      "min_lightness": "中明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "柔和浅色系主调，高明度低饱和"
+    },
+    "pattern": {
+      "preferred": ["纯色", "条纹"],
+      "acceptable": ["格纹"],
+      "rejected": ["印花", "Logo", "拼接"]
+    },
+    "fabric": {
+      "preferred": ["棉", "针织", "牛津纺"],
+      "acceptable": ["灯芯绒", "羊毛混纺"],
+      "rejected": ["速干", "合成", "皮质"]
+    },
+    "layering": {
+      "level": "低中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": { "min": 2, "max": 4 }
+  },
+
+  "key_items": [
+    {"category_code": "SHIRT", "hue": ["浅蓝", "薄荷绿", "米白", "白"], "bonus": 20, "reason": "浅色纯色衬衫单穿是韩系灵魂"},
+    {"category_code": "PT", "fit": ["合身"], "bonus": 15, "reason": "束脚休闲裤/修身长裤打造上宽下窄"},
+    {"category_code": "SHOE", "hue": ["白", "米白"], "bonus": 15, "reason": "白色板鞋/德训鞋"},
+    {"category_code": "TS", "pattern": "纯色", "hue": ["白", "米白", "浅灰"], "bonus": 10, "reason": "基础纯色T恤内搭"},
+    {"category_code": "BAG", "bonus": 5, "reason": "简约邮差包/托特包"}
+  ],
+
+  "hard_constraints": [
+    {"field": "pattern.type", "operator": "not_in", "value": ["印花", "拼接"], "reason": "印花和拼接破坏韩系干净感"},
+    {"field": "color.saturation", "operator": "neq", "value": "高饱和", "reason": "高饱和色违背韩系柔和美学"},
+    {"field": "fabric.primary", "operator": "not_in", "value": ["速干", "合成"], "reason": "运动面料不符合韩系质感"}
+  ],
+
+  "soft_constraints": [
+    {"field": "color.lightness", "operator": "in", "value": ["高明度", "中明度"], "weight": 10},
+    {"field": "color.saturation", "operator": "eq", "value": "低饱和", "weight": 8},
+    {"field": "silhouette.fit", "operator": "eq", "value": "宽松", "weight": 5},
+    {"field": "pattern.type", "operator": "eq", "value": "纯色", "weight": 5},
+    {"field": "brand.name", "operator": "in", "value": ["Uniqlo", "HLA"], "weight": 3}
+  ],
+
+  "body_modifier_bonus": {
+    "颜色显白": 10,
+    "增加上半身体量感": 5,
+    "遮盖小肚子": 5
+  },
+
+  "related_styles": ["clean_fit", "smart_casual", "japanese_city_boy"],
+  "conflicting_styles": ["athleisure_sport", "streetwear", "resort_vacation"]
+}

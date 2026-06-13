@@ -1,0 +1,51 @@
+{
+  "clothing_id": "SHOE-004",
+  "category": "鞋子",
+  "category_code": "SHOE",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "卡其驼色",
+    "saturation": "低饱和",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "帆布",
+    "texture": "平纹针织",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Converse",
+    "collection": "Chuck Taylor低帮系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "经典百搭"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "经典帆布鞋卡其驼色温和耐看,白色鞋头点缀显白,适合日常休闲搭配"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "clothing_id": "BAG-006",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "军绿卡其",
+    "saturation": "中饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "其他",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "未知",
+    "collection": null,
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "机能户外风"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "卡其色机能双肩包带挂件设计,户外风格鲜明,适合休闲或徒步场景"
+  }
+}

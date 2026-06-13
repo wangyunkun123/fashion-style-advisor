@@ -1,0 +1,51 @@
+{
+  "clothing_id": "BAG-002",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "灰色花呢",
+    "saturation": "低饱和",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "其他",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "肌理感",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "YASCIQ",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "通勤实用"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "灰色花呢双肩包低调实用,适合通勤或日常出行搭配"
+  }
+}

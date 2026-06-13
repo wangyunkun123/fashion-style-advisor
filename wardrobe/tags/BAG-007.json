@@ -1,0 +1,51 @@
+{
+  "clothing_id": "BAG-007",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "冷色",
+    "hue_name": "墨绿色",
+    "saturation": "中饱和",
+    "lightness": "低明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Wilson",
+    "collection": "复古运动系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "复古运动感"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "墨绿色复古桶包有运动质感，适合轻熟休闲搭配，需手动补充（Claude 未识别此件）"
+  }
+}

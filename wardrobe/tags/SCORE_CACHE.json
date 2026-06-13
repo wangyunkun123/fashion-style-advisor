@@ -1,0 +1,5390 @@
+{
+  "ACC-001": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 2,
+        "key_item_bonus": 20,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 8,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 10,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 6,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "ACC-002": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 2,
+        "key_item_bonus": 20,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 16,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 4,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "ACC-003": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-001": {
+    "athleisure_sport": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-002": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-003": {
+    "athleisure_sport": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-004": {
+    "athleisure_sport": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 36,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 62,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 22,
+        "key_item_bonus": 5,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 18,
+        "key_item_bonus": 5,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 18,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-005": {
+    "athleisure_sport": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-006": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 14,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 2,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "BAG-007": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 19,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 7,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "HAT-001": {
+    "athleisure_sport": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 39,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 53,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "HAT-002": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 8,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 6,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "HAT-003": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "HAT-004": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 22,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 57,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "HAT-005": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "JK-001": {
+    "athleisure_sport": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 8,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 7,
+        "key_item_bonus": 20,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "JK-002": {
+    "athleisure_sport": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 72,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "JK-003": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 26,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "JK-004": {
+    "athleisure_sport": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 68,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "JK-005": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 84,
+      "breakdown": {
+        "soft_constraints": 26,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 18
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "JK-006": {
+    "athleisure_sport": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 65,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 18
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 18
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 77,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "LS-001": {
+    "athleisure_sport": {
+      "score": 33,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 36,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 4,
+        "key_item_bonus": 0,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 3,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "LS-002": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 16,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 11,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "LS-003": {
+    "athleisure_sport": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 16,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 44,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 11,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "LS-004": {
+    "athleisure_sport": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 53,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "PT-001": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 14,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "PT-002": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 9,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "PT-003": {
+    "athleisure_sport": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 14,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "PT-004": {
+    "athleisure_sport": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 14,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "PT-005": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 51,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 12,
+        "key_item_bonus": 15,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 58,
+      "breakdown": {
+        "soft_constraints": 26,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "PT-006": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 44,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 70,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 15,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-001": {
+    "athleisure_sport": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-002": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 78,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 18,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-003": {
+    "athleisure_sport": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-004": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 44,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 59,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 60,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-005": {
+    "athleisure_sport": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-006": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-007": {
+    "athleisure_sport": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SH-008": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "SHIRT-001": {
+    "athleisure_sport": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 51,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "SHIRT-002": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 26,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 53,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 68,
+      "breakdown": {
+        "soft_constraints": 31,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "SHIRT-003": {
+    "athleisure_sport": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 52,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 40,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 58,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "SHIRT-004": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 14,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 14,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 11,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "SHOE-001": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-002": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-003": {
+    "athleisure_sport": {
+      "score": 73,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 16,
+        "key_item_bonus": 20,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 18,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 9,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 3,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-004": {
+    "athleisure_sport": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 27,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-005": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 27,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 53,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-006": {
+    "athleisure_sport": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 0,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 0,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 19,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 4,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 9,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 9,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 3,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-007": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 8,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 16,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 6,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 16,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-008": {
+    "athleisure_sport": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 0,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 14,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 9,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 8,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 15,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 3,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-009": {
+    "athleisure_sport": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "chinese_heritage": {
+      "score": 52,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 18,
+        "key_item_bonus": 10,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 55,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 22,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 74,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 22,
+        "key_item_bonus": 15,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 18,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SHOE-010": {
+    "athleisure_sport": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-001": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 33,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 14,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-002": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 39,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 12,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-003": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-004": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 39,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 53,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-005": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 39,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SOCK-006": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 22,
+        "key_item_bonus": 5,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 62,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SUN-001": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SUN-002": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "SUN-003": {
+    "athleisure_sport": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 7,
+        "key_item_bonus": 10,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TANK-001": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 48,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "TANK-002": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 59,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 38,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "TANK-003": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 52,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 51,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 68,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "TS-001": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 16,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 33,
+      "breakdown": {
+        "soft_constraints": 13,
+        "color_compatibility": 6,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "smart_casual": {
+      "score": 35,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    }
+  },
+  "TS-002": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 74,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 22,
+        "key_item_bonus": 15,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 84,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 18,
+        "key_item_bonus": 20,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 10
+      },
+      "passed": true
+    }
+  },
+  "TS-003": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 36,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 24,
+      "breakdown": {
+        "soft_constraints": 11,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TS-004": {
+    "athleisure_sport": {
+      "score": 49,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 51,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "TS-005": {
+    "athleisure_sport": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 56,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 43,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 80,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 22,
+        "key_item_bonus": 15,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 68,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 52,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 57,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "TS-006": {
+    "athleisure_sport": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 34,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 70,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 14,
+        "key_item_bonus": 15,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 28,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 3,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 66,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "TS-007": {
+    "athleisure_sport": {
+      "score": 58,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 8,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 6,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 9,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 3,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TS-008": {
+    "athleisure_sport": {
+      "score": 17,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 16,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 64,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 20,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TS-009": {
+    "athleisure_sport": {
+      "score": 45,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 10,
+        "key_item_bonus": 15,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "clean_fit": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "japanese_city_boy": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "korean_minimal": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "resort_vacation": {
+      "score": 26,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 0,
+      "breakdown": {},
+      "passed": false
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TS-010": {
+    "athleisure_sport": {
+      "score": 23,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 50,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 41,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 42,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 60,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 22,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 47,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 30,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 11,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true
+    }
+  },
+  "TS-011": {
+    "athleisure_sport": {
+      "score": 20,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 3
+      },
+      "passed": true
+    },
+    "chinese_heritage": {
+      "score": 61,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "clean_fit": {
+      "score": 75,
+      "breakdown": {
+        "soft_constraints": 23,
+        "color_compatibility": 18,
+        "key_item_bonus": 20,
+        "body_modifier": 5
+      },
+      "passed": true
+    },
+    "japanese_city_boy": {
+      "score": 85,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 22,
+        "key_item_bonus": 15,
+        "body_modifier": 13
+      },
+      "passed": true
+    },
+    "korean_minimal": {
+      "score": 85,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 22,
+        "key_item_bonus": 10,
+        "body_modifier": 15
+      },
+      "passed": true
+    },
+    "resort_vacation": {
+      "score": 52,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 8
+      },
+      "passed": true
+    },
+    "smart_casual": {
+      "score": 32,
+      "breakdown": {
+        "soft_constraints": 0,
+        "color_compatibility": 18,
+        "key_item_bonus": 0,
+        "body_modifier": 10
+      },
+      "passed": true
+    },
+    "streetwear": {
+      "score": 51,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 10,
+        "body_modifier": 15
+      },
+      "passed": true
+    }
+  },
+  "_meta": {
+    "generated_at": "2026-06-13 09:58:27",
+    "clothing_count": 76,
+    "style_count": 8,
+    "elapsed_seconds": 0.1
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "clothing_id": "PT-001",
+  "category": "长裤",
+  "category_code": "PT",
+  "color": {
+    "hue_family": "冷色",
+    "hue_name": "浅水洗蓝",
+    "saturation": "低饱和",
+    "lightness": "高明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "牛仔",
+    "texture": "斜纹",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "未知",
+    "collection": null,
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "增加下半身体量感",
+    "遮盖纤细小腿"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "宽松直筒牛仔裤可为偏瘦的腿型增加体量感,浅色水洗显休闲随性"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_comment": "天气-场合 → 风格推荐映射。auto_suggest_style() 读取此文件。",
+  "weather_rules": [
+    {"temp_high_gte": 35, "condition": "晴", "suggest": ["resort_vacation", "clean_fit"], "reason": "酷热天气优先透气轻薄"},
+    {"temp_high_between": [28, 34], "condition": "晴", "suggest": ["japanese_city_boy", "korean_minimal", "clean_fit"], "reason": "适宜温度适合层次穿搭"},
+    {"temp_high_between": [22, 27], "suggest": ["clean_fit", "smart_casual", "japanese_city_boy", "korean_minimal"], "reason": "舒适温度适合多种风格"},
+    {"temp_high_lte": 21, "suggest": ["smart_casual", "streetwear", "chinese_heritage"], "reason": "降温适合外套+叠穿"},
+    {"condition": "雨", "suggest": ["clean_fit", "smart_casual", "streetwear"], "reason": "雨天优先深色系、不易显脏"},
+    {"condition": "阴", "suggest": ["japanese_city_boy", "clean_fit", "streetwear"], "reason": "阴天适合灰调/暗色穿搭"}
+  ],
+  "occasion_rules": [
+    {"occasion": "运动", "suggest": ["athleisure_sport"], "reason": "运动场景优先运动休闲"},
+    {"occasion": "约会", "suggest": ["smart_casual", "korean_minimal", "chinese_heritage"], "reason": "约会需要精致但不刻意"},
+    {"occasion": "通勤", "suggest": ["clean_fit", "smart_casual", "korean_minimal"], "reason": "通勤需要干净利落"},
+    {"occasion": "度假", "suggest": ["resort_vacation", "japanese_city_boy"], "reason": "度假优先放松感"},
+    {"occasion": "户外", "suggest": ["athleisure_sport", "streetwear"], "reason": "户外优先功能性和耐脏"},
+    {"occasion": "聚会", "suggest": ["smart_casual", "streetwear", "chinese_heritage"], "reason": "聚会可以稍微有态度"},
+    {"occasion": "居家", "suggest": ["athleisure_sport", "clean_fit"], "reason": "居家优先舒适"}
+  ]
+}

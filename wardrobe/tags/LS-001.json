@@ -1,0 +1,51 @@
+{
+  "clothing_id": "LS-001",
+  "category": "长袖上衣",
+  "category_code": "LS",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "正红色",
+    "saturation": "高饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": false
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "增加肩宽",
+    "torso_effect": "增加上半身体量感",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "印花",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "磨毛",
+    "weight": "中厚",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "FILA",
+    "collection": "Italia Collezione熊系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加肩宽",
+    "增加上半身体量感",
+    "视觉鲜艳吸睛"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "宽松连帽卫衣可大幅增加上半身体量感和肩宽,适合偏瘦体型,但大红色较为鲜艳吸睛"
+  }
+}

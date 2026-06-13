@@ -1,0 +1,51 @@
+{
+  "clothing_id": "BAG-003",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "黑色",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "网眼",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "网眼",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "Puma",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "运动机能"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "黑色网眼运动背包轻便透气,适合运动或户外场景使用"
+  }
+}

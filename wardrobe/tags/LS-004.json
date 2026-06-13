@@ -1,0 +1,51 @@
+{
+  "clothing_id": "LS-004",
+  "category": "长袖上衣",
+  "category_code": "LS",
+  "color": {
+    "hue_family": "冷色",
+    "hue_name": "藏青色",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "增加肩宽",
+    "torso_effect": "增加上半身体量感",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "拼接",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "磨毛",
+    "weight": "中厚",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "COMME des GARÇONS PLAY",
+    "collection": "条纹拼接系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加肩宽",
+    "增加上半身体量感",
+    "颜色显白"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "宽松藏青卫衣可增加上半身体量感与肩宽,深色显瘦且衬肤色,侧边条纹设计增添细节"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "style_id": "resort_vacation",
+  "name_zh": "度假休闲",
+  "name_en": "Resort / Vacation",
+  "description": "热带印花 + 亚麻材质 + 宽松透气。北京夏季高温（35°C+）时自动推荐。夏威夷衬衫、亚麻短裤、渔夫帽、墨镜是标配。明亮自然色调，给人放松感。",
+  "category": "度假",
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["宽松", "廓形"],
+      "acceptable": ["合身"],
+      "rejected": ["紧身"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["暖色", "中性", "冷色"],
+      "allowed_hues": ["白", "米白", "棕", "绿", "浅蓝", "卡其", "咖啡", "驼色"],
+      "max_saturation": "中饱和",
+      "max_colors_per_outfit": 5,
+      "color_logic": "明亮自然色，植物绿 + 大地棕 + 天空蓝"
+    },
+    "pattern": {
+      "preferred": ["印花", "纯色"],
+      "acceptable": ["条纹"],
+      "rejected": ["格纹", "拼接"]
+    },
+    "fabric": {
+      "preferred": ["亚麻", "麻", "棉"],
+      "acceptable": ["帆布", "针织"],
+      "rejected": ["速干", "合成", "皮质", "羊毛混纺"]
+    },
+    "layering": {
+      "level": "低",
+      "min_layers": 1,
+      "max_layers": 1
+    },
+    "formality_range": { "min": 1, "max": 2 }
+  },
+
+  "key_items": [
+    {"category_code": "TS", "pattern": "印花", "bonus": 20, "reason": "夏威夷衬衫/热带印花短袖是度假灵魂"},
+    {"category_code": "SH", "fabric": ["亚麻", "麻", "棉"], "bonus": 15, "reason": "亚麻/棉质短裤透气舒适"},
+    {"category_code": "HAT", "bonus": 15, "reason": "渔夫帽遮阳+造型"},
+    {"category_code": "SUN", "bonus": 10, "reason": "墨镜是度假必备"},
+    {"category_code": "SHOE", "hue": ["卡其", "米白", "白"], "bonus": 10, "reason": "帆布鞋/凉拖"},
+    {"category_code": "BAG", "fabric": "帆布", "bonus": 5, "reason": "帆布托特包/草编包"}
+  ],
+
+  "hard_constraints": [
+    {"field": "fabric.primary", "operator": "not_in", "value": ["羊毛混纺", "皮质"], "reason": "厚重面料不适合度假"},
+    {"field": "fabric.weight", "operator": "neq", "value": "厚重", "reason": "度假必须轻薄透气"},
+    {"field": "formality", "operator": "lte", "value": 2, "reason": "度假不超过休闲正式度"}
+  ],
+
+  "soft_constraints": [
+    {"field": "fabric.primary", "operator": "in", "value": ["亚麻", "麻", "棉"], "weight": 10},
+    {"field": "pattern.type", "operator": "eq", "value": "印花", "weight": 8},
+    {"field": "silhouette.fit", "operator": "eq", "value": "宽松", "weight": 5},
+    {"field": "color.lightness", "operator": "eq", "value": "高明度", "weight": 5}
+  ],
+
+  "body_modifier_bonus": {
+    "颜色显白": 8
+  },
+
+  "related_styles": [],
+  "conflicting_styles": ["smart_casual", "chinese_heritage"]
+}

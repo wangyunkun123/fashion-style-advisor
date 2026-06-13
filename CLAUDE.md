@@ -8,8 +8,24 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - `outfits/` — 按 `日期_场景` 组织每日穿搭
 - `config/seedream.local.json` — API 密钥 + Server酱 SendKey（不提交 Git）
 
+## 风格库
+- `styles/` — 8个风格指纹定义（JSON）
+- `wardrobe/tags/` — 76件服装结构化标签（JSON）
+- `wardrobe/tags/SCORE_CACHE.json` — 608组风格兼容度缓存
+- `tools/style_matcher.py` — 风格匹配引擎
+- `config/style_defaults.json` — 天气-场合-风格默认映射
+
+### 风格匹配流程
+```
+风格指定 → python3 tools/style_matcher.py <style_id> → 候选单品排名
+       → python3 tools/style_matcher.py <style_id> <品类> → 某品类筛选
+未指定   → python3 tools/style_matcher.py --auto <温度> <天气> <场合> → 自动推荐
+```
+
 ## 操作指令
-- **"推荐穿搭"** → 读取 wardrobe + 天气，给出搭配方案
+- **"推荐穿搭"** → 读取 wardrobe + 天气 → 风格匹配筛选 → 给出搭配方案
+- **"风格排名"** → `python3 tools/style_matcher.py <style_id>`
+- **"风格矩阵"** → `python3 tools/style_scorer.py --matrix`
 - **"生成效果图"** → 完整流程：Seedream生图 → 同步抠图 → composite_v2排版 → git push → 微信推送
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`

@@ -1,0 +1,49 @@
+{
+  "clothing_id": "SHOE-007",
+  "category": "鞋子",
+  "category_code": "SHOE",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "小麦棕",
+    "saturation": "中饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "皮质",
+    "texture": "磨毛",
+    "weight": "厚重",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Timberland",
+    "collection": "经典工装靴系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加下半身视觉重量感"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "经典小麦色工装靴秋冬保暖耐穿,厚重靴型可平衡偏瘦腿型的纤细感"
+  }
+}

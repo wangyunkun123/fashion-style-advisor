@@ -1,0 +1,48 @@
+{
+  "clothing_id": "SH-007",
+  "category": "短裤",
+  "category_code": "SH",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "黑色",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "轻薄",
+    "seasonality": [
+      "夏"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "LIBERTY SHINE",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加下半身体量感"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "宽松机能短裤黑色显瘦,白色抽绳点缀细节,适合夏季休闲日常"
+  }
+}

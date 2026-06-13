@@ -1,0 +1,50 @@
+{
+  "clothing_id": "HAT-003",
+  "category": "帽子",
+  "category_code": "HAT",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "黑色",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "肌理感",
+    "weight": "中厚",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "未知",
+    "collection": null,
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "机能风格"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "黑色机能渔夫帽带金属配件细节,百搭显瘦,适合秋冬休闲造型"
+  }
+}

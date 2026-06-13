@@ -1,0 +1,49 @@
+{
+  "clothing_id": "SHOE-010",
+  "category": "鞋子",
+  "category_code": "SHOE",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "米白拼黑",
+    "saturation": "低饱和",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "轻薄",
+    "seasonality": [
+      "夏"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "Puma",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "休闲居家"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "经典拖鞋款式简单易穿,适合居家或夏季短途休闲场合,Logo设计较为醒目"
+  }
+}

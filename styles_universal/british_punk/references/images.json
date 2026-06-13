@@ -1,0 +1,79 @@
+{
+  "style_id": "british_punk",
+  "style_name": "英式朋克",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://theimpression.com/charles-jeffrey-loverboy-fall-2024-ad-campaign-review/",
+          "caption": "Charles Jeffrey Loverboy 2024秋冬 - 苏格兰后朋克性别流动大片",
+          "source": "The Impression, 2024"
+        },
+        {
+          "url": "https://www.dazeddigital.com/beauty/article/64630/1/georgia-palmer-pays-tribute-to-jean-paul-gaultier-s-punk-chic-legacy",
+          "caption": "Dazed JPG朋克致敬 - 1970s英式朋克与当代伦敦地下融合",
+          "source": "Dazed Digital, 2024"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://fashionunited.uk/news/fashion/john-richmond-brought-his-punk-spirit-to-lfw/2025022680361",
+          "caption": "John Richmond LFW 2025 - 米兰废弃地铁站朋克高定秀",
+          "source": "FashionUnited UK, 2025"
+        },
+        {
+          "url": "https://www.designscene.net/2025/02/lost-love-john-richmond-returns-to-london-fashion-week.html",
+          "caption": "John Richmond 重返伦敦时装周 - 'Lost Love' 朋克精神回归",
+          "source": "Design Scene, 2025"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.thefader.com/2026/02/20/boy-london-fall-2026-collection-creative-director-can-tran-interview",
+          "caption": "Boy London FW26 - Can Tran 执掌的朋克新世代名人穿搭",
+          "source": "The FADER, 2026"
+        },
+        {
+          "url": "https://www.lifeminute.tv/fashion/video/boy-londons-gothic-guillotine-collection-fuses-punk-heritage-medieval-drama-nyfw-fallwinter-2026",
+          "caption": "Boy London 'Guillotine' - 朋克遗产 + 中世纪戏剧 NYFW首秀",
+          "source": "LifeMinute TV, 2026"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://www.flaunt.com/post/john-richmond-spring-summer-2026",
+          "caption": "John Richmond SS26 - 英式朋克街头与高定融合",
+          "source": "Flaunt Magazine, 2026"
+        },
+        {
+          "url": "https://gulfnews.com/lifestyle/fashion/john-richmond-on-punk-music-and-dubai-fashion-week-i-dont-design-for-the-sake-of-it-1.500430997-1.500430997",
+          "caption": "John Richmond 朋克心态 - '不为设计而设计' 的英式反叛精神",
+          "source": "Gulf News, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://stockcake.com/i/punk-fashion-runway_1042480_349117",
+          "caption": "StockCake 朋克秀场图 - 铆钉皮衣 + 破坏牛仔经典英式朋克造型",
+          "source": "StockCake"
+        }
+      ]
+    }
+  }
+}

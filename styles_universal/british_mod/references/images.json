@@ -1,0 +1,79 @@
+{
+  "style_id": "british_mod",
+  "style_name": "英式摩登",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.flaunt.com/post/ben-sherman-autumn-winter-2024-signature-collection-launch",
+          "caption": "Ben Sherman 2024秋冬签名系列 - 英式Mod经典复兴",
+          "source": "Flaunt Magazine, 2024"
+        },
+        {
+          "url": "https://www.standout.co.uk/blog/get-look-noel-gallagher/",
+          "caption": "Noel Gallagher Mod风格解析 - Harrington夹克 + Fred Perry Polo + Desert Boots",
+          "source": "Standout Blog, 2025"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.esteticamagazine.com/2026/03/03/the-brit-awards-2026-mens-styling-takes-centre-stage-with-a-fresh-focus-on-natural-movement/",
+          "caption": "BRIT Awards 2026 男装 - 英式Mod自然动感造型复兴",
+          "source": "Estetica Magazine, 2026"
+        },
+        {
+          "url": "https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e",
+          "caption": "Oasis Britpop 风格档案 - Mod文化30年经典回顾",
+          "source": "GQ Australia, 2025"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.thegentlemansjournal.com/article/danny-lomas-interview-2024/",
+          "caption": "Danny Lomas - Instagram最佳Mod复兴者, Fred Perry + Our Legacy 混搭",
+          "source": "The Gentleman's Journal, 2024"
+        },
+        {
+          "url": "https://www.shortlist.com/style/is-the-traditional-suit-dead-the-future-of-formal-wear-according-to-savile-rows-elite-tailors",
+          "caption": "Mod至Savile Row - 英国男装从街头到裁缝街的风格演进",
+          "source": "Shortlist, 2025"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://www.mazeys.co.uk/blogs/news/brighton-1964-vs-2026-how-mod-fashion-has-evolved-and-whats-stayed-the-same",
+          "caption": "Brighton 1964 vs 2026 - Mod风格60年街拍演进史",
+          "source": "Mazeys, 2026"
+        },
+        {
+          "url": "https://www.fashionbeans.com/article/mod-fashion-guide/",
+          "caption": "FashionBeans Mod风格完全指南 - 从Soho到当代街头的完整图鉴",
+          "source": "FashionBeans, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://seeninthecity.co.uk/the-best-mod-influencers-you-should-follow-for-inspiration/",
+          "caption": "Seen in The City 最佳Mod博主推荐 - 社交媒体英式摩登灵感来源",
+          "source": "Seen in The City, 2025"
+        }
+      ]
+    }
+  }
+}

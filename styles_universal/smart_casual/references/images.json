@@ -1,0 +1,79 @@
+{
+  "style_id": "smart_casual",
+  "style_name": "轻熟休闲",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.thefashionisto.com/story/mango-richard-james-2026/",
+          "caption": "Mango x Richard James 2026 - 萨维尔街轻熟休闲英伦大片",
+          "source": "The Fashionisto, 2026"
+        },
+        {
+          "url": "https://robbreport.com.sg/smart-casual-menswear-tips/",
+          "caption": "Robb Report 轻熟休闲穿搭法则 - '男装最主流的着装密码'",
+          "source": "Robb Report Singapore, 2024"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/courreges/slideshow/details",
+          "caption": "Courrèges 2026春夏男装 - 轻熟廓形现代演绎",
+          "source": "Vogue Runway, 2025"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/undercover/slideshow/details",
+          "caption": "Undercover 2026春夏男装 - 日常奢华街头与正装融合",
+          "source": "Vogue Runway, 2025"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.gq-magazine.co.uk/article/joe-alwyn-bally-suit-2024",
+          "caption": "Joe Alwyn Bally 轻熟西装 - '高级工装' 红毯造型",
+          "source": "GQ UK, 2024"
+        },
+        {
+          "url": "https://www.esquire.com/uk/style/fashion/a65249347/guide-to-preppy-style/",
+          "caption": "Esquire 轻熟休闲指南 - Chris Pine, Ryan Gosling 名人示范",
+          "source": "Esquire UK, 2025"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://seoultrad.com/blazer-chino-outfit-men/",
+          "caption": "SeoulTrad 轻熟三公式 - Navy Blazer + Chino 组合拆解",
+          "source": "SeoulTrad, 2026"
+        },
+        {
+          "url": "https://mengrip.com/what-can-men-wear-for-smart-casual/",
+          "caption": "MenGrip 轻熟休闲穿搭规则 - 简单规则打造精致日常",
+          "source": "MenGrip, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://dunniotailor.com/blog/blazer-and-chinos-combinations.html",
+          "caption": "Dunnio Tailor Blazer+Chinos 完全指南 - 轻熟风社交媒体爆款组合",
+          "source": "Dunnio Tailor, 2026"
+        }
+      ]
+    }
+  }
+}

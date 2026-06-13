@@ -1,0 +1,79 @@
+{
+  "style_id": "clean_fit",
+  "style_name": "Clean Fit",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/brands/zara/zara-origins-fall-2025/",
+          "caption": "Zara Origins 2025秋冬 - '极简精炼' 纯色基础款净版大片",
+          "source": "Male Model Scene, 2025"
+        },
+        {
+          "url": "https://www.malemodelscene.net/menswear/clement-chabernaud-massimo-dutti-summer-2025/",
+          "caption": "Massimo Dutti 2025夏季 - Clement Chabernaud 演绎 '版型、面料与形态'",
+          "source": "Male Model Scene, 2025"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.lofficielusa.com/fashion-week/loewe-mens-spring-summer-2025-fashion-show-review-images",
+          "caption": "Loewe 2025春夏男装 - Jonathan Anderson '激进的克制' 极简主义",
+          "source": "L'Officiel USA, 2024"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/loewe",
+          "caption": "Loewe Spring 2025 Menswear - 极简廓形 Vogue Runway 完整图集",
+          "source": "Vogue Runway, 2024"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/menswear/idris-elba-calvin-klein",
+          "caption": "Idris Elba Calvin Klein 2024春季 - '干净简洁功能性' 代言",
+          "source": "Male Model Scene, 2024"
+        },
+        {
+          "url": "https://timesofindia.indiatimes.com/entertainment/english/hollywood/news/move-aside-rodent-man-hollywood-has-a-new-masculine-archetype-james-clean/articleshow/124992502.cms",
+          "caption": "'James Clean' 好莱坞新男性原型 - Austin Butler, Jacob Elordi 领衔",
+          "source": "Times of India/NYT, 2025"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://www.madamefigaro.hk/hommes/%e7%94%b7%e5%a3%abcleanfit%e7%a9%bf%e6%90%ad%e9%9d%88%e6%84%9f-%e5%a4%8f%e6%97%a5%e9%80%a0%e5%9e%8b-%e6%b8%85%e7%88%bd-188013/2/",
+          "caption": "Madame Figaro HK Clean Fit 穿搭灵感 - 夏日清爽慵懒造型",
+          "source": "Madame Figaro Hong Kong, 2025"
+        },
+        {
+          "url": "https://www.fashionbeans.com/article/how-to-recreate-the-clean-guy-uniform-thats-all-over-instagram/",
+          "caption": "FashionBeans Clean Guy 公式 - Instagram 爆款净版穿搭拆解",
+          "source": "FashionBeans, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/agencies/rockmen-paris/zara-fw25-lookbook/",
+          "caption": "Clément Laguardia ZARA FW25 Lookbook - 减法美学社交灵感",
+          "source": "Male Model Scene, 2025"
+        }
+      ]
+    }
+  }
+}

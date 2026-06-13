@@ -1280,9 +1280,10 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         cid = item['clothing_id']
         cat = item.get('category', '')
         color = item.get('color', {}).get('hue_name', '')
-        is_anchor = ' ⭐' if cid == anchor_id else ''
+        # ⚠️ ⭐ 不能放在 ID 列，否则 composite_v2 的 parse() 会把 ⭐ 读入 ID → 找不到文件
+        marker = ' ⭐锚点' if cid == anchor_id else ''
         items_table_lines.append(
-            f"| {cat} | **{cid}**{is_anchor} | {color} | {appeal['visual_signature'][:30]} |"
+            f"| {cat} | **{cid}** | {color} | {appeal['visual_signature'][:30]}{marker} |"
         )
 
     outfit_md = f"""# {style_name} B线探索穿搭

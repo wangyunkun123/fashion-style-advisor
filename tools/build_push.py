@@ -300,7 +300,7 @@ def build_push(outfit_dir):
         score_str = f"{score}分" if isinstance(score, int) else str(score)
         item_lines.append(f"{emoji} **{name}**\n`{cid}` · 匹配度 {score_str}")
         if reason:
-            item_lines.append(f"💡 {reason}")
+            item_lines.append(f"> 💡 {reason}")
     if acc_items:
         for it in acc_items:
             e = {'HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍'}.get(it['id'].split('-')[0],'🔹')

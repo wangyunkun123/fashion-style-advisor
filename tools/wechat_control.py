@@ -12,6 +12,7 @@
 
 import json
 import os
+import re
 import sys
 import re
 import shutil
@@ -514,9 +515,20 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 - seedream_prompt 必须是英文，详细描述服装细节和场景氛围"""
 
 
+def _detect_bline_from_hint(style_hint):
+    """从 style_hint 检测 B线触发词"""
+    try:
+        from style_lab import detect_bline_trigger
+        return detect_bline_trigger(style_hint)
+    except ImportError:
+        return False, False
+
+
 def run_pipeline(style_hint, task_id=None):
     """完整生图管线: API穿搭分析 → Seedream生图 → 排版 → 推送"""
-    log(f"🚀 管线启动: {style_hint}")
+    is_bline, is_bold = _detect_bline_from_hint(style_hint)
+    bline_tag = '🚀' if is_bold else ('🧪' if is_bline else '')
+    log(f"🚀 管线启动: {style_hint} {'| B线'+('大胆' if is_bold else '微调') if is_bline else ''}")
     log_lines = []
 
     def progress(msg):
@@ -607,12 +619,24 @@ def run_pipeline(style_hint, task_id=None):
                 'result': result_text,
             })
 
-            # 微信备份推送
-            content = f"![效果图]({github_url})\n\n"
-            if summary:
-                content += f"**单品清单**\n{summary}\n\n"
-            content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-            push_wechat(f"👔 {style_hint}", content)
+            # 微信推送：B线触发时走 build_push 完整流程
+            if is_bline:
+                try:
+                    bf = '--bold' if is_bold else '--bline'
+                    run_cli(['python3', 'tools/build_push.py', outfit_dir, bf], timeout=30)
+                except Exception:
+                    # 回退到手动词
+                    content = f"![效果图]({github_url})\n\n"
+                    if summary:
+                        content += f"**单品清单**\n{summary}\n\n"
+                    content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
+                    push_wechat(f"👔 {style_hint}", content)
+            else:
+                content = f"![效果图]({github_url})\n\n"
+                if summary:
+                    content += f"**单品清单**\n{summary}\n\n"
+                content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
+                push_wechat(f"👔 {style_hint}", content)
         else:
             if task_id:
                 tasks.update(task_id, status='error', message='未找到排版图', log='\n'.join(log_lines))
@@ -710,9 +734,11 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <span class="chip" data-cmd="同步">📤 同步</span>
 <span class="chip" data-cmd="状态">📊 状态</span>
 <span class="chip" data-cmd="帮助">❓ 帮助</span>
+<span class="chip" data-cmd="探索 日系" style="background:#e8f5e9;color:#2e7d32;">🧪 探索</span>
+<span class="chip" data-cmd="大胆 混搭" style="background:#fff3e0;color:#e65100;">🚀 大胆</span>
 </div>
 <div class="input-row">
-<input type="text" id="input" placeholder="输入指令…如：生成 日系休闲" autocomplete="off" enterkeyhint="send">
+<input type="text" id="input" placeholder="输入指令…如：生成 日系休闲 | 探索 街头 | 大胆 混搭" autocomplete="off" enterkeyhint="send">
 <button id="sendBtn">▶</button>
 </div>
 </div>
@@ -848,11 +874,90 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 import json as _json
                 with open(pref_file, 'w') as f:
                     _json.dump({'mode': mode, 'updated': time.strftime('%Y-%m-%d %H:%M')}, f, ensure_ascii=False, indent=2)
-                names = {'simple': '🅰️ 简约版', 'rich': '🅱️ 百科版', 'both': '🅰️+🅱️ 双版'}
+                names = {'simple': '🅰️ 简约版', 'rich': '🅱️ 时尚版', 'both': '🅰️+🅱️ 双版'}
                 self._html_resp(200, f"<html><body style='font-family:sans-serif;padding:40px;text-align:center;background:#f5f0eb'><h2>✅ 推送偏好已设置</h2><p style='font-size:24px;margin:20px'>{names.get(mode, mode)}</p><p style='color:#999'>下次推送将按此偏好发送</p><p><a href='/'>返回控制面板</a></p></body></html>")
                 log(f"推送偏好已设置为: {mode}")
             else:
                 self._json_resp(400, {"error": "mode 必须是 simple/rich/both"})
+            return
+
+        # 🔥 现在就试：风格立即生成
+        if parsed.path.startswith('/try/'):
+            style_id = parsed.path.split('/try/')[-1].strip()
+            if not style_id:
+                self._html_resp(400, '<p>缺少风格 ID</p>'); return
+            # 读取百科简介
+            encyc_path = os.path.join(PROJECT_DIR, 'styles_universal', style_id, 'encyclopedia.md')
+            style_desc = ''
+            if os.path.exists(encyc_path):
+                with open(encyc_path, 'r') as f:
+                    for line in f:
+                        if '一句话定义' in line:
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m: style_desc = m.group(1).strip()[:60]; break
+            # 风格名映射
+            try:
+                with open(os.path.join(PROJECT_DIR, 'styles', f'{style_id}.json')) as f:
+                    sj = json.load(f)
+                    style_name = sj.get('name_zh', style_id)
+            except:
+                style_name = style_id
+            TRY_HTML = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>现在就试 · {style_name}</title>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:-apple-system,sans-serif;background:#f5f0eb;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}}
+.card{{background:#fff;border-radius:16px;padding:32px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.06)}}
+h2{{font-size:22px;color:#3a3028;margin-bottom:8px}}
+.desc{{font-size:14px;color:#999;margin-bottom:24px;line-height:1.5}}
+.btn{{display:block;width:100%;padding:16px;border:none;border-radius:12px;font-size:18px;font-weight:600;cursor:pointer;margin-bottom:12px;-webkit-tap-highlight-color:transparent}}
+.btn-primary{{background:linear-gradient(135deg,#3a3028,#5c4d3c);color:#fff}}
+.btn-primary:active{{opacity:.8}}
+.btn-secondary{{background:#f5f0eb;color:#5c4d3c}}
+.status{{font-size:13px;color:#999;margin-top:12px;display:none}}
+.spinner{{display:inline-block;width:14px;height:14px;border:2px solid #d0c8bc;border-top-color:#3a3028;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:-2px}}
+@keyframes spin{{to{{transform:rotate(360deg)}}}}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>🧪 {style_name}</h2>
+<div class="desc">{style_desc or '点击下方按钮，AI 将为你生成一套' + style_name + '风格穿搭并推送到微信'}</div>
+<button class="btn btn-primary" onclick="tryNow()">🔥 现在就试</button>
+<button class="btn btn-secondary" onclick="history.back()">← 返回</button>
+<div class="status" id="status"><span class="spinner"></span>正在生成穿搭...</div>
+</div>
+<script>
+async function tryNow(){{
+document.querySelector('.btn-primary').disabled=true;
+document.getElementById('status').style.display='block';
+try{{
+let r=await fetch('/api/try/'+encodeURIComponent('{style_id}'));
+let d=await r.json();
+if(d.ok){{document.getElementById('status').innerHTML='✅ 已开始生成！稍后查看微信推送';}}
+else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
+}}catch(e){{document.getElementById('status').innerHTML='❌ 网络错误';}}
+}}
+</script>
+</body>
+</html>'''
+            self._html_resp(200, TRY_HTML)
+            return
+
+        if parsed.path.startswith('/api/try/'):
+            style_id = parsed.path.split('/api/try/')[-1].strip()
+            if not style_id:
+                self._json_resp(400, {"error": "缺少风格 ID"}); return
+            try:
+                tid = _start_async_pipeline('generate', style_id)
+                log(f"🔥 远程试穿: {style_id} → task {tid}")
+                self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_id} 穿搭"})
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
             return
 
         # 穿搭评分页面

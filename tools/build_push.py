@@ -518,8 +518,29 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
     # ━━━ 配色 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
-    if color_logic:
-        parts.append(f"━━━ 🎨 配色 ━━━\n\n{color_logic}")
+    # 提取排版图中的配色色块
+    swatches_html = ''
+    cache_file = os.path.join(outfit_dir, '上身效果', '.color_cache.json')
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r') as f:
+                colors = json.load(f)
+            # 生成色块（用 Markdown 兼容的格式）
+            blocks = []
+            for rgb in colors[:5]:
+                hex_color = '#{:02x}{:02x}{:02x}'.format(*rgb)
+                blocks.append(f'`{hex_color}`')
+            swatches_html = ' '.join(blocks)
+        except:
+            pass
+
+    if color_logic or swatches_html:
+        color_parts = []
+        if swatches_html:
+            color_parts.append(f"🎨 {swatches_html}")
+        if color_logic:
+            color_parts.append(color_logic)
+        parts.append("━━━ 🎨 配色 ━━━\n\n" + '\n\n'.join(color_parts))
 
     # ━━━ 今天也适合（动态生成）━━━
     if STYLE_LAB_AVAILABLE:
@@ -535,19 +556,22 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         )
         if alt_items:
             alt_names = []
+            base = get_push_base_url()
             for a in alt_items:
-                url = f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{a["style_id"]}/encyclopedia.html'
+                url = f'{base}/try/{a["style_id"]}'
                 alt_names.append(f"[{a['style_name']}]({url}) — {a['why']}")
             parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + '\n\n'.join(alt_names))
         else:
             # 降级：硬编码备用
+            base = get_push_base_url()
             alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-            alt_names = [f"[{n}](https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{i}/encyclopedia.html)" for i,n in alt_styles if i != style_id]
+            alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
             parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
     else:
         # 无 style_lab 时保持原有硬编码
+        base = get_push_base_url()
         alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-        alt_names = [f"[{n}](https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{i}/encyclopedia.html)" for i,n in alt_styles if i != style_id]
+        alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
         parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
     # ━━━ 状态更新 ━━━
@@ -620,7 +644,9 @@ def build_simple(outfit_dir):
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--bline] [--bold]")
+        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--bline|--explore] [--bold|--adventure]")
+        print("  B线触发词(微调): 探索 新尝试 新鲜 微调 不一样 换个口味 挖掘 冷门 尝鲜")
+        print("  B线触发词(大胆): 大胆 另类 冒险 突破 跨界 出格 惊喜 前卫 个性 疯狂")
         print("  偏好设置: python3 tools/build_push.py --set simple|rich|both")
         return
 
@@ -645,13 +671,26 @@ def main():
         if arg in ('--simple', '--rich', '--both'):
             force_mode = arg.lstrip('--')
 
-    # B线参数
+    # B线参数：CLI 标志 + 触发词检测
     force_line = None
     force_boldness = None
-    if '--bline' in sys.argv:
+    if '--bline' in sys.argv or '--explore' in sys.argv:
         force_line = 'B'
-        if '--bold' in sys.argv:
-            force_boldness = 'bold'
+    if '--bold' in sys.argv or '--adventure' in sys.argv:
+        force_line = 'B'
+        force_boldness = 'bold'
+    # 从 outfit 目录名自动检测触发词
+    if force_line is None:
+        try:
+            from style_lab import detect_bline_trigger
+            dir_name = os.path.basename(outfit_dir)
+            is_bl, is_bd = detect_bline_trigger(dir_name)
+            if is_bl:
+                force_line = 'B'
+                if is_bd:
+                    force_boldness = 'bold'
+        except ImportError:
+            pass
 
     mode = force_mode or get_preference()
 
@@ -674,7 +713,7 @@ def main():
             print("=" * 50)
             print(simple_content)
             print("\n" + "=" * 50)
-            print("📱 百科版预览")
+            print("📱 时尚版预览")
             print("=" * 50)
             print(rich_content)
         else:
@@ -682,7 +721,7 @@ def main():
             outfit_id = os.path.basename(outfit_dir)
             rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
             simple_desc = '🅰️ 简约版：不想费心，每天一套穿好就走 👌'
-            rich_desc = '🅱️ 百科版：想跟AI一起探索风格，越穿越懂自己 🧠✨'
+            rich_desc = '🅱️ 时尚版：想跟AI一起探索风格，越穿越懂自己 🧠✨'
             footer = f'\n\n---\n{rate_link}\n💡 选择推送模式：\n[{simple_desc}]({base}/setpref?mode=simple)\n[{rich_desc}]({base}/setpref?mode=rich)'
             r1 = push_wechat(f'🅰️ {push_title}', simple_content + footer)
             r2 = push_wechat(f'🅱️ {push_title}', rich_content + footer)
@@ -712,12 +751,12 @@ def main():
         rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
         if preview:
             print("=" * 50)
-            print("📱 百科版预览")
+            print("📱 时尚版预览")
             print("=" * 50)
             print(content)
         else:
             push_wechat(push_title, content + rate_footer)
-            print("✅ 百科版已推送")
+            print("✅ 时尚版已推送")
 
 
 if __name__ == '__main__':

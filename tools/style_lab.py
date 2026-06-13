@@ -75,6 +75,45 @@ def save_state(state):
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 
+# ============================================================
+# 触发词检测
+# ============================================================
+
+BLINE_MICRO_WORDS = [
+    '探索', '新尝试', '新鲜', '微调', '不一样', '换个口味',
+    '挖掘', '冷门', '尝鲜', '换风格', '换换风格', '新方向',
+]
+
+BLINE_BOLD_WORDS = [
+    '大胆', '另类', '冒险', '突破', '跨界', '出格',
+    '惊喜', '意想不到', '疯狂', '前卫', '个性', '先锋',
+    '反差', '混搭', '不羁', '反叛',
+]
+
+
+def detect_bline_trigger(text):
+    """
+    从文本中检测 B线触发词。
+    返回: (is_bline: bool, is_bold: bool)
+    - 微调词 → (True, False)
+    - 大胆词 → (True, True)
+    - 无触发 → (False, False)
+    大胆词优先（同时包含微调和大胆词时，大胆生效）
+    """
+    if not text:
+        return False, False
+
+    text_lower = text.lower()
+    has_bold = any(w in text_lower for w in BLINE_BOLD_WORDS)
+    has_micro = any(w in text_lower for w in BLINE_MICRO_WORDS)
+
+    if has_bold:
+        return True, True
+    if has_micro:
+        return True, False
+    return False, False
+
+
 def should_use_bline(state=None):
     """判断是否触发 B线：每 4 次推荐触发 1 次 (total % 4 == 0，且 > 0)"""
     if state is None:

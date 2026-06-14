@@ -7,7 +7,7 @@
   python3 tools/build_push.py <outfit_dir> --preview   仅预览，不推送
 """
 
-import os, sys, json, re, random, glob, time
+import os, sys, json, re, random, glob, time, urllib.parse
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.join(BASE_DIR, '..')
@@ -19,9 +19,9 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 # jsDelivr base（动态获取最新 commit hash，绕过 CDN 缓存）
 def _get_cdn_base():
     try:
-        import subprocess, os
-        h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
-                          capture_output=True, text=True, cwd=os.path.dirname(os.path.abspath(__file__))+'/..').stdout.strip()
+        import subprocess as _sp
+        h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'],
+                   capture_output=True, text=True, cwd=PROJ_DIR).stdout.strip()
         if h: return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}'
     except: pass
     return 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
@@ -458,7 +458,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
         if ai_paths:
             rel = os.path.relpath(ai_paths[0], PROJ_DIR)
-            parts.append(f"![效果图]({CDN_BASE}/{rel})")
+            parts.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
 
     # ━━━ 风格故事 ━━━
     if encyc:
@@ -551,7 +551,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             swatch_path = os.path.join(outfit_dir, '上身效果', '_swatches.png')
             strip.save(swatch_path, 'PNG')
             rel = os.path.relpath(swatch_path, PROJ_DIR)
-            swatch_img_url = f'{CDN_BASE}/{rel}'
+            swatch_img_url = f'{CDN_BASE}/{urllib.parse.quote(rel, safe="/")}'
             import subprocess as _sp
             _sp.run(['git', 'add', rel], cwd=PROJ_DIR, capture_output=True, timeout=10)
             _sp.run(['git', 'commit', '-m', '🎨 配色色块'], cwd=PROJ_DIR, capture_output=True, timeout=10)
@@ -663,7 +663,7 @@ def build_simple(outfit_dir):
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
     if ai_paths:
         rel = os.path.relpath(ai_paths[0], PROJ_DIR)
-        lines.append(f"![效果图]({CDN_BASE}/{rel})")
+        lines.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
     return '\n\n'.join(lines), '简约版', outfit_name
 
 

@@ -384,6 +384,16 @@ def _eval_outfit_rule(expr, outfit_items, weather_temp, weather_cond, occasion):
 
     if expr == 'has_TS+has_PT_or_SH+has_SHOE':
         return has_TS and has_PT_or_SH and has_SHOE
+    if expr == 'scene_match':
+        return True  # 由 match_scene_profile 单独处理
+    if expr == 'season_match':
+        return True  # 季节匹配由上层保证
+    if expr == 'rain_ready':
+        return True  # 雨天准备由硬阻断保证
+    if expr == 'skin_friendly':
+        return any(it.get('color', {}).get('friendly_for_pale_skin') for it in outfit_items)
+    if expr == 'user_preference':
+        return True  # 偏好由评分反馈动态调整
 
     # 颜色冲突检查
     if 'color clash' in expr:

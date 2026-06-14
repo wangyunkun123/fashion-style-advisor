@@ -881,7 +881,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 self._json_resp(400, {"error": "mode 必须是 simple/rich/both"})
             return
 
-        # 🔥 风格操作页：现在就试 | 了解风格 | 返回
+        # 🔥 现在就试：风格立即生成
         if parsed.path.startswith('/try/'):
             style_id = parsed.path.split('/try/')[-1].strip()
             if not style_id:
@@ -902,37 +902,12 @@ class WebhookHandler(BaseHTTPRequestHandler):
                     style_name = sj.get('name_zh', style_id)
             except:
                 style_name = style_id
-            # 检查是否有已生成的穿搭可复用
-            reuse_outfit = None
-            try:
-                # 匹配风格对应的 style_id 中文名
-                style_cn = style_name
-                outfits_base = os.path.join(PROJECT_DIR, 'outfits')
-                for d in sorted(os.listdir(outfits_base), reverse=True):
-                    dp = os.path.join(outfits_base, d)
-                    if not os.path.isdir(dp): continue
-                    # 目录名或 outfit.md 中包含风格名
-                    if style_cn in d:
-                        md = os.path.join(dp, 'outfit.md')
-                        if os.path.exists(md):
-                            # 检查是否有排版图
-                            comp = os.path.join(dp, '上身效果', '上身效果_1_方案1.jpg')
-                            if os.path.exists(comp):
-                                reuse_outfit = d
-                                break
-            except:
-                pass
-            reuse_html = ''
-            if reuse_outfit:
-                reuse_html = f'<div class="reuse">📦 已有「{reuse_outfit}」的穿搭，可直接复用</div>'
-            # 百科链接
-            encyc_url = f'https://htmlpreview.github.io/?https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main/styles_universal/{style_id}/encyclopedia.html'
             TRY_HTML = f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>{style_name} · 风格实验室</title>
+<title>现在就试 · {style_name}</title>
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
 body{{font-family:-apple-system,sans-serif;background:#f5f0eb;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}}
@@ -942,22 +917,17 @@ h2{{font-size:22px;color:#3a3028;margin-bottom:8px}}
 .btn{{display:block;width:100%;padding:16px;border:none;border-radius:12px;font-size:18px;font-weight:600;cursor:pointer;margin-bottom:12px;-webkit-tap-highlight-color:transparent}}
 .btn-primary{{background:linear-gradient(135deg,#3a3028,#5c4d3c);color:#fff}}
 .btn-primary:active{{opacity:.8}}
-.btn-info{{background:#e8f0fe;color:#1a73e8}}
-.btn-info:active{{opacity:.8}}
 .btn-secondary{{background:#f5f0eb;color:#5c4d3c}}
 .status{{font-size:13px;color:#999;margin-top:12px;display:none}}
-.reuse{{font-size:13px;color:#2e7d32;background:#e8f5e9;padding:8px 12px;border-radius:8px;margin-bottom:16px}}
 .spinner{{display:inline-block;width:14px;height:14px;border:2px solid #d0c8bc;border-top-color:#3a3028;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:-2px}}
 @keyframes spin{{to{{transform:rotate(360deg)}}}}
 </style>
 </head>
 <body>
 <div class="card">
-<h2>{style_name}</h2>
-<div class="desc">{style_desc or 'AI 将为你生成一套' + style_name + '风格穿搭并推送到微信'}</div>
-{reuse_html}
+<h2>🧪 {style_name}</h2>
+<div class="desc">{style_desc or '点击下方按钮，AI 将为你生成一套' + style_name + '风格穿搭并推送到微信'}</div>
 <button class="btn btn-primary" onclick="tryNow()">🔥 现在就试</button>
-<button class="btn btn-info" onclick="location.href='{encyc_url}'">📖 了解风格</button>
 <button class="btn btn-secondary" onclick="history.back()">← 返回</button>
 <div class="status" id="status"><span class="spinner"></span>正在生成穿搭...</div>
 </div>
@@ -982,36 +952,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             style_id = parsed.path.split('/api/try/')[-1].strip()
             if not style_id:
                 self._json_resp(400, {"error": "缺少风格 ID"}); return
-            # 检查是否有已生成的穿搭可复用
-            reused = False
             try:
-                with open(os.path.join(PROJECT_DIR, 'styles', f'{style_id}.json')) as f:
-                    style_name = json.load(f).get('name_zh', style_id)
-            except:
-                style_name = style_id
-            outfits_base = os.path.join(PROJECT_DIR, 'outfits')
-            for d in sorted(os.listdir(outfits_base), reverse=True):
-                dp = os.path.join(outfits_base, d)
-                if not os.path.isdir(dp): continue
-                if style_name in d:
-                    comp = os.path.join(dp, '上身效果', '上身效果_1_方案1.jpg')
-                    if os.path.exists(comp):
-                        # 复用已有穿搭，直接推送
-                        log(f"📦 复用已有穿搭: {d}")
-                        try:
-                            run_cli(['python3', 'tools/build_push.py', dp, '--rich'], timeout=60)
-                            self._json_resp(200, {"ok": True, "reused": True, "message": f"已复用「{d}」穿搭并推送"})
-                        except Exception as e:
-                            self._json_resp(200, {"ok": True, "reused": True, "message": f"复用「{d}」"})
-                        reused = True
-                        break
-            if not reused:
-                try:
-                    tid = _start_async_pipeline('generate', style_name)
-                    log(f"🔥 远程试穿: {style_name} → task {tid}")
-                    self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_name} 穿搭"})
-                except Exception as e:
-                    self._json_resp(500, {"error": str(e)})
+                tid = _start_async_pipeline('generate', style_id)
+                log(f"🔥 远程试穿: {style_id} → task {tid}")
+                self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_id} 穿搭"})
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
             return
 
         # 穿搭评分页面

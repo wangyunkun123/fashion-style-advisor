@@ -431,7 +431,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             companions = exploration_outfit.get('companions', [])
             direction = exploration_outfit['direction']
 
-            print(f"  [B线] 启动生图管线... 核心单品: {anchor['clothing_id']}")
+            print(f"  [B线] 启动生图管线... 锚点: {anchor['clothing_id']}")
             outfit_dir, img_path, cdn_url = prepare_bline_outfit(
                 anchor, companions, direction, temp_high, weather_cond,
                 appeal=bline_appeal, narrative=bline_narrative, encyc=bline_encyc,
@@ -440,10 +440,10 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             if img_path and cdn_url:
                 parts.append(f"![风格实验室效果图]({cdn_url})")
             else:
-                parts.append(f"🧪 本次风格实验围绕核心单品 **{anchor['clothing_id']}** 展开，搭配方案见下方。")
+                parts.append(f"🧪 本次风格实验围绕锚点单品 **{anchor['clothing_id']}** 展开，搭配方案见下方。")
         except Exception as e:
             print(f"  [B线] 生图管线异常: {e}")
-            parts.append(f"🧪 本次风格实验围绕核心单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
+            parts.append(f"🧪 本次风格实验围绕锚点单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
     else:
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
         if not ai_paths:
@@ -524,35 +524,26 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
     # ━━━ 配色 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
-    # 从排版图中截取配色色块图片
-    swatch_img_url = None
-    try:
-        from PIL import Image
-        comp_path = os.path.join(outfit_dir, '上身效果', '上身效果_1_方案1.jpg')
-        if os.path.exists(comp_path):
-            img = Image.open(comp_path)
-            w, h = img.size
-            crop_x = 48
-            crop_y = h - 84
-            crop_w = min(48 + 5*30 + 200, w - 48)
-            crop_h = 84
-            crop = img.crop((crop_x, crop_y, crop_x+crop_w, h))
-            swatch_path = os.path.join(outfit_dir, '上身效果', '_color_swatches.png')
-            crop.save(swatch_path, 'PNG')
-            rel = os.path.relpath(swatch_path, PROJ_DIR)
-            swatch_img_url = f'{CDN_BASE}/{rel}'
-            # 确保图片推送到 GitHub
-            import subprocess as _sp
-            _sp.run(['git', 'add', rel], cwd=PROJ_DIR, capture_output=True, timeout=10)
-            _sp.run(['git', 'commit', '-m', '🎨 配色色块'], cwd=PROJ_DIR, capture_output=True, timeout=10)
-            _sp.run(['git', 'push'], cwd=PROJ_DIR, capture_output=True, timeout=30)
-    except Exception:
-        pass
+    # 提取排版图中的配色色块
+    swatches_html = ''
+    cache_file = os.path.join(outfit_dir, '上身效果', '.color_cache.json')
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r') as f:
+                colors = json.load(f)
+            # 生成色块（用 Markdown 兼容的格式）
+            blocks = []
+            for rgb in colors[:5]:
+                hex_color = '#{:02x}{:02x}{:02x}'.format(*rgb)
+                blocks.append(f'`{hex_color}`')
+            swatches_html = ' '.join(blocks)
+        except:
+            pass
 
-    if color_logic or swatch_img_url:
+    if color_logic or swatches_html:
         color_parts = []
-        if swatch_img_url:
-            color_parts.append(f"![配色]({swatch_img_url})")
+        if swatches_html:
+            color_parts.append(f"🎨 {swatches_html}")
         if color_logic:
             color_parts.append(color_logic)
         parts.append("━━━ 🎨 配色 ━━━\n\n" + '\n\n'.join(color_parts))
@@ -761,15 +752,15 @@ def main():
         if content is None:
             print(f"❌ {style_name}"); return
         push_title = outfit_name if outfit_name else style_name
+        base = get_push_base_url()
+        outfit_id = os.path.basename(outfit_dir)
+        rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
         if preview:
             print("=" * 50)
             print("📱 时尚版预览")
             print("=" * 50)
             print(content)
         else:
-            base = get_push_base_url()
-            outfit_id = os.path.basename(outfit_dir)
-            rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
             push_wechat(push_title, content + rate_footer)
             print("✅ 时尚版已推送")
 

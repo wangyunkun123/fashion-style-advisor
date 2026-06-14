@@ -20,7 +20,7 @@ FONTS = {
     'title_en': '/System/Library/Fonts/Supplemental/Didot.ttc',
     'luxury':   os.path.join(BASE_DIR_FONTS, '..', 'fonts', 'CormorantGaramond-Bold.ttf'),
     # 正文 — Georgia + 细黑
-    'body_cn':  '/System/Library/Fonts/STHeiti Medium.ttc',
+    'body_cn':  '/System/Library/Fonts/STHeiti Light.ttc',
     'body_en':  '/System/Library/Fonts/Supplemental/Georgia.ttf',
     # 标签/辅助 — 黑体
     'label':    '/System/Library/Fonts/STHeiti Medium.ttc',
@@ -96,7 +96,7 @@ def find_ai(d):
         sd=os.path.join(d,sub)
         if not os.path.exists(sd): continue
         for f in sorted(os.listdir(sd)):
-            if f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.'): return os.path.join(sd,f)
+            if f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.') and not f.startswith('_'): return os.path.join(sd,f)
 
 def find_img(dd,item):
     for f in sorted(os.listdir(dd)):
@@ -219,39 +219,67 @@ def composite(ai_path,items,output_path):
     dd=os.path.join(os.path.dirname(ai_path),'..','items')
     if not os.path.exists(dd): dd=os.path.join(os.path.dirname(os.path.dirname(ai_path)),'items')
     si=sorted(items,key=lambda x:CAT_ORDER.index(x['prefix']) if x['prefix'] in CAT_ORDER else 99)
-    # 左右均衡分布（不再按品类分左右）
-    total = len(si)
-    left_count = (total + 1)//2  # 左列稍多
-    left_items = si[:left_count]
-    right_items = si[left_count:]
+    # 左右均衡分列
+    total=len(si); left_n=(total+1)//2; right_n=total-left_n
+    left_items=si[:left_n]; right_items=si[left_n:]
 
     GAP=8; BORDER=1; MARGIN=48
     ai_display_w=ai_w; ai_display_h=ai_h
-    cell_w=520; n=max(len(left_items),len(right_items),1)
+    cell_w=520; n=max(left_n,right_n,3)
     cell_h=(ai_display_h-GAP*(n-1))//n
 
-    # 标题栏高度
-    TITLE_H=20  # A方案：极简留白，几乎无标题区
-
+    TITLE_H=20; NOTE_H=72; NOTE_GAP=8
     cw=margin_x=MARGIN
     canvas_w=cw+cell_w+GAP+ai_display_w+GAP+cell_w+cw
-    canvas_h=MARGIN+TITLE_H+ai_display_h+MARGIN+60
-    canvas=Image.new('RGB',(canvas_w,canvas_h),(252,252,250))
-    draw=ImageDraw.Draw(canvas)
 
-    # 标题
+    # 顶部 STYLE NOTES 横条
     outfit_dir=os.path.dirname(ai_path)
     if 'generated' in outfit_dir or '上身效果' in outfit_dir:
         outfit_dir=os.path.dirname(outfit_dir)
-    outfit=os.path.basename(outfit_dir).split('_',1)[-1] if '_' in os.path.basename(outfit_dir) else ''
     style_kw=parse_style_info(outfit_dir)
     f_item=font(28,'body_cn'); f_mini=font(22,'body_en')
-    # C方案：底部小字标注
+    has_notes=bool(style_kw)
+
+    top_offset=TITLE_H
+    if has_notes:
+        top_offset+=NOTE_H+NOTE_GAP
+    top_y=MARGIN+top_offset
+
+    canvas_h=top_y+ai_display_h+MARGIN+60
+    canvas=Image.new('RGB',(canvas_w,canvas_h),(252,252,250))
+    draw=ImageDraw.Draw(canvas)
+
+    # 渲染顶部 STYLE NOTES
+    if has_notes:
+        note_y=MARGIN; note_h=NOTE_H; note_w=canvas_w-MARGIN*2
+        note_x=MARGIN
+        # 卡片背景
+        canvas.paste((252,250,247),(note_x,note_y,note_x+note_w,note_y+note_h))
+        # 左侧深色装饰条
+        draw.rectangle([(note_x,note_y),(note_x+3,note_y+note_h-1)],fill=(58,48,40))
+        # 底边细线
+        draw.line([(note_x,note_y+note_h-1),(note_x+note_w,note_y+note_h-1)],fill=(200,198,193),width=1)
+        # 标题
+        title_font=font(14,'body_en')
+        draw.text((note_x+18,note_y+12),'STYLE NOTES',font=title_font,fill=(140,138,135))
+        # 内容——每行一个关键词，用稍大字号
+        kw_font=font(22,'body_cn')
+        tx=note_x+18; ty=note_y+36
+        line_h=28
+        for kw in style_kw:
+            kw_text=f'· {kw}'
+            kw_w=kw_font.getbbox(kw_text)[2]
+            if tx+kw_w>note_x+note_w-24:
+                tx=note_x+18; ty+=line_h
+            # 仅两行，超出省略
+            if ty>note_y+note_h-8: break
+            draw.text((tx,ty),kw_text,font=kw_font,fill=(80,78,75))
+            tx+=kw_w+20
+
+    # 底部信息
     footer_text='FASHION STYLE ADVISOR'
     date_str=os.path.basename(outfit_dir)[:10] if outfit_dir else ''
     if date_str: footer_text+=f' / {date_str}'
-
-    top_y=MARGIN+TITLE_H
 
     # 左列
     lx=cw; ly=top_y
@@ -264,7 +292,6 @@ def composite(ai_path,items,output_path):
             ox=lx+(box_w-cloth.width)//2; oy=ly+(box_h-cloth.height)//2
             canvas.paste(cloth,(ox,oy),cloth)
         draw.rectangle([(lx,ly),(lx+box_w-1,ly+box_h-1)],outline=(189,189,184),width=BORDER)
-        # 名称在卡片内底部
         draw.text((lx+14,ly+box_h-42),it['name'][:16],font=f_item,fill=(80,80,78))
         ly+=box_h+GAP
 
@@ -288,19 +315,14 @@ def composite(ai_path,items,output_path):
         draw.text((rx+14,ry+box_h-42),it['name'][:16],font=f_item,fill=(80,80,78))
         ry+=box_h+GAP
 
-    # 右下文字卡片（已弃用——STYLE NOTES 移到底部）
-    _style_kw = style_kw  # keep reference for bottom card
-    # 底部：配色色块 — 从抠图衣服提取颜色（省token）
-    # 底部：配色色块 — 豆包视觉识别（缓存结果）
+    # 底部配色色块
     cache_file=os.path.join(os.path.dirname(output_path),'.color_cache.json')
     top_colors=[]
-    # 读缓存
     if os.path.exists(cache_file):
         try:
             cached=json.loads(open(cache_file).read())
             top_colors=[tuple(c) for c in cached]
         except: pass
-    # 无缓存则调API
     if not top_colors:
         try:
             ai_tiny=ai_img.resize((int(ai_w*0.3),int(ai_h*0.3)),Image.LANCZOS).convert('RGB')
@@ -317,17 +339,12 @@ def composite(ai_path,items,output_path):
             with urllib.request.urlopen(req,timeout=60) as resp:
                 result=json.loads(resp.read().decode('utf-8'))
                 hexes=re.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
-                for h in hexes[:5]:
-                    h=h.lstrip('#')
-                    top_colors.append((int(h[0:2],16),int(h[2:4],16),int(h[4:6],16)))
-            # 写缓存
-            if top_colors:
-                open(cache_file,'w').write(json.dumps(top_colors))
+                top_colors=[tuple(int(h[i:i+2],16) for i in (1,3,5)) for h in hexes[:5]]
+            open(cache_file,'w').write(json.dumps(top_colors))
         except: pass
     if not top_colors:
         top_colors=[(40,40,38),(180,180,178),(120,120,118),(220,220,218),(80,80,78)]
-    swatch_y = canvas_h - 60
-    swatch_x = cw
+    swatch_y=canvas_h-60; swatch_x=cw
     swatch_sz=24; swatch_gap=6
     draw.text((swatch_x,swatch_y-24),'COLOR PALETTE',font=f_mini,fill=(150,150,148))
     for i,(r,g,b) in enumerate(top_colors):
@@ -335,9 +352,8 @@ def composite(ai_path,items,output_path):
         draw.rectangle([(sx,swatch_y),(sx+swatch_sz-1,swatch_y+swatch_sz-1)],fill=(r,g,b),outline=(200,200,198),width=1)
     draw.text((swatch_x+len(top_colors)*(swatch_sz+swatch_gap)+12,swatch_y-2),footer_text,font=f_mini,fill=(170,170,168))
 
-    os.makedirs(os.path.dirname(output_path),exist_ok=True)
-    canvas.save(output_path,'JPEG',quality=95)
-    return canvas.size
+    canvas.save(output_path,'JPEG',quality=90)
+    return (canvas_w,canvas_h)
 
 def main():
     print("="*50); print("👔 方案1 ACOC网格风")

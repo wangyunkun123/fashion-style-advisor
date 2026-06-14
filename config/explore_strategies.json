@@ -1,0 +1,111 @@
+{
+  "_comment": "B线探索策略库。微调随机选1个，大胆随机选2个叠加。",
+  "last_updated": "2026-06-14",
+  "strategies": [
+    {
+      "id": "category_flip",
+      "name": "品类反转",
+      "description": "衬衫敞开当薄外套、长袖内搭+短袖外穿",
+      "example": "SHIRT-004不扣敞开，内搭TS-005白T恤",
+      "boldness": "micro",
+      "source": "日系City Boy标配"
+    },
+    {
+      "id": "formal_casual_mix",
+      "name": "正式休闲混搭",
+      "description": "西装裤×帆布鞋、连帽卫衣×西裤",
+      "example": "PT-005暗格纹西裤+SHOE-004匡威帆布鞋",
+      "boldness": "micro",
+      "source": "Smart Casual"
+    },
+    {
+      "id": "same_color_diff_material",
+      "name": "同色异材质",
+      "description": "全身同色系但不同面料：棉+麻+皮质",
+      "example": "米白棉T+杏色亚麻短裤+米白皮质德训鞋",
+      "boldness": "micro",
+      "source": "韩系极简常用"
+    },
+    {
+      "id": "half_half_style",
+      "name": "上下风格对半",
+      "description": "上半身正式+下半身休闲，或反过来",
+      "example": "SHIRT-001条纹衬衫+SH-004灰色运动短裤",
+      "boldness": "micro",
+      "source": "时装周街拍"
+    },
+    {
+      "id": "light_layering",
+      "name": "轻叠穿",
+      "description": "两件不同色T恤叠穿或高领内搭+衬衫",
+      "example": "TS-011米白短袖内搭LS-002墨绿长袖",
+      "boldness": "micro",
+      "source": "日韩基础穿法"
+    },
+    {
+      "id": "accessory_lead",
+      "name": "配饰主导",
+      "description": "全身基础色，一个亮色配饰做唯一跳色",
+      "example": "全黑白灰穿搭+HAT-002紫红色棒球帽点睛",
+      "boldness": "micro",
+      "source": "Clean Fit 点睛手法"
+    },
+    {
+      "id": "sock_highlight",
+      "name": "袜子点睛",
+      "description": "全身基础色，靠图案/亮色中筒袜出彩",
+      "example": "深色穿搭+SOCK-003民族风图案船袜露踝",
+      "boldness": "bold",
+      "source": "日系City Boy标志"
+    },
+    {
+      "id": "hat_style_switch",
+      "name": "帽子换风格",
+      "description": "同套衣服换渔夫帽vs棒球帽气质完全不同",
+      "example": "同套搭配配HAT-001渔夫帽vs HAT-004棒球帽",
+      "boldness": "bold",
+      "source": "韩系穿搭博主常用"
+    },
+    {
+      "id": "shirt_untucked_unbuttoned",
+      "name": "衬衫不塞不扣",
+      "description": "长衬衫任其垂坠当轻薄外搭，内搭素T",
+      "example": "SHIRT-002薄荷绿衬衫敞开+TANK-001背心内搭",
+      "boldness": "bold",
+      "source": "《POPEYE》高频"
+    },
+    {
+      "id": "shorts_long_socks",
+      "name": "短裤×长袜×皮鞋",
+      "description": "及膝短裤+中筒白袜+皮质德比鞋/乐福鞋",
+      "example": "SH-004灰色短裤+SOCK-004条纹中筒袜+SHOE-007",
+      "boldness": "bold",
+      "source": "日系少年感经典"
+    },
+    {
+      "id": "short_over_long",
+      "name": "短袖叠长袖",
+      "description": "短袖衬衫/T恤内搭贴身长袖打底",
+      "example": "TS-010条纹短袖内搭LS-002墨绿长袖",
+      "boldness": "bold",
+      "source": "UNIQLO U系列标配"
+    },
+    {
+      "id": "belt_proportion",
+      "name": "腰带改比例",
+      "description": "宽松上衣用腰带在腰间收一下制造假腰线",
+      "example": "宽松衬衫+腰带束腰+直筒裤",
+      "boldness": "bold",
+      "source": "韩系女装复用男装"
+    },
+    {
+      "id": "cold_color_clash",
+      "name": "冷门配色碰撞",
+      "description": "衣橱里颜色相距最远的两件单挑搭配",
+      "example": "TS-007正红色曼联球衣+PT-003深灰灯芯绒裤",
+      "boldness": "bold",
+      "source": "色彩理论实践"
+    }
+  ],
+  "pending_review": []
+}

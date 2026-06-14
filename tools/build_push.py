@@ -60,6 +60,7 @@ try:
         find_companions,
         assemble_exploratory_outfit,
         generate_exploration_narrative,
+        pick_explore_strategies,
         generate_alt_section,
         get_user_comfort_zone,
         increment_state as increment_lab_state,
@@ -377,7 +378,9 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
                     if directions:
                         direction = directions[0]
                         companions = find_companions(anchor_item, direction, all_clothing, temp_high, weather_cond)
-                        exploration_outfit = assemble_exploratory_outfit(direction, anchor_item, companions)
+                        strategies = pick_explore_strategies(boldness)
+                        direction['strategies'] = strategies  # 注入方向数据
+                        exploration_outfit = assemble_exploratory_outfit(direction, anchor_item, companions, strategies)
                         style_id = direction['target_style_id']
                         # 预加载百科（避免 prepare_bline_outfit 重复加载）
                         bline_encyc = load_encyclopedia(style_id)

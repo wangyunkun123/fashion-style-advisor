@@ -32,6 +32,7 @@ OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
 CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 STATE_FILE = os.path.join(PROJ_DIR, 'config', 'style_lab_state.json')
 DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')
+STRATEGY_FILE = os.path.join(PROJ_DIR, 'config', 'explore_strategies.json')
 
 # CDN base for encyclopedia links
 CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
@@ -595,7 +596,30 @@ def get_user_comfort_zone():
 
 
 # ============================================================
-# 7. 探索方向生成
+# 7. 探索策略选取
+# ============================================================
+
+def pick_explore_strategies(boldness='micro'):
+    """从策略库随机选取探索策略。微调1个，大胆2个叠加。"""
+    if not os.path.exists(STRATEGY_FILE):
+        return []
+    with open(STRATEGY_FILE, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    strategies = data.get('strategies', [])
+    if boldness == 'bold':
+        pool = [s for s in strategies if s.get('boldness') in ('micro', 'bold')]
+    else:
+        pool = [s for s in strategies if s.get('boldness') == 'micro']
+    if not pool:
+        return []
+    count = 2 if boldness == 'bold' else 1
+    import random
+    picks = random.sample(pool, min(count, len(pool)))
+    return picks
+
+
+# ============================================================
+# 8. 探索方向生成
 # ============================================================
 
 def generate_exploration_directions(anchor_item, weather_temp=None,
@@ -870,7 +894,7 @@ def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
 # 9. 方案组装与叙事生成
 # ============================================================
 
-def assemble_exploratory_outfit(direction, anchor_item, companions):
+def assemble_exploratory_outfit(direction, anchor_item, companions, strategies=None):
     """组装探索穿搭方案"""
     return {
         'line': 'B',
@@ -880,11 +904,28 @@ def assemble_exploratory_outfit(direction, anchor_item, companions):
         'target_style_id': direction['target_style_id'],
         'target_style_name': direction['target_style_name'],
         'direction': direction,
+        'strategies': strategies or [],
     }
+
+
+def format_strategies(strategies):
+    """格式化探索策略为可读文本"""
+    if not strategies:
+        return ''
+    lines = ['\n🔬 **探索策略**：']
+    for s in strategies:
+        lines.append(f"   🧩 **{s['name']}** — {s['description']}")
+        if s.get('example'):
+            lines.append(f"   *参考：{s['example']}*")
+    return '\n'.join(lines)
 
 
 def generate_exploration_narrative(direction, anchor, companions):
     """生成探索穿搭的详细叙事"""
+    strategies = direction.get('strategies', []) if isinstance(direction, dict) else []
+    # Also check if strategies were passed directly
+    if hasattr(direction, 'get') and not strategies:
+        strategies = direction.get('strategies', [])
     anchor_name = f"{anchor['clothing_id']} {anchor.get('brand', {}).get('name', '')}"
     anchor_color = anchor.get('color', {}).get('hue_name', '')
     anchor_fabric = anchor.get('fabric', {}).get('primary', '')
@@ -951,6 +992,10 @@ def generate_exploration_narrative(direction, anchor, companions):
         tip = '核心单品合身剪裁，可用宽松外套制造层次对比'
     else:
         tip = '尝试将核心单品作为视觉焦点，其他单品做减法'
+
+    # 探索策略
+    if strategies:
+        parts.append(format_strategies(strategies))
 
     parts.append(f"\n💬 **穿法建议**：{tip}")
 

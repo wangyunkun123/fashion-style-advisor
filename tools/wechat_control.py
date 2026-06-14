@@ -14,7 +14,6 @@ import json
 import os
 import re
 import sys
-import re
 import shutil
 import subprocess
 import threading
@@ -982,7 +981,6 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 md = os.path.join(outfit_dir, 'outfit.md')
                 if os.path.exists(md):
                     with open(md,'r') as f: txt = f.read()
-                    import re
                     items = []
                     for line in txt.split('\n'):
                         m = re.match(r'^\|\s*[^|]*\|\s*\*?\*?(\w+-\d+)\*?\*?\s*\|\s*(.+?)\s*\|', line)

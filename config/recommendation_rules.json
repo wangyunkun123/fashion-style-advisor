@@ -30,8 +30,8 @@
       },
       {
         "id": "cold_no_shorts",
-        "desc": "气温≤12°C 禁止短裤/背心",
-        "check": "weather_temp <= 12 and cat_code in ('SH', 'TANK')",
+        "desc": "气温≤12°C 禁止短裤（背心可作内搭不拦）",
+        "check": "weather_temp <= 12 and cat_code == 'SH'",
         "action": "block"
       },
       {
@@ -84,8 +84,8 @@
       },
       {
         "id": "sport_no_accessories",
-        "desc": "运动场景禁戴手串/手表",
-        "check": "occasion == '运动' and cat_code in ('ACC')",
+        "desc": "运动场景禁戴手串（Apple Watch ACC-003 推荐佩戴）",
+        "check": "occasion == '运动' and item.clothing_id in ('ACC-001', 'ACC-002')",
         "action": "block"
       },
       {

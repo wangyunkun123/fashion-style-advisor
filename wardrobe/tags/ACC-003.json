@@ -35,7 +35,7 @@
   "formality": 2,
   "brand": {
     "name": "Apple",
-    "collection": "Apple Watch表带套组(米兰尼斯/回环/运动)",
+    "collection": "三款表带：米兰尼斯(金属)、回环(尼龙)、运动(氟橡胶)",
     "confidence": "确定"
   },
   "style_modifiers": [
@@ -47,7 +47,12 @@
     "is_statement_piece": true,
     "wear_count": 9,
     "last_worn": "2026-06-14T15:38:10.177618",
-    "claude_fit_comment": "黑色系智能手表多款表带可根据场合切换风格,百搭且实用性强",
-    "_statement_score": 0.35
+    "claude_fit_comment": "三款表带适配不同场景：米兰尼斯适合商务/轻熟，回环适合日常/休闲，运动适合健身/户外",
+    "_statement_score": 0.35,
+    "band_options": [
+      "米兰尼斯表带(金属/商务)",
+      "回环表带(尼龙/日常)",
+      "运动表带(氟橡胶/运动)"
+    ]
   }
 }

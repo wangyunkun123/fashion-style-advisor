@@ -564,37 +564,22 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
     # ━━━ 配色 ━━━
     color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
-    # 从排版图中提取纯色块（无文字无背景）
-    swatch_img_url = None
-    try:
-        from PIL import Image
-        cache_file = os.path.join(outfit_dir, '上身效果', '.color_cache.json')
-        colors = []
-        if os.path.exists(cache_file):
+    swatches_text = ''
+    cache_file = os.path.join(outfit_dir, '上身效果', '.color_cache.json')
+    if os.path.exists(cache_file):
+        try:
             with open(cache_file) as f:
-                colors = [tuple(c) for c in json.load(f)]
-        if colors:
-            SZ = 60; GAP = 6; COUNT = len(colors)
-            strip = Image.new('RGB', (COUNT*SZ + (COUNT-1)*GAP, SZ), (255,255,255))
-            for i, rgb in enumerate(colors[:5]):
-                for y in range(SZ):
-                    for x in range(SZ):
-                        strip.putpixel((i*(SZ+GAP)+x, y), rgb)
-            swatch_path = os.path.join(outfit_dir, '上身效果', '_swatches.png')
-            strip.save(swatch_path, 'PNG')
-            rel = os.path.relpath(swatch_path, PROJ_DIR)
-            swatch_img_url = f'{CDN_BASE}/{urllib.parse.quote(rel, safe="/")}'
-            import subprocess as _sp
-            _sp.run(['git', 'add', rel], cwd=PROJ_DIR, capture_output=True, timeout=10)
-            _sp.run(['git', 'commit', '-m', '🎨 配色色块'], cwd=PROJ_DIR, capture_output=True, timeout=10)
-            _sp.run(['git', 'push'], cwd=PROJ_DIR, capture_output=True, timeout=30)
-    except Exception:
-        pass
+                colors = json.load(f)
+            blocks = []
+            for rgb in colors[:5]:
+                blocks.append('#{:02x}{:02x}{:02x}'.format(*rgb))
+            swatches_text = ' '.join(blocks)
+        except: pass
 
-    if color_logic or swatch_img_url:
+    if color_logic or swatches_text:
         color_parts = []
-        if swatch_img_url:
-            color_parts.append(f'![配色]({swatch_img_url})\n`#hex` `#hex` `#hex` `#hex` `#hex`')
+        if swatches_text:
+            color_parts.append(swatches_text)
         if color_logic:
             color_parts.append(color_logic)
         parts.append("━━━ 🎨 配色 ━━━\n\n" + '\n\n'.join(color_parts))

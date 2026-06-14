@@ -621,6 +621,10 @@ def run_pipeline(style_hint, task_id=None):
             # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
             try:
                 run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
+                # build_push 可能生成了 _swatches.png 等新文件，提交并推送
+                run_cli(['git', 'add', '-A'], timeout=10)
+                run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
+                run_cli(['git', 'push'], timeout=30)
             except Exception:
                 content = f"![效果图]({github_url})\n\n"
                 if summary:

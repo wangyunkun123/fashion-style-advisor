@@ -584,11 +584,13 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
                 swatch_path = os.path.join(outfit_dir, '上身效果', '_swatches.png')
                 strip.save(swatch_path, 'PNG')
                 rel = os.path.relpath(swatch_path, PROJ_DIR)
-                swatch_img_url = f'{CDN_BASE}/{urllib.parse.quote(rel, safe="/")}'
                 import subprocess as _sp
                 _sp.run(['git', 'add', rel], cwd=PROJ_DIR, capture_output=True, timeout=10)
                 _sp.run(['git', 'commit', '-m', '🎨 配色色块'], cwd=PROJ_DIR, capture_output=True, timeout=10)
-                _sp.run(['git', 'push'], cwd=PROJ_DIR, capture_output=True, timeout=30)
+                # 用最新 commit hash 构建 URL
+                h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'], cwd=PROJ_DIR, capture_output=True, text=True).stdout.strip()
+                cdn = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}' if h else CDN_BASE
+                swatch_img_url = f'{cdn}/{urllib.parse.quote(rel, safe="/")}'
     except Exception:
         pass
 

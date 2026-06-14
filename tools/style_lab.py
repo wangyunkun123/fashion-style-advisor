@@ -76,6 +76,72 @@ def save_state(state):
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 
+def apply_rating_feedback(outfit_dir, rating):
+    """
+    用户评分反馈到评分缓存，让后续推荐更准。
+    ⭐⭐⭐ → 该风格下所有单品 +5
+    ⭐⭐   → 累计3次同风格 -3
+    ⭐     → 该风格下所有单品 -10
+    """
+    if rating not in (1, 2, 3):
+        return
+
+    # 解析 outfit.md 获取风格和单品
+    md_path = os.path.join(outfit_dir, 'outfit.md')
+    if not os.path.exists(md_path):
+        return
+    with open(md_path, 'r', encoding='utf-8') as f:
+        md = f.read()
+
+    # 提取风格
+    style_id = None
+    STYLE_MAP = {
+        '韩系简约': 'korean_minimal', 'Clean Fit': 'clean_fit', 'clean fit': 'clean_fit',
+        '日系City Boy': 'japanese_city_boy', '日系': 'japanese_city_boy',
+        '轻熟休闲': 'smart_casual', '运动休闲': 'athleisure_sport',
+        '度假休闲': 'resort_vacation', '街头潮流': 'streetwear',
+        '国风质感': 'chinese_heritage', 'chinese_heritage_luxe': 'chinese_heritage_luxe',
+    }
+    for name, sid in STYLE_MAP.items():
+        if name.lower().replace(' ', '') in md.lower().replace(' ', ''):
+            style_id = sid
+            break
+
+    # 提取单品 ID
+    item_ids = re.findall(r'\b([A-Z]+-\d+)\b', md)
+
+    if not style_id or not item_ids:
+        return
+
+    # 更新 SCORE_CACHE
+    if not os.path.exists(CACHE_FILE):
+        return
+    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+        cache = json.load(f)
+
+    if rating == 3:
+        delta = 5
+    elif rating == 1:
+        delta = -10
+    else:  # rating == 2
+        delta = 0  # 中性分不直接调整，靠累计处理
+        # TODO: 累计3次同风格2星 → -3
+
+    if delta != 0:
+        changed = 0
+        for iid in set(item_ids):
+            if iid in cache and style_id in cache[iid]:
+                old_score = cache[iid][style_id].get('score', 0)
+                new_score = max(0, min(100, old_score + delta))
+                cache[iid][style_id]['score'] = new_score
+                changed += 1
+        if changed:
+            cache['_meta'] = cache.get('_meta', {})
+            cache['_meta']['last_feedback'] = datetime.now().isoformat()
+            with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+                json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
 # ============================================================
 # 触发词检测
 # ============================================================

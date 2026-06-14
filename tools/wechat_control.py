@@ -1121,6 +1121,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             with open(os.path.join(d, 'rating.json'), 'w') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             log(f"⭐ 评分: {oid} → {data.get('rating','?')}星")
+            # 反馈到评分缓存
+            try:
+                from style_lab import apply_rating_feedback
+                apply_rating_feedback(d, data.get('rating', 0))
+            except Exception as e:
+                log(f"⚠️ 反馈更新失败: {e}", "WARN")
             self._json_resp(200, {"status": "ok"})
         else:
             self._json_resp(404, {"error": "not found"})

@@ -857,3 +857,30 @@ error: failed to push some refs to 'github.com:wangyunkun1
 [18:28:31] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
 [18:30:58] [INFO] 推送成功: 🅰️ 晴日 Clean Fit
 [18:31:00] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
+[18:35:03] [INFO] 推送成功: 🅰️ 晴日 Clean Fit
+[18:35:04] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
+[18:36:32] [INFO] 推送偏好已设置为: rich
+[18:36:34] [INFO] 推送偏好已设置为: rich
+[18:38:18] [INFO] 🔥 远程试穿: japanese_city_boy → task 1781433498689
+[18:38:18] [INFO] 🚀 管线启动: japanese_city_boy 
+[18:38:18] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
+[18:38:42] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_japanese_city_boy
+[18:38:42] [INFO] 📍 ✅ 穿搭方案已创建
+[18:38:42] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
+[18:39:15] [INFO] 📍 ✅ Seedream 生图完成
+============================================================
+🎨 Seedream API 自动生图
+============================================================
+🔍 关键词匹配: 2026-06-14_japanese_city_boy
+
+📁 2026-06-14_japanese_city_boy
+📷 4 张参考图 | 📝 796字符
+📷 编码 4 张参考图...
+   ✅ 人物_IMG_8493.jpg (80KB)
+   ✅ 上衣_Image_20260610_082
+[18:39:15] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
+[18:39:20] [INFO] 📍 ✅ 排版完成
+==================================================
+👔 方案1 ACOC网格风
+💾 上身效果_1_方案1.jpg (3200x2304) ✅
+[18:39:20] [INFO] 📍 📤 Step 4/4: 推送 GitHub...

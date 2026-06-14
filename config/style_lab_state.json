@@ -1,18 +1,21 @@
 {
-  "total_recommendations": 2,
-  "bline_count": 1,
-  "bold_count": 0,
-  "last_recommendation_time": "2026-06-14T15:12:05.430234",
+  "total_recommendations": 4,
+  "bline_count": 2,
+  "bold_count": 1,
+  "last_recommendation_time": "2026-06-14T15:15:19.487619",
   "items_worn": {
-    "TS-005": 1,
-    "SHIRT-002": 1,
-    "PT-001": 2,
-    "SHOE-001": 1,
-    "SOCK-004": 1,
-    "BAG-002": 1,
-    "ACC-001": 1,
+    "TS-005": 3,
+    "SHIRT-002": 2,
+    "PT-001": 3,
+    "SHOE-001": 2,
+    "SOCK-004": 2,
+    "BAG-002": 2,
+    "ACC-001": 2,
     "LS-001": 1,
     "TS-006": 1,
-    "SHOE-010": 1
+    "SHOE-010": 1,
+    "JK-005": 1,
+    "PT-005": 1,
+    "SHOE-009": 1
   }
 }

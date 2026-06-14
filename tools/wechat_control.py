@@ -618,19 +618,13 @@ def run_pipeline(style_hint, task_id=None):
                 'result': result_text,
             })
 
-            # 微信推送：B线触发时走 build_push 完整流程
-            if is_bline:
-                try:
+            # 微信推送：统一走 build_push 时尚版
+            try:
+                bf = ''
+                if is_bline:
                     bf = '--bold' if is_bold else '--bline'
-                    run_cli(['python3', 'tools/build_push.py', outfit_dir, bf], timeout=30)
-                except Exception:
-                    # 回退到手动词
-                    content = f"![效果图]({github_url})\n\n"
-                    if summary:
-                        content += f"**单品清单**\n{summary}\n\n"
-                    content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-                    push_wechat(f"👔 {style_hint}", content)
-            else:
+                run_cli(['python3', 'tools/build_push.py', outfit_dir, bf, '--rich'], timeout=120)
+            except Exception:
                 content = f"![效果图]({github_url})\n\n"
                 if summary:
                     content += f"**单品清单**\n{summary}\n\n"

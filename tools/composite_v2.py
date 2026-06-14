@@ -76,6 +76,51 @@ def prep(path, prefix, w, h):
 def parse(d):
     md=os.path.join(d,'outfit.md')
     if not os.path.exists(md): return []
+    # 读取 JSON 标签获取品牌（用于精简显示名）
+    tags_dir=os.path.join(BASE_DIR,'..','wardrobe','tags')
+    brand_map={}
+    try:
+        for fname in os.listdir(tags_dir):
+            if not fname.endswith('.json') or fname=='SCORE_CACHE.json': continue
+            with open(os.path.join(tags_dir,fname)) as f: td=json.load(f)
+            cid=td.get('clothing_id','')
+            if cid:
+                b=td.get('brand',{}) or {}
+                brand_map[cid]=(b.get('name','') or '').strip()
+    except: pass
+
+    def short_name(iid,iname):
+        """构建精简显示名：品牌 + 品类，控在14字内"""
+        brand=brand_map.get(iid,'')
+        # 品类词提取 — 保留运动/场景关键词
+        cat_word=''
+        for full in ['网球鞋','跑步鞋','训练鞋','帆布鞋','篮球鞋','足球鞋','工装靴',
+                     '运动短裤','跑步短裤','休闲短裤','速干短袖','运动短袖','运动背心',
+                     'Polo衫','棒球帽','渔夫帽','托特包','桶包','运动背包','运动表带',
+                     '拖鞋','短袜','墨镜','发带']:
+            if full in iname:
+                cat_word=full; break
+        if not cat_word:
+            for tail,short in [('短袖','短袖'),('长袖','长袖'),('短裤','短裤'),('长裤','长裤'),
+                               ('衬衫','衬衫'),('卫衣','卫衣'),('外套','外套'),('背心','背心'),
+                               ('帽','帽'),('包','包'),('袜','袜'),('鞋','鞋'),('镜','🕶'),('表','⌚')]:
+                if tail in iname[-4:]:
+                    cat_word=short; break
+        if not cat_word:
+            cat_word=''
+
+        if brand and brand!='未知':
+            # Decathlon 子品牌用简称
+            for parent,sub in [('Decathlon Artengo','Artengo'),('Decathlon Kiprun','Kiprun')]:
+                if brand==parent: brand=sub
+            display=f'{brand} {cat_word}' if cat_word else brand
+            if len(display)>14:
+                # 品牌名太长时只用品牌
+                return brand[:14]
+            return display
+        # 无品牌
+        if len(iname)<=14: return iname
+        return iname[:12]+'…'
     with open(md,encoding='utf-8') as f: lines=f.readlines()
     in_sec,items=False,[]
     for line in lines:
@@ -88,7 +133,8 @@ def parse(d):
         if len(cells)<4: continue
         iid=cells[2].replace('**','').strip(); iname=cells[3].strip()
         if iid in ('单品ID','ID','') or not re.match(r'^[A-Z]+-\d+',iid): continue
-        items.append({'id':iid,'name':iname,'prefix':iid.split('-')[0]+'-'})
+        dname=short_name(iid,iname)
+        items.append({'id':iid,'name':iname,'display_name':dname,'prefix':iid.split('-')[0]+'-'})
     return items
 
 def find_ai(d):
@@ -237,7 +283,7 @@ def composite(ai_path,items,output_path):
     if 'generated' in outfit_dir or '上身效果' in outfit_dir:
         outfit_dir=os.path.dirname(outfit_dir)
     style_kw=parse_style_info(outfit_dir)
-    f_item=font(28,'body_cn'); f_mini=font(22,'body_en')
+    f_item=font(24,'body_cn'); f_item_sm=font(20,'body_cn'); f_mini=font(22,'body_en')
     has_notes=bool(style_kw)
 
     top_offset=TITLE_H
@@ -292,7 +338,9 @@ def composite(ai_path,items,output_path):
             ox=lx+(box_w-cloth.width)//2; oy=ly+(box_h-cloth.height)//2
             canvas.paste(cloth,(ox,oy),cloth)
         draw.rectangle([(lx,ly),(lx+box_w-1,ly+box_h-1)],outline=(189,189,184),width=BORDER)
-        draw.text((lx+14,ly+box_h-42),it['name'][:16],font=f_item,fill=(80,80,78))
+        dname=it.get('display_name',it['name'][:14])
+        fn=f_item_sm if len(dname)>12 else f_item
+        draw.text((lx+14,ly+box_h-42),dname,font=fn,fill=(80,80,78))
         ly+=box_h+GAP
 
     # 中：AI人物大图
@@ -312,10 +360,12 @@ def composite(ai_path,items,output_path):
             ox=rx+(box_w-cloth.width)//2; oy=ry+(box_h-cloth.height)//2
             canvas.paste(cloth,(ox,oy),cloth)
         draw.rectangle([(rx,ry),(rx+box_w-1,ry+box_h-1)],outline=(189,189,184),width=BORDER)
-        draw.text((rx+14,ry+box_h-42),it['name'][:16],font=f_item,fill=(80,80,78))
+        dname=it.get('display_name',it['name'][:14])
+        fn=f_item_sm if len(dname)>12 else f_item
+        draw.text((rx+14,ry+box_h-42),dname,font=fn,fill=(80,80,78))
         ry+=box_h+GAP
 
-    # 底部配色色块
+    # 底部配色色块 — 从单品抠图取主色（主服饰优先，显著差异配饰也纳入）
     cache_file=os.path.join(os.path.dirname(output_path),'.color_cache.json')
     top_colors=[]
     if os.path.exists(cache_file):
@@ -325,23 +375,51 @@ def composite(ai_path,items,output_path):
         except: pass
     if not top_colors:
         try:
-            ai_tiny=ai_img.resize((int(ai_w*0.3),int(ai_h*0.3)),Image.LANCZOS).convert('RGB')
-            buf=io.BytesIO(); ai_tiny.save(buf,format='JPEG',quality=70)
-            b64=base64.b64encode(buf.getvalue()).decode('utf-8')
-            payload={'model':'doubao-seed-2.0-code','messages':[{'role':'user','content':[
-                {'type':'image_url','image_url':{'url':f'data:image/jpeg;base64,{b64}'}},
-                {'type':'text','text':'列出这套穿搭的主要5个颜色，用Hex格式每行一个'}
-            ]}],'max_tokens':2000,'temperature':0}
-            data=json.dumps(payload).encode('utf-8')
-            req=urllib.request.Request('https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions',
-                data=data,headers={'Content-Type':'application/json',
-                'Authorization':'Bearer '+_get_ark_key()})
-            with urllib.request.urlopen(req,timeout=60) as resp:
-                result=json.loads(resp.read().decode('utf-8'))
-                hexes=re.findall(r'#[0-9A-Fa-f]{6}',result['choices'][0]['message']['content'])
-                top_colors=[tuple(int(h[i:i+2],16) for i in (1,3,5)) for h in hexes[:5]]
-            open(cache_file,'w').write(json.dumps(top_colors))
-        except: pass
+            # 主服饰优先，然后按品类遍历
+            priority=['TS-','TANK-','LS-','SHIRT-','SH-','PT-','SHOE-','HAT-','BAG-','SOCK-','ACC-','SUN-']
+            main_cats={'TS-','TANK-','LS-','SHIRT-','SH-','PT-','SHOE-'}
+            item_colors=[]  # (r,g,b, is_main)
+            for prefix in priority:
+                for it in items:
+                    if not it['id'].startswith(prefix): continue
+                    ip=find_img(dd,it)
+                    if not ip: continue
+                    try:
+                        cloth=Image.open(ip).convert('RGBA')
+                        cloth=cloth.resize((80,80),Image.LANCZOS)
+                        px=cloth.load()
+                        r_vals,g_vals,b_vals=[],[],[]
+                        for y in range(cloth.height):
+                            for x in range(cloth.width):
+                                r,g,b,a=px[x,y]
+                                if a>100 and max(r,g,b)>20 and max(r,g,b)<245:
+                                    r_vals.append(r); g_vals.append(g); b_vals.append(b)
+                        if len(r_vals)>20:
+                            r_vals.sort(); g_vals.sort(); b_vals.sort()
+                            mr=r_vals[len(r_vals)//2]; mg=g_vals[len(g_vals)//2]; mb=b_vals[len(b_vals)//2]
+                            item_colors.append((mr,mg,mb,prefix in main_cats))
+                    except: pass
+
+            def color_dist(a,b):
+                return abs(a[0]-b[0])+abs(a[1]-b[1])+abs(a[2]-b[2])
+
+            # 第一轮：取主服饰（去重）
+            merged=[]
+            for c in item_colors:
+                if not c[3]: continue  # 跳过配饰
+                if any(color_dist(c,mc)<50 for mc in merged): continue
+                merged.append(c[:3])
+            # 第二轮：取与已有色差异>80的配饰色（显著跳色）
+            for c in item_colors:
+                if c[3]: continue  # 主服饰已取完
+                if len(merged)>=5: break
+                if all(color_dist(c,mc)>=80 for mc in merged):
+                    merged.append(c[:3])
+            top_colors=merged[:5]
+            if top_colors:
+                open(cache_file,'w').write(json.dumps(top_colors))
+        except Exception:
+            pass
     if not top_colors:
         top_colors=[(40,40,38),(180,180,178),(120,120,118),(220,220,218),(80,80,78)]
     swatch_y=canvas_h-60; swatch_x=cw

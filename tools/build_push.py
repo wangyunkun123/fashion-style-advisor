@@ -295,7 +295,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     """主函数：生成丰富推送内容"""
     data = load_outfit_data(outfit_dir)
     if not data:
-        return None, "无法解析 outfit.md", None
+        return None, "无法解析 outfit.md", None, None
 
     style_id = match_style_id(data, outfit_dir) or 'japanese_city_boy'
 
@@ -440,7 +440,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             direction = exploration_outfit['direction']
 
             print(f"  [B线] 启动生图管线... 锚点: {anchor['clothing_id']}")
-            outfit_dir, img_path, cdn_url = prepare_bline_outfit(
+            bline_outfit_dir, img_path, cdn_url = prepare_bline_outfit(
                 anchor, companions, direction, temp_high, weather_cond,
                 appeal=bline_appeal, narrative=bline_narrative, encyc=bline_encyc,
                 all_clothing=all_clothing if is_bline else None
@@ -619,7 +619,8 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
         save_lab_state(state)
 
-    return B.join(parts), style_name, outfit_name
+    rating_dir = bline_outfit_dir if is_bline and bline_outfit_dir else outfit_dir
+    return B.join(parts), style_name, outfit_name, rating_dir
 
 
 # ============================================================
@@ -724,7 +725,7 @@ def main():
 
     if mode == 'both':
         # 发送两个版本
-        rich_content, rich_name, outfit_name = build_push(outfit_dir, force_line, force_boldness)
+        rich_content, rich_name, outfit_name, rating_dir = build_push(outfit_dir, force_line, force_boldness)
         simple_content, _, _ = build_simple(outfit_dir)
         if not rich_content or not simple_content:
             print("❌ 生成失败")
@@ -743,7 +744,7 @@ def main():
             print(rich_content)
         else:
             base = get_push_base_url()
-            outfit_id = os.path.basename(outfit_dir)
+            outfit_id = os.path.basename(rating_dir)
             rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={urllib.parse.quote(outfit_id)})'
             simple_desc = '🅰️ 简约版：不想费心，每天一套穿好就走 👌'
             rich_desc = '🅱️ 时尚版：想跟AI一起探索风格，越穿越懂自己 🧠✨'
@@ -767,12 +768,12 @@ def main():
             print("✅ 简约版已推送")
 
     elif mode == 'rich':
-        content, style_name, outfit_name = build_push(outfit_dir, force_line, force_boldness)
+        content, style_name, outfit_name, rating_dir = build_push(outfit_dir, force_line, force_boldness)
         if content is None:
             print(f"❌ {style_name}"); return
         push_title = outfit_name if outfit_name else style_name
         base = get_push_base_url()
-        outfit_id = os.path.basename(outfit_dir)
+        outfit_id = os.path.basename(rating_dir)
         rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={urllib.parse.quote(outfit_id)})'
         if preview:
             print("=" * 50)

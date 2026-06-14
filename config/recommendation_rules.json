@@ -1,0 +1,141 @@
+{
+  "_comment": "推荐优先级体系：硬阻断 > 实用 > 美观 > 舒适。每层级得分影响单品在推荐中的权重。",
+  "last_updated": "2026-06-14",
+  "hard_blocks": {
+    "_comment": "不通过直接淘汰，不参与后续评分",
+    "rules": [
+      {
+        "id": "temp_overheat",
+        "desc": "气温≥30°C时禁止厚外套/羊毛/灯芯绒",
+        "check": "weather_temp >= 30 and ('羊毛' in fabric_primary or '皮质' in fabric_primary or '灯芯绒' in fabric_primary) and cat_code == 'JK'",
+        "action": "block"
+      },
+      {
+        "id": "temp_freeze",
+        "desc": "气温≤10°C时禁止短裤/背心/凉鞋",
+        "check": "weather_temp <= 10 and item.category_code in ('SH', 'TANK')",
+        "action": "block"
+      },
+      {
+        "id": "rain_white_bottom",
+        "desc": "雨天禁止白色下装",
+        "check": "weather_cond in ('雨', '暴雨', '雷雨') and cat_code in ('SH', 'PT') and ('白' in hue_name or '米白' in hue_name or '浅' in hue_name)",
+        "action": "block"
+      },
+      {
+        "id": "formal_shorts",
+        "desc": "商务/正式场合禁止短裤",
+        "check": "occasion in ('商务', '正式') and cat_code == 'SH'",
+        "action": "block"
+      },
+      {
+        "id": "sport_sandals",
+        "desc": "运动场景禁止拖鞋/凉鞋",
+        "check": "occasion == '运动' and item.category_code == 'SHOE' and item.fabric.primary in ('塑料', 'EVA')",
+        "action": "block"
+      },
+      {
+        "id": "duplicate_category",
+        "desc": "禁止同品类出现两件（如两条裤子）",
+        "check": "outfit_level",
+        "action": "block"
+      }
+    ]
+  },
+  "practical": {
+    "_comment": "实用层（权重0.4）：保证能穿、功能正确",
+    "weight": 0.4,
+    "rules": [
+      {
+        "id": "season_match",
+        "desc": "面料季节适配当日气温",
+        "check": "outfit_level: season_match",
+        "score": 25
+      },
+      {
+        "id": "three_piece",
+        "desc": "上衣+下装+鞋子三件套齐全",
+        "check": "outfit_level: has_TS+has_PT_or_SH+has_SHOE",
+        "score": 30
+      },
+      {
+        "id": "scene_function",
+        "desc": "场景功能匹配：运动→至少一件运动单品",
+        "check": "occasion == '运动' and any(item.category_code in ('TS','SH','SHOE') and item.fabric.primary in ('涤纶','速干') for item in outfit)",
+        "score": 20
+      },
+      {
+        "id": "sun_protection",
+        "desc": "高温晴天有帽子/墨镜加分",
+        "check": "weather_temp >= 30 and weather_cond == '晴' and any(item.category_code in ('HAT','SUN') for item in outfit)",
+        "score": 15
+      },
+      {
+        "id": "cold_layer",
+        "desc": "低温有外套/长袖加分",
+        "check": "weather_temp <= 15 and any(item.category_code in ('JK','LS') for item in outfit)",
+        "score": 10
+      }
+    ]
+  },
+  "aesthetic": {
+    "_comment": "美观层（权重0.35）：颜色协调、风格统一、廓形平衡",
+    "weight": 0.35,
+    "rules": [
+      {
+        "id": "color_harmony",
+        "desc": "整体配色协调（无冲突撞色）",
+        "check": "outfit_level: max color clash score < 0.5",
+        "score": 30
+      },
+      {
+        "id": "style_coherence",
+        "desc": "所有单品对目标风格得分 ≥ 30",
+        "check": "all(item.style_score >= 30 for item in outfit)",
+        "score": 25
+      },
+      {
+        "id": "silhouette_balance",
+        "desc": "上宽下窄或外松内紧的廓形平衡",
+        "check": "outfit_level: top宽松 + bottom修身 or 外宽松 + 内贴身",
+        "score": 25
+      },
+      {
+        "id": "body_modifier",
+        "desc": "偏瘦体型修饰加分",
+        "check": "any('增加肩宽' in item.modifiers or '增加体量感' in item.modifiers for item in outfit)",
+        "score": 20
+      }
+    ]
+  },
+  "comfort": {
+    "_comment": "舒适层（权重0.25）：面料亲肤、版型宽松、个人偏好",
+    "weight": 0.25,
+    "rules": [
+      {
+        "id": "fabric_comfort",
+        "desc": "棉/麻/丝面料加分",
+        "check": "'棉' in fabric_primary or '麻' in fabric_primary or '亚麻' in fabric_primary or '丝' in fabric_primary",
+        "score": 30
+      },
+      {
+        "id": "relaxed_fit",
+        "desc": "日常场景宽松版型加分",
+        "check": "item.silhouette.fit == '宽松' and occasion in ('日常','休闲')",
+        "score": 25
+      },
+      {
+        "id": "skin_friendly",
+        "desc": "衬肤色加分",
+        "check": "outfit_level: skin_friendly",
+        "score": 25
+      },
+      {
+        "id": "user_preference",
+        "desc": "用户评分历史偏好加成",
+        "check": "item has been rated 3-star before in similar context",
+        "score": 20
+      }
+    ]
+  }
+}

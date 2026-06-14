@@ -33,6 +33,7 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 STATE_FILE = os.path.join(PROJ_DIR, 'config', 'style_lab_state.json')
 DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')
 STRATEGY_FILE = os.path.join(PROJ_DIR, 'config', 'explore_strategies.json')
+RULES_FILE = os.path.join(PROJ_DIR, 'config', 'recommendation_rules.json')
 
 # CDN base for encyclopedia links
 CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
@@ -268,7 +269,187 @@ def update_item_wear_count(item_id):
 
 
 # ============================================================
-# 2. 数据加载（复用 style_matcher 和 build_push 的模式）
+# 2. 推荐优先级检查
+# ============================================================
+
+def check_recommendation_rules(item=None, outfit_items=None, weather_temp=25,
+                                weather_cond='晴', occasion='日常', rule_set='all'):
+    """
+    检查单品/套装是否符合推荐优先级规则。
+    返回: (passed: bool, violations: list, score_boost: int)
+
+    rule_set: 'hard' | 'practical' | 'aesthetic' | 'comfort' | 'all'
+    """
+    if not os.path.exists(RULES_FILE):
+        return True, [], 0
+
+    with open(RULES_FILE, 'r', encoding='utf-8') as f:
+        rules = json.load(f)
+
+    violations = []
+    score_boost = 0
+
+    # ── 硬阻断 ──
+    if rule_set in ('hard', 'all'):
+        for rule in rules.get('hard_blocks', {}).get('rules', []):
+            try:
+                if _eval_rule(rule['check'], item, outfit_items, weather_temp, weather_cond, occasion):
+                    violations.append(rule['desc'])
+            except Exception:
+                pass
+
+    # ── 实用层 ──
+    if rule_set in ('practical', 'all') and outfit_items:
+        pw = rules.get('practical', {}).get('weight', 0.4)
+        for rule in rules.get('practical', {}).get('rules', []):
+            try:
+                if _eval_rule(rule['check'], item, outfit_items, weather_temp, weather_cond, occasion):
+                    score_boost += int(rule['score'] * pw)
+            except Exception:
+                pass
+
+    # ── 美观层 ──
+    if rule_set in ('aesthetic', 'all') and outfit_items:
+        aw = rules.get('aesthetic', {}).get('weight', 0.35)
+        for rule in rules.get('aesthetic', {}).get('rules', []):
+            try:
+                if _eval_rule(rule['check'], item, outfit_items, weather_temp, weather_cond, occasion):
+                    score_boost += int(rule['score'] * aw)
+            except Exception:
+                pass
+
+    # ── 舒适层 ──
+    if rule_set in ('comfort', 'all') and outfit_items:
+        cw = rules.get('comfort', {}).get('weight', 0.25)
+        for rule in rules.get('comfort', {}).get('rules', []):
+            try:
+                if _eval_rule(rule['check'], item, outfit_items, weather_temp, weather_cond, occasion):
+                    score_boost += int(rule['score'] * cw)
+            except Exception:
+                pass
+
+    passed = len([v for v in violations if rule_set in ('hard', 'all')]) == 0 if rule_set in ('hard', 'all') else True
+    return passed, violations, score_boost
+
+
+def _eval_rule(check_str, item, outfit_items, weather_temp, weather_cond, occasion):
+    """
+    评估单条规则。check_str 格式：
+    - 单品级：'weather_temp >= 30 and item.fabric.primary == "羊毛"'
+    - 套装级：'outfit_level: has_TS+has_PT+has_SHOE'
+    """
+    if not check_str:
+        return False
+
+    # 套装级检查
+    if check_str.startswith('outfit_level:'):
+        expr = check_str.split(':', 1)[1].strip()
+        return _eval_outfit_rule(expr, outfit_items, weather_temp, weather_cond, occasion)
+
+    # 单品级检查：用 Python eval（安全上下文）
+    if item is None:
+        return False
+    fabric = item.get('fabric', {})
+    color = item.get('color', {})
+    cat = item.get('category_code', '')
+    silhouette = item.get('silhouette', {})
+    meta = item.get('meta', {})
+
+    # 构建安全命名空间
+    ns = {
+        'weather_temp': weather_temp, 'weather_cond': weather_cond,
+        'occasion': occasion,
+        'item': DotDict(item),
+        'fabric_primary': fabric.get('primary', ''),
+        'hue_name': color.get('hue_name', ''),
+        'cat_code': cat,
+        'fit': silhouette.get('fit', ''),
+        'is_neutral': color.get('is_neutral', False),
+    }
+    try:
+        return bool(eval(check_str, {"__builtins__": {}}, ns))
+    except Exception:
+        return False
+
+
+def _eval_outfit_rule(expr, outfit_items, weather_temp, weather_cond, occasion):
+    """评估套装级规则"""
+    if not outfit_items:
+        return False
+    cats = set(it.get('category_code', '') for it in outfit_items)
+    has_TS = any(c.startswith('TS') or c.startswith('LS') or c.startswith('SHIRT') for c in cats)
+    has_PT_or_SH = any(c.startswith('PT') or c.startswith('SH') for c in cats)
+    has_SHOE = any(c.startswith('SHOE') for c in cats)
+
+    if expr == 'has_TS+has_PT_or_SH+has_SHOE':
+        return has_TS and has_PT_or_SH and has_SHOE
+
+    # 颜色冲突检查
+    if 'color clash' in expr:
+        hues = [it.get('color', {}).get('hue_family', '') for it in outfit_items]
+        warm = {'橙', '红', '黄', '棕'}
+        cold = {'蓝', '绿', '紫', '青'}
+        has_warm = any(h in warm for h in hues)
+        has_cold = any(h in cold for h in hues)
+        return not (has_warm and has_cold)
+
+    # 风格连贯
+    if 'style_score' in expr:
+        return all(it.get('_style_score', 0) >= 30 for it in outfit_items)
+
+    # 廓形平衡
+    if 'silhouette_balance' in expr or '宽松' in expr:
+        tops = [it for it in outfit_items if it.get('category_code', '')[:2] in ('TS', 'LS', 'SH', 'JK')]
+        bottoms = [it for it in outfit_items if it.get('category_code', '')[:2] in ('PT', 'SH')]
+        top_loose = any(it.get('silhouette', {}).get('fit') == '宽松' for it in tops)
+        bottom_slim = any(it.get('silhouette', {}).get('fit') in ('修身', '合身') for it in bottoms)
+        return top_loose and bottom_slim
+
+    # 体型修饰
+    if 'body_modifier' in expr or '增加肩宽' in expr:
+        for it in outfit_items:
+            mods = it.get('style_modifiers', [])
+            if any('增加肩宽' in m or '增加体量感' in m for m in mods):
+                return True
+        return False
+
+    # 运动功能
+    if 'scene_function' in expr or '运动' in expr:
+        return any(
+            it.get('fabric', {}).get('primary') in ('涤纶', '速干')
+            for it in outfit_items
+        )
+
+    # 防晒
+    if 'sun_protection' in expr or '帽子' in expr:
+        return any(it.get('category_code', '') in ('HAT', 'SUN') for it in outfit_items)
+
+    # 保暖
+    if 'cold_layer' in expr or '外套' in expr:
+        return any(it.get('category_code', '') in ('JK', 'LS') for it in outfit_items)
+
+    # 面料舒适
+    if 'fabric_comfort' in expr:
+        return any(it.get('fabric', {}).get('primary') in ('棉', '麻', '亚麻', '丝') for it in outfit_items)
+
+    # 衬肤色
+    if 'skin_friendly' in expr:
+        return any(it.get('color', {}).get('friendly_for_pale_skin') for it in outfit_items)
+
+    return False
+
+
+class DotDict:
+    """让 item.key.subkey 可用点号访问"""
+    def __init__(self, d): self._d = d
+    def __getattr__(self, k):
+        v = self._d.get(k, {})
+        return DotDict(v) if isinstance(v, dict) else v
+    def __getitem__(self, k): return self._d.get(k, '')
+
+
+# ============================================================
+# 3. 数据加载（复用 style_matcher 和 build_push 的模式）
 # ============================================================
 
 def load_all_clothing():

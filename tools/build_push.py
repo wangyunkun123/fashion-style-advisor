@@ -363,6 +363,11 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         with open(md_path, 'r') as f:
             md_text = f.read()
         if True:  # 每次都确保风格笔记最新
+            # 先清除旧风格笔记
+            if '## 风格笔记' in md_text:
+                md_text = md_text.split('## 风格笔记')[0].rstrip()
+                with open(md_path, 'w') as f:
+                    f.write(md_text)
             # 从风格指纹提取关键特征
             style_desc = ''
             if encyc:

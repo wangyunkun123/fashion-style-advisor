@@ -191,34 +191,29 @@ def parse_style_info(outfit_dir):
 
 
 def wrap_text(text, font, max_width):
-    """中文智能换行：优先在标点处断行"""
-    # 断行优先级：句号 > 逗号 > 空格 > 字符
-    BREAK_CHARS = '。！？；：，、.'
+    """中文换行：标点处优先断，行首不留标点"""
+    PUNCT = '，,.。、：；！？'
     lines = []
-    current = ''
+    line = ''
     for ch in text:
-        test = current + ch
+        test = line + ch
         if font.getbbox(test)[2] <= max_width:
-            current = test
+            line = test
         else:
-            # 回退到最近的标点处断行
-            if current:
-                # 找最近的断点
-                best = len(current)
-                for bc in BREAK_CHARS:
-                    idx = current.rfind(bc, max(0, len(current)-8))
-                    if idx > 0: best = min(best, idx+1)
-                if best < len(current) and font.getbbox(current[:best])[2] <= max_width:
-                    lines.append(current[:best])
-                    current = current[best:].lstrip('，,。.')
-                else:
-                    lines.append(current)
-                    current = ''
-            current += ch
-    if current.strip():
-        lines.append(current)
-    return lines or [text]
-
+            if line:
+                cut = len(line)
+                for p in PUNCT:
+                    idx = line.rfind(p, max(0, len(line)-10))
+                    if idx > 0 and font.getbbox(line[:idx+1])[2] <= max_width:
+                        cut = min(cut, idx+1)
+                lines.append(line[:cut])
+                rest = line[cut:].lstrip(PUNCT)
+                line = rest
+            if ch not in PUNCT:
+                line += ch
+    if line.strip():
+        lines.append(line)
+    return lines
 def composite(ai_path,items,output_path):
     ai_img=Image.open(ai_path).convert('RGB'); ai_w,ai_h=ai_img.size
     dd=os.path.join(os.path.dirname(ai_path),'..','items')

@@ -191,7 +191,9 @@ def parse_style_info(outfit_dir):
 
 
 def wrap_text(text, font, max_width):
-    """中文按字符换行"""
+    """中文智能换行：优先在标点处断行"""
+    # 断行优先级：句号 > 逗号 > 空格 > 字符
+    BREAK_CHARS = '。！？；：，、.'
     lines = []
     current = ''
     for ch in text:
@@ -199,10 +201,21 @@ def wrap_text(text, font, max_width):
         if font.getbbox(test)[2] <= max_width:
             current = test
         else:
+            # 回退到最近的标点处断行
             if current:
-                lines.append(current)
-            current = ch
-    if current:
+                # 找最近的断点
+                best = len(current)
+                for bc in BREAK_CHARS:
+                    idx = current.rfind(bc, max(0, len(current)-8))
+                    if idx > 0: best = min(best, idx+1)
+                if best < len(current) and font.getbbox(current[:best])[2] <= max_width:
+                    lines.append(current[:best])
+                    current = current[best:].lstrip('，,。.')
+                else:
+                    lines.append(current)
+                    current = ''
+            current += ch
+    if current.strip():
         lines.append(current)
     return lines or [text]
 

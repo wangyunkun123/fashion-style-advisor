@@ -614,3 +614,17 @@ error: failed to push some refs to 'github.com:wangyunkun1
 👔 方案1 ACOC网格风
 💾 上身效果_1_方案1.jpg (3200x2224) ✅
 [13:39:01] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
+[13:39:05] [INFO] 📍 ✅ 推送完成
+✅ 执行完成（无文本输出）
+[13:39:07] [INFO] 推送成功: 👔 晴日韩系简约
+[13:39:11] [INFO] 📍 ✅ 推送完成
+❌ 执行失败 (code=1)
+To github.com:wangyunkun123/fashion-style-advisor.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 365790d60c441dd12f7bc520d607115f90becc0d but expected eff2a713e6132a2541925b8a0d9e4d91ab5552bd)
+error: failed to push some refs to 'github.com:wangyunkun1
+[13:39:29] [INFO] 📍 ✅ 推送完成
+❌ 执行失败 (code=1)
+To github.com:wangyunkun123/fashion-style-advisor.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 365790d60c441dd12f7bc520d607115f90becc0d but expected eff2a713e6132a2541925b8a0d9e4d91ab5552bd)
+error: failed to push some refs to 'github.com:wangyunkun1
+[13:40:19] [INFO] 推送成功: 晴日韩系简约

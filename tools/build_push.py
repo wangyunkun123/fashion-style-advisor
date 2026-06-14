@@ -16,8 +16,16 @@ STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
 TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
 CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 
-# jsDelivr base for encyclopedia links
-CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
+# jsDelivr base（动态获取最新 commit hash，绕过 CDN 缓存）
+def _get_cdn_base():
+    try:
+        import subprocess, os
+        h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                          capture_output=True, text=True, cwd=os.path.dirname(os.path.abspath(__file__))+'/..').stdout.strip()
+        if h: return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}'
+    except: pass
+    return 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
+CDN_BASE = _get_cdn_base()
 
 # 推送偏好设置 URL
 def get_push_base_url():

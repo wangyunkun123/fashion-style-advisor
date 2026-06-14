@@ -618,7 +618,6 @@ def run_pipeline(style_hint, task_id=None):
 
     today = time.strftime('%Y-%m-%d')
     banned_items = get_banned_items()
-    banned_str = '、'.join(banned_items) if banned_items else '无'
 
     progress('🤖 Step 1/4: AI 分析穿搭方案...')
 
@@ -627,16 +626,18 @@ def run_pipeline(style_hint, task_id=None):
 
     system_prompt = OUTFIT_SYSTEM_PROMPT
 
+    # 构建 prompt：无禁用单品时不提"禁用"概念，避免触发 AI 的"避免复用"本能
+    ban_section = ''
+    if banned_items:
+        banned_str = '、'.join(banned_items)
+        ban_section = f'\n🚫 一星差评禁用单品（严禁使用以下ID）: {banned_str}\n'
+
     user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
-为「{style_hint}」推荐一套全新穿搭。
-
-🚫 一星差评禁用单品（严禁使用）: {banned_str}
-
-⚠️ 硬性要求：
-- 上衣、下装、鞋子三者缺一不可（绝不能留空或标 UNAVAILABLE）
-- 除上述禁用单品外，衣柜中所有单品均可自由选用
-- 一天内多次请求 = 用户想换风格，同一单品可以在不同风格中重复出现
+为「{style_hint}」推荐一套穿搭。{ban_section}
+⚠️ 上衣、下装、鞋子三者缺一不可，每项必须从下方衣柜表格中选取真实的单品ID。
+⚠️ 所有未禁用的单品均可自由选用。同一单品可以出现在不同风格的穿搭中——复用是正常且期望的行为。
+⚠️ 永远不要输出 UNAVAILABLE 作为ID。表格里每个ID都可用。
 
 以下是完整衣柜档案：
 ---
@@ -667,6 +668,27 @@ def run_pipeline(style_hint, task_id=None):
 
         if not plan:
             raise ValueError("AI 穿搭分析返回格式异常，已重试1次仍失败，请稍后再试")
+
+        # ⚠️ 硬拦截：检测 UNAVAILABLE
+        items = plan.get('items', [])
+        unavailable = [it for it in items if it.get('id', '') == 'UNAVAILABLE']
+        if unavailable:
+            log(f"⚠️ AI 返回了 UNAVAILABLE 单品，强制重试: {[it.get('category','') for it in unavailable]}", "WARN")
+            progress('🔄 检测到 UNAVAILABLE，强制重试...')
+            # 重试：追加极强指令
+            user_prompt += "\n\n❌ 你上一次输出了 UNAVAILABLE。这是严重错误。衣柜中所有鞋子和裤子都可用。必须为上衣、下装、鞋子各选一个真实ID（如 SHOE-005、SH-003）。"
+            content = call_doubao_chat([
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt},
+            ], max_tokens=4096, timeout=180)
+            plan = extract_json(content)
+            if not plan:
+                raise ValueError("AI 穿搭分析返回格式异常（UNAVAILABLE重试后JSON解析失败）")
+            items2 = plan.get('items', [])
+            unavailable2 = [it for it in items2 if it.get('id', '') == 'UNAVAILABLE']
+            if unavailable2:
+                log(f"⚠️ 重试后仍返回 UNAVAILABLE: {[it.get('category','') for it in unavailable2]}", "ERROR")
+                raise ValueError("AI 两次返回 UNAVAILABLE，请稍后重试")
 
         # 执行文件操作
         outfit_dir = execute_outfit_plan(plan, today, style_hint)

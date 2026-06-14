@@ -1,8 +1,8 @@
 {
-  "total_recommendations": 4,
-  "bline_count": 0,
+  "total_recommendations": 5,
+  "bline_count": 1,
   "bold_count": 0,
-  "last_recommendation_time": "2026-06-14T18:39:35.499993",
+  "last_recommendation_time": "2026-06-14T18:42:19.662295",
   "items_worn": {
     "TS-011": 1,
     "SHIRT-001": 1,
@@ -10,6 +10,10 @@
     "SHOE-002": 1,
     "SOCK-005": 1,
     "BAG-005": 1,
-    "ACC-003": 1
+    "ACC-003": 1,
+    "JK-005": 1,
+    "TS-005": 1,
+    "PT-005": 1,
+    "SHOE-009": 1
   }
 }

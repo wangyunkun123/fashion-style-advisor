@@ -574,7 +574,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             with open(cache_file) as f:
                 colors = [tuple(c) for c in json.load(f)]
         if colors:
-            SZ = 40; GAP = 4; COUNT = len(colors)
+            SZ = 60; GAP = 6; COUNT = len(colors)
             strip = Image.new('RGB', (COUNT*SZ + (COUNT-1)*GAP, SZ), (255,255,255))
             for i, rgb in enumerate(colors[:5]):
                 for y in range(SZ):
@@ -594,7 +594,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     if color_logic or swatch_img_url:
         color_parts = []
         if swatch_img_url:
-            color_parts.append(f'![配色]({swatch_img_url})')
+            color_parts.append(f'![配色]({swatch_img_url})\n`#hex` `#hex` `#hex` `#hex` `#hex`')
         if color_logic:
             color_parts.append(color_logic)
         parts.append("━━━ 🎨 配色 ━━━\n\n" + '\n\n'.join(color_parts))

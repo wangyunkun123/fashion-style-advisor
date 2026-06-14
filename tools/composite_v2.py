@@ -285,21 +285,8 @@ def composite(ai_path,items,output_path):
         draw.text((rx+14,ry+box_h-42),it['name'][:16],font=f_item,fill=(80,80,78))
         ry+=box_h+GAP
 
-    # 右下文字卡片（填充空白）
-    if ry < top_y+ai_display_h-20:
-        info_h=top_y+ai_display_h-ry
-        canvas.paste((255,255,255),(rx,ry,rx+cell_w,ry+info_h))
-        draw.rectangle([(rx,ry),(rx+cell_w-1,ry+info_h-1)],outline=(189,189,184),width=BORDER)
-        ty=ry+20
-        NOTE_PAD=28; NOTE_MAX_W=cell_w-NOTE_PAD-16
-        if style_kw:
-            draw.text((rx+NOTE_PAD,ty),'STYLE NOTES',font=f_mini,fill=(140,140,138))
-            ty+=36
-            for kw in style_kw:
-                for wline in wrap_text(f'· {kw}', f_item, NOTE_MAX_W):
-                    if ty+36>top_y+ai_display_h-10: break
-                    draw.text((rx+NOTE_PAD,ty),wline,font=f_item,fill=(110,110,108))
-                    ty+=36
+    # 右下文字卡片（已弃用——STYLE NOTES 移到底部）
+    _style_kw = style_kw  # keep reference for bottom card
     # 底部：配色色块 — 从抠图衣服提取颜色（省token）
     # 底部：配色色块 — 豆包视觉识别（缓存结果）
     cache_file=os.path.join(os.path.dirname(output_path),'.color_cache.json')
@@ -336,7 +323,39 @@ def composite(ai_path,items,output_path):
         except: pass
     if not top_colors:
         top_colors=[(40,40,38),(180,180,178),(120,120,118),(220,220,218),(80,80,78)]
-    swatch_y=canvas_h-60; swatch_x=cw
+    # ━━━ STYLE NOTES 底部卡片 ━━━
+    bottom_y = max(ly, ry, swatch_y + 60 if 'swatch_y' in dir() else 0)
+    if style_kw:
+        NOTE_PAD = 28; NOTE_W = canvas_w - MARGIN*2 - NOTE_PAD - 16
+        card_x = MARGIN; card_w = canvas_w - MARGIN*2
+        # 预估卡片高度
+        note_lines = 0
+        for kw in style_kw:
+            note_lines += len(wrap_text(f'· {kw}', f_item, NOTE_W))
+        card_h = 24 + note_lines * 36 + 20
+        card_y = bottom_y + 20
+        # 扩展画布
+        if card_y + card_h + 40 > canvas_h:
+            new_h = card_y + card_h + 60
+            new_canvas = Image.new('RGB', (canvas_w, new_h), (252, 252, 250))
+            new_canvas.paste(canvas, (0, 0))
+            canvas = new_canvas
+            draw = ImageDraw.Draw(canvas)
+            canvas_h = new_h
+        canvas.paste((255, 255, 255), (card_x, card_y, card_x+card_w, card_y+card_h))
+        draw.rectangle([(card_x, card_y), (card_x+card_w-1, card_y+card_h-1)], outline=(189, 189, 184), width=1)
+        ty = card_y + 20
+        draw.text((card_x+NOTE_PAD, ty), 'STYLE NOTES', font=f_mini, fill=(140, 140, 138))
+        ty += 36
+        for kw in style_kw:
+            for wline in wrap_text(f'· {kw}', f_item, NOTE_W):
+                if ty + 36 > card_y + card_h - 10: break
+                draw.text((card_x+NOTE_PAD, ty), wline, font=f_item, fill=(110, 110, 108))
+                ty += 36
+        bottom_y = card_y + card_h
+
+    swatch_y = bottom_y + 16 if style_kw else canvas_h - 60
+    swatch_x = cw
     swatch_sz=24; swatch_gap=6
     draw.text((swatch_x,swatch_y-24),'COLOR PALETTE',font=f_mini,fill=(150,150,148))
     for i,(r,g,b) in enumerate(top_colors):

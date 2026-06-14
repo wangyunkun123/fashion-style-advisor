@@ -440,10 +440,10 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             if img_path and cdn_url:
                 parts.append(f"![风格实验室效果图]({cdn_url})")
             else:
-                parts.append(f"🧪 本次风格实验围绕锚点单品 **{anchor['clothing_id']}** 展开，搭配方案见下方。")
+                parts.append(f"🧪 本次风格实验围绕核心单品 **{anchor['clothing_id']}** 展开，搭配方案见下方。")
         except Exception as e:
             print(f"  [B线] 生图管线异常: {e}")
-            parts.append(f"🧪 本次风格实验围绕锚点单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
+            parts.append(f"🧪 本次风格实验围绕核心单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
     else:
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
         if not ai_paths:
@@ -473,7 +473,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         cid = anchor['clothing_id']
         name = f"{anchor.get('brand', {}).get('name', '')} {anchor['color']['hue_name']}"
         emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
-        item_lines.append(f"{emoji} **{name}** ⭐ 锚点单品\n`{cid}` · 表现力 {exploration_outfit['direction'].get('anchor_score','?')}分")
+        item_lines.append(f"{emoji} **{name}** ⭐ 核心单品\n`{cid}` · 表现力 {exploration_outfit['direction'].get('anchor_score','?')}分")
         item_lines.append(f"*{bline_appeal.get('visual_signature', '') if bline_appeal else ''} · 探索基点*")
 
         # 同伴单品

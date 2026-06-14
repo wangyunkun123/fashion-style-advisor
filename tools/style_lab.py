@@ -699,7 +699,7 @@ def generate_exploration_directions(anchor_item, weather_temp=None,
 
         # 探索理由
         if distance == 'adjacent':
-            rationale = f"锚点单品「{appeal['visual_signature']}」在{style['name_zh']}中意外适应，为惯常风格注入新意"
+            rationale = f"核心单品「{appeal['visual_signature']}」在{style['name_zh']}中意外适应，为惯常风格注入新意"
         elif distance == 'step':
             rationale = f"从你喜欢的风格延伸而来，「{appeal['visual_signature']}」作为桥梁单品带你探索{style['name_zh']}"
         else:
@@ -946,11 +946,11 @@ def generate_exploration_narrative(direction, anchor, companions):
     # 穿法建议
     silhouette = anchor.get('silhouette', {})
     if silhouette.get('fit') == '宽松':
-        tip = '锚点单品偏宽松，下装可选直筒/锥形保持上下平衡'
+        tip = '核心单品偏宽松，下装可选直筒/锥形保持上下平衡'
     elif silhouette.get('fit') == '合身':
         tip = '核心单品合身剪裁，可用宽松外套制造层次对比'
     else:
-        tip = '尝试将锚点单品作为视觉焦点，其他单品做减法'
+        tip = '尝试将核心单品作为视觉焦点，其他单品做减法'
 
     parts.append(f"\n💬 **穿法建议**：{tip}")
 
@@ -1432,7 +1432,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
     elif silhouette.get('fit') == '合身':
         wear_tip = '外搭宽松层次，制造对比'
     else:
-        wear_tip = '以锚点单品为视觉焦点'
+        wear_tip = '以核心单品为视觉焦点'
 
     # 构造风格笔记（每条 ≤ 18 字符，适配 composite 卡片宽度）
     anchor_tip_short = claude_tip[:12] + '..' if len(claude_tip) > 14 else claude_tip

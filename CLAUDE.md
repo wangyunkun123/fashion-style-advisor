@@ -86,6 +86,76 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 - 手机通过 ngrok HTTPS URL 访问 HTML 面板
 - 端口 8765，详情见 `memory/wechat-remote-control.md`
 
+## ⚠️ 质量守则（Critical — 不可违反）
+
+### 1. 数据同步：控制台与微信内容必须一致
+
+手机控制台生成的穿搭，微信推送和控制台显示必须使用**完全相同的内容**。
+
+**实现机制（三层防御）**：
+1. **主通道**：`build_push.py --stdout` → stdout 输出 `__PUSH_RESULT__{json}` → `wechat_control.py` 解析
+2. **备用通道**：`.push_cache.json` 缓存文件
+3. **兜底通道**：`format_outfit_summary()` 简单摘要
+
+**调用规范**：手机控制台调用 build_push 必须加 `--no-bline --stdout`：
+```bash
+python3 tools/build_push.py <outfit_dir> --rich --no-bline --stdout
+```
+
+**禁止行为**：
+- ❌ 控制台用简单摘要、微信用百科内容（两条代码路径）
+- ❌ build_push 内部独立触发 B线替换 pipeline 已生成的 outfit
+- ❌ 直接调用 `build_push.py --rich` 不加 `--no-bline --stdout`
+
+### 2. 场景适配：运动/功能场景必须选对单品
+
+**规则**：
+- 运动场景（网球/跑步/健身/足球等）必须选功能运动鞋，**不可选工装靴、帆布鞋、拖鞋**
+- 运动下装必须选运动短裤/紧身裤，不可选亚麻裤、沙滩裤
+- 上衣优先选速干/Polo/背心等运动面料
+
+**实现**：
+- AI prompt 包含 `⚠️ 场景匹配` 规则
+- `get_wardrobe_summary()` 从 `wardrobe/tags/*.json` 动态生成表格，自动包含场景标签
+- 每件单品在「场景标签」列标注用途（如 `入门网球`、`工装风`、`足球文化`）
+
+**防止回退**：
+- JSON 标签是唯一数据源，改了标签 AI 即时看到
+- 禁止手改 `服装档案.md` 后就以为完事——JSON 才是真相源
+
+### 3. 服装入库：两步标注流程
+
+新衣服入库必须执行两步（不可只做视觉）：
+1. **视觉识别**：品类/颜色/面料/廓形/品牌Logo
+2. **网络搜索**：品牌 + 系列名称 → 官方定位/产品线/文化背景/场景用途
+
+标签覆盖四个维度：身形修饰 + 风格文化 + 场景用途 + 设计特征。
+
+### 4. 手机端推送：首次必须双版
+
+`build_push.py` 首次推送默认 `mode='both'`（双版）：
+- 🅰️ 简洁版：单品清单 + 效果图
+- 🅱️ 百科版：风格故事 + 单品解释 + 配色 + 备选风格 + 评分
+
+底部带模式选择链接，用户点击后写入 `config/push_preference.json`。
+
+### 5. 单品禁用：只有一星差评才禁用
+
+- ~~一天内已用单品避开~~ ← 已废除
+- 只有用户对某套穿搭点 ⭐ 一星评价时，该套的所有单品才加入禁用清单
+- `get_banned_items()` 扫描 `outfits/*/rating.json`，`rating==1` 的 outfit 中所有单品禁用
+
+### 6. 配色色块：先 git push 再发微信
+
+生成 `_swatches.png` 后必须**先 `git push` 再构建 CDN URL**，否则 jsDelivr 拿不到图片。
+
+```python
+_sp.run(['git', 'commit', '-m', '🎨 配色色块'], ...)
+_sp.run(['git', 'push'], ...)  # ← 必须！不能省略
+h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'], ...)
+swatch_img_url = f'https://cdn.jsdelivr.net/gh/...@{h}/...'
+```
+
 ## Git
 - Remote: `git@github.com:wangyunkun123/fashion-style-advisor.git` (SSH)
 - Web: https://github.com/wangyunkun123/fashion-style-advisor (public)

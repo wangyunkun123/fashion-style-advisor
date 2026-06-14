@@ -337,22 +337,76 @@ def parse_wardrobe():
     return items
 
 def get_wardrobe_summary():
-    """获取衣柜摘要文本（给 AI 的上下文）"""
+    """从 JSON 标签动态生成衣柜摘要，确保 AI 始终看到最新标签（单点真相）"""
+    tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
     wardrobe_md = os.path.join(PROJECT_DIR, 'wardrobe', '服装档案.md')
-    with open(wardrobe_md, 'r') as f:
-        content = f.read()
-    # 去掉 frontmatter 和说明段落，保留表格
-    lines = content.split('\n')
-    summary = []
-    in_table_section = False
-    for line in lines:
-        if line.startswith('## ') or line.startswith('|'):
-            in_table_section = True
-        if line.startswith('## 服装档案总结'):
-            break
-        if in_table_section:
-            summary.append(line)
-    return '\n'.join(summary)
+
+    # 先从 markdown 读取文件名映射（保持向后兼容）
+    filename_map = {}
+    try:
+        with open(wardrobe_md, 'r') as f:
+            for line in f:
+                m = re.match(r'^\|\s*(\w+-\d+)\s*\|\s*([^|]+?)\s*\|', line)
+                if m:
+                    filename_map[m.group(1)] = m.group(2).strip()
+    except:
+        pass
+
+    # 从 JSON 标签读取所有单品
+    cats = {}
+    for fname in sorted(os.listdir(tags_dir)):
+        if fname == 'SCORE_CACHE.json' or not fname.endswith('.json'):
+            continue
+        try:
+            with open(os.path.join(tags_dir, fname)) as f:
+                d = json.load(f)
+        except:
+            continue
+        cid = d.get('clothing_id', '')
+        if not cid:
+            continue
+        cat = d.get('category', '其他')
+        brand = (d.get('brand') or {}).get('name', '') or ''
+        collection = (d.get('brand') or {}).get('collection', '') or ''
+        color = (d.get('color') or {}).get('hue_name', '') or ''
+        styles = d.get('style_modifiers', [])
+        comment = (d.get('meta') or {}).get('claude_fit_comment', '') or ''
+        filename = filename_map.get(cid, '')
+        if cat not in cats:
+            cats[cat] = []
+        cats[cat].append({
+            'id': cid, 'brand': brand, 'collection': collection,
+            'color': color, 'styles': styles, 'comment': comment,
+            'filename': filename,
+        })
+
+    # 按固定品类顺序输出
+    cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
+                 '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
+    lines = []
+    for cat in cat_order:
+        if cat not in cats:
+            continue
+        lines.append(f'## {cat}')
+        lines.append('| ID | 品牌·系列 | 颜色 | 场景标签 | 穿搭提示 |')
+        lines.append('|-----|----------|------|---------|---------|')
+        for it in cats[cat]:
+            brand_str = it['brand']
+            if it['collection']:
+                brand_str += ' ' + it['collection']
+            if not brand_str:
+                brand_str = '—'
+            # 截断品牌名避免表格过宽
+            brand_str = brand_str[:28]
+            # 场景标签：取风格修饰符中非身形相关的
+            scene_tags = [s for s in it['styles']
+                          if not any(kw in s for kw in ['增加', '显白', '显瘦', '拉长', '遮盖', '修饰', '无明显'])]
+            styles_str = ' · '.join(scene_tags) if scene_tags else '—'
+            comment_short = it['comment'][:55] if it['comment'] else '—'
+            lines.append(f'| {it["id"]} | {brand_str} | {it["color"]} | {styles_str} | {comment_short} |')
+        lines.append('')
+
+    return '\n'.join(lines)
 
 def call_doubao_chat(messages, max_tokens=4096, timeout=120):
     """调用 doubao-seed-2.0-code 聊天 API"""
@@ -536,7 +590,8 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 - 帽子、包、袜子、墨镜、配饰等根据场景酌情添加
 - ACC-003 是 Apple Watch 表带套组（含米兰尼斯/回环/运动三款表带），推荐时需指定使用哪款表带
 - seedream_prompt 必须是英文，详细描述服装细节和场景氛围
-- 除用户明确标记为「一星差评禁用」的单品外，所有单品均可自由选用，同一单品可以出现在不同风格的穿搭中"""
+- 除用户明确标记为「一星差评禁用」的单品外，所有单品均可自由选用，同一单品可以出现在不同风格的穿搭中
+- ⚠️ 场景匹配：运动场景（网球/跑步/健身）必须选功能运动鞋/跑鞋/网球鞋，不可选工装靴、帆布鞋、拖鞋、亚麻裤等非运动单品"""
 
 
 def _detect_bline_from_hint(style_hint):
@@ -645,19 +700,39 @@ def run_pipeline(style_hint, task_id=None):
             result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
             # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
+            push_synced = False
             try:
-                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
+                # --no-bline 防止 build_push 独立触发 B线替换 outfit 内容
+                # --stdout 让 build_push 通过 stdout 返回内容，确保控制台与微信完全同步
+                build_out = run_cli(
+                    ['python3', 'tools/build_push.py', outfit_dir, '--rich', '--no-bline', '--stdout'],
+                    timeout=120
+                )
+                # 从 stdout 解析 build_push 返回的内容（主同步通道，最可靠）
+                m = re.search(r'__PUSH_RESULT__(\{.+\})', build_out)
+                if m:
+                    try:
+                        push_data = json.loads(m.group(1))
+                        result_text = push_data.get('content', result_text)
+                        push_synced = True
+                    except json.JSONDecodeError:
+                        pass
+                # 回退层1：读取缓存文件
+                if not push_synced:
+                    push_cache = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
+                    if os.path.exists(push_cache):
+                        with open(push_cache, 'r') as f:
+                            cached = json.load(f)
+                        result_text = cached.get('content', result_text)
+                        push_synced = True
+                        log(f"⚠️ stdout 同步失败，回退到缓存文件同步", "WARN")
+                    else:
+                        log(f"⚠️ stdout 和缓存文件同步均失败，使用简单摘要", "WARN")
+
                 # build_push 可能生成了 _swatches.png 等新文件，提交并推送
                 run_cli(['git', 'add', '-A'], timeout=10)
                 run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
                 run_cli(['git', 'push'], timeout=30)
-
-                # 读取 build_push 写入的缓存，同步到控制台显示
-                push_cache = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
-                if os.path.exists(push_cache):
-                    with open(push_cache, 'r') as f:
-                        cached = json.load(f)
-                    result_text = cached.get('content', result_text)
             except Exception:
                 content = f"![效果图]({github_url})\n\n"
                 if summary:

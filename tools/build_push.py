@@ -687,6 +687,16 @@ def save_push_cache(outfit_dir, content, style_name, outfit_name):
         }, f, ensure_ascii=False)
 
 
+def emit_stdout(content, style_name, outfit_name):
+    """向 stdout 输出 JSON，供手机控制台同步（最可靠的同步通道）"""
+    payload = json.dumps({
+        'content': content,
+        'style_name': style_name,
+        'outfit_name': outfit_name,
+    }, ensure_ascii=False)
+    print(f'__PUSH_RESULT__{payload}', flush=True)
+
+
 # ============================================================
 # 3. 命令行
 # ============================================================
@@ -734,10 +744,12 @@ def build_simple(outfit_dir):
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--bline|--explore] [--bold|--adventure]")
+        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--bline|--explore] [--bold|--adventure] [--no-bline] [--stdout]")
         print("  B线触发词(微调): 探索 新尝试 新鲜 微调 不一样 换个口味 挖掘 冷门 尝鲜")
         print("  B线触发词(大胆): 大胆 另类 冒险 突破 跨界 出格 惊喜 前卫 个性 疯狂")
         print("  偏好设置: python3 tools/build_push.py --set simple|rich|both")
+        print("  --stdout: 输出 JSON 到 stdout 供控制台同步（手机控制台自动使用）")
+        print("  --no-bline: 强制关闭 B线探索（手机控制台自动使用）")
         return
 
     # 设置偏好
@@ -764,12 +776,15 @@ def main():
     # B线参数：CLI 标志 + 触发词检测
     force_line = None
     force_boldness = None
+    # --no-bline：强制关闭 B线（手机控制台调用时使用，防止 build_push 独立触发 B线替换 outfit）
+    if '--no-bline' in sys.argv:
+        force_line = 'A'
     if '--bline' in sys.argv or '--explore' in sys.argv:
         force_line = 'B'
     if '--bold' in sys.argv or '--adventure' in sys.argv:
         force_line = 'B'
         force_boldness = 'bold'
-    # 从 outfit 目录名自动检测触发词
+    # 从 outfit 目录名自动检测触发词（仅在未明确指定时）
     if force_line is None:
         try:
             from style_lab import detect_bline_trigger
@@ -797,6 +812,8 @@ def main():
 
         # 缓存推送内容，供控制台同步显示
         save_push_cache(outfit_dir, rich_content, rich_name, outfit_name)
+        if '--stdout' in sys.argv:
+            emit_stdout(rich_content, rich_name, outfit_name)
 
         push_title = outfit_name if outfit_name else '穿搭推荐'
 
@@ -841,6 +858,8 @@ def main():
 
         # 缓存推送内容，供控制台同步显示
         save_push_cache(outfit_dir, content, style_name, outfit_name)
+        if '--stdout' in sys.argv:
+            emit_stdout(content, style_name, outfit_name)
 
         push_title = outfit_name if outfit_name else style_name
         base = get_push_base_url()

@@ -916,6 +916,8 @@ h2{{font-size:22px;color:#3a3028;margin-bottom:8px}}
 .btn{{display:block;width:100%;padding:16px;border:none;border-radius:12px;font-size:18px;font-weight:600;cursor:pointer;margin-bottom:12px;-webkit-tap-highlight-color:transparent}}
 .btn-primary{{background:linear-gradient(135deg,#3a3028,#5c4d3c);color:#fff}}
 .btn-primary:active{{opacity:.8}}
+.btn-info{{background:#e8f0fe;color:#1a73e8}}
+.btn-info:active{{opacity:.8}}
 .btn-secondary{{background:#f5f0eb;color:#5c4d3c}}
 .status{{font-size:13px;color:#999;margin-top:12px;display:none}}
 .spinner{{display:inline-block;width:14px;height:14px;border:2px solid #d0c8bc;border-top-color:#3a3028;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:-2px}}
@@ -927,6 +929,7 @@ h2{{font-size:22px;color:#3a3028;margin-bottom:8px}}
 <h2>🧪 {style_name}</h2>
 <div class="desc">{style_desc or '点击下方按钮，AI 将为你生成一套' + style_name + '风格穿搭并推送到微信'}</div>
 <button class="btn btn-primary" onclick="tryNow()">🔥 现在就试</button>
+<button class="btn btn-info" onclick="location.href='/style/{style_id}'">📖 了解更多</button>
 <button class="btn btn-secondary" onclick="history.back()">← 返回</button>
 <div class="status" id="status"><span class="spinner"></span>正在生成穿搭...</div>
 </div>
@@ -945,6 +948,21 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 </body>
 </html>'''
             self._html_resp(200, TRY_HTML)
+            return
+
+        # 📖 风格百科页（直接用已有的精美 HTML）
+        if parsed.path.startswith('/style/'):
+            style_id = parsed.path.split('/style/')[-1].strip()
+            html_path = os.path.join(PROJECT_DIR, 'styles_universal', style_id, 'encyclopedia.html')
+            if os.path.exists(html_path):
+                with open(html_path, 'r', encoding='utf-8') as f:
+                    html = f.read()
+                # 注入返回按钮
+                back_btn = '<button onclick="history.back()" style="position:fixed;top:16px;right:16px;background:#3a3028;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;cursor:pointer;z-index:999">← 返回</button>'
+                html = html.replace('</body>', back_btn + '</body>')
+                self._html_resp(200, html)
+            else:
+                self._html_resp(404, '<p>百科不存在</p>')
             return
 
         if parsed.path.startswith('/api/try/'):

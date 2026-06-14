@@ -256,23 +256,55 @@ def get_item_score(cid, style_id):
 
 
 def get_random_images(style_id, count=3):
-    """从风格图片库随机取N张参考图URL"""
+    """从风格图片库取N张参考图：三类各一（杂志秀场/名人达人/社交媒体），优先国内源，宁缺毋滥"""
     path = os.path.join(STYLES_UNI_DIR, style_id, 'references', 'images.json')
     if not os.path.exists(path):
         return []
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    all_imgs = []
-    for cat_data in data.get('categories', {}).values():
-        for img in cat_data.get('images', []):
-            url = img.get('url', '')
-            cap = img.get('caption', '')[:40]
-            src = img.get('source', '')
-            if url and not url.startswith('#'):
-                all_imgs.append({'url': url, 'caption': cap, 'source': src})
-    import random
-    random.shuffle(all_imgs)
-    return all_imgs[:count]
+    cats = data.get('categories', {})
+
+    # 三类来源：杂志秀场 / 名人达人 / 社交媒体
+    # 分类映射：把现有分类归入三类
+    CAT_PRO = ['editorial', 'runway', 'campaign', 'brand']      # 杂志秀场品牌
+    CAT_PEOPLE = ['celebrity', 'icon', 'streetstyle']            # 名人达人街拍
+    CAT_SOCIAL = ['social', 'kOL', 'blog']                       # 社交媒体
+
+    def is_cn_source(img):
+        """检测是否为国内来源"""
+        src = (img.get('source', '') + img.get('url', '')).lower()
+        cn_domains = ['weibo', 'xiaohongshu', 'xhslink', 'douyin', 'bilibili', 'kuaishou',
+                       'zhihu', '163.com', 'qq.com', 'sina', 'sohu', 'ifeng', 'ctrip',
+                       'tmall', 'taobao', 'jd.com', 'vogue.com.cn', 'gq.com.cn', 'ellechina',
+                       'harperbazaar.com.cn', 'cosmopolitan.com.cn', 'mango', 'cn']
+        return any(d in src for d in cn_domains)
+
+    def pick_one(cat_keys):
+        """从指定分类中选一张，优先国内源"""
+        pool = []
+        for ck in cat_keys:
+            if ck in cats:
+                for img in cats[ck].get('images', []):
+                    url = img.get('url', '')
+                    if url and not url.startswith('#'):
+                        pool.append({'url': url, 'caption': img.get('caption', '')[:40],
+                                     'source': img.get('source', ''), 'cn': is_cn_source(img)})
+        if not pool:
+            return None
+        # 国内源优先
+        cn = [p for p in pool if p['cn']]
+        pick = random.choice(cn) if cn else random.choice(pool)
+        return {'url': pick['url'], 'caption': pick['caption'], 'source': pick['source']}
+
+    results = []
+    for cat_keys in [CAT_PRO, CAT_PEOPLE, CAT_SOCIAL]:
+        img = pick_one(cat_keys)
+        if img:
+            results.append(img)
+        if len(results) >= count:
+            break
+
+    return results
 
 
 def get_key_item_reason(cid, style_id):

@@ -35,4 +35,4 @@ outfits/*/rating.json
 tools/wechat_history.json
 tools/wechat_control.log
 outfits/_bline_temp/
-_swatches.png
+# _swatches.png — 需要上传，不能 gitignore

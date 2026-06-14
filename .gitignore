@@ -35,4 +35,7 @@ outfits/*/rating.json
 tools/wechat_history.json
 tools/wechat_control.log
 outfits/_bline_temp/
+# 内部缓存文件（自动生成，不需提交）
+**/.color_cache.json
+**/.push_cache.json
 # _swatches.png — 需要上传，不能 gitignore

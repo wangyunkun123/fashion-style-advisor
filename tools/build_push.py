@@ -601,6 +601,8 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
                 import subprocess as _sp
                 _sp.run(['git', 'add', rel], cwd=PROJ_DIR, capture_output=True, timeout=10)
                 _sp.run(['git', 'commit', '-m', '🎨 配色色块'], cwd=PROJ_DIR, capture_output=True, timeout=10)
+                # ⚠️ 必须先 push 再构建 CDN URL，否则 jsDelivr 拿不到刚 commit 的图片
+                _sp.run(['git', 'push'], cwd=PROJ_DIR, capture_output=True, timeout=30)
                 # 用最新 commit hash 构建 URL
                 h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'], cwd=PROJ_DIR, capture_output=True, text=True).stdout.strip()
                 cdn = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}' if h else CDN_BASE
@@ -670,6 +672,19 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
     rating_dir = bline_outfit_dir if is_bline and bline_outfit_dir else outfit_dir
     return B.join(parts), style_name, outfit_name, rating_dir
+
+
+def save_push_cache(outfit_dir, content, style_name, outfit_name):
+    """将推送内容写入缓存文件，供控制台同步显示"""
+    cache_file = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+    with open(cache_file, 'w') as f:
+        json.dump({
+            'content': content,
+            'style_name': style_name,
+            'outfit_name': outfit_name,
+            'time': time.strftime('%Y-%m-%d %H:%M:%S'),
+        }, f, ensure_ascii=False)
 
 
 # ============================================================
@@ -780,6 +795,9 @@ def main():
             print("❌ 生成失败")
             return
 
+        # 缓存推送内容，供控制台同步显示
+        save_push_cache(outfit_dir, rich_content, rich_name, outfit_name)
+
         push_title = outfit_name if outfit_name else '穿搭推荐'
 
         if preview:
@@ -820,6 +838,10 @@ def main():
         content, style_name, outfit_name, rating_dir = build_push(outfit_dir, force_line, force_boldness)
         if content is None:
             print(f"❌ {style_name}"); return
+
+        # 缓存推送内容，供控制台同步显示
+        save_push_cache(outfit_dir, content, style_name, outfit_name)
+
         push_title = outfit_name if outfit_name else style_name
         base = get_push_base_url()
         outfit_id = os.path.basename(rating_dir)

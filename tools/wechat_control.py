@@ -607,6 +607,28 @@ def run_pipeline(style_hint, task_id=None):
             summary = format_outfit_summary(outfit_md)
             result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
+            # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
+            try:
+                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
+                # build_push 可能生成了 _swatches.png 等新文件，提交并推送
+                run_cli(['git', 'add', '-A'], timeout=10)
+                run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
+                run_cli(['git', 'push'], timeout=30)
+
+                # 读取 build_push 写入的缓存，同步到控制台显示
+                push_cache = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
+                if os.path.exists(push_cache):
+                    with open(push_cache, 'r') as f:
+                        cached = json.load(f)
+                    result_text = cached.get('content', result_text)
+            except Exception:
+                content = f"![效果图]({github_url})\n\n"
+                if summary:
+                    content += f"**单品清单**\n{summary}\n\n"
+                content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
+                push_wechat(f"👔 {style_hint}", content)
+
+            # 更新控制台结果（与微信推送内容一致）
             if task_id:
                 tasks.update(task_id, status='done', message='✅ 全部完成',
                              result=result_text, image_path=composite, image_url=github_url,
@@ -620,20 +642,6 @@ def run_pipeline(style_hint, task_id=None):
                 'image_url': github_url,
                 'result': result_text,
             })
-
-            # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
-            try:
-                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
-                # build_push 可能生成了 _swatches.png 等新文件，提交并推送
-                run_cli(['git', 'add', '-A'], timeout=10)
-                run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
-                run_cli(['git', 'push'], timeout=30)
-            except Exception:
-                content = f"![效果图]({github_url})\n\n"
-                if summary:
-                    content += f"**单品清单**\n{summary}\n\n"
-                content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-                push_wechat(f"👔 {style_hint}", content)
         else:
             if task_id:
                 tasks.update(task_id, status='error', message='未找到排版图', log='\n'.join(log_lines))

@@ -387,12 +387,12 @@ def compute_statement_score(item):
 # 4. 锚点发现
 # ============================================================
 
-def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, count=5, strategy='micro', comfort_zone=None):
+def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, count=5, strategy='micro', comfort_zone=None, strategy_hint=None):
     """
-    寻找被埋没的「锚点单品」：低穿着率 + 高表现力
+    寻找「核心单品」：策略驱动 + 审美优先
 
-    strategy='micro': 偏好与舒适区高度匹配的单品（安全探索）
-    strategy='bold':  偏好与舒适区格格不入的单品（大胆跨越）
+    strategy_hint: 策略指定的品类和偏好，如 {"categories": ["SHIRT","LS"], "prefer": "可敞开、宽松"}
+    若指定则优先从这些品类中选，按配色/面料/廓形审美评分排序
     """
     if state is None:
         state = load_state()
@@ -405,6 +405,11 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
         comfort_zone = get_user_comfort_zone()
     comfort_styles = set(comfort_zone.get('comfort_styles', []))
 
+    # 策略指定品类则优先过滤
+    target_cats = None
+    if strategy_hint and strategy_hint.get('categories'):
+        target_cats = set(strategy_hint['categories'])
+
     results = []
 
     for cid, item in all_clothing.items():
@@ -412,9 +417,29 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
         if wear_count > max_wear_count:
             continue
 
+        # 策略过滤：如果指定了品类，只选匹配的
+        cat = item.get('category_code', '')
+        if target_cats and cat not in target_cats:
+            continue
+
         statement_score = compute_statement_score(item)
         if statement_score < min_statement_score:
             continue
+
+        # 审美维度：配色友好 + 面料质感 + 廓形适配
+        aesthetic = 0.0
+        color = item.get('color', {})
+        if color.get('friendly_for_pale_skin'): aesthetic += 0.15
+        if not color.get('is_neutral', True): aesthetic += 0.10  # 有色彩更出彩
+        fabric = item.get('fabric', {}).get('primary', '')
+        if fabric in ('亚麻', '皮质', '灯芯绒', '羊毛混纺'): aesthetic += 0.15
+        elif fabric in ('棉', '麻'): aesthetic += 0.10
+        silhouette = item.get('silhouette', {})
+        shoulder = silhouette.get('shoulder_effect', '')
+        torso = silhouette.get('torso_effect', '')
+        if '增加肩宽' in shoulder: aesthetic += 0.10  # 偏瘦体型加分
+        if '增加上半身体量感' in torso: aesthetic += 0.10
+        aesthetic = min(aesthetic, 0.5)
 
         # 计算该单品在 8 风格中的得分
         all_scores = []
@@ -443,9 +468,12 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
 
         score_range = best_score - worst_score
 
+        # 综合分 = 表现力(0.3) + 风格适配(0.3) + 审美(0.4)
+        composite = round(statement_score * 0.3 + (avg_score/100) * 0.3 + aesthetic * 0.4, 3)
         results.append({
             'item': item,
             'statement_score': round(statement_score, 2),
+            'aesthetic_score': round(aesthetic, 2),
             'wear_count': wear_count,
             'avg_score': round(avg_score, 1),
             'max_comfort': max_comfort,
@@ -454,16 +482,13 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
             'worst_style': worst_style,
             'worst_score': worst_score,
             'score_range': score_range,
-            # 大胆策略加分：得分范围越大 + 舒适区得分越低 = 越适合大胆尝试
+            'composite': composite,
             'bold_score': round(statement_score * 0.3 + (1 - max_comfort/100) * 0.4 + (score_range/100) * 0.3, 2),
         })
 
-    if strategy == 'bold':
-        # 大胆模式：按 bold_score 降序——偏好表现力高、舒适区低分、跨风格幅度大的单品
-        results.sort(key=lambda x: (-x['bold_score'], x['wear_count']))
-    else:
-        # 微调模式：按 statement_score 降序，同分按穿着次数升序
-        results.sort(key=lambda x: (-x['statement_score'], x['wear_count']))
+    # 按综合分降序（审美优先），不再区分 micro/bold 排序策略
+    results.sort(key=lambda x: -x['composite'])
+    return results[:count]
 
     return results[:count]
 

@@ -363,17 +363,28 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
                 all_clothing = load_all_clothing()
                 comfort_zone = get_user_comfort_zone()
 
-                anchor_strategy = 'bold' if is_bold else 'micro'
-                anchors = find_anchor_items(state, min_statement_score=0.15, max_wear_count=2,
-                                            count=5, strategy=anchor_strategy, comfort_zone=comfort_zone)
+                # ① 先选策略
+                strategies = pick_explore_strategies(boldness)
+                hint = strategies[0].get('anchor_hint', {}) if strategies else {}
+                rule = strategies[0].get('companion_rule', '') if strategies else ''
+                if len(strategies) > 1:
+                    rule += ' | ' + strategies[1].get('companion_rule', '')
+
+                # ② 策略驱动找核心单品（审美优先）
+                anchors = find_anchor_items(state, min_statement_score=0.10, max_wear_count=3,
+                                            count=5, strategy_hint=hint, comfort_zone=comfort_zone)
                 if anchors:
                     anchor_data = anchors[0]
                     anchor_item = anchor_data['item']
                     bline_appeal = analyze_item_appeal(anchor_item)
 
+                    # ③ 生成探索方向
                     directions = generate_exploration_directions(
                         anchor_item, temp_high, weather_cond, '日常', boldness, comfort_zone
                     )
+                    if directions:
+                        directions[0]['strategies'] = strategies
+                        directions[0]['companion_rule'] = rule
 
                     if directions:
                         direction = directions[0]

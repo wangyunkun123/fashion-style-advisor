@@ -719,38 +719,13 @@ def run_pipeline(style_hint, task_id=None):
                 comp_dir = os.path.dirname(comp_dir)
             outfit_md = os.path.join(comp_dir, 'outfit.md')
             summary = format_outfit_summary(outfit_md)
+            # 控制台用简介版（清爽易读），微信按用户偏好推送
             result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
-            # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
-            push_synced = False
+            # 微信推送：build_push 按用户偏好推送完整内容
             try:
                 # --no-bline 防止 build_push 独立触发 B线替换 outfit 内容
-                # --stdout 让 build_push 通过 stdout 返回内容，确保控制台与微信完全同步
-                build_out = run_cli(
-                    ['python3', 'tools/build_push.py', outfit_dir, '--rich', '--no-bline', '--stdout'],
-                    timeout=120
-                )
-                # 从 stdout 解析 build_push 返回的内容（主同步通道，最可靠）
-                m = re.search(r'__PUSH_RESULT__(\{.+\})', build_out)
-                if m:
-                    try:
-                        push_data = json.loads(m.group(1))
-                        result_text = push_data.get('content', result_text)
-                        push_synced = True
-                    except json.JSONDecodeError:
-                        pass
-                # 回退层1：读取缓存文件
-                if not push_synced:
-                    push_cache = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
-                    if os.path.exists(push_cache):
-                        with open(push_cache, 'r') as f:
-                            cached = json.load(f)
-                        result_text = cached.get('content', result_text)
-                        push_synced = True
-                        log(f"⚠️ stdout 同步失败，回退到缓存文件同步", "WARN")
-                    else:
-                        log(f"⚠️ stdout 和缓存文件同步均失败，使用简单摘要", "WARN")
-
+                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich', '--no-bline'], timeout=120)
                 # build_push 可能生成了 _swatches.png 等新文件，提交并推送
                 run_cli(['git', 'add', '-A'], timeout=10)
                 run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)

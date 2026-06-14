@@ -511,8 +511,11 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
 
     # 策略指定品类则优先过滤
     target_cats = None
+    is_cold_hunt = False
     if strategy_hint and strategy_hint.get('categories'):
         target_cats = set(strategy_hint['categories'])
+    elif strategy_hint and '穿着次数' in strategy_hint.get('prefer', ''):
+        is_cold_hunt = True  # 冷门挖掘：全品类+冷门度排序
 
     results = []
 
@@ -588,12 +591,19 @@ def find_anchor_items(state=None, min_statement_score=0.20, max_wear_count=2, co
             'score_range': score_range,
             'composite': composite,
             'bold_score': round(statement_score * 0.3 + (1 - max_comfort/100) * 0.4 + (score_range/100) * 0.3, 2),
+            # 四维冷门度：穿着频率 + 表现力 + 舒适区外 + 全域低分
+            'coldness': round(
+                (3 - min(wear_count, 3)) / 3 * 0.20 +
+                statement_score * 0.25 +
+                (100 - max_comfort) / 100 * 0.25 +
+                (100 - avg_score) / 100 * 0.30, 2),
         })
 
-    # 按综合分降序（审美优先），不再区分 micro/bold 排序策略
-    results.sort(key=lambda x: -x['composite'])
-    return results[:count]
-
+    # 冷门挖掘策略按冷门度排序，其他按审美综合分
+    if is_cold_hunt:
+        results.sort(key=lambda x: -x['coldness'])
+    else:
+        results.sort(key=lambda x: -x['composite'])
     return results[:count]
 
 

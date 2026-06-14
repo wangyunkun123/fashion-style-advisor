@@ -36,14 +36,15 @@
     "confidence": "确定"
   },
   "style_modifiers": [
-    "增加下半身体量感"
+    "增加下半身体量感",
+    "网球运动"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松运动短裤功能性强,卡其灰色低调耐脏,增加下半身体量感适合运动场合",
+    "claude_fit_comment": "Decathlon Artengo网球线运动短裤,宽松速干适合网球/运动场景,卡其灰低调耐脏,增加下半身体量感",
     "_statement_score": 0.05
   }
 }

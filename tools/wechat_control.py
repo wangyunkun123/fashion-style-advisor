@@ -246,19 +246,26 @@ def find_latest_composite(date_str=None):
     log(f"⚠️ 未找到当日排版图，使用最近期: {os.path.basename(candidates[0])}", "WARN")
     return candidates[0]
 
-def get_todays_used_items():
-    """获取今日已用单品清单"""
+def get_todays_used_items(max_recent=3):
+    """获取今日最近 N 套穿搭的已用单品（避免追踪全天后品类耗尽）"""
     today = time.strftime('%Y-%m-%d')
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
+    today_dirs = sorted([
+        d for d in os.listdir(outfit_base)
+        if d.startswith(today) and os.path.isdir(os.path.join(outfit_base, d))
+    ])
+    # 只取最近 max_recent 套
+    recent_dirs = today_dirs[-max_recent:] if len(today_dirs) > max_recent else today_dirs
     used = []
-    for d in sorted(os.listdir(outfit_base)):
-        if not d.startswith(today):
-            continue
+    for d in recent_dirs:
         md = os.path.join(outfit_base, d, 'outfit.md')
         if os.path.exists(md):
             with open(md, 'r') as f:
                 content = f.read()
-            ids = re.findall(r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+)', content)
+            ids = re.findall(
+                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                content
+            )
             used.extend(ids)
     return list(set(used))
 
@@ -357,7 +364,17 @@ def call_doubao_chat(messages, max_tokens=4096, timeout=120):
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             result = json.loads(resp.read().decode('utf-8'))
-        content = result['choices'][0]['message']['content']
+        choice = result['choices'][0]
+        msg = choice.get('message', {})
+        content = msg.get('content', '')
+        # doubao 部分模型可能把内容放在 reasoning_content 里
+        if not content:
+            reasoning = msg.get('reasoning_content', '')
+            if reasoning:
+                log(f"⚠️ content 为空, reasoning_content 前200字: {reasoning[:200]}", "WARN")
+            # 记录完整响应用于排查
+            finish = choice.get('finish_reason', 'unknown')
+            log(f"⚠️ API 返回空 content, finish_reason={finish}, keys={list(msg.keys())}", "WARN")
         return content
     except Exception as e:
         log(f"豆包 API 调用失败: {e}", "ERROR")
@@ -491,7 +508,7 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 
 要求：
 1. 仔细分析场景需求（运动/休闲/通勤/约会等）
-2. 避开用户已使用的单品（已用：{used_items_hint}）
+2. 尽量避开用户最近已使用的单品，避免连续重复
 3. 所有单品 ID 必须从上方衣柜清单中选取，严禁编造不存在的 ID
 4. 考虑颜色搭配、风格统一、体型修饰
 5. 输出严格的 JSON 格式，不要包含任何其他文字
@@ -510,10 +527,11 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 }
 
 注意：
-- 每套穿搭必须包含：上衣、下装、鞋子（三者缺一不可）
+- 每套穿搭必须包含：上衣、下装、鞋子（三者缺一不可，这是硬性要求）
 - 帽子、包、袜子、墨镜、配饰等根据场景酌情添加
 - ACC-003 是 Apple Watch 表带套组（含米兰尼斯/回环/运动三款表带），推荐时需指定使用哪款表带
-- seedream_prompt 必须是英文，详细描述服装细节和场景氛围"""
+- seedream_prompt 必须是英文，详细描述服装细节和场景氛围
+- 如果某必需品类（上衣、下装、鞋子）已无未使用单品可选，允许复用最近使用过中与该场景最匹配的那件，绝不能留空或标 UNAVAILABLE"""
 
 
 def _detect_bline_from_hint(style_hint):
@@ -552,10 +570,13 @@ def run_pipeline(style_hint, task_id=None):
     user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
 为「{style_hint}」推荐一套全新穿搭。
-已用单品勿选：{used_str}
 
-❌ 今日已使用以下单品，严禁再次使用: {used_str}
-必须从未使用的单品中选择，确保上衣、下装、鞋子不与今日任何一套重复。
+📋 最近已使用的单品（尽量避开，避免连续重复）: {used_str}
+
+⚠️ 规则优先级：
+1. 上衣、下装、鞋子三者缺一不可（硬性要求，绝不能留空或标 UNAVAILABLE）
+2. 尽量从以上列表中未出现的单品中选择
+3. 如果某品类（如鞋子）已无未使用单品，允许复用该品类中与「{style_hint}」场景最匹配的那件
 
 以下是完整衣柜档案：
 ---
@@ -565,16 +586,27 @@ def run_pipeline(style_hint, task_id=None):
 请输出 JSON 格式的穿搭方案。"""
 
     try:
-        # 调用 API 获取穿搭方案
-        content = call_doubao_chat([
-            {'role': 'system', 'content': system_prompt},
-            {'role': 'user', 'content': user_prompt},
-        ], max_tokens=4096, timeout=180)
+        # 调用 API 获取穿搭方案（最多重试一次）
+        plan = None
+        for attempt in range(2):
+            content = call_doubao_chat([
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt},
+            ], max_tokens=4096, timeout=180)
 
-        plan = extract_json(content)
+            plan = extract_json(content)
+            if plan:
+                break
+
+            log(f"API 返回无法解析为 JSON (attempt {attempt+1}/2):\n{content[:500]}", "ERROR")
+            if attempt == 0:
+                # 重试：追加强制 JSON 指令
+                user_prompt += "\n\n⚠️ 你的回复必须是纯 JSON，不要包含任何解释、markdown代码块标记或额外文字。以 { 开头，以 } 结尾。"
+                progress('🔄 JSON解析失败，重试中...')
+                time.sleep(2)  # 短暂冷却
+
         if not plan:
-            log(f"API 返回无法解析为 JSON:\n{content[:500]}", "ERROR")
-            raise ValueError("AI 穿搭分析返回格式异常，请重试")
+            raise ValueError("AI 穿搭分析返回格式异常，已重试1次仍失败，请稍后再试")
 
         # 执行文件操作
         outfit_dir = execute_outfit_plan(plan, today, style_hint)

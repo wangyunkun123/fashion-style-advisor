@@ -76,17 +76,21 @@ def save_state(state):
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 
-def apply_rating_feedback(outfit_dir, rating):
+def apply_rating_feedback(outfit_dir, rating, feedback=None):
     """
-    用户评分反馈到评分缓存，让后续推荐更准。
-    ⭐⭐⭐ → 该风格下所有单品 +5
-    ⭐⭐   → 累计3次同风格 -3
-    ⭐     → 该风格下所有单品 -10
+    用户评分反馈到评分缓存，根据反馈类型精准调整。
+
+    ⭐⭐⭐           → 该风格下所有单品 +5
+    ⭐⭐             → 暂不调整（累计3次同风格后再 -3）
+    ⭐ + 风格不喜欢  → 该风格下所有单品 -10
+    ⭐ + 搭配不满意  → 该搭配涉及的单品 -8
+    ⭐ + 单品问题    → 特定单品 -15
+    ⭐ + 场景不合适  → 单品不罚（记录偏好，后续避免该场景推此风格）
     """
     if rating not in (1, 2, 3):
         return
 
-    # 解析 outfit.md 获取风格和单品
+    # 解析 outfit.md
     md_path = os.path.join(outfit_dir, 'outfit.md')
     if not os.path.exists(md_path):
         return
@@ -107,39 +111,73 @@ def apply_rating_feedback(outfit_dir, rating):
             style_id = sid
             break
 
-    # 提取单品 ID
-    item_ids = re.findall(r'\b([A-Z]+-\d+)\b', md)
-
+    item_ids = list(set(re.findall(r'\b([A-Z]+-\d+)\b', md)))
     if not style_id or not item_ids:
         return
 
-    # 更新 SCORE_CACHE
     if not os.path.exists(CACHE_FILE):
         return
     with open(CACHE_FILE, 'r', encoding='utf-8') as f:
         cache = json.load(f)
 
-    if rating == 3:
-        delta = 5
-    elif rating == 1:
-        delta = -10
-    else:  # rating == 2
-        delta = 0  # 中性分不直接调整，靠累计处理
-        # TODO: 累计3次同风格2星 → -3
-
-    if delta != 0:
+    def adjust(items, delta, log_msg):
         changed = 0
-        for iid in set(item_ids):
+        for iid in items:
             if iid in cache and style_id in cache[iid]:
-                old_score = cache[iid][style_id].get('score', 0)
-                new_score = max(0, min(100, old_score + delta))
-                cache[iid][style_id]['score'] = new_score
+                old = cache[iid][style_id].get('score', 0)
+                cache[iid][style_id]['score'] = max(0, min(100, old + delta))
                 changed += 1
         if changed:
             cache['_meta'] = cache.get('_meta', {})
             cache['_meta']['last_feedback'] = datetime.now().isoformat()
-            with open(CACHE_FILE, 'w', encoding='utf-8') as f:
-                json.dump(cache, f, ensure_ascii=False, indent=2)
+            cache['_meta']['last_action'] = log_msg
+        return changed
+
+    if rating == 3:
+        # 满意 → 全面加分
+        n = adjust(item_ids, 5, f'{style_id}+5 ({len(item_ids)}件)')
+
+    elif rating == 1:
+        reason = (feedback or {}).get('reason', '') if feedback else ''
+        detail = (feedback or {}).get('detail', '') if feedback else ''
+
+        if reason == 'style_mismatch':
+            # 风格不喜欢 → 全面减分
+            adjust(item_ids, -10, f'{style_id} 风格不喜欢 -10')
+
+        elif reason == 'combo_dislike':
+            # 搭配不满意 → 轻微减分
+            adjust(item_ids, -8, f'{style_id} 搭配不满意 -8')
+
+        elif reason == 'item_issue':
+            # 单品问题 → 从 detail 中提取特定 ID 重罚
+            bad_ids = re.findall(r'\b([A-Z]+-\d+)\b', detail)
+            if bad_ids:
+                adjust(bad_ids, -15, f'单品问题 -15: {bad_ids}')
+            else:
+                # 没找到具体 ID，回退到减所有
+                adjust(item_ids, -10, f'{style_id} 单品问题(无具体ID) -10')
+
+        elif reason == 'scene_mismatch':
+            # 场景不合适 → 不罚单品，记录偏好
+            scene_prefs = os.path.join(PROJ_DIR, 'config', 'scene_prefs.json')
+            prefs = {}
+            if os.path.exists(scene_prefs):
+                with open(scene_prefs) as f2:
+                    prefs = json.load(f2)
+            prefs[style_id] = prefs.get(style_id, {})
+            prefs[style_id]['avoid_scenes'] = prefs[style_id].get('avoid_scenes', [])
+            if detail:
+                prefs[style_id]['avoid_scenes'].append(detail)
+            with open(scene_prefs, 'w') as f2:
+                json.dump(prefs, f2, ensure_ascii=False, indent=2)
+
+        else:
+            # 未指定原因 → 默认 -10
+            adjust(item_ids, -10, f'{style_id} 1星(无原因) -10')
+
+    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
 
 
 # ============================================================

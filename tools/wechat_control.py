@@ -1124,7 +1124,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             # 反馈到评分缓存
             try:
                 from style_lab import apply_rating_feedback
-                apply_rating_feedback(d, data.get('rating', 0))
+                apply_rating_feedback(d, data.get('rating', 0), data.get('feedback'))
             except Exception as e:
                 log(f"⚠️ 反馈更新失败: {e}", "WARN")
             self._json_resp(200, {"status": "ok"})

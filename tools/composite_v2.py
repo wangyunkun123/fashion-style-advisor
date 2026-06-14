@@ -20,7 +20,7 @@ FONTS = {
     'title_en': '/System/Library/Fonts/Supplemental/Didot.ttc',
     'luxury':   os.path.join(BASE_DIR_FONTS, '..', 'fonts', 'CormorantGaramond-Bold.ttf'),
     # 正文 — Georgia + 细黑
-    'body_cn':  '/System/Library/Fonts/STHeiti Light.ttc',
+    'body_cn':  '/System/Library/Fonts/STHeiti Medium.ttc',
     'body_en':  '/System/Library/Fonts/Supplemental/Georgia.ttf',
     # 标签/辅助 — 黑体
     'label':    '/System/Library/Fonts/STHeiti Medium.ttc',
@@ -219,12 +219,15 @@ def composite(ai_path,items,output_path):
     dd=os.path.join(os.path.dirname(ai_path),'..','items')
     if not os.path.exists(dd): dd=os.path.join(os.path.dirname(os.path.dirname(ai_path)),'items')
     si=sorted(items,key=lambda x:CAT_ORDER.index(x['prefix']) if x['prefix'] in CAT_ORDER else 99)
-    main=[it for it in si if it['prefix'] in {'JK-','TS-','LS-','SHIRT-','TANK-','SH-','PT-','SHOE-'}]
-    acc =[it for it in si if it['prefix'] in {'HAT-','SUN-','SOCK-','BAG-','ACC-'}]
+    # 左右均衡分布（不再按品类分左右）
+    total = len(si)
+    left_count = (total + 1)//2  # 左列稍多
+    left_items = si[:left_count]
+    right_items = si[left_count:]
 
     GAP=8; BORDER=1; MARGIN=48
     ai_display_w=ai_w; ai_display_h=ai_h
-    cell_w=520; n=max(len(main),len(acc),1)
+    cell_w=520; n=max(len(left_items),len(right_items),1)
     cell_h=(ai_display_h-GAP*(n-1))//n
 
     # 标题栏高度
@@ -250,9 +253,9 @@ def composite(ai_path,items,output_path):
 
     top_y=MARGIN+TITLE_H
 
-    # 左列：主衣服
+    # 左列
     lx=cw; ly=top_y
-    for it in main:
+    for it in left_items:
         box_w=cell_w; box_h=cell_h
         canvas.paste((255,255,255),(lx,ly,lx+box_w,ly+box_h))
         ip=find_img(dd,it)
@@ -271,9 +274,9 @@ def composite(ai_path,items,output_path):
     canvas.paste(ai_img,(ai_x,ai_y))
     draw.rectangle([(ai_x,ai_y),(ai_x+ai_display_w-1,ai_y+ai_display_h-1)],outline=(189,189,184),width=BORDER)
 
-    # 右列：配饰
+    # 右列
     rx=ai_x+ai_display_w+GAP; ry=top_y
-    for it in acc:
+    for it in right_items:
         box_w=cell_w; box_h=cell_h
         canvas.paste((255,255,255),(rx,ry,rx+box_w,ry+box_h))
         ip=find_img(dd,it)
@@ -323,38 +326,7 @@ def composite(ai_path,items,output_path):
         except: pass
     if not top_colors:
         top_colors=[(40,40,38),(180,180,178),(120,120,118),(220,220,218),(80,80,78)]
-    # ━━━ STYLE NOTES 底部卡片 ━━━
-    bottom_y = max(ly, ry, swatch_y + 60 if 'swatch_y' in dir() else 0)
-    if style_kw:
-        NOTE_PAD = 28; NOTE_W = canvas_w - MARGIN*2 - NOTE_PAD - 16
-        card_x = MARGIN; card_w = canvas_w - MARGIN*2
-        # 预估卡片高度
-        note_lines = 0
-        for kw in style_kw:
-            note_lines += len(wrap_text(f'· {kw}', f_item, NOTE_W))
-        card_h = 24 + note_lines * 36 + 20
-        card_y = bottom_y + 20
-        # 扩展画布
-        if card_y + card_h + 40 > canvas_h:
-            new_h = card_y + card_h + 60
-            new_canvas = Image.new('RGB', (canvas_w, new_h), (252, 252, 250))
-            new_canvas.paste(canvas, (0, 0))
-            canvas = new_canvas
-            draw = ImageDraw.Draw(canvas)
-            canvas_h = new_h
-        canvas.paste((255, 255, 255), (card_x, card_y, card_x+card_w, card_y+card_h))
-        draw.rectangle([(card_x, card_y), (card_x+card_w-1, card_y+card_h-1)], outline=(189, 189, 184), width=1)
-        ty = card_y + 20
-        draw.text((card_x+NOTE_PAD, ty), 'STYLE NOTES', font=f_mini, fill=(140, 140, 138))
-        ty += 36
-        for kw in style_kw:
-            for wline in wrap_text(f'· {kw}', f_item, NOTE_W):
-                if ty + 36 > card_y + card_h - 10: break
-                draw.text((card_x+NOTE_PAD, ty), wline, font=f_item, fill=(110, 110, 108))
-                ty += 36
-        bottom_y = card_y + card_h
-
-    swatch_y = bottom_y + 16 if style_kw else canvas_h - 60
+    swatch_y = canvas_h - 60
     swatch_x = cw
     swatch_sz=24; swatch_gap=6
     draw.text((swatch_x,swatch_y-24),'COLOR PALETTE',font=f_mini,fill=(150,150,148))

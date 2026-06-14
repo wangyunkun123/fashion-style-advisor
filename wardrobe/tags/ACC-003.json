@@ -45,8 +45,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
-    "wear_count": 6,
-    "last_worn": "2026-06-14T13:05:34.733265",
+    "wear_count": 0,
+    "last_worn": null,
     "claude_fit_comment": "黑色系智能手表多款表带可根据场合切换风格,百搭且实用性强",
     "_statement_score": 0.35
   }

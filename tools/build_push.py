@@ -362,7 +362,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         md_path = os.path.join(outfit_dir, 'outfit.md')
         with open(md_path, 'r') as f:
             md_text = f.read()
-        if '风格笔记' not in md_text:
+        if True:  # 每次都确保风格笔记最新
             # 从风格指纹提取关键特征
             style_desc = ''
             if encyc:

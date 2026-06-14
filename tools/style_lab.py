@@ -948,7 +948,7 @@ def generate_exploration_narrative(direction, anchor, companions):
     if silhouette.get('fit') == '宽松':
         tip = '锚点单品偏宽松，下装可选直筒/锥形保持上下平衡'
     elif silhouette.get('fit') == '合身':
-        tip = '锚点合身剪裁，可用宽松外套制造层次对比'
+        tip = '核心单品合身剪裁，可用宽松外套制造层次对比'
     else:
         tip = '尝试将锚点单品作为视觉焦点，其他单品做减法'
 
@@ -1408,7 +1408,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
         else:
             item_name = f'{color}{cat}'
         # ⚠️ ⭐ 不能放在 ID 列，否则 composite_v2 的 parse() 会把 ⭐ 读入 ID → 找不到文件
-        marker = ' ⭐锚点' if cid == anchor_id else ''
+        marker = ' ⭐核心单品' if cid == anchor_id else ''
         items_table_lines.append(
             f"| {cat} | **{cid}** | {item_name} | {appeal['visual_signature'][:30]}{marker} |"
         )
@@ -1436,7 +1436,7 @@ def prepare_bline_outfit(anchor_item, companions, direction, weather_temp=30, we
 
     # 构造风格笔记（每条 ≤ 18 字符，适配 composite 卡片宽度）
     anchor_tip_short = claude_tip[:12] + '..' if len(claude_tip) > 14 else claude_tip
-    anchor_note = f'锚点{anchor_id}：{anchor_tip_short}' if anchor_tip_short else f'锚点：{anchor_color}{anchor_cat}'
+    anchor_note = f'核心单品 {anchor_id}：{anchor_tip_short}' if anchor_tip_short else f'核心单品：{anchor_color}{anchor_cat}'
     if len(anchor_note) > 18:
         anchor_note = anchor_note[:16] + '..'
 

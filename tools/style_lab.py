@@ -456,10 +456,10 @@ class DotDict:
 def match_scene_profile(outfit_items, occasion='日常'):
     """
     根据场景画像给套装打分（0~100）。
-    匹配：品类 > 面料 > 正式度 > 版型
+    优先级：关键词精确匹配 > 品类匹配 > 面料 > 正式度 > 版型
     """
     if not os.path.exists(SCENE_PROFILES_FILE):
-        return 50  # 无配置时中性分
+        return 50
 
     with open(SCENE_PROFILES_FILE, 'r', encoding='utf-8') as f:
         profiles = json.load(f).get('profiles', {})
@@ -472,6 +472,8 @@ def match_scene_profile(outfit_items, occasion='日常'):
     traits = profile.get('traits', {})
     boost = profile.get('category_boost', {})
     avoid = profile.get('avoid', [])
+    keywords = profile.get('keywords', [])
+    kw_boost = profile.get('keyword_boost', 30)
     formality_range = traits.get('formality', [1,2,3,4,5])
     preferred_fabrics = traits.get('fabric', [])
     preferred_fits = traits.get('fit', [])
@@ -479,49 +481,57 @@ def match_scene_profile(outfit_items, occasion='日常'):
     score = 0
     cats_found = set()
 
+    def item_text(item):
+        parts = []
+        for kp in ['brand.name', 'brand.collection', 'fabric.primary', 'category', 'meta.claude_fit_comment']:
+            v = item
+            for k in kp.split('.'): v = v.get(k, '') if isinstance(v, dict) else ''
+            if v: parts.append(str(v))
+        return ' '.join(parts).lower()
+
     for item in outfit_items:
         cat = item.get('category_code', '')
         cats_found.add(cat)
 
-        # 品类匹配（核心）
+        # 关键词精确匹配（权重最高）
+        txt = item_text(item)
+        for kw in keywords:
+            if kw in txt:
+                score += kw_boost
+                break
+
+        # 品类匹配
         if cat in boost:
             score += boost[cat]
 
-        # 正式度匹配
+        # 正式度
         formality = item.get('formality', 0)
         if formality in formality_range:
             score += 5
         else:
             score -= 5
 
-        # 面料匹配
+        # 面料
         fabric = item.get('fabric', {}).get('primary', '')
         for pf in preferred_fabrics:
             if pf in fabric:
                 score += 5
                 break
 
-        # 版型匹配
-        fit = item.get('silhouette', {}).get('fit', '')
-        if fit in preferred_fits:
+        # 版型
+        if item.get('silhouette', {}).get('fit', '') in preferred_fits:
             score += 3
 
-        # 避雷品类扣分
+        # 避雷
         if cat in avoid:
             score -= 15
 
-    # 必备品类检查
+    # 必备品类
     for req in required:
         if not any(c.startswith(req) for c in cats_found):
-            score -= 20  # 缺必备品类重扣
+            score -= 20
 
-    return max(0, min(100, score + 30))  # 基础分30，最高100
-
-
-# ============================================================
-# 4. 数据加载（复用 style_matcher 和 build_push 的模式）
-# ============================================================
-
+    return max(0, min(100, score + 30))
 def load_all_clothing():
     """加载所有衣服标签"""
     items = {}

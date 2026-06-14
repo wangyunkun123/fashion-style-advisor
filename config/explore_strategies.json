@@ -8,7 +8,13 @@
       "description": "衬衫敞开当薄外套、长袖内搭+短袖外穿",
       "boldness": "micro",
       "source": "日系City Boy标配",
-      "anchor_hint": {"categories": ["SHIRT", "LS"], "prefer": "可敞开、宽松、有层次"},
+      "anchor_hint": {
+        "categories": [
+          "SHIRT",
+          "LS"
+        ],
+        "prefer": "可敞开、宽松、有层次"
+      },
       "companion_rule": "内搭选贴身的T恤或背心，下装保持简洁不抢戏"
     },
     {
@@ -17,7 +23,14 @@
       "description": "西装裤×帆布鞋、连帽卫衣×西裤",
       "boldness": "micro",
       "source": "Smart Casual",
-      "anchor_hint": {"categories": ["JK", "PT", "SHIRT"], "prefer": "正式感单品：西装、西裤、衬衫"},
+      "anchor_hint": {
+        "categories": [
+          "JK",
+          "PT",
+          "SHIRT"
+        ],
+        "prefer": "正式感单品：西装、西裤、衬衫"
+      },
       "companion_rule": "锚点若是正式单品则配休闲款，若是休闲单品则配正式款"
     },
     {
@@ -26,7 +39,14 @@
       "description": "全身同色系但不同面料：棉+麻+皮质",
       "boldness": "micro",
       "source": "韩系极简常用",
-      "anchor_hint": {"categories": ["TS", "SH", "PT"], "prefer": "纯色、中性色、基础款"},
+      "anchor_hint": {
+        "categories": [
+          "TS",
+          "SH",
+          "PT"
+        ],
+        "prefer": "纯色、中性色、基础款"
+      },
       "companion_rule": "选与锚点同色系但不同面料的单品，注重材质对比"
     },
     {
@@ -35,7 +55,15 @@
       "description": "上半身正式+下半身休闲，或反过来",
       "boldness": "micro",
       "source": "时装周街拍",
-      "anchor_hint": {"categories": ["SHIRT", "JK", "PT", "SH"], "prefer": "有风格冲突感的单品"},
+      "anchor_hint": {
+        "categories": [
+          "SHIRT",
+          "JK",
+          "PT",
+          "SH"
+        ],
+        "prefer": "有风格冲突感的单品"
+      },
       "companion_rule": "上半身正式→下半身休闲，上半身休闲→下半身正式"
     },
     {
@@ -44,7 +72,14 @@
       "description": "两件不同色T恤叠穿或高领内搭+衬衫",
       "boldness": "micro",
       "source": "日韩基础穿法",
-      "anchor_hint": {"categories": ["TS", "LS", "SHIRT"], "prefer": "薄款、可叠穿、不同色"},
+      "anchor_hint": {
+        "categories": [
+          "TS",
+          "LS",
+          "SHIRT"
+        ],
+        "prefer": "薄款、可叠穿、不同色"
+      },
       "companion_rule": "选另一件可叠穿的上衣，颜色形成对比或呼应"
     },
     {
@@ -53,7 +88,15 @@
       "description": "全身基础色，一个亮色配饰做唯一跳色",
       "boldness": "micro",
       "source": "Clean Fit 点睛手法",
-      "anchor_hint": {"categories": ["HAT", "ACC", "SUN", "SOCK"], "prefer": "亮色、图案、个性款"},
+      "anchor_hint": {
+        "categories": [
+          "HAT",
+          "ACC",
+          "SUN",
+          "SOCK"
+        ],
+        "prefer": "亮色、图案、个性款"
+      },
       "companion_rule": "其他单品全部选基础色（黑白灰米），让锚点配饰成为焦点"
     },
     {
@@ -62,7 +105,12 @@
       "description": "全身基础色，靠图案/亮色中筒袜出彩",
       "boldness": "bold",
       "source": "日系City Boy标志",
-      "anchor_hint": {"categories": ["SOCK"], "prefer": "有图案、亮色、中筒"},
+      "anchor_hint": {
+        "categories": [
+          "SOCK"
+        ],
+        "prefer": "有图案、亮色、中筒"
+      },
       "companion_rule": "上装下装鞋子全部基础色，露出袜子做点睛"
     },
     {
@@ -71,7 +119,12 @@
       "description": "同套衣服换渔夫帽vs棒球帽，气质完全不同",
       "boldness": "bold",
       "source": "韩系穿搭博主常用",
-      "anchor_hint": {"categories": ["HAT"], "prefer": "选一个帽子定调"},
+      "anchor_hint": {
+        "categories": [
+          "HAT"
+        ],
+        "prefer": "选一个帽子定调"
+      },
       "companion_rule": "帽子定风格基调，其余单品与之呼应"
     },
     {
@@ -80,7 +133,12 @@
       "description": "长衬衫任其垂坠当轻薄外搭，内搭素T或背心",
       "boldness": "bold",
       "source": "《POPEYE》高频",
-      "anchor_hint": {"categories": ["SHIRT"], "prefer": "长款、轻薄、可敞开穿"},
+      "anchor_hint": {
+        "categories": [
+          "SHIRT"
+        ],
+        "prefer": "长款、轻薄、可敞开穿"
+      },
       "companion_rule": "内搭基础纯色T恤或背心，下装宽松直筒"
     },
     {
@@ -89,7 +147,12 @@
       "description": "及膝短裤+中筒白袜+皮质鞋",
       "boldness": "bold",
       "source": "日系少年感经典",
-      "anchor_hint": {"categories": ["SH"], "prefer": "及膝、宽松短裤"},
+      "anchor_hint": {
+        "categories": [
+          "SH"
+        ],
+        "prefer": "及膝、宽松短裤"
+      },
       "companion_rule": "配中筒袜+皮质或复古鞋款"
     },
     {
@@ -98,7 +161,13 @@
       "description": "短袖T恤/衬衫内搭贴身长袖",
       "boldness": "bold",
       "source": "UNIQLO U系列标配",
-      "anchor_hint": {"categories": ["TS", "SHIRT"], "prefer": "短袖、宽松款"},
+      "anchor_hint": {
+        "categories": [
+          "TS",
+          "SHIRT"
+        ],
+        "prefer": "短袖、宽松款"
+      },
       "companion_rule": "内搭贴身长袖（领口/下摆/袖口露出长袖层次）"
     },
     {
@@ -107,8 +176,28 @@
       "description": "衣橱里平时不怎么搭配的颜色组合",
       "boldness": "bold",
       "source": "色彩理论实践",
-      "anchor_hint": {"categories": ["TS", "LS", "SHIRT", "JK"], "prefer": "颜色独特的单品"},
+      "anchor_hint": {
+        "categories": [
+          "TS",
+          "LS",
+          "SHIRT",
+          "JK"
+        ],
+        "prefer": "颜色独特的单品"
+      },
       "companion_rule": "选与锚点颜色最不搭的另一件，刻意制造冲突"
+    },
+    {
+      "id": "hidden_gem",
+      "name": "冷门挖掘",
+      "description": "从穿着次数最少的单品中选一件，为它找到新搭配",
+      "boldness": "micro",
+      "source": "衣橱管理",
+      "anchor_hint": {
+        "categories": [],
+        "prefer": "穿着次数≤1次、被忽视的个性单品"
+      },
+      "companion_rule": "用高频基础款搭配冷门单品，降低驾驭难度"
     }
   ],
   "pending_review": []

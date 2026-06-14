@@ -1,57 +1,140 @@
 {
-  "_comment": "推荐优先级体系：硬阻断 > 实用 > 美观 > 舒适。每层级得分影响单品在推荐中的权重。",
+  "_comment": "推荐优先级：硬阻断 > 实用(0.4) > 美观(0.35) > 舒适(0.25)",
   "last_updated": "2026-06-14",
   "hard_blocks": {
-    "_comment": "不通过直接淘汰，不参与后续评分",
+    "_comment": "不通过直接淘汰。逐条检查，命中任一条即淘汰。",
     "rules": [
       {
-        "id": "temp_overheat",
-        "desc": "气温≥30°C时禁止厚外套/羊毛/灯芯绒",
-        "check": "weather_temp >= 30 and ('羊毛' in fabric_primary or '皮质' in fabric_primary or '灯芯绒' in fabric_primary) and cat_code == 'JK'",
+        "id": "hot_no_heavy_jacket",
+        "desc": "气温≥30°C禁止厚外套(羊毛/皮质/灯芯绒)，薄款冲锋衣/工装夹克可穿；商务/约会豁免",
+        "check": "weather_temp >= 30 and cat_code == 'JK' and ('羊毛' in fabric_primary or '皮质' in fabric_primary or '灯芯绒' in fabric_primary) and occasion not in ('商务', '正式', '约会')",
         "action": "block"
       },
       {
-        "id": "temp_freeze",
-        "desc": "气温≤10°C时禁止短裤/背心/凉鞋",
-        "check": "weather_temp <= 10 and item.category_code in ('SH', 'TANK')",
+        "id": "hot_no_long_sleeve",
+        "desc": "气温≥35°C禁止长袖上衣(薄款也不行)",
+        "check": "weather_temp >= 35 and cat_code in ('LS', 'SHIRT')",
         "action": "block"
       },
       {
-        "id": "rain_white_bottom",
-        "desc": "雨天禁止白色下装",
-        "check": "weather_cond in ('雨', '暴雨', '雷雨') and cat_code in ('SH', 'PT') and ('白' in hue_name or '米白' in hue_name or '浅' in hue_name)",
+        "id": "hot_no_boots",
+        "desc": "气温≥32°C禁止大黄靴/厚底靴",
+        "check": "weather_temp >= 32 and cat_code == 'SHOE' and '靴' in fabric_primary",
         "action": "block"
       },
       {
-        "id": "formal_shorts",
+        "id": "extreme_hot_no_jacket",
+        "desc": "气温≥35°C禁止任何外套",
+        "check": "weather_temp >= 35 and cat_code == 'JK'",
+        "action": "block"
+      },
+      {
+        "id": "cold_no_shorts",
+        "desc": "气温≤12°C 禁止短裤/背心",
+        "check": "weather_temp <= 12 and cat_code in ('SH', 'TANK')",
+        "action": "block"
+      },
+      {
+        "id": "cold_no_canvas",
+        "desc": "气温≤8°C 禁止帆布鞋/拖鞋",
+        "check": "weather_temp <= 8 and cat_code == 'SHOE' and ('帆布' in fabric_primary or 'Puma' in item.brand.name)",
+        "action": "block"
+      },
+      {
+        "id": "freeze_need_jacket",
+        "desc": "(已移除——改为实用层加分)",
+        "check": "False",
+        "action": "none"
+      },
+      {
+        "id": "rain_no_white_bottom",
+        "desc": "雨天/雪天禁止白色/米白/奶油色下装",
+        "check": "weather_cond in ('雨', '暴雨', '雷雨', '雪') and cat_code in ('SH', 'PT') and hue_name in ('白色', '米白', '米白色', '象牙白', '奶油色', '浅米色')",
+        "action": "block"
+      },
+      {
+        "id": "rain_no_leather_shoe",
+        "desc": "雨天禁止皮质鞋/翻毛皮鞋",
+        "check": "weather_cond in ('雨', '暴雨', '雷雨') and cat_code == 'SHOE' and ('皮质' in fabric_primary or '皮' in fabric_primary)",
+        "action": "block"
+      },
+      {
+        "id": "formal_no_shorts",
         "desc": "商务/正式场合禁止短裤",
         "check": "occasion in ('商务', '正式') and cat_code == 'SH'",
         "action": "block"
       },
       {
-        "id": "sport_sandals",
-        "desc": "运动场景禁止拖鞋/凉鞋",
-        "check": "occasion == '运动' and item.category_code == 'SHOE' and item.fabric.primary in ('塑料', 'EVA')",
+        "id": "formal_no_sports_jersey",
+        "desc": "商务/正式/约会场合禁止球衣/运动外套",
+        "check": "occasion in ('商务', '正式', '约会') and item.clothing_id in ('TS-007', 'JK-001')",
         "action": "block"
       },
       {
-        "id": "duplicate_category",
-        "desc": "禁止同品类出现两件（如两条裤子）",
-        "check": "outfit_level",
+        "id": "formal_no_athletic_shoe",
+        "desc": "商务/正式场合禁止运动鞋/足球鞋",
+        "check": "occasion in ('商务', '正式') and cat_code == 'SHOE' and item.clothing_id in ('SHOE-003', 'SHOE-008')",
         "action": "block"
+      },
+      {
+        "id": "sport_no_leather_shoe",
+        "desc": "运动场景必须有运动鞋，禁止皮鞋/靴子/帆布鞋",
+        "check": "occasion == '运动' and cat_code == 'SHOE' and item.clothing_id in ('SHOE-001', 'SHOE-002', 'SHOE-004', 'SHOE-006', 'SHOE-007', 'SHOE-009')",
+        "action": "block"
+      },
+      {
+        "id": "sport_no_accessories",
+        "desc": "运动场景禁戴手串/手表",
+        "check": "occasion == '运动' and cat_code in ('ACC')",
+        "action": "block"
+      },
+      {
+        "id": "sport_no_jeans",
+        "desc": "运动场景禁止牛仔裤/西裤",
+        "check": "occasion == '运动' and cat_code == 'PT' and item.clothing_id in ('PT-001', 'PT-005', 'PT-006')",
+        "action": "block"
+      },
+      {
+        "id": "duplicate_bottoms",
+        "desc": "禁止推荐两条裤子或两条短裤",
+        "check": "outfit_level: duplicate_bottoms",
+        "action": "block"
+      },
+      {
+        "id": "duplicate_shoes",
+        "desc": "禁止推荐两双鞋",
+        "check": "outfit_level: duplicate_shoes",
+        "action": "block"
+      },
+      {
+        "id": "duplicate_outerwear",
+        "desc": "禁止同时穿两件外套",
+        "check": "outfit_level: duplicate_outerwear",
+        "action": "block"
+      },
+      {
+        "id": "no_jersey_on_date",
+        "desc": "约会/聚会禁止穿球衣",
+        "check": "occasion in ('约会', '聚会') and item.clothing_id == 'TS-007'",
+        "action": "block"
+      },
+      {
+        "id": "no_tank_on_date",
+        "desc": "约会禁止只穿背心（可内搭）",
+        "check": "occasion == '约会' and cat_code == 'TANK' and outfit_level: tank_only",
+        "action": "block"
+      },
+      {
+        "id": "date_allow_thin_jacket",
+        "desc": "(约会/商务不因高温拦外套的豁免已在规则1中处理)",
+        "check": "False",
+        "action": "none"
       }
     ]
   },
   "practical": {
-    "_comment": "实用层（权重0.4）：保证能穿、功能正确",
     "weight": 0.4,
     "rules": [
-      {
-        "id": "season_match",
-        "desc": "面料季节适配当日气温",
-        "check": "outfit_level: season_match",
-        "score": 25
-      },
       {
         "id": "three_piece",
         "desc": "上衣+下装+鞋子三件套齐全",
@@ -59,81 +142,85 @@
         "score": 30
       },
       {
-        "id": "scene_function",
-        "desc": "场景功能匹配：运动→至少一件运动单品",
-        "check": "occasion == '运动' and any(item.category_code in ('TS','SH','SHOE') and item.fabric.primary in ('涤纶','速干') for item in outfit)",
-        "score": 20
+        "id": "season_match",
+        "desc": "面料含当前季节",
+        "check": "outfit_level: season_match",
+        "score": 25
       },
       {
         "id": "sun_protection",
-        "desc": "高温晴天有帽子/墨镜加分",
+        "desc": "高温晴天有帽子/墨镜",
         "check": "weather_temp >= 30 and weather_cond == '晴' and any(item.category_code in ('HAT','SUN') for item in outfit)",
         "score": 15
       },
       {
         "id": "cold_layer",
-        "desc": "低温有外套/长袖加分",
+        "desc": "低温有外套/长袖",
         "check": "weather_temp <= 15 and any(item.category_code in ('JK','LS') for item in outfit)",
-        "score": 10
+        "score": 15
+      },
+      {
+        "id": "rain_ready",
+        "desc": "雨天有防水/深色单品",
+        "check": "outfit_level: rain_ready",
+        "score": 15
       }
     ]
   },
   "aesthetic": {
-    "_comment": "美观层（权重0.35）：颜色协调、风格统一、廓形平衡",
     "weight": 0.35,
     "rules": [
       {
         "id": "color_harmony",
-        "desc": "整体配色协调（无冲突撞色）",
-        "check": "outfit_level: max color clash score < 0.5",
+        "desc": "配色协调无冲突撞色",
+        "check": "outfit_level: color_harmony",
         "score": 30
       },
       {
         "id": "style_coherence",
-        "desc": "所有单品对目标风格得分 ≥ 30",
-        "check": "all(item.style_score >= 30 for item in outfit)",
+        "desc": "单品风格分≥30",
+        "check": "outfit_level: style_coherence",
         "score": 25
       },
       {
         "id": "silhouette_balance",
-        "desc": "上宽下窄或外松内紧的廓形平衡",
-        "check": "outfit_level: top宽松 + bottom修身 or 外宽松 + 内贴身",
+        "desc": "上宽下窄/外松内紧",
+        "check": "outfit_level: silhouette_balance",
         "score": 25
       },
       {
         "id": "body_modifier",
-        "desc": "偏瘦体型修饰加分",
-        "check": "any('增加肩宽' in item.modifiers or '增加体量感' in item.modifiers for item in outfit)",
+        "desc": "偏瘦体型修饰",
+        "check": "outfit_level: body_modifier",
         "score": 20
       }
     ]
   },
   "comfort": {
-    "_comment": "舒适层（权重0.25）：面料亲肤、版型宽松、个人偏好",
     "weight": 0.25,
     "rules": [
       {
         "id": "fabric_comfort",
-        "desc": "棉/麻/丝面料加分",
-        "check": "'棉' in fabric_primary or '麻' in fabric_primary or '亚麻' in fabric_primary or '丝' in fabric_primary",
+        "desc": "棉/麻/丝面料",
+        "check": "'棉' in fabric_primary or '麻' in fabric_primary or '亚麻' in fabric_primary",
         "score": 30
       },
       {
         "id": "relaxed_fit",
-        "desc": "日常场景宽松版型加分",
-        "check": "item.silhouette.fit == '宽松' and occasion in ('日常','休闲')",
+        "desc": "日常宽松版型",
+        "check": "fit == '宽松' and occasion in ('日常','休闲')",
         "score": 25
       },
       {
         "id": "skin_friendly",
-        "desc": "衬肤色加分",
+        "desc": "衬偏白肤色",
         "check": "outfit_level: skin_friendly",
         "score": 25
       },
       {
-        "id": "user_preference",
-        "desc": "用户评分历史偏好加成",
-        "check": "item has been rated 3-star before in similar context",
+        "id": "user_pref",
+        "desc": "历史偏好加成",
+        "check": "outfit_level: user_preference",
         "score": 20
       }
     ]

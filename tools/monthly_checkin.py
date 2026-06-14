@@ -55,7 +55,7 @@ def check_and_send(dry_run=False):
             else:
                 msg = ("📝 你已经给AI上了一月课了\n\n"
                        "它现在挺懂你的。要不要让它自己发挥，你只管穿？\n\n"
-                       f"[🎯 切换简介版，AI直接推]({base}/setpref?mode=simple)")
+                       f"[🎯 切换简洁版，AI直接推]({base}/setpref?mode=simple)")
             if not dry_run:
                 prefs.setdefault('checkin_done', []).append('day30')
                 save_prefs(prefs)
@@ -63,7 +63,7 @@ def check_and_send(dry_run=False):
     # 31天额外请求：后悔了提醒
     if 31 <= days < 60 and 'day31' not in done and 'day60' not in done:
         other = 'rich' if mode == 'simple' else 'simple'
-        other_name = '百科版' if other == 'rich' else '简介版'
+        other_name = '百科版' if other == 'rich' else '简洁版'
         msg = ("🤔 后悔了？想改回上一版？\n\n"
                f"点一下就能切回{other_name} 📦\n\n"
                f"[🔄 切回{other_name}]({base}/setpref?mode={other})")

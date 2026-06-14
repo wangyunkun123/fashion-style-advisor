@@ -871,7 +871,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
                 import json as _json
                 with open(pref_file, 'w') as f:
                     _json.dump({'mode': mode, 'updated': time.strftime('%Y-%m-%d %H:%M')}, f, ensure_ascii=False, indent=2)
-                names = {'simple': '🅰️ 简介版', 'rich': '🅱️ 时尚版', 'both': '🅰️+🅱️ 双版'}
+                names = {'simple': '🅰️ 简洁版', 'rich': '🅱️ 时尚版', 'both': '🅰️+🅱️ 双版'}
                 self._html_resp(200, f"<html><body style='font-family:sans-serif;padding:40px;text-align:center;background:#f5f0eb'><h2>✅ 推送偏好已设置</h2><p style='font-size:24px;margin:20px'>{names.get(mode, mode)}</p><p style='color:#999'>下次推送将按此偏好发送</p><p><a href='/'>返回控制面板</a></p></body></html>")
                 log(f"推送偏好已设置为: {mode}")
             else:

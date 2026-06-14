@@ -744,7 +744,7 @@ def main():
         else:
             base = get_push_base_url()
             outfit_id = os.path.basename(outfit_dir)
-            rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
+            rate_link = f'[⭐ 给这套穿搭评分]({base}/rate?id={urllib.parse.quote(outfit_id)})'
             simple_desc = '🅰️ 简约版：不想费心，每天一套穿好就走 👌'
             rich_desc = '🅱️ 时尚版：想跟AI一起探索风格，越穿越懂自己 🧠✨'
             footer = f'\n\n---\n{rate_link}\n💡 选择推送模式：\n[{simple_desc}]({base}/setpref?mode=simple)\n[{rich_desc}]({base}/setpref?mode=rich)'
@@ -773,7 +773,7 @@ def main():
         push_title = outfit_name if outfit_name else style_name
         base = get_push_base_url()
         outfit_id = os.path.basename(outfit_dir)
-        rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={outfit_id})'
+        rate_footer = f'\n\n---\n[⭐ 给这套穿搭评分]({base}/rate?id={urllib.parse.quote(outfit_id)})'
         if preview:
             print("=" * 50)
             print("📱 时尚版预览")

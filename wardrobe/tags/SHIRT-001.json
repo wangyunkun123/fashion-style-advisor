@@ -44,8 +44,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
-    "wear_count": 9,
-    "last_worn": "2026-06-14T15:38:10.177838",
+    "wear_count": 0,
+    "last_worn": null,
     "claude_fit_comment": "竖条纹衬衫可在视觉上拉长身形比例,米白色显白,合身剪裁适合休闲偏精致场合",
     "_statement_score": 0.2
   }

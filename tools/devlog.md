@@ -43,3 +43,22 @@
 - 新增: 核心原则总纲.md
 - 重写: tools/composite_v2.py (composite函数)
 - 修改: tools/build_push.py, wechat_control.py, style_matcher.py, generate.py
+
+---
+
+## 2026-06-14 晚间
+
+### 完成
+- 核心原则总纲.md（所有逻辑一处可查）
+- 场景关键词全覆盖（10个场景）
+- 项目进程.md（版本说明+回退指令）
+- Phase 3 方向确定：智能衣橱管理优先
+- 审计修复：_eval_outfit_rule 补齐 handler、AI prompt 强制衣柜 ID
+
+### 清理
+- 删除 6月10-11日旧测试 outfit（24个目录）
+- 删除 archive 个人形象大文件
+- Git tag: phase-2-complete
+
+### 下一步
+- Phase 3: 智能衣橱管理（穿着看板 + 缺口分析 + 月度报告）

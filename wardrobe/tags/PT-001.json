@@ -44,8 +44,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
-    "wear_count": 20,
-    "last_worn": "2026-06-14T16:32:03.330053",
+    "wear_count": 0,
+    "last_worn": null,
     "claude_fit_comment": "宽松直筒牛仔裤可为偏瘦的腿型增加体量感,浅色水洗显休闲随性",
     "_statement_score": 0.15
   }

@@ -45,8 +45,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
-    "wear_count": 9,
-    "last_worn": "2026-06-14T15:38:10.177618",
+    "wear_count": 0,
+    "last_worn": null,
     "claude_fit_comment": "三款表带适配不同场景：米兰尼斯适合商务/轻熟，回环适合日常/休闲，运动适合健身/户外",
     "_statement_score": 0.35,
     "band_options": [

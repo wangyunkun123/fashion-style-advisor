@@ -34,6 +34,7 @@ STATE_FILE = os.path.join(PROJ_DIR, 'config', 'style_lab_state.json')
 DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')
 STRATEGY_FILE = os.path.join(PROJ_DIR, 'config', 'explore_strategies.json')
 RULES_FILE = os.path.join(PROJ_DIR, 'config', 'recommendation_rules.json')
+SCENE_PROFILES_FILE = os.path.join(PROJ_DIR, 'config', 'scene_profiles.json')
 
 # CDN base for encyclopedia links
 CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
@@ -449,7 +450,76 @@ class DotDict:
 
 
 # ============================================================
-# 3. 数据加载（复用 style_matcher 和 build_push 的模式）
+# 3. 场景画像匹配
+# ============================================================
+
+def match_scene_profile(outfit_items, occasion='日常'):
+    """
+    根据场景画像给套装打分（0~100）。
+    匹配：品类 > 面料 > 正式度 > 版型
+    """
+    if not os.path.exists(SCENE_PROFILES_FILE):
+        return 50  # 无配置时中性分
+
+    with open(SCENE_PROFILES_FILE, 'r', encoding='utf-8') as f:
+        profiles = json.load(f).get('profiles', {})
+
+    profile = profiles.get(occasion, profiles.get('日常', {}))
+    if not profile:
+        return 50
+
+    required = profile.get('required', [])
+    traits = profile.get('traits', {})
+    boost = profile.get('category_boost', {})
+    avoid = profile.get('avoid', [])
+    formality_range = traits.get('formality', [1,2,3,4,5])
+    preferred_fabrics = traits.get('fabric', [])
+    preferred_fits = traits.get('fit', [])
+
+    score = 0
+    cats_found = set()
+
+    for item in outfit_items:
+        cat = item.get('category_code', '')
+        cats_found.add(cat)
+
+        # 品类匹配（核心）
+        if cat in boost:
+            score += boost[cat]
+
+        # 正式度匹配
+        formality = item.get('formality', 0)
+        if formality in formality_range:
+            score += 5
+        else:
+            score -= 5
+
+        # 面料匹配
+        fabric = item.get('fabric', {}).get('primary', '')
+        for pf in preferred_fabrics:
+            if pf in fabric:
+                score += 5
+                break
+
+        # 版型匹配
+        fit = item.get('silhouette', {}).get('fit', '')
+        if fit in preferred_fits:
+            score += 3
+
+        # 避雷品类扣分
+        if cat in avoid:
+            score -= 15
+
+    # 必备品类检查
+    for req in required:
+        if not any(c.startswith(req) for c in cats_found):
+            score -= 20  # 缺必备品类重扣
+
+    return max(0, min(100, score + 30))  # 基础分30，最高100
+
+
+# ============================================================
+# 4. 数据加载（复用 style_matcher 和 build_push 的模式）
 # ============================================================
 
 def load_all_clothing():

@@ -133,7 +133,7 @@
     ]
   },
   "practical": {
-    "weight": 0.4,
+    "weight": 0.5,
     "rules": [
       {
         "id": "three_piece",
@@ -142,28 +142,28 @@
         "score": 30
       },
       {
+        "id": "scene_match",
+        "desc": "场景适配（品类/面料/正式度匹配场景画像）🆕",
+        "check": "outfit_level: scene_match",
+        "score": 40
+      },
+      {
         "id": "season_match",
         "desc": "面料含当前季节",
         "check": "outfit_level: season_match",
-        "score": 25
+        "score": 20
       },
       {
         "id": "sun_protection",
         "desc": "高温晴天有帽子/墨镜",
         "check": "weather_temp >= 30 and weather_cond == '晴' and any(item.category_code in ('HAT','SUN') for item in outfit)",
-        "score": 15
-      },
-      {
-        "id": "cold_layer",
-        "desc": "低温有外套/长袖",
-        "check": "weather_temp <= 15 and any(item.category_code in ('JK','LS') for item in outfit)",
-        "score": 15
+        "score": 5
       },
       {
         "id": "rain_ready",
         "desc": "雨天有防水/深色单品",
         "check": "outfit_level: rain_ready",
-        "score": 15
+        "score": 5
       }
     ]
   },

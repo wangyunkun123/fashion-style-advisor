@@ -1,0 +1,116 @@
+{
+  "_comment": "场景画像：定义每个场景的必备品类+偏好特征。用于推荐时加权匹配。",
+  "last_updated": "2026-06-14",
+  "profiles": {
+    "跑步": {
+      "required": ["TS", "SH", "SHOE"],
+      "traits": {
+        "fabric": ["涤纶", "速干", "运动"],
+        "fit": ["宽松", "合身"],
+        "formality": [1, 2]
+      },
+      "category_boost": {"TS": 20, "SH": 20, "SHOE": 30},
+      "avoid": ["JK", "SHIRT", "ACC", "BAG", "HAT"]
+    },
+    "网球": {
+      "required": ["TS", "SH", "SHOE"],
+      "traits": {
+        "fabric": ["涤纶", "速干", "棉"],
+        "fit": ["合身", "宽松"],
+        "formality": [1, 2]
+      },
+      "category_boost": {"TS": 20, "SH": 20, "SHOE": 30},
+      "avoid": ["JK", "SHIRT", "ACC"]
+    },
+    "运动": {
+      "required": ["TS", "SH", "SHOE"],
+      "traits": {
+        "fabric": ["涤纶", "速干", "棉"],
+        "fit": ["宽松", "合身"],
+        "formality": [1, 2]
+      },
+      "category_boost": {"TS": 15, "SH": 15, "SHOE": 25},
+      "avoid": ["JK", "SHIRT", "ACC"]
+    },
+    "商务": {
+      "required": ["SHIRT", "PT", "SHOE"],
+      "traits": {
+        "fabric": ["羊毛混纺", "棉", "皮质"],
+        "fit": ["合身", "修身"],
+        "formality": [3, 4, 5]
+      },
+      "category_boost": {"SHIRT": 25, "JK": 25, "PT": 20, "SHOE": 15},
+      "avoid": ["SH", "TANK", "TS"]
+    },
+    "通勤": {
+      "required": ["TS", "PT", "SHOE"],
+      "traits": {
+        "fabric": ["棉", "麻", "羊毛混纺"],
+        "fit": ["合身", "宽松"],
+        "formality": [2, 3]
+      },
+      "category_boost": {"SHIRT": 15, "JK": 10, "PT": 15},
+      "avoid": ["SH", "TANK"]
+    },
+    "约会": {
+      "required": ["TS", "PT", "SHOE"],
+      "traits": {
+        "fabric": ["棉", "亚麻", "皮质", "羊毛混纺"],
+        "fit": ["合身", "修身"],
+        "formality": [2, 3, 4]
+      },
+      "category_boost": {"SHIRT": 20, "JK": 15, "PT": 10},
+      "avoid": ["SH", "TANK"]
+    },
+    "聚会": {
+      "required": ["TS", "PT", "SHOE"],
+      "traits": {
+        "fabric": ["棉", "皮质", "羊毛混纺"],
+        "fit": ["合身", "宽松"],
+        "formality": [2, 3]
+      },
+      "category_boost": {"JK": 15, "SHIRT": 10},
+      "avoid": ["SH", "TANK"]
+    },
+    "度假": {
+      "required": ["TS", "SH", "SHOE"],
+      "traits": {
+        "fabric": ["棉", "亚麻", "麻"],
+        "fit": ["宽松"],
+        "formality": [1, 2]
+      },
+      "category_boost": {"SH": 20, "TS": 15, "HAT": 15},
+      "avoid": ["JK", "LS"]
+    },
+    "户外": {
+      "required": ["TS", "PT", "SHOE"],
+      "traits": {
+        "fabric": ["涤纶", "棉", "速干"],
+        "fit": ["宽松", "合身"],
+        "formality": [1, 2]
+      },
+      "category_boost": {"JK": 15, "HAT": 15, "BAG": 10},
+      "avoid": ["SHIRT", "SH"]
+    },
+    "居家": {
+      "required": ["TS", "SH", "SHOE"],
+      "traits": {
+        "fabric": ["棉", "麻"],
+        "fit": ["宽松"],
+        "formality": [1]
+      },
+      "category_boost": {"SH": 10},
+      "avoid": ["JK", "SHIRT", "BAG"]
+    },
+    "日常": {
+      "required": ["TS", "PT", "SHOE"],
+      "traits": {
+        "fabric": [],
+        "fit": [],
+        "formality": [1, 2, 3]
+      },
+      "category_boost": {},
+      "avoid": []
+    }
+  }
+}

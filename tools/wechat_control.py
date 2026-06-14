@@ -618,12 +618,9 @@ def run_pipeline(style_hint, task_id=None):
                 'result': result_text,
             })
 
-            # 微信推送：统一走 build_push 时尚版
+            # 微信推送：统一走 build_push 时尚版（B线由状态计数器自动触发）
             try:
-                bf = ''
-                if is_bline:
-                    bf = '--bold' if is_bold else '--bline'
-                run_cli(['python3', 'tools/build_push.py', outfit_dir, bf, '--rich'], timeout=120)
+                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
             except Exception:
                 content = f"![效果图]({github_url})\n\n"
                 if summary:

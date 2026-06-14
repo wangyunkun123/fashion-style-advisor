@@ -38,14 +38,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "复古街头风"
+    "复古街头",
+    "篮球文化",
+    "高帮复古",
+    "百搭经典"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 1,
     "last_worn": "2026-06-14T18:42:19.662159",
-    "claude_fit_comment": "米白色高帮复古球鞋显白且街头感强,适合搭配宽松裤装平衡整体比例",
+    "claude_fit_comment": "Nike复古高帮篮球鞋,米白配色街头感强,适合搭配宽松裤装平衡比例,复古篮球文化基因",
     "_statement_score": 0.35
   }
 }

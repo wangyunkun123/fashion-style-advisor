@@ -38,14 +38,17 @@
   },
   "style_modifiers": [
     "视觉鲜艳吸睛",
-    "无明显修饰"
+    "足球文化",
+    "速干球衣",
+    "Blokecore",
+    "球迷潮流"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "球迷版速干球衣合身剪裁加鲜艳红色,对瘦小肚体型修饰有限,更适合运动休闲场合",
+    "claude_fit_comment": "Adidas曼联主场球迷版速干球衣,红色鲜艳吸睛,合身剪裁,适合运动休闲/Blokecore足球潮流穿搭",
     "_statement_score": 0.5
   }
 }

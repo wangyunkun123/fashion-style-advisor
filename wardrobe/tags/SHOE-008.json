@@ -39,14 +39,17 @@
   },
   "style_modifiers": [
     "视觉吸睛",
-    "复古风格"
+    "篮球文化",
+    "复古街头",
+    "AJ基因",
+    "拼色潮流"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "红白拼色复古帆布鞋个性鲜明,适合休闲穿搭点缀,色彩较跳跃需注意整体搭配平衡",
+    "claude_fit_comment": "Jordan复古帆布拼色鞋,红白配色个性鲜明,承载AJ篮球文化基因,适合复古街头/潮流运动穿搭点缀",
     "_statement_score": 0.55
   }
 }

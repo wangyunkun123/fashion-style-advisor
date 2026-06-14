@@ -38,14 +38,16 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "视觉清新"
+    "视觉清新",
+    "日系简约",
+    "基础百搭"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "合身薄针织衫线条干净,绿色清新衬肤色,但对小肚子无遮盖效果",
+    "claude_fit_comment": "Uniqlo清新色系长袖,日系简约美学,颜色显白,基础百搭,适合春夏日常穿搭",
     "_statement_score": 0.25
   }
 }

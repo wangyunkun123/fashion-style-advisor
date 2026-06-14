@@ -39,14 +39,16 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "简约百搭"
+    "运动休闲",
+    "简约实用",
+    "日常通勤"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 1,
     "last_worn": "2026-06-14T18:39:35.499737",
-    "claude_fit_comment": "深灰绿Nike托特包简约百搭,适合日常出行或运动场景携带",
+    "claude_fit_comment": "Nike深灰绿托特包,简约百搭,适合日常出行/运动场景携带,大容量实用",
     "_statement_score": 0.2
   }
 }

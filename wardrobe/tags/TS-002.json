@@ -37,6 +37,9 @@
   },
   "style_modifiers": [
     "颜色显白",
+    "夏威夷风情",
+    "度假休闲",
+    "椰树印花",
     "增加上半身体量感"
   ],
   "meta": {
@@ -44,7 +47,7 @@
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松夏威夷衬衫剪裁可为瘦长身材增加体量感,大面积印花进一步增加视觉宽度",
+    "claude_fit_comment": "FUR SPEED夏威夷椰树印花短袖,度假休闲风格,颜色显白,宽松版型增加上半身体量感,适合夏季出游/度假场景",
     "_statement_score": 0.3
   }
 }

@@ -38,14 +38,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "增加上半身体量感"
+    "增加上半身体量感",
+    "日系基础",
+    "高性价比",
+    "日常百搭"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松落肩长袖T恤可增加上半身体量感,墨绿色低调耐看且对肤色友好",
+    "claude_fit_comment": "Uniqlo基础长袖,日系简约设计,高性价比,宽松版型增加上半身体量感,日常百搭基础款",
     "_statement_score": 0.2
   }
 }

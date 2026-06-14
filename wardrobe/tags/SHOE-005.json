@@ -39,14 +39,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "百搭基础款"
+    "入门网球",
+    "休闲运动",
+    "舒适耐穿",
+    "百搭基础"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "全白网球鞋干净简约,显白且百搭性极强,适合日常各种休闲穿搭",
+    "claude_fit_comment": "Nike Court Lite入门级网球鞋,全白配色干净显白,泡绵中底舒适耐穿,定位休闲/业余网球,日常百搭性强",
     "_statement_score": 0.2
   }
 }

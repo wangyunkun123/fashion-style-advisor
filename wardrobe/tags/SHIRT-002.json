@@ -39,14 +39,16 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "增加上半身体量感"
+    "增加上半身体量感",
+    "日系基础",
+    "通勤百搭"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松薄荷绿衬衫面料柔软垂坠,颜色清新显白,可增加上半身体量感",
+    "claude_fit_comment": "Uniqlo基础衬衫,日系简约,颜色显白,宽松版型增加上半身体量感,通勤日常百搭",
     "_statement_score": 0.1
   }
 }

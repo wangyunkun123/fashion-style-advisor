@@ -37,14 +37,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "密集印花遮盖小肚子"
+    "密集印花",
+    "夏威夷风情",
+    "度假休闲",
+    "遮盖小肚子"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "深藏青底色配密集大叶印花可有效转移视线、遮盖小肚子,藏青色衬肤色",
+    "claude_fit_comment": "FUR SPEED夏威夷椰树印花短袖,密集印花视觉遮盖小肚子,颜色显白,度假休闲风格",
     "_statement_score": 0.6
   }
 }

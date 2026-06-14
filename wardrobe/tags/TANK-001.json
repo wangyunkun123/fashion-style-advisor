@@ -36,14 +36,17 @@
     "confidence": "确定"
   },
   "style_modifiers": [
-    "增加上半身体量感"
+    "增加上半身体量感",
+    "澳洲休闲",
+    "基础内搭",
+    "夏季必备"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "罗纹背心可作为夏季内搭或叠穿层,军绿色低调耐看,合身剪裁对小肚子无遮盖",
+    "claude_fit_comment": "Cotton On澳洲休闲品牌基础背心,宽松版型增加上半身体量感,夏季基础内搭单品,可单穿或叠穿",
     "_statement_score": 0.0
   }
 }

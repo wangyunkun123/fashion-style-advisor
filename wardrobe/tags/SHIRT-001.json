@@ -39,14 +39,16 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "竖条纹拉长身形比例"
+    "竖条纹拉长比例",
+    "日系简约",
+    "通勤休闲"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 1,
     "last_worn": "2026-06-14T18:39:35.499594",
-    "claude_fit_comment": "竖条纹衬衫可在视觉上拉长身形比例,米白色显白,合身剪裁适合休闲偏精致场合",
+    "claude_fit_comment": "Uniqlo竖条纹衬衫,日系简约设计,竖条纹视觉拉长身形,颜色显白,适合通勤/休闲场景",
     "_statement_score": 0.2
   }
 }

@@ -38,14 +38,17 @@
   },
   "style_modifiers": [
     "增加下半身体量感",
-    "束脚收紧显比例"
+    "束脚显比例",
+    "运动休闲",
+    "三道杠经典",
+    "日常百搭"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "宽松束脚卫裤增加下半身体量感,黑色显瘦且基础款搭配性强",
+    "claude_fit_comment": "Adidas Sportswear束脚卫裤,黑色显瘦,三道杠经典标识,宽松版型增加下半身体量感,适合运动休闲/日常通勤",
     "_statement_score": 0.15
   }
 }

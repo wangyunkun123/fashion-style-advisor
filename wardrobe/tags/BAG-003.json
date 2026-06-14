@@ -39,14 +39,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "运动机能"
+    "运动潮流",
+    "复古街头",
+    "网眼轻便",
+    "户外机能"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "黑色网眼运动背包轻便透气,适合运动或户外场景使用",
+    "claude_fit_comment": "Puma黑色网眼运动背包,轻便透气,复古街头基因,适合运动/户外/日常场景",
     "_statement_score": 0.1
   }
 }

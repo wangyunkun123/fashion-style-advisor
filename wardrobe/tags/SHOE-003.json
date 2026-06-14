@@ -38,14 +38,18 @@
     "confidence": "确定"
   },
   "style_modifiers": [
-    "视觉鲜艳吸睛"
+    "视觉鲜艳吸睛",
+    "足球文化",
+    "掌控型猎鹰",
+    "荧光醒目",
+    "运动场合专属"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "荧光橙足球鞋视觉冲击力强,适合运动场合,日常通勤搭配需谨慎",
+    "claude_fit_comment": "Adidas Predator猎鹰足球鞋,荧光橙配色视觉冲击极强,定位掌控型,适合运动场合,日常通勤需谨慎搭配",
     "_statement_score": 0.6
   }
 }

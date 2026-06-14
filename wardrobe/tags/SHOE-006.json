@@ -38,14 +38,17 @@
   },
   "style_modifiers": [
     "视觉吸睛",
-    "复古风格"
+    "帆布经典",
+    "朋克摇滚",
+    "复古街头",
+    "高帮复古"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "姜黄色高帮帆布鞋复古个性,姜黄色对偏白肤色不算友好但作为单品点缀效果好",
+    "claude_fit_comment": "Converse Chuck Taylor高帮帆布鞋,复古配色个性鲜明,高帮设计经典,朋克摇滚文化基因,适合复古街头穿搭",
     "_statement_score": 0.35
   }
 }

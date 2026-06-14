@@ -39,14 +39,15 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "通勤实用"
+    "通勤实用",
+    "简约百搭"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "灰色花呢双肩包低调实用,适合通勤或日常出行搭配",
+    "claude_fit_comment": "YASCIQ简约通勤包,颜色显白,实用容量,适合日常通勤/出行场景",
     "_statement_score": 0.1
   }
 }

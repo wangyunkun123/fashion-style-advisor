@@ -37,14 +37,16 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "休闲居家"
+    "休闲居家",
+    "运动品牌",
+    "经典Logo"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "经典拖鞋款式简单易穿,适合居家或夏季短途休闲场合,Logo设计较为醒目",
+    "claude_fit_comment": "Puma经典拖鞋,米白拼黑配色,Logo醒目,适合居家/夏季短途休闲,运动品牌休闲线",
     "_statement_score": 0.2
   }
 }

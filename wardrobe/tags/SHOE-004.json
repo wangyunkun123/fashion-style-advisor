@@ -39,14 +39,17 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "经典百搭"
+    "帆布经典",
+    "摇滚文化",
+    "美式复古",
+    "百搭基础"
   ],
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "经典帆布鞋卡其驼色温和耐看,白色鞋头点缀显白,适合日常休闲搭配",
+    "claude_fit_comment": "Converse Chuck Taylor低帮帆布鞋,百年经典设计,美式复古/摇滚文化符号,百搭基础款,适合几乎所有风格",
     "_statement_score": 0.05
   }
 }

@@ -246,28 +246,33 @@ def find_latest_composite(date_str=None):
     log(f"⚠️ 未找到当日排版图，使用最近期: {os.path.basename(candidates[0])}", "WARN")
     return candidates[0]
 
-def get_todays_used_items(max_recent=3):
-    """获取今日最近 N 套穿搭的已用单品（避免追踪全天后品类耗尽）"""
-    today = time.strftime('%Y-%m-%d')
+def get_banned_items():
+    """获取因一星评价被禁用的单品清单 — 只有用户明确打一星才禁用"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    today_dirs = sorted([
-        d for d in os.listdir(outfit_base)
-        if d.startswith(today) and os.path.isdir(os.path.join(outfit_base, d))
-    ])
-    # 只取最近 max_recent 套
-    recent_dirs = today_dirs[-max_recent:] if len(today_dirs) > max_recent else today_dirs
-    used = []
-    for d in recent_dirs:
-        md = os.path.join(outfit_base, d, 'outfit.md')
-        if os.path.exists(md):
-            with open(md, 'r') as f:
-                content = f.read()
-            ids = re.findall(
-                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                content
-            )
-            used.extend(ids)
-    return list(set(used))
+    banned = []
+    for d in os.listdir(outfit_base):
+        dp = os.path.join(outfit_base, d)
+        if not os.path.isdir(dp):
+            continue
+        rating_file = os.path.join(dp, 'rating.json')
+        if not os.path.exists(rating_file):
+            continue
+        try:
+            with open(rating_file, 'r') as f:
+                rating_data = json.load(f)
+            if rating_data.get('rating') == 1:
+                md = os.path.join(dp, 'outfit.md')
+                if os.path.exists(md):
+                    with open(md, 'r') as f:
+                        content = f.read()
+                    ids = re.findall(
+                        r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                        content
+                    )
+                    banned.extend(ids)
+        except:
+            pass
+    return list(set(banned))
 
 CAT_EMOJI = {
     '上衣': '👕', '内搭': '👕', 'T恤': '👕', '短袖': '👕', '长袖': '👕',
@@ -531,7 +536,7 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 - 帽子、包、袜子、墨镜、配饰等根据场景酌情添加
 - ACC-003 是 Apple Watch 表带套组（含米兰尼斯/回环/运动三款表带），推荐时需指定使用哪款表带
 - seedream_prompt 必须是英文，详细描述服装细节和场景氛围
-- 如果某必需品类（上衣、下装、鞋子）已无未使用单品可选，允许复用最近使用过中与该场景最匹配的那件，绝不能留空或标 UNAVAILABLE"""
+- 除用户明确标记为「一星差评禁用」的单品外，所有单品均可自由选用，同一单品可以出现在不同风格的穿搭中"""
 
 
 def _detect_bline_from_hint(style_hint):
@@ -557,8 +562,8 @@ def run_pipeline(style_hint, task_id=None):
             tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
 
     today = time.strftime('%Y-%m-%d')
-    used_items = get_todays_used_items()
-    used_str = '、'.join(used_items) if used_items else '无'
+    banned_items = get_banned_items()
+    banned_str = '、'.join(banned_items) if banned_items else '无'
 
     progress('🤖 Step 1/4: AI 分析穿搭方案...')
 
@@ -571,12 +576,12 @@ def run_pipeline(style_hint, task_id=None):
 
 为「{style_hint}」推荐一套全新穿搭。
 
-📋 最近已使用的单品（尽量避开，避免连续重复）: {used_str}
+🚫 一星差评禁用单品（严禁使用）: {banned_str}
 
-⚠️ 规则优先级：
-1. 上衣、下装、鞋子三者缺一不可（硬性要求，绝不能留空或标 UNAVAILABLE）
-2. 尽量从以上列表中未出现的单品中选择
-3. 如果某品类（如鞋子）已无未使用单品，允许复用该品类中与「{style_hint}」场景最匹配的那件
+⚠️ 硬性要求：
+- 上衣、下装、鞋子三者缺一不可（绝不能留空或标 UNAVAILABLE）
+- 除上述禁用单品外，衣柜中所有单品均可自由选用
+- 一天内多次请求 = 用户想换风格，同一单品可以在不同风格中重复出现
 
 以下是完整衣柜档案：
 ---

@@ -951,10 +951,75 @@ def check_weather_appropriateness(item, weather_temp=None, weather_cond='晴'):
     return 0.8
 
 
-def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
-                     weather_cond='晴', count_per_category=None):
+def _apply_companion_rule(item, anchor_item, companion_rule):
     """
-    为锚点单品找同伴：基于风格兼容 + 锚点和谐 + 天气适配
+    根据策略搭配规则给同伴加分（0~30）。
+    规则关键词匹配 → 符合则加分。
+    """
+    if not companion_rule:
+        return 0
+
+    bonus = 0
+    rule_lower = companion_rule.lower()
+    color = item.get('color', {})
+    fabric = item.get('fabric', {}).get('primary', '')
+    silhouette = item.get('silhouette', {})
+    cat = item.get('category_code', '')
+    anchor_color = anchor_item.get('color', {})
+    anchor_fabric = anchor_item.get('fabric', {}).get('primary', '')
+
+    # 基础色 → 黑白灰米 +20
+    if '基础色' in rule_lower or '黑白灰' in rule_lower:
+        if color.get('is_neutral') or color.get('hue_name') in ('黑色', '白色', '米白', '灰色', '深灰', '浅灰'):
+            bonus += 20
+
+    # 同色系 → 色相族相同 +25
+    if '同色系' in rule_lower or '同色' in rule_lower:
+        if color.get('hue_family') == anchor_color.get('hue_family'):
+            bonus += 25
+
+    # 不同面料 → 面料不同 +20
+    if '不同面料' in rule_lower or '材质对比' in rule_lower or '材质' in rule_lower:
+        if fabric != anchor_fabric:
+            bonus += 20
+
+    # 贴身/内搭 → TS/TANK +15
+    if '贴身' in rule_lower or '内搭' in rule_lower:
+        if cat in ('TS', 'TANK') and silhouette.get('fit') in ('合身', '修身'):
+            bonus += 15
+
+    # 宽松直筒 → 下装宽松 +15
+    if '宽松' in rule_lower and ('下装' in rule_lower or '直筒' in rule_lower):
+        if cat in ('PT', 'SH') and silhouette.get('fit') == '宽松':
+            bonus += 15
+
+    # 正式单品 → JK/PT/SHIRT 正式度 ≥3 +20
+    if '正式' in rule_lower:
+        if item.get('formality', 0) >= 3:
+            bonus += 20
+
+    # 休闲单品 → 正式度 ≤2 +20
+    if '休闲' in rule_lower:
+        if item.get('formality', 0) <= 2:
+            bonus += 20
+
+    # 基础款 → 纯色无印花 +15
+    if '基础款' in rule_lower or '简洁' in rule_lower:
+        if item.get('pattern', {}).get('type') in ('纯色', None, ''):
+            bonus += 15
+
+    # 亮色配饰 → 高饱和 +20
+    if '亮色' in rule_lower or '跳色' in rule_lower:
+        if color.get('saturation') == '高饱和':
+            bonus += 20
+
+    return min(bonus, 30)
+
+
+def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
+                     weather_cond='晴', count_per_category=None, companion_rule=''):
+    """
+    为锚点单品找同伴：策略规则驱动 + 风格兼容 + 锚点和谐 + 天气适配
     """
     if wardrobe is None:
         wardrobe = load_all_clothing()
@@ -963,7 +1028,6 @@ def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
 
     target_style_id = direction['target_style_id']
     score_cache = load_score_cache()
-    style = load_style(target_style_id)
     anchor_id = anchor_item['clothing_id']
     anchor_cat = anchor_item.get('category_code', '')
 
@@ -974,9 +1038,9 @@ def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
             continue
         cat = item.get('category_code', '')
         if cat == anchor_cat:
-            continue  # 跳过锚点同品类
+            continue
 
-        # 1. 风格匹配度（从缓存）
+        # 1. 风格匹配度
         style_score = 0
         if cid in score_cache and target_style_id in score_cache[cid]:
             style_score = score_cache[cid][target_style_id].get('score', 0)
@@ -987,14 +1051,19 @@ def find_companions(anchor_item, direction, wardrobe=None, weather_temp=None,
         # 3. 天气适配度
         weather_score = check_weather_appropriateness(item, weather_temp, weather_cond)
 
-        # 综合分：60%风格 + 25%和谐 + 15%天气
-        composite = style_score * 0.6 + harmony * 100 * 0.25 + weather_score * 100 * 0.15
+        # 4. 策略规则加分 🆕
+        rule_bonus = _apply_companion_rule(item, anchor_item, companion_rule)
+
+        # 综合分：40%风格 + 20%和谐 + 10%天气 + 30%策略规则
+        composite = (style_score * 0.4 + harmony * 100 * 0.2 +
+                    weather_score * 100 * 0.1 + rule_bonus * 100 / 30 * 0.3)
 
         results.append({
             'item': item,
             'style_score': style_score,
             'harmony_score': round(harmony, 2),
             'weather_score': round(weather_score, 2),
+            'rule_bonus': rule_bonus,
             'composite': round(composite, 1),
             'category': item.get('category', ''),
         })

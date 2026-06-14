@@ -388,7 +388,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
                     if directions:
                         direction = directions[0]
-                        companions = find_companions(anchor_item, direction, all_clothing, temp_high, weather_cond)
+                        companions = find_companions(anchor_item, direction, all_clothing, temp_high, weather_cond, companion_rule=rule)
                         strategies = pick_explore_strategies(boldness)
                         direction['strategies'] = strategies  # 注入方向数据
                         exploration_outfit = assemble_exploratory_outfit(direction, anchor_item, companions, strategies)

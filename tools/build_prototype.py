@@ -94,8 +94,8 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 /* Hero card */
 .hero-card{{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:16px 0 14px;border:1px solid rgba(30,58,95,.05)}}
-.hero-img{{width:100%;aspect-ratio:4/3;background:#eaf0f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}}
-.hero-img .ph{{font-size:72px;color:#c8d4e2;opacity:.6}}
+.hero-img{{width:100%;aspect-ratio:4/3;background:#eaf0f6;position:relative;overflow:hidden}}
+.hero-img img{{width:100%;height:100%;object-fit:cover;display:block}}
 .hero-img::after{{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(26,40,56,.4));pointer-events:none}}
 .hero-body{{padding:18px}}
 .hero-style{{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}}
@@ -164,10 +164,10 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><div class="ph">&#x1f455;</div></div>
+<div class="hero-img"><img src="../outfits/2026-06-15_%E8%B5%B7%E9%9B%BE%E4%BA%86%EF%BC%8C%E4%BB%8A%E5%A4%A9%E8%AF%A5%E7%A9%BF%E4%BB%80%E4%B9%88%EF%BC%9F/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493_%E6%96%B9%E6%A1%881.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
 <div class="hero-body">
 <div class="hero-style">清爽雾天城市休闲</div>
-<div class="hero-meta">2026/06/15 · 雾 · 22&deg;C · 湿度 88%</div>
+<div class="hero-meta">2026/06/15 · 雾 · 22~34&deg;C · 湿度 88% · 紫外线 中等</div>
 <div class="item-list">
 {item_tshirt}
 {item_pants}

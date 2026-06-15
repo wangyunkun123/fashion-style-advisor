@@ -38,4 +38,7 @@ outfits/_bline_temp/
 # 内部缓存文件（自动生成，不需提交）
 **/.color_cache.json
 **/.push_cache.json
+# 自动生成的报告文件
+衣橱分析报告.txt
+穿搭月度报告.txt
 # _swatches.png — 需要上传，不能 gitignore

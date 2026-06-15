@@ -57,8 +57,11 @@ def tab_btn(key, label, active=False):
     svg = tab.get(key, '')
     return '<div class="{}" data-page="{}"><div class="t-icon">{}</div><span class="t-label">{}</span></div>'.format(cls, key, svg, label)
 
-def item_row(icon_svg, cat, iid, name):
-    return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(icon_svg, cat, iid, name)
+def item_row(icon_svg, cat, iid, name, thumb=''):
+    thumb_html = ''
+    if thumb:
+        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb)
+    return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(icon_svg, cat, iid, name, thumb_html)
 
 def mini_card(style_name, all_items):
     # Show first 3 items collapsed, rest in detail
@@ -110,6 +113,12 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .item-grid .item-cat{{font-size:9px;width:auto}}
 .item-grid .item-id{{font-size:8px}}
 .item-grid .item-name{{font-size:9px;white-space:normal}}
+.item-thumb{{width:100%;height:60px;object-fit:contain;margin-top:4px;border-radius:4px;background:#f8fafc;cursor:pointer}}
+/* Lightbox */
+.lightbox{{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:200;align-items:center;justify-content:center}}
+.lightbox.show{{display:flex}}
+.lightbox img{{max-width:90%;max-height:80%;object-fit:contain;border-radius:8px}}
+.lightbox .close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;z-index:201}}
 /* Palette strip */
 .palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
@@ -264,11 +273,14 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 </div>
 
 <!-- Tab Bar -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><span class="close">&times;</span><img id="lightbox-img" src=""></div>
+
 <div class="tab-bar" id="tab-bar">
 {tabs}
 </div>
 
 <script>
+function showImg(src){{document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('show')}}
 var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
@@ -289,13 +301,13 @@ card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落�
 
 html = html.format(
     tabs=tabs_html,
-    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon Metal Vent 运动短袖'),
-    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球运动短裤'),
-    item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite 网球鞋'),
-    item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽'),
-    item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 复古网球桶包'),
-    item_sock_tennis=item_row(item_icons.get('sock',''), '袜子', 'SOCK-006', '防滑底短袜'),
-    item_acc_tennis=item_row(item_icons.get('acc',''), '配饰', 'ACC-003', 'Apple Watch 运动表带'),
+    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon Metal Vent', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png'),
+    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球短裤', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png'),
+    item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-005_Image_20260610_0848_30_512_cutout.png'),
+    item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-004_Image_20260610_0810_53_039_cutout.png'),
+    item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 网球桶包', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-007_Image_20260610_1043_55_563%20%E6%8B%B7%E8%B4%9D_cutout.png'),
+    item_sock_tennis=item_row(item_icons.get('sock',''), '袜子', 'SOCK-006', '防滑底短袜', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png'),
+    item_acc_tennis=item_row(item_icons.get('acc',''), '配饰', 'ACC-003', 'Apple Watch', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     card1=card1,
     card2=card2,
 )

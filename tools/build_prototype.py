@@ -251,7 +251,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .style-tags span{{font-size:11px;color:#fff;background:var(--navy);padding:4px 10px;border-radius:10px;font-weight:500}}
 /* Item grid — 3 cols */
 .item-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}}
-.item-grid .item-row{{flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}}
+.item-grid .item-row{{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}}
 .item-grid .item-emoji{{width:16px;height:16px}}
 .item-grid .item-cat{{font-size:9px;width:auto}}
 .item-grid .item-id{{font-size:8px}}

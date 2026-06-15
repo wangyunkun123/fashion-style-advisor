@@ -100,25 +100,25 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             # First: 上身效果_1.png (raw AI gen, first stored)
             for f in sorted(os.listdir(sd)):
                 if f == '上身效果_1.png':
-                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    char_img = os.path.join('outfits', d, sub, f)
                     break
             if char_img: break
             # Second: 人物_*.jpg
             for f in sorted(os.listdir(sd)):
                 if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
-                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    char_img = os.path.join('outfits', d, sub, f)
                     break
             if char_img: break
             # Third: *_方案*.jpg (composite)
             for f in sorted(os.listdir(sd)):
                 if '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
-                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    char_img = os.path.join('outfits', d, sub, f)
                     break
             if char_img: break
             # Last: any image
             for f in sorted(os.listdir(sd)):
                 if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_') and not f.startswith('.'):
-                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    char_img = os.path.join('outfits', d, sub, f)
                     break
             if char_img: break
         # Build item thumbnails
@@ -127,7 +127,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if os.path.exists(items_dir):
                 for f in os.listdir(items_dir):
                     if f.startswith(it['id']+'_') and f.endswith('.png'):
-                        it['thumb'] = os.path.join('..', 'outfits', d, 'items', f)
+                        it['thumb'] = os.path.join('outfits', d, 'items', f)
                         break
         # Parse weather: temp range + UV
         temp_str = ''

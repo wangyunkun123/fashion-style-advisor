@@ -1160,3 +1160,6 @@ error: failed to push some refs to 'github.com:wangyunkun1
 ❌
 [08:40:04] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
 [08:40:04] [WARN] ⚠️ 未找到当日排版图，使用最近期: 上身效果_1_方案1.jpg
+[08:40:17] [INFO] 📍 ✅ 推送完成
+✅ 执行完成（无文本输出）
+[08:40:19] [INFO] 推送成功: 起雾了，今天该穿什么？

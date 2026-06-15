@@ -366,7 +366,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
 <div class="hero-style">清爽专业网球运动风</div>
 <div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-list">
+<div class="item-grid">
 {item_tshirt_tennis}
 {item_pants_tennis}
 {item_shoe_tennis}
@@ -460,6 +460,8 @@ function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(functio
 function showLoading(msg){{var el=document.getElementById('loading-overlay');if(!el){{el=document.createElement('div');el.id='loading-overlay';el.innerHTML='<div style=\"text-align:center;padding:60px 20px\"><div class=\"loading-spinner\"></div><div id=\"loading-msg\" style=\"margin-top:16px;font-size:14px;color:var(--sub)\">'+msg+'</div></div>';var hero=document.querySelector('.hero-card');if(hero)hero.appendChild(el)}}else{{el.style.display='block';document.getElementById('loading-msg').textContent=msg}}}}
 function updateLoading(msg){{var el=document.getElementById('loading-msg');if(el)el.textContent=msg}}
 function hideLoading(){{var el=document.getElementById('loading-overlay');if(el)el.style.display='none'}}
+// Auto-load latest today outfit
+(function refreshHero(){{fetch('/api/today').then(function(r){{return r.json()}}).then(function(d){{if(!d||d.empty)return;var heroImg=document.querySelector('.hero-img img');if(!heroImg)return;if(heroImg.getAttribute('data-loaded')===d.dir)return;heroImg.src=d.img||'';heroImg.setAttribute('data-loaded',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el)el.textContent=(d.date||'')+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return'<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var ic={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(ic[p]||'👔')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+(it.name||'').substring(0,16)+'</span></div>'}});el.innerHTML=h}}}})}})();
 </script>
 </body></html>'''
 

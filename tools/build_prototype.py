@@ -99,7 +99,21 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .hero-img img{{width:100%;display:block}}
 .hero-body{{padding:18px}}
 .hero-style{{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}}
-.hero-meta{{font-size:12px;color:var(--sub);margin-bottom:16px}}
+.hero-meta{{font-size:12px;color:var(--sub);margin-bottom:14px}}
+/* Style tags */
+.style-tags{{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}}
+.style-tags span{{font-size:11px;color:#fff;background:var(--navy);padding:4px 10px;border-radius:10px;font-weight:500}}
+/* Item grid — 3 cols */
+.item-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}}
+.item-grid .item-row{{flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}}
+.item-grid .item-emoji{{width:16px;height:16px}}
+.item-grid .item-cat{{font-size:9px;width:auto}}
+.item-grid .item-id{{font-size:8px}}
+.item-grid .item-name{{font-size:9px;white-space:normal}}
+/* Palette strip */
+.palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
+.pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
+.pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
 
 /* Item rows */
 .item-list{{display:flex;flex-direction:column}}
@@ -164,8 +178,9 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E6%89%8B%E6%9C%BA%E7%AB%AF%E6%8E%92%E7%89%88_%E6%96%B9%E6%A1%881.jpg" alt=""></div>
+<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493.jpg" alt=""></div>
 <div class="hero-body">
+<div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
 <div class="hero-style">清爽专业网球运动风</div>
 <div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
 <div class="item-list">
@@ -174,7 +189,11 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 {item_shoe_tennis}
 {item_hat_tennis}
 {item_bag_tennis}
-</div></div></div>
+{item_sock_tennis}
+{item_acc_tennis}
+</div>
+<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
+</div></div>
 
 <div class="section-header">其他推荐</div>
 <div class="rec-cards">
@@ -270,11 +289,13 @@ card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落�
 
 html = html.format(
     tabs=tabs_html,
-    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon Metal Vent Tech 运动短袖'),
-    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Decathlon Artengo 网球运动短裤'),
+    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon Metal Vent 运动短袖'),
+    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球运动短裤'),
     item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite 网球鞋'),
     item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽'),
     item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 复古网球桶包'),
+    item_sock_tennis=item_row(item_icons.get('sock',''), '袜子', 'SOCK-006', '防滑底短袜'),
+    item_acc_tennis=item_row(item_icons.get('acc',''), '配饰', 'ACC-003', 'Apple Watch 运动表带'),
     card1=card1,
     card2=card2,
 )

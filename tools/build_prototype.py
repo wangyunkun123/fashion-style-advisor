@@ -95,9 +95,8 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 /* Hero card */
 .hero-card{{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:16px 0 14px;border:1px solid rgba(30,58,95,.05)}}
-.hero-img{{width:100%;aspect-ratio:4/3;background:#eaf0f6;position:relative;overflow:hidden}}
-.hero-img img{{width:100%;height:100%;object-fit:cover;display:block}}
-.hero-img::after{{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(26,40,56,.4));pointer-events:none}}
+.hero-img{{width:100%;background:#f8fafc;overflow:hidden}}
+.hero-img img{{width:100%;display:block}}
 .hero-body{{padding:18px}}
 .hero-style{{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}}
 .hero-meta{{font-size:12px;color:var(--sub);margin-bottom:16px}}
@@ -165,7 +164,17 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E6%89%8B%E6%9C%BA%E7%AB%AF%E6%8E%92%E7%89%88_%E6%96%B9%E6%A1%881.jpg" alt="" style="width:100%;height:100%;object-fit:contain;background:#f8fafc"></div>
+<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E6%89%8B%E6%9C%BA%E7%AB%AF%E6%8E%92%E7%89%88_%E6%96%B9%E6%A1%881.jpg" alt=""></div>
+<div class="hero-body">
+<div class="hero-style">清爽专业网球运动风</div>
+<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
+<div class="item-list">
+{item_tshirt_tennis}
+{item_pants_tennis}
+{item_shoe_tennis}
+{item_hat_tennis}
+{item_bag_tennis}
+</div></div></div>
 
 <div class="section-header">其他推荐</div>
 <div class="rec-cards">

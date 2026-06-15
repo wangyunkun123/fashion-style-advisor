@@ -268,12 +268,6 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
 
 /* Item rows */
-.item-list{{display:flex;flex-direction:column}}
-.item-row{{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f2f5f9}}
-.item-row:last-child{{border-bottom:none}}
-.item-emoji{{width:20px;height:20px;flex-shrink:0;color:var(--navy)}}
-.item-emoji svg{{width:100%;height:100%;display:block}}
-.item-cat{{font-size:11px;color:var(--muted);width:36px;flex-shrink:0;font-weight:500}}
 .item-id{{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0}}
 .item-name{{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}}
 

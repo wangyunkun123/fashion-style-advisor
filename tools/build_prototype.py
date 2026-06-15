@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build mobile-v2.html prototype with proper icons from icon library"""
-import re, os, json, time
+import re, os, json, time, random
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(BASE, '..')
@@ -265,8 +265,11 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-char-img{{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
-.h-expand-row{{display:flex;gap:12px;align-items:flex-start}}
-.h-expand-row .item-grid{{flex:1}}
+.h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
+.h-expand-row .item-grid{{flex:1;grid-template-columns:repeat(2,1fr)}}
+.h-char-img-lg{{width:140px;height:auto;max-height:200px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.item-row.clickable{{cursor:pointer;transition:background .15s;border-radius:4px;padding:4px}}
+.item-row.clickable:active{{background:#f0f4f8}}
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
@@ -374,6 +377,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 <script>
 function showImg(src){{document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('show')}}
+function showItemImg(el){{var t=el.dataset.thumb;if(t)showImg(t)}}
 var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
@@ -391,6 +395,17 @@ tabs_html = '\n'.join([
 ])
 
 # ── Build history cards ──
+def random_tags(style_name):
+    """Generate random style tags for testing"""
+    pools = [['日系','韩系','欧美','街头','复古','机能','简约','轻熟','运动','度假'],
+             ['City Boy','Clean Fit','Athleisure','Y2K','Gorpcore','Normcore'],
+             ['宽松廓形','低饱和','高对比','叠穿','单色系','撞色']]
+    import random
+    tags = []
+    for pool in pools:
+        tags.append(random.choice(pool))
+    return tags[:4]
+
 def gen_history_card(outfit, idx):
     items_html = ''
     cat_icons = {'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket',
@@ -400,20 +415,24 @@ def gen_history_card(outfit, idx):
         prefix = it['id'].split('-')[0]
         ico_key = cat_icons.get(prefix, 'tshirt')
         ico = item_icons.get(ico_key, '')
-        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(ico, it['id'], it['name'][:14])
-    # Style tags from style name
-    style_words = outfit['style'].replace('丨',' ').replace('｜',' ').split()
-    tags = [w for w in style_words if len(w)>=2][:4]
-    tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>' if tags else ''
+        thumb_attr = ''
+        if it.get('thumb'):
+            thumb_attr = ' data-thumb="{}"'.format(it['thumb'])
+        items_html += '<div class="item-row clickable"{} onclick="event.stopPropagation();showItemImg(this)"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(thumb_attr, ico, it['id'], it['name'][:14])
+    # Style tags
+    tags = random_tags(outfit['style'])
+    tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'
     rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
     # Character image
     img_tag = ''
     if outfit.get('char_img'):
         img_tag = '<img class="h-char-img" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(outfit['char_img'])
     else:
-        img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:24px">👔</div>'
-    # Layout: left image, right info
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="h-expand-row">{img}<div style="flex:1;min-width:0"><div class="fav-style">{style}{rating}</div>{tags}</div></div><div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{items}</div></div></div>'.format(img=img_tag, style=outfit['style'][:30], rating=rating_str, tags=tags_html, items=items_html)
+        img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:16px">暂无</div>'
+    # Expanded: left image, right items
+    expanded_html = '<div class="h-expand-row">{img}<div style="flex:1;min-width:0"><div class="fav-style" style="margin-bottom:8px">{style}{rating}</div><div class="item-grid">{items}</div></div></div>'.format(img=img_tag.replace('h-char-img','h-char-img-lg'), style=outfit['style'][:30], rating=rating_str, items=items_html)
+    # Collapsed: number + style + tags
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info"><div class="fav-style">{style}{rating}</div>{tags}</div><div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, style=outfit['style'][:30], rating=rating_str, tags=tags_html, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)

@@ -1253,3 +1253,11 @@ error: failed to push some refs to 'github.com:wangyunkun1
 [16:35:51] [INFO] 📤 已推送上线通知
 [16:37:17] [INFO] 💬 聊天: today | 
 [16:37:22] [INFO] 💬 聊天: favorites | 
+[00:09:04] [INFO] =======================================================
+[00:09:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:09:04] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:09:04] [INFO] 💬 面板: http://localhost:8765/
+[00:09:05] [INFO] 推送成功: 🟢 穿搭助手已上线
+[00:09:05] [INFO] 📤 已推送上线通知
+[00:09:16] [INFO] 💬 聊天: status | 
+[00:09:16] [INFO] 指令: status | 

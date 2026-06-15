@@ -136,7 +136,8 @@ body{
   transition:all .25s;-webkit-tap-highlight-color:transparent;
   min-width:56px;
 }
-.tab .t-icon{font-size:20px;line-height:1}
+.tab .t-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.tab .t-icon svg{width:100%;height:100%}
 .tab .t-label{font-size:10px;color:rgba(255,255,255,.55);font-weight:500;transition:color .25s}
 .tab.active{background:rgba(255,255,255,.15)}
 .tab.active .t-label{color:#fff;font-weight:600}
@@ -276,11 +277,11 @@ body{
 
 <!-- 悬浮 Tab Bar -->
 <div class="tab-bar" id="tab-bar">
-  <div class="tab active" data-page="recommend"><span class="t-icon">&#x1f455;</span><span class="t-label">推荐</span></div>
-  <div class="tab" data-page="explore"><span class="t-icon">&#x1f4a1;</span><span class="t-label">探索</span></div>
-  <div class="tab" data-page="wardrobe"><span class="t-icon">&#x1f3e0;</span><span class="t-label">衣橱</span></div>
-  <div class="tab" data-page="add"><span class="t-icon">&#x1f4f8;</span><span class="t-label">添加</span></div>
-  <div class="tab" data-page="profile"><span class="t-icon">&#x1f464;</span><span class="t-label">我的</span></div>
+  <div class="tab active" data-page="recommend"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div><span class="t-label">推荐</span></div>
+  <div class="tab" data-page="explore"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg></div><span class="t-label">探索</span></div>
+  <div class="tab" data-page="wardrobe"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></div><span class="t-label">衣橱</span></div>
+  <div class="tab" data-page="add"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg></div><span class="t-label">添加</span></div>
+  <div class="tab" data-page="profile"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="t-label">我的</span></div>
 </div>
 
 <script>

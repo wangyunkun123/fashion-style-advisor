@@ -1266,7 +1266,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             return
 
         # 静态文件（图片等）
-        fp = os.path.normpath(os.path.join(PROJECT_DIR, parsed.path.lstrip('/')))
+        from urllib.parse import unquote
+        fp = os.path.normpath(os.path.join(PROJECT_DIR, unquote(parsed.path.lstrip('/'))))
         if os.path.isfile(fp) and fp.startswith(PROJECT_DIR):
             ext = os.path.splitext(fp)[1].lower()
             mime = {'png':'image/png','jpg':'image/jpeg','jpeg':'image/jpeg','gif':'image/gif','svg':'image/svg+xml'}.get(ext,'application/octet-stream')

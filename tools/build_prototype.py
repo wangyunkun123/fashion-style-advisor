@@ -460,6 +460,8 @@ function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(functio
 function showLoading(msg){{var el=document.getElementById('loading-overlay');if(!el){{el=document.createElement('div');el.id='loading-overlay';el.innerHTML='<div style=\"text-align:center;padding:60px 20px\"><div class=\"loading-spinner\"></div><div id=\"loading-msg\" style=\"margin-top:16px;font-size:14px;color:var(--sub)\">'+msg+'</div></div>';var hero=document.querySelector('.hero-card');if(hero)hero.appendChild(el)}}else{{el.style.display='block';document.getElementById('loading-msg').textContent=msg}}}}
 function updateLoading(msg){{var el=document.getElementById('loading-msg');if(el)el.textContent=msg}}
 function hideLoading(){{var el=document.getElementById('loading-overlay');if(el)el.style.display='none'}}
+// Auto-load latest outfit
+(function(){{fetch('/api/today').then(r=>r.json()).then(function(d){{if(!d||d.empty)return;var hero=document.querySelector('.hero-card');if(!hero)return;var img=hero.querySelector('.hero-img img');var curImg=img.getAttribute('data-outfit');if(curImg===d.dir)return;img.src=d.img||'';img.setAttribute('data-outfit',d.dir);var st=hero.querySelector('.hero-style');if(st)st.textContent=d.style||'';var items=hero.querySelector('.item-grid');if(items&&d.items){{var icons={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(icons[p]||'👔')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+it.name.substring(0,18)+'</span></div>'}});items.innerHTML=h}}}})}})();
 </script>
 </body></html>'''
 

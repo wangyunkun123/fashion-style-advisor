@@ -861,7 +861,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .input-row input:focus{border-color:#8b7a64}
 .input-row button{width:44px;height:44px;background:#3a3028;color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 /* ── Tab Bar ── */
-.tab-bar{display:flex;justify-content:space-around;background:#fff;border-top:1px solid #e8e2da;padding:6px 0 4px}
+.tab-bar{display:flex;justify-content:space-around;background:#fff;border-top:1px solid #e8e2da;padding:8px 0 10px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;-webkit-tap-highlight-color:transparent;position:relative;transition:opacity .15s}
 .tab:active{opacity:.6}
 .tab .t-icon{font-size:22px;line-height:1.2}
@@ -928,11 +928,11 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <button id="sendBtn">▶</button>
 </div>
 <div class="tab-bar">
-<div class="tab" data-cmd="推荐穿搭"><span class="t-icon">🧠</span><span class="t-label">推荐</span></div>
-<div class="tab" id="tab-explore" onclick="showExploreMenu(event)"><span class="t-icon">🧪</span><span class="t-label">探索</span></div>
-<div class="tab" id="tab-wardrobe" onclick="toggleWardrobe()"><span class="t-icon">👔</span><span class="t-label">衣橱</span></div>
-<div class="tab" onclick="addClothes()"><span class="t-icon">➕</span><span class="t-label">添加</span></div>
-<div class="tab" id="tab-settings" onclick="showSettingsMenu(event)"><span class="t-icon">⚙️</span><span class="t-label">设置</span></div>
+<div class="tab" data-cmd="推荐穿搭"><span class="t-icon">👕</span><span class="t-label">推荐</span></div>
+<div class="tab" id="tab-explore" onclick="showExploreMenu(event)"><span class="t-icon">💡</span><span class="t-label">探索</span></div>
+<div class="tab" id="tab-wardrobe" onclick="toggleWardrobe()"><span class="t-icon">🏠</span><span class="t-label">衣橱</span></div>
+<div class="tab" onclick="addClothes()"><span class="t-icon">📸</span><span class="t-label">添加</span></div>
+<div class="tab" id="tab-settings" onclick="showSettingsMenu(event)"><span class="t-icon">👤</span><span class="t-label">我的</span></div>
 </div>
 </div>
 </div>

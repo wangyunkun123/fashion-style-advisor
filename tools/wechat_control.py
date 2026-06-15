@@ -221,13 +221,15 @@ def get_github_raw_url(file_path):
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}?t={cache_buster}"
 
 def find_latest_composite(date_str=None):
-    """找到最新生成的排版合成图（优先当日，按文件修改时间）"""
+    """找到最新生成的排版合成图（严格限定当日，不跨 outfit 兜底）"""
     outfit_base = os.path.join(PROJECT_DIR, 'outfits')
     today = date_str or time.strftime('%Y-%m-%d')
     candidates = []
     for d in os.listdir(outfit_base):
         dp = os.path.join(outfit_base, d)
         if not os.path.isdir(dp) or d.startswith('.'):
+            continue
+        if not d.startswith(today):
             continue
         for root, _, files in os.walk(dp):
             for f in files:
@@ -236,14 +238,7 @@ def find_latest_composite(date_str=None):
                     candidates.append(fp)
     if not candidates:
         return None
-    # 优先当日合成图
-    today_candidates = [c for c in candidates if today in c]
-    if today_candidates:
-        today_candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-        return today_candidates[0]
-    # 兜底：全局最新（但打印警告）
     candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-    log(f"⚠️ 未找到当日排版图，使用最近期: {os.path.basename(candidates[0])}", "WARN")
     return candidates[0]
 
 def get_banned_items():
@@ -273,6 +268,39 @@ def get_banned_items():
         except:
             pass
     return list(set(banned))
+
+
+def get_recent_outfit_items(limit=3):
+    """获取最近 N 套穿搭中已使用的核心单品 ID（去重），用于避免重复推荐"""
+    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
+    today = time.strftime('%Y-%m-%d')
+    recent = []  # [(date_label, [core_ids]), ...]
+    for d in sorted(os.listdir(outfit_base), reverse=True):
+        dp = os.path.join(outfit_base, d)
+        if not os.path.isdir(dp) or d.startswith('.'):
+            continue
+        if d.startswith(today):
+            continue  # 跳过今天的
+        md = os.path.join(dp, 'outfit.md')
+        if not os.path.exists(md):
+            continue
+        try:
+            with open(md, 'r') as f:
+                content = f.read()
+            ids = list(set(re.findall(
+                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                content
+            )))
+            # 只关注核心品类（上衣/下装/鞋子）
+            core = [i for i in ids if i.startswith(('TS-', 'LS-', 'TANK-', 'SHIRT-', 'JK-', 'SH-', 'PT-', 'SHOE-'))]
+            if core:
+                recent.append((d, core))
+        except:
+            pass
+        if len(recent) >= limit:
+            break
+    return recent
+
 
 CAT_EMOJI = {
     '上衣': '👕', '内搭': '👕', 'T恤': '👕', '短袖': '👕', '长袖': '👕',
@@ -567,7 +595,7 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
 
 要求：
 1. 仔细分析场景需求（运动/休闲/通勤/约会等）
-2. 尽量避开用户最近已使用的单品，避免连续重复
+2. **避开最近已穿单品**：prompt 中会列出 📌 最近已穿的核心单品，必须至少换掉上衣/下装/鞋子中的两件，给出有新鲜感的搭配
 3. 所有单品 ID 必须从上方衣柜清单中选取，严禁编造不存在的 ID
 4. 考虑颜色搭配、风格统一、体型修饰
 5. 输出严格的 JSON 格式，不要包含任何其他文字
@@ -632,11 +660,21 @@ def run_pipeline(style_hint, task_id=None):
         banned_str = '、'.join(banned_items)
         ban_section = f'\n🚫 一星差评禁用单品（严禁使用以下ID）: {banned_str}\n'
 
+    # 获取最近已穿单品，避免重复推荐
+    recent_outfits = get_recent_outfit_items(limit=3)
+    recent_section = ''
+    if recent_outfits:
+        recent_lines = []
+        for dir_name, ids in recent_outfits:
+            label = dir_name.split('_', 1)[-1] if '_' in dir_name else dir_name[:10]
+            recent_lines.append(f"  {label}: {'、'.join(ids)}")
+        if recent_lines:
+            recent_section = '\n📌 最近已穿（请避开这些核心单品，至少换掉上衣/下装/鞋子中的两件）:\n' + '\n'.join(recent_lines) + '\n'
+
     user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
 
-为「{style_hint}」推荐一套穿搭。{ban_section}
+为「{style_hint}」推荐一套穿搭。{ban_section}{recent_section}
 ⚠️ 上衣、下装、鞋子三者缺一不可，每项必须从下方衣柜表格中选取真实的单品ID。
-⚠️ 所有未禁用的单品均可自由选用。同一单品可以出现在不同风格的穿搭中——复用是正常且期望的行为。
 ⚠️ 永远不要输出 UNAVAILABLE 作为ID。表格里每个ID都可用。
 
 以下是完整衣柜档案：

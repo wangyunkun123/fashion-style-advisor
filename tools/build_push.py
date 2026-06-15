@@ -499,9 +499,13 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             print(f"  [B线] 生图管线异常: {e}")
             parts.append(f"🧪 本次风格实验围绕核心单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
     else:
-        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
-        if not ai_paths:
-            ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
+        ai_paths = []
+        for img_dir in ['上身效果', '豆包生图']:
+            ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*方案1.jpg')))
+            if not ai_paths:
+                ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*.jpg')))
+            if ai_paths:
+                break
         if ai_paths:
             rel = os.path.relpath(ai_paths[0], PROJ_DIR)
             parts.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
@@ -581,8 +585,16 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     swatch_img_url = None
     try:
         from PIL import Image, ImageDraw
-        cache_file = os.path.join(outfit_dir, '上身效果', '.color_cache.json')
-        if os.path.exists(cache_file):
+        # 搜索多个可能目录（composite_v2 可能输出到上身效果/ 或 豆包生图/）
+        cache_file = None
+        img_subdir = '上身效果'  # 默认
+        for sub in ['上身效果', '豆包生图']:
+            candidate = os.path.join(outfit_dir, sub, '.color_cache.json')
+            if os.path.exists(candidate):
+                cache_file = candidate
+                img_subdir = sub
+                break
+        if cache_file:
             with open(cache_file) as f:
                 colors = [tuple(c) for c in json.load(f)]
             if colors:
@@ -595,7 +607,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
                 for i, rgb in enumerate(colors[:5]):
                     x = BORDER + i*(SZ+GAP)
                     draw.rectangle([x, BORDER, x+SZ-1, BORDER+SZ-1], fill=rgb, outline=(255,255,255), width=1)
-                swatch_path = os.path.join(outfit_dir, '上身效果', '_swatches.png')
+                swatch_path = os.path.join(outfit_dir, img_subdir, '_swatches.png')
                 strip.save(swatch_path, 'PNG')
                 rel = os.path.relpath(swatch_path, PROJ_DIR)
                 import subprocess as _sp
@@ -676,7 +688,14 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
 
 def save_push_cache(outfit_dir, content, style_name, outfit_name):
     """将推送内容写入缓存文件，供控制台同步显示"""
-    cache_file = os.path.join(outfit_dir, '上身效果', '.push_cache.json')
+    # 优先存在已生成的图片目录旁，兜底存 outfit 根目录
+    for sub in ['上身效果', '豆包生图']:
+        candidate = os.path.join(outfit_dir, sub)
+        if os.path.isdir(candidate):
+            cache_file = os.path.join(candidate, '.push_cache.json')
+            break
+    else:
+        cache_file = os.path.join(outfit_dir, '.push_cache.json')
     os.makedirs(os.path.dirname(cache_file), exist_ok=True)
     with open(cache_file, 'w') as f:
         json.dump({
@@ -729,10 +748,14 @@ def build_simple(outfit_dir):
     lines = [f"👔 {outfit_name}", f"📅 {data.get('date','')}"]
     if data.get('weather'):
         lines.append(f"🌤 {data['weather']}")
-    # 效果图（放在单品清单前面）
-    ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
-    if not ai_paths:
-        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
+    # 效果图（放在单品清单前面，搜索多个可能目录）
+    ai_paths = []
+    for img_dir in ['上身效果', '豆包生图']:
+        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*方案1.jpg')))
+        if not ai_paths:
+            ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*.jpg')))
+        if ai_paths:
+            break
     if ai_paths:
         rel = os.path.relpath(ai_paths[0], PROJ_DIR)
         lines.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")

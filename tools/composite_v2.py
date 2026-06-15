@@ -138,10 +138,16 @@ def parse(d):
     return items
 
 def find_ai(d):
-    for sub in ['generated','上身效果']:
+    for sub in ['generated','上身效果','豆包生图']:
         sd=os.path.join(d,sub)
         if not os.path.exists(sd): continue
-        for f in sorted(os.listdir(sd)):
+        files = sorted(os.listdir(sd))
+        # 豆包生图目录优先匹配人物图（人物_xxx.jpg），避免误取单品图
+        if sub == '豆包生图':
+            for f in files:
+                if f.startswith('人物') and f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.'):
+                    return os.path.join(sd, f)
+        for f in files:
             if f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.') and not f.startswith('_'): return os.path.join(sd,f)
 
 def find_img(dd,item):

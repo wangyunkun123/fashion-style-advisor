@@ -263,6 +263,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .fav-card.expanded .fav-arrow{{transform:rotate(180deg)}}
 .fav-card.filtered{{display:none}}
 .h-char-img{{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-thumb-sm{{width:42px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;margin-left:8px}}
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
@@ -273,7 +274,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
 .h-square-grid .item-emoji{{width:24px;height:24px}}
 .h-square-grid .item-id{{font-size:8px}}
-.h-square-grid .item-name{{font-size:9px;text-align:center;white-space:normal}}
+.h-square-grid .item-name{{font-size:8px;text-align:center;white-space:normal;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
 .h-square-grid .item-row.showing-img .item-emoji,.h-square-grid .item-row.showing-img .item-id,.h-square-grid .item-row.showing-img .item-name{{display:none}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
@@ -441,8 +442,12 @@ def gen_history_card(outfit, idx):
         img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:16px">暂无</div>'
     # Expanded: left image, right 2x4 square grid
     expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>'.format(img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html)
-    # Collapsed: number + style + tags
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info"><div class="fav-style">{style}{rating}</div>{tags}</div><div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, style=outfit['style'][:30], rating=rating_str, tags=tags_html, expanded=expanded_html)
+    # Small thumbnail for collapsed state
+    thumb_small = ''
+    if outfit.get('char_img'):
+        thumb_small = '<img class="h-thumb-sm" src="{}" loading="lazy">'.format(outfit['char_img'])
+    # Collapsed: number + style + tags + small thumbnail
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info"><div class="fav-style">{style}{rating}</div>{tags}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, style=outfit['style'][:30], rating=rating_str, tags=tags_html, thumb=thumb_small, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)

@@ -337,6 +337,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-square-grid .item-name{{font-size:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
 .h-square-grid .item-row.expanded{{grid-row:span 2;padding:3px;z-index:2}}
 .h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .item-name{{display:none}}
+.h-square-grid .item-row.expanded .item-img{{display:block}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px}}

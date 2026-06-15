@@ -266,10 +266,17 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
-.h-expand-row .item-grid{{flex:1;grid-template-columns:repeat(2,1fr)}}
 .h-char-img-lg{{width:140px;height:auto;max-height:200px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
-.item-row.clickable{{cursor:pointer;transition:background .15s;border-radius:4px;padding:4px}}
-.item-row.clickable:active{{background:#f0f4f8}}
+/* 2x4 square grid */
+.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-content:start}}
+.h-square-grid .item-row{{flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:70px;cursor:pointer;position:relative;overflow:hidden}}
+.h-square-grid .item-row.clickable:active{{background:#eef2f7}}
+.h-square-grid .item-emoji{{width:24px;height:24px}}
+.h-square-grid .item-id{{font-size:8px}}
+.h-square-grid .item-name{{font-size:9px;text-align:center;white-space:normal}}
+.h-square-grid .item-row.showing-img .item-emoji,.h-square-grid .item-row.showing-img .item-id,.h-square-grid .item-row.showing-img .item-name{{display:none}}
+.h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
+.h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
@@ -418,7 +425,10 @@ def gen_history_card(outfit, idx):
         thumb_attr = ''
         if it.get('thumb'):
             thumb_attr = ' data-thumb="{}"'.format(it['thumb'])
-        items_html += '<div class="item-row clickable"{} onclick="event.stopPropagation();showItemImg(this)"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(thumb_attr, ico, it['id'], it['name'][:14])
+        img_html = ''
+        if it.get('thumb'):
+            img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:10], img_html)
     # Style tags
     tags = random_tags(outfit['style'])
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'
@@ -429,8 +439,8 @@ def gen_history_card(outfit, idx):
         img_tag = '<img class="h-char-img" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(outfit['char_img'])
     else:
         img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:16px">暂无</div>'
-    # Expanded: left image, right items
-    expanded_html = '<div class="h-expand-row">{img}<div style="flex:1;min-width:0"><div class="fav-style" style="margin-bottom:8px">{style}{rating}</div><div class="item-grid">{items}</div></div></div>'.format(img=img_tag.replace('h-char-img','h-char-img-lg'), style=outfit['style'][:30], rating=rating_str, items=items_html)
+    # Expanded: left image, right 2x4 square grid
+    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>'.format(img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html)
     # Collapsed: number + style + tags
     return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info"><div class="fav-style">{style}{rating}</div>{tags}</div><div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, style=outfit['style'][:30], rating=rating_str, tags=tags_html, expanded=expanded_html)
 

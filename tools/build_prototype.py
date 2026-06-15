@@ -262,7 +262,11 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .fav-card .fav-arrow{{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}}
 .fav-card.expanded .fav-arrow{{transform:rotate(180deg)}}
 .fav-card.filtered{{display:none}}
-.h-char-img{{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-char-img{{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
+.h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
+.h-expand-row{{display:flex;gap:12px;align-items:flex-start}}
+.h-expand-row .item-grid{{flex:1}}
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
@@ -396,21 +400,20 @@ def gen_history_card(outfit, idx):
         prefix = it['id'].split('-')[0]
         ico_key = cat_icons.get(prefix, 'tshirt')
         ico = item_icons.get(ico_key, '')
-        thumb_html = ''
-        if it.get('thumb'):
-            thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(it['thumb'])
-        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:14], thumb_html)
-    items_preview = '、'.join([it['id'] for it in outfit['items'][:4]])
+        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(ico, it['id'], it['name'][:14])
+    # Style tags from style name
+    style_words = outfit['style'].replace('丨',' ').replace('｜',' ').split()
+    tags = [w for w in style_words if len(w)>=2][:4]
+    tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>' if tags else ''
     rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
-    # Weather line
-    weather_line = outfit['date']
-    if outfit['temp']: weather_line += ' · ' + outfit['temp']
-    if outfit['uv']: weather_line += ' · 紫外线 ' + outfit['uv']
-    # Character image thumbnail
+    # Character image
     img_tag = ''
     if outfit.get('char_img'):
         img_tag = '<img class="h-char-img" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(outfit['char_img'])
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{}</div><div class="fav-info"><div class="fav-style">{}{}</div><div class="fav-meta">{}</div></div>{}<div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{}</div></div></div>'.format(idx, outfit['style'][:30], rating_str, weather_line, img_tag, items_html)
+    else:
+        img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:24px">👔</div>'
+    # Layout: left image, right info
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="h-expand-row">{img}<div style="flex:1;min-width:0"><div class="fav-style">{style}{rating}</div>{tags}</div></div><div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{items}</div></div></div>'.format(img=img_tag, style=outfit['style'][:30], rating=rating_str, tags=tags_html, items=items_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)

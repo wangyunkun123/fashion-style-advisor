@@ -108,6 +108,13 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .page-input input:focus{border-color:var(--accent)}
 .page-input button{width:44px;height:44px;background:var(--accent);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0}
 
+/* ── 底部操作按钮 ── */
+.page-actions{flex-shrink:0;background:var(--card);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:10px}
+.btn-primary{flex:1;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:22px;font-size:15px;font-weight:600;cursor:pointer}
+.btn-primary:active{opacity:.8}
+.btn-secondary{flex:1;padding:12px;background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:22px;font-size:15px;cursor:pointer}
+.btn-secondary:active{background:#ebe5dc}
+
 /* ── 衣橱卡片 ── */
 .stat-row{display:flex;gap:8px;margin-bottom:8px}
 .stat-box{flex:1;background:var(--bg);border-radius:10px;padding:12px;text-align:center}
@@ -239,6 +246,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
     <div class="subtab active" data-sub="daily">日常穿搭</div>
     <div class="subtab" data-sub="change">改变自己</div>
     <div class="subtab" data-sub="bold">大胆跨界</div>
+    <div class="subtab" data-sub="circle">时尚圈子</div>
   </div>
   <div class="subpage active" id="sub-daily">
     <div class="placeholder"><div class="ph-icon">🧪</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div>
@@ -248,6 +256,9 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
   </div>
   <div class="subpage" id="sub-bold" style="display:none">
     <div class="placeholder"><div class="ph-icon">🚀</div><div class="ph-text">大胆跨界<br>完全不同的风格<br>给你惊喜的搭配</div></div>
+  </div>
+  <div class="subpage" id="sub-circle" style="display:none">
+    <div class="placeholder"><div class="ph-icon">🌐</div><div class="ph-text">时尚圈子<br>风格百科 · 趋势发现 · 品牌故事<br><span style="font-size:11px">即将上线，敬请期待</span></div></div>
   </div>
   <div class="page-input">
     <input type="text" placeholder="描述你想尝试的风格…">
@@ -304,6 +315,10 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
   </div>
   <div class="subpage" id="sub-upload" style="display:none">
     <div class="placeholder" style="padding:60px 20px"><div class="ph-icon">📤</div><div class="ph-text">上传衣服图片<br>从相册选择图片<br>AI 自动分析并生成标签</div></div>
+  </div>
+  <div class="page-actions" id="add-actions">
+    <button class="btn-secondary">取消重选</button>
+    <button class="btn-primary">确认分析</button>
   </div>
 </div>
 

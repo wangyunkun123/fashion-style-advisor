@@ -1,9 +1,66 @@
 #!/usr/bin/env python3
 """Build mobile-v2.html prototype with proper icons from icon library"""
-import re, os
+import re, os, json, time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(BASE, '..')
+OUTFITS_DIR = os.path.join(PROJ, 'outfits')
+
+def scan_outfits(date_filter=None, rating_filter=None, limit=20):
+    """Scan outfits directory, return list of outfit dicts"""
+    results = []
+    for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
+        dp = os.path.join(OUTFITS_DIR, d)
+        if not os.path.isdir(dp) or d.startswith('.') or d.startswith('_'):
+            continue
+        md_path = os.path.join(dp, 'outfit.md')
+        if not os.path.exists(md_path):
+            continue
+        date_str = d[:10]
+        if date_filter and date_str != date_filter:
+            continue
+        # Rating check
+        rating = None
+        rp = os.path.join(dp, 'rating.json')
+        if os.path.exists(rp):
+            try:
+                with open(rp) as f:
+                    rating = json.load(f).get('rating')
+            except: pass
+        if rating_filter is not None:
+            if rating != rating_filter: continue
+
+        with open(md_path) as f: content = f.read()
+        # Extract items
+        items = []
+        in_table = False
+        for line in content.split('\n'):
+            s = line.strip()
+            if '单品清单' in s: in_table = True; continue
+            if in_table and s.startswith('##'): break
+            if not in_table or not s.startswith('|') or '---' in s: continue
+            cells = [c.strip().replace('**','') for c in s.split('|')]
+            if len(cells) < 4: continue
+            if re.match(r'^[A-Z]+-\d+', cells[2]):
+                items.append({'id': cells[2], 'name': cells[3], 'cat': cells[1] if len(cells)>1 else ''})
+        style = ''
+        for line in content.split('\n'):
+            if 'style:' in line.lower():
+                m = re.search(r'[：:]\s*(.+)', line)
+                if m: style = m.group(1).strip()[:40]; break
+        scene = d.split('_',1)[-1] if '_' in d else style
+        # Check for images
+        has_img = False
+        for sub in ['豆包生图','上身效果']:
+            sd = os.path.join(dp, sub)
+            if os.path.exists(sd):
+                for f in os.listdir(sd):
+                    if f.endswith('.jpg') or f.endswith('.png'):
+                        has_img = True; break
+            if has_img: break
+        results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'has_img': has_img})
+        if len(results) >= limit: break
+    return results
 
 # ── Load Clothing-Icons ──
 with open(os.path.join(PROJ, 'node_modules/clothing-icons/dist/index.js')) as f:
@@ -168,11 +225,18 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 /* Favorites */
 .fav-list{{display:flex;flex-direction:column;gap:8px}}
-.fav-card{{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04)}}
+.fav-card{{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);cursor:pointer;flex-wrap:wrap}}
+.fav-card.expanded{{flex-direction:column;align-items:stretch}}
 .fav-num{{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}}
 .fav-info{{flex:1;min-width:0}}
 .fav-style{{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}}
 .fav-meta{{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.fav-expand{{display:none}}
+.fav-card.expanded .fav-expand{{display:block;width:100%;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}}
+.fav-expand .item-grid{{margin-bottom:0}}
+.fav-card .fav-arrow{{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}}
+.fav-card.expanded .fav-arrow{{transform:rotate(180deg)}}
+.fav-card.filtered{{display:none}}
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
@@ -220,18 +284,13 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 <!-- 历史推荐 -->
 <div class="subpage" id="sub-history" style="display:none;flex-direction:column;flex:1;overflow:hidden">
-<div class="scroll-area">
-<div class="section-header" style="margin-top:4px">今日全部</div>
-<div class="fav-list" style="margin-bottom:16px">
-<div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">清爽雾天城市休闲</div><div class="fav-meta">TS-011、SH-004、SHOE-005、HAT-004…</div></div></div>
-<div class="fav-card"><div class="fav-num">2</div><div class="fav-info"><div class="fav-style">夏日度假休闲</div><div class="fav-meta">TS-008、SH-008、SHOE-002</div></div></div>
-</div>
+<div class="scroll-area" id="history-scroll">
+<div class="section-header" style="margin-top:4px">今日穿搭</div>
+<div class="fav-list" id="today-list" style="margin-bottom:16px">{today_cards}</div>
 <div class="section-header">历史最爱</div>
-<div class="fav-list" style="margin-bottom:16px">
-<div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">打网球穿搭</div><div class="fav-meta">2026-06-14 · TS-009、SH-005、SHOE-005</div></div></div>
+<div class="fav-list" id="fav-list" style="margin-bottom:16px">{fav_cards}</div>
 </div>
-</div>
-<div class="page-bottom"><input type="text" placeholder="搜索历史推荐..."></div>
+<div class="page-bottom"><input type="text" id="history-search" placeholder="搜索历史推荐..." oninput="filterHistory()"></div>
 </div>
 </div>
 
@@ -288,6 +347,7 @@ function showImg(src){{document.getElementById('lightbox-img').src=src;document.
 var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
+function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
 </script>
 </body></html>'''
 
@@ -299,6 +359,28 @@ tabs_html = '\n'.join([
     tab_btn('add', '添加'),
     tab_btn('me', '我的'),
 ])
+
+# ── Build history cards ──
+def gen_history_card(outfit, idx):
+    items_html = ''
+    cat_icons = {'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket',
+                 'PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag',
+                 'SOCK':'sock','SUN':'sun','ACC':'acc'}
+    for it in outfit['items'][:8]:
+        prefix = it['id'].split('-')[0]
+        ico_key = cat_icons.get(prefix, 'tshirt')
+        ico = item_icons.get(ico_key, '')
+        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(ico, it['id'], it['name'][:16])
+    items_preview = '、'.join([it['id'] for it in outfit['items'][:4]])
+    rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{}</div><div class="fav-info"><div class="fav-style">{}{}</div><div class="fav-meta">{} · {}</div></div><div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{}</div></div></div>'.format(idx, outfit['style'][:30], rating_str, outfit['date'], items_preview, items_html)
+
+today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
+fav_outfits = scan_outfits(rating_filter=3, limit=10)
+today_cards = '\n'.join([gen_history_card(o, i+1) for i, o in enumerate(today_outfits)])
+fav_cards = '\n'.join([gen_history_card(o, i+1) for i, o in enumerate(fav_outfits)])
+if not today_cards: today_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">今日暂无推荐</div>'
+if not fav_cards: fav_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">暂无三星好评 · 给穿搭点 ⭐⭐⭐ 后会出现在这里</div>'
 
 card1 = mini_card('夏日度假休闲', ['TS-008 椰树印花短袖', 'SH-008 亚麻短裤', 'SHOE-002 复古训练鞋', 'HAT-004 棒球帽', 'SOCK-005 船袜'])
 card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落肩T恤', 'SHOE-005 网球鞋', 'SH-004 休闲短裤', 'SOCK-005 船袜'])
@@ -314,6 +396,8 @@ html = html.format(
     item_sun_summer=item_row(item_icons['sun'], '墨镜', 'SUN-002', '经典方形墨镜', '../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SUN-002_Image_20260610_0845_19_011_cutout.png'),
     item_sock_summer=item_row(item_icons['sock'], '袜子', 'SOCK-005', '基础船袜', '../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SOCK-005_Image_20260610_0807_09_360_cutout.png'),
     item_acc_summer=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 回环尼龙表带', '../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
+    today_cards=today_cards,
+    fav_cards=fav_cards,
     card1=card1,
     card2=card2,
 )

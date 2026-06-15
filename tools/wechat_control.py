@@ -855,15 +855,24 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .msg .bar{height:3px;background:#e0d8d0;border-radius:2px;margin-top:8px;overflow:hidden}
 .msg .bar div{height:100%;background:linear-gradient(90deg,#3a3028,#8b7a64);border-radius:2px;animation:progress 2s ease-in-out infinite;width:40%}
 .msg.error{border-color:#e8c0c0;background:#fff5f5}
-.input-bar{flex-shrink:0;background:#fff;border-top:1px solid #e0d8d0;padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:7px 14px;border:1px solid #d0c8bc;border-radius:16px;background:#fdfbf8;color:#5c4d3c;font-size:13px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-.chip:active{background:#f0ebe0;border-color:#b8a88c}
-.input-row{display:flex;gap:8px}
+.input-bar{flex-shrink:0;background:#fff;border-top:1px solid #e0d8d0;padding:0;padding-bottom:env(safe-area-inset-bottom)}
+.input-row{display:flex;gap:8px;padding:8px 12px}
 .input-row input{flex:1;padding:11px 14px;border:1px solid #d0c8bc;border-radius:20px;font-size:15px;background:#f8f6f3;outline:none;-webkit-appearance:none}
 .input-row input:focus{border-color:#8b7a64}
 .input-row button{width:44px;height:44px;background:#3a3028;color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+/* ── Tab Bar ── */
+.tab-bar{display:flex;justify-content:space-around;background:#fff;border-top:1px solid #e8e2da;padding:6px 0 4px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;-webkit-tap-highlight-color:transparent;position:relative;transition:opacity .15s}
+.tab:active{opacity:.6}
+.tab .t-icon{font-size:22px;line-height:1.2}
+.tab .t-label{font-size:10px;color:#8b7a64;font-weight:500;letter-spacing:.5px}
+.tab.active .t-label{color:#3a3028;font-weight:700}
+/* ── 子菜单 ── */
+.submenu{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #d0c8bc;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px 0;z-index:10;min-width:120px;animation:fadeIn .15s}
+.submenu-item{padding:10px 18px;font-size:14px;white-space:nowrap;cursor:pointer;color:#3a3028}
+.submenu-item:active{background:#f5f0eb}
+.submenu-item+.submenu-item{border-top:1px solid #f0ece6}
+.submenu-mask{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes progress{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
@@ -914,19 +923,16 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <div id="wardrobe-content"><div class="w-loading">加载中...</div></div>
 </div>
 <div class="input-bar">
-<div class="chips" id="chips">
-<span class="chip" data-cmd="推荐穿搭">🧠 推荐</span>
-<span class="chip" data-cmd="生成效果图">🎨 生成</span>
-<span class="chip" data-cmd="同步">📤 同步</span>
-<span class="chip" data-cmd="状态">📊 状态</span>
-<span class="chip" data-cmd="帮助">❓ 帮助</span>
-<span class="chip" data-cmd="探索 日系" style="background:#e8f5e9;color:#2e7d32;">🧪 探索</span>
-<span class="chip" data-cmd="大胆 混搭" style="background:#fff3e0;color:#e65100;">🚀 大胆</span>
-<span class="chip" data-cmd="衣橱" style="background:#f3e5f5;color:#7b1fa2;">👔 衣橱</span>
-</div>
 <div class="input-row">
-<input type="text" id="input" placeholder="输入指令…如：生成 日系休闲 | 探索 街头 | 大胆 混搭" autocomplete="off" enterkeyhint="send">
+<input type="text" id="input" placeholder="输入穿搭需求…" autocomplete="off" enterkeyhint="send">
 <button id="sendBtn">▶</button>
+</div>
+<div class="tab-bar">
+<div class="tab" data-cmd="推荐穿搭"><span class="t-icon">🧠</span><span class="t-label">推荐</span></div>
+<div class="tab" id="tab-explore" onclick="showExploreMenu(event)"><span class="t-icon">🧪</span><span class="t-label">探索</span></div>
+<div class="tab" id="tab-wardrobe" onclick="toggleWardrobe()"><span class="t-icon">👔</span><span class="t-label">衣橱</span></div>
+<div class="tab" onclick="addClothes()"><span class="t-icon">➕</span><span class="t-label">添加</span></div>
+<div class="tab" id="tab-settings" onclick="showSettingsMenu(event)"><span class="t-icon">⚙️</span><span class="t-label">设置</span></div>
 </div>
 </div>
 </div>
@@ -976,12 +982,55 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 document.getElementById('sendBtn').onclick=send;
 input.addEventListener('keydown',function(e){if(e.key==='Enter')send()});
-document.getElementById('chips').addEventListener('click',function(e){
-var c=e.target.closest('.chip');if(c){input.value=c.dataset.cmd;send()}
+
+// ── Tab Bar 点击 ──
+document.querySelector('.tab-bar').addEventListener('click',function(e){
+var c=e.target.closest('.tab');if(!c)return;
+var cmd=c.dataset.cmd;
+if(cmd){input.value=cmd;send();c.blur()}
 });
 
+// ── 探索子菜单 ──
+function showExploreMenu(e){
+e.stopPropagation();
+var btn=e.currentTarget;
+var old=document.querySelector('.submenu');if(old)old.remove();
+var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
+var m=document.createElement('div');m.className='submenu';
+m.innerHTML='<div class="submenu-item" data-cmd="探索 日系">🧪 微调探索</div><div class="submenu-item" data-cmd="大胆 混搭">🚀 大胆混搭</div>';
+btn.appendChild(m);
+var maskEl=document.createElement('div');maskEl.className='submenu-mask';
+maskEl.onclick=function(){m.remove();maskEl.remove()};
+document.body.appendChild(maskEl);
+m.querySelectorAll('.submenu-item').forEach(function(it){
+it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
+});
+}
+
+// ── 设置子菜单 ──
+function showSettingsMenu(e){
+e.stopPropagation();
+var btn=e.currentTarget;
+var old=document.querySelector('.submenu');if(old)old.remove();
+var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
+var m=document.createElement('div');m.className='submenu';
+m.innerHTML='<div class="submenu-item" data-cmd="同步">📤 同步GitHub</div><div class="submenu-item" data-cmd="状态">📊 项目状态</div><div class="submenu-item" data-cmd="帮助">❓ 使用帮助</div>';
+btn.appendChild(m);
+var maskEl=document.createElement('div');maskEl.className='submenu-mask';
+maskEl.onclick=function(){m.remove();maskEl.remove()};
+document.body.appendChild(maskEl);
+m.querySelectorAll('.submenu-item').forEach(function(it){
+it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
+});
+}
+
+// ── 添加新衣服 ──
+function addClothes(){
+addMsg('assistant','➕ <b>添加新衣服</b><br><br>流程：<br>1. 把衣服图片放入 <code>wardrobe/</code> 目录<br>2. 在此输入 <b>添加新衣服</b> 触发入库<br>3. AI 自动：视觉识别 → 网络搜索品牌 → 生成标签<br><br>⚠️ 请先在电脑端操作');
+}
+
 // 欢迎消息
-addMsg('assistant','👋 你好！我是穿搭助手<br><br>试试输入:<br>• <b>推荐穿搭</b> — AI推荐+生图<br>• <b>生成 日系休闲</b> — 完整流程<br>• <b>状态</b> — 查看项目状态<br>• <b>同步</b> — 推送GitHub');
+addMsg('assistant','👋 你好！我是穿搭助手<br><br>点击底部 <b>推荐</b> 获取今日穿搭<br>点击 <b>衣橱</b> 查看衣柜分析<br>或直接在输入框描述需求…');
 
 // ── 历史栏 ──
 var historyPanel=document.getElementById('history-panel');

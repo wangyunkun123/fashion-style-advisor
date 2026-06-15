@@ -326,7 +326,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
-.h-char-img-lg{{width:150px;height:240px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-char-img-lg{{width:170px;height:260px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
 .h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-content:start}}
 .h-square-grid .item-row{{flex-direction:column;align-items:flex-start;gap:3px;padding:6px 6px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
@@ -354,22 +354,21 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493.jpg" alt=""></div>
+<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png" alt=""></div>
 <div class="hero-body">
-<div class="style-tags"><span>夏日度假</span><span>城市休闲</span><span>藏青印花</span><span>日系City Boy</span></div>
-<div class="hero-style">夏日度假休闲</div>
-<div class="hero-meta">2026/06/15 · 晴 · 22~34&deg;C · 紫外线 强</div>
+<div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
+<div class="hero-style">清爽专业网球运动风</div>
+<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
 <div class="item-list">
-{item_tshirt_summer}
-{item_pants_summer}
-{item_shoe_summer}
-{item_hat_summer}
-{item_bag_summer}
-{item_sun_summer}
-{item_sock_summer}
-{item_acc_summer}
+{item_tshirt_tennis}
+{item_pants_tennis}
+{item_shoe_tennis}
+{item_hat_tennis}
+{item_bag_tennis}
+{item_sock_tennis}
+{item_acc_tennis}
 </div>
-<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#1a2a4a"></span><span class="pal-dot" style="background:#b8a898"></span><span class="pal-dot" style="background:#f5f0e8"></span><span class="pal-dot" style="background:#2a2a2a"></span><span class="pal-dot" style="background:#c0c0c0"></span></div>
+<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
 </div></div>
 
 <div class="section-header">其他推荐</div>
@@ -552,6 +551,14 @@ card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落�
 
 html = html.format(
     tabs=tabs_html,
+    # Tennis outfit items (for homepage)
+    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon 运动短袖', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png'),
+    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球短裤', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png'),
+    item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike 网球鞋', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-005_Image_20260610_0848_30_512_cutout.png'),
+    item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-004_Image_20260610_0810_53_039_cutout.png'),
+    item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 网球桶包', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-007_Image_20260610_1043_55_563%20%E6%8B%B7%E8%B4%9D_cutout.png'),
+    item_sock_tennis=item_row(item_icons['sock'], '袜子', 'SOCK-006', '防滑底短袜', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png'),
+    item_acc_tennis=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 黑色运动', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     # Summer outfit items
     item_tshirt_summer=item_row(item_icons['tshirt'], '上衣', 'TS-008', 'FUR SPEED 椰树印花短袖', '../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/TS-008_Image_20260610_0820_55_793_cutout.png'),
     item_pants_summer=item_row(item_icons['pants'], '下装', 'SH-008', '亚麻西装短裤', '../outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SH-008_Image_20260610_0839_33_059_cutout.png'),

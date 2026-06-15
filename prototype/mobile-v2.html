@@ -75,12 +75,19 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .search-box input:focus{border-color:var(--accent)}
 
 /* ── 迷你推荐卡 ── */
-.mini-cards{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.mini-cards::-webkit-scrollbar{display:none}
-.mini-card{flex-shrink:0;width:130px;background:var(--card);border-radius:10px;padding:12px;box-shadow:0 1px 6px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;border:1px solid var(--border)}
-.mini-card:active{transform:scale(.96);background:#faf8f5}
-.mini-card .mc-style{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-.mini-card .mc-item{font-size:11px;color:var(--muted);line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-cards{display:flex;flex-direction:column;gap:8px}
+.mini-card{background:var(--card);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.05);border:1px solid var(--border);overflow:hidden}
+.mini-card .mc-header{display:flex;align-items:center;justify-content:space-between;padding:12px;cursor:pointer}
+.mini-card .mc-header:active{background:#faf8f5}
+.mini-card .mc-style{font-size:14px;font-weight:600;color:var(--text)}
+.mini-card .mc-arrow{font-size:11px;color:var(--muted);transition:transform .2s}
+.mini-card.open .mc-arrow{transform:rotate(180deg)}
+.mini-card .mc-body{display:none;padding:0 12px 12px;border-top:1px solid var(--bg)}
+.mini-card.open .mc-body{display:block}
+.mini-card .mc-item{font-size:12px;color:var(--text);line-height:1.8;display:flex;align-items:center;gap:6px}
+.mini-card .mc-item .mc-emoji{font-size:13px;flex-shrink:0}
+.mini-card .mc-preview{font-size:11px;color:var(--muted);padding:0 12px 8px;display:flex;align-items:center;gap:4px}
+.mini-card.open .mc-preview{display:none}
 
 /* ── 主图信息区 ── */
 .main-outfit{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
@@ -159,23 +166,33 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
         </div>
       </div>
 
-      <!-- 其他推荐 小方框 -->
+      <!-- 其他推荐 A线 -->
       <div class="section-header">🤖 其他推荐</div>
       <div class="mini-cards">
-        <div class="mini-card">
-          <div class="mc-style">夏日度假休闲</div>
-          <div class="mc-item">👕 TS-008 椰树印花短袖</div>
-          <div class="mc-item">🩳 SH-008 亚麻短裤</div>
-          <div class="mc-item">👟 SHOE-002 复古训练鞋</div>
+        <div class="mini-card" onclick="this.classList.toggle('open')">
+          <div class="mc-header"><span class="mc-style">🌴 夏日度假休闲</span><span class="mc-arrow">▼</span></div>
+          <div class="mc-preview">椰树印花短袖 · 亚麻短裤 · 复古训练鞋…</div>
+          <div class="mc-body">
+            <div class="mc-item"><span class="mc-emoji">👕</span>椰树印花短袖</div>
+            <div class="mc-item"><span class="mc-emoji">🩳</span>亚麻西装短裤</div>
+            <div class="mc-item"><span class="mc-emoji">👟</span>Adidas 复古训练鞋</div>
+            <div class="mc-item"><span class="mc-emoji">🧢</span>米白棒球帽</div>
+            <div class="mc-item"><span class="mc-emoji">🕶️</span>牛油果绿墨镜</div>
+          </div>
         </div>
-        <div class="mini-card">
-          <div class="mc-style">衬衫叠穿层次</div>
-          <div class="mc-item">👔 SHIRT-002 基础衬衫</div>
-          <div class="mc-item">👕 TS-011 落肩T恤</div>
-          <div class="mc-item">👟 SHOE-005 网球鞋</div>
+        <div class="mini-card" onclick="this.classList.toggle('open')">
+          <div class="mc-header"><span class="mc-style">🌥️ 衬衫叠穿层次</span><span class="mc-arrow">▼</span></div>
+          <div class="mc-preview">基础衬衫 · 落肩T恤 · Nike网球鞋…</div>
+          <div class="mc-body">
+            <div class="mc-item"><span class="mc-emoji">👔</span>Uniqlo 基础衬衫</div>
+            <div class="mc-item"><span class="mc-emoji">👕</span>宽松落肩纯色T恤</div>
+            <div class="mc-item"><span class="mc-emoji">🩳</span>宽松休闲短裤</div>
+            <div class="mc-item"><span class="mc-emoji">👟</span>Nike Court Lite 网球鞋</div>
+            <div class="mc-item"><span class="mc-emoji">🧦</span>基础灰色船袜</div>
+          </div>
         </div>
-        <div class="mini-card" style="display:flex;align-items:center;justify-content:center;background:var(--bg);border:2px dashed var(--border);min-height:80px">
-          <div style="text-align:center;color:var(--muted);font-size:13px">➕<br>换一批</div>
+        <div class="mini-card" style="display:flex;align-items:center;justify-content:center;background:var(--bg);border:2px dashed var(--border);padding:16px;cursor:pointer">
+          <div style="text-align:center;color:var(--muted);font-size:13px">➕ 换一批</div>
         </div>
       </div>
     </div>

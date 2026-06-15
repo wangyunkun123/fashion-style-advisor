@@ -248,6 +248,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
     <div class="subtab" data-sub="bold">大胆跨界</div>
     <div class="subtab" data-sub="circle">时尚圈子</div>
   </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div class="subpage active" id="sub-daily">
     <div class="placeholder"><div class="ph-icon">🧪</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div>
   </div>
@@ -259,6 +260,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
   </div>
   <div class="subpage" id="sub-circle" style="display:none">
     <div class="placeholder"><div class="ph-icon">🌐</div><div class="ph-text">时尚圈子<br>风格百科 · 趋势发现 · 品牌故事<br><span style="font-size:11px">即将上线，敬请期待</span></div></div>
+  </div>
   </div>
   <div class="page-input">
     <input type="text" placeholder="描述你想尝试的风格…">
@@ -274,6 +276,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
     <div class="subtab" data-sub="unused">冷门单品</div>
     <div class="subtab" data-sub="purchase">购买建议</div>
   </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div class="subpage active" id="sub-mywardrobe">
     <div class="section">
       <div class="card"><div class="section-header">📊 概览</div>
@@ -302,6 +305,10 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
   <div class="subpage" id="sub-purchase" style="display:none">
     <div class="placeholder"><div class="ph-icon">🛒</div><div class="ph-text">购买建议<br>🔴 优先：1双棕色乐福鞋<br>🟡 可选：1件酒红色上衣<br>🟢 建议：暂停购入短袖T恤</div></div>
   </div>
+  </div>
+  <div class="search-box" style="flex-shrink:0;background:var(--card);border-top:1px solid var(--border);padding-bottom:max(10px,env(safe-area-inset-bottom))">
+    <input type="text" placeholder="🔍 搜索衣服…">
+  </div>
 </div>
 
 <!-- ═══════════ 添加页 ═══════════ -->
@@ -317,8 +324,8 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
     <div class="placeholder" style="padding:60px 20px"><div class="ph-icon">📤</div><div class="ph-text">上传衣服图片<br>从相册选择图片<br>AI 自动分析并生成标签</div></div>
   </div>
   <div class="page-actions" id="add-actions">
-    <button class="btn-secondary">取消重选</button>
     <button class="btn-primary">确认分析</button>
+    <button class="btn-secondary">取消重选</button>
   </div>
 </div>
 

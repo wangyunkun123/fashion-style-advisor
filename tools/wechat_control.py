@@ -874,11 +874,11 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .tab .t-label{font-size:10px;color:#8b7a64;font-weight:500;letter-spacing:.5px}
 .tab.active .t-label{color:#3a3028;font-weight:700}
 /* ── 子菜单 ── */
-.submenu{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #d0c8bc;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px 0;z-index:10;min-width:120px;animation:fadeIn .15s}
-.submenu-item{padding:10px 18px;font-size:14px;white-space:nowrap;cursor:pointer;color:#3a3028}
+.submenu{position:fixed;background:#fff;border:1px solid #d0c8bc;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.16);padding:4px 0;z-index:99;min-width:130px;animation:fadeIn .15s}
+.submenu-item{padding:12px 20px;font-size:15px;white-space:nowrap;cursor:pointer;color:#3a3028;-webkit-tap-highlight-color:transparent}
 .submenu-item:active{background:#f5f0eb}
 .submenu-item+.submenu-item{border-top:1px solid #f0ece6}
-.submenu-mask{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9}
+.submenu-mask{position:fixed;top:0;left:0;right:0;bottom:0;z-index:98;background:rgba(0,0,0,.05)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes progress{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
@@ -987,39 +987,36 @@ var cmd=c.dataset.cmd;
 if(cmd){input.value=cmd;send();c.blur()}
 });
 
-// ── 探索子菜单 ──
-function showExploreMenu(e){
-e.stopPropagation();
-var btn=e.currentTarget;
+// ── 通用子菜单 ──
+function _popMenu(btn,items){
 var old=document.querySelector('.submenu');if(old)old.remove();
 var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
 var m=document.createElement('div');m.className='submenu';
-m.innerHTML='<div class="submenu-item" data-cmd="探索 日系">🧪 微调探索</div><div class="submenu-item" data-cmd="大胆 混搭">🚀 大胆混搭</div>';
-btn.appendChild(m);
+var h='';items.forEach(function(it){h+='<div class="submenu-item" data-cmd="'+esc(it.cmd)+'">'+it.label+'</div>'});
+m.innerHTML=h;
+document.body.appendChild(m);
 var maskEl=document.createElement('div');maskEl.className='submenu-mask';
 maskEl.onclick=function(){m.remove();maskEl.remove()};
 document.body.appendChild(maskEl);
+// 定位：在按钮上方居中
+var rect=btn.getBoundingClientRect();
+m.style.left='50%';
+m.style.transform='translateX(-50%)';
+m.style.bottom=(window.innerHeight-rect.top+6)+'px';
+// 绑定点击
 m.querySelectorAll('.submenu-item').forEach(function(it){
 it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
 });
 }
 
+// ── 推荐子菜单 ──
+function showRecommendMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'今日穿搭',label:'🎯 今日穿搭'},{cmd:'历史推荐',label:'⭐ 历史推荐'}]);}
+
+// ── 探索子菜单 ──
+function showExploreMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'探索 日系',label:'🧪 微调探索'},{cmd:'大胆 混搭',label:'🚀 大胆混搭'}]);}
+
 // ── 设置子菜单 ──
-function showSettingsMenu(e){
-e.stopPropagation();
-var btn=e.currentTarget;
-var old=document.querySelector('.submenu');if(old)old.remove();
-var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
-var m=document.createElement('div');m.className='submenu';
-m.innerHTML='<div class="submenu-item" data-cmd="同步">📤 同步GitHub</div><div class="submenu-item" data-cmd="状态">📊 项目状态</div><div class="submenu-item" data-cmd="帮助">❓ 使用帮助</div>';
-btn.appendChild(m);
-var maskEl=document.createElement('div');maskEl.className='submenu-mask';
-maskEl.onclick=function(){m.remove();maskEl.remove()};
-document.body.appendChild(maskEl);
-m.querySelectorAll('.submenu-item').forEach(function(it){
-it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
-});
-}
+function showSettingsMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'同步',label:'📤 同步GitHub'},{cmd:'状态',label:'📊 项目状态'},{cmd:'帮助',label:'❓ 使用帮助'}]);}
 
 // ── 添加新衣服 ──
 function addClothes(){
@@ -1028,23 +1025,6 @@ addMsg('assistant','➕ <b>添加新衣服</b><br><br>流程：<br>1. 把衣服�
 
 // 欢迎消息
 addMsg('assistant','👋 你好！我是穿搭助手<br><br>点击底部 <b>推荐</b> 获取今日穿搭<br>点击 <b>衣橱</b> 查看衣柜分析<br>或直接在输入框描述需求…');
-
-// ── 推荐子菜单 ──
-function showRecommendMenu(e){
-e.stopPropagation();
-var btn=e.currentTarget;
-var old=document.querySelector('.submenu');if(old)old.remove();
-var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
-var m=document.createElement('div');m.className='submenu';
-m.innerHTML='<div class="submenu-item" data-cmd="今日穿搭">🎯 今日穿搭</div><div class="submenu-item" data-cmd="历史推荐">⭐ 历史推荐</div>';
-btn.appendChild(m);
-var maskEl=document.createElement('div');maskEl.className='submenu-mask';
-maskEl.onclick=function(){m.remove();maskEl.remove()};
-document.body.appendChild(maskEl);
-m.querySelectorAll('.submenu-item').forEach(function(it){
-it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
-});
-}
 
 // ── 衣橱面板 ──
 var wardrobePanel=document.getElementById('wardrobe-panel');

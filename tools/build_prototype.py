@@ -366,7 +366,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
 <div class="hero-style">清爽专业网球运动风</div>
 <div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-list">
+<div class="item-grid">
 {item_tshirt_tennis}
 {item_pants_tennis}
 {item_shoe_tennis}
@@ -461,7 +461,7 @@ function showLoading(msg){{var el=document.getElementById('loading-overlay');if(
 function updateLoading(msg){{var el=document.getElementById('loading-msg');if(el)el.textContent=msg}}
 function hideLoading(){{var el=document.getElementById('loading-overlay');if(el)el.style.display='none'}}
 // Auto-load latest outfit
-document.addEventListener('DOMContentLoaded',function(){{fetch('/api/today').then(r=>r.json()).then(function(d){{if(!d||d.empty)return;var img=document.querySelector('.hero-img img');if(!img)return;var cur=img.getAttribute('data-outfit');if(cur===d.dir)return;img.src=d.img||'';img.setAttribute('data-outfit',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el&&d.date)el.textContent=d.date+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return '<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var icons={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(icons[p]||'👔')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+it.name.substring(0,18)+'</span></div>'}});el.innerHTML=h}}}})}});
+document.addEventListener('DOMContentLoaded',function(){{fetch('/api/today').then(r=>r.json()).then(function(d){{if(!d||d.empty)return;var img=document.querySelector('.hero-img img');if(!img)return;var cur=img.getAttribute('data-outfit');if(cur===d.dir)return;img.src=d.img||'';img.setAttribute('data-outfit',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el&&d.date)el.textContent=d.date+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return '<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var icons={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(icons[p]||'👔')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+it.name.substring(0,16)+'</span></div>'}});el.innerHTML=h}};}}}})}});
 </script>
 </body></html>'''
 

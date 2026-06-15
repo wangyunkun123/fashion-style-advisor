@@ -1270,9 +1270,16 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                                     if kw and len(kw)>=2: tags.append(kw[:8])
                             break
                     if not tags and style:
+                        # Smart tag extraction: match known style keywords
+                        known_tags = ['日系','韩系','欧美','街头','复古','机能','简约','轻熟','运动','度假',
+                            'City Boy','Clean Fit','Athleisure','Gorpcore','美式','户外','军事','工装',
+                            '宽松廓形','低饱和','高对比','叠穿','单色系','撞色','印花','条纹','纯色',
+                            '网球','跑步','健身','通勤','约会','商务','休闲','正式']
                         st = style
                         for sep in ['丨','｜','/','·','-',' ']: st = st.replace(sep, ' ')
-                        tags = [w.strip()[:8] for w in st.split() if len(w.strip())>=2][:4]
+                        words = [w.strip() for w in st.split() if len(w.strip())>=2]
+                        tags = [w[:8] for w in words if any(kt in w for kt in known_tags)][:4]
+                        if not tags: tags = words[:4]
                     latest = {'dir': d, 'style': style or d, 'items': items, 'img': img, 'date': d[:10], 'weather': w_str, 'tags': tags}
                     break
             self._json_resp(200, latest or {"empty": True})

@@ -261,6 +261,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .fav-expand .item-grid{{margin-bottom:0}}
 .fav-card .fav-arrow{{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}}
 .fav-card.expanded .fav-arrow{{transform:rotate(180deg)}}
+.fav-card.expanded .h-thumb-sm{{display:none}}
 .fav-card.filtered{{display:none}}
 .h-char-img{{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 .h-thumb-sm{{width:42px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;margin-left:8px}}
@@ -270,11 +271,11 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-char-img-lg{{width:150px;height:240px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
 .h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-content:start}}
-.h-square-grid .item-row{{flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
+.h-square-grid .item-row{{flex-direction:column;align-items:flex-start;gap:3px;padding:6px 6px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
 .h-square-grid .item-emoji{{width:24px;height:24px}}
 .h-square-grid .item-id{{font-size:8px}}
-.h-square-grid .item-name{{font-size:8px;text-align:center;white-space:normal;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
+.h-square-grid .item-name{{font-size:9px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;padding-left:2px}}
 .h-square-grid .item-row.showing-img .item-emoji,.h-square-grid .item-row.showing-img .item-id,.h-square-grid .item-row.showing-img .item-name{{display:none}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
@@ -429,7 +430,7 @@ def gen_history_card(outfit, idx):
         img_html = ''
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
-        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:10], img_html)
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:18], img_html)
     # Style tags
     tags = random_tags(outfit['style'])
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'

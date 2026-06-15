@@ -38,6 +38,8 @@ item_icons = {
     'shoe': lu('sport-shoe'),
     'hat': ci('BaseballCap') or '',
     'bag': lu('shopping-bag'),
+    'sock': ci('Socks') or lu('shirt'),
+    'acc': lu('watch'),
 }
 # Fallback for CI if missing
 if not item_icons['pants']:
@@ -306,8 +308,8 @@ html = html.format(
     item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-005_Image_20260610_0848_30_512_cutout.png'),
     item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-004_Image_20260610_0810_53_039_cutout.png'),
     item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 网球桶包', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-007_Image_20260610_1043_55_563%20%E6%8B%B7%E8%B4%9D_cutout.png'),
-    item_sock_tennis=item_row(item_icons.get('sock',''), '袜子', 'SOCK-006', '防滑底短袜', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png'),
-    item_acc_tennis=item_row(item_icons.get('acc',''), '配饰', 'ACC-003', 'Apple Watch', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
+    item_sock_tennis=item_row(item_icons['sock'], '袜子', 'SOCK-006', '防滑底短袜', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png'),
+    item_acc_tennis=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 黑色运动表带', '../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     card1=card1,
     card2=card2,
 )

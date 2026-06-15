@@ -20,7 +20,7 @@ def simplify_name(iid, name):
     # Apple Watch: keep band info
     if iid == 'ACC-003' or 'Apple Watch' in name:
         band = ''
-        for b in ['回环尼龙','米兰尼斯','运动表带','黑色运动']:
+        for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
             if b in name: band = b; break
         return 'Apple Watch {}'.format(band) if band else 'Apple Watch'
     # Remove series/tech terms
@@ -234,7 +234,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
 .page.active{{display:flex}}
 .scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}}
-.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5}}
+.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;align-items:center}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
 .page-bottom input::placeholder{{color:var(--muted)}}
@@ -367,13 +367,14 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 </div></div>
 
 <div class="section-header">其他推荐</div>
-<div class="rec-cards">
+<div class="rec-cards" id="alt-cards">
 {card1}
 {card2}
-<div class="rec-card dashed"><div class="dash-text">+ 换一批</div></div>
+{card3}
 </div>
+<div style="text-align:center;padding:4px 0 12px"><span style="font-size:12px;color:var(--navy);cursor:pointer;font-weight:600" onclick="refreshAlts()">⟳ 换一批</span></div>
 </div>
-<div class="page-bottom"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
+<div class="page-bottom"><input type="text" id="today-input" placeholder="描述穿搭需求，如「今天要去约会」..." onkeydown="if(event.key==='Enter')sendOutfit()"><button style="width:44px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:8px" onclick="sendOutfit()">▶</button></div>
 </div>
 
 <!-- 历史推荐 -->
@@ -443,6 +444,9 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
+function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
+function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
+function refreshAlts(){{var alts=[['日系 City Boy',['TS-011 落肩T恤','SHIRT-001 条纹衬衫','SHOE-009 AF1']],['轻熟休闲',['SHIRT-003 牛津衬衫','PT-005 西裤','SHOE-009 板鞋']],['韩系简约',['TS-010 条纹T恤','PT-006 直筒牛仔裤','SHOE-005']],['Clean Fit',['TS-009 短袖','PT-002 牛仔裤','SHOE-006']],['街头潮流',['TS-006 黑T','JK-003 棒球服','SHOE-008']],['运动休闲',['TANK-001 背心','SH-001 速干短裤','SHOE-003']]];var pool=alts.sort(function(){{return Math.random()-0.5}}).slice(0,3);var h='';pool.forEach(function(a){{var items=a[1].map(function(i){{return'<div>'+i+'</div>'}}).join('');h+='<div class=\"rec-card\" onclick=\"this.classList.toggle(\\'open\\')\"><div class=\"rc-style-name\">'+a[0]+'</div><div class=\"rc-items\">'+items+'</div><div class=\"rc-arrow\">▾</div></div>'}});var el=document.getElementById('alt-cards');if(el)el.innerHTML=h}}
 </script>
 </body></html>'''
 

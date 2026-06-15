@@ -1265,6 +1265,16 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手", "time": time.strftime("%H:%M:%S")})
             return
 
+        # 静态文件（图片等）
+        fp = os.path.normpath(os.path.join(PROJECT_DIR, parsed.path.lstrip('/')))
+        if os.path.isfile(fp) and fp.startswith(PROJECT_DIR):
+            ext = os.path.splitext(fp)[1].lower()
+            mime = {'png':'image/png','jpg':'image/jpeg','jpeg':'image/jpeg','gif':'image/gif','svg':'image/svg+xml'}.get(ext,'application/octet-stream')
+            with open(fp,'rb') as f: data = f.read()
+            self.send_response(200); self.send_header('Content-Type',mime); self.send_header('Content-Length',len(data)); self.end_headers()
+            self.wfile.write(data)
+            return
+
         self._json_resp(404, {"error": "not found"})
 
     def do_POST(self):

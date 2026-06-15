@@ -418,22 +418,47 @@ tabs_html = '\n'.join([
 
 # ── Build history cards ──
 def extract_tags(outfit):
-    """Extract real style tags from outfit keywords + style name"""
+    """Extract style tags: keywords from outfit.md, fallback to style name"""
     tags = []
-    # Split style name into words
-    style = outfit.get('style','')
-    for sep in ['丨','｜','/','·','-',' ']:
-        style = style.replace(sep, ' ')
-    words = [w.strip() for w in style.split() if len(w.strip())>=2]
-    tags.extend(words[:3])
-    # Deduplicate & limit
-    seen = set()
-    result = []
-    for t in tags:
-        if t not in seen:
-            result.append(t[:8])
-            seen.add(t)
-    return result[:4]
+    dp = os.path.join(OUTFITS_DIR, outfit['dir'], 'outfit.md')
+    if os.path.exists(dp):
+        with open(dp) as f: content = f.read()
+        # Strategy 1: 风格关键词 section
+        in_kw = False
+        for line in content.split('\n'):
+            s = line.strip()
+            if '风格关键词' in s:
+                in_kw = True
+                # Same-line content
+                m = re.search(r'[：:]\s*(.+)', s)
+                if m:
+                    for kw in m.group(1).split(','):
+                        kw = kw.strip()
+                        if kw and len(kw)>=2: tags.append(kw[:8])
+                continue
+            if in_kw:
+                if s.startswith('##') or s.startswith('---'): break
+                if s.startswith('- '): s = s[2:]
+                for kw in s.replace('，',',').split(','):
+                    kw = kw.strip()
+                    if kw and len(kw)>=2 and kw not in tags:
+                        tags.append(kw[:8])
+        # Strategy 2: 风格笔记 section
+        if not tags:
+            in_notes = False
+            for line in content.split('\n'):
+                if '风格笔记' in line: in_notes = True; continue
+                if in_notes and line.strip().startswith('##'): break
+                if in_notes and line.strip().startswith('- '):
+                    kw = line.strip()[2:].split('：')[0].split('—')[0].strip()[:8]
+                    if kw and len(kw)>=2: tags.append(kw)
+        # Fallback: from style name
+        if not tags:
+            style = outfit.get('style','')
+            for sep in ['丨','｜','/','·','-',' ']:
+                style = style.replace(sep, ' ')
+            tags = [w.strip()[:8] for w in style.split() if len(w.strip())>=2][:4]
+    return tags[:4]
 
 def gen_history_card(outfit, idx):
     items_html = ''

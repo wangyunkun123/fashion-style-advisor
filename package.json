@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/wangyunkun123/fashion-style-advisor#readme",
   "dependencies": {
+    "@phosphor-icons/core": "^2.1.1",
+    "clothing-icons": "^1.0.0",
+    "feather-icons": "^4.29.2",
     "lucide-static": "^1.18.0"
   }
 }

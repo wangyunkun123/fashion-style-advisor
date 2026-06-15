@@ -328,14 +328,15 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
 .h-char-img-lg{{width:170px;height:226px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
-.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start}}
-.h-square-grid .item-row{{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;padding:6px 5px;background:#f8fafc;border-radius:6px;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
+.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start;grid-auto-rows:52px}}
+.h-square-grid .item-row{{display:flex;flex-direction:column;gap:2px;padding:6px 5px;background:#f8fafc;border-radius:6px;cursor:pointer;position:relative;overflow:hidden;min-height:52px}}
+.h-square-grid .item-row .ir-top{{display:flex;align-items:center;gap:3px}}
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
 .h-square-grid .item-emoji{{width:16px;height:16px;flex-shrink:0}}
 .h-square-grid .item-id{{font-size:7px;flex-shrink:0}}
-.h-square-grid .item-name{{font-size:8px;line-height:1.3;word-break:break-all;width:100%}}
-.h-square-grid .item-row.showing-img .item-emoji,.h-square-grid .item-row.showing-img .item-id,.h-square-grid .item-row.showing-img .item-name{{display:none}}
-.h-square-grid .item-row.showing-img{{padding:2px}}
+.h-square-grid .item-name{{font-size:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
+.h-square-grid .item-row.expanded{{grid-row:span 2;padding:3px;z-index:2}}
+.h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .item-name{{display:none}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px}}
@@ -521,7 +522,7 @@ def gen_history_card(outfit, idx):
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
         clean_name = it['name'].replace('·','').replace('，',' ').replace('、',' ').replace('  ',' ').strip()[:20]
-        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], clean_name, img_html)
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'expanded\')"><div class="ir-top"><span class="item-emoji">{}</span><span class="item-id">{}</span></div><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], clean_name, img_html)
     # Style tags from real data
     tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'

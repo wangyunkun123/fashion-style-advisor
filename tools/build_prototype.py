@@ -326,15 +326,16 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
-.h-char-img-lg{{width:170px;height:260px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-char-img-lg{{width:170px;height:226px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
-.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-content:start}}
-.h-square-grid .item-row{{flex-direction:column;align-items:flex-start;gap:3px;padding:6px 6px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
+.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start}}
+.h-square-grid .item-row{{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;padding:6px 5px;background:#f8fafc;border-radius:6px;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
-.h-square-grid .item-emoji{{width:24px;height:24px}}
-.h-square-grid .item-id{{font-size:8px}}
-.h-square-grid .item-name{{font-size:9px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;padding-left:2px}}
+.h-square-grid .item-emoji{{width:16px;height:16px;flex-shrink:0}}
+.h-square-grid .item-id{{font-size:7px;flex-shrink:0}}
+.h-square-grid .item-name{{font-size:8px;line-height:1.3;word-break:break-all;width:100%}}
 .h-square-grid .item-row.showing-img .item-emoji,.h-square-grid .item-row.showing-img .item-id,.h-square-grid .item-row.showing-img .item-name{{display:none}}
+.h-square-grid .item-row.showing-img{{padding:2px}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px}}
@@ -519,7 +520,8 @@ def gen_history_card(outfit, idx):
         img_html = ''
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
-        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:16], img_html)
+        clean_name = it['name'].replace('·','').replace('，',' ').replace('、',' ').replace('  ',' ').strip()[:20]
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], clean_name, img_html)
     # Style tags from real data
     tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'

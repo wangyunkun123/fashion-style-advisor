@@ -6,6 +6,45 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(BASE, '..')
 OUTFITS_DIR = os.path.join(PROJ, 'outfits')
 
+def simplify_name(iid, name):
+    """Simplify item name: brand + basic description, remove series/wearing style"""
+    # Keep brand name if present
+    brands = ['Lululemon','Nike','Adidas','Uniqlo','FUR SPEED','Champion','Decathlon',
+              'Artengo','Wilson','Converse','Puma','FILA','HLA','COMME des GARCONS','CDG',
+              'Merrell','Timberland','Jordan','Cotton On','Kiprun']
+    found_brand = ''
+    for b in brands:
+        if b.lower() in name.lower():
+            found_brand = b
+            break
+    # Apple Watch: keep band info
+    if iid == 'ACC-003' or 'Apple Watch' in name:
+        band = ''
+        for b in ['回环尼龙','米兰尼斯','运动表带','黑色运动']:
+            if b in name: band = b; break
+        return 'Apple Watch {}'.format(band) if band else 'Apple Watch'
+    # Remove series/tech terms
+    remove = ['Metal Vent Tech','Metal Vent','Court Lite','入门级','Artengo',
+              'Leisure Club','基础','简约实用','经典','复古','专业','入门',
+              '敞穿或卷袖','敞穿','卷袖','叠穿','基本款','常规','标准']
+    clean = name
+    for r in remove:
+        clean = clean.replace(r, '').replace('  ', ' ')
+    # If brand found, use "Brand + short name"
+    if found_brand:
+        short = clean.replace(found_brand, '').strip()
+        # Keep only first meaningful part
+        parts = [p for p in short.split() if len(p)>=2 and p not in [' ','']]
+        short = parts[0] if parts else short[:4]
+        # Add category suffix if too short
+        if len(short) <= 2:
+            for cat in ['短袖','长袖','短裤','长裤','衬衫','外套','鞋子','帽子','袜子','墨镜','包']:
+                if cat in clean: short = cat; break
+        return '{} {}'.format(found_brand, short)[:16]
+    # No brand: just first meaningful words
+    clean = clean.strip()
+    return clean[:14]
+
 def scan_outfits(date_filter=None, rating_filter=None, limit=20):
     """Scan outfits directory, return list of outfit dicts"""
     results = []
@@ -42,7 +81,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             cells = [c.strip().replace('**','') for c in s.split('|')]
             if len(cells) < 4: continue
             if re.match(r'^[A-Z]+-\d+', cells[2]):
-                items.append({'id': cells[2], 'name': cells[3], 'cat': cells[1] if len(cells)>1 else ''})
+                items.append({'id': cells[2], 'name': simplify_name(cells[2], cells[3]), 'cat': cells[1] if len(cells)>1 else ''})
         style = ''
         weather = ''
         for line in content.split('\n'):
@@ -53,26 +92,32 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m: weather = m.group(1).strip()[:60]
         scene = d.split('_',1)[-1] if '_' in d else style
-        # Find character image: AI生图优先，兜底用排版图
+        # Find character image: 上身效果_1.png (AI原图) > 人物*.jpg > 排版图 > any
         char_img = ''
-        for sub in ['豆包生图','上身效果']:
+        for sub in ['上身效果','豆包生图']:
             sd = os.path.join(dp, sub)
             if not os.path.exists(sd): continue
-            # First try: 人物_*.jpg (AI gen)
+            # First: 上身效果_1.png (raw AI gen, first stored)
+            for f in sorted(os.listdir(sd)):
+                if f == '上身效果_1.png':
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    break
+            if char_img: break
+            # Second: 人物_*.jpg
             for f in sorted(os.listdir(sd)):
                 if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
                     char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
-            # Fallback: 上身效果_*方案*.jpg (composite)
+            # Third: *_方案*.jpg (composite)
             for f in sorted(os.listdir(sd)):
-                if '上身效果' in f and '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
+                if '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
                     char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
-            # Last resort: any jpg/png
+            # Last: any image
             for f in sorted(os.listdir(sd)):
-                if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_'):
+                if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_') and not f.startswith('.'):
                     char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
@@ -475,7 +520,7 @@ def gen_history_card(outfit, idx):
         img_html = ''
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
-        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:18], img_html)
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:16], img_html)
     # Style tags from real data
     tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'

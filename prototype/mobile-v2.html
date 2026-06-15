@@ -96,7 +96,7 @@ body{
 }
 
 /* ── ⑦ 推荐卡片 ── */
-.rec-cards{display:flex;gap:12px;margin-bottom:20px}
+.rec-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
 .rec-card{
   flex:1;background:var(--white);border-radius:var(--radius-sm);
   padding:16px 14px;box-shadow:var(--shadow);
@@ -118,6 +118,8 @@ body{
   display:flex;align-items:center;justify-content:center;
 }
 .rec-card.dashed .dash-text{color:var(--muted);font-size:12px;text-align:center}
+
+.page-bottom{position:sticky;bottom:0;z-index:5;background:var(--bg);margin-top:auto}
 
 /* ── ⑧ 输入框 ── */
 .input-wrap{margin-bottom:16px}
@@ -198,7 +200,7 @@ body{
     <div class="seg-btn" data-sub="history">历史推荐</div>
   </div>
 
-  <div class="content">
+  <div class="content" style="flex:1">
     <!-- 今日推荐 -->
     <div class="subpage active" id="sub-today">
       <div class="hero-card">
@@ -207,12 +209,12 @@ body{
           <div class="hero-style">清爽雾天城市休闲</div>
           <div class="hero-meta"><span><svg class="ico-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg> 06/15</span><span><svg class="ico-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg> 雾 22&deg;C</span></div>
           <div class="item-list">
-            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></svg></span></span><span class="item-cat">上衣</span><span class="item-id">TS-011</span><span class="item-name">宽松落肩纯色T恤</span></div>
-            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2h10v4l-3 4v12h-4V10L7 6V2z"/></svg></span></span><span class="item-cat">下装</span><span class="item-id">SH-004</span><span class="item-name">宽松休闲短裤</span></div>
+            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></svg></span><span class="item-cat">上衣</span><span class="item-id">TS-011</span><span class="item-name">宽松落肩纯色T恤</span></div>
+            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2h10v4l-3 4v12h-4V10L7 6V2z"/></svg></span><span class="item-cat">下装</span><span class="item-id">SH-004</span><span class="item-name">宽松休闲短裤</span></div>
             <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10.42 4.8-5.07" />
   <path d="M19 18h3" />
-  <path d="M9.5 22 21.414 9.415A2 2 0 0 0 21.2 6.4l-5.61-4.208A1 1 0 0 0 14 3v2a2 2 0 0 1-1.394 1.906L8.677 8.053A1 1 0 0 0 8 9c-.155 6.393-2.082 9-4 9a2 2 0 0 0 0 4h14" /></svg></span></span><span class="item-cat">鞋子</span><span class="item-id">SHOE-005</span><span class="item-name">Nike Court Lite 网球鞋</span></div>
-            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17h20v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2z"/><path d="M5 17v-6a7 7 0 0 1 14 0v6"/></svg></span></span><span class="item-cat">帽子</span><span class="item-id">HAT-004</span><span class="item-name">基础棒球帽</span></div>
+  <path d="M9.5 22 21.414 9.415A2 2 0 0 0 21.2 6.4l-5.61-4.208A1 1 0 0 0 14 3v2a2 2 0 0 1-1.394 1.906L8.677 8.053A1 1 0 0 0 8 9c-.155 6.393-2.082 9-4 9a2 2 0 0 0 0 4h14" /></svg></span><span class="item-cat">鞋子</span><span class="item-id">SHOE-005</span><span class="item-name">Nike Court Lite 网球鞋</span></div>
+            <div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17h20v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2z"/><path d="M5 17v-6a7 7 0 0 1 14 0v6"/></svg></span><span class="item-cat">帽子</span><span class="item-id">HAT-004</span><span class="item-name">基础棒球帽</span></div>
           </div>
         </div>
       </div>
@@ -229,10 +231,10 @@ body{
           <div class="rc-preview">基础衬衫 · 落肩T恤 · Nike网球鞋…</div>
           <div class="rc-detail"><div class="rc-item">SHIRT-002 基础衬衫</div><div class="rc-item">TS-011 落肩T恤</div><div class="rc-item">SHOE-005 网球鞋</div></div>
         </div>
-        <div class="rec-card dashed"><div class="dash-text">+<br>换一批</div></div>
+        <div class="rec-card dashed" style="padding:20px"><div class="dash-text">+ 换一批</div></div>
       </div>
 
-      <div class="input-wrap"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
+      <div class="input-wrap page-bottom" id="rec-input-box"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
     </div>
 
     <!-- 历史推荐 -->
@@ -248,7 +250,7 @@ body{
         <div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">打网球穿搭</div><div class="fav-meta">2026-06-14 · TS-009、SH-005、SHOE-005</div></div></div>
       </div>
       </div>
-      <div class="input-wrap" style="padding:12px 20px;margin:0;flex-shrink:0;background:var(--bg);border-top:1px solid var(--border)"><input type="text" placeholder="搜索历史推荐..."></div>
+      <div class="input-wrap page-bottom" style="padding:12px 20px;margin:0;flex-shrink:0;background:var(--bg);border-top:1px solid var(--border)"><input type="text" placeholder="搜索历史推荐..."></div>
     </div>
   </div>
 </div>
@@ -260,7 +262,7 @@ body{
     <div class="seg-btn active">日常穿搭</div><div class="seg-btn">改变自己</div><div class="seg-btn">大胆跨界</div><div class="seg-btn">时尚圈子</div>
   </div>
   <div class="content"><div class="placeholder"><div class="ph-icon">&#x1f9ea;</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div></div>
-  <div style="padding:0 20px 20px"><div class="input-wrap"><input type="text" placeholder="描述你想尝试的风格..."></div></div>
+  <div class="input-wrap page-bottom" style="padding:12px 20px"><input type="text" placeholder="描述你想尝试的风格..."></div>
 </div>
 
 <!-- ═══ 衣橱页 ═══ -->
@@ -279,7 +281,7 @@ body{
       <div class="gap-row"><span>外衣</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:#4a8c3f"></div></div><span>6件</span><span class="gap-tag ok">OK</span></div>
     </div>
   </div>
-  <div style="padding:0 20px 20px"><div class="input-wrap"><input type="text" placeholder="搜索衣服..."></div></div>
+  <div class="input-wrap page-bottom" style="padding:12px 20px"><input type="text" placeholder="搜索衣服..."></div>
 </div>
 
 <!-- ═══ 添加页 ═══ -->

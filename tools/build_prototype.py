@@ -240,7 +240,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .page-bottom input::placeholder{{color:var(--muted)}}
 
 /* Hero card */
-.hero-card{{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:16px 0 14px;border:1px solid rgba(30,58,95,.05)}}
+.hero-card{{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:16px 0 14px;border:1px solid rgba(30,58,95,.05);position:relative}}
 .hero-img{{width:100%;background:#f8fafc;overflow:hidden}}
 .hero-img img{{width:100%;display:block}}
 .hero-body{{padding:18px}}

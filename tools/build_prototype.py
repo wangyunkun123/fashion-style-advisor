@@ -100,25 +100,25 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             # First: 上身效果_1.png (raw AI gen, first stored)
             for f in sorted(os.listdir(sd)):
                 if f == '上身效果_1.png':
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Second: 人物_*.jpg
             for f in sorted(os.listdir(sd)):
                 if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Third: *_方案*.jpg (composite)
             for f in sorted(os.listdir(sd)):
                 if '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Last: any image
             for f in sorted(os.listdir(sd)):
                 if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_') and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
         # Build item thumbnails
@@ -127,7 +127,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if os.path.exists(items_dir):
                 for f in os.listdir(items_dir):
                     if f.startswith(it['id']+'_') and f.endswith('.png'):
-                        it['thumb'] = os.path.join('outfits', d, 'items', f)
+                        it['thumb'] = os.path.join('..', 'outfits', d, 'items', f)
                         break
         # Parse weather: temp range + UV
         temp_str = ''
@@ -234,7 +234,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
 .page.active{{display:flex}}
 .scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}}
-.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;gap:0}}
+.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
 .page-bottom input::placeholder{{color:var(--muted)}}
@@ -262,10 +262,6 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .lightbox.show{{display:flex}}
 .lightbox img{{max-width:90%;max-height:80%;object-fit:contain;border-radius:8px}}
 .lightbox .close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;z-index:201}}
-/* Loading overlay */
-#loading-overlay{{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(248,250,252,.92);z-index:10;display:flex;align-items:center;justify-content:center}}
-.loading-spinner{{width:32px;height:32px;border:3px solid #e6ecf3;border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}}
-@keyframes spin{{to{{transform:rotate(360deg)}}}}
 /* Palette strip */
 .palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
@@ -366,7 +362,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
 <div class="hero-style">清爽专业网球运动风</div>
 <div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-grid">
+<div class="item-list">
 {item_tshirt_tennis}
 {item_pants_tennis}
 {item_shoe_tennis}
@@ -385,7 +381,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="rec-card dashed"><div class="dash-text">+ 换一批</div></div>
 </div>
 </div>
-<div class="page-bottom"><input type="text" id="today-input" placeholder="描述穿搭需求，如「今天要去约会」..." onkeydown="if(event.key==='Enter')sendOutfit()"><button style="width:44px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:8px" onclick="sendOutfit()">▶</button></div>
+<div class="page-bottom"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
 </div>
 
 <!-- 历史推荐 -->
@@ -455,13 +451,7 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
-function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';showLoading(msg);fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{hideLoading();inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{hideLoading();inp.placeholder='网络错误: '+e.message}})}}
-function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{updateLoading('✅ 完成! 刷新中...');setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{updateLoading('❌ '+(d.message||'生成失败'));setTimeout(hideLoading,3000)}}else{{var msgs=['🤖 AI分析穿搭方案中...','🎨 Seedream生成效果图...','🖼️ 排版合成中...','📤 推送同步中...'];var idx=Math.min(n-1,msgs.length-1);if(d.message)updateLoading(d.message);else updateLoading(msgs[idx]);setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
-function showLoading(msg){{var el=document.getElementById('loading-overlay');if(!el){{el=document.createElement('div');el.id='loading-overlay';el.innerHTML='<div style=\"text-align:center;padding:60px 20px\"><div class=\"loading-spinner\"></div><div id=\"loading-msg\" style=\"margin-top:16px;font-size:14px;color:var(--sub)\">'+msg+'</div></div>';var hero=document.querySelector('.hero-card');if(hero)hero.appendChild(el)}}else{{el.style.display='block';document.getElementById('loading-msg').textContent=msg}}}}
-function updateLoading(msg){{var el=document.getElementById('loading-msg');if(el)el.textContent=msg}}
-function hideLoading(){{var el=document.getElementById('loading-overlay');if(el)el.style.display='none'}}
-// Auto-load latest today outfit
-(function refreshHero(){{fetch('/api/today').then(function(r){{return r.json()}}).then(function(d){{if(!d||d.empty)return;var heroImg=document.querySelector('.hero-img img');if(!heroImg)return;if(heroImg.getAttribute('data-loaded')===d.dir)return;heroImg.src=d.img||'';heroImg.setAttribute('data-loaded',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el)el.textContent=(d.date||'')+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return'<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var ic={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];var catMap={{TS:'上衣',LS:'长袖',SHIRT:'衬衫',TANK:'背心',JK:'外套',PT:'长裤',SH:'短裤',SHOE:'鞋子',HAT:'帽子',BAG:'包',SOCK:'袜子',SUN:'墨镜',ACC:'配饰'}};h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(ic[p]||'👔')+'</span><span class=\"item-cat\">'+(catMap[p]||'')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+(it.name||'').substring(0,16)+'</span></div>'}});el.innerHTML=h}}}})}})();
+(function refreshHero(){{fetch('/api/today').then(function(r){{return r.json()}}).then(function(d){{if(!d||d.empty)return;var hi=document.querySelector('.hero-img img');if(!hi||hi.getAttribute('data-loaded')===d.dir)return;hi.src=d.img||'';hi.setAttribute('data-loaded',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el)el.textContent=(d.date||'')+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return'<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var ic={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var cm={{TS:'上衣',LS:'长袖',SHIRT:'衬衫',TANK:'背心',JK:'外套',PT:'长裤',SH:'短裤',SHOE:'鞋子',HAT:'帽子',BAG:'包',SOCK:'袜子',SUN:'墨镜',ACC:'配饰'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(ic[p]||'👔')+'</span><span class=\"item-cat\">'+(cm[p]||'')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+(it.name||'').substring(0,14)+'</span></div>'}});el.innerHTML=h}}}})}})();
 </script>
 </body></html>'''
 

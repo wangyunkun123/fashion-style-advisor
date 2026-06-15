@@ -909,6 +909,13 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .w-suggest .reason{font-size:11px;color:#9b8c7c;margin-top:3px}
 .w-subcat{margin-bottom:4px;font-size:12px}
 .w-loading{text-align:center;padding:30px;color:#9b8c7c;font-size:13px}
+/* ── 历史推荐面板 ── */
+.fav-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-bottom:1px solid #f0ece6}
+.fav-card:active{background:#faf8f5}
+.fav-num{width:28px;height:28px;border-radius:50%;background:#3a3028;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fav-info{flex:1;min-width:0}
+.fav-style{font-size:15px;font-weight:600;color:#3a3028;margin-bottom:2px}
+.fav-meta{font-size:11px;color:#9b8c7c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
@@ -918,6 +925,10 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <div id="wardrobe-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
 <div class="wardrobe-header">👔 我的衣橱 <span onclick="toggleWardrobe()">✕</span></div>
 <div id="wardrobe-content"><div class="w-loading">加载中...</div></div>
+</div>
+<div id="favorites-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
+<div class="wardrobe-header">⭐ 历史推荐 <span onclick="toggleFavorites()">✕</span></div>
+<div id="favorites-content"><div class="fav-loading" style="text-align:center;padding:30px;color:#9b8c7c">加载中...</div></div>
 </div>
 <div class="input-bar">
 <div class="input-row">
@@ -991,26 +1002,75 @@ if(cmd){input.value=cmd;send();c.blur()}
 function _popMenu(btn,items){
 var old=document.querySelector('.submenu');if(old)old.remove();
 var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
-var m=document.createElement('div');m.className='submenu';
+var m=document.createElement('div');m.className='submenu';m.style.visibility='hidden';
 var h='';items.forEach(function(it){h+='<div class="submenu-item" data-cmd="'+esc(it.cmd)+'">'+it.label+'</div>'});
 m.innerHTML=h;
 document.body.appendChild(m);
 var maskEl=document.createElement('div');maskEl.className='submenu-mask';
 maskEl.onclick=function(){m.remove();maskEl.remove()};
 document.body.appendChild(maskEl);
-// 定位：在按钮上方居中
-var rect=btn.getBoundingClientRect();
+// 绑定点击（在定位前绑定，避免竞态）
+m.querySelectorAll('.submenu-item').forEach(function(it){
+it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
+});
+// requestAnimationFrame 等布局完成后再定位，避免跳动
+requestAnimationFrame(function(){
+var vb=document.querySelector('.tab-bar');if(!vb){m.style.visibility='visible';return}
+var rect=vb.getBoundingClientRect();
 m.style.left='50%';
 m.style.transform='translateX(-50%)';
 m.style.bottom=(window.innerHeight-rect.top+6)+'px';
-// 绑定点击
-m.querySelectorAll('.submenu-item').forEach(function(it){
-it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
+m.style.visibility='visible';
 });
 }
 
 // ── 推荐子菜单 ──
-function showRecommendMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'今日穿搭',label:'🎯 今日穿搭'},{cmd:'历史推荐',label:'⭐ 历史推荐'}]);}
+function showRecommendMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'今日穿搭',label:'🎯 今日穿搭'},{action:'favpanel',label:'⭐ 历史推荐'}]);}
+
+// ── 历史推荐面板 ──
+var favPanel=document.getElementById('favorites-panel');
+var favContent=document.getElementById('favorites-content');
+var favOpen=false;
+
+function toggleFavorites(){
+favOpen=!favOpen;
+favPanel.style.display=favOpen?'block':'none';
+if(favOpen&&favContent.querySelector('.fav-loading')){
+fetch('/api/favorites').then(function(r){return r.json()}).then(function(d){
+if(!d||!d.length){favContent.innerHTML='<div style="padding:20px;text-align:center;color:#9b8c7c">⭐ 暂无三星好评<br><br>给满意的穿搭点 ⭐⭐⭐ 后会出现在这里</div>';return}
+var html='';
+d.forEach(function(f,i){
+html+='<div class="fav-card">';
+html+='<div class="fav-num">'+(i+1)+'</div>';
+html+='<div class="fav-info"><div class="fav-style">'+esc(f.style)+'</div>';
+html+='<div class="fav-meta">'+esc(f.date)+' · '+esc(f.items||'')+'</div></div></div>';
+});
+favContent.innerHTML=html;
+}).catch(function(e){favContent.innerHTML='<div style="padding:20px;color:#c62828">⚠️ 加载失败</div>'});
+}
+}
+
+// 处理子菜单中的自定义 action
+(function(){
+var origPop=_popMenu;
+_popMenu=function(btn,items){
+var newItems=items.map(function(it){
+if(it.action==='favpanel'){return {cmd:'__fav__',label:it.label}}
+return it;
+});
+origPop(btn,newItems);
+// 监听 __fav__ 点击
+setTimeout(function(){
+var m=document.querySelector('.submenu');
+if(!m)return;
+m.querySelectorAll('.submenu-item').forEach(function(it){
+if(it.dataset.cmd==='__fav__'){
+it.onclick=function(ev){ev.stopPropagation();toggleFavorites();m.remove();document.querySelector('.submenu-mask')?.remove()}
+}
+});
+},0);
+}
+})();
 
 // ── 探索子菜单 ──
 function showExploreMenu(e){e.stopPropagation();_popMenu(e.currentTarget,[{cmd:'探索 日系',label:'🧪 微调探索'},{cmd:'大胆 混搭',label:'🚀 大胆混搭'}]);}

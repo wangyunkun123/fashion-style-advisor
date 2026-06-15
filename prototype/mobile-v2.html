@@ -80,7 +80,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .mini-card{flex-shrink:0;width:130px;background:var(--card);border-radius:10px;padding:12px;box-shadow:0 1px 6px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s;border:1px solid var(--border)}
 .mini-card:active{transform:scale(.96);background:#faf8f5}
 .mini-card .mc-style{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-.mini-card .mc-items{font-size:11px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mini-card .mc-item{font-size:11px;color:var(--muted);line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ── 主图信息区 ── */
 .main-outfit{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
@@ -164,11 +164,15 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
       <div class="mini-cards">
         <div class="mini-card">
           <div class="mc-style">夏日度假休闲</div>
-          <div class="mc-items">TS-008 夏威夷椰树印花短袖<br>SH-008 亚麻西装短裤<br>SHOE-002 Adidas训练鞋</div>
+          <div class="mc-item">👕 TS-008 椰树印花短袖</div>
+          <div class="mc-item">🩳 SH-008 亚麻短裤</div>
+          <div class="mc-item">👟 SHOE-002 复古训练鞋</div>
         </div>
         <div class="mini-card">
           <div class="mc-style">衬衫叠穿层次</div>
-          <div class="mc-items">SHIRT-002 Uniqlo衬衫敞穿<br>TS-011 宽松落肩T恤<br>SHOE-005 Nike网球鞋</div>
+          <div class="mc-item">👔 SHIRT-002 基础衬衫</div>
+          <div class="mc-item">👕 TS-011 落肩T恤</div>
+          <div class="mc-item">👟 SHOE-005 网球鞋</div>
         </div>
         <div class="mini-card" style="display:flex;align-items:center;justify-content:center;background:var(--bg);border:2px dashed var(--border);min-height:80px">
           <div style="text-align:center;color:var(--muted);font-size:13px">➕<br>换一批</div>

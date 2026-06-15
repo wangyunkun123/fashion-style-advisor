@@ -234,7 +234,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
 .page.active{{display:flex}}
 .scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}}
-.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5}}
+.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;align-items:center}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
 .page-bottom input::placeholder{{color:var(--muted)}}
@@ -381,7 +381,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="rec-card dashed"><div class="dash-text">+ 换一批</div></div>
 </div>
 </div>
-<div class="page-bottom"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
+<div class="page-bottom"><input type="text" id="today-input" placeholder="描述穿搭需求，如「今天要去约会」..." onkeydown="if(event.key==='Enter')sendOutfit()"><button style="width:44px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:8px" onclick="sendOutfit()">▶</button></div>
 </div>
 
 <!-- 历史推荐 -->
@@ -451,6 +451,8 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
+function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
+function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
 (function refreshHero(){{fetch('/api/today').then(function(r){{return r.json()}}).then(function(d){{if(!d||d.empty)return;var hi=document.querySelector('.hero-img img');if(!hi||hi.getAttribute('data-loaded')===d.dir)return;hi.src=d.img||'';hi.setAttribute('data-loaded',d.dir);var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el)el.textContent=(d.date||'')+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return'<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var ic={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var cm={{TS:'上衣',LS:'长袖',SHIRT:'衬衫',TANK:'背心',JK:'外套',PT:'长裤',SH:'短裤',SHOE:'鞋子',HAT:'帽子',BAG:'包',SOCK:'袜子',SUN:'墨镜',ACC:'配饰'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(ic[p]||'👔')+'</span><span class=\"item-cat\">'+(cm[p]||'')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+(it.name||'').substring(0,14)+'</span></div>'}});el.innerHTML=h}}}})}})();
 </script>
 </body></html>'''

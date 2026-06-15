@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>穿搭助手</title>
+<style>
+:root {
+  --bg: #f5f0eb;
+  --card: #fff;
+  --text: #3a3028;
+  --muted: #9b8c7c;
+  --border: #e0d8d0;
+  --accent: #5c4d3c;
+  --warn: #c62828;
+  --ok: #2e7d32;
+  --tag-bg: #f0ece6;
+  --shadow: 0 2px 12px rgba(0,0,0,.06);
+  --radius: 14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:#e8e2da;display:flex;justify-content:center;min-height:100vh}
+#app{max-width:500px;width:100%;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+/* ── 顶部标题栏 ── */
+.header{background:linear-gradient(135deg,#3a3028,#5c4d3c);color:#fff;padding:14px 18px;text-align:center;flex-shrink:0;position:relative;z-index:10}
+.header h1{font-size:18px;font-weight:600;letter-spacing:1px}
+.header .sub{font-size:10px;opacity:.55;letter-spacing:2px;margin-top:2px}
+
+/* ── 二级标签栏 ── */
+.subtabs{display:flex;gap:0;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 8px}
+.subtabs::-webkit-scrollbar{display:none}
+.subtab{flex-shrink:0;padding:12px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.subtab.active{color:var(--text);font-weight:600;border-bottom-color:var(--accent)}
+
+/* ── 页面主体 ── */
+.page{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column}
+.page.active{display:flex}
+
+/* ── 穿搭卡片 ── */
+.outfit-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px}
+.outfit-img{width:100%;aspect-ratio:4/3;background:var(--tag-bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.outfit-img img{width:100%;display:block;object-fit:cover}
+.outfit-img .no-img{font-size:40px;opacity:.3}
+.outfit-body{padding:14px}
+.outfit-style{font-size:17px;font-weight:700;color:var(--text);margin-bottom:3px}
+.outfit-meta{font-size:11px;color:var(--muted);margin-bottom:10px}
+.outfit-items{display:flex;flex-direction:column;gap:6px}
+.outfit-item{display:flex;align-items:center;gap:8px;font-size:13px}
+.oi-id{font-size:10px;color:var(--muted);background:var(--tag-bg);padding:1px 6px;border-radius:4px;font-family:monospace;flex-shrink:0}
+.oi-name{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.oi-cat{font-size:10px;color:var(--muted);flex-shrink:0;min-width:32px}
+
+/* ── 通用内容区 ── */
+.section{padding:14px 16px}
+.section-header{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:6px}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.placeholder{text-align:center;padding:40px 20px;color:var(--muted)}
+.placeholder .ph-icon{font-size:48px;margin-bottom:12px;opacity:.5}
+.placeholder .ph-text{font-size:14px;line-height:1.6}
+
+/* ── 历史推荐列表 ── */
+.fav-list{display:flex;flex-direction:column;gap:8px}
+.fav-card{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:pointer}
+.fav-card:active{background:#faf8f5}
+.fav-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fav-info{flex:1;min-width:0}
+.fav-style{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.fav-meta{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fav-star{color:#e6a817;font-size:13px;flex-shrink:0}
+
+/* ── 搜索框 ── */
+.search-box{padding:10px 14px;display:flex;gap:8px}
+.search-box input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:20px;font-size:14px;background:var(--card);outline:none;-webkit-appearance:none}
+.search-box input:focus{border-color:var(--accent)}
+
+/* ── 输入栏 ── */
+.page-input{flex-shrink:0;background:var(--card);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px}
+.page-input input{flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:20px;font-size:15px;background:var(--bg);outline:none;-webkit-appearance:none}
+.page-input input:focus{border-color:var(--accent)}
+.page-input button{width:44px;height:44px;background:var(--accent);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0}
+
+/* ── 衣橱卡片 ── */
+.stat-row{display:flex;gap:8px;margin-bottom:8px}
+.stat-box{flex:1;background:var(--bg);border-radius:10px;padding:12px;text-align:center}
+.stat-num{font-size:22px;font-weight:700;color:var(--text)}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+.gap-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--bg)}
+.gap-row:last-child{border-bottom:none}
+.gap-bar{flex:1;height:5px;background:var(--bg);border-radius:3px;margin:0 8px;overflow:hidden}
+.gap-fill{height:100%;border-radius:3px}
+.gap-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
+.gap-tag.warn{background:#fff3e0;color:#e65100}
+.gap-tag.danger{background:#ffebee;color:var(--warn)}
+.gap-tag.ok{background:#e8f5e9;color:var(--ok)}
+
+/* ── 底部 Tab Bar ── */
+.tab-bar{flex-shrink:0;display:flex;justify-content:space-around;background:var(--card);border-top:1px solid var(--border);padding:8px 0;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:2px 0;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
+.tab:active{opacity:.6}
+.tab .t-icon{font-size:21px;line-height:1.2}
+.tab .t-label{font-size:10px;color:var(--muted);font-weight:500}
+.tab.active .t-label{color:var(--text);font-weight:700}
+
+/* ── 动画 ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn .2s}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- 顶部 -->
+<div class="header"><h1>👔 穿搭助手</h1><div class="sub">AI STYLE ADVISOR</div></div>
+
+<!-- ═══════════ 推荐页（默认首页）═══════════ -->
+<div class="page active" id="page-recommend">
+  <div class="subtabs" id="subtabs-recommend">
+    <div class="subtab active" data-sub="today">今日推荐</div>
+    <div class="subtab" data-sub="history">历史推荐</div>
+  </div>
+
+  <!-- ── 今日推荐 ── -->
+  <div class="subpage active" id="sub-today">
+    <div class="section">
+      <div class="section-header">🤖 AI 为你生成 3 套今日穿搭</div>
+
+      <!-- 方案1 -->
+      <div class="outfit-card">
+        <div class="outfit-img"><img src="../outfits/2026-06-15_起雾了，今天该穿什么？/豆包生图/人物_IMG_8493_方案1.jpg" alt=""></div>
+        <div class="outfit-body">
+          <div class="outfit-style">方案一 · 清爽雾天城市休闲</div>
+          <div class="outfit-meta">🌫️ 雾 22°C · 湿度88% · 米白+浅灰绿主调</div>
+          <div class="outfit-items">
+            <div class="outfit-item"><span class="oi-cat">上衣</span><span class="oi-id">TS-011</span><span class="oi-name">宽松落肩纯色T恤</span></div>
+            <div class="outfit-item"><span class="oi-cat">下装</span><span class="oi-id">SH-004</span><span class="oi-name">宽松休闲短裤</span></div>
+            <div class="outfit-item"><span class="oi-cat">鞋子</span><span class="oi-id">SHOE-005</span><span class="oi-name">Nike Court Lite入门网球鞋</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 方案2 -->
+      <div class="outfit-card">
+        <div class="outfit-img"><div class="no-img">🌴</div></div>
+        <div class="outfit-body">
+          <div class="outfit-style">方案二 · 夏日度假休闲</div>
+          <div class="outfit-meta">🌤️ 晴 28°C · 椰树印花 + 亚麻短裤</div>
+          <div class="outfit-items">
+            <div class="outfit-item"><span class="oi-cat">上衣</span><span class="oi-id">TS-008</span><span class="oi-name">FUR SPEED 夏威夷椰树印花短袖</span></div>
+            <div class="outfit-item"><span class="oi-cat">下装</span><span class="oi-id">SH-008</span><span class="oi-name">亚麻西装短裤</span></div>
+            <div class="outfit-item"><span class="oi-cat">鞋子</span><span class="oi-id">SHOE-002</span><span class="oi-name">Adidas 复古训练鞋</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 方案3 -->
+      <div class="outfit-card">
+        <div class="outfit-img"><div class="no-img">🌥️</div></div>
+        <div class="outfit-body">
+          <div class="outfit-style">方案三 · 雾天清爽日常休闲</div>
+          <div class="outfit-meta">🌫️ 雾 21°C · 衬衫叠穿增加层次</div>
+          <div class="outfit-items">
+            <div class="outfit-item"><span class="oi-cat">上衣</span><span class="oi-id">TS-011</span><span class="oi-name">宽松落肩纯色T恤</span></div>
+            <div class="outfit-item"><span class="oi-cat">外层</span><span class="oi-id">SHIRT-002</span><span class="oi-name">Uniqlo基础衬衫，敞穿</span></div>
+            <div class="outfit-item"><span class="oi-cat">下装</span><span class="oi-id">SH-004</span><span class="oi-name">宽松休闲短裤</span></div>
+            <div class="outfit-item"><span class="oi-cat">鞋子</span><span class="oi-id">SHOE-005</span><span class="oi-name">Nike Court Lite入门网球鞋</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 历史推荐 ── -->
+  <div class="subpage" id="sub-history" style="display:none">
+    <!-- 今日全部推荐 -->
+    <div class="section">
+      <div class="section-header">📅 今日全部推荐</div>
+      <div class="fav-list">
+        <div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">清爽雾天城市休闲</div><div class="fav-meta">TS-011、SH-004、SHOE-005、HAT-004、BAG-005…</div></div></div>
+        <div class="fav-card"><div class="fav-num">2</div><div class="fav-info"><div class="fav-style">夏日度假休闲</div><div class="fav-meta">TS-008、SH-008、SHOE-002、HAT-004</div></div></div>
+        <div class="fav-card"><div class="fav-num">3</div><div class="fav-info"><div class="fav-style">雾天清爽日常休闲</div><div class="fav-meta">TS-011、SHIRT-002、SH-004、SHOE-005</div></div></div>
+      </div>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="search-box">
+      <input type="text" placeholder="🔍 按风格/日期/单品搜索历史推荐…">
+    </div>
+
+    <!-- 三星好评 -->
+    <div class="section" style="padding-top:0">
+      <div class="section-header">⭐ 你的历史最爱</div>
+      <div class="fav-list">
+        <div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">打网球穿搭</div><div class="fav-meta">2026-06-14 · TS-009、SH-005、SHOE-005</div></div><div class="fav-star">⭐⭐⭐</div></div>
+        <div class="fav-card"><div class="fav-num">2</div><div class="fav-info"><div class="fav-style">(暂无更多三星好评)</div><div class="fav-meta">给满意的穿搭点 ⭐⭐⭐ 后会出现在这里</div></div><div class="fav-star"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-input">
+    <input type="text" id="rec-input" placeholder="描述你的穿搭需求，比如「今天要去约会」…">
+    <button onclick="document.getElementById('rec-input').value&&alert('已发送: '+document.getElementById('rec-input').value)">▶</button>
+  </div>
+</div>
+
+<!-- ═══════════ 探索页 ═══════════ -->
+<div class="page" id="page-explore">
+  <div class="subtabs" id="subtabs-explore">
+    <div class="subtab active" data-sub="daily">日常穿搭</div>
+    <div class="subtab" data-sub="change">改变自己</div>
+    <div class="subtab" data-sub="bold">大胆跨界</div>
+  </div>
+  <div class="subpage active" id="sub-daily">
+    <div class="placeholder"><div class="ph-icon">🧪</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div>
+  </div>
+  <div class="subpage" id="sub-change" style="display:none">
+    <div class="placeholder"><div class="ph-icon">🔄</div><div class="ph-text">改变自己<br>跳出舒适区<br>尝试与你风格不同的方向</div></div>
+  </div>
+  <div class="subpage" id="sub-bold" style="display:none">
+    <div class="placeholder"><div class="ph-icon">🚀</div><div class="ph-text">大胆跨界<br>完全不同的风格<br>给你惊喜的搭配</div></div>
+  </div>
+  <div class="page-input">
+    <input type="text" placeholder="描述你想尝试的风格…">
+    <button>▶</button>
+  </div>
+</div>
+
+<!-- ═══════════ 衣橱页 ═══════════ -->
+<div class="page" id="page-wardrobe">
+  <div class="subtabs" id="subtabs-wardrobe">
+    <div class="subtab active" data-sub="mywardrobe">我的衣橱</div>
+    <div class="subtab" data-sub="monthly">月度报告</div>
+    <div class="subtab" data-sub="unused">冷门单品</div>
+    <div class="subtab" data-sub="purchase">购买建议</div>
+  </div>
+  <div class="subpage active" id="sub-mywardrobe">
+    <div class="section">
+      <div class="card"><div class="section-header">📊 概览</div>
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-num">76</div><div class="stat-label">总件数</div></div>
+          <div class="stat-box"><div class="stat-num" style="color:var(--warn)">26%</div><div class="stat-label">利用率</div></div>
+          <div class="stat-box"><div class="stat-num" style="color:var(--warn)">8</div><div class="stat-label">超标品类</div></div>
+          <div class="stat-box"><div class="stat-num" style="color:#e65100">1</div><div class="stat-label">缺口品类</div></div>
+        </div>
+      </div>
+      <div class="card"><div class="section-header">📦 品类健康</div>
+        <div class="gap-row"><span>短袖 T恤</span><div class="gap-bar"><div class="gap-fill" style="width:73%;background:var(--warn)"></div></div><span>11件</span><span class="gap-tag danger">超标+4</span></div>
+        <div class="gap-row"><span>鞋子</span><div class="gap-bar"><div class="gap-fill" style="width:67%;background:var(--warn)"></div></div><span>10件</span><span class="gap-tag danger">超标+2</span></div>
+        <div class="gap-row"><span>长裤</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:var(--ok)"></div></div><span>6件</span><span class="gap-tag ok">✓</span></div>
+        <div class="gap-row"><span>短裤</span><div class="gap-bar"><div class="gap-fill" style="width:53%;background:var(--warn)"></div></div><span>8件</span><span class="gap-tag danger">超标+4</span></div>
+        <div class="gap-row"><span>外套</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:var(--ok)"></div></div><span>6件</span><span class="gap-tag ok">✓</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="subpage" id="sub-monthly" style="display:none">
+    <div class="placeholder"><div class="ph-icon">📊</div><div class="ph-text">月度穿搭报告<br>统计周期：2026年6月<br>44套穿搭 · 9种风格 · 评分率7%</div></div>
+  </div>
+  <div class="subpage" id="sub-unused" style="display:none">
+    <div class="placeholder"><div class="ph-icon">💤</div><div class="ph-text">沉睡好货<br>JK-001 Adidas曼联夹克<br>LS-004 CDG Play长袖<br>SHOE-007 Timberland大黄靴<br>等29件好品质单品从未穿过</div></div>
+  </div>
+  <div class="subpage" id="sub-purchase" style="display:none">
+    <div class="placeholder"><div class="ph-icon">🛒</div><div class="ph-text">购买建议<br>🔴 优先：1双棕色乐福鞋<br>🟡 可选：1件酒红色上衣<br>🟢 建议：暂停购入短袖T恤</div></div>
+  </div>
+</div>
+
+<!-- ═══════════ 添加页 ═══════════ -->
+<div class="page" id="page-add">
+  <div class="subtabs" id="subtabs-add">
+    <div class="subtab active" data-sub="camera">拍照</div>
+    <div class="subtab" data-sub="upload">上传图片</div>
+  </div>
+  <div class="subpage active" id="sub-camera">
+    <div class="placeholder" style="padding:60px 20px"><div class="ph-icon">📸</div><div class="ph-text">拍照识别衣服<br>对准衣服拍照<br>AI 自动识别品牌、品类、颜色</div></div>
+  </div>
+  <div class="subpage" id="sub-upload" style="display:none">
+    <div class="placeholder" style="padding:60px 20px"><div class="ph-icon">📤</div><div class="ph-text">上传衣服图片<br>从相册选择图片<br>AI 自动分析并生成标签</div></div>
+  </div>
+</div>
+
+<!-- ═══════════ 我的页 ═══════════ -->
+<div class="page" id="page-profile">
+  <div class="section">
+    <div class="placeholder" style="padding:80px 20px">
+      <div class="ph-icon">👤</div>
+      <div class="ph-text">个人中心<br>即将上线<br><span style="font-size:11px">推送偏好 · 穿搭统计 · 身形档案</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部 Tab Bar -->
+<div class="tab-bar" id="tab-bar">
+  <div class="tab active" data-page="recommend"><span class="t-icon">👕</span><span class="t-label">推荐</span></div>
+  <div class="tab" data-page="explore"><span class="t-icon">💡</span><span class="t-label">探索</span></div>
+  <div class="tab" data-page="wardrobe"><span class="t-icon">🗄️</span><span class="t-label">衣橱</span></div>
+  <div class="tab" data-page="add"><span class="t-icon">📸</span><span class="t-label">添加</span></div>
+  <div class="tab" data-page="profile"><span class="t-icon">👤</span><span class="t-label">我的</span></div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+var currentPage='recommend';
+var tabs=document.querySelectorAll('#tab-bar .tab');
+var pages=document.querySelectorAll('.page');
+
+tabs.forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var page=this.dataset.page;
+    if(page===currentPage) return;
+    currentPage=page;
+    tabs.forEach(function(t){t.classList.remove('active')});
+    this.classList.add('active');
+    pages.forEach(function(p){p.classList.remove('active')});
+    document.getElementById('page-'+page).classList.add('active');
+  });
+});
+
+// 二级标签切换
+document.querySelectorAll('.subtabs').forEach(function(subtabs){
+  subtabs.addEventListener('click',function(e){
+    var subtab=e.target.closest('.subtab');
+    if(!subtab) return;
+    var sub=subtab.dataset.sub;
+    subtabs.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active')});
+    subtab.classList.add('active');
+    var parent=subtabs.parentElement;
+    parent.querySelectorAll('.subpage').forEach(function(sp){sp.style.display='none'});
+    var target=document.getElementById('sub-'+sub);
+    if(target) target.style.display='block';
+  });
+});
+</script>
+</body>
+</html>

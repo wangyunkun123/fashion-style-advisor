@@ -417,16 +417,23 @@ tabs_html = '\n'.join([
 ])
 
 # ── Build history cards ──
-def random_tags(style_name):
-    """Generate random style tags for testing"""
-    pools = [['日系','韩系','欧美','街头','复古','机能','简约','轻熟','运动','度假'],
-             ['City Boy','Clean Fit','Athleisure','Y2K','Gorpcore','Normcore'],
-             ['宽松廓形','低饱和','高对比','叠穿','单色系','撞色']]
-    import random
+def extract_tags(outfit):
+    """Extract real style tags from outfit keywords + style name"""
     tags = []
-    for pool in pools:
-        tags.append(random.choice(pool))
-    return tags[:4]
+    # Split style name into words
+    style = outfit.get('style','')
+    for sep in ['丨','｜','/','·','-',' ']:
+        style = style.replace(sep, ' ')
+    words = [w.strip() for w in style.split() if len(w.strip())>=2]
+    tags.extend(words[:3])
+    # Deduplicate & limit
+    seen = set()
+    result = []
+    for t in tags:
+        if t not in seen:
+            result.append(t[:8])
+            seen.add(t)
+    return result[:4]
 
 def gen_history_card(outfit, idx):
     items_html = ''
@@ -444,8 +451,8 @@ def gen_history_card(outfit, idx):
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
         items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'showing-img\')"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:18], img_html)
-    # Style tags
-    tags = random_tags(outfit['style'])
+    # Style tags from real data
+    tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'
     rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
     # Character image

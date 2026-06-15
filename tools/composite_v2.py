@@ -103,7 +103,7 @@ def parse(d):
         if not cat_word:
             for tail,short in [('短袖','短袖'),('长袖','长袖'),('短裤','短裤'),('长裤','长裤'),
                                ('衬衫','衬衫'),('卫衣','卫衣'),('外套','外套'),('背心','背心'),
-                               ('帽','帽'),('包','包'),('袜','袜'),('鞋','鞋'),('镜','🕶'),('表','⌚')]:
+                               ('帽','帽'),('包','包'),('袜','袜'),('鞋','鞋'),('镜','墨镜'),('表','表')]:
                 if tail in iname[-4:]:
                     cat_word=short; break
         if not cat_word:
@@ -113,14 +113,23 @@ def parse(d):
             # Decathlon 子品牌用简称
             for parent,sub in [('Decathlon Artengo','Artengo'),('Decathlon Kiprun','Kiprun')]:
                 if brand==parent: brand=sub
-            display=f'{brand} {cat_word}' if cat_word else brand
-            if len(display)>14:
-                # 品牌名太长时只用品牌
-                return brand[:14]
+            # 提取型号/系列关键词（如 Court Lite, Metal Vent Tech）
+            model = ''
+            for prefix in ['Court Lite','Air Max','Ultraboost','Metal Vent','Pegasus',
+                           'Air Force','Gel-Kayano','Chuck Taylor','Old Skool']:
+                if prefix.lower() in iname.lower():
+                    model = prefix; break
+            if model:
+                display = f'{brand} {model}'
+                if len(display) <= 18:
+                    return display
+            display = f'{brand} {cat_word}' if cat_word else brand
+            if len(display) > 16:
+                return brand[:16]
             return display
         # 无品牌
-        if len(iname)<=14: return iname
-        return iname[:12]+'…'
+        if len(iname) <= 16: return iname
+        return iname[:14] + '…'
     with open(md,encoding='utf-8') as f: lines=f.readlines()
     in_sec,items=False,[]
     for line in lines:
@@ -344,7 +353,7 @@ def composite(ai_path,items,output_path):
             ox=lx+(box_w-cloth.width)//2; oy=ly+(box_h-cloth.height)//2
             canvas.paste(cloth,(ox,oy),cloth)
         draw.rectangle([(lx,ly),(lx+box_w-1,ly+box_h-1)],outline=(189,189,184),width=BORDER)
-        dname=it.get('display_name',it['name'][:14])
+        dname=it.get('display_name',it['name'][:16])
         fn=f_item_sm if len(dname)>12 else f_item
         draw.text((lx+14,ly+box_h-42),dname,font=fn,fill=(80,80,78))
         ly+=box_h+GAP
@@ -366,7 +375,7 @@ def composite(ai_path,items,output_path):
             ox=rx+(box_w-cloth.width)//2; oy=ry+(box_h-cloth.height)//2
             canvas.paste(cloth,(ox,oy),cloth)
         draw.rectangle([(rx,ry),(rx+box_w-1,ry+box_h-1)],outline=(189,189,184),width=BORDER)
-        dname=it.get('display_name',it['name'][:14])
+        dname=it.get('display_name',it['name'][:16])
         fn=f_item_sm if len(dname)>12 else f_item
         draw.text((rx+14,ry+box_h-42),dname,font=fn,fill=(80,80,78))
         ry+=box_h+GAP

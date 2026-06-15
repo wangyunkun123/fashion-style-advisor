@@ -784,6 +784,9 @@ def run_pipeline(style_hint, task_id=None):
                 content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
                 push_wechat(f"👔 {style_hint}", content)
 
+            # 重建原型HTML(使用最新数据)
+            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
+
             # 更新控制台结果（与微信推送内容一致）
             if task_id:
                 tasks.update(task_id, status='done', message='✅ 全部完成',

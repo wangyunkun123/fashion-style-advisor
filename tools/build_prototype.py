@@ -357,21 +357,13 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png" alt=""></div>
+<div class="hero-img"><img src="{hero_img}" alt=""></div>
 <div class="hero-body">
-<div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
-<div class="hero-style">清爽专业网球运动风</div>
-<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-list">
-{item_tshirt_tennis}
-{item_pants_tennis}
-{item_shoe_tennis}
-{item_hat_tennis}
-{item_bag_tennis}
-{item_sock_tennis}
-{item_acc_tennis}
-</div>
-<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
+<div class="style-tags">{hero_tags_html}</div>
+<div class="hero-style">{hero_style}</div>
+<div class="hero-meta">{hero_meta}</div>
+<div class="item-grid">{hero_items_html}</div>
+<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span>{hero_palette}</div>
 </div></div>
 
 <div class="section-header">其他推荐</div>
@@ -455,7 +447,7 @@ function filterHistory(){{var q=document.getElementById('history-search').value.
 function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
 function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
 function refreshAlts(){{var alts=[['日系 City Boy',['TS-011 落肩T恤','SHIRT-001 条纹衬衫','SHOE-009 AF1']],['轻熟休闲',['SHIRT-003 牛津衬衫','PT-005 西裤','SHOE-009 板鞋']],['韩系简约',['TS-010 条纹T恤','PT-006 直筒牛仔裤','SHOE-005']],['Clean Fit',['TS-009 短袖','PT-002 牛仔裤','SHOE-006']],['街头潮流',['TS-006 黑T','JK-003 棒球服','SHOE-008']],['运动休闲',['TANK-001 背心','SH-001 速干短裤','SHOE-003']]];var pool=alts.sort(function(){{return Math.random()-0.5}}).slice(0,3);var h='';pool.forEach(function(a){{var items=a[1].map(function(i){{return'<div>'+i+'</div>'}}).join('');h+='<div class=\"rec-card\" onclick=\"this.classList.toggle(\\'open\\')\"><div class=\"rc-style-name\">'+a[0]+'</div><div class=\"rc-items\">'+items+'</div><div class=\"rc-arrow\">▾</div></div>'}});var el=document.getElementById('alt-cards');if(el)el.innerHTML=h}}
-setTimeout(function(){{fetch('/api/today').then(function(r){{return r.json()}}).then(function(d){{if(!d||d.empty)return;var hi=document.querySelector('.hero-img img');if(!hi)return;hi.src=d.img||'';var el=document.querySelector('.hero-style');if(el&&d.style)el.textContent=d.style;el=document.querySelector('.hero-meta');if(el)el.textContent=(d.date||'')+(d.weather?' · '+d.weather:'');el=document.querySelector('.style-tags');if(el&&d.tags)el.innerHTML=d.tags.map(function(t){{return'<span>'+t+'</span>'}}).join('');el=document.querySelector('.item-grid');if(el&&d.items){{var ic={{TS:'👕',LS:'👔',SHIRT:'👔',TANK:'🎽',JK:'🧥',PT:'👖',SH:'🩳',SHOE:'👟',HAT:'🧢',BAG:'🎒',SOCK:'🧦',SUN:'🕶',ACC:'⌚'}};var cm={{TS:'上衣',LS:'长袖',SHIRT:'衬衫',TANK:'背心',JK:'外套',PT:'长裤',SH:'短裤',SHOE:'鞋子',HAT:'帽子',BAG:'包',SOCK:'袜子',SUN:'墨镜',ACC:'配饰'}};var h='';d.items.forEach(function(it){{var p=it.id.split('-')[0];h+='<div class=\"item-row\"><span class=\"item-emoji\">'+(ic[p]||'👔')+'</span><span class=\"item-cat\">'+(cm[p]||'')+'</span><span class=\"item-id\">'+it.id+'</span><span class=\"item-name\">'+(it.name||'').substring(0,14)+'</span></div>'}});el.innerHTML=h}}}})}},500);
+
 </script>
 </body></html>'''
 
@@ -545,6 +537,34 @@ if not fav_cards: fav_cards = '<div style="padding:16px;color:var(--muted);font-
 
 # "今天也适合" style alternatives based on weather
 alt_styles = ['日系 City Boy','轻熟休闲','韩系简约','Clean Fit','街头潮流','运动休闲']
+# ── Use latest today outfit for hero ──
+today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=1)
+hero_outfit = today_outfits[0] if today_outfits else None
+if hero_outfit:
+    hero_img = hero_outfit.get('char_img','outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png')
+    hero_style = hero_outfit['style'][:30]
+    hero_meta = hero_outfit['date'] + ' · ' + (hero_outfit.get('weather','晴 · 22~34°C')[:30])
+    hero_tags = extract_tags(hero_outfit)
+    hero_tags_html = ''.join(['<span>{}</span>'.format(t) for t in hero_tags])
+    hero_items_html = ''
+    cat_icons_map = {'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket','PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}
+    for it in hero_outfit['items'][:8]:
+        p = it['id'].split('-')[0]
+        ico = item_icons.get(cat_icons_map.get(p,'tshirt'),'')
+        thumb = it.get('thumb','')
+        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb) if thumb else ''
+        hero_items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it.get('cat',''), it['id'], it['name'][:14], thumb_html)
+    # Color palette from items
+    hero_palette = '<span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span>'
+else:
+    hero_img = 'outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png'
+    hero_style = '清爽专业网球运动风'
+    hero_meta = '2026/06/14 · 晴 · 22~34°C · 紫外线 强'
+    hero_tags_html = '<span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span>'
+    hero_items_html = '{item_tshirt_tennis}{item_pants_tennis}{item_shoe_tennis}{item_hat_tennis}{item_bag_tennis}{item_sock_tennis}{item_acc_tennis}'
+    hero_palette = '<span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span>'
+
+# Alt style cards
 card1 = mini_card(alt_styles[0], ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
 card2 = mini_card(alt_styles[1], ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
 card3 = mini_card(alt_styles[2], ['TS-010 条纹T恤', 'PT-006 直筒牛仔裤', 'SHOE-005 网球鞋', 'HAT-004 棒球帽'])
@@ -568,8 +588,9 @@ html = html.format(
     item_sun_summer=item_row(item_icons['sun'], '墨镜', 'SUN-002', '经典方形墨镜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SUN-002_Image_20260610_0845_19_011_cutout.png'),
     item_sock_summer=item_row(item_icons['sock'], '袜子', 'SOCK-005', '基础船袜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SOCK-005_Image_20260610_0807_09_360_cutout.png'),
     item_acc_summer=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 回环尼龙表带', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
-    today_cards=today_cards,
-    fav_cards=fav_cards,
+    hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
+    hero_tags_html=hero_tags_html, hero_items_html=hero_items_html, hero_palette=hero_palette,
+    today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
 )
 

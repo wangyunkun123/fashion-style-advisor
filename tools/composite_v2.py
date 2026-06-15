@@ -113,17 +113,15 @@ def parse(d):
             # Decathlon 子品牌用简称
             for parent,sub in [('Decathlon Artengo','Artengo'),('Decathlon Kiprun','Kiprun')]:
                 if brand==parent: brand=sub
-            # 提取型号/系列关键词（如 Court Lite, Metal Vent Tech）
-            model = ''
-            for prefix in ['Court Lite','Air Max','Ultraboost','Metal Vent','Pegasus',
-                           'Air Force','Gel-Kayano','Chuck Taylor','Old Skool']:
-                if prefix.lower() in iname.lower():
-                    model = prefix; break
-            if model:
-                display = f'{brand} {model}'
-                if len(display) <= 18:
-                    return display
-            display = f'{brand} {cat_word}' if cat_word else brand
+            # Apple Watch 显示表带类型
+            if iid == 'ACC-003':
+                band = ''
+                for b in ['回环尼龙','米兰尼斯','运动表带','黑色运动']:
+                    if b in iname:
+                        band = b; break
+                display = f'{brand} {band}' if band else f'{brand} {cat_word}'
+            else:
+                display = f'{brand} {cat_word}' if cat_word else brand
             if len(display) > 16:
                 return brand[:16]
             return display

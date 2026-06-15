@@ -46,8 +46,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": false,
-    "wear_count": 0,
-    "last_worn": null,
+    "wear_count": 1,
+    "last_worn": "2026-06-15T08:51:02.371283",
     "claude_fit_comment": "Uniqlo基础衬衫,日系简约,颜色显白,宽松版型增加上半身体量感,通勤日常百搭",
     "_statement_score": 0.1
   }

@@ -165,17 +165,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
-<div class="hero-body">
-<div class="hero-style">清爽专业网球运动风</div>
-<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-list">
-{item_tshirt_tennis}
-{item_pants_tennis}
-{item_shoe_tennis}
-{item_hat_tennis}
-{item_bag_tennis}
-</div></div></div>
+<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E6%89%8B%E6%9C%BA%E7%AB%AF%E6%8E%92%E7%89%88_%E6%96%B9%E6%A1%881.jpg" alt="" style="width:100%;height:100%;object-fit:contain;background:#f8fafc"></div>
 
 <div class="section-header">其他推荐</div>
 <div class="rec-cards">

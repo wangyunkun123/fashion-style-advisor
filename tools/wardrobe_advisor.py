@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
-衣橱智能顾问 — 品类分析 / 颜色平衡 / 利用率追踪 / 购买建议
+衣橱智能顾问 — 品类分析 / 颜色平衡 / 利用率追踪 / 购买建议 / 月度穿搭报告
 
 用法:
-  python3 tools/wardrobe_advisor.py --report     完整分析报告
-  python3 tools/wardrobe_advisor.py --summary     简要统计概览
+  python3 tools/wardrobe_advisor.py --report     衣橱完整分析报告
+  python3 tools/wardrobe_advisor.py --monthly    月度穿搭报告（基于历史穿搭记录）
+  python3 tools/wardrobe_advisor.py --summary     衣橱简要统计概览
+  python3 tools/wardrobe_advisor.py --json        JSON 导出
+
+  --save  附带参数可将报告保存到项目根目录 .txt 文件
 """
 
 import os, sys, json, glob, re, time
@@ -705,6 +709,206 @@ def build_structured_data(gaps, sub_gaps, color_analysis, brand_analysis, utiliz
 
 
 # ============================================================
+# 5b. 月度穿搭报告
+# ============================================================
+
+def normalize_style(style_name):
+    """归并风格到核心类别"""
+    s = style_name.lower()
+    if 'city boy' in s or 'cityboy' in s: return '日系 City Boy'
+    if 'clean fit' in s or 'cleanfit' in s: return 'Clean Fit'
+    if '轻熟' in s: return '轻熟休闲'
+    if '街头' in s: return '街头潮流'
+    if '运动' in s or 'athleisure' in s or '网球' in s or '跑步' in s: return '运动/网球'
+    if '韩系' in s: return '韩系简约'
+    if '度假' in s or '热带' in s or '亚麻' in s: return '度假休闲'
+    if '大胆' in s or '探索' in s or '突破' in s: return 'B线探索实验'
+    if '雾' in s or '雾天' in s: return '日系 City Boy'
+    if '日系' in s: return '日系 City Boy'
+    return '其他'
+
+
+def load_all_outfits():
+    """加载所有穿搭记录"""
+    records = []
+    for d in sorted(os.listdir(OUTFITS_DIR)):
+        dp = os.path.join(OUTFITS_DIR, d)
+        md = os.path.join(dp, 'outfit.md')
+        if not os.path.exists(md):
+            continue
+        with open(md, 'r', encoding='utf-8') as f:
+            content = f.read()
+        date_m = re.search(r'(\d{4}-\d{2}-\d{2})', d)
+        date_str = date_m.group(1) if date_m else d[:10]
+        style = ''
+        for line in content.split('\n'):
+            if 'style:' in line.lower() or '风格' in line:
+                m = re.search(r'[：:]\s*(.+)', line)
+                if m:
+                    style = m.group(1).strip()[:30]
+                    break
+        ids = set()
+        in_table = False
+        for line in content.split('\n'):
+            s = line.strip()
+            if '单品清单' in s:
+                in_table = True; continue
+            if in_table and s.startswith('##'):
+                break
+            if not in_table or not s.startswith('|') or '---' in s:
+                continue
+            cells = [c.strip().replace('**', '') for c in s.split('|')]
+            if len(cells) < 4:
+                continue
+            if re.match(r'^[A-Z]+-\d+', cells[2]):
+                ids.add(cells[2])
+        rating = None
+        rp = os.path.join(dp, 'rating.json')
+        if os.path.exists(rp):
+            try:
+                with open(rp) as f:
+                    rating = json.load(f).get('rating')
+            except:
+                pass
+        records.append({
+            'date': date_str, 'dir': d, 'style': style,
+            'items': sorted(ids), 'count': len(ids), 'rating': rating,
+        })
+    return records
+
+
+def build_monthly_report(wardrobe=None):
+    """构建月度穿搭报告"""
+    records = load_all_outfits()
+    if not records:
+        return '暂无穿搭记录'
+
+    from collections import Counter, defaultdict
+
+    by_date = defaultdict(list)
+    for r in records:
+        by_date[r['date']].append(r)
+
+    dates = sorted(by_date)
+    total = len(records)
+    rated = [r for r in records if r['rating']]
+
+    # 风格归并
+    style_groups = defaultdict(list)
+    for r in records:
+        ns = normalize_style(r['style'])
+        style_groups[ns].append(r)
+
+    # 单品频次
+    item_freq = Counter()
+    for r in records:
+        for iid in r['items']:
+            item_freq[iid] += 1
+
+    daily_counts = [len(by_date[d]) for d in dates]
+    max_count = max(daily_counts) if daily_counts else 1
+
+    parts = []
+    parts.append('━' * 44)
+    parts.append('📊 穿搭月度报告')
+    parts.append(f'📅 {dates[0]} ~ {dates[-1]} ({len(dates)}天) | {total}套穿搭')
+    parts.append('━' * 44)
+
+    # 核心数据
+    parts.append(f'\n━━━ 📈 核心数据 ━━━')
+    parts.append(f'  🧥 总生成穿搭: {total} 套')
+    parts.append(f'  📅 活跃天数: {len(dates)} 天')
+    parts.append(f'  📊 日均穿搭: {total/len(dates):.1f} 套/天')
+    parts.append(f'  ⭐ 有评分: {len(rated)} 套 ({len(rated)/total*100:.0f}%)')
+    parts.append(f'  🏷️ 覆盖风格: {len(style_groups)} 种')
+
+    # 每日活跃度
+    parts.append(f'\n━━━ 📅 每日活跃度 ━━━')
+    for d in dates:
+        n = len(by_date[d])
+        bar = '█' * n + '░' * (max_count - n)
+        rs = by_date[d]
+        styles_str = ' | '.join(dict.fromkeys(normalize_style(r['style']) for r in rs))
+        parts.append(f'  {d}  {bar} {n}套  {styles_str[:65]}')
+
+    # 风格分布
+    parts.append(f'\n━━━ 🎯 风格分布 ━━━')
+    total_s = sum(len(v) for v in style_groups.values())
+    for ns, rs in sorted(style_groups.items(), key=lambda x: -len(x[1])):
+        n = len(rs)
+        pct = n / total_s * 100 if total_s else 0
+        bar = '█' * max(1, int(pct / 3))
+        parts.append(f'  {ns:14s}  {bar} {n}套 ({pct:.0f}%)')
+
+    # 满意度
+    parts.append(f'\n━━━ ⭐ 满意度 ━━━')
+    if rated:
+        by_rating = Counter(r['rating'] for r in rated)
+        avg = sum(r['rating'] for r in rated) / len(rated)
+        parts.append(f'  ⭐⭐⭐ 满意: {by_rating.get(3,0)}次 ({by_rating.get(3,0)/len(rated)*100:.0f}%)')
+        parts.append(f'  ⭐⭐   一般: {by_rating.get(2,0)}次 ({by_rating.get(2,0)/len(rated)*100:.0f}%)')
+        parts.append(f'  ⭐     失望: {by_rating.get(1,0)}次 ({by_rating.get(1,0)/len(rated)*100:.0f}%)')
+        parts.append(f'  📊 平均分: {avg:.1f}/3')
+        if by_rating.get(1, 0) > 0:
+            parts.append(f'  ⚠️ 有差评记录，已自动禁用相关单品')
+    else:
+        parts.append(f'  (暂无评分 — 多评分能帮AI更懂你)')
+
+    # 最爱单品 TOP 15
+    parts.append(f'\n━━━ 👟 最爱单品 TOP 15 ━━━')
+    for i, (iid, n) in enumerate(item_freq.most_common(15), 1):
+        name = ''
+        if wardrobe:
+            item = wardrobe.get(iid, {})
+            name = item.get('meta', {}).get('claude_fit_comment', '')[:25]
+        bar = '█' * n
+        parts.append(f'  {i:2d}. {iid}  {bar} {n}次  {name}')
+
+    # B线探索
+    bline = style_groups.get('B线探索实验', [])
+    parts.append(f'\n━━━ 🧪 B线探索报告 ━━━')
+    parts.append(f'  探索次数: {len(bline)} 套 ({len(bline)/total*100:.0f}%)')
+    if bline:
+        bline_dates = sorted(set(r['date'] for r in bline))
+        parts.append(f'  探索日期: {", ".join(bline_dates)}')
+        for r in bline:
+            parts.append(f'    · {r["date"]} {r["style"][:40]}')
+
+    # 搭配习惯 — 品类组合
+    cat_combos = Counter()
+    for r in records:
+        cats = tuple(sorted(set(iid.split('-')[0] for iid in r['items'])))
+        cat_combos[cats] += 1
+    parts.append(f'\n━━━ 🔄 搭配习惯 ━━━')
+    parts.append(f'  品类组合 TOP 5:')
+    for cats, n in cat_combos.most_common(5):
+        if cats:
+            parts.append(f'    {"+".join(cats)}: {n}次')
+
+    # 月度洞察
+    parts.append(f'\n━━━ 💡 月度洞察 ━━━')
+    if style_groups:
+        top_style = max(style_groups, key=lambda x: len(style_groups[x]))
+        parts.append(f'  🔍 最常穿风格「{top_style}」({len(style_groups[top_style])}套)')
+    if len(rated) < total * 0.3:
+        parts.append(f'  ⚠️ 评分率仅{len(rated)/total*100:.0f}%，多评分帮AI更懂你')
+    if item_freq:
+        top_item = item_freq.most_common(1)[0]
+        parts.append(f'  👟 最爱单品 {top_item[0]} ({top_item[1]}次)')
+    peak_date = max(dates, key=lambda d: len(by_date[d]))
+    parts.append(f'  📈 最活跃日 {peak_date} ({len(by_date[peak_date])}套)')
+
+    # 下月待办
+    parts.append(f'\n━━━ 📋 下月待办 ━━━')
+    if len(rated) < total * 0.3:
+        parts.append(f'  💡 评分率提到50%+可获得个性化偏好报告')
+    parts.append(f'  💡 尝试穿一次闲置关键单品（JK-001、LS-004、SHOE-007等）')
+
+    parts.append('\n' + '━' * 44)
+    return '\n'.join(parts)
+
+
+# ============================================================
 # 6. CLI
 # ============================================================
 
@@ -724,8 +928,22 @@ def main():
         prev_snap = save_monthly_snapshot(wardrobe)
         monthly_delta = compute_monthly_delta(wardrobe, prev_snap)
 
-        print(build_report(gaps, sub_gaps, color_analysis, brand_analysis, utilization,
-                           purchase_suggestions, cp_data, monthly_delta, wardrobe))
+        output = build_report(gaps, sub_gaps, color_analysis, brand_analysis, utilization,
+                              purchase_suggestions, cp_data, monthly_delta, wardrobe)
+        print(output)
+        if '--save' in sys.argv:
+            path = os.path.abspath(os.path.join(PROJ_DIR, '衣橱分析报告.txt'))
+            with open(path, 'w') as f: f.write(output)
+            print(f'\n📄 已保存: {path}')
+
+    elif '--monthly' in sys.argv:
+        wardrobe = load_all_clothing()
+        output = build_monthly_report(wardrobe)
+        print(output)
+        if '--save' in sys.argv:
+            path = os.path.abspath(os.path.join(PROJ_DIR, '穿搭月度报告.txt'))
+            with open(path, 'w') as f: f.write(output)
+            print(f'\n📄 已保存: {path}')
 
     elif '--summary' in sys.argv:
         wardrobe = load_all_clothing()
@@ -753,9 +971,11 @@ def main():
 
     else:
         print("🧥 衣橱智能顾问")
-        print("  python3 tools/wardrobe_advisor.py --report     完整分析报告")
-        print("  python3 tools/wardrobe_advisor.py --summary     简要统计概览")
+        print("  python3 tools/wardrobe_advisor.py --report     衣橱完整分析报告")
+        print("  python3 tools/wardrobe_advisor.py --monthly    月度穿搭报告")
+        print("  python3 tools/wardrobe_advisor.py --summary     衣橱简要统计")
         print("  python3 tools/wardrobe_advisor.py --json        JSON 导出")
+        print("  加 --save 可将报告保存为 .txt 文件")
 
 
 if __name__ == '__main__':

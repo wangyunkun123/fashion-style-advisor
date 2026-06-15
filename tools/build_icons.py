@@ -35,8 +35,12 @@ men = [
     ('TANK', '背心', 'Vest'), ('JK', '外套', 'Jacket'), ('PT', '长裤', 'PantsMans'),
     ('SH', '短裤', 'Shorts'), ('HAT', '帽子', 'BaseballCap'), ('SOCK', '袜子', 'Socks'),
     ('SCARF', '围巾', 'Scarf'), ('COAT', '大衣', 'Coat'), ('HOODIE', '卫衣', 'Hoodie'),
-    ('SWEATER', '毛衣', 'Sweater'), ('BELT', '腰带', 'ABelt'), ('TIE', '领结', 'ABowTie'),
-    ('GLOVES', '手套', 'Gloves'),
+    ('SWEATER', '毛衣', 'Sweater'), ('TIE', '领结', 'ABowTie'),
+    ('GLOVES', '手套', 'Gloves'), ('BLAZER', '西装', 'Blazer'),
+    ('WAISTCOAT', '马甲', 'Waistcoat'), ('TUXEDO', '燕尾服', 'Tuxedo'),
+    ('PARKA', '派克大衣', 'Parka'), ('WINDBREAKER', '风衣', 'Windbreaker'),
+    ('DENIM', '牛仔外套', 'Denim'), ('CHINOS', '卡其裤', 'Chinos'),
+    ('JOGGERS', '慢跑裤', 'Joggers'), ('BRIEFS', '内裤', 'Briefs'),
 ]
 for code, name, src in men:
     I['c_' + code] = ci(src) or lu('shirt')

@@ -187,6 +187,9 @@ def match_command(message):
     if re.search(r'^(帮助|help|功能|命令|菜单|\?)$', msg, re.I):
         return ('help', '')
 
+    if re.search(r'^(衣橱|我的衣橱|衣柜|wardrobe)$', msg, re.I):
+        return ('wardrobe', '')
+
     if re.search(r'^(同步|推送|push|上传)$', msg, re.I):
         return ('sync', '')
 
@@ -869,6 +872,33 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 .history-card:active{background:#faf8f5}
 .history-card .detail{display:none;margin-top:6px;font-size:13px;line-height:1.5}
 .history-card .detail img{max-width:100%;border-radius:6px;margin-top:6px}
+/* ── 衣橱面板 ── */
+#wardrobe-panel{flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0}
+.wardrobe-header{position:sticky;top:0;background:#3a3028;color:#fff;padding:10px 18px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;z-index:1}
+.wardrobe-header span{cursor:pointer;font-size:18px;opacity:.7}
+.w-section{padding:12px 14px}
+.w-section+.w-section{border-top:1px solid #e8e2da}
+.w-section-title{font-size:12px;color:#9b8c7c;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600}
+.w-stats{display:flex;gap:8px;margin-bottom:8px}
+.w-stat{flex:1;background:#fff;border-radius:10px;padding:10px;text-align:center;border:1px solid #e8e2da}
+.w-stat .num{font-size:22px;font-weight:700;color:#3a3028}
+.w-stat .label{font-size:10px;color:#9b8c7c;margin-top:2px}
+.w-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid #f0ece6}
+.w-row:last-child{border-bottom:none}
+.w-row .name{color:#3a3028;flex:1}
+.w-row .bar-wrap{flex:1;height:6px;background:#e8e2da;border-radius:3px;margin:0 8px;overflow:hidden}
+.w-row .bar-fill{height:100%;border-radius:3px}
+.w-row .val{font-size:11px;color:#9b8c7c;min-width:40px;text-align:right}
+.w-tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600}
+.w-tag.warn{background:#fff3e0;color:#e65100}
+.w-tag.danger{background:#ffebee;color:#c62828}
+.w-tag.ok{background:#e8f5e9;color:#2e7d32}
+.w-suggest{background:#fff;border:1px solid #e8e2da;border-radius:10px;padding:10px 12px;margin-bottom:6px}
+.w-suggest .pri{font-size:10px;font-weight:600;margin-bottom:3px}
+.w-suggest .item{font-size:14px;font-weight:600;color:#3a3028}
+.w-suggest .reason{font-size:11px;color:#9b8c7c;margin-top:3px}
+.w-subcat{margin-bottom:4px;font-size:12px}
+.w-loading{text-align:center;padding:30px;color:#9b8c7c;font-size:13px}
 </style>
 </head>
 <body>
@@ -879,6 +909,10 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <span id="history-icon">▶</span> <span>📋 历史记录</span> <span id="history-count" style="font-size:11px;color:#9b8c7c"></span>
 </div>
 <div id="history-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:40vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 14px"></div>
+<div id="wardrobe-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
+<div class="wardrobe-header">👔 我的衣橱 <span onclick="toggleWardrobe()">✕</span></div>
+<div id="wardrobe-content"><div class="w-loading">加载中...</div></div>
+</div>
 <div class="input-bar">
 <div class="chips" id="chips">
 <span class="chip" data-cmd="推荐穿搭">🧠 推荐</span>
@@ -888,6 +922,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <span class="chip" data-cmd="帮助">❓ 帮助</span>
 <span class="chip" data-cmd="探索 日系" style="background:#e8f5e9;color:#2e7d32;">🧪 探索</span>
 <span class="chip" data-cmd="大胆 混搭" style="background:#fff3e0;color:#e65100;">🚀 大胆</span>
+<span class="chip" data-cmd="衣橱" style="background:#f3e5f5;color:#7b1fa2;">👔 衣橱</span>
 </div>
 <div class="input-row">
 <input type="text" id="input" placeholder="输入指令…如：生成 日系休闲 | 探索 街头 | 大胆 混搭" autocomplete="off" enterkeyhint="send">
@@ -909,7 +944,8 @@ var t=input.value.trim();if(!t)return;
 addMsg('user',esc(t));input.value='';
 fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t})})
 .then(r=>r.json()).then(d=>{
-if(d.task_id){var el=addLoading();pollTask(d.task_id,el,0)}
+if(d.action==='wardrobe'){toggleWardrobe();addMsg('assistant',esc(d.result).replace(/\n/g,'<br>'))}
+else if(d.task_id){var el=addLoading();pollTask(d.task_id,el,0)}
 else if(d.result){addMsg('assistant',esc(d.result).replace(/\n/g,'<br>'))}
 else{addMsg('assistant error',esc(JSON.stringify(d)))}
 }).catch(e=>{addMsg('assistant error','网络错误: '+e.message)})
@@ -982,6 +1018,104 @@ var img=el.dataset.img,result=el.dataset.result;
 var h=result.replace(/\\n/g,'<br>');
 if(img)h+='<br><img src="'+img+'" loading="lazy">';
 detail.innerHTML=h;detail.style.display='block';
+}
+
+// ── 衣橱面板 ──
+var wardrobePanel=document.getElementById('wardrobe-panel');
+var wardrobeContent=document.getElementById('wardrobe-content');
+var wardrobeOpen=false;
+
+function toggleWardrobe(){
+wardrobeOpen=!wardrobeOpen;
+wardrobePanel.style.display=wardrobeOpen?'block':'none';
+if(wardrobeOpen&&wardrobeContent.querySelector('.w-loading')){
+loadWardrobe();
+}
+}
+
+function loadWardrobe(){
+fetch('/api/wardrobe').then(function(r){return r.json()}).then(function(d){
+var h='';
+
+// 概览
+var meta=d.metadata||{};
+var util=d.utilization||{};
+var gaps=d.category_gaps||{};
+var brands=d.brand_diversity||{};
+var ps=d.purchase_suggestions||[];
+var shoes=d.subcategory_gaps||{};
+var keyUnused=util.key_unused||[];
+
+// 卡片：概览统计
+var overstock=0,gap=0,healthy=0;
+for(var k in gaps){var s=gaps[k];if(s.status==='overstock')overstock++;else if(s.status==='gap')gap++;else healthy++;}
+h+='<div class="w-section"><div class="w-section-title">📊 概览</div>';
+h+='<div class="w-stats">';
+h+='<div class="w-stat"><div class="num">'+meta.total_items+'</div><div class="label">总件数</div></div>';
+h+='<div class="w-stat"><div class="num" style="color:'+(util.utilization_rate<.3?'#c62828':'#2e7d32')+'">'+(util.utilization_rate*100).toFixed(0)+'%</div><div class="label">利用率</div></div>';
+h+='<div class="w-stat"><div class="num" style="color:#c62828">'+overstock+'</div><div class="label">超标品类</div></div>';
+h+='<div class="w-stat"><div class="num" style="color:#e65100">'+gap+'</div><div class="label">缺口品类</div></div>';
+h+='</div></div>';
+
+// 品类健康（超标+缺口）
+h+='<div class="w-section"><div class="w-section-title">📦 品类健康</div>';
+var order=['TS','LS','SHIRT','TANK','JK','PT','SH','SHOE','BAG','HAT','SOCK','SUN','ACC'];
+var names={'TS':'短袖','LS':'长袖','SHIRT':'衬衫','TANK':'背心','JK':'外套','PT':'长裤','SH':'短裤','SHOE':'鞋子','BAG':'包','HAT':'帽子','SOCK':'袜子','SUN':'墨镜','ACC':'配饰'};
+for(var i=0;i<order.length;i++){
+var code=order[i],g=gaps[code];
+if(!g)continue;
+var tag='';
+if(g.status==='overstock')tag='<span class="w-tag danger">超标+'+g.diff+'</span>';
+else if(g.status==='gap')tag='<span class="w-tag warn">缺-'+g.diff+'</span>';
+else tag='<span class="w-tag ok">✓</span>';
+var maxW=15,pct=g.actual/maxW*100;
+var barColor=g.status==='overstock'?'#c62828':(g.status==='gap'?'#e65100':'#7cb342');
+h+='<div class="w-row"><span class="name">'+(names[code]||code)+'</span>';
+h+='<div class="bar-wrap"><div class="bar-fill" style="width:'+Math.min(pct,100)+'%;background:'+barColor+'"></div></div>';
+h+='<span class="val">'+g.actual+'件 '+tag+'</span></div>';
+}
+h+='</div>';
+
+// 购买建议（高+中各1条）
+h+='<div class="w-section"><div class="w-section-title">🛒 购买建议</div>';
+var shown=0;
+for(var i=0;i<ps.length&&shown<3;i++){
+var p=ps[i];
+var priEmoji=p.priority==='high'?'🔴':(p.priority==='medium'?'🟡':'🟢');
+var priLabel=p.priority==='high'?'优先':(p.priority==='medium'?'可选':'建议');
+h+='<div class="w-suggest"><div class="pri">'+priEmoji+' '+priLabel+'</div>';
+h+='<div class="item">'+esc(p.item)+'</div>';
+h+='<div class="reason">💡 '+esc(p.reason)+'</div></div>';
+shown++;
+}
+h+='</div>';
+
+// 鞋柜速览
+var shoeSubs=shoes.SHOE||{};
+h+='<div class="w-section"><div class="w-section-title">👟 鞋柜速览</div>';
+for(var sub in shoeSubs){
+var ids=shoeSubs[sub]||[];
+var icon=ids.length?'✅':'⚠️';
+var color=ids.length?'#2e7d32':'#c62828';
+h+='<div class="w-subcat" style="color:'+color+'">'+icon+' '+sub+'：'+(ids.length?ids.join('、'):'缺失')+'</div>';
+}
+h+='</div>';
+
+// 闲置关键单品
+if(keyUnused&&keyUnused.length){
+h+='<div class="w-section"><div class="w-section-title">💤 沉睡好货</div>';
+for(var i=0;i<Math.min(keyUnused.length,4);i++){
+var ku=keyUnused[i];
+h+='<div class="w-row"><span class="name"><b>'+ku.id+'</b></span><span style="font-size:11px;color:#9b8c7c">'+(ku.name||'').substring(0,30)+'</span></div>';
+}
+h+='<div style="font-size:11px;color:#9b8c7c;margin-top:4px">以上是好品质但从未穿过的单品，给它们一次机会吧 ✨</div>';
+h+='</div>';
+}
+
+wardrobeContent.innerHTML=h;
+}).catch(function(e){
+wardrobeContent.innerHTML='<div class="w-loading" style="color:#c62828">⚠️ 加载失败: '+e.message+'</div>';
+});
 }
 
 </script>
@@ -1233,6 +1367,35 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._html_resp(200, HISTORY_HTML)
             return
 
+        # 衣橱分析 API
+        if parsed.path == '/api/wardrobe':
+            try:
+                from wardrobe_advisor import (load_all_clothing, load_state, analyze_category_gaps,
+                    analyze_subcategory_gaps, analyze_color_balance, analyze_brand_diversity,
+                    analyze_utilization, generate_purchase_suggestions, build_structured_data,
+                    mine_cp_combinations, save_monthly_snapshot, compute_monthly_delta)
+                wardrobe = load_all_clothing()
+                state = load_state()
+                gaps = analyze_category_gaps(wardrobe)
+                sub_gaps = analyze_subcategory_gaps(wardrobe)
+                color_analysis = analyze_color_balance(wardrobe)
+                brand_analysis = analyze_brand_diversity(wardrobe)
+                utilization = analyze_utilization(wardrobe, state)
+                purchase_suggestions = generate_purchase_suggestions(gaps, sub_gaps, color_analysis, brand_analysis)
+                cp_data = mine_cp_combinations()
+                prev_snap = save_monthly_snapshot(wardrobe)
+                monthly_delta = compute_monthly_delta(wardrobe, prev_snap)
+                data = build_structured_data(gaps, sub_gaps, color_analysis, brand_analysis,
+                                             utilization, purchase_suggestions, cp_data, monthly_delta, wardrobe)
+                data['utilization']['zero_wear'] = utilization['zero_wear'][:20]
+                data['utilization']['key_unused'] = utilization['key_unused']
+                self._json_resp(200, data)
+                return
+            except Exception as e:
+                log(f"衣橱API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
         # 健康检查
         if parsed.path == '/health':
             self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手", "time": time.strftime("%H:%M:%S")})
@@ -1261,7 +1424,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             action, extra = match_command(message)
             log(f"💬 聊天: {action} | {extra}")
 
-            if action in ('generate', 'recommend'):
+            if action == 'wardrobe':
+                self._json_resp(200, {"result": "👔 衣橱面板已打开，向上滑动查看完整数据", "action": "wardrobe"})
+            elif action in ('generate', 'recommend'):
                 tid = _start_async_pipeline(action, extra)
                 self._json_resp(200, {"task_id": tid})
             else:

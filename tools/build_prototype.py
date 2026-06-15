@@ -37,6 +37,7 @@ item_icons = {
     'pants': ci('PantsMans') or '',
     'shoe': lu('sport-shoe'),
     'hat': ci('BaseballCap') or '',
+    'bag': lu('shopping-bag'),
 }
 # Fallback for CI if missing
 if not item_icons['pants']:
@@ -164,15 +165,16 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
 <div class="scroll-area">
 <div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-15_%E8%B5%B7%E9%9B%BE%E4%BA%86%EF%BC%8C%E4%BB%8A%E5%A4%A9%E8%AF%A5%E7%A9%BF%E4%BB%80%E4%B9%88%EF%BC%9F/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493_%E6%96%B9%E6%A1%881.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
+<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_IMG_8493.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
 <div class="hero-body">
-<div class="hero-style">清爽雾天城市休闲</div>
-<div class="hero-meta">2026/06/15 · 雾 · 22~34&deg;C · 湿度 88% · 紫外线 中等</div>
+<div class="hero-style">清爽专业网球运动风</div>
+<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
 <div class="item-list">
-{item_tshirt}
-{item_pants}
-{item_shoe}
-{item_hat}
+{item_tshirt_tennis}
+{item_pants_tennis}
+{item_shoe_tennis}
+{item_hat_tennis}
+{item_bag_tennis}
 </div></div></div>
 
 <div class="section-header">其他推荐</div>
@@ -269,12 +271,11 @@ card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落�
 
 html = html.format(
     tabs=tabs_html,
-    cal=ico['cal'],
-    cloud=ico['cloud'],
-    item_tshirt=item_row(item_icons['tshirt'], '上衣', 'TS-011', '宽松落肩纯色T恤'),
-    item_pants=item_row(item_icons['pants'], '下装', 'SH-004', '宽松休闲短裤'),
-    item_shoe=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite 网球鞋'),
-    item_hat=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽'),
+    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon Metal Vent Tech 运动短袖'),
+    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Decathlon Artengo 网球运动短裤'),
+    item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike Court Lite 网球鞋'),
+    item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽'),
+    item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 复古网球桶包'),
     card1=card1,
     card2=card2,
 )

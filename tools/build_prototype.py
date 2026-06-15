@@ -20,7 +20,7 @@ def simplify_name(iid, name):
     # Apple Watch: keep band info
     if iid == 'ACC-003' or 'Apple Watch' in name:
         band = ''
-        for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
+        for b in ['回环尼龙','米兰尼斯','运动表带','黑色运动']:
             if b in name: band = b; break
         return 'Apple Watch {}'.format(band) if band else 'Apple Watch'
     # Remove series/tech terms
@@ -100,25 +100,25 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             # First: 上身效果_1.png (raw AI gen, first stored)
             for f in sorted(os.listdir(sd)):
                 if f == '上身效果_1.png':
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Second: 人物_*.jpg
             for f in sorted(os.listdir(sd)):
                 if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Third: *_方案*.jpg (composite)
             for f in sorted(os.listdir(sd)):
                 if '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
             # Last: any image
             for f in sorted(os.listdir(sd)):
                 if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_') and not f.startswith('.'):
-                    char_img = os.path.join('outfits', d, sub, f)
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
                     break
             if char_img: break
         # Build item thumbnails
@@ -127,7 +127,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if os.path.exists(items_dir):
                 for f in os.listdir(items_dir):
                     if f.startswith(it['id']+'_') and f.endswith('.png'):
-                        it['thumb'] = os.path.join('outfits', d, 'items', f)
+                        it['thumb'] = os.path.join('..', 'outfits', d, 'items', f)
                         break
         # Parse weather: temp range + UV
         temp_str = ''
@@ -234,7 +234,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
 .page.active{{display:flex}}
 .scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}}
-.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;align-items:center}}
+.page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
 .page-bottom input::placeholder{{color:var(--muted)}}
@@ -251,7 +251,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .style-tags span{{font-size:11px;color:#fff;background:var(--navy);padding:4px 10px;border-radius:10px;font-weight:500}}
 /* Item grid — 3 cols */
 .item-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}}
-.item-grid .item-row{{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}}
+.item-grid .item-row{{flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}}
 .item-grid .item-emoji{{width:16px;height:16px}}
 .item-grid .item-cat{{font-size:9px;width:auto}}
 .item-grid .item-id{{font-size:8px}}
@@ -268,6 +268,14 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
 
 /* Item rows */
+.item-list{{display:flex;flex-direction:column}}
+.item-row{{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f2f5f9}}
+.item-row:last-child{{border-bottom:none}}
+.item-emoji{{width:20px;height:20px;flex-shrink:0;color:var(--navy)}}
+.item-emoji svg{{width:100%;height:100%;display:block}}
+.item-cat{{font-size:11px;color:var(--muted);width:36px;flex-shrink:0;font-weight:500}}
+.item-id{{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0}}
+.item-name{{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}}
 
 /* Section */
 .section-header{{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.5px;margin:0 0 12px}}
@@ -354,19 +362,18 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="style-tags">{hero_tags_html}</div>
 <div class="hero-style">{hero_style}</div>
 <div class="hero-meta">{hero_meta}</div>
-<div class="item-grid">{hero_items_html}</div>
-<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span>{hero_palette}</div>
+<div class="item-list">{hero_items_html}</div>
+<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
 </div></div>
 
 <div class="section-header">其他推荐</div>
-<div class="rec-cards" id="alt-cards">
+<div class="rec-cards">
 {card1}
 {card2}
-{card3}
+<div class="rec-card dashed"><div class="dash-text">+ 换一批</div></div>
 </div>
-<div style="text-align:center;padding:4px 0 12px"><span style="font-size:12px;color:var(--navy);cursor:pointer;font-weight:600" onclick="refreshAlts()">⟳ 换一批</span></div>
 </div>
-<div class="page-bottom"><input type="text" id="today-input" placeholder="描述穿搭需求，如「今天要去约会」..." onkeydown="if(event.key==='Enter')sendOutfit()"><button style="width:44px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:8px" onclick="sendOutfit()">▶</button></div>
+<div class="page-bottom"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
 </div>
 
 <!-- 历史推荐 -->
@@ -436,10 +443,6 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
-function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
-function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
-function refreshAlts(){{var alts=[['日系 City Boy',['TS-011 落肩T恤','SHIRT-001 条纹衬衫','SHOE-009 AF1']],['轻熟休闲',['SHIRT-003 牛津衬衫','PT-005 西裤','SHOE-009 板鞋']],['韩系简约',['TS-010 条纹T恤','PT-006 直筒牛仔裤','SHOE-005']],['Clean Fit',['TS-009 短袖','PT-002 牛仔裤','SHOE-006']],['街头潮流',['TS-006 黑T','JK-003 棒球服','SHOE-008']],['运动休闲',['TANK-001 背心','SH-001 速干短裤','SHOE-003']]];var pool=alts.sort(function(){{return Math.random()-0.5}}).slice(0,3);var h='';pool.forEach(function(a){{var items=a[1].map(function(i){{return'<div>'+i+'</div>'}}).join('');h+='<div class=\"rec-card\" onclick=\"this.classList.toggle(\\'open\\')\"><div class=\"rc-style-name\">'+a[0]+'</div><div class=\"rc-items\">'+items+'</div><div class=\"rc-arrow\">▾</div></div>'}});var el=document.getElementById('alt-cards');if(el)el.innerHTML=h}}
-
 </script>
 </body></html>'''
 
@@ -454,34 +457,46 @@ tabs_html = '\n'.join([
 
 # ── Build history cards ──
 def extract_tags(outfit):
-    """Generate diverse tags: style + color + scene from outfit data"""
+    """Extract style tags: keywords from outfit.md, fallback to style name"""
     tags = []
-    style = outfit.get('style','')
-    weather = outfit.get('weather','')
-    # Combine all text for analysis
-    text = style + ' ' + weather
-    # Categories
-    style_kw = ['日系','韩系','美式','欧美','街头','复古','机能','简约','轻熟','运动',
-                'City Boy','Clean Fit','户外','军事','工装','网球','跑步','健身',
-                '商务','正式','休闲','优雅','硬朗','柔和']
-    color_kw = ['低饱和','浅色','深色','亮色','撞色','单色','印花','条纹','纯色',
-                '大地色','莫兰迪','黑白灰','蓝色系','绿色系','暖色','清爽']
-    scene_kw = ['通勤','约会','度假','日常','运动','户外','居家','出行','休闲','雨天','晴天','雨']
-    tech_kw  = ['叠穿','宽松','廓形','层次','oversize','修身','高腰','透气','防水']
-    # Pick 1 from each category
-    for cat in [style_kw, color_kw, scene_kw, tech_kw]:
-        for kw in cat:
-            if kw in text and kw not in tags:
-                tags.append(kw)
-                break
-    # Fill remaining
-    all_kw = style_kw + color_kw + scene_kw + tech_kw
-    for kw in all_kw:
-        if kw in text and kw not in tags and len(tags) < 4:
-            tags.append(kw)
-    if not tags:
-        for sep in ['丨','｜','/','·','-']: text = text.replace(sep, ' ')
-        tags = [w.strip()[:6] for w in text.split() if len(w.strip())>=2][:4]
+    dp = os.path.join(OUTFITS_DIR, outfit['dir'], 'outfit.md')
+    if os.path.exists(dp):
+        with open(dp) as f: content = f.read()
+        # Strategy 1: 风格关键词 section
+        in_kw = False
+        for line in content.split('\n'):
+            s = line.strip()
+            if '风格关键词' in s:
+                in_kw = True
+                # Same-line content
+                m = re.search(r'[：:]\s*(.+)', s)
+                if m:
+                    for kw in m.group(1).split(','):
+                        kw = kw.strip()
+                        if kw and len(kw)>=2: tags.append(kw[:8])
+                continue
+            if in_kw:
+                if s.startswith('##') or s.startswith('---'): break
+                if s.startswith('- '): s = s[2:]
+                for kw in s.replace('，',',').split(','):
+                    kw = kw.strip()
+                    if kw and len(kw)>=2 and kw not in tags:
+                        tags.append(kw[:8])
+        # Strategy 2: 风格笔记 section
+        if not tags:
+            in_notes = False
+            for line in content.split('\n'):
+                if '风格笔记' in line: in_notes = True; continue
+                if in_notes and line.strip().startswith('##'): break
+                if in_notes and line.strip().startswith('- '):
+                    kw = line.strip()[2:].split('：')[0].split('—')[0].strip()[:8]
+                    if kw and len(kw)>=2: tags.append(kw)
+        # Fallback: from style name
+        if not tags:
+            style = outfit.get('style','')
+            for sep in ['丨','｜','/','·','-',' ']:
+                style = style.replace(sep, ' ')
+            tags = [w.strip()[:8] for w in style.split() if len(w.strip())>=2][:4]
     return tags[:4]
 
 def gen_history_card(outfit, idx):
@@ -527,39 +542,29 @@ fav_cards = '\n'.join([gen_history_card(o, i+1) for i, o in enumerate(fav_outfit
 if not today_cards: today_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">今日暂无推荐</div>'
 if not fav_cards: fav_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">暂无三星好评 · 给穿搭点 ⭐⭐⭐ 后会出现在这里</div>'
 
-# "今天也适合" style alternatives based on weather
-alt_styles = ['日系 City Boy','轻熟休闲','韩系简约','Clean Fit','街头潮流','运动休闲']
-# ── Use latest today outfit for hero ──
-today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=1)
-hero_outfit = today_outfits[0] if today_outfits else None
-if hero_outfit:
-    hero_img = hero_outfit.get('char_img','outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png')
-    hero_style = hero_outfit['style'][:30]
-    hero_meta = hero_outfit['date'] + ' · ' + (hero_outfit.get('weather','晴 · 22~34°C')[:30])
-    hero_tags = extract_tags(hero_outfit)
-    hero_tags_html = ''.join(['<span>{}</span>'.format(t) for t in hero_tags])
-    hero_items_html = ''
-    cat_icons_map = {'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket','PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}
-    for it in hero_outfit['items'][:8]:
-        p = it['id'].split('-')[0]
-        ico = item_icons.get(cat_icons_map.get(p,'tshirt'),'')
-        thumb = it.get('thumb','')
-        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb) if thumb else ''
-        hero_items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it.get('cat',''), it['id'], it['name'][:14], thumb_html)
-    # Color palette from items
-    hero_palette = '<span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span>'
+# ── Hero: use today's latest outfit ──
+today = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=1)
+if today:
+    ho = today[0]
+    hero_img = ho['char_img']
+    hero_style = ho['style'][:30]
+    hero_meta = '{} · {}'.format(ho['date'], (ho.get('weather','') or '晴 22~34°C')[:30])
+    tags = extract_tags(ho)
+    hero_tags_html = ''.join('<span>{}</span>'.format(t) for t in tags)
+    hero_items_html = ''.join(item_row(
+        item_icons.get({'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket','PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}.get(it['id'].split('-')[0],'tshirt'),''),
+        it.get('cat',''), it['id'], it['name'][:14], it.get('thumb','')
+    ) for it in ho['items'][:8])
 else:
     hero_img = 'outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png'
     hero_style = '清爽专业网球运动风'
     hero_meta = '2026/06/14 · 晴 · 22~34°C · 紫外线 强'
     hero_tags_html = '<span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span>'
-    hero_items_html = '{item_tshirt_tennis}{item_pants_tennis}{item_shoe_tennis}{item_hat_tennis}{item_bag_tennis}{item_sock_tennis}{item_acc_tennis}'
-    hero_palette = '<span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span>'
+    hero_items_html = '{}{}{}{}{}{}{}'.format(item_tshirt_tennis, item_pants_tennis, item_shoe_tennis, item_hat_tennis, item_bag_tennis, item_sock_tennis, item_acc_tennis)
 
-# Alt style cards
-card1 = mini_card(alt_styles[0], ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
-card2 = mini_card(alt_styles[1], ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
-card3 = mini_card(alt_styles[2], ['TS-010 条纹T恤', 'PT-006 直筒牛仔裤', 'SHOE-005 网球鞋', 'HAT-004 棒球帽'])
+card1 = mini_card('日系 City Boy', ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
+card2 = mini_card('轻熟休闲', ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
+card3 = mini_card('韩系简约', ['TS-010 条纹T恤', 'PT-006 直筒牛仔裤', 'SHOE-005 网球鞋', 'HAT-004 棒球帽'])
 
 html = html.format(
     tabs=tabs_html,
@@ -581,7 +586,7 @@ html = html.format(
     item_sock_summer=item_row(item_icons['sock'], '袜子', 'SOCK-005', '基础船袜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SOCK-005_Image_20260610_0807_09_360_cutout.png'),
     item_acc_summer=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 回环尼龙表带', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
-    hero_tags_html=hero_tags_html, hero_items_html=hero_items_html, hero_palette=hero_palette,
+    hero_tags_html=hero_tags_html, hero_items_html=hero_items_html,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
 )

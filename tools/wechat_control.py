@@ -1255,7 +1255,26 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                             if f == '上身效果_1.png' or ('人物' in f and f.endswith(('.jpg','.png'))):
                                 img = 'outfits/{}/{}/{}'.format(d, sub, f); break
                         if img: break
-                    latest = {'dir': d, 'style': style or d, 'items': items, 'img': img, 'date': d[:10]}
+                    # Extract weather and tags
+                    weather_str = ''
+                    for line in content.split('\n'):
+                        if 'weather' in line.lower() or '天气' in line:
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m: weather_str = m.group(1).strip()[:30]; break
+                    tags = []
+                    for line in content.split('\n'):
+                        if '风格关键词' in line:
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m:
+                                for kw in m.group(1).split(','):
+                                    kw = kw.strip()
+                                    if kw and len(kw)>=2: tags.append(kw[:8])
+                            break
+                    if not tags and style:
+                        for sep in ['丨','｜','/','·','-',' ']:
+                            style = style.replace(sep, ' ')
+                        tags = [w.strip()[:8] for w in style.split() if len(w.strip())>=2][:4]
+                    latest = {'dir': d, 'style': style or d, 'items': items, 'img': img, 'date': d[:10], 'weather': weather_str, 'tags': tags}
                     break
             self._json_resp(200, latest or {"empty": True})
             return

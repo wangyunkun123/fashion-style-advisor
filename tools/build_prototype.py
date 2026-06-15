@@ -268,8 +268,6 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
 
 /* Item rows */
-.item-id{{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0}}
-.item-name{{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}}
 
 /* Section */
 .section-header{{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.5px;margin:0 0 12px}}

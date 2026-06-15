@@ -53,15 +53,28 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m: weather = m.group(1).strip()[:60]
         scene = d.split('_',1)[-1] if '_' in d else style
-        # Find character image
+        # Find character image: AI生图优先，兜底用排版图
         char_img = ''
         for sub in ['豆包生图','上身效果']:
             sd = os.path.join(dp, sub)
-            if os.path.exists(sd):
-                for f in sorted(os.listdir(sd)):
-                    if ('人物' in f or '上身效果' in f) and f.endswith(('.jpg','.png')) and not f.startswith('.'):
-                        char_img = os.path.join('..', 'outfits', d, sub, f)
-                        break
+            if not os.path.exists(sd): continue
+            # First try: 人物_*.jpg (AI gen)
+            for f in sorted(os.listdir(sd)):
+                if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    break
+            if char_img: break
+            # Fallback: 上身效果_*方案*.jpg (composite)
+            for f in sorted(os.listdir(sd)):
+                if '上身效果' in f and '方案' in f and f.endswith('.jpg') and not f.startswith('.'):
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    break
+            if char_img: break
+            # Last resort: any jpg/png
+            for f in sorted(os.listdir(sd)):
+                if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_'):
+                    char_img = os.path.join('..', 'outfits', d, sub, f)
+                    break
             if char_img: break
         # Build item thumbnails
         items_dir = os.path.join(dp, 'items')

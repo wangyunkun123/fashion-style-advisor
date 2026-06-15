@@ -266,10 +266,10 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
-.h-char-img-lg{{width:140px;height:auto;max-height:200px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
+.h-char-img-lg{{width:150px;height:240px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
 .h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-content:start}}
-.h-square-grid .item-row{{flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:70px;cursor:pointer;position:relative;overflow:hidden}}
+.h-square-grid .item-row{{flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:#f8fafc;border-radius:8px;justify-content:center;min-height:52px;cursor:pointer;position:relative;overflow:hidden}}
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
 .h-square-grid .item-emoji{{width:24px;height:24px}}
 .h-square-grid .item-id{{font-size:8px}}

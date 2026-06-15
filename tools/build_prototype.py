@@ -466,22 +466,34 @@ tabs_html = '\n'.join([
 
 # ── Build history cards ──
 def extract_tags(outfit):
-    """Extract style tags: same smart-matching as API"""
+    """Generate diverse tags: style + color + scene from outfit data"""
     tags = []
-    known = ['日系','韩系','欧美','街头','复古','机能','简约','轻熟','运动','度假',
-        'City Boy','Clean Fit','美式','户外','军事','工装','网球','跑步','健身',
-        '宽松','低饱和','高对比','叠穿','单色','撞色','印花','条纹','纯色',
-        '通勤','约会','商务','休闲','正式','清爽','优雅','硬朗','柔和',
-        '机能休闲','美式复古','日常休闲','城市休闲','度假休闲']
     style = outfit.get('style','')
-    st = style
-    for sep in ['丨','｜','/','·','-']: st = st.replace(sep, ' ')
-    for kw in known:
-        if kw in st and kw not in tags: tags.append(kw)
-    if len(tags) < 2:
-        words = [w.strip() for w in st.split() if len(w.strip())>=2]
-        for w in words:
-            if w[:8] not in tags: tags.append(w[:8])
+    weather = outfit.get('weather','')
+    # Combine all text for analysis
+    text = style + ' ' + weather
+    # Categories
+    style_kw = ['日系','韩系','美式','欧美','街头','复古','机能','简约','轻熟','运动',
+                'City Boy','Clean Fit','户外','军事','工装','网球','跑步','健身',
+                '商务','正式','休闲','优雅','硬朗','柔和']
+    color_kw = ['低饱和','浅色','深色','亮色','撞色','单色','印花','条纹','纯色',
+                '大地色','莫兰迪','黑白灰','蓝色系','绿色系','暖色','清爽']
+    scene_kw = ['通勤','约会','度假','日常','运动','户外','居家','出行','休闲','雨天','晴天']
+    tech_kw  = ['叠穿','宽松','廓形','层次','oversize','修身','高腰']
+    # Pick 1 from each category
+    for cat in [style_kw, color_kw, scene_kw, tech_kw]:
+        for kw in cat:
+            if kw in text and kw not in tags:
+                tags.append(kw)
+                break
+    # Fill remaining
+    all_kw = style_kw + color_kw + scene_kw + tech_kw
+    for kw in all_kw:
+        if kw in text and kw not in tags and len(tags) < 4:
+            tags.append(kw)
+    if not tags:
+        for sep in ['丨','｜','/','·','-']: text = text.replace(sep, ' ')
+        tags = [w.strip()[:6] for w in text.split() if len(w.strip())>=2][:4]
     return tags[:4]
 
 def gen_history_card(outfit, idx):

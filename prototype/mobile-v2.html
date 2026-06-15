@@ -3,247 +3,314 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
-<title>穿搭助手</title>
+<title>穿搭助手 · B2 Navy</title>
 <style>
-:root{--bg:#fff;--surface:#fafafa;--text:#1a1a1a;--sub:#8e8e8e;--muted:#b0b0b0;--border:#eee;--accent:#ff2442;--accent-soft:#fff0f3;--tag-bg:#f5f5f5;--shadow:0 1px 3px rgba(0,0,0,.04);--radius:12px}
+:root{
+  --navy:#1e3a5f;--navy-light:#2a5080;--navy-bg:#f4f7fb;
+  --text:#1a2838;--sub:#6b7d94;--muted:#94a3b5;
+  --border:#e6ecf3;--bg:#f8fafc;--white:#fff;
+  --shadow:0 2px 8px rgba(30,58,95,.04);
+  --shadow-lg:0 4px 20px rgba(30,58,95,.08);
+  --radius:14px;--radius-sm:10px;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:#f0f0f0;display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
-#app{max-width:500px;width:100%;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.header{background:var(--bg);padding:12px 16px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.header h1{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
-.header .sub{font-size:11px;color:var(--muted)}
-.subtabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 16px;gap:4px}
-.subtabs::-webkit-scrollbar{display:none}
-.subtab{flex-shrink:0;padding:12px 8px 10px;font-size:14px;color:var(--sub);cursor:pointer;position:relative;transition:color .2s;-webkit-tap-highlight-color:transparent;white-space:nowrap;font-weight:400}
-.subtab.active{color:var(--text);font-weight:600}
-.subtab.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:20px;height:3px;border-radius:2px;background:var(--accent)}
-.page{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column;background:var(--surface)}
+body{
+  font-family:-apple-system,'SF Pro Display','PingFang SC','Hiragino Sans GB',sans-serif;
+  background:#e2e6ec;display:flex;justify-content:center;min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+#app{max-width:500px;width:100%;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;padding-bottom:80px}
+
+/* ── ① Header ── */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;background:var(--white);border-bottom:1px solid var(--border);
+}
+.header h1{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.4px}
+.header .avatar{
+  width:34px;height:34px;background:var(--navy);border-radius:50%;
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:600;
+}
+
+/* ── ② 胶囊分段控制器 ── */
+.segmented{
+  display:flex;background:#eef2f7;border-radius:12px;padding:3px;
+  margin:14px 20px;gap:2px;
+}
+.seg-btn{
+  flex:1;text-align:center;padding:9px 0;font-size:13px;font-weight:600;
+  color:var(--sub);border-radius:10px;cursor:pointer;
+  transition:all .25s;-webkit-tap-highlight-color:transparent;
+}
+.seg-btn.active{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.25)}
+
+/* ── ③ 内容滚动区 ── */
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px}
+
+/* ── ④ 主图卡片 4:3 ── */
+.hero-card{
+  background:var(--white);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px;
+  border:1px solid rgba(30,58,95,.05);
+  transition:transform .2s;
+}
+.hero-card:active{transform:scale(.98)}
+.hero-img{
+  width:100%;aspect-ratio:4/3;background:#eaf0f6;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.hero-img .placeholder-img{font-size:72px;color:#c8d4e2;opacity:.6}
+.hero-img::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:60px;background:linear-gradient(transparent,rgba(26,40,56,.4));
+  pointer-events:none;
+}
+.hero-body{padding:18px}
+.hero-style{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}
+.hero-meta{font-size:12px;color:var(--sub);margin-bottom:16px;display:flex;gap:14px}
+
+/* ── ⑤ 单品列表行 ── */
+.item-list{display:flex;flex-direction:column}
+.item-row{
+  display:flex;align-items:center;gap:12px;padding:10px 0;
+  border-bottom:1px solid #f2f5f9;
+}
+.item-row:last-child{border-bottom:none}
+.item-emoji{font-size:18px;width:28px;text-align:center;flex-shrink:0}
+.item-cat{font-size:11px;color:var(--muted);width:36px;flex-shrink:0;font-weight:500}
+.item-id{
+  font-size:10px;color:var(--sub);font-family:'SF Mono',Menlo,monospace;
+  background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0;
+}
+.item-name{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+
+/* ── ⑥ Section ── */
+.section-header{
+  font-size:12px;font-weight:700;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;margin:0 0 12px;
+}
+
+/* ── ⑦ 推荐卡片 ── */
+.rec-cards{display:flex;gap:12px;margin-bottom:20px}
+.rec-card{
+  flex:1;background:var(--white);border-radius:var(--radius-sm);
+  padding:16px 14px;box-shadow:var(--shadow);
+  border:1px solid rgba(30,58,95,.04);cursor:pointer;
+  transition:all .2s;
+}
+.rec-card:active{transform:scale(.97);box-shadow:var(--shadow-lg)}
+.rec-card .rc-style{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.rec-card .rc-items{font-size:11px;color:var(--sub);line-height:1.6}
+.rec-card.dashed{
+  background:transparent;border:2px dashed #dce3ed;
+  display:flex;align-items:center;justify-content:center;
+}
+.rec-card.dashed .dash-text{color:var(--muted);font-size:12px;text-align:center}
+
+/* ── ⑧ 输入框 ── */
+.input-wrap{margin-bottom:16px}
+.input-wrap input{
+  width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);
+  background:var(--white);font-size:14px;color:var(--text);
+  box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);
+  outline:none;-webkit-appearance:none;transition:all .2s;
+}
+.input-wrap input::placeholder{color:var(--muted)}
+.input-wrap input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}
+
+/* ── ⑨ 悬浮 Tab Bar ── */
+.tab-bar{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  background:rgba(30,58,95,.92);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-radius:18px;padding:6px 8px;
+  display:flex;gap:2px;z-index:100;
+  box-shadow:0 8px 32px rgba(30,58,95,.25);
+  max-width:440px;width:calc(100% - 32px);
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;cursor:pointer;padding:8px 0;border-radius:14px;
+  transition:all .25s;-webkit-tap-highlight-color:transparent;
+  min-width:56px;
+}
+.tab .t-icon{font-size:20px;line-height:1}
+.tab .t-label{font-size:10px;color:rgba(255,255,255,.55);font-weight:500;transition:color .25s}
+.tab.active{background:rgba(255,255,255,.15)}
+.tab.active .t-label{color:#fff;font-weight:600}
+
+/* ── Pages ── */
+.page{display:none;flex:1;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .page.active{display:flex}
-.main-outfit{background:var(--bg);margin-bottom:8px;padding-bottom:16px}
-.main-img{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;background:var(--tag-bg)}
-.main-img img{width:100%;height:100%;object-fit:cover;display:block}
-.main-img .no-img{font-size:48px;opacity:.08;display:flex;align-items:center;justify-content:center;height:100%}
-.main-info{padding:12px 16px 0}
-.main-style{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
-.main-meta{font-size:12px;color:var(--sub);margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap}
-.main-meta span{display:flex;align-items:center;gap:3px}
-.main-items{display:flex;flex-wrap:wrap;gap:6px}
-.main-items .outfit-item{display:flex;align-items:center;gap:4px;font-size:12px;background:var(--tag-bg);padding:5px 10px;border-radius:16px}
-.main-items .oi-cat{display:none}
-.main-items .oi-id{font-size:10px;color:var(--sub);flex-shrink:0}
-.main-items .oi-name{color:var(--text)}
-.section{padding:12px 16px}
-.section-header{font-size:13px;color:var(--text);font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.mini-cards{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.mini-cards::-webkit-scrollbar{display:none}
-.mini-card{flex-shrink:0;width:140px;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;transition:all .25s ease}
-.mini-card.open{width:210px}
-.mini-card .mc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 6px;cursor:pointer}
-.mini-card .mc-header:active{background:var(--accent-soft)}
-.mini-card .mc-style{font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mini-card .mc-arrow{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}
-.mini-card.open .mc-arrow{transform:rotate(180deg)}
-.mini-card .mc-body{display:none;padding:0 12px 12px;border-top:1px solid var(--border)}
-.mini-card.open .mc-body{display:block}
-.mini-card .mc-item{font-size:12px;color:var(--sub);line-height:1.8;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-card .mc-item .mc-emoji{font-size:13px;flex-shrink:0}
-.mini-card .mc-preview{font-size:10px;color:var(--muted);padding:0 12px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-card.open .mc-preview{display:none}
-.card{background:var(--bg);border-radius:var(--radius);padding:16px;margin-bottom:8px;border:1px solid var(--border)}
-.placeholder{text-align:center;padding:60px 24px;color:var(--muted)}
-.placeholder .ph-icon{font-size:40px;margin-bottom:12px;opacity:.25}
-.placeholder .ph-text{font-size:14px;line-height:1.7;color:var(--sub)}
-.fav-list{display:flex;flex-direction:column;gap:6px}
-.fav-card{display:flex;align-items:center;gap:12px;background:var(--bg);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;transition:all .15s}
-.fav-card:active{background:var(--accent-soft)}
-.fav-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.fav-info{flex:1;min-width:0}
-.fav-style{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
-.fav-meta{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fav-star{font-size:12px;flex-shrink:0}
-.search-box{padding:10px 16px;display:flex;gap:8px}
-.search-box input{flex:1;padding:10px 14px;border:none;border-radius:20px;font-size:14px;background:var(--surface);color:var(--text);outline:none;-webkit-appearance:none}
-.search-box input::placeholder{color:var(--muted)}
-.page-input{flex-shrink:0;background:var(--bg);border-top:1px solid var(--border);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px}
-.page-input input{flex:1;padding:11px 16px;border:none;border-radius:20px;font-size:14px;background:var(--surface);color:var(--text);outline:none;-webkit-appearance:none}
-.page-input input::placeholder{color:var(--muted)}
-.page-input button{width:42px;height:42px;background:var(--accent);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;transition:transform .15s}
-.page-actions{flex-shrink:0;background:var(--bg);border-top:1px solid var(--border);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:10px}
-.btn-primary{flex:1;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:22px;font-size:15px;font-weight:600;cursor:pointer}
-.btn-secondary{flex:1;padding:14px;background:var(--surface);color:var(--sub);border:none;border-radius:22px;font-size:15px;cursor:pointer}
-.stat-row{display:flex;gap:8px;margin-bottom:8px}
-.stat-box{flex:1;background:var(--surface);border-radius:var(--radius);padding:14px 8px;text-align:center}
-.stat-num{font-size:24px;font-weight:700;color:var(--text);line-height:1}
-.stat-label{font-size:10px;color:var(--sub);margin-top:4px}
-.gap-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px solid var(--surface)}
+
+/* ── Wardrobe etc (compact) ── */
+.stat-row{display:flex;gap:10px;margin-bottom:12px}
+.stat-box{flex:1;background:var(--white);border-radius:var(--radius-sm);padding:14px 10px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04)}
+.stat-num{font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+.stat-label{font-size:10px;color:var(--muted);margin-top:4px;font-weight:500}
+.gap-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:13px;border-bottom:1px solid #f2f5f9}
 .gap-row:last-child{border-bottom:none}
-.gap-bar{flex:1;height:4px;background:var(--surface);border-radius:2px;margin:0 10px;overflow:hidden}
+.gap-bar{flex:1;height:4px;background:#eef2f7;border-radius:2px;margin:0 10px;overflow:hidden}
 .gap-fill{height:100%;border-radius:2px}
-.gap-tag{font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600}
-.gap-tag.danger{background:var(--accent-soft);color:var(--accent)}
-.gap-tag.warn{background:#fff8e8;color:#c47f20}
-.gap-tag.ok{background:#eef6ec;color:#4a8c3f}
-.tab-bar{flex-shrink:0;display:flex;justify-content:space-around;background:var(--bg);border-top:1px solid var(--border);padding:6px 0 4px;padding-bottom:max(4px,env(safe-area-inset-bottom))}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0;position:relative;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
-.tab:active{opacity:.5}
-.tab .t-icon{font-size:20px;line-height:1.1}
-.tab .t-label{font-size:10px;color:var(--sub);font-weight:400;transition:color .2s}
-.tab.active .t-label{color:var(--accent);font-weight:600}
+.gap-tag{font-size:9px;padding:2px 8px;border-radius:8px;font-weight:700}
+.gap-tag.high{background:#e8f0fd;color:var(--navy)}
+.gap-tag.ok{background:#eaf5ea;color:#3a7d3a}
+.placeholder{text-align:center;padding:60px 20px}
+.placeholder .ph-icon{font-size:40px;margin-bottom:12px;opacity:.2}
+.placeholder .ph-text{font-size:14px;line-height:1.7;color:var(--sub)}
+.fav-list{display:flex;flex-direction:column;gap:8px}
+.fav-card{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04)}
+.fav-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fav-info{flex:1;min-width:0}
+.fav-style{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.fav-meta{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-row{display:flex;gap:10px;margin-top:12px}
+.btn{flex:1;padding:14px;border-radius:24px;font-size:15px;font-weight:600;text-align:center;cursor:pointer;transition:all .15s}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:active{background:var(--navy-light)}
+.btn.secondary{background:#eef2f7;color:var(--sub)}
+.btn.secondary:active{background:#e2e8f0}
 </style>
 </head>
 <body>
 <div id="app">
-<div class="header"><h1>穿搭助手</h1><div class="sub">AI STYLE ADVISOR</div></div>
 
+<!-- ═══ 推荐页 ═══ -->
 <div class="page active" id="page-recommend">
-<div class="subtabs" id="subtabs-recommend">
-<div class="subtab active" data-sub="today">今日推荐</div>
-<div class="subtab" data-sub="history">历史推荐</div>
-</div>
-<div class="subpage active" id="sub-today">
-<div class="section" style="padding:0">
-<div class="main-outfit">
-<div class="main-img"><img src="../outfits/2026-06-15_起雾了，今天该穿什么？/豆包生图/人物_IMG_8493_方案1.jpg" alt=""></div>
-<div class="main-info">
-<div class="main-style">清爽雾天城市休闲</div>
-<div class="main-meta"><span>2026-06-15</span><span>雾 22C</span><span>湿度88%</span></div>
-<div class="main-items">
-<div class="outfit-item"><span class="oi-id">TS-011</span><span class="oi-name">宽松落肩纯色T恤</span></div>
-<div class="outfit-item"><span class="oi-id">SH-004</span><span class="oi-name">宽松休闲短裤</span></div>
-<div class="outfit-item"><span class="oi-id">SHOE-005</span><span class="oi-name">Nike Court Lite网球鞋</span></div>
-<div class="outfit-item"><span class="oi-id">HAT-004</span><span class="oi-name">基础棒球帽</span></div>
-</div>
-</div>
-</div>
-</div>
-<div class="section">
-<div class="section-header">其他推荐</div>
-<div class="mini-cards">
-<div class="mini-card" onclick="this.classList.toggle('open')">
-<div class="mc-header"><span class="mc-style">夏日度假休闲</span><span class="mc-arrow">V</span></div>
-<div class="mc-preview">椰树印花短袖 . 亚麻短裤 . 复古训练鞋…</div>
-<div class="mc-body">
-<div class="mc-item"><span class="mc-emoji">T</span>椰树印花短袖</div>
-<div class="mc-item"><span class="mc-emoji">D</span>亚麻西装短裤</div>
-<div class="mc-item"><span class="mc-emoji">S</span>Adidas 复古训练鞋</div>
-<div class="mc-item"><span class="mc-emoji">H</span>米白棒球帽</div>
-</div>
-</div>
-<div class="mini-card" onclick="this.classList.toggle('open')">
-<div class="mc-header"><span class="mc-style">衬衫叠穿层次</span><span class="mc-arrow">V</span></div>
-<div class="mc-preview">基础衬衫 . 落肩T恤 . Nike网球鞋…</div>
-<div class="mc-body">
-<div class="mc-item"><span class="mc-emoji">S</span>Uniqlo 基础衬衫</div>
-<div class="mc-item"><span class="mc-emoji">T</span>宽松落肩纯色T恤</div>
-<div class="mc-item"><span class="mc-emoji">D</span>宽松休闲短裤</div>
-<div class="mc-item"><span class="mc-emoji">S</span>Nike Court Lite 网球鞋</div>
-</div>
-</div>
-<div class="mini-card" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:2px dashed var(--border);cursor:pointer;min-height:60px;flex-shrink:0;width:80px">
-<div style="text-align:center;color:var(--sub);font-size:12px">+ 换一批</div>
-</div>
-</div>
-</div>
-</div>
-<div class="subpage" id="sub-history" style="display:none">
-<div class="section"><div class="section-header">今日全部推荐</div>
-<div class="fav-list">
-<div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">清爽雾天城市休闲</div><div class="fav-meta">TS-011、SH-004、SHOE-005、HAT-004…</div></div></div>
-<div class="fav-card"><div class="fav-num">2</div><div class="fav-info"><div class="fav-style">夏日度假休闲</div><div class="fav-meta">TS-008、SH-008、SHOE-002、HAT-004</div></div></div>
-<div class="fav-card"><div class="fav-num">3</div><div class="fav-info"><div class="fav-style">雾天清爽日常休闲</div><div class="fav-meta">TS-011、SHIRT-002、SH-004、SHOE-005</div></div></div>
-</div></div>
-<div class="section" style="padding-top:0"><div class="section-header">你的历史最爱</div>
-<div class="fav-list">
-<div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">打网球穿搭</div><div class="fav-meta">2026-06-14 . TS-009、SH-005、SHOE-005</div></div><div class="fav-star">3星</div></div>
-</div></div>
-</div>
-<div class="page-input" id="rec-input-box">
-<input type="text" id="rec-input" placeholder="描述你的穿搭需求...">
-<button onclick="alert('sent')">&gt;</button>
-</div>
-<div class="search-box" id="rec-search-box" style="display:none;flex-shrink:0;background:var(--bg);border-top:1px solid var(--border);padding-bottom:max(10px,env(safe-area-inset-bottom))">
-<input type="text" placeholder="搜索历史推荐...">
-</div>
+  <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
+
+  <div class="segmented" id="seg-recommend">
+    <div class="seg-btn active" data-sub="today">今日推荐</div>
+    <div class="seg-btn" data-sub="history">历史推荐</div>
+  </div>
+
+  <div class="content">
+    <!-- 今日推荐 -->
+    <div class="subpage active" id="sub-today">
+      <div class="hero-card">
+        <div class="hero-img"><div class="placeholder-img">&#x1f455;</div></div>
+        <div class="hero-body">
+          <div class="hero-style">清爽雾天城市休闲</div>
+          <div class="hero-meta"><span>&#x1f4c5; 06/15</span><span>&#x1f32b; 雾 22&deg;C</span></div>
+          <div class="item-list">
+            <div class="item-row"><span class="item-emoji">&#x1f455;</span><span class="item-cat">上衣</span><span class="item-id">TS-011</span><span class="item-name">宽松落肩纯色T恤</span></div>
+            <div class="item-row"><span class="item-emoji">&#x1f7e9;</span><span class="item-cat">下装</span><span class="item-id">SH-004</span><span class="item-name">宽松休闲短裤</span></div>
+            <div class="item-row"><span class="item-emoji">&#x1f45f;</span><span class="item-cat">鞋子</span><span class="item-id">SHOE-005</span><span class="item-name">Nike Court Lite 网球鞋</span></div>
+            <div class="item-row"><span class="item-emoji">&#x1f9e2;</span><span class="item-cat">帽子</span><span class="item-id">HAT-004</span><span class="item-name">基础棒球帽</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">其他推荐</div>
+      <div class="rec-cards">
+        <div class="rec-card"><div class="rc-style">夏日度假休闲</div><div class="rc-items">TS-008 / SH-008<br>SHOE-002</div></div>
+        <div class="rec-card"><div class="rc-style">衬衫叠穿层次</div><div class="rc-items">SHIRT-002 / TS-011<br>SHOE-005</div></div>
+        <div class="rec-card dashed"><div class="dash-text">+<br>换一批</div></div>
+      </div>
+
+      <div class="input-wrap"><input type="text" placeholder="描述穿搭需求，如「今天要去约会」..."></div>
+    </div>
+
+    <!-- 历史推荐 -->
+    <div class="subpage" id="sub-history" style="display:none">
+      <div class="section-header" style="margin-top:4px">今日全部</div>
+      <div class="fav-list" style="margin-bottom:16px">
+        <div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">清爽雾天城市休闲</div><div class="fav-meta">TS-011、SH-004、SHOE-005、HAT-004…</div></div></div>
+        <div class="fav-card"><div class="fav-num">2</div><div class="fav-info"><div class="fav-style">夏日度假休闲</div><div class="fav-meta">TS-008、SH-008、SHOE-002</div></div></div>
+      </div>
+      <div class="section-header">历史最爱</div>
+      <div class="fav-list" style="margin-bottom:16px">
+        <div class="fav-card"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">打网球穿搭</div><div class="fav-meta">2026-06-14 · TS-009、SH-005、SHOE-005</div></div></div>
+      </div>
+      <div class="input-wrap"><input type="text" placeholder="搜索历史推荐..."></div>
+    </div>
+  </div>
 </div>
 
+<!-- ═══ 探索页 ═══ -->
 <div class="page" id="page-explore">
-<div class="subtabs" id="subtabs-explore">
-<div class="subtab active" data-sub="daily">日常穿搭</div>
-<div class="subtab" data-sub="change">改变自己</div>
-<div class="subtab" data-sub="bold">大胆跨界</div>
-<div class="subtab" data-sub="circle">时尚圈子</div>
-</div>
-<div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
-<div class="subpage active" id="sub-daily"><div class="placeholder"><div class="ph-icon">+</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div></div>
-<div class="subpage" id="sub-change" style="display:none"><div class="placeholder"><div class="ph-icon">~</div><div class="ph-text">改变自己<br>跳出舒适区<br>尝试与你风格不同的方向</div></div></div>
-<div class="subpage" id="sub-bold" style="display:none"><div class="placeholder"><div class="ph-icon">*</div><div class="ph-text">大胆跨界<br>完全不同的风格<br>给你惊喜的搭配</div></div></div>
-<div class="subpage" id="sub-circle" style="display:none"><div class="placeholder"><div class="ph-icon">@</div><div class="ph-text">时尚圈子<br>风格百科 / 趋势发现 / 品牌故事<br>即将上线</div></div></div>
-</div>
-<div class="page-input"><input type="text" placeholder="描述你想尝试的风格..."><button>&gt;</button></div>
+  <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
+  <div class="segmented" style="margin-bottom:16px">
+    <div class="seg-btn active">日常穿搭</div><div class="seg-btn">改变自己</div><div class="seg-btn">大胆跨界</div><div class="seg-btn">时尚圈子</div>
+  </div>
+  <div class="content"><div class="placeholder"><div class="ph-icon">&#x1f9ea;</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div></div>
+  <div style="padding:0 20px 20px"><div class="input-wrap"><input type="text" placeholder="描述你想尝试的风格..."></div></div>
 </div>
 
+<!-- ═══ 衣橱页 ═══ -->
 <div class="page" id="page-wardrobe">
-<div class="subtabs" id="subtabs-wardrobe">
-<div class="subtab active" data-sub="mywardrobe">我的衣橱</div>
-<div class="subtab" data-sub="monthly">月度报告</div>
-<div class="subtab" data-sub="unused">冷门单品</div>
-<div class="subtab" data-sub="purchase">购买建议</div>
-</div>
-<div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
-<div class="subpage active" id="sub-mywardrobe">
-<div class="section">
-<div class="card"><div class="section-header">概览</div>
-<div class="stat-row">
-<div class="stat-box"><div class="stat-num">76</div><div class="stat-label">总件数</div></div>
-<div class="stat-box"><div class="stat-num" style="color:var(--accent)">26%</div><div class="stat-label">利用率</div></div>
-<div class="stat-box"><div class="stat-num" style="color:var(--accent)">8</div><div class="stat-label">超标品类</div></div>
-<div class="stat-box"><div class="stat-num" style="color:#c47f20">1</div><div class="stat-label">缺口品类</div></div>
-</div></div>
-<div class="card"><div class="section-header">品类健康</div>
-<div class="gap-row"><span>短袖 T恤</span><div class="gap-bar"><div class="gap-fill" style="width:73%;background:var(--accent)"></div></div><span>11件</span><span class="gap-tag danger">超标+4</span></div>
-<div class="gap-row"><span>鞋子</span><div class="gap-bar"><div class="gap-fill" style="width:67%;background:var(--accent)"></div></div><span>10件</span><span class="gap-tag danger">超标+2</span></div>
-<div class="gap-row"><span>长裤</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:#4a8c3f"></div></div><span>6件</span><span class="gap-tag ok">OK</span></div>
-<div class="gap-row"><span>短裤</span><div class="gap-bar"><div class="gap-fill" style="width:53%;background:var(--accent)"></div></div><span>8件</span><span class="gap-tag danger">超标+4</span></div>
-<div class="gap-row"><span>外套</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:#4a8c3f"></div></div><span>6件</span><span class="gap-tag ok">OK</span></div>
-</div>
-</div></div>
-<div class="subpage" id="sub-monthly" style="display:none"><div class="placeholder"><div class="ph-icon">%</div><div class="ph-text">月度穿搭报告<br>2026年6月 . 44套 . 9种风格 . 7%评分率</div></div></div>
-<div class="subpage" id="sub-unused" style="display:none"><div class="placeholder"><div class="ph-icon">z</div><div class="ph-text">沉睡好货<br>JK-001 Adidas曼联夹克<br>LS-004 CDG Play长袖<br>SHOE-007 Timberland大黄靴<br>等29件好品质单品从未穿过</div></div></div>
-<div class="subpage" id="sub-purchase" style="display:none"><div class="placeholder"><div class="ph-icon">$</div><div class="ph-text">购买建议<br>优先：1双棕色乐福鞋<br>可选：1件酒红色上衣<br>建议：暂停购入短袖T恤</div></div></div>
-</div>
-<div class="search-box" style="flex-shrink:0;background:var(--bg);border-top:1px solid var(--border);padding-bottom:max(10px,env(safe-area-inset-bottom))">
-<input type="text" placeholder="搜索衣服...">
-</div>
+  <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
+  <div class="segmented" style="margin-bottom:16px">
+    <div class="seg-btn active">我的衣橱</div><div class="seg-btn">月度报告</div><div class="seg-btn">冷门单品</div><div class="seg-btn">购买建议</div>
+  </div>
+  <div class="content">
+    <div class="stat-row"><div class="stat-box"><div class="stat-num">76</div><div class="stat-label">总件数</div></div><div class="stat-box"><div class="stat-num" style="color:#c4523c">26%</div><div class="stat-label">利用率</div></div><div class="stat-box"><div class="stat-num" style="color:#c4523c">8</div><div class="stat-label">超标</div></div><div class="stat-box"><div class="stat-num" style="color:#c47f20">1</div><div class="stat-label">缺口</div></div></div>
+    <div class="hero-card" style="padding:18px;margin-bottom:12px">
+      <div class="section-header" style="margin-top:0">品类健康</div>
+      <div class="gap-row"><span>短袖T恤</span><div class="gap-bar"><div class="gap-fill" style="width:73%;background:var(--navy)"></div></div><span>11件</span><span class="gap-tag high">超标+4</span></div>
+      <div class="gap-row"><span>鞋子</span><div class="gap-bar"><div class="gap-fill" style="width:67%;background:var(--navy)"></div></div><span>10件</span><span class="gap-tag high">超标+2</span></div>
+      <div class="gap-row"><span>长裤</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:#4a8c3f"></div></div><span>6件</span><span class="gap-tag ok">OK</span></div>
+      <div class="gap-row"><span>外衣</span><div class="gap-bar"><div class="gap-fill" style="width:40%;background:#4a8c3f"></div></div><span>6件</span><span class="gap-tag ok">OK</span></div>
+    </div>
+  </div>
+  <div style="padding:0 20px 20px"><div class="input-wrap"><input type="text" placeholder="搜索衣服..."></div></div>
 </div>
 
+<!-- ═══ 添加页 ═══ -->
 <div class="page" id="page-add">
-<div class="subtabs" id="subtabs-add">
-<div class="subtab active" data-sub="camera">拍照</div>
-<div class="subtab" data-sub="upload">上传图片</div>
-</div>
-<div class="subpage active" id="sub-camera"><div class="placeholder" style="padding:60px 20px"><div class="ph-icon">[]</div><div class="ph-text">拍照识别衣服<br>对准衣服拍照<br>AI 自动识别品牌、品类、颜色</div></div></div>
-<div class="subpage" id="sub-upload" style="display:none"><div class="placeholder" style="padding:60px 20px"><div class="ph-icon">^</div><div class="ph-text">上传衣服图片<br>从相册选择图片<br>AI 自动分析并生成标签</div></div></div>
-<div class="page-actions"><button class="btn-primary">确认分析</button><button class="btn-secondary">取消重选</button></div>
+  <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
+  <div class="segmented" style="margin-bottom:16px"><div class="seg-btn active">拍照</div><div class="seg-btn">上传图片</div></div>
+  <div class="content"><div class="placeholder"><div class="ph-icon">&#x1f4f8;</div><div class="ph-text">拍照识别衣服<br>对准衣服拍照<br>AI 自动识别品牌、品类、颜色</div></div></div>
+  <div style="padding:0 20px 20px"><div class="btn-row"><div class="btn primary">确认分析</div><div class="btn secondary">取消重选</div></div></div>
 </div>
 
+<!-- ═══ 我的页 ═══ -->
 <div class="page" id="page-profile">
-<div class="section"><div class="placeholder" style="padding:80px 20px"><div class="ph-icon">@</div><div class="ph-text">个人中心<br>即将上线<br>推送偏好 / 穿搭统计 / 身形档案</div></div></div>
+  <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
+  <div class="content"><div class="placeholder" style="padding:80px 20px"><div class="ph-icon">&#x1f464;</div><div class="ph-text">个人中心<br>即将上线<br>推送偏好 · 穿搭统计 · 身形档案</div></div></div>
 </div>
 
+</div>
+
+<!-- 悬浮 Tab Bar -->
 <div class="tab-bar" id="tab-bar">
-<div class="tab active" data-page="recommend"><span class="t-icon">T</span><span class="t-label">推荐</span></div>
-<div class="tab" data-page="explore"><span class="t-icon">L</span><span class="t-label">探索</span></div>
-<div class="tab" data-page="wardrobe"><span class="t-icon">W</span><span class="t-label">衣橱</span></div>
-<div class="tab" data-page="add"><span class="t-icon">+</span><span class="t-label">添加</span></div>
-<div class="tab" data-page="profile"><span class="t-icon">@</span><span class="t-label">我的</span></div>
+  <div class="tab active" data-page="recommend"><span class="t-icon">&#x1f455;</span><span class="t-label">推荐</span></div>
+  <div class="tab" data-page="explore"><span class="t-icon">&#x1f4a1;</span><span class="t-label">探索</span></div>
+  <div class="tab" data-page="wardrobe"><span class="t-icon">&#x1f3e0;</span><span class="t-label">衣橱</span></div>
+  <div class="tab" data-page="add"><span class="t-icon">&#x1f4f8;</span><span class="t-label">添加</span></div>
+  <div class="tab" data-page="profile"><span class="t-icon">&#x1f464;</span><span class="t-label">我的</span></div>
 </div>
-</div>
+
 <script>
 var currentPage='recommend';
-var tabs=document.querySelectorAll('#tab-bar .tab');
-var pages=document.querySelectorAll('.page');
-tabs.forEach(function(tab){tab.addEventListener('click',function(){var page=this.dataset.page;if(page===currentPage)return;currentPage=page;tabs.forEach(function(t){t.classList.remove('active')});this.classList.add('active');pages.forEach(function(p){p.classList.remove('active')});document.getElementById('page-'+page).classList.add('active')})});
-document.querySelectorAll('.subtabs').forEach(function(subtabs){subtabs.addEventListener('click',function(e){var subtab=e.target.closest('.subtab');if(!subtab)return;var sub=subtab.dataset.sub;subtabs.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active')});subtab.classList.add('active');var parent=subtabs.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){sp.style.display='none'});var target=document.getElementById('sub-'+sub);if(target)target.style.display='block';var recInput=document.getElementById('rec-input-box');var recSearch=document.getElementById('rec-search-box');if(recInput&&recSearch){if(sub==='history'){recInput.style.display='none';recSearch.style.display='flex'}else{recInput.style.display='flex';recSearch.style.display='none'}}})});
+document.querySelectorAll('#tab-bar .tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var page=this.dataset.page;
+    if(page===currentPage) return;
+    currentPage=page;
+    document.querySelectorAll('#tab-bar .tab').forEach(function(t){t.classList.remove('active')});
+    this.classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('page-'+page).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.segmented').forEach(function(seg){
+  seg.addEventListener('click',function(e){
+    var btn=e.target.closest('.seg-btn');
+    if(!btn) return;
+    seg.querySelectorAll('.seg-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    var sub=btn.dataset.sub;
+    if(!sub) return;
+    var parent=seg.parentElement;
+    parent.querySelectorAll('.subpage').forEach(function(sp){sp.style.display='none'});
+    var target=document.getElementById('sub-'+sub);
+    if(target) target.style.display='block';
+  });
+});
 </script>
 </body>
 </html>

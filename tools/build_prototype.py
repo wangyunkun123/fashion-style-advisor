@@ -20,7 +20,7 @@ def simplify_name(iid, name):
     # Apple Watch: keep band info
     if iid == 'ACC-003' or 'Apple Watch' in name:
         band = ''
-        for b in ['回环尼龙','米兰尼斯','运动表带','黑色运动']:
+        for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
             if b in name: band = b; break
         return 'Apple Watch {}'.format(band) if band else 'Apple Watch'
     # Remove series/tech terms
@@ -500,12 +500,21 @@ def extract_tags(outfit):
                 if in_notes and line.strip().startswith('- '):
                     kw = line.strip()[2:].split('：')[0].split('—')[0].strip()[:8]
                     if kw and len(kw)>=2: tags.append(kw)
-        # Fallback: from style name
+        # Fallback: smart keyword matching (same as API)
         if not tags:
             style = outfit.get('style','')
-            for sep in ['丨','｜','/','·','-',' ']:
-                style = style.replace(sep, ' ')
-            tags = [w.strip()[:8] for w in style.split() if len(w.strip())>=2][:4]
+            known = ['日系','韩系','欧美','街头','复古','机能','简约','轻熟','运动','度假',
+                'City Boy','Clean Fit','美式','户外','军事','工装','网球','跑步','健身',
+                '宽松','低饱和','高对比','叠穿','单色','撞色','印花','条纹','纯色',
+                '通勤','约会','商务','休闲','正式','清爽','优雅','硬朗','柔和']
+            st = style
+            for sep in ['丨','｜','/','·','-']: st = st.replace(sep, ' ')
+            for kw in known:
+                if kw in st and kw not in tags: tags.append(kw)
+            if len(tags) < 2:
+                words = [w.strip() for w in st.split() if len(w.strip())>=2]
+                for w in words:
+                    if w[:8] not in tags: tags.append(w[:8])
     return tags[:4]
 
 def gen_history_card(outfit, idx):

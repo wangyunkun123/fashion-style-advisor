@@ -42,3 +42,4 @@ outfits/_bline_temp/
 衣橱分析报告.txt
 穿搭月度报告.txt
 # _swatches.png — 需要上传，不能 gitignore
+node_modules/

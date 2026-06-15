@@ -1,0 +1,24 @@
+{
+  "name": "fashion",
+  "version": "1.0.0",
+  "description": "> 专属 AI 时尚顾问 — 基于服装档案的 Asian Male 穿搭系统",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangyunkun123/fashion-style-advisor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wangyunkun123/fashion-style-advisor/issues"
+  },
+  "homepage": "https://github.com/wangyunkun123/fashion-style-advisor#readme",
+  "dependencies": {
+    "lucide-static": "^1.18.0"
+  }
+}

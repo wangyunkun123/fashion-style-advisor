@@ -190,6 +190,12 @@ def match_command(message):
     if re.search(r'^(衣橱|我的衣橱|衣柜|wardrobe)$', msg, re.I):
         return ('wardrobe', '')
 
+    if re.search(r'^(今日穿搭|今天穿什么)$', msg, re.I):
+        return ('today', '')
+
+    if re.search(r'^(历史推荐|我的最爱|评分记录)$', msg, re.I):
+        return ('favorites', '')
+
     if re.search(r'^(同步|推送|push|上传)$', msg, re.I):
         return ('sync', '')
 
@@ -876,11 +882,6 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes progress{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
-#history-bar:active{background:#f0ebe0}
-.history-card{background:#fff;border:1px solid #e0d8d0;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
-.history-card:active{background:#faf8f5}
-.history-card .detail{display:none;margin-top:6px;font-size:13px;line-height:1.5}
-.history-card .detail img{max-width:100%;border-radius:6px;margin-top:6px}
 /* ── 衣橱面板 ── */
 #wardrobe-panel{flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0}
 .wardrobe-header{position:sticky;top:0;background:#3a3028;color:#fff;padding:10px 18px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;z-index:1}
@@ -914,10 +915,6 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <div id="app">
 <div class="header"><h1>👔 穿搭助手</h1><div class="sub">AI STYLE ADVISOR</div></div>
 <div id="messages"></div>
-<div id="history-bar" style="flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;cursor:pointer;padding:8px 18px;font-size:13px;color:#5c4d3c;display:flex;align-items:center;gap:6px;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleHistoryBar()">
-<span id="history-icon">▶</span> <span>📋 历史记录</span> <span id="history-count" style="font-size:11px;color:#9b8c7c"></span>
-</div>
-<div id="history-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:40vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 14px"></div>
 <div id="wardrobe-panel" style="display:none;flex-shrink:0;background:#f8f6f3;border-top:1px solid #e0d8d0;max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
 <div class="wardrobe-header">👔 我的衣橱 <span onclick="toggleWardrobe()">✕</span></div>
 <div id="wardrobe-content"><div class="w-loading">加载中...</div></div>
@@ -928,7 +925,7 @@ body{font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei
 <button id="sendBtn">▶</button>
 </div>
 <div class="tab-bar">
-<div class="tab" data-cmd="推荐穿搭"><span class="t-icon">👕</span><span class="t-label">推荐</span></div>
+<div class="tab" id="tab-recommend" onclick="showRecommendMenu(event)"><span class="t-icon">👕</span><span class="t-label">推荐</span></div>
 <div class="tab" id="tab-explore" onclick="showExploreMenu(event)"><span class="t-icon">💡</span><span class="t-label">探索</span></div>
 <div class="tab" id="tab-wardrobe" onclick="toggleWardrobe()"><span class="t-icon">🏠</span><span class="t-label">衣橱</span></div>
 <div class="tab" onclick="addClothes()"><span class="t-icon">📸</span><span class="t-label">添加</span></div>
@@ -1032,41 +1029,21 @@ addMsg('assistant','➕ <b>添加新衣服</b><br><br>流程：<br>1. 把衣服�
 // 欢迎消息
 addMsg('assistant','👋 你好！我是穿搭助手<br><br>点击底部 <b>推荐</b> 获取今日穿搭<br>点击 <b>衣橱</b> 查看衣柜分析<br>或直接在输入框描述需求…');
 
-// ── 历史栏 ──
-var historyPanel=document.getElementById('history-panel');
-var historyIcon=document.getElementById('history-icon');
-var historyCount=document.getElementById('history-count');
-var historyOpen=false;
-
-function loadHistoryBar(){
-fetch('/api/history?n=20').then(function(r){return r.json()}).then(function(data){
-if(!data||!data.length){historyCount.textContent='(暂无)';return}
-historyCount.textContent='('+data.length+'条)';
-var h='';
-data.forEach(function(e){
-var emoji=e.status==='done'?'✅':'❌';
-h+='<div class="history-card" onclick="toggleCard(this)" data-img="'+esc(e.image_url||'')+'" data-result="'+esc(e.result||'')+'">';
-h+='<div style="font-size:14px;font-weight:600">'+emoji+' '+esc(e.style)+'</div>';
-h+='<div style="font-size:11px;color:#9b8c7c;margin-top:2px">'+esc(e.time)+'</div>';
-h+='<div class="detail"></div></div>';
+// ── 推荐子菜单 ──
+function showRecommendMenu(e){
+e.stopPropagation();
+var btn=e.currentTarget;
+var old=document.querySelector('.submenu');if(old)old.remove();
+var mask=document.querySelector('.submenu-mask');if(mask)mask.remove();
+var m=document.createElement('div');m.className='submenu';
+m.innerHTML='<div class="submenu-item" data-cmd="今日穿搭">🎯 今日穿搭</div><div class="submenu-item" data-cmd="历史推荐">⭐ 历史推荐</div>';
+btn.appendChild(m);
+var maskEl=document.createElement('div');maskEl.className='submenu-mask';
+maskEl.onclick=function(){m.remove();maskEl.remove()};
+document.body.appendChild(maskEl);
+m.querySelectorAll('.submenu-item').forEach(function(it){
+it.onclick=function(ev){ev.stopPropagation();input.value=this.dataset.cmd;send();m.remove();maskEl.remove()}
 });
-historyPanel.innerHTML=h;
-})}
-
-function toggleHistoryBar(){
-historyOpen=!historyOpen;
-historyPanel.style.display=historyOpen?'block':'none';
-historyIcon.textContent=historyOpen?'▼':'▶';
-if(historyOpen)loadHistoryBar();
-}
-
-function toggleCard(el){
-var detail=el.querySelector('.detail');
-if(detail.style.display==='block'){detail.style.display='none';return}
-var img=el.dataset.img,result=el.dataset.result;
-var h=result.replace(/\\n/g,'<br>');
-if(img)h+='<br><img src="'+img+'" loading="lazy">';
-detail.innerHTML=h;detail.style.display='block';
 }
 
 // ── 衣橱面板 ──
@@ -1170,6 +1147,109 @@ wardrobeContent.innerHTML='<div class="w-loading" style="color:#c62828">⚠️ �
 </script>
 </body>
 </html>"""
+
+# ── 今日穿搭计数器 ───────────────────────────────────────
+_TODAY_CLICKS = {}  # {date_str: count}
+
+def _handle_today(handler):
+    """智能今日穿搭：首次返回已有，后续生成新品"""
+    today = time.strftime('%Y-%m-%d')
+    click_count = _TODAY_CLICKS.get(today, 0) + 1
+    _TODAY_CLICKS[today] = click_count
+
+    # 检查今日是否已有 outfit
+    existing = []
+    for d in sorted(os.listdir(os.path.join(PROJECT_DIR, 'outfits')), reverse=True):
+        if d.startswith(today):
+            dp = os.path.join(PROJECT_DIR, 'outfits', d)
+            md = os.path.join(dp, 'outfit.md')
+            if os.path.exists(md):
+                existing.append(d)
+    existing.sort(reverse=True)
+
+    if click_count == 1 and existing:
+        # 首次点击且有今日穿搭 → 返回已生成的
+        latest = existing[0]
+        dp = os.path.join(PROJECT_DIR, 'outfits', latest)
+        # 找效果图
+        img_url = ''
+        for sub in ['上身效果', '豆包生图', 'generated']:
+            for root, _, files in os.walk(os.path.join(dp, sub) if os.path.exists(os.path.join(dp, sub)) else dp):
+                for f in files:
+                    if ('方案' in f or '直角' in f) and f.endswith('.jpg'):
+                        rel = os.path.relpath(os.path.join(root, f), PROJECT_DIR)
+                        img_url = get_cdn_url(rel)
+                        break
+                if img_url:
+                    break
+            if img_url:
+                break
+
+        handler._json_resp(200, {
+            "result": f'🎯 今日穿搭 #{click_count}<br><br>已为你准备好今日推荐：<b>{latest.split("_",1)[-1] if "_" in latest else latest}</b><br><br>不满意？再点一次「今日穿搭」换一套',
+            "action": "today",
+            "image_url": img_url,
+        })
+    else:
+        # 首次但无今日 outfit，或第 N 次点击 → 生成新的
+        extra = f'今日穿搭 第{click_count}版 请与之前不同'
+        tid = _start_async_pipeline('recommend', extra)
+        handler._json_resp(200, {"task_id": tid, "result": f'🔍 正在为你生成第 {click_count} 套今日穿搭…'})
+
+
+def _handle_favorites(handler):
+    """返回近10次三星好评穿搭"""
+    favs = []
+    outfits_dir = os.path.join(PROJECT_DIR, 'outfits')
+    for d in sorted(os.listdir(outfits_dir), reverse=True):
+        dp = os.path.join(outfits_dir, d)
+        rp = os.path.join(dp, 'rating.json')
+        if not os.path.exists(rp):
+            continue
+        try:
+            with open(rp) as f:
+                rating = json.load(f)
+            if rating.get('rating') != 3:
+                continue
+        except:
+            continue
+        md = os.path.join(dp, 'outfit.md')
+        style = d.split('_', 1)[-1] if '_' in d else d
+        date_str = d[:10]
+        items_str = ''
+        if os.path.exists(md):
+            with open(md) as f:
+                content = f.read()
+            ids = re.findall(r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)', content)
+            items_str = '、'.join(list(dict.fromkeys(ids))[:5])
+        favs.append({'dir': d, 'style': style, 'date': date_str, 'items': items_str})
+
+    if not favs:
+        handler._json_resp(200, {"result": '⭐ 暂无三星好评记录。<br><br>给满意的穿搭点 ⭐⭐⭐ 后会出现在这里', "action": "favorites"})
+        return
+
+    lines = ['⭐ 你最爱的穿搭 TOP ' + str(min(len(favs), 10))]
+    for i, f in enumerate(favs[:10], 1):
+        lines.append(f'{i}. <b>{f["style"]}</b> · {f["date"]}')
+        if f['items']:
+            lines.append(f'   <span style="font-size:12px;color:#9b8c7c">{f["items"]}</span>')
+
+    handler._json_resp(200, {"result": '<br>'.join(lines), "action": "favorites"})
+
+
+def get_cdn_url(rel_path):
+    """构建 jsDelivr CDN URL"""
+    try:
+        import subprocess as _sp
+        h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
+                     text=True, cwd=PROJECT_DIR).stdout.strip()
+        if h:
+            import urllib.parse
+            return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{urllib.parse.quote(rel_path, safe="/")}'
+    except:
+        pass
+    return ''
+
 
 # ── HTTP 处理器 ───────────────────────────────────────
 class WebhookHandler(BaseHTTPRequestHandler):
@@ -1475,6 +1555,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
             if action == 'wardrobe':
                 self._json_resp(200, {"result": "👔 衣橱面板已打开，向上滑动查看完整数据", "action": "wardrobe"})
+            elif action == 'today':
+                _handle_today(self)
+            elif action == 'favorites':
+                _handle_favorites(self)
             elif action in ('generate', 'recommend'):
                 tid = _start_async_pipeline(action, extra)
                 self._json_resp(200, {"task_id": tid})

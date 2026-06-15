@@ -1251,7 +1251,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                                 for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
                                     if b in iname: band = b; break
                                 iname = ('Apple Watch '+band) if band else 'Apple Watch'
-                            elif len(iname) > 16: iname = iname[:14]
+                            elif len(iname) > 14: iname = iname[:14]
                             items.append({'id': iid, 'name': iname.strip()})
                     style = ''
                     for line in content.split('\n'):

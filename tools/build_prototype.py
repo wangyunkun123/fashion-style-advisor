@@ -262,6 +262,10 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .lightbox.show{{display:flex}}
 .lightbox img{{max-width:90%;max-height:80%;object-fit:contain;border-radius:8px}}
 .lightbox .close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;z-index:201}}
+/* Loading overlay */
+#loading-overlay{{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(248,250,252,.92);z-index:10;display:flex;align-items:center;justify-content:center}}
+.loading-spinner{{width:32px;height:32px;border:3px solid #e6ecf3;border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}}
+@keyframes spin{{to{{transform:rotate(360deg)}}}}
 /* Palette strip */
 .palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
@@ -451,8 +455,11 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
-function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{inp.placeholder='任务进行中...';pollTask(d.task_id)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
-function pollTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{location.reload()}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='生成失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid)}},3000)}}}})}}
+function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';showLoading(msg);fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{hideLoading();inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{hideLoading();inp.placeholder='网络错误: '+e.message}})}}
+function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{updateLoading('✅ 完成! 刷新中...');setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{updateLoading('❌ '+(d.message||'生成失败'));setTimeout(hideLoading,3000)}}else{{var msgs=['🤖 AI分析穿搭方案中...','🎨 Seedream生成效果图...','🖼️ 排版合成中...','📤 推送同步中...'];var idx=Math.min(n-1,msgs.length-1);if(d.message)updateLoading(d.message);else updateLoading(msgs[idx]);setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
+function showLoading(msg){{var el=document.getElementById('loading-overlay');if(!el){{el=document.createElement('div');el.id='loading-overlay';el.innerHTML='<div style=\"text-align:center;padding:60px 20px\"><div class=\"loading-spinner\"></div><div id=\"loading-msg\" style=\"margin-top:16px;font-size:14px;color:var(--sub)\">'+msg+'</div></div>';var hero=document.querySelector('.hero-card');if(hero)hero.appendChild(el)}}else{{el.style.display='block';document.getElementById('loading-msg').textContent=msg}}}}
+function updateLoading(msg){{var el=document.getElementById('loading-msg');if(el)el.textContent=msg}}
+function hideLoading(){{var el=document.getElementById('loading-overlay');if(el)el.style.display='none'}}
 </script>
 </body></html>'''
 

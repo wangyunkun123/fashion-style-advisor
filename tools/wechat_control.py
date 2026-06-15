@@ -837,274 +837,16 @@ def execute_action(action, extra, task_id=None):
     return "❌ 未知错误"
 
 # ── 聊天界面 HTML ─────────────────────────────────────
-CHAT_HTML = r"""<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
-<title>穿搭助手</title>
-<style>
-:root{--navy:#1e3a5f;--navy-light:#2a5080;--text:#1a2838;--sub:#6b7d94;
-  --muted:#94a3b5;--border:#e6ecf3;--bg:#f8fafc;--white:#fff;
-  --shadow:0 2px 8px rgba(30,58,95,.04);--radius:14px;--radius-sm:10px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
-#app{max-width:500px;width:100%;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;padding-bottom:80px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--white);border-bottom:1px solid var(--border)}
-.header h1{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.4px}
-.header .avatar{width:34px;height:34px;background:var(--navy);border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
-.segmented{display:flex;background:#eef2f7;border-radius:12px;padding:3px;margin:14px 20px;gap:2px}
-.seg-btn{flex:1;text-align:center;padding:9px 0;font-size:13px;font-weight:600;color:var(--sub);border-radius:10px;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}
-.seg-btn.active{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.25)}
-.page{display:none;flex:1;flex-direction:column;overflow:hidden}
-.page.active{display:flex}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}
-.page-bottom{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;gap:0}
-.page-bottom input{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}
-.page-bottom input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}
-.page-bottom input::placeholder{color:var(--muted)}
+# ── 聊天界面 HTML ─────────────────────────────────────
+def _load_chat_html():
+    """Load prototype HTML from file, with caching"""
+    proto_path = os.path.join(PROJECT_DIR, "prototype", "mobile-v2.html")
+    if os.path.exists(proto_path):
+        with open(proto_path, "r", encoding="utf-8") as f:
+            return f.read()
+    # Fallback minimal HTML
+    return """<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>穿搭助手</title></head><body style="font-family:sans-serif;text-align:center;padding-top:60px"><h2>原型文件未找到</h2><p>请运行 python3 tools/build_prototype.py</p></body></html>"""
 
-/* Hero card */
-.hero-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:16px 0 14px;border:1px solid rgba(30,58,95,.05)}
-.hero-img{width:100%;background:#f8fafc;overflow:hidden}
-.hero-img img{width:100%;display:block}
-.hero-body{padding:18px}
-.hero-style{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}
-.hero-meta{font-size:12px;color:var(--sub);margin-bottom:14px}
-/* Style tags */
-.style-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.style-tags span{font-size:11px;color:#fff;background:var(--navy);padding:4px 10px;border-radius:10px;font-weight:500}
-/* Item grid — 3 cols */
-.item-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.item-grid .item-row{flex-direction:column;align-items:flex-start;gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:none}
-.item-grid .item-emoji{width:16px;height:16px}
-.item-grid .item-cat{font-size:9px;width:auto}
-.item-grid .item-id{font-size:8px}
-.item-grid .item-name{font-size:9px;white-space:normal}
-.item-thumb{width:28px;height:28px;object-fit:cover;border-radius:4px;cursor:pointer;flex-shrink:0;margin-left:auto}
-/* Lightbox */
-.lightbox{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:200;align-items:center;justify-content:center}
-.lightbox.show{display:flex}
-.lightbox img{max-width:90%;max-height:80%;object-fit:contain;border-radius:8px}
-.lightbox .close{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;z-index:201}
-/* Palette strip */
-.palette-strip{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}
-.pal-label{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}
-.pal-dot{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}
-
-/* Item rows */
-.item-list{display:flex;flex-direction:column}
-.item-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f2f5f9}
-.item-row:last-child{border-bottom:none}
-.item-emoji{width:20px;height:20px;flex-shrink:0;color:var(--navy)}
-.item-emoji svg{width:100%;height:100%;display:block}
-.item-cat{font-size:11px;color:var(--muted);width:36px;flex-shrink:0;font-weight:500}
-.item-id{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0}
-.item-name{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-
-/* Section */
-.section-header{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.5px;margin:0 0 12px}
-
-/* Mini rec cards — horizontal, square-ish */
-.rec-cards{display:flex;gap:10px;margin-bottom:16px}
-.rec-card{flex:1;min-width:0;background:var(--white);border-radius:var(--radius-sm);padding:14px 12px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;text-align:center}
-.rec-card:active{transform:scale(.97)}
-.rec-card{display:flex;flex-direction:column}
-.rec-card .rc-style-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
-.rec-card .rc-items{font-size:11px;color:var(--sub);line-height:1.8}
-.rec-card .rc-items div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rec-card .rc-detail{display:none;margin-top:6px;padding-top:6px;border-top:1px solid #f0f4f8}
-.rec-card.open .rc-detail{display:block}
-.rec-card .rc-detail .rci{font-size:11px;color:var(--sub);line-height:1.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rec-card .rc-arrow{text-align:center;font-size:9px;color:var(--muted);margin-top:6px;transition:transform .25s;cursor:pointer}
-.rec-card.open .rc-arrow{transform:rotate(180deg)}
-.rec-card.dashed{background:transparent;border:2px dashed #dce3ed;display:flex;align-items:center;justify-content:center}
-.rec-card.dashed .dash-text{color:var(--muted);font-size:12px}
-
-/* Tab Bar */
-.tab-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(30,58,95,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:18px;padding:6px 8px;display:flex;gap:2px;z-index:100;box-shadow:0 8px 32px rgba(30,58,95,.25);max-width:440px;width:calc(100% - 32px)}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 0;border-radius:14px;transition:all .25s;-webkit-tap-highlight-color:transparent;min-width:56px}
-.tab .t-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:color .25s}
-.tab .t-icon svg{width:100%;height:100%}
-.tab .t-label{font-size:10px;color:rgba(255,255,255,.55);font-weight:500;transition:color .25s}
-.tab.active{background:rgba(255,255,255,.15)}
-.tab.active .t-icon{color:#fff}
-.tab.active .t-label{color:#fff;font-weight:600}
-
-/* Favorites */
-.fav-list{display:flex;flex-direction:column;gap:8px}
-.fav-card{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);cursor:pointer;flex-wrap:wrap}
-.fav-card.expanded{flex-direction:column;align-items:stretch}
-.fav-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.fav-info{flex:1;min-width:0}
-.fav-style{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
-.fav-meta{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fav-expand{display:none}
-.fav-card.expanded .fav-expand{display:block;width:100%;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
-.fav-expand .item-grid{margin-bottom:0}
-.fav-card .fav-arrow{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}
-.fav-card.expanded .fav-arrow{transform:rotate(180deg)}
-.fav-card.expanded .h-thumb-sm{display:none}
-.fav-card.filtered{display:none}
-.h-char-img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer}
-.h-thumb-sm{width:42px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;margin-left:8px}
-.h-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
-.h-tags span{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}
-.h-expand-row{display:flex;gap:14px;align-items:flex-start}
-.h-char-img-lg{width:170px;height:226px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}
-/* 2x4 square grid */
-.h-square-grid{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start;grid-auto-rows:52px}
-.h-square-grid .item-row{display:flex;flex-direction:column;gap:2px;padding:6px 5px;background:#f8fafc;border-radius:6px;cursor:pointer;position:relative;overflow:hidden;min-height:52px}
-.h-square-grid .item-row .ir-top{display:flex;align-items:center;gap:3px}
-.h-square-grid .item-row.clickable:active{background:#eef2f7}
-.h-square-grid .item-emoji{width:16px;height:16px;flex-shrink:0}
-.h-square-grid .item-id{font-size:7px;flex-shrink:0}
-.h-square-grid .item-name{font-size:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.h-square-grid .item-row.expanded{grid-row:span 2;padding:3px;z-index:2}
-.h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .item-name{display:none}
-.h-square-grid .item-row.expanded .item-img{display:block}
-.h-square-grid .item-img{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}
-.h-square-grid .item-row.showing-img .item-img{display:block}
-.placeholder{text-align:center;padding:60px 20px}
-.placeholder .ph-icon{font-size:40px;margin-bottom:12px;opacity:.2}
-.placeholder .ph-text{font-size:14px;line-height:1.7;color:var(--sub)}
-</style></head><body><div id="app">
-
-<!-- ═══ 推荐页 ═══ -->
-<div class="page active" id="page-recommend">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented" id="seg-recommend">
-<div class="seg-btn active" data-sub="today">今日推荐</div>
-<div class="seg-btn" data-sub="history">历史推荐</div>
-</div>
-
-<!-- 今日推荐 -->
-<div class="subpage active" id="sub-today" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
-<div class="scroll-area">
-<div class="hero-card">
-<div class="hero-img"><img src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png" alt=""></div>
-<div class="hero-body">
-<div class="style-tags"><span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span></div>
-<div class="hero-style">清爽专业网球运动风</div>
-<div class="hero-meta">2026/06/14 · 晴 · 22~34&deg;C · 紫外线 强</div>
-<div class="item-list">
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m33.973 41.092-19.817.005c-.487 0-1.081.033-1.08-.653.001-.48.093-.979.13-1.458l.06-.924c.015-.159.044-.313.052-.474l.026-3.327c.009-.22.054-.435.059-.658l.013-.837c.008-.46.069-.945.108-1.407l.78-5.914-.572.396c-.463.28-1.051.457-1.588.51-.692.069-.88-.155-1.228-.673-.735-1.095-1.764-2.062-2.865-2.779l-1.535-.963c-.217-.141-.48-.313-.601-.55l-.06-.135c-.241-.746.476-1.249.926-1.697l.861-.925 1.92-2.543c.875-1.168 1.887-2.215 3.259-2.77 2.069-.84 2.069-1.09 3.513-2.794.116-.137.31-.265.398-.412.211-.358.511-1.048.655-1.427.299-.787.207-1.52 1.124-1.813.625-.038.757.207 1.27.513 2.489 1.483 5.558 1.542 7.985-.056.194-.127.392-.302.61-.384l.03-.01c1.556-.583 1.465 2.756 2.429 3.187.538.24.835.793 1.193 1.236a7.4 7.4 0 0 0 2.481 1.995c.36.174.741.312 1.084.52 1.036.625 1.803 1.592 2.568 2.506.537.642 3.26 3.975 4.036 4.165.353.086 1.166.989 1.211 1.308.107.766-.325 1.444-.752 2.032l-2.927 3.958c-.6.794-2.547-.404-3.081-.829-.818-.65-.351-.413-1.35-.694a5.1 5.1 0 0 1-1.624-.819l.964 8.17c.056.398.028.823.028 1.226v2.187c.002.344-.017.731.048 1.068l.226 2.118c.039.74-.316.82-.967.825M18.846 8.332c-.307.65-.335 1.301-.789 2.031l2.629 1.297c3.335 1.504 5.003.678 7.941-.754.129-.066.777-.34.824-.414-.293-.46-.484-.944-.658-1.46-.075-.223-.121-.518-.249-.714l-.017.014c-1.059.863-2.334 1.2-3.642 1.466-.328.067-.723.03-1.06.03-1.505 0-2.67-.303-4.045-.983zm-1.59 3.066-1.007 1.24a6.5 6.5 0 0 1-2.263 1.635c-.388.164-.812.265-1.188.446-1.132.546-1.982 1.83-2.703 2.833l-1.028 1.372c-.408.52-.859 1.018-1.312 1.498l-.456.463 1.694 1.107c1.47 1.029 2.059 1.704 3.074 3.097 1.051-.215 1.638-.838 2.494-1.365.15-.927.067-2.514-.166-3.391l-.21-.713c-.434-1.4.678-1.473.994-.928l.121.254c.191.432.26.915.393 1.365l.066.294c.25 1.412.19 2.27-.008 3.629l-.834 5.871-.31 3.479-.003 2.978c0 .091-.034.247-.01.33.42-.038.842-.03 1.262-.045l2.11-.095c.78-.037 1.902-.431 2.3.384l.02.035c.135.292-.164.655-.426.748-.233.083-.588.047-.838.053l-2.008.082c-.37.01-.718.078-1.09.087-.464.01-.955-.011-1.414.043l-.1 1.634 19.18.01-.115-1.338-.033-.33-3.866-.22c-.235-.013-.465-.06-.702-.07l-.991-.026c-.245-.013-.486-.055-.732-.061-.533-.013-1.498.18-1.368-.74.113-.795 1.403-.488 1.924-.471l1.5.014 3.52.255c.225.014.45.014.672.048l-.01-2.983-.486-5.031-.751-5.111c-.2-1.644-.134-2.928.404-4.543.072-.217.135-.49.299-.659.459-.471 1.133.033 1.052.61l-.414 1.458c-.129.44-.377 2.808 0 3.15.664.602 1.555 1.154 2.422 1.36l.01-.025c.631-1.511 3.284-3.452 4.637-4.189-1.3-1.067-2.302-2.4-3.362-3.69-.712-.868-1.455-1.848-2.478-2.368-1.403-.714-2.242-1.03-3.357-2.328-.308-.359-.581-.751-.899-1.101-5.077 2.572-6.37 3.31-11.818.687-.466-.225-.966-.434-1.392-.728M41.73 21.763c-1.81.911-3.583 2.181-4.675 3.923.26.242.556.446.852.642.333.199.663.359 1.043.445l2.861-3.898c.375-.573.485-.703-.08-1.113"/><path d="M24.123 37.854h-1.17c-.234 0-.609.05-.809-.064-.621-.356-.339-1.056.265-1.202.286-.015 1.669-.056 1.846.034l.027.014a.7.7 0 0 1 .29.262l.02.034a.618.618 0 0 1-.447.919z"/></svg></span><span class="item-cat">上衣</span><span class="item-id">TS-009</span><span class="item-name">Lululemon 运动短袖</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m25.802 31.152-1.821-6.51-3.163 11.733-1.396 6.469c-.08.438-.126.895-.249 1.324-.756 2.627-3.486 2.998-5.875 2.812-1.27-.099-2.607-.356-3.589-1.238-1.234-1.108-1.15-2.156-1.013-3.624l1.04-12.071.75-9.92.322-4.596c.028-.221.076-.42.085-.648l.011-7.248c.004-.224.043-.442.045-.665l-.001-4.239c0-1.107.036-1.099 1.2-1.333 1.542-.309 3.15-.516 4.724-.54.934 0 1.936-.064 2.855.11.34.064.63.198.958.288 2.154.59 4.6.688 6.775.22l.968-.252C29.54.884 30.133.861 31.313.86l1.806.068c.652.054 1.31.108 1.957.219l.905.17c.769.135 1 .29 1.001 1.052l-.008 3.546c.006.423.047.736.066 1.13l.089 3.236c.002.395.075.77.077 1.164l.013 4.533 1.047 14.444.874 9.842c.025.245.033.496.071.74l.237 2.377c.28 1.56-1.3 2.938-2.67 3.348-2.448.734-6.535.541-7.787-2.115-.25-.53-.287-1.172-.404-1.741l-.939-4.588zM30.688 2.29c-.41.01-.851-.004-1.255.06-.657.102-1.31.33-2.01.441l-1.146.127c-1.557.158-3.512.084-5.065-.224-.543-.107-1.084-.273-1.629-.355-1.272-.191-3.72-.003-4.976.13.922.373 2.58.828 3.568 1.03 4.52 1.24 8.304.971 12.843-.208 1.028-.267 2.074-.439 3.061-.848zm-18.304.98-.02 2.633c.003.22-.002.46.043.676.354.065.72.067 1.076.107l1.842.284 4.637.938c1.866.318 3.771.495 5.663.335l4.422-.676 4.887-.98c.192-.027.387-.02.578-.048l.006-.709.001-1.54c0-.284.026-.604-.027-.882-.553.348-1.2.54-1.827.708l-4.22 1.05c-1.837.407-3.236.65-5.099.65l-1.37-.015c-1.234-.071-2.44-.277-3.643-.55l-5.084-1.326-1.716-.6c-.041-.018-.106-.056-.149-.056M35.55 7.977l-4.438.803c.087 1.497.632 3.061 1.713 4.131 1.018 1.011 1.654 1.17 2.944 1.44l-.073-6.372c-.054-.015-.092-.009-.146-.002m-23.167.058.016 6.273c1.309-.284 1.976-.509 2.95-1.568 1.085-1.319 1.32-2.354 1.55-3.944l-3.144-.584c-.455-.066-.912-.147-1.372-.177m5.863 1.024c-.039.21-.043.41-.066.62-.328 3.076-2.777 5.99-5.986 6.083L10.186 41.36c.26.108.567.15.842.2l2.323.29c.154.014.3.053.457.06l1.48.007c.384-.002.73-.02 1.108-.06l.901-.115c.329-.058.657-.11.973-.22.017-.225.07-.437.11-.658l.847-3.866 2.07-7.967 1.628-6.013c.197-.837.382-1.114.36-1.982l-.004-10.875c0-.13.024-.282-.002-.41-1.33-.082-2.642-.266-3.954-.49-.353-.06-.74-.096-1.08-.202m11.393.04-3.708.576c-.133.015-.264.044-.397.053l-.797.017c-.04.55-.011 1.121-.012 1.674l.004 10.365c.008.302.148.726.25 1.017l1 3.794c.008.035.02.063.031.097l.532 1.916a1 1 0 0 0 .031.109l2.062 7.688 1.093 5.117c1.192.209 1.957.333 3.165.358 1.976.065 3.144-.067 4.874-.97l-1.927-25.076c-3.587-.394-5.835-3.247-6.102-6.738a.3.3 0 0 0-.1.002m8.22 33.357c-1.511.835-2.912.86-4.562.858-.5-.001-1.01.017-1.509-.022l-1.757-.215c.089.72.318 1.23.881 1.696.847.675 1.888.883 2.949.884 1.397 0 3.807-.197 4.154-1.818l.009-.04c.05-.243.002-.47-.029-.71zm-27.844.375c-.056.273-.048.681.036.95l.045.131c.726 2.073 6.037 2.233 7.173.81.31-.322.668-1.14.67-1.593l-1.777.217c-.954.071-2.302.024-3.285-.075z"/></svg></span><span class="item-cat">下装</span><span class="item-id">SH-005</span><span class="item-name">Artengo 网球短裤</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10.42 4.8-5.07" />
-  <path d="M19 18h3" />
-  <path d="M9.5 22 21.414 9.415A2 2 0 0 0 21.2 6.4l-5.61-4.208A1 1 0 0 0 14 3v2a2 2 0 0 1-1.394 1.906L8.677 8.053A1 1 0 0 0 8 9c-.155 6.393-2.082 9-4 9a2 2 0 0 0 0 4h14" /></svg></span><span class="item-cat">鞋子</span><span class="item-id">SHOE-005</span><span class="item-name">Nike 网球鞋</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-005_Image_20260610_0848_30_512_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.236 35.938c-2.107-.513-3.827-1.38-5.435-2.873-.703-.652-1.36-1.366-2.242-1.78-1.763-.829-2.826.082-3.813-.377-1.461-.679-1.263-2.1-.255-3.096 1.993-1.967 6.174-2.487 8.79-2.473.236-3.702 3.61-7.03 6.631-8.802 2.384-1.398 4.74-1.915 7.523-1.86.976.02 1.56.036 2.521-.089-.193-1.668-1.1-1.697-1.235-2.26-.116-.479.157-.76.6-.863.773-.054 1.582 1.156 1.804 1.766l.104.352c.125.331.059.73.11 1.078l1.25.172c4.655.84 8.898 4.695 9.77 9.397l.156.767c.078.444.114.898.154 1.347l.05.442c.044.709.007 1.442.006 2.154l-.002.648c-.008 1.903-1.847 3.185-3.571 3.479l-1.266.151c-.488.064-1.198.103-1.717.133h-2.372c-.868-.072-.617-.053-1.494.242l-4.39 1.33c-4.1 1.235-7.305 2.036-11.677 1.015m14.175-19.853c-.488.108-1.004.18-1.478.339-1.594.535-3.05 1.878-3.936 3.265l-.21.362c.614.35 1.956.51 2.263 1.16l.014.027c.063.133.041.393-.013.529l-1.393 2.96 1.63.572 3.327 1.112c.617.208 1.24.49 1.873.634.05-.803.038-1.633-.009-2.435l-.125-1.799-.154-1.096c-.218-1.5-.58-3.023-1.166-4.425l-.344-.763c-.073-.148-.147-.335-.279-.442m-4.407.12c-3.386.124-6.388 1.718-8.691 4.188l-.956 1.092 1.496.535c.417.135.836.347 1.258.45l1.484-2.46c.667-1.1.56-1.186 1.73-.798.36.12.718.236 1.065.39l.617-.99a10.1 10.1 0 0 1 2.331-2.405c-.093-.002-.245-.022-.334-.001m6.121.028.453 1.111.645 2.159.356 1.743c.03.128.035.26.054.39l.274 3.151.008 7.104 1.875-.01c.18-.007.357-.04.535-.055l1.192-.095c1.083-.088 2.014-.135 2.946-.743 1.086-.822.841-1.84.834-3.053-.003-.446.011-.901-.019-1.347-.353-5.161-3.68-9.11-8.736-10.265-.136-.03-.287-.043-.417-.09M21.92 20.619l-1.428 2.333c.1.073.234.105.35.143l2.164.736c.347.115.712.224 1.047.37l.206.074 1.155-2.41zm-6.39 2.155a7.3 7.3 0 0 0-.865 2.72c.144.08.292.124.446.182l9.409 3.249 7.397 2.448.57.176c.02-.333.038-2.908-.01-2.952-.095-.084-.286-.093-.408-.131l-15.391-5.303c-.377-.133-.78-.234-1.148-.389m-3.037 4.045c-1.765.068-5.718.651-7.02 2.053-1.041 1.12.6.55 1.137.521 1.176-.064 2.458.334 3.399 1.044l1.694 1.468c2.783 2.421 5.71 3.157 9.298 2.964l1.965-.202c.485-.105.974-.168 1.456-.29l6.245-1.816L14.931 27.2c-.59-.219-.791-.373-1.443-.38z"/><path d="M37.059 30.254c-1.198-.108-1.247-1.172-.483-1.448.27-.098 1.297-.007 1.839-.138.218-.053.417-.152.634-.21.34-.05.729.104.883.421l.048.102c.462 1.146-2.359 1.264-2.921 1.273"/></svg></span><span class="item-cat">帽子</span><span class="item-id">HAT-004</span><span class="item-name">基础棒球帽</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-004_Image_20260610_0810_53_039_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0" />
-  <path d="M3.103 6.034h17.794" />
-  <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" /></svg></span><span class="item-cat">包</span><span class="item-id">BAG-007</span><span class="item-name">Wilson 网球桶包</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-007_Image_20260610_1043_55_563%20%E6%8B%B7%E8%B4%9D_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M25.13 41.235c-2.064.793-2.632 1.437-4.966 1.435-.334 0-.68.008-1.011-.026-5.854-.596-9.674-7.518-5.875-12.485 1.476-1.929 4.052-3.026 6.472-2.828l.047.005c.294-.434.629-.831.965-1.231l.247-.278c.116-.127.114-.13.139-.301l.455-3.586c.046-.314.128-.63.158-.946l.913-10.315.343-4.362c.052-.462.204-.743.679-.876l13.349-.002c.086.003.164.01.243.047l.025.012c.2.097.398.278.486.486l.012.035c.136.367-.024 1.03-.053 1.416l-1.891 19.167c-.076.912-.182.524.133 1.395l.228.786c.32 1.46.384 3.15-.167 4.564-.914 2.347-2.005 3.584-4.171 4.714zm-.52-34.236-.095.014c-.064.155-.047.415-.053.585l-.138 1.86c-.035.376-.106.768-.073 1.148l11.567-.001.1.012.332-3.61zm-.513 5.1c-.069.402-.072.81-.113 1.209l-.118 1.224c-.02.222-.057.44-.056.664l11.701-.008.283-3.07c-.716-.074-1.473-.029-2.194-.03l-8.85.002c-.216 0-.438-.012-.653.01m10.674 4.602-11.103.01c-.057.29-.034.602-.067.897l-.359 3.574c.168.147.37.235.567.334l1.115.497c1.462.542 2.96.905 4.515 1.043l.92.037c1.523.09 2.814.072 4.347-.086l.617-6.31zm-11.749 6.1-.412 3.047 2.617 1.64c.319.203.683.38.97.626.63.54-.007 1.547-.812 1.222-.698-.282-3.375-2.164-3.53-2.15-.007.001-.112.125-.126.142l-.662.867a17.8 17.8 0 0 1 2.967 4.88c.075.186.109.397-.006.57l-.02.033c-.23.35-.753.469-1.092.196-.253-.204-.364-.549-.496-.836l-.361-.723a19.7 19.7 0 0 0-2.046-3.024c-.202-.247-.175-.44-.521-.435l-.675.02c-.707.055-1.5.265-2.141.565.14.166.31.29.468.435l.664.647c1.105 1.134 2.188 2.43 2.957 3.825l.825 1.557c.159.363.328.717.458 1.091l.489 1.584c.218.752.134 1.371.285 2.014l5.318-2.438c.113-.05.261-.092.36-.166-.216-.52-.318-1.06-.396-1.615-.511-3.642.773-7.31 4.348-8.797a5.7 5.7 0 0 1 1.834-.44l.24-2.522a31.5 31.5 0 0 1-4.014.04l-2.293-.213c-1.848-.28-3.502-.88-5.197-1.642m11.394 5.826c-3.143.445-4.999 3.229-5 6.266 0 .251-.011.515.023.764l.28 1.48a.8.8 0 0 0 .096.254l.17-.073c.525-.262 1.056-.514 1.555-.82 1.86-1.138 3.419-3.154 3.476-5.408.019-.752-.16-1.739-.406-2.465a1.3 1.3 0 0 0-.194.002m-19.155 1.665c-1.508 1.437-2.408 3.83-1.72 5.881l.102.343c.933 2.548 3.124 4.424 5.91 4.573.602.049 1.19.034 1.789-.045.037-3.836-2.643-7.757-5.471-10.212-.196-.17-.446-.343-.61-.54"/></svg></span><span class="item-cat">袜子</span><span class="item-id">SOCK-006</span><span class="item-name">防滑底短袜</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-<div class="item-row"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v2.2l1.6 1" />
-  <path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05" />
-  <path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05" />
-  <circle cx="12" cy="12" r="6" /></svg></span><span class="item-cat">配饰</span><span class="item-id">ACC-003</span><span class="item-name">Apple Watch 黑色运动</span><img class="item-thumb" src="../outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"></div>
-</div>
-<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
-</div></div>
-
-<div class="section-header">其他推荐</div>
-<div class="rec-cards">
-<div class="rec-card" onclick="this.classList.toggle('open')"><div class="rc-style-name">夏日度假休闲</div><div class="rc-items"><div>TS-008 椰树印花短袖</div><div>SH-008 亚麻短裤</div><div>SHOE-002 复古训练鞋</div></div><div class="rc-detail"><div class="rci">HAT-004 棒球帽</div><div class="rci">SOCK-005 船袜</div></div><div class="rc-arrow">▾</div></div>
-<div class="rec-card" onclick="this.classList.toggle('open')"><div class="rc-style-name">衬衫叠穿层次</div><div class="rc-items"><div>SHIRT-002 基础衬衫</div><div>TS-011 落肩T恤</div><div>SHOE-005 网球鞋</div></div><div class="rc-detail"><div class="rci">SH-004 休闲短裤</div><div class="rci">SOCK-005 船袜</div></div><div class="rc-arrow">▾</div></div>
-<div class="rec-card dashed"><div class="dash-text">+ 换一批</div></div>
-</div>
-</div>
-<div class="page-bottom"><input type="text" id="today-input" placeholder="描述穿搭需求，如「今天要去约会」..." onkeydown="if(event.key==='Enter')sendOutfit()"><button style="width:44px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;flex-shrink:0;margin-left:8px" onclick="sendOutfit()">▶</button></div>
-</div>
-
-<!-- 历史推荐 -->
-<div class="subpage" id="sub-history" style="display:none;flex-direction:column;flex:1;overflow:hidden">
-<div class="scroll-area" id="history-scroll">
-<div class="section-header" style="margin-top:4px">今日穿搭</div>
-<div class="fav-list" id="today-list" style="margin-bottom:16px"><div style="padding:16px;color:var(--muted);font-size:13px">今日暂无推荐</div></div>
-<div class="section-header">历史最爱</div>
-<div class="fav-list" id="fav-list" style="margin-bottom:16px"><div class="fav-card" onclick="this.classList.toggle('expanded')"><div class="fav-num">1</div><div class="fav-info"><div class="fav-style">清爽专业网球运动风 ⭐ ⭐ ⭐</div><div class="h-tags"><span>网球运动</span><span>速干透气</span><span>清爽显白</span><span>低饱和配色</span></div></div><img class="h-thumb-sm" src="../outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png" loading="lazy"><div class="fav-arrow">▾</div><div class="fav-expand"><div class="h-expand-row"><img class="h-char-img-lg" src="../outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png" onclick="event.stopPropagation();showImg(this.src)" loading="lazy"><div class="h-square-grid"><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m33.973 41.092-19.817.005c-.487 0-1.081.033-1.08-.653.001-.48.093-.979.13-1.458l.06-.924c.015-.159.044-.313.052-.474l.026-3.327c.009-.22.054-.435.059-.658l.013-.837c.008-.46.069-.945.108-1.407l.78-5.914-.572.396c-.463.28-1.051.457-1.588.51-.692.069-.88-.155-1.228-.673-.735-1.095-1.764-2.062-2.865-2.779l-1.535-.963c-.217-.141-.48-.313-.601-.55l-.06-.135c-.241-.746.476-1.249.926-1.697l.861-.925 1.92-2.543c.875-1.168 1.887-2.215 3.259-2.77 2.069-.84 2.069-1.09 3.513-2.794.116-.137.31-.265.398-.412.211-.358.511-1.048.655-1.427.299-.787.207-1.52 1.124-1.813.625-.038.757.207 1.27.513 2.489 1.483 5.558 1.542 7.985-.056.194-.127.392-.302.61-.384l.03-.01c1.556-.583 1.465 2.756 2.429 3.187.538.24.835.793 1.193 1.236a7.4 7.4 0 0 0 2.481 1.995c.36.174.741.312 1.084.52 1.036.625 1.803 1.592 2.568 2.506.537.642 3.26 3.975 4.036 4.165.353.086 1.166.989 1.211 1.308.107.766-.325 1.444-.752 2.032l-2.927 3.958c-.6.794-2.547-.404-3.081-.829-.818-.65-.351-.413-1.35-.694a5.1 5.1 0 0 1-1.624-.819l.964 8.17c.056.398.028.823.028 1.226v2.187c.002.344-.017.731.048 1.068l.226 2.118c.039.74-.316.82-.967.825M18.846 8.332c-.307.65-.335 1.301-.789 2.031l2.629 1.297c3.335 1.504 5.003.678 7.941-.754.129-.066.777-.34.824-.414-.293-.46-.484-.944-.658-1.46-.075-.223-.121-.518-.249-.714l-.017.014c-1.059.863-2.334 1.2-3.642 1.466-.328.067-.723.03-1.06.03-1.505 0-2.67-.303-4.045-.983zm-1.59 3.066-1.007 1.24a6.5 6.5 0 0 1-2.263 1.635c-.388.164-.812.265-1.188.446-1.132.546-1.982 1.83-2.703 2.833l-1.028 1.372c-.408.52-.859 1.018-1.312 1.498l-.456.463 1.694 1.107c1.47 1.029 2.059 1.704 3.074 3.097 1.051-.215 1.638-.838 2.494-1.365.15-.927.067-2.514-.166-3.391l-.21-.713c-.434-1.4.678-1.473.994-.928l.121.254c.191.432.26.915.393 1.365l.066.294c.25 1.412.19 2.27-.008 3.629l-.834 5.871-.31 3.479-.003 2.978c0 .091-.034.247-.01.33.42-.038.842-.03 1.262-.045l2.11-.095c.78-.037 1.902-.431 2.3.384l.02.035c.135.292-.164.655-.426.748-.233.083-.588.047-.838.053l-2.008.082c-.37.01-.718.078-1.09.087-.464.01-.955-.011-1.414.043l-.1 1.634 19.18.01-.115-1.338-.033-.33-3.866-.22c-.235-.013-.465-.06-.702-.07l-.991-.026c-.245-.013-.486-.055-.732-.061-.533-.013-1.498.18-1.368-.74.113-.795 1.403-.488 1.924-.471l1.5.014 3.52.255c.225.014.45.014.672.048l-.01-2.983-.486-5.031-.751-5.111c-.2-1.644-.134-2.928.404-4.543.072-.217.135-.49.299-.659.459-.471 1.133.033 1.052.61l-.414 1.458c-.129.44-.377 2.808 0 3.15.664.602 1.555 1.154 2.422 1.36l.01-.025c.631-1.511 3.284-3.452 4.637-4.189-1.3-1.067-2.302-2.4-3.362-3.69-.712-.868-1.455-1.848-2.478-2.368-1.403-.714-2.242-1.03-3.357-2.328-.308-.359-.581-.751-.899-1.101-5.077 2.572-6.37 3.31-11.818.687-.466-.225-.966-.434-1.392-.728M41.73 21.763c-1.81.911-3.583 2.181-4.675 3.923.26.242.556.446.852.642.333.199.663.359 1.043.445l2.861-3.898c.375-.573.485-.703-.08-1.113"/><path d="M24.123 37.854h-1.17c-.234 0-.609.05-.809-.064-.621-.356-.339-1.056.265-1.202.286-.015 1.669-.056 1.846.034l.027.014a.7.7 0 0 1 .29.262l.02.034a.618.618 0 0 1-.447.919z"/></svg></span><span class="item-id">TS-009</span></div><span class="item-name">Lululemon 科技运动短袖</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/TS-009_Image_20260610_0821_27_191_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"></span><span class="item-id">SH-005</span></div><span class="item-name">Decathlon 网球线运动短</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/SH-005_Image_20260610_0838_22_364_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10.42 4.8-5.07" />
-  <path d="M19 18h3" />
-  <path d="M9.5 22 21.414 9.415A2 2 0 0 0 21.2 6.4l-5.61-4.208A1 1 0 0 0 14 3v2a2 2 0 0 1-1.394 1.906L8.677 8.053A1 1 0 0 0 8 9c-.155 6.393-2.082 9-4 9a2 2 0 0 0 0 4h14" /></svg></span><span class="item-id">SHOE-005</span></div><span class="item-name">Nike 网球鞋</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/SHOE-005_Image_20260610_0848_30_512_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.236 35.938c-2.107-.513-3.827-1.38-5.435-2.873-.703-.652-1.36-1.366-2.242-1.78-1.763-.829-2.826.082-3.813-.377-1.461-.679-1.263-2.1-.255-3.096 1.993-1.967 6.174-2.487 8.79-2.473.236-3.702 3.61-7.03 6.631-8.802 2.384-1.398 4.74-1.915 7.523-1.86.976.02 1.56.036 2.521-.089-.193-1.668-1.1-1.697-1.235-2.26-.116-.479.157-.76.6-.863.773-.054 1.582 1.156 1.804 1.766l.104.352c.125.331.059.73.11 1.078l1.25.172c4.655.84 8.898 4.695 9.77 9.397l.156.767c.078.444.114.898.154 1.347l.05.442c.044.709.007 1.442.006 2.154l-.002.648c-.008 1.903-1.847 3.185-3.571 3.479l-1.266.151c-.488.064-1.198.103-1.717.133h-2.372c-.868-.072-.617-.053-1.494.242l-4.39 1.33c-4.1 1.235-7.305 2.036-11.677 1.015m14.175-19.853c-.488.108-1.004.18-1.478.339-1.594.535-3.05 1.878-3.936 3.265l-.21.362c.614.35 1.956.51 2.263 1.16l.014.027c.063.133.041.393-.013.529l-1.393 2.96 1.63.572 3.327 1.112c.617.208 1.24.49 1.873.634.05-.803.038-1.633-.009-2.435l-.125-1.799-.154-1.096c-.218-1.5-.58-3.023-1.166-4.425l-.344-.763c-.073-.148-.147-.335-.279-.442m-4.407.12c-3.386.124-6.388 1.718-8.691 4.188l-.956 1.092 1.496.535c.417.135.836.347 1.258.45l1.484-2.46c.667-1.1.56-1.186 1.73-.798.36.12.718.236 1.065.39l.617-.99a10.1 10.1 0 0 1 2.331-2.405c-.093-.002-.245-.022-.334-.001m6.121.028.453 1.111.645 2.159.356 1.743c.03.128.035.26.054.39l.274 3.151.008 7.104 1.875-.01c.18-.007.357-.04.535-.055l1.192-.095c1.083-.088 2.014-.135 2.946-.743 1.086-.822.841-1.84.834-3.053-.003-.446.011-.901-.019-1.347-.353-5.161-3.68-9.11-8.736-10.265-.136-.03-.287-.043-.417-.09M21.92 20.619l-1.428 2.333c.1.073.234.105.35.143l2.164.736c.347.115.712.224 1.047.37l.206.074 1.155-2.41zm-6.39 2.155a7.3 7.3 0 0 0-.865 2.72c.144.08.292.124.446.182l9.409 3.249 7.397 2.448.57.176c.02-.333.038-2.908-.01-2.952-.095-.084-.286-.093-.408-.131l-15.391-5.303c-.377-.133-.78-.234-1.148-.389m-3.037 4.045c-1.765.068-5.718.651-7.02 2.053-1.041 1.12.6.55 1.137.521 1.176-.064 2.458.334 3.399 1.044l1.694 1.468c2.783 2.421 5.71 3.157 9.298 2.964l1.965-.202c.485-.105.974-.168 1.456-.29l6.245-1.816L14.931 27.2c-.59-.219-.791-.373-1.443-.38z"/><path d="M37.059 30.254c-1.198-.108-1.247-1.172-.483-1.448.27-.098 1.297-.007 1.839-.138.218-.053.417-.152.634-.21.34-.05.729.104.883.421l.048.102c.462 1.146-2.359 1.264-2.921 1.273"/></svg></span><span class="item-id">HAT-004</span></div><span class="item-name">棒球帽</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/HAT-004_Image_20260610_0810_53_039_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0" />
-  <path d="M3.103 6.034h17.794" />
-  <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" /></svg></span><span class="item-id">BAG-007</span></div><span class="item-name">Wilson 网球桶包</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/BAG-007_Image_20260610_1043_55_563 拷贝_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M25.13 41.235c-2.064.793-2.632 1.437-4.966 1.435-.334 0-.68.008-1.011-.026-5.854-.596-9.674-7.518-5.875-12.485 1.476-1.929 4.052-3.026 6.472-2.828l.047.005c.294-.434.629-.831.965-1.231l.247-.278c.116-.127.114-.13.139-.301l.455-3.586c.046-.314.128-.63.158-.946l.913-10.315.343-4.362c.052-.462.204-.743.679-.876l13.349-.002c.086.003.164.01.243.047l.025.012c.2.097.398.278.486.486l.012.035c.136.367-.024 1.03-.053 1.416l-1.891 19.167c-.076.912-.182.524.133 1.395l.228.786c.32 1.46.384 3.15-.167 4.564-.914 2.347-2.005 3.584-4.171 4.714zm-.52-34.236-.095.014c-.064.155-.047.415-.053.585l-.138 1.86c-.035.376-.106.768-.073 1.148l11.567-.001.1.012.332-3.61zm-.513 5.1c-.069.402-.072.81-.113 1.209l-.118 1.224c-.02.222-.057.44-.056.664l11.701-.008.283-3.07c-.716-.074-1.473-.029-2.194-.03l-8.85.002c-.216 0-.438-.012-.653.01m10.674 4.602-11.103.01c-.057.29-.034.602-.067.897l-.359 3.574c.168.147.37.235.567.334l1.115.497c1.462.542 2.96.905 4.515 1.043l.92.037c1.523.09 2.814.072 4.347-.086l.617-6.31zm-11.749 6.1-.412 3.047 2.617 1.64c.319.203.683.38.97.626.63.54-.007 1.547-.812 1.222-.698-.282-3.375-2.164-3.53-2.15-.007.001-.112.125-.126.142l-.662.867a17.8 17.8 0 0 1 2.967 4.88c.075.186.109.397-.006.57l-.02.033c-.23.35-.753.469-1.092.196-.253-.204-.364-.549-.496-.836l-.361-.723a19.7 19.7 0 0 0-2.046-3.024c-.202-.247-.175-.44-.521-.435l-.675.02c-.707.055-1.5.265-2.141.565.14.166.31.29.468.435l.664.647c1.105 1.134 2.188 2.43 2.957 3.825l.825 1.557c.159.363.328.717.458 1.091l.489 1.584c.218.752.134 1.371.285 2.014l5.318-2.438c.113-.05.261-.092.36-.166-.216-.52-.318-1.06-.396-1.615-.511-3.642.773-7.31 4.348-8.797a5.7 5.7 0 0 1 1.834-.44l.24-2.522a31.5 31.5 0 0 1-4.014.04l-2.293-.213c-1.848-.28-3.502-.88-5.197-1.642m11.394 5.826c-3.143.445-4.999 3.229-5 6.266 0 .251-.011.515.023.764l.28 1.48a.8.8 0 0 0 .096.254l.17-.073c.525-.262 1.056-.514 1.555-.82 1.86-1.138 3.419-3.154 3.476-5.408.019-.752-.16-1.739-.406-2.465a1.3 1.3 0 0 0-.194.002m-19.155 1.665c-1.508 1.437-2.408 3.83-1.72 5.881l.102.343c.933 2.548 3.124 4.424 5.91 4.573.602.049 1.19.034 1.789-.045.037-3.836-2.643-7.757-5.471-10.212-.196-.17-.446-.343-.61-.54"/></svg></span><span class="item-id">SOCK-006</span></div><span class="item-name">防滑底短袜</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/SOCK-006_Image_20260610_0807_48_614_cutout.png" loading="lazy"></div><div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle('expanded')"><div class="ir-top"><span class="item-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v2.2l1.6 1" />
-  <path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05" />
-  <path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05" />
-  <circle cx="12" cy="12" r="6" /></svg></span><span class="item-id">ACC-003</span></div><span class="item-name">Apple Watch 运动表带</span><img class="item-img" src="../outfits/2026-06-14_打网球穿搭/items/ACC-003_Image_20260610_0840_55_238_cutout.png" loading="lazy"></div></div></div></div></div></div>
-</div>
-<div class="page-bottom"><input type="text" id="history-search" placeholder="搜索历史推荐..." oninput="filterHistory()"></div>
-</div>
-</div>
-
-<!-- ═══ 探索页 ═══ -->
-<div class="page" id="page-explore">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">日常穿搭</div><div class="seg-btn">改变自己</div><div class="seg-btn">大胆跨界</div><div class="seg-btn">时尚圈子</div></div>
-<div class="scroll-area"><div class="placeholder"><div class="ph-icon">&#x1f9ea;</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div></div>
-<div class="page-bottom"><input type="text" placeholder="描述你想尝试的风格..."></div>
-</div>
-
-<!-- ═══ 衣橱页 ═══ -->
-<div class="page" id="page-wardrobe">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">我的衣橱</div><div class="seg-btn">月度报告</div><div class="seg-btn">冷门单品</div><div class="seg-btn">购买建议</div></div>
-<div class="scroll-area">
-<div style="display:flex;gap:10px;margin:16px 0 12px">
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:var(--navy)">76</div><div style="font-size:10px;color:var(--muted)">总件数</div></div>
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:#c4523c">26%</div><div style="font-size:10px;color:var(--muted)">利用率</div></div>
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:#c4523c">8</div><div style="font-size:10px;color:var(--muted)">超标</div></div>
-</div>
-</div>
-<div class="page-bottom"><input type="text" placeholder="搜索衣服..."></div>
-</div>
-
-<!-- ═══ 添加页 ═══ -->
-<div class="page" id="page-add">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">拍照</div><div class="seg-btn">上传图片</div></div>
-<div class="scroll-area"><div class="placeholder"><div class="ph-icon">&#x1f4f8;</div><div class="ph-text">拍照识别衣服<br>对准衣服拍照<br>AI 自动识别品牌品类颜色</div></div></div>
-<div class="page-bottom" style="display:flex;gap:10px">
-<button style="flex:1;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:24px;font-size:15px;font-weight:600">确认分析</button>
-<button style="flex:1;padding:14px;background:#eef2f7;color:var(--sub);border:none;border-radius:24px;font-size:15px">取消重选</button>
-</div>
-</div>
-
-<!-- ═══ 我的页 ═══ -->
-<div class="page" id="page-profile">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="scroll-area"><div class="placeholder" style="padding:80px 20px"><div class="ph-icon">&#x1f464;</div><div class="ph-text">个人中心<br>即将上线<br>推送偏好 · 穿搭统计 · 身形档案</div></div></div>
-</div>
-
-</div>
-
-<!-- Tab Bar -->
-<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><span class="close">&times;</span><img id="lightbox-img" src=""></div>
-
-<div class="tab-bar" id="tab-bar">
-<div class="tab active" data-page="rec"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></svg></div><span class="t-label">推荐</span></div>
-<div class="tab" data-page="exp"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" />
-  <line x1="22" x2="18" y1="12" y2="12" />
-  <line x1="6" x2="2" y1="12" y2="12" />
-  <line x1="12" x2="12" y1="6" y2="2" />
-  <line x1="12" x2="12" y1="22" y2="18" /></svg></div><span class="t-label">探索</span></div>
-<div class="tab" data-page="wrd"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1" />
-  <rect width="7" height="7" x="14" y="3" rx="1" />
-  <rect width="7" height="7" x="14" y="14" rx="1" />
-  <rect width="7" height="7" x="3" y="14" rx="1" /></svg></div><span class="t-label">衣橱</span></div>
-<div class="tab" data-page="add"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
-  <circle cx="12" cy="13" r="3" /></svg></div><span class="t-label">添加</span></div>
-<div class="tab" data-page="me"><div class="t-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-  <circle cx="12" cy="7" r="4" /></svg></div><span class="t-label">我的</span></div>
-</div>
-
-<script>
-function showImg(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('show')}
-function showItemImg(el){var t=el.dataset.thumb;if(t)showImg(t)}
-var currentPage='recommend';
-document.querySelectorAll('#tab-bar .tab').forEach(function(tab){tab.addEventListener('click',function(){var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){t.classList.remove('active')});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){pg.classList.remove('active')});document.getElementById('page-'+p).classList.add('active')})});
-document.querySelectorAll('.segmented').forEach(function(seg){seg.addEventListener('click',function(e){var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){s.classList.remove('active')});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){sp.style.display='none'});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'})});
-function filterHistory(){var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))})}
-function sendOutfit(){var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})}).then(r=>r.json()).then(d=>{if(d.task_id){inp.placeholder='任务进行中...';pollTask(d.task_id)}else{inp.placeholder=d.result||'已发送';setTimeout(function(){location.reload()},2000)}}).catch(function(e){inp.placeholder='网络错误: '+e.message})}
-function pollTask(tid){fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){if(d.status==='done'){location.reload()}else if(d.status==='error'){document.getElementById('today-input').placeholder='生成失败:'+(d.message||'')}else{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){pollTask(tid)},3000)}})}
-</script>
-</body></html>
-"""
 
 # ── 今日穿搭计数器 ───────────────────────────────────────
 _TODAY_CLICKS = {}  # {date_str: count}
@@ -1218,7 +960,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
         # 聊天面板
         if parsed.path in ('/', ''):
-            self._html_resp(200, CHAT_HTML)
+            self._html_resp(200, _load_chat_html())
             return
 
         # 兼容旧版 URL 触发
@@ -1482,6 +1224,41 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 log(f"衣橱API异常: {e}", "ERROR")
                 self._json_resp(500, {"error": str(e)})
                 return
+
+        # 今日最新穿搭
+        if parsed.path == '/api/today':
+            today = time.strftime('%Y-%m-%d')
+            latest = None
+            for d in sorted(os.listdir(os.path.join(PROJECT_DIR, 'outfits')), reverse=True):
+                if d.startswith(today):
+                    dp = os.path.join(PROJECT_DIR, 'outfits', d)
+                    md = os.path.join(dp, 'outfit.md')
+                    if not os.path.exists(md): continue
+                    with open(md) as f: content = f.read()
+                    items = []
+                    for line in content.split('\n'):
+                        s = line.strip()
+                        if not s.startswith('|') or '---' in s: continue
+                        cells = [c.strip().replace('**','') for c in s.split('|')]
+                        if len(cells) >= 4 and re.match(r'^[A-Z]+-\d+', cells[2]):
+                            items.append({'id': cells[2], 'name': cells[3]})
+                    style = ''
+                    for line in content.split('\n'):
+                        if 'style:' in line.lower():
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m: style = m.group(1).strip()[:40]; break
+                    img = ''
+                    for sub in ['上身效果','豆包生图']:
+                        sd = os.path.join(dp, sub)
+                        if not os.path.exists(sd): continue
+                        for f in sorted(os.listdir(sd)):
+                            if f == '上身效果_1.png' or ('人物' in f and f.endswith(('.jpg','.png'))):
+                                img = 'outfits/{}/{}/{}'.format(d, sub, f); break
+                        if img: break
+                    latest = {'dir': d, 'style': style or d, 'items': items, 'img': img, 'date': d[:10]}
+                    break
+            self._json_resp(200, latest or {"empty": True})
+            return
 
         # 健康检查
         if parsed.path == '/health':

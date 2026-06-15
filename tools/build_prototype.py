@@ -44,21 +44,46 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if re.match(r'^[A-Z]+-\d+', cells[2]):
                 items.append({'id': cells[2], 'name': cells[3], 'cat': cells[1] if len(cells)>1 else ''})
         style = ''
+        weather = ''
         for line in content.split('\n'):
-            if 'style:' in line.lower():
+            if 'style:' in line.lower() and not style:
                 m = re.search(r'[：:]\s*(.+)', line)
-                if m: style = m.group(1).strip()[:40]; break
+                if m: style = m.group(1).strip()[:40]
+            if 'weather' in line.lower() or '天气' in line:
+                m = re.search(r'[：:]\s*(.+)', line)
+                if m: weather = m.group(1).strip()[:60]
         scene = d.split('_',1)[-1] if '_' in d else style
-        # Check for images
-        has_img = False
+        # Find character image
+        char_img = ''
         for sub in ['豆包生图','上身效果']:
             sd = os.path.join(dp, sub)
             if os.path.exists(sd):
-                for f in os.listdir(sd):
-                    if f.endswith('.jpg') or f.endswith('.png'):
-                        has_img = True; break
-            if has_img: break
-        results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'has_img': has_img})
+                for f in sorted(os.listdir(sd)):
+                    if ('人物' in f or '上身效果' in f) and f.endswith(('.jpg','.png')) and not f.startswith('.'):
+                        char_img = os.path.join('..', 'outfits', d, sub, f)
+                        break
+            if char_img: break
+        # Build item thumbnails
+        items_dir = os.path.join(dp, 'items')
+        for it in items:
+            if os.path.exists(items_dir):
+                for f in os.listdir(items_dir):
+                    if f.startswith(it['id']+'_') and f.endswith('.png'):
+                        it['thumb'] = os.path.join('..', 'outfits', d, 'items', f)
+                        break
+        # Parse weather: temp range + UV
+        temp_str = ''
+        uv_str = ''
+        if weather:
+            tm = re.search(r'(\d+)[-\s~~]+(\d+)\s*[°度]?C', weather)
+            if tm: temp_str = '{}~{}°C'.format(tm.group(1), tm.group(2))
+            if '紫外线' in weather:
+                um = re.search(r'紫外线\s*(\S+)', weather)
+                if um: uv_str = um.group(1)
+            elif '晴' in weather: uv_str = '强'
+            elif '多云' in weather: uv_str = '中等'
+            elif '雾' in weather or '阴' in weather: uv_str = '弱'
+        results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'char_img': char_img, 'weather': weather, 'temp': temp_str, 'uv': uv_str})
         if len(results) >= limit: break
     return results
 
@@ -237,6 +262,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .fav-card .fav-arrow{{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}}
 .fav-card.expanded .fav-arrow{{transform:rotate(180deg)}}
 .fav-card.filtered{{display:none}}
+.h-char-img{{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
@@ -370,10 +396,21 @@ def gen_history_card(outfit, idx):
         prefix = it['id'].split('-')[0]
         ico_key = cat_icons.get(prefix, 'tshirt')
         ico = item_icons.get(ico_key, '')
-        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(ico, it['id'], it['name'][:16])
+        thumb_html = ''
+        if it.get('thumb'):
+            thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(it['thumb'])
+        items_html += '<div class="item-row"><span class="item-emoji">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], it['name'][:14], thumb_html)
     items_preview = '、'.join([it['id'] for it in outfit['items'][:4]])
     rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{}</div><div class="fav-info"><div class="fav-style">{}{}</div><div class="fav-meta">{} · {}</div></div><div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{}</div></div></div>'.format(idx, outfit['style'][:30], rating_str, outfit['date'], items_preview, items_html)
+    # Weather line
+    weather_line = outfit['date']
+    if outfit['temp']: weather_line += ' · ' + outfit['temp']
+    if outfit['uv']: weather_line += ' · 紫外线 ' + outfit['uv']
+    # Character image thumbnail
+    img_tag = ''
+    if outfit.get('char_img'):
+        img_tag = '<img class="h-char-img" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(outfit['char_img'])
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{}</div><div class="fav-info"><div class="fav-style">{}{}</div><div class="fav-meta">{}</div></div>{}<div class="fav-arrow">▾</div><div class="fav-expand"><div class="item-grid">{}</div></div></div>'.format(idx, outfit['style'][:30], rating_str, weather_line, img_tag, items_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)

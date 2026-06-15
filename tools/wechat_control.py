@@ -1241,7 +1241,18 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         if not s.startswith('|') or '---' in s: continue
                         cells = [c.strip().replace('**','') for c in s.split('|')]
                         if len(cells) >= 4 and re.match(r'^[A-Z]+-\d+', cells[2]):
-                            items.append({'id': cells[2], 'name': cells[3]})
+                            # Simplify name like build_prototype
+                            iid, iname = cells[2], cells[3]
+                            # Basic name shortening
+                            for rmv in ['Metal Vent Tech','Metal Vent','Court Lite','入门级','Artengo','Leisure Club','经典','复古','专业','入门','敞穿或卷袖','敞穿','卷袖','叠穿','基本款','常规','标准']:
+                                iname = iname.replace(rmv, '').replace('  ', ' ')
+                            if iid == 'ACC-003' or 'Apple Watch' in iname:
+                                band = ''
+                                for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
+                                    if b in iname: band = b; break
+                                iname = ('Apple Watch '+band) if band else 'Apple Watch'
+                            elif len(iname) > 16: iname = iname[:14]
+                            items.append({'id': iid, 'name': iname.strip()})
                     style = ''
                     for line in content.split('\n'):
                         if 'style:' in line.lower():

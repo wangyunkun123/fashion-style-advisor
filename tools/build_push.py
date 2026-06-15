@@ -729,16 +729,16 @@ def build_simple(outfit_dir):
     lines = [f"👔 {outfit_name}", f"📅 {data.get('date','')}"]
     if data.get('weather'):
         lines.append(f"🌤 {data['weather']}")
-    # 单品
-    for it in data['items']:
-        lines.append(f"{it['id']} {it['name']}")
-    # 效果图
+    # 效果图（放在单品清单前面）
     ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*方案1.jpg')))
     if not ai_paths:
         ai_paths = sorted(glob.glob(os.path.join(outfit_dir, '上身效果', '*.jpg')))
     if ai_paths:
         rel = os.path.relpath(ai_paths[0], PROJ_DIR)
         lines.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
+    # 单品
+    for it in data['items']:
+        lines.append(f"{it['id']} {it['name']}")
     return '\n\n'.join(lines), '简洁版', outfit_name
 
 

@@ -59,10 +59,14 @@ def tab_btn(key, label, active=False):
 def item_row(icon_svg, cat, iid, name):
     return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span></div>'.format(icon_svg, cat, iid, name)
 
-def mini_card(icon_svg, style_name, preview_items, detail_items):
-    prev_html = ''.join('<div>{}</div>'.format(p) for p in preview_items)
-    detail_html = ''.join('<div class="rci">{}</div>'.format(d) for d in detail_items)
-    return '<div class="rec-card" onclick="this.classList.toggle(\'open\')"><div class="rc-top">{icon}<div class="rc-style-name">{name}</div><div class="rc-arrow">▾</div></div><div class="rc-preview">{prev}</div><div class="rc-detail">{items}</div></div>'.format(icon=icon_svg, name=style_name, prev=prev_html, items=detail_html)
+def mini_card(style_name, all_items):
+    # Show first 3 items collapsed, rest in detail
+    preview = all_items[:3]
+    detail = all_items[3:]
+    prev_html = ''.join('<div>{}</div>'.format(p) for p in preview)
+    detail_html = ''.join('<div class="rci">{}</div>'.format(d) for d in detail)
+    arrow = '<div class="rc-arrow">▾</div>' if detail else ''
+    return '<div class="rec-card" onclick="this.classList.toggle(\'open\')"><div class="rc-style-name">{name}</div><div class="rc-items">{prev}</div>{detail_block}{arrow}</div>'.format(name=style_name, prev=prev_html, detail_block=('<div class="rc-detail">'+detail_html+'</div>') if detail else '', arrow=arrow)
 
 html = '''<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
@@ -95,9 +99,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .hero-img::after{{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(26,40,56,.4));pointer-events:none}}
 .hero-body{{padding:18px}}
 .hero-style{{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}}
-.hero-meta{{font-size:12px;color:var(--sub);margin-bottom:16px;display:flex;gap:14px}}
-.hero-meta span{{display:flex;align-items:center;gap:4px}}
-.ico-inline{{width:13px;height:13px;flex-shrink:0;color:var(--sub);margin-right:2px}}
+.hero-meta{{font-size:12px;color:var(--sub);margin-bottom:16px}}
 
 /* Item rows */
 .item-list{{display:flex;flex-direction:column}}
@@ -116,17 +118,15 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .rec-cards{{display:flex;gap:10px;margin-bottom:16px}}
 .rec-card{{flex:1;min-width:0;background:var(--white);border-radius:var(--radius-sm);padding:14px 12px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;text-align:center}}
 .rec-card:active{{transform:scale(.97)}}
-.rec-card{{position:relative}}
-.rec-card .rc-top{{display:flex;align-items:flex-start;gap:8px;width:100%}}
-.rec-card .rc-top svg{{width:14px;height:14px;color:var(--navy);flex-shrink:0;margin-top:2px;position:absolute;top:10px;left:10px}}
-.rec-card .rc-style-name{{font-size:13px;font-weight:700;color:var(--text);padding-left:20px}}
-.rec-card .rc-arrow{{font-size:9px;color:var(--muted);transition:transform .25s;flex-shrink:0}}
-.rec-card.open .rc-arrow{{transform:rotate(180deg)}}
-.rec-card .rc-preview{{font-size:11px;color:var(--sub);margin-top:6px;line-height:1.7;padding-left:20px}}
-.rec-card .rc-preview div{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-.rec-card .rc-detail{{display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f0f4f8;width:100%;text-align:left}}
+.rec-card{{display:flex;flex-direction:column}}
+.rec-card .rc-style-name{{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}}
+.rec-card .rc-items{{font-size:11px;color:var(--sub);line-height:1.8}}
+.rec-card .rc-items div{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.rec-card .rc-detail{{display:none;margin-top:6px;padding-top:6px;border-top:1px solid #f0f4f8}}
 .rec-card.open .rc-detail{{display:block}}
-.rec-card .rc-detail .rci{{font-size:11px;color:var(--sub);line-height:1.7}}
+.rec-card .rc-detail .rci{{font-size:11px;color:var(--sub);line-height:1.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.rec-card .rc-arrow{{text-align:center;font-size:9px;color:var(--muted);margin-top:6px;transition:transform .25s;cursor:pointer}}
+.rec-card.open .rc-arrow{{transform:rotate(180deg)}}
 .rec-card.dashed{{background:transparent;border:2px dashed #dce3ed;display:flex;align-items:center;justify-content:center}}
 .rec-card.dashed .dash-text{{color:var(--muted);font-size:12px}}
 
@@ -167,9 +167,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="hero-img"><div class="ph">&#x1f455;</div></div>
 <div class="hero-body">
 <div class="hero-style">清爽雾天城市休闲</div>
-<div class="hero-meta">
-<span>{cal} 06/15</span><span>{cloud} 雾 22&deg;C</span>
-</div>
+<div class="hero-meta">2026/06/15 · 雾 · 22&deg;C · 湿度 88%</div>
 <div class="item-list">
 {item_tshirt}
 {item_pants}
@@ -266,12 +264,8 @@ tabs_html = '\n'.join([
     tab_btn('me', '我的'),
 ])
 
-card1 = mini_card(ico['shirt_sm'], '夏日度假休闲',
-    ['椰树印花短袖', '亚麻短裤', '复古训练鞋…'],
-    ['TS-008 椰树印花短袖', 'SH-008 亚麻短裤', 'SHOE-002 复古训练鞋'])
-card2 = mini_card(ico['shirt_sm'], '衬衫叠穿层次',
-    ['基础衬衫', '落肩T恤', 'Nike网球鞋…'],
-    ['SHIRT-002 基础衬衫', 'TS-011 落肩T恤', 'SHOE-005 网球鞋'])
+card1 = mini_card('夏日度假休闲', ['TS-008 椰树印花短袖', 'SH-008 亚麻短裤', 'SHOE-002 复古训练鞋', 'HAT-004 棒球帽', 'SOCK-005 船袜'])
+card2 = mini_card('衬衫叠穿层次', ['SHIRT-002 基础衬衫', 'TS-011 落肩T恤', 'SHOE-005 网球鞋', 'SH-004 休闲短裤', 'SOCK-005 船袜'])
 
 html = html.format(
     tabs=tabs_html,

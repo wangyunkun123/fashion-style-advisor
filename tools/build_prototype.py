@@ -343,6 +343,24 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .placeholder{{text-align:center;padding:60px 20px}}
 .placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
+/* Progress overlay */
+.progress-overlay{{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,40,56,.55);z-index:160;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}}
+.progress-overlay.show{{display:flex}}
+.progress-card{{background:var(--white);border-radius:var(--radius);padding:32px 24px;max-width:340px;width:calc(100% - 48px);text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.18);animation:fadeInUp .3s ease}}
+@keyframes fadeInUp{{from{{opacity:0;transform:translateY(16px)}}to{{opacity:1;transform:translateY(0)}}}}
+.progress-spinner{{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 18px}}
+@keyframes spin{{to{{transform:rotate(360deg)}}}}
+.progress-title{{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px;min-height:22px}}
+.progress-steps{{text-align:left;font-size:12px;color:var(--sub);line-height:2.2;max-height:200px;overflow-y:auto}}
+.progress-steps .step-done{{color:#5a7d3a}}
+.progress-steps .step-active{{color:var(--navy);font-weight:600}}
+.progress-steps .step-pending{{color:var(--muted)}}
+.progress-dot{{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:middle}}
+.progress-dot.done{{background:#5a7d3a}}
+.progress-dot.active{{background:var(--navy);animation:pulse 1s ease infinite}}
+@keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
+.progress-result-img{{width:100%;border-radius:10px;margin-top:14px;box-shadow:var(--shadow)}}
+.progress-close{{display:inline-block;margin-top:18px;padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer}}
 </style></head><body><div id="app">
 
 <!-- ═══ 推荐页 ═══ -->
@@ -433,6 +451,16 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <!-- Tab Bar -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><span class="close">&times;</span><img id="lightbox-img" src=""></div>
 
+<!-- Progress Overlay -->
+<div class="progress-overlay" id="progress-overlay">
+<div class="progress-card">
+<div class="progress-spinner" id="progress-spinner"></div>
+<div class="progress-title" id="progress-title">正在生成穿搭...</div>
+<div class="progress-steps" id="progress-steps"></div>
+<button class="progress-close" id="progress-close" style="display:none" onclick="dismissProgress()">好的</button>
+</div>
+</div>
+
 <div class="tab-bar" id="tab-bar">
 {tabs}
 </div>
@@ -444,8 +472,12 @@ var currentPage='recommend';
 document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{var p=this.dataset.page;if(p===currentPage)return;currentPage=p;document.querySelectorAll('#tab-bar .tab').forEach(function(t){{t.classList.remove('active')}});this.classList.add('active');document.querySelectorAll('.page').forEach(function(pg){{pg.classList.remove('active')}});document.getElementById('page-'+p).classList.add('active')}})}});
 document.querySelectorAll('.segmented').forEach(function(seg){{seg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;seg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;if(!sub)return;var parent=seg.parentElement;parent.querySelectorAll('.subpage').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='flex'}})}});
 function filterHistory(){{var q=document.getElementById('history-search').value.toLowerCase();document.querySelectorAll('#today-list .fav-card, #fav-list .fav-card').forEach(function(c){{var t=c.textContent.toLowerCase();c.classList.toggle('filtered',q&&!t.includes(q))}})}}
-function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='生成中...';fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{pollTask(d.task_id,1)}}else{{inp.placeholder=d.result||'已发送';setTimeout(function(){{location.reload()}},2000)}}}}).catch(function(e){{inp.placeholder='网络错误: '+e.message}})}}
-function pollTask(tid,n){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{setTimeout(function(){{location.reload()}},1500)}}else if(d.status==='error'){{document.getElementById('today-input').placeholder='失败:'+(d.message||'')}}else{{document.getElementById('today-input').placeholder='生成中...';setTimeout(function(){{pollTask(tid,n+1)}},3000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid,n+1)}},3000)}})}}
+var __activePollId=null;
+function escHtml(s){{return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}}
+function showProgress(){{var o=document.getElementById('progress-overlay');o.classList.add('show');document.getElementById('progress-title').textContent='正在分析...';document.getElementById('progress-steps').innerHTML='';document.getElementById('progress-spinner').style.display='block';document.getElementById('progress-close').style.display='none'}}
+function dismissProgress(){{location.href=location.href.split('#')[0]+'?t='+Date.now()}}
+function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='描述穿搭需求...';showProgress();fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.result){{document.getElementById('progress-title').textContent=d.result;document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(d.image_url){{document.getElementById('progress-steps').innerHTML='<img class=\"progress-result-img\" src=\"'+d.image_url+'\" loading=\"lazy\">'}}}}else if(d.task_id){{__activePollId=d.task_id;pollTask(d.task_id)}}else{{document.getElementById('progress-title').textContent='已发送';setTimeout(dismissProgress,2000)}}}}).catch(function(e){{document.getElementById('progress-title').textContent='网络错误: '+e.message;document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block'}})}}
+function pollTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(tid!==__activePollId)return;var title=document.getElementById('progress-title');var steps=document.getElementById('progress-steps');var spinner=document.getElementById('progress-spinner');var closeBtn=document.getElementById('progress-close');if(d.status==='done'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='✅ 穿搭完成';var log=d.log||'';var lines=log.split('\\n').filter(function(l){{return l.trim()}});steps.innerHTML=lines.map(function(l,i){{var cls=i<lines.length-1?'step-done':'step-done';return'<div class=\"'+cls+'\"><span class=\"progress-dot done\"></span>'+escHtml(l)+'</div>'}}).join('');if(d.image_url){{steps.innerHTML+='<img class=\"progress-result-img\" src=\"'+d.image_url+'\" onerror=\"this.style.display=\\'none\\'\" loading=\"lazy\">'}}if(d.result){{steps.innerHTML+='<div style=\"margin-top:10px;font-size:13px;color:var(--text);white-space:pre-wrap\">'+escHtml(d.result)+'</div>'}}}}else if(d.status==='error'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='❌ 生成失败';steps.innerHTML='<div style=\"color:#c4523c\">'+escHtml(d.message||'未知错误')+'</div>'}}else{{title.textContent=d.message||'生成中...';var log=d.log||'';if(log){{var lines=log.split('\\n').filter(function(l){{return l.trim()}});steps.innerHTML=lines.map(function(l,i){{var isLast=i===lines.length-1;var cls=isLast?'step-active':'step-done';var dot=isLast?'active':'done';return'<div class=\"'+cls+'\"><span class=\"progress-dot '+dot+'\"></span>'+escHtml(l)+'</div>'}}).join('')}}setTimeout(function(){{pollTask(tid)}},2000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid)}},2000)}})}}
 function refreshAlts(){{var alts=[['日系 City Boy',['TS-011 落肩T恤','SHIRT-001 条纹衬衫','SHOE-009 AF1']],['轻熟休闲',['SHIRT-003 牛津衬衫','PT-005 西裤','SHOE-009 板鞋']],['韩系简约',['TS-010 条纹T恤','PT-006 直筒牛仔裤','SHOE-005']],['Clean Fit',['TS-009 短袖','PT-002 牛仔裤','SHOE-006']],['街头潮流',['TS-006 黑T','JK-003 棒球服','SHOE-008']],['运动休闲',['TANK-001 背心','SH-001 速干短裤','SHOE-003']]];var pool=alts.sort(function(){{return Math.random()-0.5}}).slice(0,3);var h='';pool.forEach(function(a){{var items=a[1].map(function(i){{return'<div>'+i+'</div>'}}).join('');h+='<div class=\"rec-card\" onclick=\"this.classList.toggle(\\'open\\')\"><div class=\"rc-style-name\">'+a[0]+'</div><div class=\"rc-items\">'+items+'</div><div class=\"rc-arrow\">▾</div></div>'}});var el=document.getElementById('alt-cards');if(el)el.innerHTML=h}}
 </script>
 </body></html>'''

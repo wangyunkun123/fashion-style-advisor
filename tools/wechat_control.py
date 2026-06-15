@@ -1387,6 +1387,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         self.send_response(code)
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(body)))
+        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
         self.end_headers()
         self.wfile.write(body)
 

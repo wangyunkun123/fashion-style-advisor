@@ -7,6 +7,9 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - `profile/analysis.md` — 用户身形分析
 - `outfits/` — 按 `日期_场景` 组织每日穿搭
 - `config/seedream.local.json` — API 密钥 + Server酱 SendKey（不提交 Git）
+- `prototype/mobile-v2.html` — 手机控制台原型（由 `build_prototype.py` 自动生成，勿手动编辑）
+- `prototype/icons-set.html` — 83个自定义图标库预览（Clothing-Icons + Lucide）
+- `prototype/icons-tab.json` — Tab Bar 图标配置映射
 
 ## 风格库
 - `styles_universal/` — 49风格百科（知识层）：文化/历史/品牌/名人/秀场/图片
@@ -68,27 +71,43 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 数据存储在 `outfits/<id>/rating.json`（已加入 .gitignore），不提交到 Git。
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
+- **"重建原型"** → `python3 tools/build_prototype.py`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing
 - **"新想法"** → 记录到 `系统升级建议.md`
 - **"衣橱分析"** → `python3 tools/wardrobe_advisor.py --report`
 
-## 手机控制台布局（2026-06-15 改版）
+## 手机控制台（2026-06-15 改版）
 
+### 页面结构
 ```
-┌─ 消息区 ──────────────────┐
-├─ 输入框 ─── [输入需求… ▶] ─┤
-├─ Tab Bar ─────────────────┤
-│  🧠推荐  🧪探索  👔衣橱  ➕添加  ⚙️设置 │
-└──────────────────────────┘
+┌─ Hero 区（最新穿搭效果图 + 风格标签 + 配色条）──┐
+├─ 单品清单（3列网格 + Clothing-Icons 图标）─────┤
+├─ 其他推荐（横向卡片 + 换一批按钮）─────────────┤
+├─ 历史推荐（可展开穿搭卡片 + 风格标签）─────────┤
+├─ 输入框 ─── [输入需求… ▶] ───────────────────┤
+├─ Tab Bar ────────────────────────────────────┤
+│  🧠推荐  🧪探索  👔衣橱  ➕添加  ⚙️设置          │
+└──────────────────────────────────────────────┘
 ```
 
 | Tab | 功能 |
 |-----|------|
-| 🧠 推荐 | 一键推荐今日穿搭 |
-| 🧪 探索 | 弹出子菜单：微调/大胆 |
+| 🧠 推荐 | 一键推荐今日穿搭（首次返回已有，后续生成新品） |
+| 🧪 探索 | 弹出子菜单：微调探索 / 大胆混搭 |
 | 👔 衣橱 | 展开衣橱分析面板（品类/利用率/购买建议） |
 | ➕ 添加 | 新衣服入库引导 |
 | ⚙️ 设置 | 弹出子菜单：同步/状态/帮助 |
+
+### 原型构建流程
+```bash
+python3 tools/build_prototype.py          # 手动重建原型
+# 或通过管线自动触发（生成穿搭后自动重建）
+```
+- `build_prototype.py` 扫描 `outfits/` 目录，动态注入 Hero、单品、历史卡片数据
+- `wechat_control.py` 通过 `_load_chat_html()` 从文件读取原型 HTML
+- **⚠️ 布局铁律**：确认版排版只改数据源，绝不动 CSS/HTML 结构（详见 memory）
+- **⚠️ Hero 图规则**：优先 AI 原始生图 `上身效果_1.png`，不用排版图
+- **⚠️ 管线重建**：每次生成新穿搭后必须运行 `build_prototype.py` 重建原型
 
 ## 生图完整流程
 1. Seedream API 生图 → `outfits/<日期>_<风格>/豆包生图/`
@@ -103,7 +122,9 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 ## 手机远程控制
 - 启动：`bash tools/start_wechat_control.sh`
 - 手机通过 ngrok HTTPS URL 访问 HTML 面板
-- 端口 8765，详情见 `memory/wechat-remote-control.md`
+- 端口 8765，静态文件从项目根目录提供（中文路径需 URL decode）
+- 原型页面从 `prototype/mobile-v2.html` 加载（由 `build_prototype.py` 构建）
+- 详情见 `memory/wechat-remote-control.md`
 
 ## ⚠️ 质量守则（Critical — 不可违反）
 

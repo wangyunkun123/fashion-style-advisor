@@ -839,8 +839,7 @@ def execute_action(action, extra, task_id=None):
         return f"🤔 未识别的指令: 「{extra}」\n\n{HELP_TEXT}"
     return "❌ 未知错误"
 
-# ── 聊天界面 HTML ─────────────────────────────────────
-# ── 聊天界面 HTML ─────────────────────────────────────
+# ── 聊天界面 HTML（从 prototype/mobile-v2.html 加载）───
 def _load_chat_html():
     """Load prototype HTML from file, with caching"""
     proto_path = os.path.join(PROJECT_DIR, "prototype", "mobile-v2.html")

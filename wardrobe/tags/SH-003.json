@@ -45,8 +45,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
-    "wear_count": 0,
-    "last_worn": null,
+    "wear_count": 1,
+    "last_worn": "2026-06-16T02:02:23.594123",
     "claude_fit_comment": "Decathlon Kiprun专业跑步双层短裤,内衬增加层次感,速干排汗,宽松版型增加下半身体量感,适合跑步/运动场景",
     "_statement_score": 0.3
   }

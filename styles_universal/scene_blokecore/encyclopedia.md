@@ -93,3 +93,17 @@
 1. 买一双 Adidas Samba 或 Gazelle —— Blokecore 的"入场券"
 2. 淘一件你支持球队的复古球衣（或任何你觉得好看的90s球衣）
 3. 搭配直筒水洗牛仔裤 + 白T内搭 + Samba，完成
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/scene_blokecore_01.jpg)
+*风格穿搭参考*
+
+![Bloke Core | Mens outfits, Jersey outfit, Football jersey outfit](gallery/scene_blokecore_02.jpg)
+*Bloke Core | Mens outfits, Jersey outfit, Football jersey outfit*
+
+![Argentina vintage jersey blokecore | Football jersey outfit, Street ...](gallery/scene_blokecore_03.jpg)
+*Argentina vintage jersey blokecore | Football jersey outfit, Street ...*

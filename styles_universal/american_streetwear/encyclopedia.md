@@ -195,3 +195,17 @@ X-Large的关键角色：
 8. **当代OG穿搭公式（2025年基线）：**
    - 宽松直筒牛仔裤（水洗蓝或原色）+ 白色大图像T恤（一家OG品牌）+ 棒球帽 + 厚底运动鞋
    - 这是经过30年简化后的OG基底——简单，但每一个单品的品牌和版型选择决定你是"参与者"还是"游客"
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/american_streetwear_01.jpg)
+*风格穿搭参考*
+
+![Premium Photo | Urban hip hop fashion concept handsome african american ...](gallery/american_streetwear_02.jpg)
+*Premium Photo | Urban hip hop fashion concept handsome african american ...*
+
+![10 Awesome Hip Hop Style Tips for Men | Hip hop fashion, Men style tips ...](gallery/american_streetwear_03.jpg)
+*10 Awesome Hip Hop Style Tips for Men | Hip hop fashion, Men style tips ...*

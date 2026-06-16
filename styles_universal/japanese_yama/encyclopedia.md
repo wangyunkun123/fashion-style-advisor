@@ -351,3 +351,17 @@ White Mountaineering 创始人的每一次谢幕造型都是媒体焦点——�
 ---
 
 *撰写参考：GO OUT杂志、Hypebeast日本版、The Spin-off (nanamica专访)、POPEYE、Fashionsnap、Rakuten Fashion Week Tokyo*
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_yama_01.jpg)
+*风格穿搭参考*
+
+![What To Wear Every Day This August | Hiking outfit men, Summer hiking ...](gallery/japanese_yama_02.jpg)
+*What To Wear Every Day This August | Hiking outfit men, Summer hiking ...*
+
+![Mens Cyberpunk Overcoat Urban Outdoor Techwear Yama Style Coat Japanese ...](gallery/japanese_yama_03.jpg)
+*Mens Cyberpunk Overcoat Urban Outdoor Techwear Yama Style Coat Japanese ...*

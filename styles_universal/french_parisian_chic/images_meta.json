@@ -1,0 +1,29 @@
+{
+  "images": [
+    {
+      "filename": "representative.jpg",
+      "source_url": "https://www.fashionbeans.com/wp-content/uploads/2015/04/bretontop.jpg",
+      "source": "Bing",
+      "title": "Style Lessons We've Learned From The French | FashionBeans",
+      "width": 675,
+      "height": 1350
+    },
+    {
+      "filename": "french_parisian_chic_02.jpg",
+      "source_url": "https://i.pinimg.com/originals/27/10/de/2710de2dd46bc0633b67a2cdf92c75b3.jpg",
+      "source": "Bing",
+      "title": "Breton Striped T Shirt Blue | Blue shirt with jeans, Stripe tshirt ...",
+      "width": 800,
+      "height": 1200
+    },
+    {
+      "filename": "french_parisian_chic_03.jpg",
+      "source_url": "https://i.pinimg.com/736x/40/74/77/407477a5e18637ea905a230344aff2ec.jpg",
+      "source": "Bing",
+      "title": "Armor-Lux Breton Shirt | Huckberry | Mens outfits, Mens fashion casual ...",
+      "width": 720,
+      "height": 858
+    }
+  ],
+  "search_query": "French Parisian chic men fashion simple elegant Breton stripe tailored casual"
+}

@@ -279,3 +279,17 @@ Ivy 风格的精神内核从来不是规则本身，而是 **"知道规则后选
 - 《The Official Preppy Handbook》（Lisa Birnbach，1980）——半开玩笑但信息量巨大的风格指南
 - 网站：Ivy-Style.com（专注常春藤风格的男装博客）
 - 《POPEYE》杂志过刊（尤其是 2012-2018 年木下孝浩主编时期）
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/american_ivy_league_01.jpg)
+*风格穿搭参考*
+
+![Five Ivy League Outfit Ideas for a Super Posh Collegiate Look](gallery/american_ivy_league_02.jpg)
+*Five Ivy League Outfit Ideas for a Super Posh Collegiate Look*
+
+![Five Ivy League Outfit Ideas for a Super Posh Collegiate Look](gallery/american_ivy_league_03.jpg)
+*Five Ivy League Outfit Ideas for a Super Posh Collegiate Look*

@@ -357,3 +357,17 @@ K-Drama 角色穿搭（PPL 植入）直接驱动单品销量。2025年趋势是�
 ---
 
 > **风格金句**：韩系极简不是穿得少，而是每一件都在说话 —— 说得轻，但分量重。
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/korean_minimal_01.jpg)
+*风格穿搭参考*
+
+![Pin by Joshua Cheng on Fall/Winter 2024 | Korean summer outfits, Korean ...](gallery/korean_minimal_02.jpg)
+*Pin by Joshua Cheng on Fall/Winter 2024 | Korean summer outfits, Korean ...*
+
+![35 Date Outfit Ideas Casual Men Korean](gallery/korean_minimal_03.jpg)
+*35 Date Outfit Ideas Casual Men Korean*

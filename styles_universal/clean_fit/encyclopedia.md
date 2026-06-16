@@ -113,3 +113,17 @@ Clean Fit 不是凭空发明，它是极简主义美学在流媒体时代的"再
 2. 先掌握同色系搭配，再尝试跨色系
 3. 面料 > 品牌：选高支数棉、精纺羊毛，不选软塌材质
 4. 全身不超过3个颜色
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/clean_fit_01.jpg)
+*风格穿搭参考*
+
+![Neutral color palette outfit for guys | Neutral tones fashion, Neutral ...](gallery/clean_fit_02.jpg)
+*Neutral color palette outfit for guys | Neutral tones fashion, Neutral ...*
+
+![5 Simple Casual Outfits For Men - LIFESTYLE BY PS](gallery/clean_fit_03.jpg)
+*5 Simple Casual Outfits For Men - LIFESTYLE BY PS*

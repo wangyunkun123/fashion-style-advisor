@@ -69,3 +69,17 @@ Chanel 解放女性身体的同时，也为男装提供了一个核心原则：*
 ## 💡 穿搭建议
 1. 五件单品构建法式春夏衣橱：海军蓝西装 + 白衬衫 + 布雷顿条纹衫 + 深色牛仔 + 乐福鞋
 2. 加一条围巾 — 这就是巴黎
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/french_parisian_chic_01.jpg)
+*风格穿搭参考*
+
+![Breton Striped T Shirt Blue | Blue shirt with jeans, Stripe tshirt ...](gallery/french_parisian_chic_02.jpg)
+*Breton Striped T Shirt Blue | Blue shirt with jeans, Stripe tshirt ...*
+
+![Armor-Lux Breton Shirt | Huckberry | Mens outfits, Mens fashion casual ...](gallery/french_parisian_chic_03.jpg)
+*Armor-Lux Breton Shirt | Huckberry | Mens outfits, Mens fashion casual ...*

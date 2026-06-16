@@ -157,6 +157,9 @@ def inline_md(text):
     text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
     text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
     text = re.sub(r'`(.+?)`', r'<code>\1</code>', text)
+    # 图片（必须在链接之前处理）
+    text = re.sub(r'!\[(.+?)\]\((.+?)\)', r'<img src="\2" alt="\1" loading="lazy">', text)
+    # 链接
     text = re.sub(r'\[(.+?)\]\((.+?)\)', r'<a href="\2">\1</a>', text)
     return text
 
@@ -173,6 +176,12 @@ def generate_one(style_id, dry_run=False):
 
     with open(md_path, 'r', encoding='utf-8') as f:
         text = f.read()
+
+    # 转换图片相对路径为 API 端点
+    univ_prefix = f'styles_universal/{style_id}'
+    text = re.sub(r'!\[([^\]]*)\]\(((?:gallery/)?[^)]+\.(?:jpg|png|jpeg|webp))\)',
+                  lambda m: f'![{m.group(1)}](/api/image?f={univ_prefix}/{m.group(2)})',
+                  text)
 
     # Extract metadata
     name_zh = style_id

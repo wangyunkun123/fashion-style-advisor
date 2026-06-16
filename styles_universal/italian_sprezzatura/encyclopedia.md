@@ -107,3 +107,17 @@
 1. 不需要全套 Sprezzatura——从一个"错误"开始：口袋方巾随意塞入
 2. 投资一件 Boglioli K-Jacket 或类似无结构西装——这是 Sprezzatura 的物理基础
 3. 记住铁律："看起来没花心思"需要花最多心思——练习到不假思索
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/italian_sprezzatura_01.jpg)
+*风格穿搭参考*
+
+![Sprezzatura-Eleganza — Alessandro Squarzi Pitti Uomo 92 | Old man ...](gallery/italian_sprezzatura_02.jpg)
+*Sprezzatura-Eleganza — Alessandro Squarzi Pitti Uomo 92 | Old man ...*
+
+![Sprezzatura-Eleganza : Photos](gallery/italian_sprezzatura_03.jpg)
+*Sprezzatura-Eleganza : Photos*

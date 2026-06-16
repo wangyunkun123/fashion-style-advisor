@@ -117,3 +117,17 @@
 1. 从一条日本赤耳原牛开始（Momotaro 或 Fullcount）——感受老式梭织机的质感
 2. 搭配一件工装夹克（OrSlow 或 Engineered Garments）或军装 Parka
 3. 一双日本产帆布鞋（MoonStar 或 Shoes Like Pottery）收尾
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_amekaji_01.jpg)
+*风格穿搭参考*
+
+![Pin by Daniela Bueno on Amekaji Inspiration in 2025 | Americana fashion ...](gallery/japanese_amekaji_02.jpg)
+*Pin by Daniela Bueno on Amekaji Inspiration in 2025 | Americana fashion ...*
+
+![20+ Japanese Fashion Men Have to Wear This Year](gallery/japanese_amekaji_03.jpg)
+*20+ Japanese Fashion Men Have to Wear This Year*

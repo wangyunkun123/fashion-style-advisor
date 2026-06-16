@@ -318,3 +318,17 @@ Brunello Cucinelli 每季都在强化 Soft Tailoring 的话语权——软肩、
 ---
 
 *本文由 Fashion Style Advisor 风格研究系统根据多渠道信息综合整理，已审核。*
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/smart_casual_01.jpg)
+*风格穿搭参考*
+
+![Men's Chinos Pants in 2023 | Blazer outfits men, Mens business casual ...](gallery/smart_casual_02.jpg)
+*Men's Chinos Pants in 2023 | Blazer outfits men, Mens business casual ...*
+
+![Smart Casual for Men: Dress Code Guide & Outfit Inspiration • Styles of Man](gallery/smart_casual_03.jpg)
+*Smart Casual for Men: Dress Code Guide & Outfit Inspiration • Styles of Man*

@@ -67,3 +67,17 @@
 4. **鞋子铁律**：黑色鞋配黑色/深蓝/炭灰西装；棕色/酒红鞋配深蓝/灰/棕西装；腰带和鞋同色
 5. **夏季鸡尾酒**：热带羊毛或亚麻混纺西装 + 浅蓝府绸衬衫 + 棕色乐福鞋 + 不系领带
 6. **禁忌**：牛仔裤、运动鞋、T恤、过于闪亮的 Logo 扣带、Tuxedo（留给 Black Tie 场合）
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/scene_cocktail_01.jpg)
+*风格穿搭参考*
+
+![Semi-Formal Dress Code Attire for Men - Suits Expert](gallery/scene_cocktail_02.jpg)
+*Semi-Formal Dress Code Attire for Men - Suits Expert*
+
+![What Is Semi-Formal Attire For A Gala at Betty Finkelstein blog](gallery/scene_cocktail_03.jpg)
+*What Is Semi-Formal Attire For A Gala at Betty Finkelstein blog*

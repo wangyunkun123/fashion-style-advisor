@@ -103,3 +103,17 @@
 1. 买一件 COS 或 Arket 的建筑感大衣——这是北欧极简的灵魂单品
 2. 把色板收窄到 5 个中性色——黑/白/灰/米白/驼色
 3. 投资好面料——北欧极简的"高级感"来自面料，不是 Logo
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/scandi_minimalism_01.jpg)
+*风格穿搭参考*
+
+![Studio Nicholson FW19 Exudes Sophisticated Minimalism - Love handmade](gallery/scandi_minimalism_02.jpg)
+*Studio Nicholson FW19 Exudes Sophisticated Minimalism - Love handmade*
+
+![ACNE STUDIOS Doverio Wool-Flannel Jacket for Men | Flannel jacket, Wool ...](gallery/scandi_minimalism_03.jpg)
+*ACNE STUDIOS Doverio Wool-Flannel Jacket for Men | Flannel jacket, Wool ...*

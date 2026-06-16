@@ -50,3 +50,17 @@
 ## 💡 穿搭建议
 - 不是日常穿搭风格——是**灵感和审美的来源**，而非直接复制的模板
 - 提取单个元素：一件不对称剪裁的外套、一条垂坠宽腿裤
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/aesthetic_avant_garde_01.jpg)
+*风格穿搭参考*
+
+![2023 Men's Fall](gallery/aesthetic_avant_garde_02.jpg)
+*2023 Men's Fall*
+
+![RICK OWENS FW23 MENS FITTING | Silhouettes clothing, Rick owens outfit ...](gallery/aesthetic_avant_garde_03.jpg)
+*RICK OWENS FW23 MENS FITTING | Silhouettes clothing, Rick owens outfit ...*

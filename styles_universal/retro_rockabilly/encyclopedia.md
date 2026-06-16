@@ -58,3 +58,17 @@ Rockabilly 作为经典亚文化风格具有长期生命力，每十年经历一
 3. **发型是灵魂**：庞帕多油头需要每日梳理，但这是识别 Rockabilly 的最快方式
 4. **配饰点睛**：一条红色头巾系在脖子上或后口袋、一副 Wayfarer 墨镜，即可提升完整度
 5. **现代化处理**：用修身现代剪裁替代 vintage 版型，保留发型和皮夹克作为核心标识
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/retro_rockabilly_01.jpg)
+*风格穿搭参考*
+
+![50 Men's Vintage Halloween Costume Ideas | Greaser style, Rockabilly ...](gallery/retro_rockabilly_02.jpg)
+*50 Men's Vintage Halloween Costume Ideas | Greaser style, Rockabilly ...*
+
+![#greaser 50's | Greaser style, Rockabilly fashion, Mens fashion](gallery/retro_rockabilly_03.jpg)
+*#greaser 50's | Greaser style, Rockabilly fashion, Mens fashion*

@@ -54,3 +54,17 @@ WGSN 将 "Rugged Luxury" 预测为 2025-2026 年的关键男装趋势。Ferragam
 1. 一件 Safari 夹克是这个风格的入场券
 2. 搭配白色或沙色衬衫+巧克力棕卡其裤+棕色皮鞋
 3. 金属配件（扣子/拉链）选择哑光黄铜色——这是"粗砺"感的来源
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/rugged_luxury_01.jpg)
+*风格穿搭参考*
+
+![Here's Why Loro Piana is the Pinnacle of Quiet Luxury](gallery/rugged_luxury_02.jpg)
+*Here's Why Loro Piana is the Pinnacle of Quiet Luxury*
+
+![Quiet Luxury Brand | Brunello Cucinelli India | Quiet Luxury](gallery/rugged_luxury_03.jpg)
+*Quiet Luxury Brand | Brunello Cucinelli India | Quiet Luxury*

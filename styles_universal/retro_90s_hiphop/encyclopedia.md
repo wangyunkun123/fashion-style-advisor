@@ -71,3 +71,17 @@
 3. **西海岸版**：法兰绒衬衫（只扣最上面一颗）+ 宽松卡其裤/Dickies + Converse Chucks + 口袋里的 Paisley 头巾
 4. **鞋子决定区域**：Timbs = 东海岸；Chucks = 西海岸——你选哪一边？
 5. **关键是「松」**：整个廓形必须是宽松的，合身的 90s 嘻哈不是真 90s 嘻哈
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/retro_90s_hiphop_01.jpg)
+*风格穿搭参考*
+
+![90s Hip Hop Fashion For Any Party - 13 Ideas - My Black Clothing](gallery/retro_90s_hiphop_02.jpg)
+*90s Hip Hop Fashion For Any Party - 13 Ideas - My Black Clothing*
+
+![Baggy denim> | Mens outfits, Street fashion men streetwear, Streetwear ...](gallery/retro_90s_hiphop_03.jpg)
+*Baggy denim> | Mens outfits, Street fashion men streetwear, Streetwear ...*

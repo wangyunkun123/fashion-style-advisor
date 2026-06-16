@@ -130,3 +130,17 @@ Arpege Story 成立于 1981 年，是一家著名的日本女性时尚精品集�
 > Auralee 的岩井良太说：*"我认为生活中有一些我们无法改变的事情，但我相信我们可以用衣服来软化它们。穿某些衣服能让你感觉更放松。"*
 >
 > 如果你的衣服让你感到紧张（怕弄脏、怕起皱、怕过时），那就不是侘寂极简的衣服。
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_wabi_sabi_01.jpg)
+*风格穿搭参考*
+
+![Linen style fashion, Style, Japan fashion](gallery/japanese_wabi_sabi_02.jpg)
+*Linen style fashion, Style, Japan fashion*
+
+![Linen Indigo Stripe Sailor Smock Shirt｜nest Robe International Online ...](gallery/japanese_wabi_sabi_03.jpg)
+*Linen Indigo Stripe Sailor Smock Shirt｜nest Robe International Online ...*

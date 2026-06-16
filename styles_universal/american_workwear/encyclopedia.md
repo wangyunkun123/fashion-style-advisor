@@ -181,3 +181,17 @@ Amekaji（アメカジ）是日语"American Casual"的缩写。它描述的是�
    - 避免一次穿满三个品牌（全身Carhartt看起来像穿工作服去上班）
    - 避免同时穿过多工装元素（Chore Coat + Bib Overall + Work Boots = 角色扮演感太强）
    - 选择水洗/旧化效果的单品，全新工装看起来过于僵硬
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/american_workwear_01.jpg)
+*风格穿搭参考*
+
+![Carhartt Chore Coat in 2025 | Mannenoutfits, Herenmode](gallery/american_workwear_02.jpg)
+*Carhartt Chore Coat in 2025 | Mannenoutfits, Herenmode*
+
+![Carhartt WIP CHORE COAT - Denim jacket - blue one wash/blue denim ...](gallery/american_workwear_03.jpg)
+*Carhartt WIP CHORE COAT - Denim jacket - blue one wash/blue denim ...*

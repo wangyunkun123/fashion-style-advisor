@@ -79,3 +79,17 @@ Poetcore（诗人美学）是 2025 年男装最诗意的答案——它把浪漫
 4. **包袋是关键**：一个旧的棕色皮质信使包——不是运动背包，不是公文包，不是斜挎小包——是那种跨在身上的邮差包。这是 Poetcore 最被低估的识别符。
 5. **围巾的使用**：一条长围巾随便搭在脖子上——棉/羊毛混纺，中性色，不需要系，自然垂落——Poetcore 的标志性动作
 6. **禁忌**：不要穿任何 Logo 明显的、不要穿运动鞋（除非是极度简单的帆布款）、不要让任何单品看起来是「全新的」——Poetcore 是关于时间的痕迹
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/poetcore_01.jpg)
+*风格穿搭参考*
+
+![Pin by James Gettys on My Style | Boho men style, Bohemian outfit men ...](gallery/poetcore_02.jpg)
+*Pin by James Gettys on My Style | Boho men style, Bohemian outfit men ...*
+
+![Poetcore: 7 Essential Ways to Master This Literary Aesthetic](gallery/poetcore_03.jpg)
+*Poetcore: 7 Essential Ways to Master This Literary Aesthetic*

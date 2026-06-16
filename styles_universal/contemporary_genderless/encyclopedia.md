@@ -53,3 +53,17 @@ BTS、GOT7、Stray Kids 等 K-pop 偶像在舞台上穿束带、choker、裙子�
 1. 从配饰开始——一条珍珠项链或丝巾是最低门槛的尝试
 2. Oversized 廓形是无性别穿搭的安全区
 3. 关注面料——垂坠感面料比性别标签更重要
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/contemporary_genderless_01.jpg)
+*风格穿搭参考*
+
+![Art School Spring 2020 Menswear Fashion Show - Vogue | Genderless ...](gallery/contemporary_genderless_02.jpg)
+*Art School Spring 2020 Menswear Fashion Show - Vogue | Genderless ...*
+
+![Adnym's Progressive, Genderless Designs Meet Your #WFH Needs ...](gallery/contemporary_genderless_03.jpg)
+*Adnym's Progressive, Genderless Designs Meet Your #WFH Needs ...*

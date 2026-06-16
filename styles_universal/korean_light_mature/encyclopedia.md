@@ -154,3 +154,17 @@
 - **拒绝一切过度合身**：韩系轻熟的"轻"意味着衣服和身体之间要有空隙——大衣可以落肩，高领可以微松，裤子可以直筒。紧身=老气，是这一风格的大忌
 - **发型配合**：韩系轻熟的造型完整性包含发型——蓬松有纹理的中短发，略带卷度或空气感，避免油头或过于精密的造型产品痕迹。自然感的发型与松弛的服装形成统一
 - **找准"年龄锚点"**：25 岁选更多驼色、米白和柔软的针织材质，偏"轻"；35 岁选更多深灰、黑色和结构感大衣，偏"熟"。风格的核心是"轻"与"熟"的个性化比例调配
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/korean_light_mature_01.jpg)
+*风格穿搭参考*
+
+![20+ Korean Mens Fashion Ideas You Will Adore](gallery/korean_light_mature_02.jpg)
+*20+ Korean Mens Fashion Ideas You Will Adore*
+
+![KOrean Outfits | Korean fashion men, Mens outfits, Mens fashion casual](gallery/korean_light_mature_03.jpg)
+*KOrean Outfits | Korean fashion men, Mens outfits, Mens fashion casual*

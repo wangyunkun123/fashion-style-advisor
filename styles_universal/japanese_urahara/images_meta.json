@@ -1,0 +1,29 @@
+{
+  "images": [
+    {
+      "filename": "representative.jpg",
+      "source_url": "https://tokyofashion.com/wp-content/uploads/2012/02/TK-2012-01-07-015-001-Harajuku.jpg",
+      "source": "Bing",
+      "title": "Harajuku Streetwear Style Guys - Tokyo Fashion",
+      "width": 853,
+      "height": 1280
+    },
+    {
+      "filename": "japanese_urahara_02.jpg",
+      "source_url": "https://tokyofashion.com/wp-content/uploads/2010/02/TK-12-26-09-03-003-Harajuku.jpg",
+      "source": "Bing",
+      "title": "Ambush Rings & Bathing Ape Streetwear in Harajuku - Tokyo Fashion",
+      "width": 850,
+      "height": 1280
+    },
+    {
+      "filename": "japanese_urahara_03.jpg",
+      "source_url": "https://morbidfiber.com/wp-content/uploads/original-bape.jpg",
+      "source": "Bing",
+      "title": "Bape (A Bathing Ape) is a Japanese street wear clothing brand",
+      "width": 1280,
+      "height": 853
+    }
+  ],
+  "search_query": "Japanese Urahara Harajuku streetwear men fashion A Bathing Ape"
+}

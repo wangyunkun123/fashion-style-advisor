@@ -242,3 +242,17 @@ Huntsman是萨维尔街**最硬的结构**代表，在某些方面最接近英�
    - 不要在萨维尔街Bespoke中"创新"——第一次必须是经典。如果你想要超大翻领或荧光色面料，去成衣品牌。萨维尔街的价值在于其**经典性**——如果你不想要经典的，你就不需要萨维尔街
    - 不要跳过Fitting——Baste Fitting（粗缝试身）是Bespoke体验的绝对核心——所有有关肩部、腰部、长度的微调必须在Fitting中发生。你错过Fitting就是在浪费Bespoke的全部价值
    - 不要选择过于昂贵的面料（第一次）——Super 150s/180s的精纺羊毛极其漂亮但也极其娇嫩。第一次Bespoke选择Super 120s-130s英国精纺羊毛——耐久性和垂坠感的黄金平衡
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/british_savile_row_01.jpg)
+*风格穿搭参考*
+
+![Savile Row: The Ultimate Guide to the Best Bespoke Suits & Tailors in ...](gallery/british_savile_row_02.jpg)
+*Savile Row: The Ultimate Guide to the Best Bespoke Suits & Tailors in ...*
+
+![Savile Row Tailors - Gentlemen's Guide zur britischen Schneiderkunst](gallery/british_savile_row_03.jpg)
+*Savile Row Tailors - Gentlemen's Guide zur britischen Schneiderkunst*

@@ -40,3 +40,17 @@
 1. 入门：用一条丝质领巾替代领带，搭配白衬衫+深色西装
 2. 进阶：一件丝绒西装外套，单穿配牛仔裤
 3. 不需要全身 Regency——一个元素就够
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/regency_romantic_01.jpg)
+*风格穿搭参考*
+
+![10 Must-Have Ideas for the Perfect Bridgerton Birthday Soirée in 2025 ...](gallery/regency_romantic_02.jpg)
+*10 Must-Have Ideas for the Perfect Bridgerton Birthday Soirée in 2025 ...*
+
+![anthony bridgerton | Mens outfits, Tea party outfits, Regency era fashion](gallery/regency_romantic_03.jpg)
+*anthony bridgerton | Mens outfits, Tea party outfits, Regency era fashion*

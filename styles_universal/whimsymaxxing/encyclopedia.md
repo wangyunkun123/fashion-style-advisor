@@ -52,3 +52,17 @@ Harry Styles 的珍珠项链+花衬衫、A$AP Rocky 的胸针收藏、Jacob Elor
 1. 从**一个胸针**开始——别在夹克翻领或衬衫口袋上
 2. 一双撞色袜子——全身中性色+一双亮色袜=零风险尝试
 3. 不要同时玩太多——一个俏皮点就够了，这不是小丑装
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/whimsymaxxing_01.jpg)
+*风格穿搭参考*
+
+![Pin by Rayn Amrillah on February Outfit Moodboard💐 | Whimsical fashion ...](gallery/whimsymaxxing_02.jpg)
+*Pin by Rayn Amrillah on February Outfit Moodboard💐 | Whimsical fashion ...*
+
+![Design of a colored men's suit from multi-colored patches | Костюм для ...](gallery/whimsymaxxing_03.jpg)
+*Design of a colored men's suit from multi-colored patches | Костюм для ...*

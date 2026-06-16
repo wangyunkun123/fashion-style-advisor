@@ -65,3 +65,17 @@ Tenniscore（网球风）是将经典网球美学融入日常穿搭的风格，�
 3. **叠穿技巧**：绞花 V 领针织背心套在牛津衬衫外面，或把针织毛衣披在肩上（系结）
 4. **品牌入门**：Uniqlo Polo + Sporty & Rich 短裤 + Lacoste 鞋；进阶：Casablanca Polo + Brunello Cucinelli 长裤
 5. **关键禁忌**：不要穿脏鞋——Tenniscore 的核心是「一尘不染」
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/scene_tenniscore_01.jpg)
+*风格穿搭参考*
+
+![Six Preppy Style Outfit Ideas for Contemporary Dapper Men | Tennis ...](gallery/scene_tenniscore_02.jpg)
+*Six Preppy Style Outfit Ideas for Contemporary Dapper Men | Tennis ...*
+
+![Tennis Inspired Outfits for Men - The Tennis Aesthetic in 2024 | Mens ...](gallery/scene_tenniscore_03.jpg)
+*Tennis Inspired Outfits for Men - The Tennis Aesthetic in 2024 | Mens ...*

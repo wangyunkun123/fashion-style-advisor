@@ -124,3 +124,17 @@
 2. **"进化派"**：吸收山系、机能甚至极简的元素——UNDERCOVER 的西裤式工装裤、Human Made 的精致复古、Wacko Maria 的成熟坏男孩
 
 无论哪条路线，里原宿的精神核心始终不变：**"穿衣服不是为了融入，而是为了表达自己属于某个理解你的部落。"**
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_urahara_01.jpg)
+*风格穿搭参考*
+
+![Ambush Rings & Bathing Ape Streetwear in Harajuku - Tokyo Fashion](gallery/japanese_urahara_02.jpg)
+*Ambush Rings & Bathing Ape Streetwear in Harajuku - Tokyo Fashion*
+
+![Bape (A Bathing Ape) is a Japanese street wear clothing brand](gallery/japanese_urahara_03.jpg)
+*Bape (A Bathing Ape) is a Japanese street wear clothing brand*

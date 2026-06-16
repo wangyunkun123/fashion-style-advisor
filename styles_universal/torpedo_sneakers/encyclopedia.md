@@ -43,3 +43,17 @@
 1. 搭配直筒裤或微阔腿裤——裤脚刚好盖住鞋面或九分露踝
 2. 避开过于宽松的裤子（与薄底比例失衡）
 3. 白袜/灰袜+薄底鞋=2026标准公式
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/torpedo_sneakers_01.jpg)
+*风格穿搭参考*
+
+![adidas Samba - landmark of the Terrace Culture | Adidas outfit men ...](gallery/torpedo_sneakers_02.jpg)
+*adidas Samba - landmark of the Terrace Culture | Adidas outfit men ...*
+
+![How to style the adidas Samba OG - Sneakerjagers](gallery/torpedo_sneakers_03.jpg)
+*How to style the adidas Samba OG - Sneakerjagers*

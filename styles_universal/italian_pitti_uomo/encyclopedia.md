@@ -56,3 +56,17 @@ Pitti Immagine Uomo 创立于 1972 年，每年 1 月和 6 月在佛罗伦萨举
 ## 💡 穿搭建议
 - 不需要穿成 Pitti Peacock 才能去 Pitti——那是进阶玩家的选择
 - 入门：一件合身双排扣 + 无袜乐福鞋 + 口袋方巾
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/italian_pitti_uomo_01.jpg)
+*风格穿搭参考*
+
+![The best street style from Pitti Uomo AW18 | Mens street style, Mens ...](gallery/italian_pitti_uomo_02.jpg)
+*The best street style from Pitti Uomo AW18 | Mens street style, Mens ...*
+
+![Pitti Uomo SS18 street style | British GQ | Pitti uomo street style ...](gallery/italian_pitti_uomo_03.jpg)
+*Pitti Uomo SS18 street style | British GQ | Pitti uomo street style ...*

@@ -294,3 +294,17 @@ Dior Men 和 Fendi 引领的潮流——用精裁西装面料制作的短裤套�
 ---
 
 > **风格箴言：** 度假休闲的本质是"精心营造的漫不经心"（studied nonchalance）。最好的度假装看起来像你随手从行李箱里抽出来就穿上了——但实际上，每一件面料、每一条褶皱、每一个卷起的袖口，都是深思熟虑的结果。
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/resort_vacation_01.jpg)
+*风格穿搭参考*
+
+![Resort beachwear for men. Choosing shorts for vacation| El-Style](gallery/resort_vacation_02.jpg)
+*Resort beachwear for men. Choosing shorts for vacation| El-Style*
+
+![White Linen Beach Outfit for Men | Summer Fits Men in 2024 | Linen ...](gallery/resort_vacation_03.jpg)
+*White Linen Beach Outfit for Men | Summer Fits Men in 2024 | Linen ...*

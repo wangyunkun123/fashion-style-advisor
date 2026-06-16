@@ -113,3 +113,17 @@
 1. 买一件 Barbour Bedale 或 Beaufort——如果预算有限，二手市场很多
 2. 搭配一条斜纹裤或深色牛仔裤+切尔西靴
 3. 秋冬加入设得兰毛衣和羊绒围巾
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/british_heritage_01.jpg)
+*风格穿搭参考*
+
+![Pin by Paolo Medica on English Style | Barbour style, Harris tweed ...](gallery/british_heritage_02.jpg)
+*Pin by Paolo Medica on English Style | Barbour style, Harris tweed ...*
+
+![Official Barbour Website | Barbour style, Mens outdoor fashion, Barbour ...](gallery/british_heritage_03.jpg)
+*Official Barbour Website | Barbour style, Mens outdoor fashion, Barbour ...*

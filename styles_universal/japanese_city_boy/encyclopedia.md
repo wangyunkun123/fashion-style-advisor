@@ -137,4 +137,24 @@ City Boy 是现代时尚史上极少数**完全从一本杂志中诞生**的风�
 
 ---
 
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_city_boy_01.jpg)
+*风格穿搭参考*
+
+![Popeye | Japanese street fashion, Guys fits, Japanese skater style](gallery/japanese_city_boy_02.jpg)
+*Popeye | Japanese street fashion, Guys fits, Japanese skater style*
+
+![From Japan Popeye Japanese Magazine for City Boys Issue May 2019 | ポパイ ...](gallery/japanese_city_boy_03.jpg)
+*From Japan Popeye Japanese Magazine for City Boys Issue May 2019 | ポパイ ...*
+
+![风格穿搭参考](gallery/japanese_city_boy_04.jpg)
+*风格穿搭参考*
+
+![风格穿搭参考](gallery/japanese_city_boy_05.jpg)
+*风格穿搭参考*
+
 *本文基于多源研究整理，人工审核。*

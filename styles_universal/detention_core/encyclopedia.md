@@ -75,3 +75,17 @@ Detention-Core（叛逆学长风）是 2024–2025 年男装界最有辨识度�
 3. **半塞法则**：衬衫前面塞进裤子，后面和侧面全部露在外面——这是 Detention-Core 区分于正常穿着的核心视觉符号
 4. **选对廓形**：裤子一定要宽，衬衫一定要大一号，所有合身的选择都会让你看起来像一个真的在遵守校规的好学生
 5. **态度比衣服更重要**：发型略凌乱，双手插袋，眼神有点睥睨——你刚从留堂教室走出来，不是从教堂走出来
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/detention_core_01.jpg)
+*风格穿搭参考*
+
+![dark academia | Academia aesthetic outfit men, Mens outfits, Academia ...](gallery/detention_core_02.jpg)
+*dark academia | Academia aesthetic outfit men, Mens outfits, Academia ...*
+
+![😭🤚🏽1 | School uniform outfits, Boys school uniform, School outfits](gallery/detention_core_03.jpg)
+*😭🤚🏽1 | School uniform outfits, Boys school uniform, School outfits*

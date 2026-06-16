@@ -226,3 +226,17 @@ Mod与Rockers的冲突在1964年于海滨度假胜地**布莱顿、马尔盖特�
 9. **2025年Mod入门公式**：
    - 军绿色M-51 Parka + 白色Ben Sherman纽扣领衬衫 + 黑色修身斜纹裤 + Clarks沙漠靴
    - 或黑色Fred Perry Polo（扣到顶）+ 修身灰色羊毛长裤 + 黑色切尔西靴 + 一件单排扣黑色Car Coat
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/british_mod_01.jpg)
+*风格穿搭参考*
+
+![Mods Scooters Photos and Premium High Res Pictures - Getty Images](gallery/british_mod_02.jpg)
+*Mods Scooters Photos and Premium High Res Pictures - Getty Images*
+
+![Youth Culture Mod Mods Swinging Sixties Collection May 1965 Mods ...](gallery/british_mod_03.jpg)
+*Youth Culture Mod Mods Swinging Sixties Collection May 1965 Mods ...*

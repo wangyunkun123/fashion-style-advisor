@@ -187,3 +187,17 @@ meanswhile 各季都在 Solotex®、GORE-TEX、Thinsulate、X-Pac 等合成纤�
 > meanswhile 创始人藤崎尚大说得好：*"坚实的功能扩大了人们的日常生活。"*
 >
 > 日系机能的终极目标，不是让你在某个特定场景中表现卓越（爬山、打仗、潜入），而是**让你的日常比别人的日常包含更多可能性**——穿着它骑车去公园、突遇下雨不慌乱、半路拐进超市不需要先回家换衣服、傍晚见朋友不需要再换装。就是这种**日常的无缝感**，才是日系机能最深层的奢侈。
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/japanese_techwear_01.jpg)
+*风格穿搭参考*
+
+![@thatslapz #items #techwear #urbanwear #acronym #acrnm #airpresto #nike ...](gallery/japanese_techwear_02.jpg)
+*@thatslapz #items #techwear #urbanwear #acronym #acrnm #airpresto #nike ...*
+
+![Cyberpunk Techwear: the Ultimate Buying Guide (2023)](gallery/japanese_techwear_03.jpg)
+*Cyberpunk Techwear: the Ultimate Buying Guide (2023)*

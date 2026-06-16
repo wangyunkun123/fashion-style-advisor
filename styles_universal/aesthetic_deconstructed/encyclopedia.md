@@ -197,3 +197,17 @@
 > 山本耀司的一段话是最好的总结：*"我认为人们喜欢我的衣服，是当他们有疑问的时候——当他们有一种怀疑感。他们可能想找一些让他们感兴趣的东西。那才是他们被我的衣服吸引的时候。我希望我的设计像一个人的脸——人的脸每天都在变化。"*
 >
 > 解构主义穿搭的最高评价不是"你穿得帅"，而是**"你穿得让我在想事情。"**
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/aesthetic_deconstructed_01.jpg)
+*风格穿搭参考*
+
+![Newly Installed At The Met, Rei Kawakubo's Fashion Looks More Avant ...](gallery/aesthetic_deconstructed_02.jpg)
+*Newly Installed At The Met, Rei Kawakubo's Fashion Looks More Avant ...*
+
+![Maison Margiela Spring 2020 Couture Collection - Vogue | Deconstruction ...](gallery/aesthetic_deconstructed_03.jpg)
+*Maison Margiela Spring 2020 Couture Collection - Vogue | Deconstruction ...*

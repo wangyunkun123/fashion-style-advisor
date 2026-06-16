@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Build mobile-v2.html prototype with proper icons from icon library"""
 import re, os, json, time, random
 
@@ -175,8 +176,8 @@ def lu(name):
 
 # ── Tab icons (Lucide) ──
 tab = {
-    'rec': lu('shirt'), 'exp': lu('crosshair'), 'wrd': lu('layout-grid'),
-    'add': lu('camera'), 'me': lu('user'),
+    'recommend': lu('shirt'), 'explore': lu('crosshair'), 'wardrobe': lu('layout-grid'),
+    'add': lu('camera'), 'profile': lu('user'),
 }
 
 # ── Clothing item icons (CI for clothing, Lucide for shoes) ──
@@ -200,6 +201,16 @@ if not item_icons['hat']:
 ico = {
     'cal': lu('calendar'), 'cloud': lu('cloud'), 'search': lu('search'),
     'shirt_sm': lu('shirt'),  # for mini cards
+}
+
+# ── Add page icons ──
+add_icons = {
+    'camera_icon': lu('camera'),        # segmented tab icon
+    'upload_icon': lu('upload'),        # segmented tab icon
+    'camera_lg_icon': lu('camera'),     # large camera icon
+    'image_icon': lu('image'),          # album/image icon
+    'file_icon': lu('folder-open'),     # file picker icon
+    'construction_icon': lu('construction'),  # under construction
 }
 
 # ── Build HTML ──
@@ -343,9 +354,9 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .segmented{{display:flex;background:#eef2f7;border-radius:12px;padding:3px;margin:14px 20px;gap:2px}}
 .seg-btn{{flex:1;text-align:center;padding:9px 0;font-size:13px;font-weight:600;color:var(--sub);border-radius:10px;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}}
 .seg-btn.active{{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.25)}}
-.page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
+.page{{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0}}
 .page.active{{display:flex}}
-.scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px 16px}}
+.scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px 16px;min-height:0}}
 .page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;align-items:center}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
@@ -404,7 +415,6 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .rec-cards{{display:flex;gap:10px;margin-bottom:16px}}
 .rec-card{{flex:1;min-width:0;background:var(--white);border-radius:var(--radius-sm);padding:14px 12px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;text-align:center}}
 .rec-card:active{{transform:scale(.97)}}
-.rec-card{{display:flex;flex-direction:column}}
 .rec-card .rc-style-name{{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}}
 .rec-card .rc-items{{font-size:11px;color:var(--sub);line-height:1.8}}
 .rec-card .rc-items div{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
@@ -465,8 +475,9 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-exp-palette .pal-dot{{width:16px;height:16px;border-radius:3px;border:1px solid var(--border)}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
-.placeholder{{text-align:center;padding:60px 20px}}
-.placeholder .ph-icon{{font-size:40px;margin-bottom:12px;opacity:.2}}
+.placeholder{{text-align:center;padding:60px 20px;cursor:pointer}}
+.placeholder .ph-icon{{width:56px;height:56px;margin:0 auto 16px;color:var(--navy);opacity:.5}}
+.placeholder .ph-icon svg{{width:100%;height:100%}}
 .placeholder .ph-text{{font-size:14px;line-height:1.7;color:var(--sub)}}
 /* Progress overlay */
 .progress-overlay{{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,40,56,.55);z-index:160;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}}
@@ -486,6 +497,158 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 @keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
 .progress-result-img{{width:100%;border-radius:10px;margin-top:14px;box-shadow:var(--shadow)}}
 .progress-close{{display:inline-block;margin-top:18px;padding:10px 28px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer}}
+/* Wardrobe page */
+.wrd-stats{{display:flex;gap:10px;margin:16px 0 12px}}
+.wrd-stat-card{{flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)}}
+.wrd-stat-num{{font-size:26px;font-weight:800;color:var(--navy)}}
+.wrd-stat-label{{font-size:10px;color:var(--muted);margin-top:2px}}
+.wrd-stat-card.warn .wrd-stat-num{{color:#c4523c}}
+.skeleton-text{{animation:skeleton-pulse 1.5s ease infinite;border-radius:6px}}
+@keyframes skeleton-pulse{{0%,100%{{opacity:1}}50%{{opacity:.4}}}}
+/* Category rows + horizontal scroll */
+.wrd-cat-row{{margin-bottom:22px}}
+.wrd-cat-header{{display:flex;align-items:center;gap:8px;padding:0 4px 10px}}
+.wrd-cat-header-icon{{font-size:18px}}
+.wrd-cat-header-name{{font-size:14px;font-weight:700;color:var(--text)}}
+.wrd-cat-header-count{{font-size:12px;color:var(--muted)}}
+.wrd-cat-scroll{{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:none}}
+.wrd-cat-scroll::-webkit-scrollbar{{display:none}}
+/* Horizontal item card */
+.wrd-item-card-h{{flex:0 0 auto;width:100px;scroll-snap-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s}}
+.wrd-item-card-h:active{{transform:scale(.96)}}
+.wrd-item-card-img-wrap{{position:relative;width:100px;height:120px;background:#f0f4f8;border-radius:var(--radius-sm);overflow:hidden}}
+.wrd-item-card-img{{width:100%;height:100%;object-fit:cover;display:block}}
+.wrd-item-card-id{{position:absolute;bottom:4px;left:4px;font-size:8px;font-family:monospace;color:#fff;background:rgba(0,0,0,.55);padding:2px 5px;border-radius:4px;letter-spacing:.3px;line-height:1}}
+/* Item detail modal — bottom sheet */
+.item-modal-overlay{{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,40,56,.6);z-index:180;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);justify-content:center;align-items:flex-end}}
+.item-modal-overlay.show{{display:flex}}
+.item-modal{{background:var(--white);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:500px;max-height:92vh;display:flex;flex-direction:column;animation:slideUp .3s ease}}
+@keyframes slideUp{{from{{transform:translateY(100%)}}to{{transform:translateY(0)}}}}
+.item-modal-close{{position:absolute;top:12px;right:16px;font-size:26px;color:var(--muted);cursor:pointer;z-index:5;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.85)}}
+.item-modal-scroll{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 20px}}
+/* Hero image + rotate */
+.im-hero{{position:relative;width:100%;background:#f0f4f8;min-height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden}}
+.im-hero-img{{width:100%;display:block;max-height:50vh;object-fit:contain;transition:transform .3s ease}}
+.im-rotate-btn{{position:absolute;bottom:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;border:none;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;-webkit-tap-highlight-color:transparent}}
+.im-rotate-btn:active{{background:rgba(0,0,0,.7)}}
+.im-rotate-left{{left:16px}}
+.im-rotate-right{{right:16px}}
+.im-hero-id{{position:absolute;top:12px;left:12px;font-size:11px;font-family:monospace;color:#fff;background:rgba(0,0,0,.6);padding:4px 8px;border-radius:6px;z-index:2}}
+/* Info header */
+.im-info{{padding:16px 16px 0}}
+.im-info-name{{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:4px}}
+.im-info-brand{{font-size:12px;color:var(--sub)}}
+/* Tag chips */
+.im-tags-title{{font-size:12px;font-weight:700;color:var(--muted);padding:14px 16px 8px;letter-spacing:.5px}}
+.im-tags{{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px}}
+.im-tag{{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;background:#eef2f7;color:var(--sub);border:1px solid transparent;transition:all .15s}}
+.im-tag:active{{transform:scale(.96)}}
+.im-tag.editing{{background:var(--white);border-color:var(--navy);color:var(--text)}}
+.im-tag .im-tag-del{{font-size:14px;line-height:1;opacity:.4;cursor:pointer;margin-left:2px}}
+.im-tag .im-tag-del:hover{{opacity:1;color:#c4523c}}
+.im-tag-add{{background:transparent;border:1px dashed var(--border);color:var(--muted)}}
+.im-tag-input{{width:80px;border:none;outline:none;font-size:11px;background:transparent;color:var(--text);padding:0}}
+/* Tag detail modal (nested) */
+.im-tag-detail{{padding:12px 16px;border-top:1px solid var(--border);margin-top:8px}}
+.im-tag-detail input{{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);margin-bottom:8px}}
+.im-tag-detail textarea{{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);resize:vertical;min-height:60px;margin-bottom:8px}}
+.im-tag-detail-btns{{display:flex;gap:8px}}
+.im-tag-detail-btns button{{flex:1;padding:10px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none}}
+.im-btn-save{{background:var(--navy);color:#fff}}
+.im-btn-cancel{{background:#eef2f7;color:var(--sub)}}
+/* Explore style cards */
+.exp-style-card{{background:var(--white);border-radius:var(--radius);padding:18px 16px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;border:1px solid rgba(30,58,95,.04);display:flex;flex-direction:column;gap:8px}}
+.exp-style-card:active{{transform:scale(.98);background:#f8fafc}}
+.es-header{{display:flex;align-items:flex-start;gap:12px}}
+.es-icon{{width:56px;height:72px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;font-weight:700;overflow:hidden;position:relative}}
+.es-icon img{{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}}
+.es-icon.has-img{{background:#f0f4f8}}
+.es-info{{flex:1;min-width:0}}
+.es-name{{font-size:15px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:1px}}
+.es-en{{font-size:11px;color:var(--muted);font-weight:400}}
+.es-desc{{font-size:12px;color:var(--sub);line-height:1.55;margin-top:2px}}
+.es-footer{{display:flex;justify-content:space-between;align-items:center}}
+.es-cat{{font-size:10px;color:var(--navy);background:#f0f4ff;padding:3px 8px;border-radius:6px;font-weight:500}}
+.es-arrow{{font-size:14px;color:var(--muted)}}
+.es-fusion{{text-align:center;font-size:16px;font-weight:700;color:var(--navy);padding:14px;background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid #e0e4f8}}
+/* Action buttons */
+.im-actions{{display:flex;gap:10px;padding:16px}}
+.im-actions button{{flex:1;padding:12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent}}
+.im-btn-save-tags{{background:var(--navy);color:#fff}}
+.im-btn-archive{{background:transparent;color:#c4523c;border:1px solid #fce4ec!important}}
+.im-btn-restore{{background:transparent;color:#2e7d32;border:1px solid #e8f5e9!important}}
+.im-btn-boost{{background:transparent;color:#e88a3c;border:1px solid #fff3e0!important}}
+/* Add clothing page */
+.add-action-cards{{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 16px}}
+.add-action-card{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:36px 16px;min-height:150px;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:all .2s;border:2px solid transparent;-webkit-tap-highlight-color:transparent}}
+.add-action-card:active{{transform:scale(.97);background:#f8fafc}}
+.add-action-icon{{width:52px;height:52px;color:var(--navy);opacity:.85}}
+.add-action-icon svg{{width:100%;height:100%}}
+.add-action-label{{font-size:18px;font-weight:700;color:var(--text)}}
+.add-action-hint{{font-size:12px;color:var(--muted)}}
+/* Image strip */
+.add-image-strip{{display:flex;gap:10px;overflow-x:auto;padding:16px 14px;scrollbar-width:none;align-items:center}}
+.add-image-strip::-webkit-scrollbar{{display:none}}
+.add-image-thumb{{flex:0 0 88px;width:88px;height:88px;border-radius:10px;overflow:hidden;position:relative;background:#f0f4f8}}
+.add-image-thumb img{{width:100%;height:100%;object-fit:cover}}
+.add-image-thumb .thumb-remove{{position:absolute;top:2px;right:2px;width:22px;height:22px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;cursor:pointer;z-index:2}}
+.add-more-btn{{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:2px dashed #dce3ed;background:transparent;cursor:pointer}}
+.add-more-plus{{font-size:28px;color:var(--muted);line-height:1}}
+.add-more-label{{font-size:10px;color:var(--muted)}}
+/* Review cards */
+.add-review-card{{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.05)}}
+.add-review-card .ar-header{{display:flex;align-items:center;gap:8px;margin-bottom:10px}}
+.add-review-card .ar-id{{font-size:12px;font-family:monospace;font-weight:700;color:var(--navy);background:#eef2f7;padding:2px 8px;border-radius:4px}}
+.add-review-card .ar-cat{{font-size:11px;color:var(--sub);font-weight:500}}
+.add-review-card .ar-fields{{display:flex;flex-direction:column;gap:6px}}
+.add-review-card .ar-field{{display:flex;align-items:center;gap:8px;font-size:12px}}
+.add-review-card .ar-label{{color:var(--muted);width:36px;flex-shrink:0;font-weight:500}}
+.add-review-card .ar-value{{color:var(--text);flex:1}}
+/* New badge */
+.new-badge{{position:absolute;top:-3px;right:-3px;background:linear-gradient(135deg,#ff6b6b,#ee5a24);color:#fff;font-size:7px;font-weight:700;padding:2px 5px;border-radius:5px;z-index:2;letter-spacing:.5px;box-shadow:0 1px 4px rgba(238,90,36,.35);animation:badgePulse 2s ease infinite;pointer-events:none}}
+@keyframes badgePulse{{{{0%,100%{{{{transform:scale(1)}}}}50%{{{{transform:scale(1.1)}}}}}}}}
+.im-tag-group{{padding:8px 16px}}
+.im-tag-group-title{{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.5px}}
+.im-tag-ro{{opacity:.8;pointer-events:none}}
+.im-tag-group-hl{{background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:12px;padding:12px 16px;margin:4px 8px;border:1px solid #e0e4f8}}
+.im-tag-group-hl .im-tag{{background:var(--white);border-color:#d0d4f0;color:var(--navy);font-weight:600}}
+.im-tag-group-hl .im-tag-group-title{{color:var(--navy-light)}}
+/* Keep old detail for cold-items backward compat */
+.wrd-monthly{{margin:12px 0 16px}}
+.wrd-monthly .wm-card{{background:var(--white);border-radius:10px;padding:16px;box-shadow:var(--shadow);margin-bottom:10px}}
+.wrd-monthly .wm-title{{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px}}
+.wrd-monthly .wm-stat-row{{display:flex;gap:12px;margin-bottom:8px}}
+.wrd-monthly .wm-stat-item{{flex:1;text-align:center}}
+.wrd-monthly .wm-stat-val{{font-size:22px;font-weight:800;color:var(--navy)}}
+.wrd-monthly .wm-stat-lbl{{font-size:9px;color:var(--muted)}}
+.wrd-monthly .wm-bar-row{{display:flex;align-items:center;gap:8px;margin-bottom:6px}}
+.wrd-monthly .wm-bar-label{{font-size:11px;color:var(--sub);width:72px;flex-shrink:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.wrd-monthly .wm-bar-track{{flex:1;height:8px;background:#eef2f7;border-radius:4px;overflow:hidden}}
+.wrd-monthly .wm-bar-fill{{height:100%;background:var(--navy);border-radius:4px;transition:width .4s ease}}
+.wrd-monthly .wm-bar-num{{font-size:10px;color:var(--muted);width:28px;flex-shrink:0}}
+.wrd-cold-item{{background:var(--white);border-radius:10px;padding:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;margin-bottom:8px}}
+.wrd-cold-item .cold-badge{{font-size:9px;background:#fce4ec;color:#c62828;padding:3px 8px;border-radius:6px;font-weight:600;flex-shrink:0}}
+.wrd-cold-item .cold-badge.key{{background:#fff3e0;color:#e65100}}
+.wrd-item-thumb{{width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#f0f4f8}}
+.wrd-item-info{{flex:1;min-width:0}}
+.wi-name{{font-size:12px;font-weight:600;color:var(--text);line-height:1.35}}
+.wi-meta{{font-size:10px;color:var(--sub);margin-top:3px}}
+.wi-usage{{font-size:9px;color:var(--muted);margin-top:2px}}
+.wrd-gap-card{{background:var(--white);border-radius:10px;padding:14px;box-shadow:var(--shadow);margin-bottom:8px;border-left:3px solid transparent}}
+.wrd-gap-card.priority-high{{border-left-color:#c62828}}
+.wrd-gap-card.priority-medium{{border-left-color:#e65100}}
+.wrd-gap-card.priority-low{{border-left-color:#2e7d32}}
+.wrd-gap-card .gap-item{{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}}
+.wrd-gap-card .gap-reason{{font-size:11px;color:var(--sub);line-height:1.5}}
+.wrd-gap-card .gap-priority{{font-size:9px;font-weight:600;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:6px}}
+.gap-priority.high{{background:#fce4ec;color:#c62828}}
+.gap-priority.medium{{background:#fff3e0;color:#e65100}}
+.gap-priority.low{{background:#e8f5e9;color:#2e7d32}}
+.wrd-sub{{margin:12px 0 16px}}
+.wrd-loading{{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}}
+.wrd-loading::before{{content:'⏳';display:block;font-size:32px;margin-bottom:10px}}
+.wrd-empty{{text-align:center;padding:30px 20px;color:var(--muted);font-size:12px}}
+.filtered{{display:none!important}}
 </style></head><body><div id="app">
 
 <!-- ═══ 推荐页 ═══ -->
@@ -535,40 +698,104 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <!-- ═══ 探索页 ═══ -->
 <div class="page" id="page-explore">
 <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">日常穿搭</div><div class="seg-btn">改变自己</div><div class="seg-btn">大胆跨界</div><div class="seg-btn">时尚圈子</div></div>
-<div class="scroll-area"><div class="placeholder"><div class="ph-icon">&#x1f9ea;</div><div class="ph-text">日常微调探索<br>以你最近的风格为基点<br>小幅延伸出新搭配</div></div></div>
-<div class="page-bottom"><input type="text" placeholder="描述你想尝试的风格..."></div>
+<div class="segmented" id="exp-seg"><div class="seg-btn active" data-sub="tweak">日常穿搭</div><div class="seg-btn" data-sub="transform">改变自己</div><div class="seg-btn" data-sub="cross">大胆跨界</div><div class="seg-btn" data-sub="trends">时尚圈子</div></div>
+<div class="scroll-area">
+<div class="exp-sub" id="sub-tweak" style="display:block">
+<div id="exp-tweak-content"><div class="wrd-loading">加载中...</div></div>
+</div>
+<div class="exp-sub" id="sub-transform" style="display:none">
+<div id="exp-transform-content"><div class="wrd-loading">加载中...</div></div>
+</div>
+<div class="exp-sub" id="sub-cross" style="display:none">
+<div id="exp-cross-content"><div class="wrd-loading">加载中...</div></div>
+</div>
+<div class="exp-sub" id="sub-trends" style="display:none">
+<div id="exp-trends-content"><div class="wrd-loading">加载中...</div></div>
+</div>
+</div>
+<div class="page-bottom"><input type="text" id="exp-input" placeholder="描述你想尝试的风格..." onkeydown="if(event.key==='Enter')tryExplore()"></div>
 </div>
 
 <!-- ═══ 衣橱页 ═══ -->
 <div class="page" id="page-wardrobe">
 <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">我的衣橱</div><div class="seg-btn">月度报告</div><div class="seg-btn">冷门单品</div><div class="seg-btn">购买建议</div></div>
+<div class="segmented" id="wrd-seg"><div class="seg-btn active" data-sub="my">我的衣橱</div><div class="seg-btn" data-sub="monthly">月度报告</div><div class="seg-btn" data-sub="cold">冷门单品</div><div class="seg-btn" data-sub="gaps">购买建议</div></div>
 <div class="scroll-area">
-<div style="display:flex;gap:10px;margin:16px 0 12px">
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:var(--navy)">76</div><div style="font-size:10px;color:var(--muted)">总件数</div></div>
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:#c4523c">26%</div><div style="font-size:10px;color:var(--muted)">利用率</div></div>
-<div style="flex:1;background:var(--white);border-radius:10px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)"><div style="font-size:26px;font-weight:800;color:#c4523c">8</div><div style="font-size:10px;color:var(--muted)">超标</div></div>
+<!-- 统计卡片（JS动态填充） -->
+<div class="wrd-stats" id="wrd-stats">
+<div class="wrd-stat-card"><div class="wrd-stat-num skeleton-text" id="wrd-total">—</div><div class="wrd-stat-label">总件数</div></div>
+<div class="wrd-stat-card"><div class="wrd-stat-num skeleton-text" id="wrd-util">—</div><div class="wrd-stat-label">利用率</div></div>
+<div class="wrd-stat-card"><div class="wrd-stat-num skeleton-text" id="wrd-over">—</div><div class="wrd-stat-label">超标品类</div></div>
+</div>
+
+<!-- 子页：我的衣橱 -->
+<div class="wrd-sub" id="sub-my" style="display:block">
+<div id="wrd-rows"><div class="wrd-loading">加载中...</div></div>
+</div>
+
+<!-- 子页：月度报告 -->
+<div class="wrd-sub" id="sub-monthly" style="display:none">
+<div id="wrd-monthly-content"><div class="wrd-loading">加载中...</div></div>
+</div>
+
+<!-- 子页：冷门单品 -->
+<div class="wrd-sub" id="sub-cold" style="display:none">
+<div id="wrd-cold-list"><div class="wrd-loading">加载中...</div></div>
+</div>
+
+<!-- 子页：购买建议 -->
+<div class="wrd-sub" id="sub-gaps" style="display:none">
+<div id="wrd-gaps-content"><div class="wrd-loading">加载中...</div></div>
 </div>
 </div>
-<div class="page-bottom"><input type="text" placeholder="搜索衣服..."></div>
+<div class="page-bottom"><input type="text" id="wrd-search" placeholder="搜索衣服..." oninput="filterWardrobe()"></div>
 </div>
 
 <!-- ═══ 添加页 ═══ -->
 <div class="page" id="page-add">
-<div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="segmented"><div class="seg-btn active">拍照</div><div class="seg-btn">上传图片</div></div>
-<div class="scroll-area"><div class="placeholder"><div class="ph-icon">&#x1f4f8;</div><div class="ph-text">拍照识别衣服<br>对准衣服拍照<br>AI 自动识别品牌品类颜色</div></div></div>
-<div class="page-bottom" style="display:flex;gap:10px">
-<button style="flex:1;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:24px;font-size:15px;font-weight:600">确认分析</button>
-<button style="flex:1;padding:14px;background:#eef2f7;color:var(--sub);border:none;border-radius:24px;font-size:15px">取消重选</button>
+<div class="header"><h1>添加单品</h1><div class="avatar">K</div></div>
+<div class="scroll-area">
+<div class="add-action-cards" id="add-action-cards">
+<div class="add-action-card" onclick="triggerAddCamera()">
+<div class="add-action-icon">{camera_lg_icon}</div>
+<div class="add-action-label">拍照</div>
+<div class="add-action-hint">打开相机拍摄</div>
+</div>
+<div class="add-action-card" onclick="triggerAddAlbum()">
+<div class="add-action-icon">{image_icon}</div>
+<div class="add-action-label">上传</div>
+<div class="add-action-hint">从相册选择多张</div>
+</div>
+</div>
+<input type="file" id="add-camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleAddImages(this)">
+<input type="file" id="add-album-input" accept="image/*" multiple style="display:none" onchange="handleAddImages(this)">
+
+<!-- 图片缩略条 -->
+<div class="add-image-strip" id="add-image-strip" style="display:none"></div>
+
+<!-- 进度 -->
+<div id="add-progress" style="display:none">
+<div id="add-progress-text" style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px">识别中...</div>
+</div>
+
+<!-- 审核结果 -->
+<div id="add-result" style="display:none"></div>
+</div>
+<div class="page-bottom" style="display:flex;gap:10px" id="add-buttons">
+<button style="flex:1;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:24px;font-size:15px;font-weight:600" id="add-confirm-btn" onclick="submitAddImages()" disabled>确认分析</button>
+<button style="flex:1;padding:14px;background:#eef2f7;color:var(--sub);border:none;border-radius:24px;font-size:15px" onclick="clearAddImages()">清空</button>
 </div>
 </div>
 
 <!-- ═══ 我的页 ═══ -->
 <div class="page" id="page-profile">
 <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
-<div class="scroll-area"><div class="placeholder" style="padding:80px 20px"><div class="ph-icon">&#x1f464;</div><div class="ph-text">个人中心<br>即将上线<br>推送偏好 · 穿搭统计 · 身形档案</div></div></div>
+<div class="scroll-area">
+<div class="placeholder" style="padding:100px 20px">
+<div class="ph-icon">{construction_icon}</div>
+<div class="ph-text">施工中<br>敬请期待</div>
+</div>
+</div>
 </div>
 
 </div>
@@ -583,6 +810,16 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="progress-title" id="progress-title">正在生成穿搭...</div>
 <div class="progress-steps" id="progress-steps"></div>
 <button class="progress-close" id="progress-close" style="display:none" onclick="dismissProgress()">好的</button>
+</div>
+</div>
+
+<!-- Item Detail Modal -->
+<div class="item-modal-overlay" id="item-modal" onclick="if(event.target===this)closeItemModal()">
+<div class="item-modal">
+<div class="item-modal-close" onclick="closeItemModal()">&times;</div>
+<div class="item-modal-scroll" id="item-modal-scroll">
+<div class="wrd-loading">加载中...</div>
+</div>
 </div>
 </div>
 
@@ -604,16 +841,73 @@ function dismissProgress(){{location.href=location.href.split('#')[0]+'?t='+Date
 function sendOutfit(){{var inp=document.getElementById('today-input');var msg=inp.value.trim()||'推荐穿搭';inp.value='';inp.placeholder='描述穿搭需求...';showProgress();fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.result){{document.getElementById('progress-title').textContent=d.result;document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(d.image_url){{document.getElementById('progress-steps').innerHTML='<img class=\"progress-result-img\" src=\"'+d.image_url+'\" loading=\"lazy\">'}}}}else if(d.task_id){{__activePollId=d.task_id;pollTask(d.task_id)}}else{{document.getElementById('progress-title').textContent='已发送';setTimeout(dismissProgress,2000)}}}}).catch(function(e){{document.getElementById('progress-title').textContent='网络错误: '+e.message;document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block'}})}}
 function pollTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(tid!==__activePollId)return;var title=document.getElementById('progress-title');var steps=document.getElementById('progress-steps');var spinner=document.getElementById('progress-spinner');var closeBtn=document.getElementById('progress-close');if(d.status==='done'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='✅ 穿搭完成';var log=d.log||'';var lines=log.split('\\n').filter(function(l){{return l.trim()}});steps.innerHTML=lines.map(function(l,i){{var cls=i<lines.length-1?'step-done':'step-done';return'<div class=\"'+cls+'\"><span class=\"progress-dot done\"></span>'+escHtml(l)+'</div>'}}).join('');if(d.image_url){{steps.innerHTML+='<img class=\"progress-result-img\" src=\"'+d.image_url+'\" onerror=\"this.style.display=\\'none\\'\" loading=\"lazy\">'}}if(d.result){{steps.innerHTML+='<div style=\"margin-top:10px;font-size:13px;color:var(--text);white-space:pre-wrap\">'+escHtml(d.result)+'</div>'}}}}else if(d.status==='error'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='❌ 生成失败';steps.innerHTML='<div style=\"color:#c4523c\">'+escHtml(d.message||'未知错误')+'</div>'}}else{{title.textContent=d.message||'生成中...';var log=d.log||'';if(log){{var lines=log.split('\\n').filter(function(l){{return l.trim()}});steps.innerHTML=lines.map(function(l,i){{var isLast=i===lines.length-1;var cls=isLast?'step-active':'step-done';var dot=isLast?'active':'done';return'<div class=\"'+cls+'\"><span class=\"progress-dot '+dot+'\"></span>'+escHtml(l)+'</div>'}}).join('')}}setTimeout(function(){{pollTask(tid)}},2000)}}}}).catch(function(){{setTimeout(function(){{pollTask(tid)}},2000)}})}}
 function refreshAlts(){{var alts=[['日系 City Boy',['TS-011 落肩T恤','SHIRT-001 条纹衬衫','SHOE-009 AF1']],['轻熟休闲',['SHIRT-003 牛津衬衫','PT-005 西裤','SHOE-009 板鞋']],['韩系简约',['TS-010 条纹T恤','PT-006 直筒牛仔裤','SHOE-005']],['Clean Fit',['TS-009 短袖','PT-002 牛仔裤','SHOE-006']],['街头潮流',['TS-006 黑T','JK-003 棒球服','SHOE-008']],['运动休闲',['TANK-001 背心','SH-001 速干短裤','SHOE-003']]];var pool=alts.sort(function(){{return Math.random()-0.5}}).slice(0,3);var h='';pool.forEach(function(a){{var items=a[1].map(function(i){{return'<div>'+i+'</div>'}}).join('');h+='<div class=\"rec-card\" onclick=\"this.classList.toggle(\\'open\\')\"><div class=\"rc-style-name\">'+a[0]+'</div><div class=\"rc-items\">'+items+'</div><div class=\"rc-arrow\">▾</div></div>'}});var el=document.getElementById('alt-cards');if(el)el.innerHTML=h}}
+/* ═══ 衣橱页 ═══ */
+var __wrdData=null,__wrdStats=null,__newItemIds=[],__wardrobeNeedsReload=false;
+function loadWardrobe(){{fetch('/api/wardrobe').then(r=>r.json()).then(d=>{{__wrdStats=d;var elTotal=document.getElementById('wrd-total'),elUtil=document.getElementById('wrd-util'),elOver=document.getElementById('wrd-over');if(elTotal){{elTotal.textContent=d.metadata.total_items;elTotal.classList.remove('skeleton-text')}}if(elUtil){{var pct=Math.round((d.utilization||{{}}).utilization_rate*100)||0;elUtil.textContent=pct+'%';elUtil.classList.remove('skeleton-text');if(pct<30)elUtil.parentElement.classList.add('warn')}}if(elOver){{var over=Object.values(d.category_gaps||{{}}).filter(function(g){{return g.status==='overstock'}}).length;elOver.textContent=over;elOver.classList.remove('skeleton-text');if(over>2)elOver.parentElement.classList.add('warn')}}}}).catch(function(e){{console.error('Wardrobe stats error:',e)}});fetch('/api/wardrobe/items').then(r=>r.json()).then(d=>{{__wrdData=d.items;renderCatRows(d.items)}}).catch(function(e){{console.error('Wardrobe items error:',e)}});fetch('/api/wardrobe/new-items').then(r=>r.json()).then(function(d){{__newItemIds=(d.new_items||[]).map(function(it){{return it.id}});if(__wrdData)renderCatRows(__wrdData)}}).catch(function(){{}})}}
+var COLOR_MAP={{'黑色':'#2a2a2a','白色':'#f5f3ef','米白':'#f5f0e8','乳白':'#faf8f5','深灰':'#4a4a4a','灰色':'#9e9e9e','浅灰':'#d0d0d0','银灰':'#bdbdbd','灰绿':'#8a9a82','卡其':'#c4b5a0','卡其色':'#c4b5a0','驼色':'#b8976e','深棕':'#5c3d2e','棕色':'#7a5230','浅棕':'#b8956a','深蓝':'#1e3a5f','藏蓝':'#1e3a6f','藏青':'#1e3a5f','海军蓝':'#1e3a5f','蓝色':'#4a7eb5','浅蓝':'#7ea3c8','天蓝':'#8bb8d6','军绿':'#5c6e4a','军绿色':'#5c6e4a','墨绿':'#3c5032','绿色':'#6b8c5c','浅绿':'#9cba8c','正红色':'#c4523c','红色':'#c4523c','暗红':'#8b2e3e','酒红':'#8b2e3e','橙色':'#e88a3c','亮橙':'#f0983c','橘色':'#e88030','黄色':'#d4a84b','姜黄':'#c49a3c','米黄':'#e8d8b0','紫色':'#8b6b9e','浅紫':'#b89ac8','粉色':'#e8b4b8','浅粉':'#f0c8cc','米色':'#e8dcc8','沙色':'#d8ccb0','深牛仔蓝':'#2a4a6c','牛仔蓝':'#4a6a8c','浅牛仔蓝':'#7a9ab8','牛油果绿':'#7a9a5c','条纹':'#c0c0c0','印花':'#c0c0c0'}};function colorHex(name){{var c=COLOR_MAP[name];if(c)return c;for(var k in COLOR_MAP){{if(k.indexOf(name)!=-1||name.indexOf(k)!=-1)return COLOR_MAP[k]}}return'#bdbdbd'}}
+	var CAT_ORDER=['TS','LS','SHIRT','TANK','JK','PT','SH','SHOE','BAG','HAT','SOCK','SUN','ACC'];
+var CAT_ICONS={{'TS':'👕','LS':'👔','SHIRT':'👔','TANK':'🎽','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','BAG':'🎒','HAT':'🧢','SOCK':'🧦','SUN':'🕶️','ACC':'⌚'}};
+function renderCatRows(items){{var cats={{}};var archived=[];items.forEach(function(it){{if(it._archived){{archived.push(it);return}}var c=it.category_code;if(!cats[c])cats[c]=[];cats[c].push(it)}});var html='';CAT_ORDER.forEach(function(code){{var list=cats[code]||[];if(!list.length)return;var icon=CAT_ICONS[code]||'📦';var name=list[0].category;html+='<div class=\"wrd-cat-row\"><div class=\"wrd-cat-header\"><span class=\"wrd-cat-header-icon\">'+icon+'</span><span class=\"wrd-cat-header-name\">'+escHtml(name)+'</span><span class=\"wrd-cat-header-count\">'+list.length+'件</span></div><div class=\"wrd-cat-scroll\">'+list.map(function(it){{return renderItemCardH(it)}}).join('')+'</div></div>'}});if(archived.length){{html+='<div class=\"wrd-cat-row\" style=\"opacity:.7\"><div class=\"wrd-cat-header\"><span class=\"wrd-cat-header-icon\">🗄️</span><span class=\"wrd-cat-header-name\">旧衣库</span><span class=\"wrd-cat-header-count\">'+archived.length+'件</span></div><div class=\"wrd-cat-scroll\">'+archived.map(function(it){{return renderItemCardH(it)}}).join('')+'</div></div>'}}document.getElementById('wrd-rows').innerHTML=html||'<div class=\"wrd-empty\">暂无数据</div>'}}
+function renderItemCardH(it){{var inner='';if(it.thumb){{inner='<img class=\"wrd-item-card-img\" src=\"../'+escHtml(it.thumb)+'\" loading=\"lazy\" onerror=\"this.style.display=\\'none\\';this.parentElement.innerHTML=\\'<span style=font-size:11px;color:var(--muted)>'+escHtml(it.id)+'</span>\\'\">'}}else{{inner='<span style=\"font-size:11px;color:var(--muted)\">'+escHtml(it.id)+'</span>'}}var badgeHtml='';if(__newItemIds&&__newItemIds.indexOf(it.id)!==-1){{badgeHtml='<span class=\"new-badge\">NEW</span>'}}return'<div class=\"wrd-item-card-h\" onclick=\"openItemModal(\\''+escHtml(it.id)+'\\')\" style=\"position:relative\"><div class=\"wrd-item-card-img-wrap\">'+inner+'<span class=\"wrd-item-card-id\">'+escHtml(it.id)+'</span></div>'+badgeHtml+'</div>'}}
+function filterWardrobe(){{var q=document.getElementById('wrd-search').value.toLowerCase();document.querySelectorAll('.wrd-cat-row').forEach(function(row){{var cards=row.querySelectorAll('.wrd-item-card-h');var anyVisible=false;cards.forEach(function(c){{var t=(c.querySelector('.wrd-item-card-id')||{{}}).textContent||'';var visible=!q||t.toLowerCase().includes(q);c.style.display=visible?'':'none';if(visible)anyVisible=true}});row.style.display=anyVisible?'':'none'}})}}
+var __currentItemId=null,__currentItemData=null,__imgRotation=0,__editingTagIdx=-1,__editingTagGroup='';
+function openItemModal(itemId){{__currentItemId=itemId;__imgRotation=0;__editingTagIdx=-1;var overlay=document.getElementById('item-modal');var scroll=document.getElementById('item-modal-scroll');overlay.classList.add('show');scroll.innerHTML='<div class=\"wrd-loading\">加载中...</div>';if(__newItemIds&&__newItemIds.indexOf(itemId)!==-1){{fetch('/api/wardrobe/new-items/dismiss',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{clothing_id:itemId}})}}).then(function(){{__newItemIds=__newItemIds.filter(function(id){{return id!==itemId}});if(__wrdData)renderCatRows(__wrdData)}})}}fetch('/api/wardrobe/item/'+encodeURIComponent(itemId)).then(function(r){{return r.json()}}).then(function(data){{if(data.error){{scroll.innerHTML='<div class=\"wrd-empty\">加载失败</div>';return}}__currentItemData=data;if(!data.recommended_styles||!data.recommended_styles.length){{data.recommended_styles=matchStyles(data)}}renderItemCard(data)}}).catch(function(){{scroll.innerHTML='<div class=\"wrd-empty\">网络错误</div>'}})}}
+function closeItemModal(){{document.getElementById('item-modal').classList.remove('show');__currentItemId=null;__currentItemData=null}}
+function rotateImg(dir){{__imgRotation+=dir*90;var img=document.getElementById('im-hero-img');if(img)img.style.transform='rotate('+__imgRotation+'deg)'}}
+function matchStyles(data){{var styles=[];var allTags=[];if(data.brand&&data.brand.name)allTags.push(data.brand.name);var c=data.color||{{}};if(c.hue_family)allTags.push(c.hue_family);if(c.hue_name)allTags.push(c.hue_name);var f=data.fabric||{{}};if(f.primary)allTags.push(f.primary);if(f.texture)allTags.push(f.texture);var s=data.silhouette||{{}};if(s.fit)allTags.push(s.fit);var p=data.pattern||{{}};if(p.type)allTags.push(p.type);var sm=data.style_modifiers||[];allTags=allTags.concat(sm);var occ=data.occasions||[];allTags=allTags.concat(occ);var str=allTags.join(' ').toLowerCase();var rules=[{{k:'日系简约',m:['uniqlo','日系','简约','基本','基础百搭']}},{{k:'韩系潮流',m:['韩','韩流','街头','潮流','oversize']}},{{k:'City Boy',m:['宽松','落肩','city','boy','日系']}},{{k:'Clean Fit',m:['合身','clean','简约','基本','纯色']}},{{k:'街头潮流',m:['街头','潮流','logo','印花','oversize','棒球']}},{{k:'轻熟商务',m:['商务','通勤','正式','衬衫','西裤','牛津','polo']}},{{k:'运动休闲',m:['运动','速干','nike','adidas','跑步','健身','网球']}},{{k:'复古工装',m:['工装','复古','军绿','卡其','帆布','牛仔']}},{{k:'意式运动',m:['意式','fila','italia','运动','复古']}},{{k:'高街暗黑',m:['黑色','暗黑','高街','cdg','comme']}},{{k:'户外机能',m:['户外','机能','冲锋','防风','防水','登山','徒步']}},{{k:'夏日度假',m:['度假','海滩','亚麻','短裤','凉鞋','夏日']}},{{k:'极简主义',m:['极简','纯色','基本','无logo','单色']}}];rules.forEach(function(r){{var hit=r.m.some(function(kw){{return str.indexOf(kw)!=-1}});if(hit&&styles.indexOf(r.k)==-1)styles.push(r.k)}});if(!styles.length)styles.push('基础百搭');return styles.slice(0,5)}}
+function getTagGroups(data){{var g=[];var rs=data.recommended_styles||matchStyles(data);g.push({{id:'recommended_styles',title:'🤖 AI 适合风格',tags:rs.slice(),readonly:true,highlight:true}});var b=data.brand||{{}};if(b.name)g.push({{id:'brand',title:'品牌',tags:b.name?[b.name+(b.collection?' · '+b.collection:'')]:[]}});var c=data.color||{{}};var colorTags=[];if(c.hue_family)colorTags.push(c.hue_family);if(c.hue_name)colorTags.push(c.hue_name);if(c.saturation)colorTags.push(c.saturation);if(c.lightness)colorTags.push(c.lightness);if(c.is_neutral)colorTags.push('中性色');if(c.friendly_for_pale_skin)colorTags.push('显白');if(colorTags.length)g.push({{id:'color',title:'色彩',tags:colorTags}});var f=data.fabric||{{}};var fabTags=[];if(f.primary)fabTags.push(f.primary);if(f.texture)fabTags.push(f.texture);if(f.weight)fabTags.push(f.weight);if(fabTags.length)g.push({{id:'fabric',title:'面料',tags:fabTags}});var s=data.silhouette||{{}};var silTags=[];if(s.fit)silTags.push(s.fit);if(s.shoulder_effect&&s.shoulder_effect!='无特殊效果')silTags.push(s.shoulder_effect);if(s.torso_effect&&s.torso_effect!='无特殊效果')silTags.push(s.torso_effect);if(silTags.length)g.push({{id:'silhouette',title:'版型',tags:silTags}});var p=data.pattern||{{}};var patTags=[];if(p.type&&p.type!='纯色')patTags.push(p.type);if(p.density&&p.density!='无')patTags.push(p.density);if(p.logo_visible)patTags.push('Logo');if(patTags.length)g.push({{id:'pattern',title:'图案',tags:patTags}});var season=(f.seasonality||[]).slice();if(season.length)g.push({{id:'season',title:'季节',tags:season}});var occ=data.occasions||[];g.push({{id:'occasions',title:'场景',tags:occ.slice()}});var sm=(data.style_modifiers||[]).slice();g.push({{id:'style_modifiers',title:'风格修饰',tags:sm}});return g}}
+function renderItemCard(data,forceRefresh){{var isArchived=data.meta&&data.meta.archived;var boost=(data.meta&&data.meta.boost_score)||0;var thumbPath=data._thumb?data._thumb.split('?')[0]:'';var imgSrc=thumbPath?'../'+escHtml(thumbPath)+(forceRefresh?'?v='+Date.now():''):'';var groups=getTagGroups(data);var groupsHtml=groups.map(function(grp){{var wrapCls=grp.highlight?'im-tag-group im-tag-group-hl':'im-tag-group';var chips=grp.tags.map(function(t,i){{var cls=grp.readonly?'im-tag im-tag-ro':'im-tag';var del=grp.readonly?'':'<span class=\"im-tag-del\" onclick=\"event.stopPropagation();removeChip(\\''+grp.id+'\\','+i+')\">×</span>';return'<span class=\"'+cls+'\" onclick=\"'+(grp.readonly?'':'editChip(\\''+grp.id+'\\','+i+')')+'\">'+escHtml(t)+del+'</span>'}}).join('');if(!grp.readonly)chips+='<span class=\"im-tag im-tag-add\" onclick=\"addChip(\\''+grp.id+'\\')\">+</span>';return'<div class=\"'+wrapCls+'\"><div class=\"im-tag-group-title\">'+escHtml(grp.title)+'</div><div class=\"im-tags\">'+chips+'</div></div>'}}).join('');var archiveLabel=isArchived?'↩️ 移回衣橱':'🗑️ 移入旧衣库';var archiveBtnClass=isArchived?'im-btn-restore':'im-btn-archive';var archiveFn=isArchived?'restoreItem()':'archiveItem()';var deleteBtn=isArchived?'<button class=\"im-btn-archive\" onclick=\"deleteItem()\" style=\"color:#c62828;border-color:#fce4ec!important\">🗑️ 彻底扔掉</button>':'';var boostLabel=boost>0?'⭐ 已推荐('+boost+')':'⭐ 多推荐';var actionsHtml=isArchived?'<div class=\"im-actions\"><button class=\"'+archiveBtnClass+'\" onclick=\"'+archiveFn+'\">'+archiveLabel+'</button>'+deleteBtn+'</div>':'<div class=\"im-actions\"><button class=\"im-btn-save-tags\" onclick=\"saveAllChanges()\">💾 保存修改</button><button class=\"im-btn-boost\" onclick=\"boostItem()\">'+boostLabel+'</button><button class=\"'+archiveBtnClass+'\" onclick=\"'+archiveFn+'\">'+archiveLabel+'</button></div>';var scroll=document.getElementById('item-modal-scroll');scroll.innerHTML='<div class=\"im-hero\"><img class=\"im-hero-img\" id=\"im-hero-img\" src=\"'+imgSrc+'\" onerror=\"this.style.display=\\'none\\'\" style=\"transform:rotate('+__imgRotation+'deg)\"><span class=\"im-hero-id\">'+escHtml(data.clothing_id)+'</span><button class=\"im-rotate-btn im-rotate-left\" onclick=\"rotateImg(-1)\">↺</button><button class=\"im-rotate-btn im-rotate-right\" onclick=\"rotateImg(1)\">↻</button></div><div class=\"im-info\"><div class=\"im-info-name\">'+escHtml(data.meta&&data.meta.claude_fit_comment||data.category)+'</div><div class=\"im-info-brand\">'+escHtml(data.clothing_id)+' · '+escHtml(data.category)+' · 穿着'+escHtml(String(data.meta&&data.meta.wear_count||0))+'次</div></div>'+groupsHtml+'<div id=\"im-chip-editor\" style=\"display:none\"></div><div class=\"im-actions\">'+actionsHtml+'</div>'}}
+function editChip(groupId,idx){{var data=__currentItemData;if(!data)return;var grp=getTagGroups(data).find(function(g){{return g.id===groupId}});if(!grp||idx<0||idx>=grp.tags.length)return;__editingTagGroup=groupId;__editingTagIdx=idx;var el=document.getElementById('im-chip-editor');el.style.display='block';el.innerHTML='<div class=\"im-tag-detail\"><input id=\"im-chip-input\" value=\"'+escHtml(grp.tags[idx])+'\"><div class=\"im-tag-detail-btns\"><button class=\"im-btn-save\" onclick=\"saveChipEdit()\">确认</button><button class=\"im-btn-cancel\" onclick=\"cancelChipEdit()\">取消</button></div></div>';var inp=document.getElementById('im-chip-input');inp.focus();inp.select()}}
+function saveChipEdit(){{var val=document.getElementById('im-chip-input').value.trim();if(!val||__editingTagIdx<0||!__editingTagGroup)return cancelChipEdit();var data=__currentItemData;var gid=__editingTagGroup;if(gid==='brand'){{if(!data.brand)data.brand={{}};data.brand.name=val}}else if(gid==='color'){{var colorTags=getTagGroups(data).find(function(g){{return g.id==='color'}});if(colorTags&&__editingTagIdx<colorTags.tags.length){{var oldVal=colorTags.tags[__editingTagIdx];var c=data.color||{{}};if(oldVal===c.hue_family)c.hue_family=val;else if(oldVal===c.hue_name)c.hue_name=val;else if(oldVal===c.saturation)c.saturation=val;else if(oldVal===c.lightness)c.lightness=val}}}}else if(gid==='fabric'){{var fabTags=getTagGroups(data).find(function(g){{return g.id==='fabric'}});if(fabTags&&__editingTagIdx<fabTags.tags.length){{var oldVal=fabTags.tags[__editingTagIdx];var f=data.fabric||{{}};if(oldVal===f.primary)f.primary=val;else if(oldVal===f.texture)f.texture=val;else if(oldVal===f.weight)f.weight=val}}}}else if(gid==='silhouette'){{var silTags=getTagGroups(data).find(function(g){{return g.id==='silhouette'}});if(silTags&&__editingTagIdx<silTags.tags.length){{var oldVal=silTags.tags[__editingTagIdx];var s=data.silhouette||{{}};if(oldVal===s.fit)s.fit=val;else if(oldVal===s.shoulder_effect)s.shoulder_effect=val;else if(oldVal===s.torso_effect)s.torso_effect=val}}}}else if(gid==='pattern'){{var patTags=getTagGroups(data).find(function(g){{return g.id==='pattern'}});if(patTags&&__editingTagIdx<patTags.tags.length){{var oldVal=patTags.tags[__editingTagIdx];var p=data.pattern||{{}};if(oldVal===p.type)p.type=val;else if(oldVal===p.density)p.density=val}}}}else if(gid==='season'){{if(!data.fabric)data.fabric={{}};if(!data.fabric.seasonality)data.fabric.seasonality=[];data.fabric.seasonality[__editingTagIdx]=val}}else if(gid==='occasions'){{if(!data.occasions)data.occasions=[];data.occasions[__editingTagIdx]=val}}else if(gid==='style_modifiers'){{if(!data.style_modifiers)data.style_modifiers=[];data.style_modifiers[__editingTagIdx]=val}}cancelChipEdit();renderItemCard(data)}}
+function cancelChipEdit(){{__editingTagIdx=-1;__editingTagGroup='';document.getElementById('im-chip-editor').style.display='none'}}
+function addChip(groupId){{var data=__currentItemData;if(!data)return;var grp=getTagGroups(data).find(function(g){{return g.id===groupId}});if(!grp||grp.readonly)return;var newVal='新标签';if(groupId==='brand'){{if(!data.brand)data.brand={{}};data.brand.name=data.brand.name||newVal}}else if(groupId==='color'){{if(!data.color)data.color={{}};data.color.hue_name=data.color.hue_name||newVal}}else if(groupId==='fabric'){{if(!data.fabric)data.fabric={{}};data.fabric.primary=data.fabric.primary||newVal}}else if(groupId==='silhouette'){{if(!data.silhouette)data.silhouette={{}};data.silhouette.fit=data.silhouette.fit||newVal}}else if(groupId==='pattern'){{if(!data.pattern)data.pattern={{}};data.pattern.type=data.pattern.type||newVal}}else if(groupId==='season'){{if(!data.fabric)data.fabric={{}};if(!data.fabric.seasonality)data.fabric.seasonality=[];data.fabric.seasonality.push(newVal)}}else if(groupId==='occasions'){{if(!data.occasions)data.occasions=[];data.occasions.push(newVal)}}else if(groupId==='style_modifiers'){{if(!data.style_modifiers)data.style_modifiers=[];data.style_modifiers.push(newVal)}}renderItemCard(data);__editingTagGroup=groupId;__editingTagIdx=grp.tags.length;var el=document.getElementById('im-chip-editor');el.style.display='block';el.innerHTML='<div class=\"im-tag-detail\"><input id=\"im-chip-input\" value=\"'+escHtml(newVal)+'\"><div class=\"im-tag-detail-btns\"><button class=\"im-btn-save\" onclick=\"saveChipEdit()\">确认</button><button class=\"im-btn-cancel\" onclick=\"cancelChipEdit()\">取消</button></div></div>';var inp=document.getElementById('im-chip-input');inp.focus();inp.select()}}
+function removeChip(groupId,idx){{var data=__currentItemData;if(!data)return;if(groupId==='brand'){{if(data.brand)data.brand.name=''}}else if(groupId==='season'){{if(data.fabric&&data.fabric.seasonality)data.fabric.seasonality.splice(idx,1)}}else if(groupId==='occasions'){{if(data.occasions)data.occasions.splice(idx,1)}}else if(groupId==='style_modifiers'){{if(data.style_modifiers)data.style_modifiers.splice(idx,1)}}renderItemCard(data)}}
+function showToast(msg,color){{var t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:'+(color||'#1e3a5f')+';color:#fff;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;z-index:300;box-shadow:0 8px 32px rgba(0,0,0,.25);animation:fadeInUp .3s ease';document.body.appendChild(t);setTimeout(function(){{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(function(){{t.remove()}},300)}},1800)}}
+function saveAllChanges(){{if(!__currentItemId||!__currentItemData)return;var data=__currentItemData;var btn=document.querySelector('.im-btn-save-tags');if(btn){{btn.textContent='保存中...';btn.disabled=true}}var hasRotation=__imgRotation%360!==0;var doSave=function(){{var newStyles=matchStyles(data);data.recommended_styles=newStyles;var updates={{}};if(data.brand)updates.brand=data.brand;if(data.color)updates.color=data.color;if(data.fabric)updates.fabric=data.fabric;if(data.silhouette)updates.silhouette=data.silhouette;if(data.pattern)updates.pattern=data.pattern;if(data.occasions!==undefined)updates.occasions=data.occasions;if(data.style_modifiers!==undefined)updates.style_modifiers=data.style_modifiers;updates.recommended_styles=newStyles;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(updates)}}).then(function(r){{return r.json()}}).then(function(d){{if(btn)btn.disabled=false;if(d.ok){{showToast('✅ 保存成功','#2e7d32');var hadRotation=hasRotation;__imgRotation=0;renderItemCard(data,!!hadRotation);if(hadRotation){{fetch('/api/wardrobe/items').then(function(r){{return r.json()}}).then(function(d2){{__wrdData=d2.items;renderCatRows(d2.items)}})}}setTimeout(function(){{var b=document.querySelector('.im-btn-save-tags');if(b)b.textContent='💾 保存修改'}},800)}}else{{showToast('❌ 保存失败','#c4523c');if(btn)btn.textContent='💾 保存修改'}}}}).catch(function(){{if(btn){{btn.disabled=false;btn.textContent='💾 保存修改'}}showToast('❌ 网络错误','#c4523c')}})}};if(hasRotation){{fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId)+'/transform',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{rotate:__imgRotation,scale:1.0,translate_x:0,translate_y:0}})}}).then(function(r){{return r.json()}}).then(function(){{doSave()}}).catch(function(){{doSave()}})}}else{{doSave()}}}}
+function boostItem(){{if(!__currentItemId||!__currentItemData)return;var cur=(__currentItemData.meta&&__currentItemData.meta.boost_score)||0;var newBoost=cur+1;if(!__currentItemData.meta)__currentItemData.meta={{}};__currentItemData.meta.boost_score=newBoost;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{meta:{{boost_score:newBoost}}}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok)renderItemCard(__currentItemData)}})}}
+function archiveItem(){{if(!__currentItemId||!confirm('确定移入旧衣库吗？'))return;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{meta:{{archived:true}}}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok){{closeItemModal();loadWardrobe()}}}})}}
+function restoreItem(){{if(!__currentItemId)return;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{meta:{{archived:false}}}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok){{closeItemModal();loadWardrobe()}}}})}}
+function deleteItem(){{if(!__currentItemId||!confirm('确定彻底删除 '+__currentItemId+' 吗？\\n\\n将删除标签、图片等所有数据，不可恢复！'))return;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId)+'/delete',{{method:'POST'}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok){{showToast('已删除 '+d.deleted+' 个文件','#c4523c');closeItemModal();loadWardrobe()}}else{{showToast('删除失败: '+(d.error||'未知'),'#c4523c')}}}}).catch(function(){{showToast('网络错误','#c4523c')}})}}
+function loadMonthlyReport(){{var el=document.getElementById('wrd-monthly-content');el.innerHTML='<div class=\"wrd-loading\">加载中...</div>';fetch('/api/wardrobe/stats').then(r=>r.json()).then(d=>{{var html='<div class=\"wrd-monthly\"><div class=\"wm-card\"><div class=\"wm-title\">📈 核心数据</div><div class=\"wm-stat-row\"><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+d.total_outfits+'</div><div class=\"wm-stat-lbl\">累计穿搭</div></div><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+d.active_days+'</div><div class=\"wm-stat-lbl\">活跃天数</div></div><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+d.avg_rating+'</div><div class=\"wm-stat-lbl\">平均评分</div></div></div><div class=\"wm-stat-row\"><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+Math.round(d.utilization_rate*100)+'%</div><div class=\"wm-stat-lbl\">利用率</div></div><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+d.items_worn+'/'+d.items_total+'</div><div class=\"wm-stat-lbl\">已穿/总数</div></div><div class=\"wm-stat-item\"><div class=\"wm-stat-val\">'+d.rated_count+'</div><div class=\"wm-stat-lbl\">有评分</div></div></div></div>';if(d.top_styles&&d.top_styles.length){{html+='<div class=\"wm-card\"><div class=\"wm-title\">🎯 最爱风格</div>';var maxS=d.top_styles[0].count;d.top_styles.forEach(function(s){{var pct=Math.round(s.count/maxS*100);html+='<div class=\"wm-bar-row\"><span class=\"wm-bar-label\">'+escHtml(s.name)+'</span><div class=\"wm-bar-track\"><div class=\"wm-bar-fill\" style=\"width:'+pct+'%\"></div></div><span class=\"wm-bar-num\">'+s.count+'</span></div>'}});html+='</div>'}}if(d.top_items&&d.top_items.length){{html+='<div class=\"wm-card\"><div class=\"wm-title\">👟 最爱单品</div>';var maxI=d.top_items[0].count;d.top_items.forEach(function(s){{var pct=Math.round(s.count/maxI*100);html+='<div class=\"wm-bar-row\"><span class=\"wm-bar-label\">'+escHtml(s.id)+'</span><div class=\"wm-bar-track\"><div class=\"wm-bar-fill\" style=\"width:'+pct+'%\"></div></div><span class=\"wm-bar-num\">'+s.count+'</span></div>'}});html+='</div>'}}html+='</div>';el.innerHTML=html}}).catch(function(e){{el.innerHTML='<div class=\"wrd-empty\">加载失败: '+escHtml(e.message)+'</div>'}})}}
+function loadColdItems(){{var el=document.getElementById('wrd-cold-list');el.innerHTML='<div class=\"wrd-loading\">加载中...</div>';fetch('/api/wardrobe/cold-items').then(r=>r.json()).then(d=>{{if(!d.cold_items||!d.cold_items.length){{el.innerHTML='<div class=\"wrd-empty\">🎉 所有单品都有穿着记录！</div>';return}}var html='';d.cold_items.forEach(function(it){{var badge=it.is_key?'<span class=\"cold-badge key\">关键</span>':'<span class=\"cold-badge\">闲置</span>';var thumb=it.thumb?'<img class=\"wrd-item-thumb\" src=\"../'+escHtml(it.thumb)+'\" loading=\"lazy\" onclick=\"event.stopPropagation();showImg(this.src)\">':'<div class=\"wrd-item-thumb\" style=\"background:'+colorHex(it.color)+';display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3)\">'+escHtml(it.id)+'</div>';html+='<div class=\"wrd-cold-item\">'+thumb+'<div class=\"wrd-item-info\"><div class=\"wi-name\">'+escHtml(it.name)+'</div><div class=\"wi-meta\">'+escHtml(it.brand||'')+' · '+escHtml(it.id)+'</div><div class=\"wi-usage\">上次穿: '+escHtml(it.last_used||'从未')+'</div></div>'+badge+'</div>'}});el.innerHTML=html}}).catch(function(e){{el.innerHTML='<div class=\"wrd-empty\">加载失败: '+escHtml(e.message)+'</div>'}})}}
+function loadGaps(){{var el=document.getElementById('wrd-gaps-content');el.innerHTML='<div class=\"wrd-loading\">加载中...</div>';fetch('/api/wardrobe/gaps').then(r=>r.json()).then(d=>{{var html='';if(d.suggestions&&d.suggestions.length){{d.suggestions.forEach(function(s){{html+='<div class=\"wrd-gap-card priority-'+s.priority+'\"><span class=\"gap-priority '+s.priority+'\">'+{{'high':'🔴 高优先','medium':'🟡 中优先','low':'🟢 低优先'}}[s.priority]+'</span><div class=\"gap-item\">'+escHtml(s.item)+'</div><div class=\"gap-reason\">💡 '+escHtml(s.reason)+'</div></div>'}})}}if(d.category_gaps){{var gapCats=Object.entries(d.category_gaps).filter(function(e){{return e[1].status!=='healthy'}});if(gapCats.length){{html+='<div class=\"wm-card\" style=\"margin-top:12px\"><div class=\"wm-title\">📊 品类状态</div>';gapCats.forEach(function(e){{var g=e[1];var icon=g.status==='overstock'?'⚠️':'❌';html+='<div class=\"wm-bar-row\"><span class=\"wm-bar-label\">'+icon+' '+escHtml(g.name)+'</span><span class=\"wm-bar-num\" style=\"width:auto\">'+g.actual+'件 (理想'+g.ideal_lo+'-'+g.ideal_hi+')</span></div>'}});html+='</div>'}}}}el.innerHTML=html||'<div class=\"wrd-empty\">衣橱品类分布良好 👍</div>'}}).catch(function(e){{el.innerHTML='<div class=\"wrd-empty\">加载失败: '+escHtml(e.message)+'</div>'}})}}
+/* 衣橱子页切换 */
+(function(){{var wrdSeg=document.getElementById('wrd-seg');if(wrdSeg){{wrdSeg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;wrdSeg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;document.querySelectorAll('#page-wardrobe .wrd-sub').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='block';if(sub==='my'){{if(!__wrdData)loadWardrobe()}}else if(sub==='monthly'){{loadMonthlyReport()}}else if(sub==='cold'){{loadColdItems()}}else if(sub==='gaps'){{loadGaps()}}}})}};/* Auto-load wardrobe on first visit to wardrobe tab */var __wrdLoaded=false;var origTabHandler=document.querySelector('#tab-bar').onclick;document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{if(this.dataset.page==='wardrobe'&&!__wrdLoaded){{__wrdLoaded=true;setTimeout(loadWardrobe,100)}}}})}})}})();
+/* ═══ 探索页 ═══ */
+function renderStyleCards(styles,showDesc){{if(!styles||!styles.length)return'<div class="wrd-empty">暂无风格数据</div>';return styles.map(function(s){{var desc=showDesc&&s.description?'<div class="es-desc">'+escHtml(s.description)+'</div>':'';var cat=s.category?'<span class="es-cat">'+escHtml(s.category)+'</span>':'';var hasImg=!!s.image;var iconHtml=hasImg?'<img src="'+escHtml(s.image)+'" alt="'+escHtml(s.name_zh)+'" loading="lazy" onclick="event.stopPropagation();showImg(\\''+escHtml(s.image)+'\\')" style="cursor:pointer">':s.name_zh.charAt(0);var iconCls=hasImg?'es-icon has-img':'es-icon';return'<div class="exp-style-card" onclick="window.location=\\'/style/'+escHtml(s.id)+'\\'"><div class="es-header"><div class="'+iconCls+'">'+iconHtml+'</div><div class="es-info"><div class="es-name">'+escHtml(s.name_zh)+'</div><div class="es-en">'+escHtml(s.name_en||s.id)+'</div></div></div>'+desc+'<div class="es-footer">'+cat+'<span class="es-arrow">›</span></div></div>'}}).join('')}}
+function loadExploreTweak(){{var el=document.getElementById('exp-tweak-content');el.innerHTML='<div class="wrd-loading">加载中...</div>';fetch('/api/explore/tweak').then(r=>r.json()).then(d=>{{el.innerHTML=renderStyleCards(d.styles,true)||'<div class="wrd-empty">先完成几套穿搭推荐吧</div>'}}).catch(function(e){{el.innerHTML='<div class="wrd-empty">加载失败</div>'}})}}
+function loadExploreTransform(){{var el=document.getElementById('exp-transform-content');el.innerHTML='<div class="wrd-loading">加载中...</div>';fetch('/api/explore/transform').then(r=>r.json()).then(d=>{{el.innerHTML=renderStyleCards(d.styles,true)||'<div class="wrd-empty">已探索全部风格</div>'}}).catch(function(e){{el.innerHTML='<div class="wrd-empty">加载失败</div>'}})}}
+function loadExploreCross(){{var el=document.getElementById('exp-cross-content');el.innerHTML='<div class="wrd-loading">加载中...</div>';fetch('/api/explore/cross').then(r=>r.json()).then(d=>{{var html='';if(d.fusion)html+='<div class="es-fusion">🎲 '+escHtml(d.fusion)+'</div>';html+=renderStyleCards(d.styles,true);el.innerHTML=html||'<div class="wrd-empty">暂无跨界建议</div>'}}).catch(function(e){{el.innerHTML='<div class="wrd-empty">加载失败</div>'}})}}
+function loadExploreTrends(){{var el=document.getElementById('exp-trends-content');el.innerHTML='<div class="wrd-loading">加载中...</div>';fetch('/api/explore/trends').then(r=>r.json()).then(d=>{{el.innerHTML='<div class="section-header">📚 全部风格 ('+d.total+')</div>'+renderStyleCards(d.styles,false)}}).catch(function(e){{el.innerHTML='<div class="wrd-empty">加载失败</div>'}})}}
+function tryExplore(){{var inp=document.getElementById('exp-input');var msg=inp.value.trim();if(!msg)return;showProgress();fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{__activePollId=d.task_id;pollTask(d.task_id)}}else{{document.getElementById('progress-title').textContent=d.result||'已发送';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block'}}}})}}
+/* 探索页子页切换 */
+(function(){{var expSeg=document.getElementById('exp-seg');if(expSeg){{expSeg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;expSeg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;document.querySelectorAll('#page-explore .exp-sub').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='block';if(sub==='tweak'){{loadExploreTweak()}}else if(sub==='transform'){{loadExploreTransform()}}else if(sub==='cross'){{loadExploreCross()}}else if(sub==='trends'){{loadExploreTrends()}}}})}};var __expLoaded=false;document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{if(this.dataset.page==='explore'&&!__expLoaded){{__expLoaded=true;setTimeout(loadExploreTweak,100)}}}})}})}})();
+/* ═══ 我的页 ═══ */
+function loadProfile(){{/* 施工中 */}}
+function setPreference(mode){{fetch('/setpref?mode='+mode).catch(function(){{}})}}
+/* ═══ 添加页 ═══ */
+var __addImages=[];
+function triggerAddCamera(){{document.getElementById('add-camera-input').click()}}
+function triggerAddAlbum(){{document.getElementById('add-album-input').click()}}
+function handleAddImages(input){{var files=Array.from(input.files);if(!files.length)return;files.forEach(function(f){{var reader=new FileReader();reader.onload=function(e){{__addImages.push({{file:f,preview:e.target.result}});renderAddImageStrip()}};reader.readAsDataURL(f)}});input.value=''}}
+function renderAddImageStrip(){{var strip=document.getElementById('add-image-strip');var hasImgs=__addImages.length>0;strip.style.display=hasImgs?'flex':'none';var html='';__addImages.forEach(function(img,i){{html+='<div class="add-image-thumb"><img src="'+img.preview+'"><span class="thumb-remove" onclick="event.stopPropagation();removeAddImage('+i+')">&times;</span></div>'}});html+='<div class="add-image-thumb add-more-btn" onclick="triggerAddAlbum()"><span class="add-more-plus">+</span><span class="add-more-label">添加</span></div>';strip.innerHTML=html;document.getElementById('add-confirm-btn').disabled=!hasImgs;document.getElementById('add-action-cards').style.display=hasImgs?'none':'grid'}}
+function removeAddImage(index){{__addImages.splice(index,1);renderAddImageStrip();if(!__addImages.length){{document.getElementById('add-action-cards').style.display='grid';document.getElementById('add-confirm-btn').disabled=true}}}}
+function clearAddImages(){{__addImages=[];document.getElementById('add-image-strip').style.display='none';document.getElementById('add-image-strip').innerHTML='';document.getElementById('add-result').style.display='none';document.getElementById('add-result').innerHTML='';document.getElementById('add-progress').style.display='none';document.getElementById('add-action-cards').style.display='grid';var btn=document.getElementById('add-confirm-btn');btn.disabled=true;btn.textContent='确认分析';btn.onclick=function(){{submitAddImages()}};document.getElementById('add-camera-input').value='';document.getElementById('add-album-input').value=''}}
+function submitAddImages(){{if(!__addImages.length)return;var btn=document.getElementById('add-confirm-btn');btn.disabled=true;btn.textContent='识别中...';document.getElementById('add-progress').style.display='block';document.getElementById('add-progress-text').innerHTML='<div class="wrd-loading">AI识别中...</div>';var b64s=__addImages.map(function(img){{return img.preview.split(',')[1]}});fetch('/api/wardrobe/add',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{images:b64s}})}}).then(r=>r.json()).then(function(d){{if(d.task_id){{pollAddTask(d.task_id)}}else{{showAddReview(d)}}}}).catch(function(e){{document.getElementById('add-progress').style.display='none';btn.textContent='重试';btn.disabled=false;document.getElementById('add-progress-text').innerHTML='<div class=\"wrd-empty\">上传失败: '+escHtml(e.message)+'</div>'}})}}
+function pollAddTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(d.status==='done'){{document.getElementById('add-progress').style.display='none';var data=JSON.parse(d.result);showAddReview(data)}}else if(d.status==='error'){{document.getElementById('add-progress').style.display='none';document.getElementById('add-progress-text').innerHTML='<div class=\"wrd-empty\">识别失败: '+escHtml(d.message)+'</div>';var btn=document.getElementById('add-confirm-btn');btn.textContent='重试';btn.disabled=false}}else{{document.getElementById('add-progress-text').innerHTML='<div class=\"wrd-loading\">'+escHtml(d.message||'识别中...')+'</div>';setTimeout(function(){{pollAddTask(tid)}},1500)}}}}).catch(function(){{setTimeout(function(){{pollAddTask(tid)}},2000)}})}}
+function showAddReview(data){{var items=data.items||[];if(!items.length){{document.getElementById('add-progress-text').innerHTML='<div class=\"wrd-empty\">未识别到服装单品</div>';var btn=document.getElementById('add-confirm-btn');btn.textContent='重试';btn.disabled=false;return}}var btn=document.getElementById('add-confirm-btn');btn.textContent='确认入库 ('+items.length+'件)';btn.disabled=false;btn.onclick=function(){{confirmAddItems(data)}};var html='<div class=\"section-header\">AI 识别结果 · 请核对后确认</div>';items.forEach(function(item,i){{var c=item.color||{{}};var b=item.brand||{{}};var f=item.fabric||{{}};var colorHex=colorNameToHex(c.hue_name||'');html+='<div class=\"add-review-card\"><div class=\"ar-header\"><span class=\"ar-id\">'+escHtml(item.suggested_id||'')+'</span><span class=\"ar-cat\">'+escHtml(item.category||'')+'</span></div><div class=\"ar-fields\"><div class=\"ar-field\"><span class=\"ar-label\">品牌</span><span class=\"ar-value\">'+escHtml(b.name||'未知')+(b.confidence&&b.confidence!=='确定'?' <em>('+escHtml(b.confidence)+')</em>':'')+'</span></div><div class=\"ar-field\"><span class=\"ar-label\">颜色</span><span class=\"ar-value\">'+escHtml(c.hue_name||'')+' '+escHtml(c.hue_family||'')+'</span><span class=\"pal-dot\" style=\"display:inline-block;margin-left:6px;background:'+colorHex+'\"></span></div><div class=\"ar-field\"><span class=\"ar-label\">面料</span><span class=\"ar-value\">'+escHtml(f.primary||'')+' · '+escHtml(f.texture||'')+' · '+escHtml(f.weight||'')+'</span></div><div class=\"ar-field\"><span class=\"ar-label\">风格</span><span class=\"ar-value\">'+escHtml((item.style_modifiers||[]).join(' · ')||'基础款')+'</span></div><div class=\"ar-field\"><span class=\"ar-label\">场景</span><span class=\"ar-value\">'+escHtml((item.occasions||[]).join(' · ')||'日常')+'</span></div></div></div>'}});document.getElementById('add-result').innerHTML=html;document.getElementById('add-result').style.display='block'}}
+function confirmAddItems(data){{var btn=document.getElementById('add-confirm-btn');btn.disabled=true;btn.textContent='入库中...';fetch('/api/wardrobe/add/confirm',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{task_id:data._task_id,items:data.items}})}}).then(r=>r.json()).then(function(d){{if(d.ok){{document.getElementById('add-result').innerHTML='<div class=\"wrd-loading\" style=\"color:#2e7d32\">✅ 已添加 '+d.added.length+' 件单品</div>';setTimeout(function(){{clearAddImages();__wardrobeNeedsReload=true}},1500)}}else{{btn.disabled=false;btn.textContent='重试入库';document.getElementById('add-result').innerHTML='<div class=\"wrd-empty\">入库失败: '+escHtml(d.message||'')+'</div>'}}}}).catch(function(e){{btn.disabled=false;btn.textContent='重试入库';document.getElementById('add-result').innerHTML='<div class=\"wrd-empty\">网络错误: '+escHtml(e.message)+'</div>'}})}}
+function colorNameToHex(name){{var m={{'红':'#c0392b','橙':'#e67e22','黄':'#f1c40f','绿':'#27ae60','青':'#1abc9c','蓝':'#2980b9','紫':'#8e44ad','粉':'#e91e63','棕':'#795548','灰':'#95a5a6','白':'#ecf0f1','黑':'#2c3e50','米':'#f5deb3','卡其':'#c3b091','藏青':'#1a3a5c','酒红':'#722f37','墨绿':'#1a4028','驼':'#c19a6b','焦糖':'#af6b3d','浅灰':'#bdc3c7','深灰':'#636e72','银':'#bdc3c7','金':'#d4a574'}};if(!name)return'#ccc';for(var k in m){{if(name.indexOf(k)>=0)return m[k]}}return'#ccc'}}
 </script>
 </body></html>'''
 
 # Fill in variables
 tabs_html = '\n'.join([
-    tab_btn('rec', '推荐', True),
-    tab_btn('exp', '探索'),
-    tab_btn('wrd', '衣橱'),
+    tab_btn('recommend', '推荐', True),
+    tab_btn('explore', '探索'),
+    tab_btn('wardrobe', '衣橱'),
     tab_btn('add', '添加'),
-    tab_btn('me', '我的'),
+    tab_btn('profile', '我的'),
 ])
 
 # ── Build history cards ──
@@ -787,7 +1081,15 @@ else:
     hero_meta = '2026/06/14 · 晴 · 22~34°C · 紫外线 强'
     hero_tags_html = '<span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span>'
     palette_html = '<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#f5f3ef"></span><span class="pal-dot" style="background:#5c6e4a"></span><span class="pal-dot" style="background:#2a2a2a"></span><span class="pal-dot" style="background:#bdbdbd"></span><span class="pal-dot" style="background:#f0983c"></span></div>'
-    hero_items_html = '{}{}{}{}{}{}{}'.format(item_tshirt_tennis, item_pants_tennis, item_shoe_tennis, item_hat_tennis, item_bag_tennis, item_sock_tennis, item_acc_tennis)
+    hero_items_html = (
+        item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon 运动短袖', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png') +
+        item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球短裤', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png') +
+        item_row(item_icons['shoe'], '鞋子', 'SHOE-008', 'Asics 网球鞋', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-008_Image_20260610_0844_43_461_cutout.png') +
+        item_row(item_icons['hat'], '帽子', 'HAT-003', 'Nike 速干空顶帽', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-003_Image_20260610_0843_08_628_cutout.png') +
+        item_row(item_icons['bag'], '包', 'BAG-004', 'Nike 运动背包', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-004_Image_20260610_0831_16_866_cutout.png') +
+        item_row(item_icons['sock'], '袜子', 'SOCK-001', 'Nike 运动袜', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-001_Image_20260610_0846_37_520_cutout.png') +
+        item_row(item_icons['acc'], '配饰', 'ACC-003', '运动护腕', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0835_10_332_cutout.png')
+    )
 
 card1 = mini_card('日系 City Boy', ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
 card2 = mini_card('轻熟休闲', ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
@@ -816,6 +1118,9 @@ html = html.format(
     hero_tags_html=hero_tags_html, palette_html=palette_html, hero_items_html=hero_items_html,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
+    camera_icon=add_icons['camera_icon'], upload_icon=add_icons['upload_icon'],
+    camera_lg_icon=add_icons['camera_lg_icon'], image_icon=add_icons['image_icon'],
+    file_icon=add_icons['file_icon'], construction_icon=add_icons['construction_icon'],
 )
 
 out = os.path.join(PROJ, 'prototype', 'mobile-v2.html')

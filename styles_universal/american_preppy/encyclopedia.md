@@ -159,3 +159,17 @@ Preppy风格正在经历一场重大复兴，但与过去截然不同：
 5. **适老化处理**：亚洲男性穿全新Preppy单品容易显得"用力过猛"。优先选水洗牛津布、磨损效果的乐福鞋、轻微褪色的卡其裤——"不新"的感觉才是Preppy的精髓
 6. **不穿袜子的技巧**：船鞋/乐福鞋不穿袜子是Preppy的标志性穿法。如果不习惯可穿隐形船袜，但确保袜子完全不可见
 7. **2025版Preppy入门**：不想全套经典Preppy的话，可以尝试"一件Preppy单品+其他风格混搭"——例如橄榄球衫配工装裤、西装夹克配牛仔裤、船鞋配九分西裤
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/american_preppy_01.jpg)
+*风格穿搭参考*
+
+![Simple Guide To Nail The Preppy Style With Ease | Preppy mens fashion ...](gallery/american_preppy_02.jpg)
+*Simple Guide To Nail The Preppy Style With Ease | Preppy mens fashion ...*
+
+![What Is Preppy Old Money Style ? | Polo ralph lauren, Abbigliamento ...](gallery/american_preppy_03.jpg)
+*What Is Preppy Old Money Style ? | Polo ralph lauren, Abbigliamento ...*

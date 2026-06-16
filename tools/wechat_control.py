@@ -72,6 +72,56 @@ CATEGORY_MAP = {
     '袜子':     {'dir': '袜子',     'prefix': '袜子'},
 }
 
+# ── 品类代码 → 中文名 ──────────────────────────────────
+CATEGORY_NAMES = {
+    'TS': 'T恤/短袖', 'LS': '长袖上衣', 'SHIRT': '衬衫', 'TANK': '背心',
+    'JK': '外套/夹克', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
+    'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '太阳镜', 'ACC': '配饰',
+}
+
+# ── 品类代码 → CATEGORY_MAP 中文名（用于入库）──
+CATEGORY_CODE_TO_NAME = {
+    'TS': '短袖上衣', 'LS': '长袖上衣', 'SHIRT': '衬衣', 'TANK': '背心',
+    'JK': '外套', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
+    'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '墨镜', 'ACC': '手部配饰',
+}
+
+def _find_item_thumb(clothing_id):
+    """查找单品抠图缩略图路径（优先 items/ 目录，其次 wardrobe/enhanced/）"""
+    import glob as _glob, os as _os
+    # Search in all outfit items/ dirs first (newest first)
+    outfits_dir = _os.path.join(PROJECT_DIR, 'outfits')
+    if _os.path.exists(outfits_dir):
+        for d in sorted(_os.listdir(outfits_dir), reverse=True):
+            dp = _os.path.join(outfits_dir, d)
+            if not _os.path.isdir(dp): continue
+            items_dir = _os.path.join(dp, 'items')
+            if not _os.path.exists(items_dir): continue
+            pattern = _os.path.join(items_dir, f'{clothing_id}_*cutout*')
+            matches = _glob.glob(pattern)
+            if matches:
+                p = _os.path.relpath(matches[0], PROJECT_DIR)
+                mtime = int(_os.path.getmtime(matches[0]))
+                return f'{p}?v={mtime}'
+    # Fallback to wardrobe/enhanced/ — try cutout first, then thumb
+    enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+    if _os.path.exists(enhanced_dir):
+        # Priority 1: cutout files
+        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout*')
+        matches = _glob.glob(pattern)
+        if matches:
+            p = _os.path.relpath(matches[0], PROJECT_DIR)
+            mtime = int(_os.path.getmtime(matches[0]))
+            return f'{p}?v={mtime}'
+        # Priority 2: generated thumbnails
+        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_thumb.*')
+        matches = _glob.glob(pattern)
+        if matches:
+            p = _os.path.relpath(matches[0], PROJECT_DIR)
+            mtime = int(_os.path.getmtime(matches[0]))
+            return f'{p}?v={mtime}'
+    return ''
+
 # ── 任务管理器 ────────────────────────────────────────
 class TaskManager:
     """线程安全的内存任务状态追踪"""
@@ -499,6 +549,364 @@ def extract_json(text):
             pass
     return None
 
+# ── 衣橱入库辅助函数 ──────────────────────────────────
+
+def _get_next_id(category_code):
+    """扫描 wardrobe/tags/ 获取某品类下一个可用 ID"""
+    existing = []
+    tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+    if os.path.isdir(tags_dir):
+        for fn in os.listdir(tags_dir):
+            if fn.startswith(f'{category_code}-') and fn.endswith('.json'):
+                m = re.search(rf'{category_code}-(\d+)', fn)
+                if m:
+                    existing.append(int(m.group(1)))
+    next_num = max(existing) + 1 if existing else 1
+    return f'{category_code}-{next_num:03d}'
+
+
+def _append_to_wardrobe_md(cid, category_name, filename, tag_data):
+    """向 wardrobe/服装档案.md 对应品类表格追加一行"""
+    md_path = os.path.join(PROJECT_DIR, 'wardrobe', '服装档案.md')
+    if not os.path.exists(md_path):
+        log(f"服装档案.md 不存在", "WARN")
+        return
+
+    with open(md_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # 找到品类章节和其表格的 |---| 分隔行
+    cat_header = f'## {category_name}'
+    in_section = False
+    insert_after = -1
+
+    for i, line in enumerate(lines):
+        if line.strip() == cat_header:
+            in_section = True
+            continue
+        if in_section and line.startswith('|---'):
+            insert_after = i
+            # 往后找该表格的最后一行数据
+            for j in range(i + 1, len(lines)):
+                if lines[j].startswith('|') and not lines[j].startswith('|---'):
+                    insert_after = j
+                elif not lines[j].startswith('|') and lines[j].strip():
+                    break  # 遇到非表格内容，停止
+            break
+
+    if insert_after < 0:
+        log(f"未找到品类 {category_name} 的表格位置", "WARN")
+        return
+
+    # 构建新行
+    color_info = tag_data.get('color', {})
+    color_str = color_info.get('hue_name', '未知')
+    brand_info = tag_data.get('brand', {})
+    fabric_info = tag_data.get('fabric', {})
+    style_tags = '、'.join(tag_data.get('style_modifiers', [])) or '基础款'
+    occasions = '、'.join(tag_data.get('occasions', [])) or '日常'
+    fit_comment = tag_data.get('meta', {}).get('claude_fit_comment', '')
+    fit_note = fit_comment[:40] if fit_comment else 'AI 识别入库'
+
+    new_row = f'| {cid} | {filename} | {color_str} | {brand_info.get("name", "")} {fabric_info.get("primary", "")} | {style_tags} | {fit_note} | {occasions} |\n'
+
+    lines.insert(insert_after + 1, new_row)
+
+    with open(md_path, 'w', encoding='utf-8') as f:
+        f.writelines(lines)
+
+    log(f"已追加到服装档案: {cid}")
+
+
+def _register_new_item(cid, category_name):
+    """注册新单品到 config/new_items.json"""
+    new_path = os.path.join(PROJECT_DIR, 'config', 'new_items.json')
+    items = {}
+    if os.path.exists(new_path):
+        try:
+            with open(new_path, 'r') as f:
+                items = json.load(f).get('items', {})
+        except:
+            pass
+    items[cid] = {
+        'added_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
+        'category': category_name,
+    }
+    os.makedirs(os.path.dirname(new_path), exist_ok=True)
+    with open(new_path, 'w') as f:
+        json.dump({'items': items}, f, ensure_ascii=False, indent=2)
+
+
+def _resize_image_for_api(image_path, max_size=1024):
+    """将图片缩放到 max_size px，返回 JPEG bytes"""
+    from PIL import Image as PILImage
+    img = PILImage.open(image_path)
+    if img.mode in ('RGBA', 'P', 'LA'):
+        rgb = PILImage.new('RGB', img.size, (255, 255, 255))
+        if img.mode == 'P':
+            img = img.convert('RGBA')
+        rgb.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+        img = rgb
+    elif img.mode != 'RGB':
+        img = img.convert('RGB')
+    # 缩放
+    w, h = img.size
+    if max(w, h) > max_size:
+        ratio = max_size / max(w, h)
+        img = img.resize((int(w * ratio), int(h * ratio)), PILImage.LANCZOS)
+    import io
+    buf = io.BytesIO()
+    img.save(buf, format='JPEG', quality=80)
+    return buf.getvalue()
+
+
+def _finalize_add_item(item_data):
+    """执行完整的衣橱入库流程：复制图片 → 增强 → 写标签 → 更新档案 → 注册新单品"""
+    cid = item_data.get('override_id') or item_data.get('suggested_id')
+    if not cid:
+        raise ValueError("缺少 clothing ID")
+
+    category_name = item_data.get('category', '')
+    category_code = item_data.get('category_code', '')
+
+    # 获取品类目录名
+    cat_info = CATEGORY_MAP.get(category_name, {})
+    cat_dir = cat_info.get('dir', category_name)
+
+    # 1. 复制原图到品类目录
+    src_img = item_data.get('_temp_image_path', '')
+    if not src_img or not os.path.exists(src_img):
+        raise ValueError(f"临时图片不存在: {src_img}")
+
+    timestamp = time.strftime('%Y%m%d_%H%M%S')
+    dest_dir = os.path.join(PROJECT_DIR, 'wardrobe', cat_dir)
+    os.makedirs(dest_dir, exist_ok=True)
+    dest_filename = f'Image_{timestamp}_{cid}.jpg'
+    dest_path = os.path.join(dest_dir, dest_filename)
+    shutil.copy2(src_img, dest_path)
+    log(f"图片已复制: {dest_path}")
+
+    # 2. 运行 enhance_clothing 增强管线
+    try:
+        from enhance_clothing import enhance_image
+        cutout_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+        os.makedirs(cutout_dir, exist_ok=True)
+        cutout_path = os.path.join(cutout_dir, f'{cid}_cutout.png')
+        enhanced_jpg = os.path.join(cutout_dir, dest_filename)
+        enhance_image(dest_path, cutout_path, enhanced_jpg)
+        log(f"图片增强完成: {cid}")
+    except Exception as e:
+        log(f"图片增强失败（非致命）: {e}", "WARN")
+
+    # 3. 构建标签 JSON
+    tag_data = {
+        'clothing_id': cid,
+        'category': category_name,
+        'category_code': category_code,
+        'color': item_data.get('color', {}),
+        'silhouette': item_data.get('silhouette', {}),
+        'pattern': item_data.get('pattern', {}),
+        'fabric': item_data.get('fabric', {}),
+        'formality': item_data.get('formality', 3),
+        'brand': item_data.get('brand', {}),
+        'style_modifiers': item_data.get('style_modifiers', []),
+        'meta': item_data.get('meta', {
+            'is_key_piece': False,
+            'is_statement_piece': False,
+            'wear_count': 0,
+            'last_worn': None,
+            'claude_fit_comment': '',
+        }),
+        'occasions': item_data.get('occasions', []),
+    }
+
+    # 4. 写入标签 JSON
+    tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+    os.makedirs(tags_dir, exist_ok=True)
+    tag_path = os.path.join(tags_dir, f'{cid}.json')
+    with open(tag_path, 'w', encoding='utf-8') as f:
+        json.dump(tag_data, f, ensure_ascii=False, indent=2)
+    log(f"标签已写入: {tag_path}")
+
+    # 5. 追加到服装档案
+    _append_to_wardrobe_md(cid, category_name, dest_filename, tag_data)
+
+    # 6. 注册新单品
+    _register_new_item(cid, category_name)
+
+    # 7. 清理临时图片
+    try:
+        os.remove(src_img)
+    except:
+        pass
+
+    return {
+        'clothing_id': cid,
+        'category': category_name,
+        'name': f'{tag_data["brand"].get("name", "")} {tag_data["color"].get("hue_name", "")}{category_name}'.strip(),
+    }
+
+
+def _run_add_analysis(task_id, image_b64_list):
+    """后台线程：调用豆包视觉 API 分析衣物图片"""
+    try:
+        tasks.update(task_id, status='running', message='正在保存图片...')
+
+        # 1. 保存临时图片
+        incoming_dir = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming')
+        os.makedirs(incoming_dir, exist_ok=True)
+        temp_paths = []
+        import base64 as _b64
+        for i, b64_str in enumerate(image_b64_list):
+            # 去掉可能的 data:image/...;base64, 前缀
+            if ',' in b64_str and b64_str.startswith('data:'):
+                b64_str = b64_str.split(',', 1)[1]
+            img_bytes = _b64.b64decode(b64_str)
+            temp_path = os.path.join(incoming_dir, f'img_{task_id}_{i}.jpg')
+            with open(temp_path, 'wb') as f:
+                f.write(img_bytes)
+            temp_paths.append(temp_path)
+
+        tasks.update(task_id, status='running', message=f'正在AI智能识别 {len(temp_paths)} 张图片...')
+
+        # 2. 构建多模态 prompt
+        content_blocks = []
+        for i, tp in enumerate(temp_paths):
+            # 缩放并编码图片
+            jpg_bytes = _resize_image_for_api(tp)
+            img_b64 = _b64.b64encode(jpg_bytes).decode('utf-8')
+            content_blocks.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}
+            })
+            content_blocks.append({
+                "type": "text",
+                "text": f"【图片 {i+1}】"
+            })
+
+        # 构建分析指令
+        analysis_prompt = """你是一位专业的服装鉴定师。请仔细分析以上每张图片中的服装单品，输出严格的JSON格式结果。
+
+对每件单品，按以下结构输出：
+{
+  "items": [
+    {
+      "category_code": "品类代码，必须是以下之一: TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰)",
+      "category": "中文品类名，如 短袖上衣、衬衣、长裤",
+      "color": {
+        "hue_family": "暖色/冷色/中性色",
+        "hue_name": "具体颜色名，如 藏青色、米白色、焦糖色、浅灰色",
+        "saturation": "高饱和/中饱和/低饱和/无彩色",
+        "lightness": "高明度/中明度/低明度",
+        "is_neutral": false,
+        "friendly_for_pale_skin": false
+      },
+      "brand": {
+        "name": "品牌名，如识别到logo或标志性款式则填写，否则填'未知'",
+        "collection": "系列名或空",
+        "confidence": "确定/推测/未知"
+      },
+      "fabric": {
+        "primary": "主要面料，如 棉、聚酯纤维、羊毛、亚麻、牛仔布、皮革、尼龙",
+        "texture": "面料质感，如 平纹针织、斜纹、帆布、网眼、光滑、磨毛",
+        "weight": "轻薄/适中/中厚/厚重",
+        "seasonality": ["春","夏"]
+      },
+      "silhouette": {
+        "fit": "合身/宽松/修身/oversize/直筒/锥形/阔腿",
+        "shoulder_effect": "无特殊效果/增加肩宽/落肩/插肩",
+        "torso_effect": "无特殊效果/显瘦/遮盖腹部/拉长比例",
+        "length_ratio": "标准/短款/长款/及膝/过膝"
+      },
+      "pattern": {
+        "type": "纯色/条纹/格纹/印花/Logo/迷彩/扎染/拼接/文字",
+        "density": "无/稀疏/适中/密集",
+        "logo_visible": false
+      },
+      "style_modifiers": ["风格标签1", "风格标签2"],
+      "occasions": ["运动", "日常休闲"],
+      "formality": 3,
+      "meta": {
+        "claude_fit_comment": "一句话总结版型与适配度"
+      }
+    }
+  ]
+}
+
+注意：
+- 严格只输出JSON，不要包含markdown代码块标记或解释文字
+- 如果图片中没有服装单品，返回 {"items": []}
+- 仔细区分品类：有领子扣子的是衬衣(SHIRT)，无领T恤根据袖长分短袖(TS)或长袖(LS)
+- 品牌识别：看到明显logo或认识标志性款式的填品牌名，否则填"未知"，confidence相应降低
+- 颜色描述要具体（如"浅灰蓝"而非"蓝色"）
+- formality 1=极休闲(运动/居家) 2=休闲(日常) 3=中间(通勤) 4=正式(商务) 5=极正式(礼服)"""
+
+        content_blocks.append({"type": "text", "text": analysis_prompt})
+
+        messages = [{"role": "user", "content": content_blocks}]
+
+        tasks.update(task_id, status='running', message='AI正在识别品类/颜色/品牌/面料...')
+
+        # 3. 调用豆包视觉 API
+        response_text = call_doubao_chat(messages, max_tokens=4096, timeout=180)
+
+        if not response_text:
+            tasks.update(task_id, status='error', message='AI 未返回结果，请重试')
+            return
+
+        # 4. 解析 JSON
+        analysis = extract_json(response_text)
+        if not analysis or 'items' not in analysis:
+            log(f"AI 返回无法解析: {response_text[:300]}", "WARN")
+            tasks.update(task_id, status='error', message='AI 识别结果格式异常，请重试')
+            return
+
+        items = analysis.get('items', [])
+        if not items:
+            tasks.update(task_id, status='error', message='未在图片中识别到服装单品')
+            return
+
+        # 5. 为每件单品分配建议 ID 和补充信息
+        for i, item in enumerate(items):
+            cc = item.get('category_code', 'TS')
+            # 验证品类代码
+            if cc not in CATEGORY_CODE_TO_NAME:
+                cc = 'TS'  # fallback
+            item['category_code'] = cc
+            item['category'] = CATEGORY_CODE_TO_NAME.get(cc, item.get('category', '短袖上衣'))
+            item['suggested_id'] = _get_next_id(cc)
+            item['_temp_image_path'] = temp_paths[i] if i < len(temp_paths) else ''
+            # 补充默认值
+            if 'color' not in item: item['color'] = {}
+            if 'brand' not in item: item['brand'] = {'name': '未知', 'collection': None, 'confidence': '未知'}
+            if 'fabric' not in item: item['fabric'] = {'primary': '未知', 'texture': '未知', 'weight': '适中', 'seasonality': ['春', '秋']}
+            if 'silhouette' not in item: item['silhouette'] = {'fit': '合身', 'shoulder_effect': '无特殊效果', 'torso_effect': '无特殊效果', 'length_ratio': '标准'}
+            if 'pattern' not in item: item['pattern'] = {'type': '纯色', 'density': '无', 'logo_visible': False}
+            if 'style_modifiers' not in item: item['style_modifiers'] = []
+            if 'occasions' not in item: item['occasions'] = ['日常休闲']
+            if 'formality' not in item: item['formality'] = 3
+            if 'meta' not in item: item['meta'] = {
+                'is_key_piece': False, 'is_statement_piece': False,
+                'wear_count': 0, 'last_worn': None,
+                'claude_fit_comment': '',
+            }
+
+        # 保存临时分析结果
+        analysis_path = os.path.join(incoming_dir, f'analysis_{task_id}.json')
+        with open(analysis_path, 'w', encoding='utf-8') as f:
+            json.dump({'items': items, '_task_id': task_id}, f, ensure_ascii=False, indent=2)
+
+        tasks.update(task_id, status='done', message=f'识别完成，共 {len(items)} 件单品',
+                     result=json.dumps({'items': items, '_task_id': task_id}, ensure_ascii=False))
+        log(f"衣物分析完成: {task_id} → {len(items)} 件")
+
+    except Exception as e:
+        log(f"衣物分析失败: {e}", "ERROR")
+        import traceback
+        traceback.print_exc()
+        tasks.update(task_id, status='error', message=f'分析失败: {str(e)[:80]}')
+
+
 def execute_outfit_plan(plan, today, style_hint):
     """根据 AI 方案创建目录、写入文件、复制图片"""
     wardrobe = parse_wardrobe()
@@ -839,6 +1247,67 @@ def execute_action(action, extra, task_id=None):
         return f"🤔 未识别的指令: 「{extra}」\n\n{HELP_TEXT}"
     return "❌ 未知错误"
 
+def _style_has_image(style_id):
+    """检查风格是否有代表性图片"""
+    img_path = os.path.join(PROJECT_DIR, 'styles_universal', style_id, 'representative.jpg')
+    if os.path.exists(img_path):
+        return f'/api/image?f=styles_universal/{style_id}/representative.jpg'
+    return None
+
+def _load_style_cards(include_universal=False):
+    """加载风格卡片数据，返回 [{id, name_zh, name_en, description, category, has_encyclopedia, image}]"""
+    styles = []
+    # B-line styles
+    styles_dir = os.path.join(PROJECT_DIR, 'styles')
+    if os.path.isdir(styles_dir):
+        for fn in sorted(os.listdir(styles_dir)):
+            if not fn.endswith('.json'): continue
+            fp = os.path.join(styles_dir, fn)
+            try:
+                with open(fp) as f:
+                    d = json.load(f)
+                sid = d.get('style_id', fn.replace('.json', ''))
+                name_zh = d.get('name_zh', sid)
+                styles.append({
+                    'id': sid,
+                    'name_zh': name_zh,
+                    'name_en': d.get('name_en', ''),
+                    'description': (d.get('description') or '')[:120],
+                    'category': d.get('category', ''),
+                    'has_encyclopedia': os.path.exists(os.path.join(
+                        PROJECT_DIR, 'styles_universal', sid, 'encyclopedia.md')),
+                    'image': _style_has_image(sid),
+                })
+            except: pass
+    # Universal styles (not already in B-line)
+    if include_universal:
+        univ_dir = os.path.join(PROJECT_DIR, 'styles_universal')
+        b_ids = {s['id'] for s in styles}
+        if os.path.isdir(univ_dir):
+            for d in sorted(os.listdir(univ_dir)):
+                if d.startswith('.') or d.startswith('_') or d in b_ids: continue
+                dp = os.path.join(univ_dir, d)
+                if not os.path.isdir(dp): continue
+                enc = os.path.join(dp, 'encyclopedia.md')
+                if not os.path.exists(enc): continue
+                try:
+                    with open(enc) as f:
+                        first_line = f.readline().strip()
+                    # Extract Chinese name from markdown title: "# 日系 City Boy (Japanese City Boy)"
+                    name_zh = first_line.lstrip('# ').split('(')[0].strip() if first_line.startswith('#') else d
+                    styles.append({
+                        'id': d,
+                        'name_zh': name_zh,
+                        'name_en': d.replace('_', ' ').title(),
+                        'description': '',
+                        'category': '',
+                        'has_encyclopedia': True,
+                        'image': _style_has_image(d),
+                    })
+                except: pass
+    return styles
+
+
 # ── 聊天界面 HTML（从 prototype/mobile-v2.html 加载）───
 def _load_chat_html():
     """Load prototype HTML from file, with caching"""
@@ -942,8 +1411,7 @@ def _handle_favorites(handler):
 def get_cdn_url(rel_path):
     """构建 jsDelivr CDN URL"""
     try:
-        import subprocess as _sp
-        h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
+        h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
                      text=True, cwd=PROJECT_DIR).stdout.strip()
         if h:
             import urllib.parse
@@ -1227,6 +1695,307 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 self._json_resp(500, {"error": str(e)})
                 return
 
+        # ─── 衣橱子 API ───
+
+        # 单品详情（完整标签）
+        if parsed.path.startswith('/api/wardrobe/item/'):
+            cid = parsed.path.split('/api/wardrobe/item/')[-1].strip()
+            if not cid:
+                self._json_resp(400, {"error": "missing clothing_id"})
+                return
+            tag_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', f'{cid}.json')
+            if not os.path.exists(tag_path):
+                self._json_resp(404, {"error": f"item {cid} not found"})
+                return
+            try:
+                with open(tag_path, 'r', encoding='utf-8') as f:
+                    tag_data = json.load(f)
+                tag_data['_thumb'] = _find_item_thumb(cid)
+                self._json_resp(200, tag_data)
+                return
+            except Exception as e:
+                log(f"单品详情API异常 {cid}: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # 单品列表
+        if parsed.path == '/api/wardrobe/items':
+            try:
+                from wardrobe_advisor import load_all_clothing
+                wardrobe = load_all_clothing()
+                items = []
+                for cid, item in sorted(wardrobe.items()):
+                    meta = item.get('meta', {})
+                    brand = item.get('brand', {})
+                    color = item.get('color', {})
+                    cat_code = item.get('category_code', '?')
+                    items.append({
+                        'id': cid,
+                        'name': meta.get('claude_fit_comment', item.get('category', ''))[:40],
+                        'category': CATEGORY_NAMES.get(cat_code, cat_code),
+                        'category_code': cat_code,
+                        'brand': brand.get('name', ''),
+                        'color': color.get('hue_name', ''),
+                        'color_family': color.get('hue_family', ''),
+                        'usage_count': meta.get('wear_count', 0),
+                        'last_used': meta.get('last_worn') or '',
+                        'is_key': meta.get('is_key_piece', False),
+                        'is_statement': meta.get('is_statement_piece', False),
+                        'thumb': _find_item_thumb(cid),
+                        '_archived': meta.get('archived', False),
+                    })
+                self._json_resp(200, {'items': items, 'total': len(items)})
+                return
+            except Exception as e:
+                log(f"单品列表API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # 月度统计
+        if parsed.path == '/api/wardrobe/stats':
+            try:
+                from wardrobe_advisor import (load_all_clothing, load_state,
+                    analyze_utilization, load_all_outfits, normalize_style)
+                wardrobe = load_all_clothing()
+                state = load_state()
+                utilization = analyze_utilization(wardrobe, state)
+                records = load_all_outfits()
+                # Monthly stats
+                now = time.localtime()
+                this_month = f"{now.tm_year}-{now.tm_mon:02d}"
+                monthly_records = [r for r in records if r['date'].startswith(this_month)]
+                total_all = len(records)
+                total_month = len(monthly_records)
+                rated = [r for r in records if r['rating']]
+                avg_rating = sum(r['rating'] for r in rated) / len(rated) if rated else 0
+                # Style distribution
+                from collections import Counter
+                style_counter = Counter()
+                for r in records:
+                    style_counter[normalize_style(r['style'])] += 1
+                top_styles = [{'name': s, 'count': n} for s, n in style_counter.most_common(5)]
+                # Item frequency
+                item_freq = Counter()
+                for r in records:
+                    for iid in r['items']:
+                        item_freq[iid] += 1
+                top_items = []
+                for iid, n in item_freq.most_common(5):
+                    name = ''
+                    if iid in wardrobe:
+                        name = wardrobe[iid].get('meta', {}).get('claude_fit_comment', '')[:25]
+                    top_items.append({'id': iid, 'name': name, 'count': n})
+                # Active days this month
+                from collections import defaultdict
+                by_date = defaultdict(list)
+                for r in records:
+                    by_date[r['date']].append(r)
+                active_days = len(by_date)
+                active_days_month = len(set(r['date'] for r in monthly_records))
+                self._json_resp(200, {
+                    'total_outfits': total_all,
+                    'monthly_outfits': total_month,
+                    'active_days': active_days,
+                    'active_days_month': active_days_month,
+                    'rated_count': len(rated),
+                    'avg_rating': round(avg_rating, 1),
+                    'top_styles': top_styles,
+                    'top_items': top_items,
+                    'utilization_rate': utilization['utilization_rate'],
+                    'items_worn': utilization['items_worn_count'],
+                    'items_total': len(wardrobe),
+                })
+                return
+            except Exception as e:
+                log(f"月度统计API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # 冷门单品
+        if parsed.path == '/api/wardrobe/cold-items':
+            try:
+                from wardrobe_advisor import load_all_clothing, load_state, analyze_utilization
+                wardrobe = load_all_clothing()
+                state = load_state()
+                utilization = analyze_utilization(wardrobe, state)
+                cold = []
+                for item in utilization.get('zero_wear', []):
+                    cid = item['id']
+                    witem = wardrobe.get(cid, {})
+                    cold.append({
+                        'id': cid,
+                        'name': item.get('name', '')[:40],
+                        'brand': item.get('brand', ''),
+                        'usage_count': item.get('wear_count', 0),
+                        'last_used': witem.get('meta', {}).get('last_worn') or '从未',
+                        'thumb': _find_item_thumb(cid),
+                        'category_code': witem.get('category_code', '?'),
+                        'is_key': witem.get('meta', {}).get('is_key_piece', False),
+                    })
+                self._json_resp(200, {'cold_items': cold, 'total': len(cold)})
+                return
+            except Exception as e:
+                log(f"冷门单品API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # 购买建议/缺口
+        if parsed.path == '/api/wardrobe/gaps':
+            try:
+                from wardrobe_advisor import (load_all_clothing, analyze_category_gaps,
+                    analyze_subcategory_gaps, analyze_color_balance, analyze_brand_diversity,
+                    generate_purchase_suggestions)
+                wardrobe = load_all_clothing()
+                gaps = analyze_category_gaps(wardrobe)
+                sub_gaps = analyze_subcategory_gaps(wardrobe)
+                color_analysis = analyze_color_balance(wardrobe)
+                brand_analysis = analyze_brand_diversity(wardrobe)
+                suggestions = generate_purchase_suggestions(gaps, sub_gaps, color_analysis, brand_analysis)
+                # Also return category gaps for display
+                cat_gaps = {}
+                for code, g in gaps.items():
+                    cat_gaps[code] = {
+                        'name': CATEGORY_NAMES.get(code, code),
+                        'actual': g['actual'],
+                        'ideal_lo': g['ideal'][0],
+                        'ideal_hi': g['ideal'][1],
+                        'status': g['status'],
+                        'diff': g['diff'],
+                    }
+                self._json_resp(200, {
+                    'suggestions': suggestions,
+                    'category_gaps': cat_gaps,
+                    'color_missing': color_analysis.get('missing_hues', {}),
+                })
+                return
+            except Exception as e:
+                log(f"购买建议API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # ─── 新单品徽标 ───
+        if parsed.path == '/api/wardrobe/new-items':
+            new_path = os.path.join(PROJECT_DIR, 'config', 'new_items.json')
+            if os.path.exists(new_path):
+                try:
+                    with open(new_path, 'r') as f:
+                        new_data = json.load(f)
+                    items = new_data.get('items', {})
+                    self._json_resp(200, {
+                        'new_items': [{'id': k, **v} for k, v in items.items()],
+                        'total': len(items),
+                    })
+                except Exception as e:
+                    self._json_resp(500, {"error": str(e)})
+            else:
+                self._json_resp(200, {'new_items': [], 'total': 0})
+            return
+
+        # ─── 探索页 API ───
+
+        if parsed.path == '/api/explore/tweak':
+            try:
+                # 日常穿搭：用户风格指纹匹配的B线风格
+                styles = _load_style_cards()
+                self._json_resp(200, {'styles': styles[:8]})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        if parsed.path == '/api/explore/transform':
+            try:
+                # 改变自己：B线风格中随机选取
+                styles = _load_style_cards()
+                import random; random.shuffle(styles)
+                self._json_resp(200, {'styles': styles[:6]})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        if parsed.path == '/api/explore/cross':
+            try:
+                # 大胆跨界：随机选两个B线风格
+                styles = _load_style_cards()
+                import random
+                if len(styles) >= 2:
+                    a, b = random.sample(styles, 2)
+                    self._json_resp(200, {'styles': [a, b], 'fusion': f'{a["name_zh"]} × {b["name_zh"]}'})
+                else:
+                    self._json_resp(200, {'styles': styles[:2], 'fusion': ''})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        if parsed.path == '/api/explore/trends':
+            try:
+                # 时尚圈子：全部风格
+                styles = _load_style_cards(include_universal=True)
+                self._json_resp(200, {'styles': styles, 'total': len(styles)})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # ─── 我的页 API ───
+
+        if parsed.path == '/api/pref':
+            try:
+                pref_path = os.path.join(PROJECT_DIR, 'config', 'push_preference.json')
+                mode = 'both'
+                if os.path.exists(pref_path):
+                    with open(pref_path) as f:
+                        pref = json.load(f)
+                    mode = pref.get('mode', 'both')
+                self._json_resp(200, {'mode': mode})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        if parsed.path == '/api/profile':
+            try:
+                analysis_path = os.path.join(PROJECT_DIR, 'profile', 'analysis.md')
+                profile = {'height': '', 'weight': '', 'body_type': '', 'skin_tone': '', 'style_preference': '', 'occupation': ''}
+                if os.path.exists(analysis_path):
+                    with open(analysis_path) as f:
+                        content = f.read()
+                    for line in content.split('\n'):
+                        line = line.strip()
+                        if '身高' in line or 'height' in line.lower():
+                            m = re.search(r'(\d{3})\s*cm', line)
+                            if m: profile['height'] = m.group(1) + 'cm'
+                        elif '体重' in line or 'weight' in line.lower():
+                            m = re.search(r'(\d+)\s*kg', line)
+                            if m: profile['weight'] = m.group(1) + 'kg'
+                        elif '身形' in line or 'body' in line.lower():
+                            for bt in ['偏瘦','标准','偏胖','H型','倒三角','矩形']:
+                                if bt in line: profile['body_type'] = bt; break
+                        elif '肤色' in line or 'skin' in line.lower():
+                            for st in ['白皙','偏白','自然','小麦','偏黄']:
+                                if st in line: profile['skin_tone'] = st; break
+                        elif '风格' in line or 'style' in line.lower():
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m: profile['style_preference'] = m.group(1).strip()[:60]
+                        elif '职业' in line or 'occupation' in line.lower():
+                            m = re.search(r'[：:]\s*(.+)', line)
+                            if m: profile['occupation'] = m.group(1).strip()[:30]
+                # Also load stats
+                records = _load_recent_outfits(100)
+                total_outfits = len(records)
+                rated = [r for r in records if r.get('rating')]
+                avg_rating = round(sum(r['rating'] for r in rated)/len(rated), 1) if rated else 0
+                profile['total_outfits'] = total_outfits
+                profile['rated_count'] = len(rated)
+                profile['avg_rating'] = avg_rating
+                self._json_resp(200, {'profile': profile})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
         # 今日最新穿搭
         if parsed.path == '/api/today':
             today = time.strftime('%Y-%m-%d')
@@ -1371,6 +2140,206 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             except Exception as e:
                 log(f"⚠️ 反馈更新失败: {e}", "WARN")
             self._json_resp(200, {"status": "ok"})
+        elif parsed.path.startswith('/api/wardrobe/item/') and parsed.path.endswith('/delete'):
+            # 彻底删除单品
+            cid = parsed.path.split('/api/wardrobe/item/')[-1].replace('/delete', '').strip()
+            tag_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', f'{cid}.json')
+            if not os.path.exists(tag_path):
+                self._json_resp(404, {"error": f"item {cid} not found"})
+                return
+            try:
+                import glob as _glob, shutil as _shutil
+                deleted_files = []
+                # 删除标签 JSON
+                os.remove(tag_path)
+                deleted_files.append(tag_path)
+                # 删除 enhanced 目录下的图片
+                enhanced_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+                if os.path.exists(enhanced_dir):
+                    for pattern in [f'{cid}_cutout.*', f'{cid}_thumb.*']:
+                        for fpath in _glob.glob(os.path.join(enhanced_dir, pattern)):
+                            os.remove(fpath)
+                            deleted_files.append(fpath)
+                # 穿搭方案中的图片保留不删（已使用的历史记录）
+                log(f"单品已删除: {cid} ({len(deleted_files)} files)")
+                self._json_resp(200, {"ok": True, "deleted": len(deleted_files)})
+            except Exception as e:
+                log(f"删除单品失败 {cid}: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+        elif parsed.path.startswith('/api/wardrobe/item/') and not parsed.path.endswith('/rotate') and not parsed.path.endswith('/transform'):
+            # 更新单品标签
+            cid = parsed.path.split('/api/wardrobe/item/')[-1].strip()
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                updates = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            tag_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', f'{cid}.json')
+            if not os.path.exists(tag_path):
+                self._json_resp(404, {"error": f"item {cid} not found"})
+                return
+            try:
+                with open(tag_path, 'r', encoding='utf-8') as f:
+                    current = json.load(f)
+
+                def _deep_merge(base, patch):
+                    for k, v in patch.items():
+                        if isinstance(v, dict) and isinstance(base.get(k), dict):
+                            _deep_merge(base[k], v)
+                        else:
+                            base[k] = v
+
+                _deep_merge(current, updates)
+
+                with open(tag_path, 'w', encoding='utf-8') as f:
+                    json.dump(current, f, ensure_ascii=False, indent=2)
+
+                log(f"标签更新: {cid}")
+                self._json_resp(200, {"ok": True, "item_id": cid})
+            except Exception as e:
+                log(f"标签更新失败 {cid}: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+        elif parsed.path.startswith('/api/wardrobe/item/') and parsed.path.endswith('/transform'):
+            # 复合变换单品图片（旋转+缩放+平移）
+            cid = parsed.path.split('/api/wardrobe/item/')[-1].replace('/transform', '').strip()
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                params = json.loads(body)
+                degrees = int(params.get('rotate', 0))
+                scale = float(params.get('scale', 1.0))
+                tx = int(params.get('translate_x', 0))
+                ty = int(params.get('translate_y', 0))
+            except (json.JSONDecodeError, ValueError):
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            import glob as _glob
+            from PIL import Image as _PILImage
+            transformed = 0
+            def _transform_img(fpath, orig_w, orig_h):
+                nonlocal transformed
+                try:
+                    img = _PILImage.open(fpath)
+                    if degrees % 360 != 0:
+                        img = img.rotate(-degrees, expand=True)
+                    if abs(scale - 1.0) > 0.01:
+                        new_w = int(img.width * scale)
+                        new_h = int(img.height * scale)
+                        img = img.resize((new_w, new_h), _PILImage.LANCZOS)
+                        # Crop back to original dimensions based on pan
+                        left = (img.width - orig_w) // 2 + tx
+                        top = (img.height - orig_h) // 2 + ty
+                        left = max(0, min(left, img.width - orig_w))
+                        top = max(0, min(top, img.height - orig_h))
+                        if img.width > orig_w or img.height > orig_h:
+                            img = img.crop((left, top, left + orig_w, top + orig_h))
+                    img.save(fpath, 'PNG')
+                    transformed += 1
+                    return True
+                except Exception as e:
+                    log(f"图片变换失败 {fpath}: {e}", "WARN")
+                    return False
+            enhanced_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+            if os.path.exists(enhanced_dir):
+                for pattern in [f'{cid}_cutout.*', f'{cid}_thumb.*']:
+                    for fpath in _glob.glob(os.path.join(enhanced_dir, pattern)):
+                        img = _PILImage.open(fpath)
+                        w, h = img.size
+                        img.close()
+                        _transform_img(fpath, w, h)
+            outfits_dir = os.path.join(PROJECT_DIR, 'outfits')
+            if os.path.exists(outfits_dir):
+                for d in sorted(os.listdir(outfits_dir)):
+                    dp = os.path.join(outfits_dir, d)
+                    if not os.path.isdir(dp): continue
+                    items_dir = os.path.join(dp, 'items')
+                    if not os.path.exists(items_dir): continue
+                    for fpath in _glob.glob(os.path.join(items_dir, f'{cid}_*cutout*')):
+                        img = _PILImage.open(fpath)
+                        w, h = img.size
+                        img.close()
+                        _transform_img(fpath, w, h)
+            log(f"图片变换: {cid} rotate={degrees} scale={scale} pan=({tx},{ty}) -> {transformed} files")
+            self._json_resp(200, {"ok": True, "transformed": transformed})
+
+        # ─── 衣橱添加入库 ───
+        elif parsed.path == '/api/wardrobe/add':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"}); return
+            images = data.get('images', [])
+            if not images or not isinstance(images, list):
+                self._json_resp(400, {"error": "请至少提供一张图片"}); return
+            if len(images) > 10:
+                self._json_resp(400, {"error": "最多10张图片"}); return
+            tid = tasks.create()
+            threading.Thread(target=_run_add_analysis, args=(tid, images), daemon=True).start()
+            log(f"📸 衣橱添加: {tid} ({len(images)} 张图片)")
+            self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(images)} 张图片..."})
+
+        elif parsed.path == '/api/wardrobe/add/confirm':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"}); return
+            task_id = data.get('task_id', '')
+            items = data.get('items', [])
+            if not items:
+                self._json_resp(400, {"error": "请至少确认一件单品"}); return
+            # 加载临时分析结果以获取 _temp_image_path
+            incoming_dir = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming')
+            analysis_path = os.path.join(incoming_dir, f'analysis_{task_id}.json')
+            if os.path.exists(analysis_path):
+                with open(analysis_path, 'r') as f:
+                    saved = json.load(f)
+                saved_items = {str(i): it for i, it in enumerate(saved.get('items', []))}
+                for i, item in enumerate(items):
+                    if not item.get('_temp_image_path'):
+                        item['_temp_image_path'] = saved_items.get(str(i), {}).get('_temp_image_path', '')
+            added = []
+            errors = []
+            for item in items:
+                try:
+                    result = _finalize_add_item(item)
+                    added.append(result)
+                except Exception as e:
+                    log(f"入库失败: {e}", "ERROR")
+                    errors.append(str(e))
+            # 清理临时文件
+            try:
+                os.remove(analysis_path)
+            except: pass
+            self._json_resp(200, {"ok": True, "added": added, "errors": errors,
+                                  "message": f'已添加 {len(added)} 件单品' + (f'，{len(errors)} 件失败' if errors else '')})
+
+        elif parsed.path == '/api/wardrobe/new-items/dismiss':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"}); return
+            cid = data.get('clothing_id', '')
+            if not cid:
+                self._json_resp(400, {"error": "missing clothing_id"}); return
+            new_path = os.path.join(PROJECT_DIR, 'config', 'new_items.json')
+            if os.path.exists(new_path):
+                with open(new_path, 'r') as f:
+                    new_data = json.load(f)
+                if cid in new_data.get('items', {}):
+                    del new_data['items'][cid]
+                    with open(new_path, 'w') as f:
+                        json.dump(new_data, f, ensure_ascii=False, indent=2)
+                    log(f"🔔 新单品徽标已消除: {cid}")
+            self._json_resp(200, {"ok": True})
+
         else:
             self._json_resp(404, {"error": "not found"})
 

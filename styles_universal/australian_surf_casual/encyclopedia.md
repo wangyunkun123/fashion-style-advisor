@@ -68,3 +68,17 @@
 3. **澳洲冬季版**：连帽卫衣 + 法兰绒衬衫（外穿）+ 工装短裤或牛仔 + Vans
 4. **复古冲浪版**：去 Depop/eBay 找 1990s Quiksilver/Billabong vintage T 恤，配现代合身短裤和帆布鞋——新旧平衡
 5. **核心态度**：无论怎么穿，保持「刚从海边回来」的放松感——别过度搭配，让风、盐和阳光决定质感
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/australian_surf_casual_01.jpg)
+*风格穿搭参考*
+
+![Ekouaer Men's White Solid Button Up Short Sleeve Shirt & Short Set ...](gallery/australian_surf_casual_02.jpg)
+*Ekouaer Men's White Solid Button Up Short Sleeve Shirt & Short Set ...*
+
+![23+ Comfy Men's Beach Outfits That'll Make Waves - Men Inspire](gallery/australian_surf_casual_03.jpg)
+*23+ Comfy Men's Beach Outfits That'll Make Waves - Men Inspire*

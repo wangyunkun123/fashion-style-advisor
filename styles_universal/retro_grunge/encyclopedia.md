@@ -63,3 +63,17 @@ Grunge 在 2023–2025 年间作为 90 年代怀旧浪潮的核心分支再次�
 3. **法兰绒系腰**：热了就把格子衬衫系在腰上，这是 Grunge 标志性细节
 4. **叠穿不追求完美**：图案和材质故意冲突，千万不要「搭配」
 5. **现代版精进**：在基本公式上外搭一件现代剪裁的黑色外套，避免完全沦为万圣节装扮
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/retro_grunge_01.jpg)
+*风格穿搭参考*
+
+![Kurt Cobain at Raji's in Hollywood, CA, US. February 15th, 1990 ...](gallery/retro_grunge_02.jpg)
+*Kurt Cobain at Raji's in Hollywood, CA, US. February 15th, 1990 ...*
+
+![Image in grunge | alternative collection by tjaša | Kurt cobain style ...](gallery/retro_grunge_03.jpg)
+*Image in grunge | alternative collection by tjaša | Kurt cobain style ...*

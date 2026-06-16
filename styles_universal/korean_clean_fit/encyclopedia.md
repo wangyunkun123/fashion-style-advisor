@@ -154,3 +154,17 @@ Clean Fit 于 2021 年在中文社交平台**小红书**首次出现，最初专
 - **叠穿是进阶武器**：白 T 打底 + 衬衫 + 针织外套的三层叠穿是韩系 Clean Fit 的核心公式，通过长度差和材质对比营造层次
 - **脚踝是秘密武器**：裤长刚好露出脚踝最细处（或卷起 1-2 折），搭配浅口鞋款，是拉长比例的无声技巧
 - **不必完美**：Clean Fit 的精髓在于"松弛"，一丝微皱的衬衫领口、自然卷起的袖口，比一丝不苟的整洁更有魅力
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/korean_clean_fit_01.jpg)
+*风格穿搭参考*
+
+![Korean Outfit Male, Korean Summer Outfits, Mens Summer Outfits, Korean ...](gallery/korean_clean_fit_02.jpg)
+*Korean Outfit Male, Korean Summer Outfits, Mens Summer Outfits, Korean ...*
+
+![20+ Korean Fashion Men Ideas That Will Drive You Crazy](gallery/korean_clean_fit_03.jpg)
+*20+ Korean Fashion Men Ideas That Will Drive You Crazy*

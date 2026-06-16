@@ -186,3 +186,17 @@ K-pop 街头不是让你全身更换衣柜——**一件标志性单品** + 日�
 - **拥抱"不完美"**：不对称下摆、未锁边的剪裁、外露的缝线、过度水洗的质感——K-pop 街头不追求精致完美，它追求"有意的粗粝"。不要熨烫你的 Ader Error
 - **性别是开放的**：尝试你的女性朋友/伴侣的 oversized 单品——一件女装 oversized 皮夹克搭配男装工装裤，在 K-pop 街头的逻辑里是完全合理的
 - **从偶像的反差中学习**：观察 Jungkook 如何在机场穿搭中把 oversize 帽衫与修身牛仔裤搭配，或者在舞台上把宽腿裤与合身 T 恤搭配。他的"一宽一窄"原则是最容易上手复制的心法
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/korean_kpop_street_01.jpg)
+*风格穿搭参考*
+
+![Male Korean Fashion - Korean Fashion](gallery/korean_kpop_street_02.jpg)
+*Male Korean Fashion - Korean Fashion*
+
+![Kpop Outfits Ideas Men](gallery/korean_kpop_street_03.jpg)
+*Kpop Outfits Ideas Men*

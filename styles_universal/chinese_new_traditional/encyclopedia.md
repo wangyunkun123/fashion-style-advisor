@@ -77,3 +77,17 @@
 1. 从一件立领衬衫开始——这是最低成本的入场
 2. 搭配日常单品（牛仔裤/直筒裤/帆布鞋）——不需要一身新中式
 3. 中国传统色优先——月白/靛蓝/玄黑，不选荧光色
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/chinese_new_traditional_01.jpg)
+*风格穿搭参考*
+
+![Models present creations from designer Zeng Fengfei at China's Fashion ...](gallery/chinese_new_traditional_02.jpg)
+*Models present creations from designer Zeng Fengfei at China's Fashion ...*
+
+![Chinese tang suit for men cheongsam style male gown traditional long ...](gallery/chinese_new_traditional_03.jpg)
+*Chinese tang suit for men cheongsam style male gown traditional long ...*

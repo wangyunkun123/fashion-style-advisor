@@ -75,3 +75,17 @@ Rugged Comfort（粗砺舒适）是 2024 年男装界最踏实、最有分量的
 4. **原牛选择**：初次接触选 13–14oz 中磅（如 Sugar Cane、Naked & Famous），进阶可选 18oz+ 重磅（如 Iron Heart、Samurai）。不要洗——让它记录你的生活。
 5. **季节适应**：春夏保留华夫纹长袖 + 帆布 Chore Coat（轻量版）；秋冬加重——羊毛驴夹克 + 重磅原牛 + 工装靴
 6. **禁忌**：任何看起来「新」的——刻意做旧反而出戏。让你的衣服自己变旧。
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/rugged_comfort_01.jpg)
+*风格穿搭参考*
+
+![Rugged Men's Clothing Brands at Hunter Wang blog](gallery/rugged_comfort_02.jpg)
+*Rugged Men's Clothing Brands at Hunter Wang blog*
+
+![Flannel-Lined Waxed Trucker Jacket | Mens fashion rugged, Mens winter ...](gallery/rugged_comfort_03.jpg)
+*Flannel-Lined Waxed Trucker Jacket | Mens fashion rugged, Mens winter ...*

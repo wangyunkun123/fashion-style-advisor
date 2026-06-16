@@ -48,3 +48,17 @@
 1. 第一件选奶油色或海军蓝美利奴羊毛——最百搭
 2. 里面穿白T恤，下摆露出1-2cm
 3. 搭配直筒卡其裤+乐福鞋=最安全公式
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/quarter_zip_revival_01.jpg)
+*风格穿搭参考*
+
+![DAFPZW Men's Quarter Zip Pullover Sweater Cable Knit Casual Mock Neck ...](gallery/quarter_zip_revival_02.jpg)
+*DAFPZW Men's Quarter Zip Pullover Sweater Cable Knit Casual Mock Neck ...*
+
+![Polo Ralph Lauren CABLE KNIT COTTON QUARTER ZIP SWEATER - Džemperis ...](gallery/quarter_zip_revival_03.jpg)
+*Polo Ralph Lauren CABLE KNIT COTTON QUARTER ZIP SWEATER - Džemperis ...*

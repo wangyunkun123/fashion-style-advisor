@@ -59,3 +59,17 @@ Sex Pistols 的穿着就是 SEX 店铺的活广告——朋克音乐和朋克穿
 
 ## 💡 穿搭建议
 - 现代演绎：一件皮夹克 + 黑色直筒牛仔裤 + Dr. Martens + 一件乐队T恤，就是最安全的朋克致敬
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/british_punk_01.jpg)
+*风格穿搭参考*
+
+![Leather Jacket Ripped Light Jeans at Elsie Tucker blog](gallery/british_punk_02.jpg)
+*Leather Jacket Ripped Light Jeans at Elsie Tucker blog*
+
+![Harajuku Punk Style w/ Mohawk, Leather Vest, Creepers & Ripped Jeans ...](gallery/british_punk_03.jpg)
+*Harajuku Punk Style w/ Mohawk, Leather Vest, Creepers & Ripped Jeans ...*

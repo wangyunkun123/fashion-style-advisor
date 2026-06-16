@@ -153,3 +153,17 @@
    - 避免刺绣过于精美的西部衬衫（Nudie Suit风格）——那是舞台表演服装，不适合日常
    - 牛仔帽对亚洲脸型/气质挑战极大，除非你有非常自信的风格掌控力，否则用棒球帽或无帽替代
 8. **西部风的"一半法则"**：一件西部单品配现代基础款。西部衬衫配修身黑色西裤+德比鞋。Bolo Tie配纯色亚麻西装。牛仔靴配九分直筒牛仔裤+白色Oversized T恤。一半西部一半现代，这才是2025年的正确穿法
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/american_western_01.jpg)
+*风格穿搭参考*
+
+![Rugged Western Outfit | Indigo Suede Jacket, Black Denim & Cowboy Felt ...](gallery/american_western_02.jpg)
+*Rugged Western Outfit | Indigo Suede Jacket, Black Denim & Cowboy Felt ...*
+
+![Country Outfits For Men, Cowboy Outfit For Men, Boots Outfit Men, Rodeo ...](gallery/american_western_03.jpg)
+*Country Outfits For Men, Cowboy Outfit For Men, Boots Outfit Men, Rodeo ...*

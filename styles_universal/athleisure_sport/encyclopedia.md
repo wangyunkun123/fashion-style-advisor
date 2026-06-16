@@ -116,3 +116,17 @@ Athleisure 不是一个单一体，而是多个子风格的集合：
 2. 运动外套+白T+直筒裤是最简单的入门公式
 3. 选一个子风格深入，不要混搭太多种运动元素
 4. 品牌 Logo 作为点缀，不超过一处大面积露出
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/athleisure_sport_01.jpg)
+*风格穿搭参考*
+
+![Nike Tech Men's Fleece Joggers. Nike UK](gallery/athleisure_sport_02.jpg)
+*Nike Tech Men's Fleece Joggers. Nike UK*
+
+![NIKE Tech Fleece Joggers HV0959 011 - Shiekh](gallery/athleisure_sport_03.jpg)
+*NIKE Tech Fleece Joggers HV0959 011 - Shiekh*

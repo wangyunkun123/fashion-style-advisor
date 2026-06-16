@@ -7,43 +7,45 @@ PROJ = os.path.join(BASE, '..')
 OUTFITS_DIR = os.path.join(PROJ, 'outfits')
 
 def simplify_name(iid, name):
-    """Simplify item name: brand + basic description, remove series/wearing style"""
-    # Keep brand name if present
+    """Simplify item name: brand + description, remove filler terms only"""
     brands = ['Lululemon','Nike','Adidas','Uniqlo','FUR SPEED','Champion','Decathlon',
-              'Artengo','Wilson','Converse','Puma','FILA','HLA','COMME des GARCONS','CDG',
-              'Merrell','Timberland','Jordan','Cotton On','Kiprun']
-    found_brand = ''
-    for b in brands:
-        if b.lower() in name.lower():
-            found_brand = b
-            break
+              'Artengo','Decathlon Artengo','Decathlon Kiprun','Kiprun','Wilson','Converse',
+              'Puma','FILA','HLA','COMME des GARCONS','COMME des GARÇONS PLAY','CDG',
+              'Merrell','Timberland','Jordan','Cotton On','H FOREST','DAN JOHN',
+              'LIBERTY SHINE','SHINO','YASCIQ','NBA','Apple']
     # Apple Watch: keep band info
     if iid == 'ACC-003' or 'Apple Watch' in name:
         band = ''
-        for b in ['回环尼龙','尼龙回环','米兰尼斯','运动表带','黑色运动','回环']:
+        for b in ['尼龙回环','回环尼龙','米兰尼斯','运动表带','黑色运动','回环']:
             if b in name: band = b; break
-        return 'Apple Watch {}'.format(band) if band else 'Apple Watch'
-    # Remove series/tech terms
+        if not band:
+            # Try extracting from "表带套组（xxx）"
+            m = re.search(r'表带套组[（(](.+?)[）)]', name)
+            if m: band = m.group(1)
+        if not band and '表带套组' in name:
+            band = '表带套组'
+        return 'Apple Watch {}'.format(band).strip() if band else 'Apple Watch'
+    # Detect brand (longest match first)
+    found_brand = ''
+    for b in sorted(brands, key=len, reverse=True):
+        if b.lower() in name.lower():
+            found_brand = b
+            break
+    # Remove filler/tech terms only — keep the descriptive parts
     remove = ['Metal Vent Tech','Metal Vent','Court Lite','入门级','Artengo',
-              'Leisure Club','基础','简约实用','经典','复古','专业','入门',
-              '敞穿或卷袖','敞穿','卷袖','叠穿','基本款','常规','标准']
+              'Leisure Club','敞穿或卷袖','敞穿','卷袖','叠穿','基本款','常规','标准']
     clean = name
     for r in remove:
         clean = clean.replace(r, '').replace('  ', ' ')
-    # If brand found, use "Brand + short name"
     if found_brand:
-        short = clean.replace(found_brand, '').strip()
-        # Keep only first meaningful part
-        parts = [p for p in short.split() if len(p)>=2 and p not in [' ','']]
-        short = parts[0] if parts else short[:4]
-        # Add category suffix if too short
-        if len(short) <= 2:
+        desc = clean.replace(found_brand, '').strip()
+        desc = desc.replace('  ', ' ').strip()
+        if len(desc) <= 1:
             for cat in ['短袖','长袖','短裤','长裤','衬衫','外套','鞋子','帽子','袜子','墨镜','包']:
-                if cat in clean: short = cat; break
-        return '{} {}'.format(found_brand, short)[:16]
-    # No brand: just first meaningful words
+                if cat in clean: desc = cat; break
+        return '{} {}'.format(found_brand, desc)[:30]
     clean = clean.strip()
-    return clean[:14]
+    return clean[:24]
 
 def scan_outfits(date_filter=None, rating_filter=None, limit=20):
     """Scan outfits directory, return list of outfit dicts"""
@@ -85,7 +87,9 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             cells = [c.strip().replace('**','') for c in s.split('|')]
             if len(cells) < 4: continue
             if re.match(r'^[A-Z]+-\d+', cells[2]):
-                items.append({'id': cells[2], 'name': simplify_name(cells[2], cells[3]), 'cat': cells[1] if len(cells)>1 else ''})
+                full_name = cells[3]
+                items.append({'id': cells[2], 'name': simplify_name(cells[2], full_name),
+                              'full_name': full_name, 'cat': cells[1] if len(cells)>1 else ''})
         style = ''
         weather = ''
         for line in content.split('\n'):
@@ -210,6 +214,110 @@ def item_row(icon_svg, cat, iid, name, thumb=''):
         thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb)
     return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(icon_svg, cat, iid, name, thumb_html)
 
+# ── Chinese color → hex mapping ──
+COLOR_MAP = {
+    '黑色':'#2a2a2a','深黑':'#1a1a1a','纯黑':'#000',
+    '白色':'#f5f3ef','米白':'#f5f0e8','乳白':'#faf8f5','本白':'#fefdfb',
+    '深灰':'#4a4a4a','灰色':'#9e9e9e','浅灰':'#d0d0d0','银灰':'#bdbdbd','灰白':'#e0ded8',
+    '灰绿':'#8a9a82','灰绿色':'#8a9a82',
+    '卡其':'#c4b5a0','卡其色':'#c4b5a0','卡其驼色':'#c4b098','驼色':'#b8976e',
+    '深棕':'#5c3d2e','棕色':'#7a5230','浅棕':'#b8956a',
+    '深蓝':'#1e3a5f','藏蓝':'#1e3a6f','藏青':'#1e3a5f','海军蓝':'#1e3a5f','蓝色':'#4a7eb5','浅蓝':'#7ea3c8','天蓝':'#8bb8d6',
+    '军绿':'#5c6e4a','军绿色':'#5c6e4a','深军绿':'#4a5c3a','墨绿':'#3c5032','绿色':'#6b8c5c','浅绿':'#9cba8c',
+    '红色':'#c4523c','暗红':'#8b2e3e','酒红':'#8b2e3e','深红':'#7a2a2a','亮红':'#d4453c',
+    '橙色':'#e88a3c','亮橙':'#f0983c','橘色':'#e88030',
+    '黄色':'#d4a84b','姜黄':'#c49a3c','亮黄':'#e8c84b','米黄':'#e8d8b0',
+    '紫色':'#8b6b9e','浅紫':'#b89ac8',
+    '粉色':'#e8b4b8','浅粉':'#f0c8cc',
+    '米色':'#e8dcc8','沙色':'#d8ccb0',
+    '深牛仔蓝':'#2a4a6c','牛仔蓝':'#4a6a8c','浅牛仔蓝':'#7a9ab8',
+    '条纹':'#c0c0c0','印花':'#c0c0c0',
+}
+def color_to_hex(name):
+    """Convert Chinese color name to approximate hex code"""
+    if not name: return None
+    name = name.strip()
+    if name in COLOR_MAP: return COLOR_MAP[name]
+    # Partial match
+    for cname, chex in COLOR_MAP.items():
+        if cname in name or name in cname: return chex
+    return None
+
+def extract_palette(outfit):
+    """Extract color palette from .color_cache.json (same source as WeChat push).
+    Falls back to Chinese color name mapping if cache unavailable."""
+    dp = os.path.join(OUTFITS_DIR, outfit['dir'])
+    # Strategy 1: Read from .color_cache.json (generated by composite_v2, used by build_push)
+    for sub in ['上身效果', '豆包生图']:
+        cache_file = os.path.join(dp, sub, '.color_cache.json')
+        if os.path.exists(cache_file):
+            try:
+                with open(cache_file) as f:
+                    colors = [tuple(c) for c in json.load(f)]
+                # Convert (R,G,B) tuples to hex, deduplicate
+                seen = set()
+                hex_colors = []
+                for rgb in colors[:5]:
+                    hex_c = '#{:02x}{:02x}{:02x}'.format(*rgb)
+                    if hex_c not in seen:
+                        hex_colors.append(hex_c)
+                        seen.add(hex_c)
+                if hex_colors:
+                    return hex_colors
+            except: pass
+    # Strategy 2: Fallback to Chinese color name mapping
+    colors = []
+    seen = set()
+    md_path = os.path.join(dp, 'outfit.md')
+    if os.path.exists(md_path):
+        with open(md_path) as f: content = f.read()
+        for it in outfit.get('items', []):
+            for line in content.split('\n'):
+                if it['id'] in line and line.strip().startswith('|'):
+                    cells = [c.strip().replace('**','') for c in line.split('|')]
+                    if len(cells) >= 5:
+                        color_text = cells[4].split('，')[0].split(',')[0].strip()
+                        hex_c = color_to_hex(color_text)
+                        if hex_c and hex_c not in seen:
+                            colors.append(hex_c)
+                            seen.add(hex_c)
+                    break
+    return colors[:5]
+
+def build_palette_html(outfit):
+    """Build palette strip HTML from outfit colors"""
+    colors = extract_palette(outfit)
+    if not colors:
+        return ''
+    dots = ''.join('<span class="pal-dot" style="background:{}"></span>'.format(c) for c in colors)
+    return '<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span>{}</div>'.format(dots)
+
+def split_brand_desc(name):
+    """Split a simplified item name into (brand, description)"""
+    brands = ['COMME des GARÇONS PLAY','COMME des GARCONS','Decathlon Artengo',
+              'Decathlon Kiprun','FUR SPEED','Cotton On','H FOREST','DAN JOHN',
+              'LIBERTY SHINE','Apple Watch','Lululemon','Champion','Converse',
+              'Timberland','Artengo','Decathlon','Merrell','Adidas','Jordan',
+              'Wilson','Kiprun','Uniqlo','FILA','SHINO','YASCIQ','Puma','NBA',
+              'HLA','Nike','CDG']
+    for b in brands:
+        if b.lower() in name.lower():
+            desc = name.replace(b, '').strip()
+            return (b, desc)
+    return ('', name)
+
+def build_hero_item_card(icon_svg, iid, name, cat='', thumb=''):
+    """Build a compact hero item card (brand + desc on two lines)"""
+    brand, desc = split_brand_desc(name)
+    thumb_html = ''
+    if thumb:
+        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb)
+    ico = '<span class="item-emoji">{}</span>'.format(icon_svg) if icon_svg else ''
+    bid = '<span class="ir-id">{}</span>'.format(iid)
+    brand_html = '<span class="ir-brand">{}</span>'.format(brand) if brand else ''
+    desc_html = '<span class="ir-desc">{}</span>'.format(desc if desc else name[:18])
+    return '<div class="hero-item">{}{}{}{}{}</div>'.format(ico, bid, brand_html, desc_html, thumb_html)
+
 def mini_card(style_name, all_items):
     # Show first 3 items collapsed, rest in detail
     preview = all_items[:3]
@@ -237,7 +345,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .seg-btn.active{{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.25)}}
 .page{{display:none;flex:1;flex-direction:column;overflow:hidden}}
 .page.active{{display:flex}}
-.scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px}}
+.scroll-area{{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px 16px}}
 .page-bottom{{flex-shrink:0;padding:10px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:5;display:flex;align-items:center}}
 .page-bottom input{{width:100%;padding:14px 18px;border:none;border-radius:var(--radius-sm);background:var(--white);font-size:14px;color:var(--text);box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.04);outline:none;-webkit-appearance:none}}
 .page-bottom input:focus{{border-color:var(--navy);box-shadow:0 0 0 3px rgba(30,58,95,.08)}}
@@ -271,15 +379,23 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
 
+/* Hero item grid — 2 cols */
+.hero-item-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}}
+.hero-item{{background:#f8fafc;border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:1px 5px;position:relative}}
+.hero-item .item-emoji{{width:14px;height:14px;flex-shrink:0;color:var(--navy)}}
+.hero-item .ir-id{{font-size:7px;color:var(--muted);font-family:monospace;flex-shrink:0;line-height:14px}}
+.hero-item .ir-brand{{font-size:11px;font-weight:700;color:var(--text);width:100%;text-align:left;line-height:1.3}}
+.hero-item .ir-desc{{font-size:10px;color:var(--sub);width:100%;text-align:left;line-height:1.4}}
+.hero-item .item-thumb{{width:28px;height:28px;object-fit:cover;border-radius:4px;cursor:pointer;flex-shrink:0;margin-left:auto;order:99}}
 /* Item rows */
 .item-list{{display:flex;flex-direction:column}}
-.item-row{{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f2f5f9}}
+.item-row{{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f2f5f9}}
 .item-row:last-child{{border-bottom:none}}
-.item-emoji{{width:20px;height:20px;flex-shrink:0;color:var(--navy)}}
+.item-emoji{{width:17px;height:17px;flex-shrink:0;color:var(--navy)}}
 .item-emoji svg{{width:100%;height:100%;display:block}}
-.item-cat{{font-size:11px;color:var(--muted);width:36px;flex-shrink:0;font-weight:500}}
-.item-id{{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:3px 8px;border-radius:5px;flex-shrink:0}}
-.item-name{{font-size:14px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}}
+.item-cat{{font-size:10px;color:var(--muted);width:22px;flex-shrink:0;font-weight:500}}
+.item-id{{font-size:10px;color:var(--sub);font-family:monospace;background:#f0f4f8;padding:2px 5px;border-radius:4px;flex-shrink:0}}
+.item-name{{font-size:12px;color:var(--text);flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;line-height:1.35}}
 
 /* Section */
 .section-header{{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.5px;margin:0 0 12px}}
@@ -330,18 +446,23 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-tags{{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}}
 .h-tags span{{font-size:9px;background:var(--navy);color:#fff;padding:2px 7px;border-radius:8px;font-weight:500}}
 .h-expand-row{{display:flex;gap:14px;align-items:flex-start}}
+.h-head-palette{{display:flex;align-items:center;gap:4px;margin-top:6px}}
+.h-head-palette .pal-dot{{width:14px;height:14px;border-radius:3px;border:1px solid var(--border)}}
 .h-char-img-lg{{width:170px;height:226px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer}}
 /* 2x4 square grid */
-.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start;grid-auto-rows:52px}}
-.h-square-grid .item-row{{display:flex;flex-direction:column;gap:2px;padding:6px 5px;background:#f8fafc;border-radius:6px;cursor:pointer;position:relative;overflow:hidden;min-height:52px}}
-.h-square-grid .item-row .ir-top{{display:flex;align-items:center;gap:3px}}
+.h-square-grid{{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start;grid-auto-rows:53px}}
+.h-square-grid .item-row{{display:flex;flex-direction:column;gap:0;padding:3px 5px;background:#f8fafc;border-radius:6px;cursor:pointer;position:relative;overflow:hidden;min-height:53px;justify-content:flex-start;align-items:flex-start}}
+.h-square-grid .item-row .ir-top{{display:flex;align-items:center;gap:2px}}
 .h-square-grid .item-row.clickable:active{{background:#eef2f7}}
-.h-square-grid .item-emoji{{width:16px;height:16px;flex-shrink:0}}
+.h-square-grid .item-emoji{{width:13px;height:13px;flex-shrink:0}}
 .h-square-grid .item-id{{font-size:7px;flex-shrink:0}}
-.h-square-grid .item-name{{font-size:8px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}}
-.h-square-grid .item-row.expanded{{grid-row:span 2;padding:3px;z-index:2}}
-.h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .item-name{{display:none}}
-.h-square-grid .item-row.expanded .item-img{{display:block}}
+.h-square-grid .ir-brand{{font-size:7px;font-weight:700;color:var(--text);line-height:1.15;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:left}}
+.h-square-grid .ir-desc{{font-size:7px;color:var(--sub);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-align:left}}
+.h-square-grid .item-row.expanded{{grid-column:1 / -1;grid-row:span 2;padding:4px;z-index:2}}
+.h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .ir-brand,.h-square-grid .item-row.expanded .ir-desc{{display:none}}
+.h-square-grid .item-row.expanded .item-img{{display:block;border-radius:6px}}
+.h-exp-palette{{display:flex;align-items:center;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}}
+.h-exp-palette .pal-dot{{width:16px;height:16px;border-radius:3px;border:1px solid var(--border)}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px}}
@@ -385,7 +506,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="hero-style">{hero_style}</div>
 <div class="hero-meta">{hero_meta}</div>
 <div class="item-list">{hero_items_html}</div>
-<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#dcd7cd"></span><span class="pal-dot" style="background:#b4b4a0"></span><span class="pal-dot" style="background:#fff"></span><span class="pal-dot" style="background:#3c5032"></span><span class="pal-dot" style="background:#282826"></span></div>
+{palette_html}
 </div></div>
 
 <div class="section-header">其他推荐</div>
@@ -496,10 +617,48 @@ tabs_html = '\n'.join([
 ])
 
 # ── Build history cards ──
+# Style keyword dictionary for fallback matching
+STYLE_KW_DICT = [
+    # Style families
+    (['日系','City Boy','city boy','cityboy'], '日系CityBoy'),
+    (['韩系','韩式','korean'], '韩系简约'),
+    (['美式','复古','retro','vintage'], '美式复古'),
+    (['Clean Fit','clean fit','cleanfit','简约干净'], 'Clean Fit'),
+    (['轻熟','smart casual','通勤'], '轻熟休闲'),
+    (['街头','street','潮流','hip-hop'], '街头潮流'),
+    (['机能','techwear','tech wear','户外'], '机能户外'),
+    (['运动','athleisure','sport','跑步','网球','健身'], '运动休闲'),
+    (['度假','resort','vacation','热带'], '度假休闲'),
+    (['军事','工装','military','cargo'], '军事工装'),
+    (['暗黑','先锋','avant-garde'], '暗黑先锋'),
+    (['国风','新中式','heritage','东方'], '国风质感'),
+    # Color tones
+    (['低饱和','莫兰迪','大地色','earth tone','浅色系'], '低饱和配色'),
+    (['深色','暗色','dark','黑色系'], '深色系'),
+    (['亮色','撞色','鲜艳','亮眼'], '亮色撞色'),
+    (['黑白灰','单色','monochrome'], '黑白灰'),
+    (['蓝色系','蓝色调'], '蓝色系'),
+    (['暖色','暖调','温暖'], '暖色系'),
+    (['清爽','清凉','冷调'], '清爽配色'),
+    # Occasion / mood
+    (['雨天','防雨','防水','小雨'], '防小雨'),
+    (['约会','date'], '约会'),
+    (['休闲','日常','casual'], '日常休闲'),
+    (['正式','formal','商务'], '正式场合'),
+    # Silhouette / fabric
+    (['叠穿','层次','layer'], '叠穿层次'),
+    (['宽松','oversize','廓形','loose'], '宽松廓形'),
+    (['修身','slim','合身'], '修身剪裁'),
+    (['速干','透气','dry','吸湿'], '速干透气'),
+    (['亚麻','linen','棉麻'], '天然面料'),
+    (['丹宁','牛仔','denim'], '丹宁材质'),
+]
+
 def extract_tags(outfit):
-    """Extract style tags: keywords from outfit.md, fallback to style name"""
+    """Extract style tags: outfit.md keywords → content matching → style name"""
     tags = []
     dp = os.path.join(OUTFITS_DIR, outfit['dir'], 'outfit.md')
+    content = ''
     if os.path.exists(dp):
         with open(dp) as f: content = f.read()
         # Strategy 1: 风格关键词 section
@@ -508,21 +667,21 @@ def extract_tags(outfit):
             s = line.strip()
             if '风格关键词' in s:
                 in_kw = True
-                # Same-line content
                 m = re.search(r'[：:]\s*(.+)', s)
                 if m:
-                    for kw in m.group(1).split(','):
+                    text = m.group(1).replace('、',',').replace('，',',')
+                    for kw in text.split(','):
                         kw = kw.strip()
                         if kw and len(kw)>=2: tags.append(kw[:8])
                 continue
             if in_kw:
                 if s.startswith('##') or s.startswith('---'): break
                 if s.startswith('- '): s = s[2:]
-                for kw in s.replace('，',',').split(','):
+                for kw in s.replace('、',',').replace('，',',').split(','):
                     kw = kw.strip()
                     if kw and len(kw)>=2 and kw not in tags:
                         tags.append(kw[:8])
-        # Strategy 2: 风格笔记 section
+        # Strategy 2: 风格笔记 section (bullet points)
         if not tags:
             in_notes = False
             for line in content.split('\n'):
@@ -531,31 +690,52 @@ def extract_tags(outfit):
                 if in_notes and line.strip().startswith('- '):
                     kw = line.strip()[2:].split('：')[0].split('—')[0].strip()[:8]
                     if kw and len(kw)>=2: tags.append(kw)
-        # Fallback: from style name
+        # Strategy 3: Content keyword matching
+        if not tags:
+            # Search whole outfit.md content for known style keywords
+            matched = set()
+            for patterns, label in STYLE_KW_DICT:
+                for p in patterns:
+                    if p.lower() in content.lower():
+                        matched.add(label)
+                        break
+            tags = list(matched)[:4]
+        # Strategy 4: from style name + weather
         if not tags:
             style = outfit.get('style','')
+            weather = outfit.get('weather','')
+            combined = style + ' ' + weather
             for sep in ['丨','｜','/','·','-',' ']:
-                style = style.replace(sep, ' ')
-            tags = [w.strip()[:8] for w in style.split() if len(w.strip())>=2][:4]
+                combined = combined.replace(sep, ' ')
+            tags = [w.strip()[:8] for w in combined.split() if len(w.strip())>=2][:4]
     return tags[:4]
 
 def gen_history_card(outfit, idx):
     items_html = ''
-    cat_icons = {'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket',
-                 'PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag',
-                 'SOCK':'sock','SUN':'sun','ACC':'acc'}
+    # All keys must map to valid item_icons entries (tshirt/pants/shoe/hat/bag/sock/sun/acc)
+    cat_icons = {'TS':'tshirt','LS':'tshirt','SHIRT':'tshirt','TANK':'tshirt',
+                 'JK':'tshirt','PT':'pants','SH':'pants','SHOE':'shoe',
+                 'HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}
     for it in outfit['items'][:8]:
         prefix = it['id'].split('-')[0]
         ico_key = cat_icons.get(prefix, 'tshirt')
-        ico = item_icons.get(ico_key, '')
-        thumb_attr = ''
-        if it.get('thumb'):
-            thumb_attr = ' data-thumb="{}"'.format(it['thumb'])
+        # Never empty icon — fallback to tshirt
+        ico = item_icons.get(ico_key) or item_icons.get('tshirt', '')
         img_html = ''
         if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(it['thumb'])
-        clean_name = it['name'].replace('·','').replace('，',' ').replace('、',' ').replace('  ',' ').strip()[:20]
-        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'expanded\')"><div class="ir-top"><span class="item-emoji">{}</span><span class="item-id">{}</span></div><span class="item-name">{}</span>{}</div>'.format(ico, it['id'], clean_name, img_html)
+        # Split brand from description using original full name
+        full_name = it.get('full_name', it['name'])
+        brand, desc = split_brand_desc(full_name)
+        # Apple Watch: ensure band info in description
+        if it['id'] == 'ACC-003':
+            if not desc or len(desc) < 3:
+                for b in ['尼龙回环','回环尼龙','米兰尼斯','运动表带','黑色运动','回环']:
+                    if b in full_name: desc = b + '表带'; break
+                if not desc: desc = '表带套组'
+        brand_html = '<span class="ir-brand">{}</span>'.format(brand) if brand else ''
+        desc_html = '<span class="ir-desc">{}</span>'.format(desc if desc else full_name[:18])
+        items_html += '<div class="item-row clickable" onclick="event.stopPropagation();this.classList.toggle(\'expanded\')"><div class="ir-top"><span class="item-emoji">{}</span><span class="item-id">{}</span></div>{}{}{}</div>'.format(ico, it['id'], brand_html, desc_html, img_html)
     # Style tags from real data
     tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'
@@ -566,14 +746,19 @@ def gen_history_card(outfit, idx):
         img_tag = '<img class="h-char-img" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(outfit['char_img'])
     else:
         img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:16px">暂无</div>'
-    # Expanded: left image, right 2x4 square grid
-    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>'.format(img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html)
+    # Color palette — only shown in expanded view
+    palette_html = build_palette_html(outfit).replace('palette-strip', 'h-exp-palette')
+    # Expanded: left image, right 2x4 grid, palette below grid
+    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>{palette}'.format(
+        img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html, palette=palette_html)
     # Small thumbnail for collapsed state
     thumb_small = ''
     if outfit.get('char_img'):
         thumb_small = '<img class="h-thumb-sm" src="{}" loading="lazy">'.format(outfit['char_img'])
-    # Collapsed: number + style + tags + small thumbnail
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info"><div class="fav-style">{style}{rating}</div>{tags}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, style=outfit['style'][:30], rating=rating_str, tags=tags_html, thumb=thumb_small, expanded=expanded_html)
+    # Header: style + tags only (no palette when collapsed)
+    tag_info_html = '<div class="fav-style">{style}{rating}</div>{tags}'.format(
+        style=outfit['style'][:30], rating=rating_str, tags=tags_html)
+    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)
@@ -591,15 +776,17 @@ if today:
     hero_meta = '{} · {}'.format(ho['date'], (ho.get('weather','') or '晴 22~34°C')[:30])
     tags = extract_tags(ho)
     hero_tags_html = ''.join('<span>{}</span>'.format(t) for t in tags)
+    palette_html = build_palette_html(ho)
     hero_items_html = ''.join(item_row(
-        item_icons.get({'TS':'tshirt','LS':'tshirt','SHIRT':'shirt','TANK':'tank','JK':'jacket','PT':'pants','SH':'shorts','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}.get(it['id'].split('-')[0],'tshirt'),''),
-        it.get('cat',''), it['id'], it['name'][:14], it.get('thumb','')
+        item_icons.get({'TS':'tshirt','LS':'tshirt','SHIRT':'tshirt','TANK':'tshirt','JK':'tshirt','PT':'pants','SH':'pants','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}.get(it['id'].split('-')[0],'tshirt'),''),
+        it.get('cat',''), it['id'], it['name'], it.get('thumb','')
     ) for it in ho['items'][:8])
 else:
     hero_img = 'outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png'
     hero_style = '清爽专业网球运动风'
     hero_meta = '2026/06/14 · 晴 · 22~34°C · 紫外线 强'
     hero_tags_html = '<span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span>'
+    palette_html = '<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#f5f3ef"></span><span class="pal-dot" style="background:#5c6e4a"></span><span class="pal-dot" style="background:#2a2a2a"></span><span class="pal-dot" style="background:#bdbdbd"></span><span class="pal-dot" style="background:#f0983c"></span></div>'
     hero_items_html = '{}{}{}{}{}{}{}'.format(item_tshirt_tennis, item_pants_tennis, item_shoe_tennis, item_hat_tennis, item_bag_tennis, item_sock_tennis, item_acc_tennis)
 
 card1 = mini_card('日系 City Boy', ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
@@ -626,7 +813,7 @@ html = html.format(
     item_sock_summer=item_row(item_icons['sock'], '袜子', 'SOCK-005', '基础船袜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SOCK-005_Image_20260610_0807_09_360_cutout.png'),
     item_acc_summer=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 回环尼龙表带', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
-    hero_tags_html=hero_tags_html, hero_items_html=hero_items_html,
+    hero_tags_html=hero_tags_html, palette_html=palette_html, hero_items_html=hero_items_html,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
 )

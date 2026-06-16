@@ -48,10 +48,14 @@ def simplify_name(iid, name):
 def scan_outfits(date_filter=None, rating_filter=None, limit=20):
     """Scan outfits directory, return list of outfit dicts"""
     results = []
-    for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
+    # Sort by modification time (newest first) not name, so newly generated
+    # outfits always appear first in Hero and history lists.
+    dirs = [d for d in os.listdir(OUTFITS_DIR)
+            if os.path.isdir(os.path.join(OUTFITS_DIR, d))
+            and not d.startswith('.') and not d.startswith('_')]
+    dirs.sort(key=lambda d: os.path.getmtime(os.path.join(OUTFITS_DIR, d)), reverse=True)
+    for d in dirs:
         dp = os.path.join(OUTFITS_DIR, d)
-        if not os.path.isdir(dp) or d.startswith('.') or d.startswith('_'):
-            continue
         md_path = os.path.join(dp, 'outfit.md')
         if not os.path.exists(md_path):
             continue

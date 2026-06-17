@@ -72,7 +72,9 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 - **"排版"/"合成"** → `python3 tools/composite_v2.py <outfit_dir>`
 - **"同步"/"推送"** → `bash sync.sh`
 - **"重建原型"** → `python3 tools/build_prototype.py`
-- **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing
+- **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing → 生成缩略图 `python3 tools/generate_thumbnails.py <ID>`
+- **"搜索图片"/"找图"** → `python3 tools/fashion_image_search.py --query "<关键词>"` — 免费服装图片搜索
+- **"采集小红书"** → `xhs search "<关键词>"` → `xhs read <id>` → 写入 `encyclopedia.md`「小红书社区经验」章节（详见 `tools/小红书采集流程.md`）
 - **"新想法"** → 记录到 `系统升级建议.md`
 - **"衣橱分析"** → `python3 tools/wardrobe_advisor.py --report`
 
@@ -199,3 +201,20 @@ swatch_img_url = f'https://cdn.jsdelivr.net/gh/...@{h}/...'
 ## Git
 - Remote: `git@github.com:wangyunkun123/fashion-style-advisor.git` (SSH)
 - Web: https://github.com/wangyunkun123/fashion-style-advisor (public)
+
+## 免费服装图片搜索
+无需任何付费 API，三个免费源：
+
+| 源 | 免费额度 | API Key | 命令 |
+|----|---------|---------|------|
+| DuckDuckGo | 无限次，免 Key | ❌ | `python3 tools/fashion_image_search.py --query "linen shirt"` |
+| Pexels | 200次/小时 | ✅ 免费注册 | `python3 tools/fashion_image_search.py --query "..." --source pexels` |
+| Unsplash | 50次/小时 | ✅ 免费注册 | `python3 tools/fashion_image_search.py --query "..." --source unsplash` |
+
+```bash
+python3 tools/fashion_image_search.py --query "关键词"                  # 默认 DuckDuckGo
+python3 tools/fashion_image_search.py --query "关键词" --all-sources     # 三源同时搜
+python3 tools/fashion_image_search.py --query "关键词" --save ./图片     # 下载到本地
+python3 tools/fashion_image_search.py --list-sources                     # 查看可用源
+```
+> API Key 配置在 `config/seedream.local.json`（`pexels_api_key` / `unsplash_api_key`）

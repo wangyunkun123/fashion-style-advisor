@@ -38,10 +38,7 @@
   },
   "style_modifiers": [
     "增加肩宽",
-    "增加上半身体量感",
-    "意式运动",
-    "韩流复古",
-    "潮流学院"
+    "意式运动"
   ],
   "meta": {
     "is_key_piece": false,
@@ -50,5 +47,16 @@
     "last_worn": null,
     "claude_fit_comment": "FILA Italia Collezione连帽卫衣,正红色鲜艳吸睛,宽松版型大幅增加体量感,意式运动×韩流复古风格,潮流学院风",
     "_statement_score": 0.7
-  }
+  },
+  "occasions": [
+    "日常通勤",
+    "周末休闲"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "街头潮流",
+    "轻熟商务",
+    "运动休闲",
+    "意式运动"
+  ]
 }

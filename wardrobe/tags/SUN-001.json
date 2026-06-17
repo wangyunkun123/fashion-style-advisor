@@ -48,5 +48,9 @@
     "last_worn": null,
     "claude_fit_comment": "透明米灰色异形墨镜造型独特,适合作为时尚单品点缀整体造型",
     "_statement_score": 0.1
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
 }

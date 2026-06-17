@@ -49,5 +49,11 @@
     "last_worn": null,
     "claude_fit_comment": "Uniqlo清新色系长袖,日系简约美学,颜色显白,基础百搭,适合春夏日常穿搭",
     "_statement_score": 0.25
-  }
+  },
+  "recommended_styles": [
+    "日系简约",
+    "City Boy",
+    "Clean Fit",
+    "极简主义"
+  ]
 }

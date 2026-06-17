@@ -47,5 +47,9 @@
     "last_worn": null,
     "claude_fit_comment": "牛油果绿猫眼墨镜色彩鲜艳吸睛,可为夏季造型增添亮色点缀",
     "_statement_score": 0.4
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
 }

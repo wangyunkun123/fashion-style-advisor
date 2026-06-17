@@ -1061,8 +1061,10 @@ fav_cards = '\n'.join([gen_history_card(o, i+1) for i, o in enumerate(fav_outfit
 if not today_cards: today_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">今日暂无推荐</div>'
 if not fav_cards: fav_cards = '<div style="padding:16px;color:var(--muted);font-size:13px">暂无三星好评 · 给穿搭点 ⭐⭐⭐ 后会出现在这里</div>'
 
-# ── Hero: use today's latest outfit ──
+# ── Hero: use today's latest outfit (fallback to most recent if none today) ──
 today = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=1)
+if not today:
+    today = scan_outfits(limit=1)  # fallback: latest outfit from any date
 if today:
     ho = today[0]
     hero_img = ho['char_img']
@@ -1076,20 +1078,13 @@ if today:
         it.get('cat',''), it['id'], it['name'], it.get('thumb','')
     ) for it in ho['items'][:8])
 else:
-    hero_img = 'outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1.png'
-    hero_style = '清爽专业网球运动风'
-    hero_meta = '2026/06/14 · 晴 · 22~34°C · 紫外线 强'
-    hero_tags_html = '<span>网球运动</span><span>清爽低饱和</span><span>专业功能</span><span>City Boy</span>'
-    palette_html = '<div class="palette-strip"><span class="pal-label">COLOR PALETTE</span><span class="pal-dot" style="background:#f5f3ef"></span><span class="pal-dot" style="background:#5c6e4a"></span><span class="pal-dot" style="background:#2a2a2a"></span><span class="pal-dot" style="background:#bdbdbd"></span><span class="pal-dot" style="background:#f0983c"></span></div>'
-    hero_items_html = (
-        item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon 运动短袖', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png') +
-        item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球短裤', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png') +
-        item_row(item_icons['shoe'], '鞋子', 'SHOE-008', 'Asics 网球鞋', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-008_Image_20260610_0844_43_461_cutout.png') +
-        item_row(item_icons['hat'], '帽子', 'HAT-003', 'Nike 速干空顶帽', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-003_Image_20260610_0843_08_628_cutout.png') +
-        item_row(item_icons['bag'], '包', 'BAG-004', 'Nike 运动背包', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-004_Image_20260610_0831_16_866_cutout.png') +
-        item_row(item_icons['sock'], '袜子', 'SOCK-001', 'Nike 运动袜', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-001_Image_20260610_0846_37_520_cutout.png') +
-        item_row(item_icons['acc'], '配饰', 'ACC-003', '运动护腕', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0835_10_332_cutout.png')
-    )
+    # Absolute fallback: no outfits exist at all — show placeholder
+    hero_img = ''
+    hero_style = '暂无推荐'
+    hero_meta = '今天还没有生成穿搭，请先点击下方按钮生成'
+    hero_tags_html = '<span>等待首套穿搭</span>'
+    palette_html = ''
+    hero_items_html = ''
 
 card1 = mini_card('日系 City Boy', ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
 card2 = mini_card('轻熟休闲', ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
@@ -1097,23 +1092,6 @@ card3 = mini_card('韩系简约', ['TS-010 条纹T恤', 'PT-006 直筒牛仔裤'
 
 html = html.format(
     tabs=tabs_html,
-    # Tennis outfit items (for homepage)
-    item_tshirt_tennis=item_row(item_icons['tshirt'], '上衣', 'TS-009', 'Lululemon 运动短袖', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/TS-009_Image_20260610_0821_27_191_cutout.png'),
-    item_pants_tennis=item_row(item_icons['pants'], '下装', 'SH-005', 'Artengo 网球短裤', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SH-005_Image_20260610_0838_22_364_cutout.png'),
-    item_shoe_tennis=item_row(item_icons['shoe'], '鞋子', 'SHOE-005', 'Nike 网球鞋', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SHOE-005_Image_20260610_0848_30_512_cutout.png'),
-    item_hat_tennis=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/HAT-004_Image_20260610_0810_53_039_cutout.png'),
-    item_bag_tennis=item_row(item_icons['bag'], '包', 'BAG-007', 'Wilson 网球桶包', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/BAG-007_Image_20260610_1043_55_563%20%E6%8B%B7%E8%B4%9D_cutout.png'),
-    item_sock_tennis=item_row(item_icons['sock'], '袜子', 'SOCK-006', '防滑底短袜', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/SOCK-006_Image_20260610_0807_48_614_cutout.png'),
-    item_acc_tennis=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 黑色运动', 'outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
-    # Summer outfit items
-    item_tshirt_summer=item_row(item_icons['tshirt'], '上衣', 'TS-008', 'FUR SPEED 椰树印花短袖', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/TS-008_Image_20260610_0820_55_793_cutout.png'),
-    item_pants_summer=item_row(item_icons['pants'], '下装', 'SH-008', '亚麻西装短裤', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SH-008_Image_20260610_0839_33_059_cutout.png'),
-    item_shoe_summer=item_row(item_icons['shoe'], '鞋子', 'SHOE-002', 'Adidas 复古训练鞋', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SHOE-002_Image_20260610_0847_33_357_cutout.png'),
-    item_hat_summer=item_row(item_icons['hat'], '帽子', 'HAT-004', '基础棒球帽', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/HAT-004_Image_20260610_0810_53_039_cutout.png'),
-    item_bag_summer=item_row(item_icons['bag'], '包', 'BAG-004', 'Champion 米白托特包', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/BAG-004_Image_20260610_0812_10_563_cutout.png'),
-    item_sun_summer=item_row(item_icons['sun'], '墨镜', 'SUN-002', '经典方形墨镜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SUN-002_Image_20260610_0845_19_011_cutout.png'),
-    item_sock_summer=item_row(item_icons['sock'], '袜子', 'SOCK-005', '基础船袜', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/SOCK-005_Image_20260610_0807_09_360_cutout.png'),
-    item_acc_summer=item_row(item_icons['acc'], '配饰', 'ACC-003', 'Apple Watch 回环尼龙表带', 'outfits/2026-06-15_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD%20%E7%AC%AC2%E7%89%88%20%E8%AF%B7%E4%B8%8E%E4%B9%8B%E5%89%8D%E4%B8%8D%E5%90%8C/items/ACC-003_Image_20260610_0840_55_238_cutout.png'),
     hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
     hero_tags_html=hero_tags_html, palette_html=palette_html, hero_items_html=hero_items_html,
     today_cards=today_cards, fav_cards=fav_cards,

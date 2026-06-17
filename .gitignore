@@ -43,3 +43,8 @@ outfits/_bline_temp/
 穿搭月度报告.txt
 # _swatches.png — 需要上传，不能 gitignore
 node_modules/
+
+# 小红书采集（Cookie 含登录信息 + 采集数据）
+config/.xhs_cookies.json
+xiaohongshu_data/
+xiaohongshu_screenshots/

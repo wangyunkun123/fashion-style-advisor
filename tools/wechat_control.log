@@ -1,1762 +1,203 @@
-[15:16:18] [INFO] =======================================================
-[15:16:18] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:16:18] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:16:18] [INFO] 💬 面板: http://localhost:8765/
-[15:16:19] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:16:19] [INFO] 📤 已推送上线通知
-[15:27:56] [INFO] 💬 聊天: recommend | 遇见傍晚跑步穿搭
-[15:27:56] [INFO] 🚀 管线启动: 遇见傍晚跑步穿搭
-[15:27:56] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[15:31:03] [INFO] 📍 ✅ 穿搭方案已创建
-✅ **傍晚跑步穿搭全部完成！** 以下是总结：
-
----
-
-## 🏃 遇见傍晚跑步穿搭 — 完成报告
-
-### 单品选择（全部为今日未使用）
-
-| 品类 | ID | 单品 | 颜色 |
-|------|-----|------|------|
-| 上衣 | **TS-004** | 深灰色运动速干T恤 | 深灰 |
-| 下装 | **SH-007** | 深灰/黑色运动五分裤 | 深灰黑 |
-| 鞋子 | **SHOE-008** | 红色+米白/灰 Jordan板鞋 | 红+米白 |
-| 袜子 | **SOCK-001** | 黑色小熊图案短袜 | 黑色 |
-| 帽子 | **HAT-0
-[15:31:03] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[15:31:39] [INFO] 📍 ✅ Seedream 生图完成
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57913)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57914)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57915)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57917)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57920)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57916)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 347, in process_request
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1696, in do_GET
+    self.wfile.write(data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+[23:17:42] [INFO] =======================================================
+[23:17:42] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:17:42] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:17:42] [INFO] 💬 面板: http://localhost:8765/
+[23:17:43] [INFO] 推送成功: 🟢 穿搭助手已上线
+[23:17:43] [INFO] 📤 已推送上线通知
+[23:43:24] [INFO] =======================================================
+[23:43:24] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:43:24] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:43:24] [INFO] 💬 面板: http://localhost:8765/
+[23:43:25] [INFO] 推送成功: 🟢 穿搭助手已上线
+[23:43:25] [INFO] 📤 已推送上线通知
+[23:51:52] [INFO] 📸 衣橱添加: 1781625112692 (1 张图片)
+[23:52:08] [INFO] 衣物分析完成: 1781625112692 → 1 件
+[23:52:19] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短裤/Image_20260616_235219_SH-009.jpg
+[23:52:37] [INFO] 图片增强完成: SH-009
+[23:52:37] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SH-009.json
+[23:52:37] [INFO] 已追加到服装档案: SH-009
+[23:56:41] [INFO] 🔔 新单品徽标已消除: SH-009
+[23:59:11] [INFO] =======================================================
+[23:59:11] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:59:11] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:59:11] [INFO] 💬 面板: http://localhost:8765/
+[23:59:12] [INFO] 推送成功: 🟢 穿搭助手已上线
+[23:59:12] [INFO] 📤 已推送上线通知
+[00:01:22] [INFO] 📸 衣橱添加: 1781625682597 (1 张图片)
+[00:02:48] [INFO] 衣物分析完成: 1781625682597 → 4 件
+[00:03:09] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/鞋子/Image_20260617_000309_SHOE-011.jpg
+[00:03:32] [INFO] 图片增强完成: SHOE-011
+[00:03:32] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SHOE-011.json
+[00:03:32] [INFO] 已追加到服装档案: SHOE-011
+[00:03:32] [ERROR] 入库失败: 临时图片不存在: 
+[00:03:32] [ERROR] 入库失败: 临时图片不存在: 
+[00:03:32] [ERROR] 入库失败: 临时图片不存在: 
+[00:05:33] [INFO] =======================================================
+[00:05:33] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:05:33] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:05:33] [INFO] 💬 面板: http://localhost:8765/
+[00:05:34] [INFO] 推送成功: 🟢 穿搭助手已上线
+[00:05:34] [INFO] 📤 已推送上线通知
+[00:11:04] [INFO] 🔔 新单品徽标已消除: SHOE-011
+[00:11:08] [INFO] 标签更新: SHOE-011
+[00:11:23] [INFO] 图片变换: SH-009 rotate=-270 scale=1.0 pan=(0,0) -> 1 files
+[00:11:23] [INFO] 标签更新: SH-009
+[00:11:36] [INFO] 标签更新: SH-009
+[00:13:04] [INFO] =======================================================
+[00:13:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:13:04] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:13:04] [INFO] 💬 面板: http://localhost:8765/
+[00:13:05] [INFO] 推送成功: 🟢 穿搭助手已上线
+[00:13:05] [INFO] 📤 已推送上线通知
+[09:13:18] [INFO] 单品已删除: SH-009 (2 files)
+[10:17:44] [INFO] 💬 聊天: generate | 今日穿搭
+[10:17:44] [INFO] 🚀 管线启动: 今日穿搭 
+[10:17:44] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
+[10:18:00] [WARN] ⚠️ 抠图不存在: Image_20260617_000309_SHOE-011_cutout.png
+[10:18:00] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-17_今日穿搭
+[10:18:00] [INFO] 📍 ✅ 穿搭方案已创建
+[10:18:00] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
+[10:18:34] [INFO] 📍 ✅ Seedream 生图完成
 ============================================================
 🎨 Seedream API 自动生图
 ============================================================
-🔍 关键词匹配: 2026-06-12_遇见傍晚跑步穿搭
+🔍 关键词匹配: 2026-06-17_今日穿搭
 
-📁 2026-06-12_遇见傍晚跑步穿搭
-📷 4 张参考图 | 📝 698字符
+📁 2026-06-17_今日穿搭
+📷 4 张参考图 | 📝 453字符
 📷 编码 4 张参考图...
    ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_43_448.jpg (77KB
-[15:31:39] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[15:31:54] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[15:31:54] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[15:32:11] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[15:32:12] [INFO] 推送成功: 👔 遇见傍晚跑步穿搭
-[15:45:18] [INFO] =======================================================
-[15:45:18] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:45:18] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:45:18] [INFO] 💬 面板: http://localhost:8765/
-[15:45:19] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:45:19] [INFO] 📤 已推送上线通知
-[15:47:58] [INFO] 💬 聊天: generate | 打网球穿搭
-[15:47:58] [INFO] 🚀 管线启动: 打网球穿搭
-[15:47:58] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:16:55] [INFO] =======================================================
-[16:16:55] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:16:55] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:16:55] [INFO] 💬 面板: http://localhost:8765/
-[16:16:56] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:16:56] [INFO] 📤 已推送上线通知
-[16:19:29] [INFO] 💬 聊天: generate | 打网球穿搭
-[16:19:29] [INFO] 🚀 管线启动: 打网球穿搭
-[16:19:29] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:30:22] [INFO] =======================================================
-[16:30:22] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:30:22] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:30:22] [INFO] 💬 面板: http://localhost:8765/
-[16:30:23] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:30:23] [INFO] 📤 已推送上线通知
-[16:34:22] [INFO] 💬 聊天: generate | 打网球穿搭
-[16:34:22] [INFO] 🚀 管线启动: 打网球穿搭
-[16:34:22] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:42:27] [INFO] 💬 聊天: generate | 打网球穿搭
-[16:42:27] [INFO] 🚀 管线启动: 打网球穿搭
-[16:42:27] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:49:55] [INFO] =======================================================
-[16:49:55] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:49:55] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:49:55] [INFO] 💬 面板: http://localhost:8765/
-[16:49:56] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:49:56] [INFO] 📤 已推送上线通知
-[16:51:19] [INFO] 💬 聊天: recommend | 打网球穿搭
-[16:51:19] [INFO] 🚀 管线启动: 打网球穿搭
-[16:51:19] [INFO] 🧹 清理孤儿claude进程: PID 52529
-[16:51:19] [INFO] 🧹 清理孤儿claude进程: PID 52883
-[16:51:20] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:55:07] [INFO] 💬 聊天: recommend | 打网球穿搭
-[16:55:07] [INFO] 🚀 管线启动: 打网球穿搭
-[16:55:07] [INFO] 🧹 清理孤儿claude进程: PID 52989
-[16:55:08] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:06:35] [INFO] 💬 聊天: generate | 打网球穿搭
-[17:06:35] [INFO] 🚀 管线启动: 打网球穿搭
-[17:06:36] [INFO] 🧹 清理孤儿claude进程: PID 53251
-[17:06:37] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:18:56] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-12_测试_API管线
-[17:20:11] [INFO] =======================================================
-[17:20:11] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:20:11] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:20:11] [INFO] 💬 面板: http://localhost:8765/
-[17:20:12] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:20:12] [INFO] 📤 已推送上线通知
-[17:20:27] [INFO] =======================================================
-[17:20:27] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:20:27] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:20:27] [INFO] 💬 面板: http://localhost:8765/
-[17:20:28] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:20:28] [INFO] 📤 已推送上线通知
-[17:22:01] [INFO] 💬 聊天: generate | 打网球穿搭
-[17:22:01] [INFO] 🚀 管线启动: 打网球穿搭
-[17:22:01] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:23:03] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-12_打网球穿搭
-[17:23:03] [INFO] 📍 ✅ 穿搭方案已创建
-[17:23:03] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[17:23:28] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-12_打网球穿搭
-
-📁 2026-06-12_打网球穿搭
-📷 4 张参考图 | 📝 631字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_24_451.jpg (64KB)
-   ✅
-[17:23:28] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[17:23:39] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[17:23:39] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[17:23:59] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[17:24:00] [INFO] 推送成功: 👔 打网球穿搭
-[17:28:11] [INFO] =======================================================
-[17:28:11] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:28:11] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:28:11] [INFO] 💬 面板: http://localhost:8765/
-[17:28:12] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:28:12] [INFO] 📤 已推送上线通知
-[17:29:20] [INFO] 💬 聊天: generate | 打网球穿搭
-[17:29:20] [INFO] 🚀 管线启动: 打网球穿搭
-[17:29:20] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:30:37] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-12_打网球穿搭
-[17:30:37] [INFO] 📍 ✅ 穿搭方案已创建
-[17:30:37] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[17:31:01] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-12_打网球穿搭
-
-📁 2026-06-12_打网球穿搭
-📷 4 张参考图 | 📝 568字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_24_451.jpg (64KB)
-   ✅
-[17:31:01] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[17:31:02] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[17:31:02] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[17:31:12] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[17:31:13] [INFO] 推送成功: 👔 打网球穿搭
-[17:36:05] [INFO] =======================================================
-[17:36:05] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:36:05] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:36:05] [INFO] 💬 面板: http://localhost:8765/
-[17:36:07] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:36:07] [INFO] 📤 已推送上线通知
-[17:37:25] [INFO] 💬 聊天: generate | 网球穿搭
-[17:37:25] [INFO] 🚀 管线启动: 网球穿搭
-[17:37:25] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:39:25] [ERROR] API 返回无法解析为 JSON:
-
-[17:39:26] [INFO] 推送成功: ❌ 网球穿搭 生成失败
-[17:40:25] [INFO] 💬 聊天: generate | 网球穿搭
-[17:40:25] [INFO] 🚀 管线启动: 网球穿搭
-[17:40:25] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[17:41:19] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-12_网球穿搭
-[17:41:19] [INFO] 📍 ✅ 穿搭方案已创建
-[17:41:19] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[17:41:52] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-12_网球穿搭
-
-📁 2026-06-12_网球穿搭
-📷 4 张参考图 | 📝 640字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_26_360.jpg (78KB)
+   ✅ 上衣_Image_20260610_0818_43_448.jpg (77KB)
    ✅ 下
-[17:41:52] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[17:42:04] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[17:42:04] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[17:42:18] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[17:42:19] [INFO] 推送成功: 👔 网球穿搭
-[17:52:01] [INFO] =======================================================
-[17:52:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:52:01] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:52:01] [INFO] 💬 面板: http://localhost:8765/
-[17:52:03] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:52:03] [INFO] 📤 已推送上线通知
-[17:58:55] [INFO] =======================================================
-[17:58:55] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[17:58:55] [INFO] 📡 服务: http://0.0.0.0:8765
-[17:58:55] [INFO] 💬 面板: http://localhost:8765/
-[17:58:56] [INFO] 推送成功: 🟢 穿搭助手已上线
-[17:58:56] [INFO] 📤 已推送上线通知
-[18:13:11] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-13_夏日亚麻清凉度假
-[18:14:59] [INFO] =======================================================
-[18:14:59] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[18:14:59] [INFO] 📡 服务: http://0.0.0.0:8765
-[18:14:59] [INFO] 💬 面板: http://localhost:8765/
-[18:15:00] [INFO] 推送成功: 🟢 穿搭助手已上线
-[18:15:00] [INFO] 📤 已推送上线通知
-[18:16:52] [INFO] 推送成功: 👔 夏日亚麻清凉度假
-[18:18:25] [INFO] 💬 聊天: generate | 明日穿搭
-[18:18:25] [INFO] 🚀 管线启动: 明日穿搭
-[18:18:25] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:19:30] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-12_明日穿搭
-[18:19:30] [INFO] 📍 ✅ 穿搭方案已创建
-[18:19:30] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:20:00] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-12_明日穿搭
-
-📁 2026-06-12_明日穿搭
-📷 3 张参考图 | 📝 691字符
-📷 编码 3 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_55_793.jpg (122KB)
-   ✅ 
-[18:20:00] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:20:09] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[18:20:09] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:20:20] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:20:21] [INFO] 推送成功: 👔 明日穿搭
-[11:00:56] [INFO] 推送成功: 👔 日系CityBoy阴天叠穿 | 风格库首推
-[11:03:23] [INFO] 推送成功: 👔 日系CityBoy阴天叠穿 | 已修复卡片
-[11:05:49] [INFO] 推送成功: 👔 日系CityBoy阴天叠穿 | 缓存已刷新
-[11:10:07] [INFO] 推送成功: 👔 CityBoy阴天叠穿 v2 | jsDelivr CDN
-[13:58:18] [INFO] 推送成功: 👔 日系 City Boy
-[14:08:14] [INFO] 推送成功: 👔 日系 City Boy
-[14:12:13] [INFO] 推送成功: 👔 日系 City Boy
-[14:15:53] [INFO] 推送成功: 👔 日系 City Boy
-[14:18:13] [INFO] 推送成功: 👔 日系 City Boy
-[14:21:45] [INFO] 推送成功: 👔 日系 City Boy
-[14:23:57] [INFO] 推送成功: 👔 日系 City Boy
-[14:28:51] [INFO] 推送成功: 👔 日系 City Boy
-[14:52:57] [INFO] 推送成功: 👔 日系 City Boy
-[14:53:44] [INFO] 推送成功: 日系CityBoy阴天叠穿
-[14:55:15] [INFO] 推送成功: 日系CityBoy阴天叠穿
-[15:13:23] [INFO] 推送成功: 日系CityBoy阴天叠穿
-[15:17:27] [INFO] 推送成功: 日系CityBoy阴天叠穿
-[18:02:12] [INFO] 推送成功: 日系CityBoy阴天叠穿
-[18:13:03] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[18:16:58] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[18:22:23] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[18:27:23] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[18:31:47] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[18:34:54] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[19:16:30] [INFO] 推送成功: 🅰️ 暴雨CleanFit暗色防护
-[19:16:31] [INFO] 推送成功: 🅱️ 暴雨CleanFit暗色防护
-[19:23:27] [INFO] 推送成功: 🅰️ 暴雨CleanFit暗色防护
-[19:23:28] [INFO] 推送成功: 🅱️ 暴雨CleanFit暗色防护
-[19:30:26] [INFO] =======================================================
-[19:30:26] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[19:30:26] [INFO] 📡 服务: http://0.0.0.0:8765
-[19:30:26] [INFO] 💬 面板: http://localhost:8765/
-[19:30:27] [INFO] 推送成功: 🟢 穿搭助手已上线
-[19:30:27] [INFO] 📤 已推送上线通知
-[19:30:27] [INFO] 推送偏好已设置为: rich
-[19:30:41] [INFO] 推送成功: 🅰️ 暴雨CleanFit暗色防护
-[19:30:42] [INFO] 推送成功: 🅱️ 暴雨CleanFit暗色防护
-[19:31:09] [INFO] 推送偏好已设置为: rich
-[20:43:24] [INFO] =======================================================
-[20:43:24] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[20:43:24] [INFO] 📡 服务: http://0.0.0.0:8765
-[20:43:24] [INFO] 💬 面板: http://localhost:8765/
-[20:43:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[20:43:26] [INFO] 📤 已推送上线通知
-[20:43:26] [INFO] ⭐ 评分: 2026-06-13_暴雨CleanFit暗色防护 → 3星
-[20:44:04] [INFO] =======================================================
-[20:44:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[20:44:04] [INFO] 📡 服务: http://0.0.0.0:8765
-[20:44:04] [INFO] 💬 面板: http://localhost:8765/
-[20:44:05] [INFO] 推送成功: 🟢 穿搭助手已上线
-[20:44:05] [INFO] 📤 已推送上线通知
-[20:44:26] [INFO] =======================================================
-[20:44:26] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[20:44:26] [INFO] 📡 服务: http://0.0.0.0:8765
-[20:44:26] [INFO] 💬 面板: http://localhost:8765/
-[20:44:27] [INFO] 推送成功: 🟢 穿搭助手已上线
-[20:44:27] [INFO] 📤 已推送上线通知
-[20:44:36] [INFO] 推送成功: 暴雨CleanFit暗色防护
-[20:47:30] [INFO] ⭐ 评分: 2026-06-13_暴雨CleanFit暗色防护 → 3星
-[20:54:34] [INFO] 推送成功: 🧪 [日系City Boy] 日系条纹休闲风
-[20:54:35] [INFO] 推送成功: 🧪 [韩系轻熟] 薄荷绿轻熟衬衫
-[20:54:36] [INFO] 推送成功: 🧪 [Clean Fit] 阴天灰调Clean Fit
-[20:54:37] [INFO] 推送成功: 🧪 [暗色轻熟] 雨天暗色轻熟
-[20:54:39] [INFO] 推送成功: 🧪 [日系City Boy] 日系CityBoy阴天叠穿
-[20:54:40] [INFO] 推送成功: 🧪 [Clean Fit] 暴雨CleanFit暗色防护
-[20:54:41] [INFO] 推送成功: 🧪 [度假休闲] 夏日亚麻清凉度假
-[20:54:42] [INFO] 推送成功: 🧪 [街头潮流 🆕] 街头潮流暗黑工装
-[20:54:43] [INFO] 推送成功: 🧪 [运动休闲 🆕] 运动休闲足球风
-[20:54:44] [INFO] 推送成功: 🧪 [度假休闲 🆕] 度假热带印花风
-[20:56:15] [INFO] 推送成功: 🧪 [日系City Boy] 日系条纹休闲风
-[20:56:17] [INFO] 推送成功: 🧪 [韩系轻熟] 薄荷绿轻熟衬衫
-[20:56:18] [INFO] 推送成功: 🧪 [Clean Fit] 阴天灰调Clean Fit
-[20:56:19] [INFO] 推送成功: 🧪 [暗色轻熟] 雨天暗色轻熟
-[20:56:20] [INFO] 推送成功: 🧪 [日系City Boy] 日系CityBoy阴天叠穿
-[20:56:21] [INFO] 推送成功: 🧪 [Clean Fit] 暴雨CleanFit暗色防护
-[20:56:22] [INFO] 推送成功: 🧪 [度假休闲] 夏日亚麻清凉度假
-[20:56:23] [INFO] 推送成功: 🧪 [街头潮流 🆕] 街头潮流暗黑工装
-[20:56:25] [INFO] 推送成功: 🧪 [运动休闲 🆕] 运动休闲足球风
-[20:56:26] [INFO] 推送成功: 🧪 [度假休闲 🆕] 度假热带印花风
-[20:58:48] [INFO] ⭐ 评分: 2026-06-12_日系条纹休闲风 → 3星
-[21:00:43] [INFO] ⭐ 评分: 2026-06-12_薄荷绿轻熟衬衫 → 1星
-[21:01:28] [INFO] ⭐ 评分: 2026-06-12_雨天暗色轻熟 → 2星
-[21:02:13] [INFO] ⭐ 评分: 2026-06-13_日系CityBoy阴天叠穿 → 3星
-[21:02:54] [INFO] ⭐ 评分: 2026-06-13_暴雨CleanFit暗色防护 → 2星
-[21:04:02] [INFO] ⭐ 评分: 2026-06-13_夏日亚麻清凉度假 → 1星
-[21:06:34] [INFO] ⭐ 评分: 2026-06-13_度假热带印花风 → 1星
-[21:08:28] [INFO] ⭐ 评分: 2026-06-13_运动休闲足球风 → 3星
-[21:08:46] [INFO] ⭐ 评分: 2026-06-13_街头潮流暗黑工装 → 2星
-[21:09:30] [INFO] ⭐ 评分: 2026-06-12_阴天灰调Clean Fit → 2星
-[21:39:30] [INFO] 推送成功: 🧪 [测试] 首次推送-简约版
-[21:39:31] [INFO] 推送成功: 🧪 [测试] 首次推送-百科版
-[21:39:33] [INFO] 推送成功: 🧪 [测试] Day30-简约回访
-[21:39:34] [INFO] 推送成功: 🧪 [测试] Day30-百科回访
-[21:39:35] [INFO] 推送成功: 🧪 [测试] Day31-后悔提醒
-[21:39:36] [INFO] 推送成功: 🧪 [测试] Day60-再确认
-[21:40:37] [INFO] 推送偏好已设置为: rich
-[21:40:39] [INFO] 推送偏好已设置为: rich
-[21:43:04] [INFO] 推送成功: 🧪 [测试v2] 首次推送-简约版
-[21:43:05] [INFO] 推送成功: 🧪 [测试v2] 首次推送-百科版
-[21:51:10] [INFO] 推送成功: 韩系简约晴日Clean
-[21:55:27] [INFO] ⭐ 评分: 2026-06-14_韩系简约晴日Clean → 2星
-[23:42:52] [INFO] 推送成功: 韩系简约晴日Clean
-[23:43:01] [INFO] 推送成功: 韩系简约晴日Clean
-[23:43:08] [INFO] 推送成功: 韩系简约晴日Clean
-[23:50:59] [INFO] 推送成功: 韩系简约晴日Clean
-[23:51:05] [INFO] 推送成功: 韩系简约晴日Clean
-[23:51:09] [INFO] 推送成功: 韩系简约晴日Clean
-[23:56:00] [INFO] 推送成功: 韩系简约晴日Clean
-[23:56:05] [INFO] 推送成功: 韩系简约晴日Clean
-[23:56:12] [INFO] 推送成功: 韩系简约晴日Clean
-[00:02:19] [INFO] 推送成功: 韩系简约晴日Clean
-[00:03:21] [INFO] 推送成功: 韩系简约晴日Clean
-[00:04:24] [INFO] 推送成功: 韩系简约晴日Clean
-[00:08:45] [INFO] 推送成功: 韩系简约晴日Clean
-[00:09:28] [INFO] 推送成功: 韩系简约晴日Clean
-[00:10:27] [INFO] 推送成功: 韩系简约晴日Clean
-[00:36:01] [INFO] 推送成功: 韩系简约晴日Clean
-[00:36:48] [INFO] 推送成功: 韩系简约晴日Clean
-[00:37:37] [INFO] 推送成功: 韩系简约晴日Clean
-[00:40:00] [INFO] 推送成功: 韩系简约晴日Clean
-[00:40:47] [INFO] 推送成功: 韩系简约晴日Clean
-[00:41:35] [INFO] 推送成功: 韩系简约晴日Clean
-[00:49:17] [INFO] 推送成功: 韩系简约晴日Clean
-[00:53:23] [INFO] 推送成功: 韩系简约晴日Clean
-[00:54:34] [INFO] 推送成功: 韩系简约晴日Clean
-[00:55:16] [INFO] 推送成功: 韩系简约晴日Clean
-[00:56:00] [INFO] 推送成功: 韩系简约晴日Clean
-[00:57:45] [INFO] 推送成功: 韩系简约晴日Clean
-[00:59:16] [INFO] 推送成功: 韩系简约晴日Clean
-[01:03:17] [INFO] 推送成功: 韩系简约晴日Clean
-[01:04:14] [INFO] 推送成功: 韩系简约晴日Clean
-[01:04:57] [INFO] 推送成功: 韩系简约晴日Clean
-[01:11:43] [INFO] 推送成功: 韩系简约晴日Clean
-[01:12:33] [INFO] 推送成功: 韩系简约晴日Clean
-[01:13:45] [INFO] 推送成功: 韩系简约晴日Clean
-[01:22:49] [INFO] 推送成功: 韩系简约晴日Clean
-[01:23:37] [INFO] 推送成功: 韩系简约晴日Clean
-[01:24:24] [INFO] 推送成功: 韩系简约晴日Clean
-[01:31:01] [INFO] 推送成功: 韩系简约晴日Clean
-[01:31:53] [INFO] 推送成功: 韩系简约晴日Clean
-[01:32:36] [INFO] 推送成功: 韩系简约晴日Clean
-[01:43:57] [INFO] =======================================================
-[01:43:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:43:57] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:43:57] [INFO] 💬 面板: http://localhost:8765/
-[01:43:59] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:43:59] [INFO] 📤 已推送上线通知
-[01:47:11] [INFO] 💬 聊天: generate | 大胆 混搭
-[01:47:11] [INFO] 🚀 管线启动: 大胆 混搭 | B线大胆
-[01:47:11] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[01:47:28] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_大胆 混搭
-[01:47:28] [INFO] 📍 ✅ 穿搭方案已创建
-[01:47:28] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[01:47:59] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_大胆 混搭
-
-📁 2026-06-14_大胆 混搭
-📷 4 张参考图 | 📝 843字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_55_793.jpg (122KB)
-   
-[01:47:59] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[01:48:06] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[01:48:06] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[01:48:20] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[01:53:06] [INFO] 💬 聊天: generate | 推送给微信
-[01:53:06] [INFO] 🚀 管线启动: 推送给微信 
-[01:53:06] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[01:53:28] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_推送给微信
-[01:53:28] [INFO] 📍 ✅ 穿搭方案已创建
-[01:53:28] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[01:53:54] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_推送给微信
-
-📁 2026-06-14_推送给微信
-📷 4 张参考图 | 📝 614字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_26_036.jpg (135KB)
-   
-[01:53:54] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[01:54:00] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[01:54:00] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[01:54:19] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[01:54:20] [INFO] 推送成功: 👔 推送给微信
-[12:34:10] [INFO] 🚀 管线启动: 晴日韩系简约 
-[12:34:10] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[12:34:12] [INFO] 🚀 管线启动: 探索 晴日新风格 | B线微调
-[12:34:12] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[12:34:14] [INFO] 🚀 管线启动: 大胆 突破尝试 | B线大胆
-[12:34:14] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[12:34:31] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_晴日韩系简约
-[12:34:31] [INFO] 📍 ✅ 穿搭方案已创建
-[12:34:31] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[12:34:34] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_探索 晴日新风格
-[12:34:34] [INFO] 📍 ✅ 穿搭方案已创建
-[12:34:34] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[12:34:37] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_大胆 突破尝试
-[12:34:37] [INFO] 📍 ✅ 穿搭方案已创建
-[12:34:37] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[12:34:56] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_晴日韩系简约
-
-📁 2026-06-14_晴日韩系简约
-📷 4 张参考图 | 📝 611字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0822_20_064.jpg (64KB)
-  
-[12:34:56] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[12:34:59] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_探索 晴日新风格
-
-📁 2026-06-14_探索 晴日新风格
-📷 4 张参考图 | 📝 729字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_02_904.jpg (165K
-[12:34:59] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[12:35:01] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[12:35:01] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[12:35:05] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[12:35:05] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[12:35:07] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_大胆 突破尝试
-
-📁 2026-06-14_大胆 突破尝试
-📷 4 张参考图 | 📝 826字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_02_904.jpg (165KB)
-[12:35:07] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[12:35:13] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[12:35:13] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[12:35:23] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[12:35:24] [INFO] 推送成功: 👔 晴日韩系简约
-[12:35:28] [INFO] 📍 ✅ 推送完成
-❌ 执行失败 (code=1)
-To github.com:wangyunkun123/fashion-style-advisor.git
- ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 1009781a2df90b6498675d3c42ff271dd843ae62 but expected 6a8574342dc9cb9f1d7e01c1218f978181301b70)
-error: failed to push some refs to 'github.com:wangyunkun1
-[12:35:36] [INFO] 📍 ✅ 推送完成
-❌ 执行失败 (code=1)
-To github.com:wangyunkun123/fashion-style-advisor.git
- ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 1009781a2df90b6498675d3c42ff271dd843ae62 but expected 6a8574342dc9cb9f1d7e01c1218f978181301b70)
-error: failed to push some refs to 'github.com:wangyunkun1
-[12:36:49] [INFO] 推送成功: 晴日韩系简约
-[12:37:30] [INFO] 推送成功: 探索 晴日新风格
-[12:38:10] [INFO] 推送成功: 大胆 突破尝试
-[12:52:10] [INFO] 推送成功: 晴日韩系简约
-[12:52:51] [INFO] 推送成功: 探索 晴日新风格
-[12:53:36] [INFO] 推送成功: 大胆 突破尝试
-[12:54:03] [INFO] 推送成功: 晴日韩系简约
-[12:54:32] [INFO] 推送成功: 晴日韩系简约
-[12:57:30] [INFO] 推送成功: 晴日韩系简约
-[12:58:34] [INFO] 推送成功: 探索 晴日新风格
-[12:59:32] [INFO] 推送成功: 大胆 突破尝试
-[13:05:35] [INFO] 推送成功: 晴日韩系简约
-[13:06:32] [INFO] 推送成功: 探索 晴日新风格
-[13:07:12] [INFO] 推送成功: 大胆 突破尝试
-[13:37:44] [INFO] 🚀 管线启动: 晴日韩系简约 
-[13:37:44] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[13:37:47] [INFO] 🚀 管线启动: 探索 晴日新风格 | B线微调
-[13:37:47] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[13:37:50] [INFO] 🚀 管线启动: 大胆 突破尝试 | B线大胆
-[13:37:50] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[13:38:07] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_晴日韩系简约
-[13:38:07] [INFO] 📍 ✅ 穿搭方案已创建
-[13:38:07] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[13:38:12] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_大胆 突破尝试
-[13:38:12] [INFO] 📍 ✅ 穿搭方案已创建
-[13:38:12] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[13:38:23] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_探索 晴日新风格
-[13:38:23] [INFO] 📍 ✅ 穿搭方案已创建
-[13:38:23] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[13:38:40] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_晴日韩系简约
-
-📁 2026-06-14_晴日韩系简约
-📷 4 张参考图 | 📝 692字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0819_26_942.jpg (67KB)
-  
-[13:38:40] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[13:38:41] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[13:38:41] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[13:38:42] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_大胆 突破尝试
-
-📁 2026-06-14_大胆 突破尝试
-📷 4 张参考图 | 📝 705字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_24_451.jpg (64KB)
-
-[13:38:42] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[13:38:42] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[13:38:42] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[13:39:01] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_探索 晴日新风格
-
-📁 2026-06-14_探索 晴日新风格
-📷 4 张参考图 | 📝 696字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0819_26_942.jpg (67KB
-[13:39:01] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[13:39:01] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2224) ✅
-[13:39:01] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[13:39:05] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[13:39:07] [INFO] 推送成功: 👔 晴日韩系简约
-[13:39:11] [INFO] 📍 ✅ 推送完成
-❌ 执行失败 (code=1)
-To github.com:wangyunkun123/fashion-style-advisor.git
- ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 365790d60c441dd12f7bc520d607115f90becc0d but expected eff2a713e6132a2541925b8a0d9e4d91ab5552bd)
-error: failed to push some refs to 'github.com:wangyunkun1
-[13:39:29] [INFO] 📍 ✅ 推送完成
-❌ 执行失败 (code=1)
-To github.com:wangyunkun123/fashion-style-advisor.git
- ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 365790d60c441dd12f7bc520d607115f90becc0d but expected eff2a713e6132a2541925b8a0d9e4d91ab5552bd)
-error: failed to push some refs to 'github.com:wangyunkun1
-[13:40:19] [INFO] 推送成功: 晴日韩系简约
-[13:41:11] [INFO] 推送成功: 探索 晴日新风格
-[13:42:03] [INFO] 推送成功: 大胆 突破尝试
-[15:11:18] [INFO] 推送成功: 晴日韩系简约
-[15:12:06] [INFO] 推送成功: 晴日韩系简约
-[15:12:52] [INFO] 推送成功: 晴日韩系简约
-[15:15:20] [INFO] 推送成功: 晴日韩系简约
-[15:16:42] [INFO] 🚀 管线启动: 晴日 Clean Fit 
-[15:16:42] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[15:17:21] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_晴日 Clean Fit
-[15:17:21] [INFO] 📍 ✅ 穿搭方案已创建
-[15:17:21] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[15:17:47] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_晴日 Clean Fit
-
-📁 2026-06-14_晴日 Clean Fit
-📷 4 张参考图 | 📝 686字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0822_20_064.j
-[15:17:47] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[15:17:53] [INFO] 📍 ✅ 排版完成
+[10:18:34] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
+[10:18:35] [INFO] 📍 ✅ 排版完成
 ==================================================
 👔 方案1 ACOC网格风
 💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[15:17:53] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[15:18:07] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[15:18:08] [INFO] 推送成功: 👔 晴日 Clean Fit
-[15:19:06] [INFO] 推送成功: 晴日 Clean Fit
-[15:19:20] [INFO] 推送成功: 晴日 Clean Fit
-[15:21:31] [INFO] 推送成功: 晴日 Clean Fit
-[15:23:01] [INFO] 推送成功: 晴日 Clean Fit
-[15:27:25] [INFO] 推送成功: 晴日 Clean Fit
-[15:29:33] [INFO] 推送成功: 晴日 Clean Fit
-[15:33:21] [INFO] 推送成功: 晴日 Clean Fit
-[15:38:56] [INFO] =======================================================
-[15:38:56] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:38:56] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:38:56] [INFO] 💬 面板: http://localhost:8765/
-[15:38:57] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:38:57] [INFO] 📤 已推送上线通知
-[15:39:07] [INFO] =======================================================
-[15:39:07] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:39:07] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:39:07] [INFO] 💬 面板: http://localhost:8765/
-[15:39:09] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:39:09] [INFO] 📤 已推送上线通知
-[15:39:59] [INFO] =======================================================
-[15:39:59] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:39:59] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:39:59] [INFO] 💬 面板: http://localhost:8765/
-[15:40:00] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:40:00] [INFO] 📤 已推送上线通知
-[15:44:12] [INFO] =======================================================
-[15:44:12] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:44:12] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:44:12] [INFO] 💬 面板: http://localhost:8765/
-[15:44:14] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:44:14] [INFO] 📤 已推送上线通知
-[15:48:21] [INFO] =======================================================
-[15:48:21] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:48:21] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:48:21] [INFO] 💬 面板: http://localhost:8765/
-[15:48:22] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:48:22] [INFO] 📤 已推送上线通知
-[16:05:22] [INFO] 🚀 管线启动: 晴日 Clean Fit 新 
-[16:05:22] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:05:43] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_晴日 Clean Fit 新
-[16:05:43] [INFO] 📍 ✅ 穿搭方案已创建
-[16:05:43] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[16:06:14] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_晴日 Clean Fit 新
-
-📁 2026-06-14_晴日 Clean Fit 新
-📷 4 张参考图 | 📝 548字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0821_27_1
-[16:06:14] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[16:06:19] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[16:06:19] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[16:06:29] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[16:06:30] [INFO] 推送成功: 👔 晴日 Clean Fit 新
-[16:06:33] [INFO] 🚀 管线启动: 探索 街头新风格 | B线微调
-[16:06:33] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:06:55] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_探索 街头新风格
-[16:06:55] [INFO] 📍 ✅ 穿搭方案已创建
-[16:06:55] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[16:07:28] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_探索 街头新风格
-
-📁 2026-06-14_探索 街头新风格
-📷 4 张参考图 | 📝 733字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_43_448.jpg (77KB
-[16:07:28] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[16:07:34] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[16:07:34] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[16:07:44] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[16:08:42] [INFO] 推送成功: 晴日 Clean Fit 新
-[16:09:39] [INFO] 推送成功: 探索 街头新风格
-[16:16:06] [INFO] 推送成功: 晴日 Clean Fit 新
-[16:16:51] [INFO] 推送成功: 探索 街头新风格
-[16:19:22] [INFO] 推送成功: 晴日 Clean Fit 新
-[16:22:55] [INFO] 推送成功: 晴日 Clean Fit 新
-[16:25:29] [INFO] 推送成功: 晴日 Clean Fit 新
-[16:29:02] [INFO] =======================================================
-[16:29:02] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:29:02] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:29:02] [INFO] 💬 面板: http://localhost:8765/
-[16:29:05] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:29:05] [INFO] 📤 已推送上线通知
-[16:29:38] [INFO] 💬 聊天: recommend | 打网球穿搭
-[16:29:38] [INFO] 🚀 管线启动: 打网球穿搭 
-[16:29:38] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:30:29] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[16:30:29] [INFO] 📍 ✅ 穿搭方案已创建
-[16:30:29] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[16:30:58] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 4 张参考图 | 📝 565字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0817_22_673.jpg (68KB)
-   ✅
-[16:30:58] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[16:31:04] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[16:31:04] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[16:31:13] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[16:32:04] [INFO] 推送成功: 打网球穿搭
-[16:33:57] [INFO] =======================================================
-[16:33:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:33:57] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:33:57] [INFO] 💬 面板: http://localhost:8765/
-[16:33:58] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:33:58] [INFO] 📤 已推送上线通知
-[16:34:22] [INFO] 💬 聊天: generate | 跑步穿搭
-[16:34:22] [INFO] 🚀 管线启动: 跑步穿搭 
-[16:34:22] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:34:50] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_跑步穿搭
-[16:34:50] [INFO] 📍 ✅ 穿搭方案已创建
-[16:34:50] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[16:35:18] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_跑步穿搭
-
-📁 2026-06-14_跑步穿搭
-📷 3 张参考图 | 📝 489字符
-📷 编码 3 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_00_648.jpg (90KB)
-   ✅ 下
-[16:35:18] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[16:35:23] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[16:35:23] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[16:35:31] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[16:35:37] [INFO] 推送成功: 跑步穿搭
-[16:38:23] [INFO] =======================================================
-[16:38:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:38:23] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:38:23] [INFO] 💬 面板: http://localhost:8765/
-[16:38:24] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:38:24] [INFO] 📤 已推送上线通知
-[18:25:24] [INFO] 🚀 管线启动: 晴日 Clean Fit 
-[18:25:24] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:26:02] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_晴日 Clean Fit
-[18:26:02] [INFO] 📍 ✅ 穿搭方案已创建
-[18:26:02] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:26:32] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_晴日 Clean Fit
-
-📁 2026-06-14_晴日 Clean Fit
-📷 1 张参考图 | 📝 190字符
-📷 编码 1 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-
-🎨 调用 doubao-seedream-5.0-lite...
-  
-[18:26:32] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:26:33] [INFO] 📍 ✅ 排版完成
-❌ 执行失败 (code=1)
-==================================================
-👔 方案1 ACOC网格风
-❌
-[18:26:33] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:26:38] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:26:41] [INFO] 推送成功: 晴日 Clean Fit
-[18:27:02] [INFO] 推送成功: 晴日 Clean Fit
-[18:28:30] [INFO] 推送成功: 🅰️ 晴日 Clean Fit
-[18:28:31] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
-[18:30:58] [INFO] 推送成功: 🅰️ 晴日 Clean Fit
-[18:31:00] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
-[18:35:03] [INFO] 推送成功: 🅰️ 晴日 Clean Fit
-[18:35:04] [INFO] 推送成功: 🅱️ 晴日 Clean Fit
-[18:36:32] [INFO] 推送偏好已设置为: rich
-[18:36:34] [INFO] 推送偏好已设置为: rich
-[18:38:18] [INFO] 🔥 远程试穿: japanese_city_boy → task 1781433498689
-[18:38:18] [INFO] 🚀 管线启动: japanese_city_boy 
-[18:38:18] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:38:42] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_japanese_city_boy
-[18:38:42] [INFO] 📍 ✅ 穿搭方案已创建
-[18:38:42] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:39:15] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_japanese_city_boy
-
-📁 2026-06-14_japanese_city_boy
-📷 4 张参考图 | 📝 796字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_082
-[18:39:15] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:39:20] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[18:39:20] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:39:33] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:39:36] [INFO] 推送成功: japanese_city_boy
-[18:40:00] [INFO] 💬 聊天: generate | 明天我有个运动计划，幫我推薦衣服
-[18:40:00] [INFO] 🚀 管线启动: 明天我有个运动计划，幫我推薦衣服 
-[18:40:00] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:40:55] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_明天我有个运动计划，幫我推薦衣服
-[18:40:55] [INFO] 📍 ✅ 穿搭方案已创建
-[18:40:55] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:41:19] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_明天我有个运动计划，幫我推薦衣服
-
-📁 2026-06-14_明天我有个运动计划，幫我推薦衣服
-📷 3 张参考图 | 📝 673字符
-📷 编码 3 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_
-[18:41:19] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:41:27] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[18:41:27] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:41:42] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:42:20] [INFO] 推送成功: 明天我有个运动计划，幫我推薦衣服
-[18:49:33] [INFO] 💬 聊天: generate | 网球穿搭
-[18:49:33] [INFO] 🚀 管线启动: 网球穿搭 
-[18:49:33] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:50:15] [WARN] ⚠️ 找不到衣柜档案: None
-[18:50:15] [WARN] ⚠️ 找不到衣柜档案: None
-[18:50:15] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_网球穿搭
-[18:50:15] [INFO] 📍 ✅ 穿搭方案已创建
-[18:50:15] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:50:31] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_网球穿搭
-
-📁 2026-06-14_网球穿搭
-📷 2 张参考图 | 📝 173字符
-📷 编码 2 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_26_360.jpg (78KB)
-
-🎨 调用 
-[18:50:31] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:50:37] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[18:50:37] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:50:43] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:50:51] [INFO] 推送成功: 网球穿搭
-[18:54:21] [INFO] ⭐ 评分: 2026-06-14_japanese_city_boy → 2星
-[18:55:18] [INFO] 💬 聊天: generate | 网球穿搭
-[18:55:18] [INFO] 🚀 管线启动: 网球穿搭 
-[18:55:19] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[18:55:57] [WARN] ⚠️ 找不到衣柜档案: UNAVAILABLE
-[18:55:57] [WARN] ⚠️ 找不到衣柜档案: UNAVAILABLE
-[18:55:57] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_网球穿搭
-[18:55:57] [INFO] 📍 ✅ 穿搭方案已创建
-[18:55:57] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[18:56:19] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_网球穿搭
-
-📁 2026-06-14_网球穿搭
-📷 2 张参考图 | 📝 588字符
-📷 编码 2 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_26_360.jpg (78KB)
-
-🎨 调用 
-[18:56:19] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[18:56:19] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[18:56:19] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[18:56:24] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[18:56:31] [INFO] 推送成功: 网球穿搭
-[19:04:55] [INFO] 💬 聊天: generate | 打网球穿的衣服。
-[19:04:55] [INFO] 🚀 管线启动: 打网球穿的衣服。 
-[19:04:55] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[19:05:54] [ERROR] API 返回无法解析为 JSON:
-
-[19:05:55] [INFO] 推送成功: ❌ 打网球穿的衣服。 生成失败
-[19:08:52] [INFO] 💬 聊天: generate | 打网球穿搭
-[19:08:52] [INFO] 🚀 管线启动: 打网球穿搭 
-[19:08:52] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[19:09:31] [WARN] ⚠️ 找不到衣柜档案: NO-SHOE-AVAILABLE
-[19:09:31] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[19:09:31] [INFO] 📍 ✅ 穿搭方案已创建
-[19:09:31] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[19:09:56] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 3 张参考图 | 📝 531字符
-📷 编码 3 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_26_360.jpg (78KB)
-   ✅
-[19:09:56] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[19:09:56] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[19:09:56] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[19:10:04] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[19:10:10] [INFO] 推送成功: 打网球穿搭
-[19:57:00] [INFO] 💬 聊天: generate | 打网球穿搭
-[19:57:00] [INFO] 🚀 管线启动: 打网球穿搭 
-[19:57:00] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[19:57:35] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[19:57:35] [INFO] 📍 ✅ 穿搭方案已创建
-[19:57:35] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[19:58:10] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 4 张参考图 | 📝 616字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0817_22_673.jpg (68KB)
-   ✅
-[19:58:10] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[19:58:10] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[19:58:10] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[19:58:18] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[19:59:26] [INFO] 推送成功: 打网球穿搭
-[20:19:32] [INFO] 💬 聊天: generate | 打网球穿搭
-[20:19:32] [INFO] 🚀 管线启动: 打网球穿搭 
-[20:19:32] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[20:20:17] [WARN] ⚠️ 找不到衣柜档案: UNAVAILABLE
-[20:20:17] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[20:20:17] [INFO] 📍 ✅ 穿搭方案已创建
-[20:20:17] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[20:20:45] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 3 张参考图 | 📝 584字符
-📷 编码 3 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0834_26_360.jpg (78KB)
-   ✅
-[20:20:45] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[20:20:46] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[20:20:46] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[20:20:54] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[20:21:01] [INFO] 推送成功: 打网球穿搭
-[20:23:25] [INFO] =======================================================
-[20:23:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[20:23:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[20:23:25] [INFO] 💬 面板: http://localhost:8765/
-[20:23:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[20:23:26] [INFO] 📤 已推送上线通知
-[20:25:38] [INFO] 💬 聊天: recommend | 打网球穿搭
-[20:25:38] [INFO] 🚀 管线启动: 打网球穿搭 
-[20:25:38] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[20:25:56] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[20:25:56] [INFO] 📍 ✅ 穿搭方案已创建
-[20:25:56] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[20:26:25] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 4 张参考图 | 📝 750字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0821_27_191.jpg (91KB)
-   ✅
-[20:26:25] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[20:26:26] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[20:26:26] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[20:26:39] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[20:26:45] [INFO] 推送成功: 打网球穿搭
-[20:30:38] [INFO] ⭐ 评分: 2026-06-14_打网球穿搭 → 3星
-[20:34:19] [INFO] =======================================================
-[20:34:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[20:34:19] [INFO] 📡 服务: http://0.0.0.0:8765
-[20:34:19] [INFO] 💬 面板: http://localhost:8765/
-[20:34:20] [INFO] 推送成功: 🟢 穿搭助手已上线
-[20:34:20] [INFO] 📤 已推送上线通知
-[20:39:08] [INFO] 💬 聊天: generate | 打网球穿搭
-[20:39:08] [INFO] 🚀 管线启动: 打网球穿搭 
-[20:39:08] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[20:39:24] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-14_打网球穿搭
-[20:39:24] [INFO] 📍 ✅ 穿搭方案已创建
-[20:39:24] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[20:39:49] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-14_打网球穿搭
-
-📁 2026-06-14_打网球穿搭
-📷 4 张参考图 | 📝 698字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0821_27_191.jpg (91KB)
-   ✅
-[20:39:49] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[20:39:49] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[20:39:49] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[20:39:56] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[20:40:06] [INFO] 推送成功: 打网球穿搭
-[20:59:36] [INFO] 推送成功: 打网球穿搭
-[20:59:54] [INFO] 推送成功: 打网球穿搭
-[08:34:31] [INFO] 推送成功: 🅰️ 打网球穿搭
-[08:34:32] [INFO] 推送成功: 🅱️ 打网球穿搭
-[08:37:35] [INFO] 推送成功: 打网球穿搭
-[08:39:12] [INFO] 💬 聊天: recommend | 起雾了，今天该穿什么？
-[08:39:12] [INFO] 🚀 管线启动: 起雾了，今天该穿什么？ 
-[08:39:12] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[08:39:29] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-15_起雾了，今天该穿什么？
-[08:39:29] [INFO] 📍 ✅ 穿搭方案已创建
-[08:39:29] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[08:40:04] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-15_起雾了，今天该穿什么？
-
-📁 2026-06-15_起雾了，今天该穿什么？
-📷 4 张参考图 | 📝 623字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0822_20_064.jpg
-[08:40:04] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[08:40:04] [INFO] 📍 ✅ 排版完成
-❌ 执行失败 (code=1)
-==================================================
-👔 方案1 ACOC网格风
-❌
-[08:40:04] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[08:40:04] [WARN] ⚠️ 未找到当日排版图，使用最近期: 上身效果_1_方案1.jpg
-[08:40:17] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[08:40:19] [INFO] 推送成功: 起雾了，今天该穿什么？
-[08:49:42] [INFO] 💬 聊天: generate | 今天起雾了，我该穿些什么？
-[08:49:42] [INFO] 🚀 管线启动: 今天起雾了，我该穿些什么？ 
-[08:49:42] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[08:50:10] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-15_今天起雾了，我该穿些什么？
-[08:50:10] [INFO] 📍 ✅ 穿搭方案已创建
-[08:50:10] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[08:50:40] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-15_今天起雾了，我该穿些什么？
-
-📁 2026-06-15_今天起雾了，我该穿些什么？
-📷 4 张参考图 | 📝 739字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0822_20_064
-[08:50:40] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[08:50:41] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[08:50:41] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[08:50:56] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[08:51:03] [INFO] 推送成功: 今天起雾了，我该穿些什么？
-[08:56:43] [INFO] ⭐ 评分: 2026-06-15_今天起雾了，我该穿些什么？ → 2星
-[15:52:30] [INFO] =======================================================
-[15:52:30] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[15:52:30] [INFO] 📡 服务: http://0.0.0.0:8765
-[15:52:30] [INFO] 💬 面板: http://localhost:8765/
-[15:52:31] [INFO] 推送成功: 🟢 穿搭助手已上线
-[15:52:31] [INFO] 📤 已推送上线通知
-[15:54:20] [INFO] 💬 聊天: help | 
-[15:54:20] [INFO] 指令: help | 
-[15:54:49] [INFO] 💬 聊天: wardrobe | 
-[16:08:44] [INFO] =======================================================
-[16:08:44] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:08:44] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:08:44] [INFO] 💬 面板: http://localhost:8765/
-[16:08:45] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:08:45] [INFO] 📤 已推送上线通知
-[16:19:39] [INFO] =======================================================
-[16:19:39] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:19:39] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:19:39] [INFO] 💬 面板: http://localhost:8765/
-[16:19:40] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:19:40] [INFO] 📤 已推送上线通知
-[16:32:54] [INFO] =======================================================
-[16:32:54] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:32:54] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:32:54] [INFO] 💬 面板: http://localhost:8765/
-[16:32:55] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:32:55] [INFO] 📤 已推送上线通知
-[16:32:56] [INFO] 💬 聊天: today | 
-[16:32:56] [INFO] 💬 聊天: favorites | 
-[16:33:03] [INFO] 💬 聊天: today | 
-[16:33:03] [INFO] 🚀 管线启动: 今日穿搭 第2版 请与之前不同 
-[16:33:03] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[16:33:18] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-15_今日穿搭 第2版 请与之前不同
-[16:33:18] [INFO] 📍 ✅ 穿搭方案已创建
-[16:33:18] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[16:33:47] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-15_今日穿搭 第2版 请与之前不同
-
-📁 2026-06-15_今日穿搭 第2版 请与之前不同
-📷 4 张参考图 | 📝 641字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_55
-[16:33:47] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[16:33:48] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[16:33:48] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[16:34:00] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[16:34:08] [INFO] 推送成功: 今日穿搭 第2版 请与之前不同
-[16:35:49] [INFO] =======================================================
-[16:35:49] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:35:49] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:35:49] [INFO] 💬 面板: http://localhost:8765/
-[16:35:51] [INFO] 推送成功: 🟢 穿搭助手已上线
-[16:35:51] [INFO] 📤 已推送上线通知
-[16:37:17] [INFO] 💬 聊天: today | 
-[16:37:22] [INFO] 💬 聊天: favorites | 
-[00:09:04] [INFO] =======================================================
-[00:09:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:09:04] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:09:04] [INFO] 💬 面板: http://localhost:8765/
-[00:09:05] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:09:05] [INFO] 📤 已推送上线通知
-[00:09:16] [INFO] 💬 聊天: status | 
-[00:09:16] [INFO] 指令: status | 
-[00:10:05] [INFO] 💬 聊天: generate | 今日穿搭
-[00:10:05] [INFO] 🚀 管线启动: 今日穿搭 
-[00:10:05] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[00:10:40] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_今日穿搭
-[00:10:40] [INFO] 📍 ✅ 穿搭方案已创建
-[00:10:40] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[00:11:06] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-16_今日穿搭
-
-📁 2026-06-16_今日穿搭
-📷 4 张参考图 | 📝 509字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_02_904.jpg (165KB)
-   ✅ 
-[00:11:06] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[00:11:07] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[00:11:07] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[00:11:20] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[00:11:28] [INFO] 推送成功: 今日穿搭
-[00:21:23] [INFO] =======================================================
-[00:21:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:21:23] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:21:23] [INFO] 💬 面板: http://localhost:8765/
-[00:21:24] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:21:24] [INFO] 📤 已推送上线通知
-[00:22:16] [INFO] =======================================================
-[00:22:16] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:22:16] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:22:16] [INFO] 💬 面板: http://localhost:8765/
-[00:22:17] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:22:17] [INFO] 📤 已推送上线通知
-[00:23:42] [INFO] =======================================================
-[00:23:42] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:23:42] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:23:42] [INFO] 💬 面板: http://localhost:8765/
-[00:23:43] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:23:43] [INFO] 📤 已推送上线通知
-[00:25:00] [INFO] =======================================================
-[00:25:00] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:25:00] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:25:00] [INFO] 💬 面板: http://localhost:8765/
-[00:25:01] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:25:01] [INFO] 📤 已推送上线通知
-[00:25:49] [INFO] =======================================================
-[00:25:49] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:25:49] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:25:49] [INFO] 💬 面板: http://localhost:8765/
-[00:25:50] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:25:50] [INFO] 📤 已推送上线通知
-[00:27:52] [INFO] =======================================================
-[00:27:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:27:52] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:27:52] [INFO] 💬 面板: http://localhost:8765/
-[00:27:54] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:27:54] [INFO] 📤 已推送上线通知
-[00:28:36] [INFO] 💬 聊天: recommend | 推荐明天雨天穿搭
-[00:28:36] [INFO] 🚀 管线启动: 推荐明天雨天穿搭 
-[00:28:36] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[00:29:07] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_推荐明天雨天穿搭
-[00:29:07] [INFO] 📍 ✅ 穿搭方案已创建
-[00:29:07] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[00:29:33] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-16_推荐明天雨天穿搭
-
-📁 2026-06-16_推荐明天雨天穿搭
-📷 4 张参考图 | 📝 462字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0820_01_848.jpg (44KB
-[00:29:33] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[00:29:34] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[00:29:34] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[00:29:48] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[00:29:56] [INFO] 推送成功: 推荐明天雨天穿搭
-[00:31:52] [INFO] =======================================================
-[00:31:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:31:52] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:31:52] [INFO] 💬 面板: http://localhost:8765/
-[00:31:53] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:31:53] [INFO] 📤 已推送上线通知
-[00:35:06] [INFO] =======================================================
-[00:35:06] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:35:06] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:35:06] [INFO] 💬 面板: http://localhost:8765/
-[00:35:08] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:35:08] [INFO] 📤 已推送上线通知
-[00:36:52] [INFO] =======================================================
-[00:36:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:36:52] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:36:52] [INFO] 💬 面板: http://localhost:8765/
-[00:36:53] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:36:53] [INFO] 📤 已推送上线通知
-[00:38:24] [INFO] =======================================================
-[00:38:24] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:38:24] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:38:24] [INFO] 💬 面板: http://localhost:8765/
-[00:38:25] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:38:25] [INFO] 📤 已推送上线通知
-[00:40:19] [INFO] =======================================================
-[00:40:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:40:19] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:40:19] [INFO] 💬 面板: http://localhost:8765/
-[00:40:21] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:40:21] [INFO] 📤 已推送上线通知
-[00:42:51] [INFO] =======================================================
-[00:42:51] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:42:51] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:42:51] [INFO] 💬 面板: http://localhost:8765/
-[00:42:53] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:42:53] [INFO] 📤 已推送上线通知
-[00:44:54] [INFO] =======================================================
-[00:44:54] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:44:54] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:44:54] [INFO] 💬 面板: http://localhost:8765/
-[00:44:55] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:44:55] [INFO] 📤 已推送上线通知
-[00:46:20] [INFO] =======================================================
-[00:46:20] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:46:20] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:46:20] [INFO] 💬 面板: http://localhost:8765/
-[00:46:21] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:46:21] [INFO] 📤 已推送上线通知
-[00:48:23] [INFO] =======================================================
-[00:48:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:48:23] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:48:23] [INFO] 💬 面板: http://localhost:8765/
-[00:48:24] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:48:24] [INFO] 📤 已推送上线通知
-[00:48:41] [INFO] =======================================================
-[00:48:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:48:41] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:48:41] [INFO] 💬 面板: http://localhost:8765/
-[00:48:42] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:48:42] [INFO] 📤 已推送上线通知
-[00:52:57] [INFO] =======================================================
-[00:52:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:52:57] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:52:57] [INFO] 💬 面板: http://localhost:8765/
-[00:52:58] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:52:58] [INFO] 📤 已推送上线通知
-[00:53:21] [INFO] =======================================================
-[00:53:21] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:53:21] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:53:21] [INFO] 💬 面板: http://localhost:8765/
-[00:53:22] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:53:22] [INFO] 📤 已推送上线通知
-[00:56:24] [INFO] =======================================================
-[00:56:24] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[00:56:24] [INFO] 📡 服务: http://0.0.0.0:8765
-[00:56:24] [INFO] 💬 面板: http://localhost:8765/
-[00:56:25] [INFO] 推送成功: 🟢 穿搭助手已上线
-[00:56:25] [INFO] 📤 已推送上线通知
-[01:03:22] [INFO] =======================================================
-[01:03:22] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:03:22] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:03:22] [INFO] 💬 面板: http://localhost:8765/
-[01:03:23] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:03:23] [INFO] 📤 已推送上线通知
-[01:05:01] [INFO] =======================================================
-[01:05:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:05:01] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:05:01] [INFO] 💬 面板: http://localhost:8765/
-[01:05:04] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:05:04] [INFO] 📤 已推送上线通知
-[01:08:18] [INFO] =======================================================
-[01:08:18] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:08:18] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:08:18] [INFO] 💬 面板: http://localhost:8765/
-[01:08:19] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:08:19] [INFO] 📤 已推送上线通知
-[01:08:58] [INFO] =======================================================
-[01:08:58] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:08:58] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:08:58] [INFO] 💬 面板: http://localhost:8765/
-[01:08:59] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:08:59] [INFO] 📤 已推送上线通知
-[01:09:25] [INFO] =======================================================
-[01:09:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:09:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:09:25] [INFO] 💬 面板: http://localhost:8765/
-[01:09:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:09:26] [INFO] 📤 已推送上线通知
-[01:12:45] [INFO] =======================================================
-[01:12:45] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:12:45] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:12:45] [INFO] 💬 面板: http://localhost:8765/
-[01:12:46] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:12:46] [INFO] 📤 已推送上线通知
-[01:16:01] [INFO] =======================================================
-[01:16:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:16:01] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:16:01] [INFO] 💬 面板: http://localhost:8765/
-[01:16:02] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:16:02] [INFO] 📤 已推送上线通知
-[01:17:57] [INFO] =======================================================
-[01:17:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:17:57] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:17:57] [INFO] 💬 面板: http://localhost:8765/
-[01:17:59] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:17:59] [INFO] 📤 已推送上线通知
-[01:19:10] [INFO] =======================================================
-[01:19:10] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:19:10] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:19:10] [INFO] 💬 面板: http://localhost:8765/
-[01:19:11] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:19:11] [INFO] 📤 已推送上线通知
-[01:21:36] [INFO] =======================================================
-[01:21:36] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:21:36] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:21:36] [INFO] 💬 面板: http://localhost:8765/
-[01:21:37] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:21:37] [INFO] 📤 已推送上线通知
-[01:22:02] [INFO] =======================================================
-[01:22:02] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:22:02] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:22:02] [INFO] 💬 面板: http://localhost:8765/
-[01:22:04] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:22:04] [INFO] 📤 已推送上线通知
-[01:23:51] [INFO] =======================================================
-[01:23:51] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:23:51] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:23:51] [INFO] 💬 面板: http://localhost:8765/
-[01:23:52] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:23:52] [INFO] 📤 已推送上线通知
-[01:25:47] [INFO] =======================================================
-[01:25:47] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:25:47] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:25:47] [INFO] 💬 面板: http://localhost:8765/
-[01:25:48] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:25:48] [INFO] 📤 已推送上线通知
-[01:28:32] [INFO] =======================================================
-[01:28:32] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:28:32] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:28:32] [INFO] 💬 面板: http://localhost:8765/
-[01:28:33] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:28:33] [INFO] 📤 已推送上线通知
-[01:30:06] [INFO] =======================================================
-[01:30:06] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:30:06] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:30:06] [INFO] 💬 面板: http://localhost:8765/
-[01:30:08] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:30:08] [INFO] 📤 已推送上线通知
-[01:33:23] [INFO] =======================================================
-[01:33:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:33:23] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:33:23] [INFO] 💬 面板: http://localhost:8765/
-[01:33:24] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:33:24] [INFO] 📤 已推送上线通知
-[01:34:23] [INFO] =======================================================
-[01:34:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:34:23] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:34:23] [INFO] 💬 面板: http://localhost:8765/
-[01:34:24] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:34:24] [INFO] 📤 已推送上线通知
-[01:34:56] [INFO] =======================================================
-[01:34:56] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:34:56] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:34:56] [INFO] 💬 面板: http://localhost:8765/
-[01:34:57] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:34:57] [INFO] 📤 已推送上线通知
-[01:36:45] [INFO] =======================================================
-[01:36:45] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:36:45] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:36:45] [INFO] 💬 面板: http://localhost:8765/
-[01:36:47] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:36:47] [INFO] 📤 已推送上线通知
-[01:41:07] [INFO] =======================================================
-[01:41:07] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:41:07] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:41:07] [INFO] 💬 面板: http://localhost:8765/
-[01:41:08] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:41:08] [INFO] 📤 已推送上线通知
-[01:48:52] [INFO] =======================================================
-[01:48:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:48:52] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:48:52] [INFO] 💬 面板: http://localhost:8765/
-[01:48:53] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:48:53] [INFO] 📤 已推送上线通知
-[01:50:29] [INFO] =======================================================
-[01:50:29] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:50:29] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:50:29] [INFO] 💬 面板: http://localhost:8765/
-[01:50:30] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:50:30] [INFO] 📤 已推送上线通知
-[01:52:46] [INFO] 💬 聊天: recommend | 明日打网球穿搭
-[01:52:46] [INFO] 🚀 管线启动: 明日打网球穿搭 
-[01:52:46] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[01:53:04] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_明日打网球穿搭
-[01:53:04] [INFO] 📍 ✅ 穿搭方案已创建
-[01:53:04] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[01:56:06] [INFO] =======================================================
-[01:56:06] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[01:56:06] [INFO] 📡 服务: http://0.0.0.0:8765
-[01:56:06] [INFO] 💬 面板: http://localhost:8765/
-[01:56:07] [INFO] 推送成功: 🟢 穿搭助手已上线
-[01:56:07] [INFO] 📤 已推送上线通知
-[01:56:08] [INFO] 💬 聊天: help | 
-[01:56:08] [INFO] 指令: help | 
-[02:00:24] [INFO] 💬 聊天: generate | 傍晚跑步穿搭
-[02:00:24] [INFO] 🚀 管线启动: 傍晚跑步穿搭 
-[02:00:24] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[02:01:00] [ERROR] API 返回无法解析为 JSON (attempt 1/2):
-{
-  "weather_note": "北京6月中旬傍晚晴转多云，22-34°C，高温褪去体感舒适但仍需速干透气排汗，薄款发带可吸汗整理碎发",
-  "style": "专业科技运动",
-  "items": [
-    {"category": "上衣", "id": "TS-009", "name": "Lululemon Metal Vent Tech科技运动短袖", "color": "浅灰白"},
-    {"category": "下装", "id": "SH-003", "name": "Decathlon Kiprun专业跑步双层短裤", "color": "灰色"},
-    {"category": "鞋子", "id": "SHOE-005", "skip": "最近已穿SHOE-005，换为SHOE-010？不对，拖鞋不能跑步，哦衣柜里还有没提到的功能鞋吗？等下看鞋子！Adidas复古训练？不对场景要求专业跑步或功能，哦SH-003是Kiprun专业，上衣TS-009是Lululemon高端HIIT跑步，鞋子……哦等下再核对最近核心鞋：已穿SHOE-002（A
-[02:01:00] [INFO] 📍 🔄 JSON解析失败，重试中...
-[02:01:31] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_傍晚跑步穿搭
-[02:01:31] [INFO] 📍 ✅ 穿搭方案已创建
-[02:01:31] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[02:02:00] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-16_傍晚跑步穿搭
-
-📁 2026-06-16_傍晚跑步穿搭
-📷 4 张参考图 | 📝 487字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0821_27_191.jpg (91KB)
-  
-[02:02:00] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[02:02:01] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[02:02:01] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[02:02:17] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[02:02:24] [INFO] 推送成功: 傍晚跑步穿搭
-[09:25:19] [INFO] 💬 聊天: recommend | 推荐一下今日穿搭，需要出门
-[09:25:19] [INFO] 🚀 管线启动: 推荐一下今日穿搭，需要出门 
-[09:25:19] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[09:25:38] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_推荐一下今日穿搭，需要出门
-[09:25:38] [INFO] 📍 ✅ 穿搭方案已创建
-[09:25:38] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[09:26:09] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-16_推荐一下今日穿搭，需要出门
-
-📁 2026-06-16_推荐一下今日穿搭，需要出门
-📷 4 张参考图 | 📝 619字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0818_02_904
-[09:26:09] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[09:26:10] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[09:26:10] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[09:26:25] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[09:26:32] [INFO] 推送成功: 推荐一下今日穿搭，需要出门
-[09:33:40] [INFO] =======================================================
-[09:33:40] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:33:40] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:33:40] [INFO] 💬 面板: http://localhost:8765/
-[09:33:42] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:33:42] [INFO] 📤 已推送上线通知
-[09:38:41] [INFO] =======================================================
-[09:38:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:38:41] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:38:41] [INFO] 💬 面板: http://localhost:8765/
-[09:38:42] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:38:42] [INFO] 📤 已推送上线通知
-[09:42:25] [INFO] =======================================================
-[09:42:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:42:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:42:25] [INFO] 💬 面板: http://localhost:8765/
-[09:42:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:42:26] [INFO] 📤 已推送上线通知
-[09:45:01] [INFO] =======================================================
-[09:45:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:45:01] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:45:01] [INFO] 💬 面板: http://localhost:8765/
-[09:45:02] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:45:02] [INFO] 📤 已推送上线通知
-[09:47:25] [INFO] =======================================================
-[09:47:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:47:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:47:25] [INFO] 💬 面板: http://localhost:8765/
-[09:47:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:47:26] [INFO] 📤 已推送上线通知
-[09:53:08] [INFO] =======================================================
-[09:53:08] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:53:08] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:53:08] [INFO] 💬 面板: http://localhost:8765/
-[09:53:10] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:53:10] [INFO] 📤 已推送上线通知
-[09:56:38] [INFO] =======================================================
-[09:56:38] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:56:38] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:56:38] [INFO] 💬 面板: http://localhost:8765/
-[09:56:40] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:56:40] [INFO] 📤 已推送上线通知
-[09:59:19] [INFO] =======================================================
-[09:59:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[09:59:19] [INFO] 📡 服务: http://0.0.0.0:8765
-[09:59:19] [INFO] 💬 面板: http://localhost:8765/
-[09:59:20] [INFO] 推送成功: 🟢 穿搭助手已上线
-[09:59:20] [INFO] 📤 已推送上线通知
-[10:02:33] [INFO] =======================================================
-[10:02:33] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:02:33] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:02:33] [INFO] 💬 面板: http://localhost:8765/
-[10:02:34] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:02:34] [INFO] 📤 已推送上线通知
-[10:07:04] [INFO] =======================================================
-[10:07:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:07:04] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:07:04] [INFO] 💬 面板: http://localhost:8765/
-[10:07:05] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:07:05] [INFO] 📤 已推送上线通知
-[10:08:34] [INFO] ⭐ 评分: 2026-06-16_推荐一下今日穿搭，需要出门 → 1星
-[10:10:25] [INFO] =======================================================
-[10:10:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:10:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:10:25] [INFO] 💬 面板: http://localhost:8765/
-[10:10:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:10:26] [INFO] 📤 已推送上线通知
-[10:11:04] [INFO] =======================================================
-[10:11:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:11:04] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:11:04] [INFO] 💬 面板: http://localhost:8765/
-[10:11:05] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:11:05] [INFO] 📤 已推送上线通知
-[10:16:15] [INFO] =======================================================
-[10:16:15] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:16:15] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:16:15] [INFO] 💬 面板: http://localhost:8765/
-[10:16:16] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:16:16] [INFO] 📤 已推送上线通知
-[10:19:56] [INFO] =======================================================
-[10:19:56] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:19:56] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:19:56] [INFO] 💬 面板: http://localhost:8765/
-[10:19:57] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:19:57] [INFO] 📤 已推送上线通知
-[10:20:08] [INFO] =======================================================
-[10:20:08] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:20:08] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:20:08] [INFO] 💬 面板: http://localhost:8765/
-[10:20:09] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:20:09] [INFO] 📤 已推送上线通知
-[10:23:25] [INFO] =======================================================
-[10:23:25] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:23:25] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:23:25] [INFO] 💬 面板: http://localhost:8765/
-[10:23:26] [INFO] 推送成功: 🟢 穿搭助手已上线
-[10:23:26] [INFO] 📤 已推送上线通知
-[10:25:12] [INFO] 💬 聊天: generate | 通勤穿搭
-[10:25:12] [INFO] 🚀 管线启动: 通勤穿搭 
-[10:25:12] [INFO] 📍 🤖 Step 1/4: AI 分析穿搭方案...
-[10:25:47] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-16_通勤穿搭
-[10:25:47] [INFO] 📍 ✅ 穿搭方案已创建
-[10:25:47] [INFO] 📍 🎨 Step 2/4: Seedream AI 生图中...
-[10:26:13] [INFO] 📍 ✅ Seedream 生图完成
-============================================================
-🎨 Seedream API 自动生图
-============================================================
-🔍 关键词匹配: 2026-06-16_通勤穿搭
-
-📁 2026-06-16_通勤穿搭
-📷 4 张参考图 | 📝 520字符
-📷 编码 4 张参考图...
-   ✅ 人物_IMG_8493.jpg (80KB)
-   ✅ 上衣_Image_20260610_0835_21_753.jpg (133KB)
-   ✅ 
-[10:26:13] [INFO] 📍 🖼️ Step 3/4: 排版合成中...
-[10:26:14] [INFO] 📍 ✅ 排版完成
-==================================================
-👔 方案1 ACOC网格风
-💾 上身效果_1_方案1.jpg (3200x2304) ✅
-[10:26:14] [INFO] 📍 📤 Step 4/4: 推送 GitHub...
-[10:26:29] [INFO] 📍 ✅ 推送完成
-✅ 执行完成（无文本输出）
-[10:26:36] [INFO] 推送成功: 通勤穿搭
+[10:18:35] [INFO] 📍 📤 Step 4/4: 推送 GitHub...

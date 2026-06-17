@@ -1,5 +1,28 @@
 # 开发日志
 
+## 2026-06-16/17: 手机端三大模块 — 风格图库 + 探索页图片化 + 智能添加页
+
+### 手机端优化
+- **探索页卡片图片化**：49 个风格卡片左上角蓝底文字替换为代表性穿搭图（56×72px 竖版），点击可放大。`_load_style_cards()` 自动检测 `representative.jpg`。
+- **风格百科图库**：修复 `generate_encyclopedia_html.py` 不支持的 `![图片]()` 语法，为 49 篇百科文章末尾插入「📸 风格图库」章节（152 张参考图）。
+- **添加页重写**：从 tab 切换 → 两个直接操作卡片（拍照/上传），支持多图（连续拍摄 + 相册多选），豆包视觉 AI 自动识别品类/颜色/品牌/面料，审核确认后自动入库（ID 分配 → 图片增强 → 标签 JSON → 服装档案更新）。
+- **NEW 徽标**：新入库单品在衣橱卡片上显示红色脉动徽标，点击进入详情自动消失。
+- **布局优化**：双沙漏修复、按钮不下沉、徽标不裁剪、卡片比例均衡。
+
+### 后端新增
+- `tools/wechat_control.py` +180 行：4 个 API 端点（`/api/wardrobe/add`, `/add/confirm`, `/new-items`, `/new-items/dismiss`）+ 6 个辅助函数（入库/增强/档案更新/ID 分配/NEW 注册）
+- 豆包视觉 API 多模态调用（复用 `call_doubao_chat` 函数，图片编码模式来自 `auto_orient.py`）
+
+### 工具脚本
+- `tools/fetch_style_images.py` — DDGS 自动搜索+下载风格穿搭图（50 主图 + 152 备选）
+- `tools/insert_gallery_to_encyclopedia.py` — 批量插入图库到百科文章
+- `tools/generate_encyclopedia_html.py` — 修复图片语法支持
+
+### 代码优化
+- 删除 2 处冗余 inline import (`shutil`, `subprocess`)
+- 删除 1 处重复 CSS (`.rec-card`)
+- 清理旧添加页死代码（`switchAddTab`, `handleAddImage` 单数版等）
+
 ## 2026-06-13: 风格库 v2.0 完工 — 49风格百科 + 图片参考 + 自学习系统
 
 ### 产出
@@ -17,6 +40,63 @@
 
 ### 定时任务
 - 每月1日 9:07 自动: 发现趋势 + 充实5旧风格 + 图片URL校验 + 微信推送报告
+
+---
+
+## 2026-06-16: 手机端 5 Tab 完整建设
+
+### 背景
+手机控制台 (`prototype/mobile-v2.html`) 原只有「推荐」页完整，其余 4 个 Tab（探索/衣橱/添加/我的）均为占位符。
+
+### 改动文件
+
+| 文件 | 行数 | 改动 |
+|------|------|------|
+| `tools/wechat_control.py` | 1885→~1950 | 新增 9 个 API 端点 + `_load_recent_outfits()` + `_identify_clothing()` + `CATEGORY_NAMES` + `_find_item_thumb()` |
+| `tools/build_prototype.py` | 1009→~1150 | 衣橱/探索/添加/我的 四个页面完整重写，CSS+JS 全量替换 |
+
+### 新增 API 端点（9个）
+
+| 端点 | 用途 |
+|------|------|
+| `GET /api/wardrobe/items` | 76件单品列表含缩略图路径 |
+| `GET /api/wardrobe/stats` | 月度穿搭统计/利用率/最爱风格排行 |
+| `GET /api/wardrobe/cold-items` | 38件闲置单品列表 |
+| `GET /api/wardrobe/gaps` | 5条购买建议（高/中/低优先级） |
+| `GET /api/explore/tweak` | 最近穿搭微调建议（3条） |
+| `GET /api/explore/transform` | 风格转换建议（未尝试的风格） |
+| `GET /api/explore/cross` | 跨界融合建议（随机两风格交叉） |
+| `GET /api/trends` | 12个风格趋势 + 5个热门百科 |
+| `GET /api/pref` | 推送偏好读取 |
+| `GET /api/profile` | 用户身形档案+使用统计 |
+| `POST /api/wardrobe/add` | 拍照识别（异步 task） |
+| `POST /api/wardrobe/confirm` | 确认入库（生成ID+保存标签+移动图片） |
+
+### 修复的 Bug
+
+1. **Tab 图标消失** — `tab` 字典 key 从 `rec/exp/wrd/me` 改为 `recommend/explore/wardrobe/profile`
+2. **所有 Tab 切换失效** — Tab Bar 的 `data-page` 值（`rec/exp/wrd/me`）与页面 ID（`page-recommend/explore/wardrobe/profile`）不匹配，导致 JS 无法找到对应页面
+3. **JS 语法错误导致全部事件失效** — `__profLoaded` 行多了一个 `}}`，整个 `<script>` 块被 Node.js 拒绝解析，所有 Tab 切换/API 调用全部失效
+4. **单品列表不可滚动** — `.wrd-item-detail` 在 `scroll-area` 外，无 `max-height` + `overflow-y:auto`，超出屏幕的单品不可见
+5. **CSS 样式未注入** — 新增的探索页/我的页/添加页 CSS 在模板替换时位置错误，未进入最终输出
+
+### 手机端验证
+
+📱 `https://climatic-erupt-mandatory.ngrok-free.dev`
+
+| Tab | 功能 | 数据源 |
+|-----|------|--------|
+| 🧠 推荐 | Hero图+单品清单+历史+输入框 | build 时注入 |
+| 🧪 探索 | 4子页：微调/转换/跨界/趋势 | 5个API端点 |
+| 👔 衣橱 | 4子页：品类网格/月度/闲置/缺口 | 5个API端点 |
+| ➕ 添加 | 拍照/上传→AI识别→确认入库 | 2个API端点（异步task） |
+| ⚙️ 我的 | 推送偏好/身形档案/使用统计 | 3个API端点 |
+
+### 关键决策
+
+- **统计数据采用前端 JS fetch**（非 build 时注入），保证实时性
+- **异步识别**：`/api/wardrobe/add` 返回 `task_id`，前端轮询 `/api/task/{id}`
+- **缓存策略**：HTML 设置 `Cache-Control: no-store`，`_load_chat_html()` 去除 2 秒缓存
 
 ---
 

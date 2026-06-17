@@ -4,7 +4,7 @@
   "category_code": "BAG",
   "color": {
     "hue_family": "暖色",
-    "hue_name": "军绿卡其",
+    "hue_name": "卡其色",
     "saturation": "中饱和",
     "lightness": "中明度",
     "is_neutral": false,
@@ -33,7 +33,7 @@
   },
   "formality": 1,
   "brand": {
-    "name": "未知",
+    "name": "RAWROW",
     "collection": null,
     "confidence": "未知"
   },
@@ -48,5 +48,14 @@
     "last_worn": "2026-06-16T00:29:54.917510",
     "claude_fit_comment": "卡其色机能双肩包带挂件设计,户外风格鲜明,适合休闲或徒步场景",
     "_statement_score": 0.3
-  }
+  },
+  "occasions": [
+    "徒步",
+    "旅游"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "复古工装",
+    "户外机能"
+  ]
 }

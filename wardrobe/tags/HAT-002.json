@@ -48,5 +48,9 @@
     "last_worn": null,
     "claude_fit_comment": "砖红色棒球帽温暖显白,可为整体造型增添活力色彩点缀",
     "_statement_score": 0.5
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "街头潮流"
+  ]
 }

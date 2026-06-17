@@ -48,5 +48,8 @@
     "last_worn": "2026-06-16T10:26:35.638944",
     "claude_fit_comment": "米白色厚底老爹鞋显白,厚底设计可在视觉上平衡偏瘦腿型的比例",
     "_statement_score": 0.3
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit"
+  ]
 }

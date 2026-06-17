@@ -47,8 +47,8 @@
   "meta": {
     "is_key_piece": false,
     "is_statement_piece": true,
-    "wear_count": 0,
-    "last_worn": null,
+    "wear_count": 1,
+    "last_worn": "2026-06-17T23:01:41.618504",
     "claude_fit_comment": "Jordan复古帆布拼色鞋,红白配色个性鲜明,承载AJ篮球文化基因,适合复古街头/潮流运动穿搭点缀",
     "_statement_score": 0.55
   }

@@ -452,6 +452,9 @@ def get_wardrobe_summary():
         cid = d.get('clothing_id', '')
         if not cid:
             continue
+        # 过滤已归档/删除的单品
+        if (d.get('meta') or {}).get('archived'):
+            continue
         cat = d.get('category', '其他')
         brand = (d.get('brand') or {}).get('name', '') or ''
         collection = (d.get('brand') or {}).get('collection', '') or ''
@@ -968,7 +971,7 @@ style: {plan.get('style', style_hint)}
     if os.path.exists(person_photo):
         shutil.copy2(person_photo, os.path.join(shengtu_dir, '人物_IMG_8493.jpg'))
 
-    # ── 4. 复制参考图到豆包生图/ ──
+    # ── 4. 复制抠图到豆包生图/（用抠图做 Seedream 参考图，非原始照片）──
     for it in items:
         item_id = it['id']
         w = wardrobe.get(item_id)
@@ -979,15 +982,14 @@ style: {plan.get('style', style_hint)}
         if not cat_info:
             log(f"⚠️ 未知品类映射: {w['category']}", "WARN")
             continue
-        src_dir = os.path.join(PROJECT_DIR, 'wardrobe', cat_info['dir'])
-        src_file = os.path.join(src_dir, w['filename'])
-        if not os.path.exists(src_file):
-            # 尝试在其他目录找
-            log(f"⚠️ 找不到源文件: {src_file}", "WARN")
+        # 使用抠图（去背景，干净轮廓），不用原始照片
+        cutout_src = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{item_id}_cutout.png')
+        if not os.path.exists(cutout_src):
+            log(f"⚠️ 抠图不存在: {item_id}_cutout.png", "WARN")
             continue
         prefix = cat_info['prefix']
-        dst_name = f"{prefix}_{w['filename']}"
-        shutil.copy2(src_file, os.path.join(shengtu_dir, dst_name))
+        dst_name = f"{prefix}_{item_id}.png"
+        shutil.copy2(cutout_src, os.path.join(shengtu_dir, dst_name))
 
     # ── 5. 复制抠图到 items/（加 ID 前缀以匹配 composite_v2 的 find_img）──
     for it in items:

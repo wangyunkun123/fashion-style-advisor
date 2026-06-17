@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Seedream API 自动生图
-通过火山引擎 API 调用 Seedream 5.0 Lite 模型生成穿搭效果图
+Seedream API 自动生图（两轮接力版）
+Pass 1: 人物 + 上衣 + 下装 + 鞋子 → 基础穿搭
+Pass 2: Pass1最佳图 + 帽子 + 包 + 墨镜 + 袜子 + 配饰 → 精确配饰
+通过火山引擎 API 调用 Seedream 5.0 Lite 模型
 """
-
 import os, sys, json, base64, urllib.request, time, io
 from PIL import Image
 
@@ -15,7 +16,6 @@ LOCAL_CONFIG_FILE = os.path.join(BASE_DIR, '..', 'config', 'seedream.local.json'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
     config = json.load(f)
 
-# 合并本地密钥（不提交Git）
 if os.path.exists(LOCAL_CONFIG_FILE):
     with open(LOCAL_CONFIG_FILE, 'r', encoding='utf-8') as f:
         local = json.load(f)
@@ -29,38 +29,78 @@ MAX_IMAGES = config['max_images']
 
 OUTFIT_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'outfits')
 
+# 中性灰背景色（用于抠图抗锯齿边缘融合）
+NEUTRAL_GRAY = (217, 217, 217)
+
+
 def find_latest_outfit():
     dirs = sorted([d for d in os.listdir(OUTFIT_BASE)
                    if os.path.isdir(os.path.join(OUTFIT_BASE, d)) and not d.startswith('.')])
     return os.path.join(OUTFIT_BASE, dirs[-1]) if dirs else None
 
+
 def compress_image(path, max_size=1024, quality=70):
-    """压缩图片为 base64"""
+    """压缩图片为 base64。透明 PNG 自动补中性灰底"""
     img = Image.open(path)
-    if img.mode in ('RGBA', 'P'):
+    # 处理透明通道：在中性灰背景上合成
+    if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+        bg = Image.new('RGB', img.size, NEUTRAL_GRAY)
+        bg.paste(img, mask=img.split()[3])
+        img = bg
+    elif img.mode not in ('RGB',):
         img = img.convert('RGB')
     w, h = img.size
     if w > max_size or h > max_size:
         ratio = max_size / max(w, h)
-        img = img.resize((int(w*ratio), int(h*ratio)), Image.LANCZOS)
+        img = img.resize((int(w * ratio), int(h * ratio)), Image.LANCZOS)
     buf = io.BytesIO()
     img.save(buf, format='JPEG', quality=quality)
     b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
     return f"data:image/jpeg;base64,{b64}"
 
-def collect_key_images(doubao_dir):
-    """收集核心参考图：人物+上衣+下装+鞋子"""
+
+def collect_core_images(doubao_dir):
+    """Pass 1 核心参考图：人物 + 上衣 + 下装 + 鞋子"""
     images = []
     for f in sorted(os.listdir(doubao_dir)):
-        if f.startswith("人物_") and f.lower().endswith(('.jpg','.jpeg','.png')):
+        if f.startswith("人物_") and f.lower().endswith(('.jpg', '.jpeg', '.png')):
             images.append(os.path.join(doubao_dir, f))
             break
-    for prefix in ['上衣_', '外搭_', '下装_', '鞋子_']:
+    for prefix in ['上衣_', '下装_', '鞋子_']:
         for f in sorted(os.listdir(doubao_dir)):
-            if f.startswith(prefix) and f.lower().endswith(('.jpg','.jpeg','.png')):
+            if f.startswith(prefix) and f.lower().endswith(('.jpg', '.jpeg', '.png')):
                 images.append(os.path.join(doubao_dir, f))
                 break
     return images
+
+
+def collect_accessory_images(doubao_dir):
+    """Pass 2 配饰参考图：帽子 + 包 + 墨镜 + 袜子 + 配饰"""
+    images = []
+    for prefix in ['帽子_', '包_', '墨镜_', '袜子_', '配饰_']:
+        for f in sorted(os.listdir(doubao_dir)):
+            if f.startswith(prefix) and f.lower().endswith(('.jpg', '.jpeg', '.png')):
+                images.append(os.path.join(doubao_dir, f))
+                break
+    return images
+
+
+def get_item_descriptions(doubao_dir):
+    """从参考图文件名提取配饰描述（用于 Pass 2 prompt）"""
+    descs = {}
+    for prefix, label in [('帽子_', 'hat'), ('包_', 'bag'), ('墨镜_', 'sunglasses'),
+                           ('袜子_', 'socks'), ('配饰_', 'accessory')]:
+        for f in sorted(os.listdir(doubao_dir)):
+            if f.startswith(prefix) and f.lower().endswith(('.jpg', '.jpeg', '.png')):
+                # 提取文件名中描述部分
+                name = f[len(prefix):]
+                name = os.path.splitext(name)[0][:40]
+                descs[label] = name
+                break
+    return descs
+
 
 def load_prompt(doubao_dir):
     pf = os.path.join(doubao_dir, "豆包提示词.txt")
@@ -69,24 +109,30 @@ def load_prompt(doubao_dir):
             return f.read().strip()
     return ""
 
-def call_seedream(prompt, image_paths):
+
+def call_seedream(prompt, image_paths, max_images=None):
     """调用 Seedream API"""
+    if max_images is None:
+        max_images = MAX_IMAGES
+
     print(f"📷 编码 {len(image_paths)} 张参考图...")
     refs = []
-    for path in image_paths:
+    for i, path in enumerate(image_paths):
         b64 = compress_image(path)
         refs.append(b64)
-        print(f"   ✅ {os.path.basename(path)[:50]} ({len(b64)//1024}KB)")
+        print(f"   [{i+1}] ✅ {os.path.basename(path)[:50]} ({len(b64)//1024}KB)")
 
     print(f"\n🎨 调用 {MODEL}...")
+    print(f"📝 Prompt ({len(prompt)}字符): {prompt[:150]}...")
+
     payload = json.dumps({
         "model": MODEL,
         "prompt": prompt,
-        "reference_images": refs,
+        "image": refs,               # 官方参数名: image（非 reference_images）
         "size": SIZE,
         "response_format": "url",
         "watermark": False,
-        "max_images": MAX_IMAGES,
+        "max_images": max_images,
     }).encode('utf-8')
 
     req = urllib.request.Request(API_URL, data=payload, headers={
@@ -98,13 +144,15 @@ def call_seedream(prompt, image_paths):
         with urllib.request.urlopen(req, timeout=600) as resp:
             return json.loads(resp.read().decode('utf-8'))
     except urllib.request.HTTPError as e:
-        print(f"❌ API 错误 ({e.code}): {e.read().decode('utf-8')[:500]}")
+        body = e.read().decode('utf-8')[:500]
+        print(f"❌ API 错误 ({e.code}): {body}")
         return None
     except Exception as e:
         print(f"❌ 请求失败: {e}")
         return None
 
-def download_results(result, output_dir):
+
+def download_results(result, output_dir, prefix="上身效果"):
     """下载生成结果"""
     os.makedirs(output_dir, exist_ok=True)
     downloaded = []
@@ -118,7 +166,7 @@ def download_results(result, output_dir):
         if not url:
             continue
         try:
-            fname = f"上身效果_{i+1}.png"
+            fname = f"{prefix}_{i+1}.png"
             spath = os.path.join(output_dir, fname)
             urllib.request.urlretrieve(url, spath)
             sz = os.path.getsize(spath) // 1024
@@ -128,9 +176,10 @@ def download_results(result, output_dir):
             print(f"   ❌ {fname}: {e}")
     return downloaded
 
+
 def main():
     print("=" * 60)
-    print("🎨 Seedream API 自动生图")
+    print("🎨 Seedream API 两轮接力生图")
     print("=" * 60)
 
     outfit_dir = None
@@ -154,40 +203,141 @@ def main():
 
     print(f"\n📁 {os.path.basename(outfit_dir)}")
 
-    images = collect_key_images(doubao_dir)
+    core_images = collect_core_images(doubao_dir)
+    accessory_images = collect_accessory_images(doubao_dir)
     prompt = load_prompt(doubao_dir)
 
-    if not images:
-        print("❌ 未找到参考图")
+    if not core_images:
+        print("❌ 未找到核心参考图（人物/上衣/下装/鞋子）")
         return
     if not prompt:
         print("❌ 未找到提示词")
         return
 
-    print(f"📷 {len(images)} 张参考图 | 📝 {len(prompt)}字符")
+    print(f"\n🧥 核心参考图: {len(core_images)} 张")
+    for img in core_images:
+        print(f"   ▸ {os.path.basename(img)}")
+    if accessory_images:
+        print(f"🎒 配饰参考图: {len(accessory_images)} 张")
+        for img in accessory_images:
+            print(f"   ▸ {os.path.basename(img)}")
+    else:
+        print(f"🎒 配饰参考图: 无（仅核心4件）")
+
+    # ═══════════════════════════════════════════
+    # Pass 1: 基础穿搭（人物 + 上衣 + 下装 + 鞋子）
+    # ═══════════════════════════════════════════
+    print(f"\n{'─' * 60}")
+    print(f"🔄 Pass 1/2: 基础穿搭（{len(core_images)} 张参考图）")
+    print(f"{'─' * 60}")
 
     start = time.time()
-    result = call_seedream(prompt, images)
+    result1 = call_seedream(prompt, core_images)
 
-    if not result:
+    if not result1:
+        print("❌ Pass 1 失败，终止")
         return
 
-    elapsed = int(time.time() - start)
-    print(f"   ⏱ API 耗时: {elapsed}秒")
+    elapsed1 = int(time.time() - start)
+    print(f"   ⏱ Pass 1 耗时: {elapsed1}秒")
 
     output_dir = os.path.join(outfit_dir, "上身效果")
-    print(f"\n📥 下载到: {output_dir}")
-    downloaded = download_results(result, output_dir)
+    # 清空旧的上身效果图
+    if os.path.exists(output_dir):
+        import shutil
+        shutil.rmtree(output_dir)
 
-    print(f"\n{'=' * 60}")
-    if downloaded:
-        total_kb = sum(os.path.getsize(d)//1024 for d in downloaded)
-        print(f"✅ 生图完成！{len(downloaded)} 张，{total_kb}KB，总耗时 {elapsed}秒")
-        print(f"📁 {output_dir}")
-        for d in downloaded:
-            print(f"   ▸ {os.path.basename(d)}")
+    downloaded1 = download_results(result1, output_dir, prefix="上身效果")
+
+    if not downloaded1:
+        print("❌ Pass 1 未下载到图片")
+        return
+
+    # 取第一张（通常最好）作为 Pass 2 的底图
+    pass1_best = downloaded1[0]
+    print(f"\n   🏆 Pass 1 最佳: {os.path.basename(pass1_best)}")
+
+    # ═══════════════════════════════════════════
+    # Pass 2: 配饰精确化（Pass1最佳 + 配饰图）
+    # ═══════════════════════════════════════════
+    if not accessory_images:
+        print(f"\n{'─' * 60}")
+        print(f"⏭️  无配饰参考图，跳过 Pass 2")
+        print(f"{'─' * 60}")
     else:
-        print(f"⚠️ 未获取到图片")
+        print(f"\n{'─' * 60}")
+        print(f"🔄 Pass 2/2: 配饰精确化（1张底图 + {len(accessory_images)} 张配饰）")
+        print(f"{'─' * 60}")
+
+        # 构建 Pass 2 的参考图列表：底图 + 配饰
+        pass2_images = [pass1_best] + accessory_images
+        print(f"   参考图: 1张底图 + {len(accessory_images)}张配饰 = {len(pass2_images)}张")
+
+        # 构建 Pass 2 prompt：保持基础，精确配饰
+        item_descs = get_item_descriptions(doubao_dir)
+        accessory_hints = []
+        for i, img in enumerate(accessory_images):
+            basename = os.path.splitext(os.path.basename(img))[0]
+            # 去掉前缀（帽子_/包_/墨镜_/袜子_/配饰_）
+            for prefix in ['帽子_', '包_', '墨镜_', '袜子_', '配饰_']:
+                if basename.startswith(prefix):
+                    basename = basename[len(prefix):]
+                    break
+            accessory_hints.append(f"image {i+2} = {basename}")
+
+        pass2_prompt = (
+            f"Image 1 is a base outfit photo. Keep the person's face, body pose, "
+            f"skin tone, hairstyle, and the basic clothing (top, pants, shoes) EXACTLY "
+            f"as shown in image 1 — do not alter them. "
+            f"Images 2-{len(pass2_images)} are reference cutouts of accessories to ADD or REFINE: "
+            f"{'; '.join(accessory_hints)}. "
+            f"Accurately render these specific accessories onto the person in image 1. "
+            f"The overall scene, lighting, and background should remain consistent with image 1. "
+            f"Full-body fashion portrait, high quality, photorealistic."
+        )
+
+        start2 = time.time()
+        result2 = call_seedream(pass2_prompt, pass2_images, max_images=2)
+
+        if not result2:
+            print("⚠️ Pass 2 失败，保留 Pass 1 结果")
+        else:
+            elapsed2 = int(time.time() - start2)
+            print(f"   ⏱ Pass 2 耗时: {elapsed2}秒")
+
+            # Pass 2 结果保存为 上身效果_1p2.png, _2p2.png
+            downloaded2 = download_results(result2, output_dir, prefix="上身效果_p2")
+
+            if downloaded2:
+                # 把 Pass 2 最佳图也存为 上身效果_1.png（覆盖，作为最终效果图）
+                final_best = downloaded2[0]
+                final_name = os.path.join(output_dir, "上身效果_1.png")
+                # 先备份 Pass1 的图
+                pass1_backup = os.path.join(output_dir, "上身效果_p1_backup.png")
+                os.rename(pass1_best, pass1_backup)
+                # 复制 Pass2 最佳为最终图
+                import shutil
+                shutil.copy2(final_best, final_name)
+                print(f"\n   🏆 最终效果图: 上身效果_1.png (来自 Pass 2)")
+                print(f"   💾 Pass 1 备份: 上身效果_p1_backup.png")
+                total_elapsed = elapsed1 + elapsed2
+            else:
+                total_elapsed = elapsed1
+        total_elapsed = elapsed1 + (elapsed2 if 'elapsed2' in dir() else 0)
+
+    total_elapsed = elapsed1
+    if accessory_images and result2:
+        total_elapsed = elapsed1 + elapsed2
+
+    # ── 汇总 ──
+    print(f"\n{'=' * 60}")
+    final_files = sorted([f for f in os.listdir(output_dir) if f.endswith('.png')])
+    total_kb = sum(os.path.getsize(os.path.join(output_dir, f)) // 1024 for f in final_files)
+    print(f"✅ 两轮生图完成！{len(final_files)} 张，{total_kb}KB，总耗时 {total_elapsed}秒")
+    print(f"📁 {output_dir}")
+    for f in final_files:
+        print(f"   ▸ {f}")
+
 
 if __name__ == '__main__':
     main()

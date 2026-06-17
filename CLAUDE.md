@@ -36,7 +36,7 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 - **"风格排名"** → `python3 tools/style_matcher.py <style_id>`
 - **"风格矩阵"** → `python3 tools/style_scorer.py --matrix`
 - **"分析偏好"** → `python3 tools/rating_analyzer.py --report`
-- **"生成效果图"** → Seedream生图 → sync_items同步 → composite_v2排版 → git push → build_push推送
+- **"生成效果图"** → 两轮接力Seedream生图（抠图参考）→ composite_v2排版 → git push → build_push推送
 
 ## 微信推送
 首次双版+引导语，用户点击选择。简洁版去评分，百科版带评分。月度自动回访。
@@ -53,7 +53,7 @@ python3 tools/build_push.py <outfit_dir>              # 按偏好推送
 python3 tools/build_push.py --set simple|rich|both     # 设置偏好
 python3 tools/monthly_checkin.py                       # 月度回访（auto_learn.sh自动调用）
 ```
-> 完整生图流程：`outfit.md` → `generate.py` → `sync_items.py` → `composite_v2.py` → `git push` → `build_push.py`
+> 完整生图流程：`outfit.md` → `generate.py`（两轮接力：核心4件→配饰精确化）→ `composite_v2.py` → `git push` → `build_push.py`
 
 ## 用户打分
 推送底部自动带评分链接。三级评分 + 偏好学习。
@@ -75,6 +75,8 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing → 生成缩略图 `python3 tools/generate_thumbnails.py <ID>`
 - **"搜索图片"/"找图"** → `python3 tools/fashion_image_search.py --query "<关键词>"` — 免费服装图片搜索
 - **"采集小红书"** → `xhs search "<关键词>"` → `xhs read <id>` → 写入 `encyclopedia.md`「小红书社区经验」章节（详见 `tools/小红书采集流程.md`）
+- **"采集Instagram"/"搜INS"** → `python3 tools/instagram_search.py --query "<关键词>"`（无需登录，详见 `tools/Instagram采集流程.md`）
+- **"双平台采集"** → 小红书 Top 5 + Instagram Top 5 → 下载封面 → 写入百科 + 更新 `images_meta.json`
 - **"新想法"** → 记录到 `系统升级建议.md`
 - **"衣橱分析"** → `python3 tools/wardrobe_advisor.py --report`
 
@@ -111,15 +113,19 @@ python3 tools/build_prototype.py          # 手动重建原型
 - **⚠️ Hero 图规则**：优先 AI 原始生图 `上身效果_1.png`，不用排版图
 - **⚠️ 管线重建**：每次生成新穿搭后必须运行 `build_prototype.py` 重建原型
 
-## 生图完整流程
-1. Seedream API 生图 → `outfits/<日期>_<风格>/豆包生图/`
-2. **同步抠图**：`python3 tools/sync_items.py <dir>` → 自动复制 `_cutout.png` 并命名为 `{ID}_{名称}_cutout.png`
-3. `python3 tools/composite_v2.py <dir>` → 生成 `_直角画册.jpg`
-4. `git add -A && git commit && git push`
-5. `wechat_control.py` 内 `push_wechat()` 推送效果图
+## 生图完整流程（两轮接力抠图参考）
 
-> ⚠️ items/ 文件名必须为 `{ID}_{名称}_cutout.png` 格式（如 `SHIRT-004_黑白格纹长袖衬衫_cutout.png`），否则 composite_v2 找不到衣服。用 `sync_items.py` 自动处理。
-> ⚠️ 微信推送图片必须用 jsDelivr CDN URL（`cdn.jsdelivr.net/gh/...`），不能用 GitHub Raw（`raw.githubusercontent.com` 国内慢/被阻断）。`push_wechat()` 已内置自动转换。
+### 管线
+1. `execute_outfit_plan()` 复制抠图（`wardrobe/enhanced/{ID}_cutout.png`）到豆包生图/
+2. **Pass 1**: `generate.py` → 人物+上衣+下装+鞋子抠图 → Seedream生成基础穿搭
+3. **Pass 2**: Pass1最佳图 + 帽子/包/墨镜/袜子抠图 → Seedream精确配饰
+4. `composite_v2.py` 排版合成
+5. `git push` → CDN → 微信推送
+6. `build_prototype.py` 重建原型
+
+> ⚠️ 参考图使用抠图（去背景），非原始照片。抠图透明部分自动补中性灰底(#D9D9D9)
+> ⚠️ Seedream API 参数名为 `image`（非 `reference_images`）
+> ⚠️ Pass 1 生成 4 张，Pass 2 用第 1 张做底图生成 2 张，最终保留 Pass1 备份 + Pass2 最佳
 
 ## 手机远程控制
 - 启动：`bash tools/start_wechat_control.sh`

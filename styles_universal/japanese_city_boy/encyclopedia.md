@@ -1,7 +1,9 @@
 # 日系 City Boy (Japanese City Boy)
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 > **分类**: 日系 > 休闲 > 当代2000s > 极简调性
+
+![日系 City Boy 风格封面](representative.jpg)
 
 ## 📖 概述
 - **发源年代**: 1976年
@@ -137,86 +139,139 @@ City Boy 是现代时尚史上极少数**完全从一本杂志中诞生**的风�
 
 ---
 
-## 📕 小红书社区经验（2026-06 采集）
+## 📕 小红书社区经验（2026-06-17 双平台采集）
 
-> 以下内容整理自小红书社区真实穿搭分享，反映国内 City Boy 爱好者的实战经验与穿搭思路。
+> 🔄 本次更新：重新采集小红书 + Instagram 各 5 条最火 City Boy 穿搭帖子，按热度排序。
 
-### 👤 信仔 — 《男生穿搭知识库:要学会City Boy风格穿搭》
-> 综合热度: ❤️ 783  👍 735  💬 6  🔄 278
+### 🥇 查理叔叔 — 《👨🏻40+叔叔｜5套男生穿搭学会蓝色搭卡其色》
+> ❤️ 2034  ⭐ 1438  💬 54  🔄 753 | [原文](https://www.xiaohongshu.com/explore/6892ed3700000000230246b2)
 
-**核心观点**: City boy 是将不同的元素和谐混搭在一起，形成充满活力、阳光、热爱生活的风格。
+![封面](gallery/xhs_cityboy_01.webp)
+
+**核心观点**: 蓝色搭配卡其色是 City Boy 最易上手的配色方案，零基础也能穿好。
+
+**经验要点**:
+- 🥇 **蓝+卡其**是 City Boy 最经典的配色公式
+- 涵盖单品：衬衫、长裤、短裤、Polo衫、跑鞋、皮鞋
+- 适合 **40+ 年龄段**，证明 City Boy 并非年轻人的专利
+- 强调**胶囊衣橱**思路：少量单品搭配出多套造型
+
+### 🥈 0800 — 《vintage店员一周8️⃣套上班穿搭》
+> ❤️ 1532  ⭐ 780  💬 52  🔄 244 | [原文](https://www.xiaohongshu.com/explore/69296a1e000000000d034d79)
+
+![封面](gallery/xhs_cityboy_02.webp)
+
+**核心观点**: Vintage 店员日常穿搭展示了 City Boy 在古着语境下的可能性——用旧衣服穿出新态度。
+
+**经验要点**:
+- **一周穿搭不重样**：基础款 + 配饰变换即可撑满一周
+- 标签覆盖 Softcore / 柔系美式 / CORTIS风 / 复古穿搭
+- 秋季叠穿示范：衬衫外搭 + 针织中层 + 工装外套
+- 古着店员的选品眼光：注重面料质感和年代感
+
+### 🥉 信仔 — 《男生穿搭知识库:要学会City Boy风格穿搭》
+> ❤️ 783  ⭐ 735  💬 6  🔄 278 | [原文](https://www.xiaohongshu.com/explore/68b83f9f000000001c03004b)
+
+![封面](gallery/xhs_cityboy_03.webp)
+
+**核心观点**: City Boy 是将不同元素和谐混搭在一起，形成充满活力、阳光、热爱生活的风格。
 
 **经验要点**:
 - 大胆尝试**叠穿**，融入**机能元素**并用**亮色点缀**
 - 最终呈现"懂得生活，热爱生活，阳光男孩"的形象
 - 关键是**不同风格元素的混搭能力**，而非固定公式
 
-### 👤 查理叔叔 — 《👨🏻40+叔叔｜5套男生穿搭学会蓝色搭卡其色》
-> 综合热度: ❤️ 2034（高互动爆款）
+### ④ Top的大高 — 《nanamica 店员穿搭模版第七十八弹｜日系穿搭》
+> ❤️ 634  ⭐ 309  💬 17  🔄 233 | [原文](https://www.xiaohongshu.com/explore/69bd00ec000000002200ef4f)
 
-**核心观点**: 蓝色搭配卡其色是 City Boy 最易上手的配色方案。
+![封面](gallery/xhs_cityboy_04.webp)
 
-**经验要点**:
-- 🥇 **蓝+卡其**是 City Boy 最经典的配色公式，零基础也能穿好
-- 涵盖单品：衬衫、长裤、短裤、Polo衫、跑鞋、皮鞋
-- 适合 **40+ 年龄段**，证明 City Boy 并非年轻人的专利
-- 强调**胶囊衣橱**思路：少量单品搭配出多套造型
-
-### 👤 猫头鹰 — 《日系boy出游不重样穿搭》
-> 综合热度: ❤️ 603
+**核心观点**: 来自 nanamica 福冈店员的真实穿搭演绎，City Boy 的机能面。
 
 **经验要点**:
-- **一周穿搭不重样**的核心是基础款+配饰变换
+- nanamica 作为 City Boy 核心品牌，店员穿搭是最佳实战参考
+- 标签涵盖 #cityboy #nanamica #日潮穿搭 #北面紫标
+- **店员穿搭系列**（已更新至第78弹）是最可持续的灵感来源
+- 日系机能与 City Boy 的融合：GORE-TEX + 宽松剪裁
+
+### ⑤ 猫头鹰 — 《日系boy出游不重样穿搭》
+> ❤️ 604  ⭐ 236  💬 89  🔄 447 | [原文](https://www.xiaohongshu.com/explore/686e4f6c0000000017034e85)
+
+![封面](gallery/xhs_cityboy_05.webp)
+
+**经验要点**:
+- 出游场景的 City Boy 搭配方案
 - 工装元素与 City Boy 结合（工装裤、多口袋设计）
-- 夏季出游穿搭关键词：清爽、叠穿、层次感
+- 夏季关键词：清爽、叠穿、层次感
 
-### 👤 卡平K克 — 《本周穿搭分享 | Cityboy杭州氛围感街拍》
-> 综合热度: ❤️ 206
+### 📊 小红书社区共识总结
 
-**经验要点**:
-- City Boy 在街拍场景中的核心是**氛围感**——穿搭要与环境互动
-- 杭州/复古建筑背景下的 City Boy：低饱和色+复古元素
-- **少年感穿搭**在镜头前的呈现技巧
-
-### 👤 米斯特 outfit — 《夏日city boy怎么穿，这份教程快收好》
-> 综合热度: ❤️ 189
-
-**经验要点**:
-- 夏季 City Boy 以**轻薄叠穿**替代厚重层次
-- 短袖衬衫作外搭+白T内搭是夏季经典组合
-- 配色向浅色系偏移（米白、浅蓝、卡其）
-
-### 📊 社区共识总结
-
-| 维度 | 小红书社区共识 |
-|------|--------------|
+| 维度 | 社区共识 |
+|------|---------|
 | **入门配色** | 蓝+卡其是最安全且出效果的首选 |
 | **年龄段** | 20-50岁均可驾驭，关键在配色调整 |
-| **场景** | 日常出街、旅行、街拍、咖啡厅 |
-| **季节** | 四季皆宜，夏季注重轻薄叠穿 |
+| **场景** | 日常出街、旅行、街拍、咖啡厅、古着店 |
 | **核心单品** | 牛津衬衫、白T、直筒裤、New Balance |
 | **风格精神** | "懂得生活、热爱生活"的生活态度 |
-| **进阶技巧** | 叠穿+机能元素+亮色点缀 |
+| **进阶技巧** | 叠穿 + 机能元素 + 亮色点缀 |
+| **品牌关联** | nanamica, WTAPS, BEAMS, Nautica Japan |
 
 ---
 
-## 📸 风格图库
+## 📸 Instagram 社区经验（2026-06-17 采集）
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+> 以下内容通过 DuckDuckGo 搜索 Instagram 公开内容整理。
+> ⚠️ Instagram 需登录才能查看帖子详情，以下链接在浏览器中登录后可访问。
 
-![风格穿搭参考](gallery/japanese_city_boy_01.jpg)
-*风格穿搭参考*
+### 🥇 Shinya — POPEYE風投稿📚 冬を楽しむcityboy 🛹
+> 🔗 [Post](https://www.instagram.com/p/Cl_EsiCvWap/)（需登录查看）
 
-![Popeye | Japanese street fashion, Guys fits, Japanese skater style](gallery/japanese_city_boy_02.jpg)
-*Popeye | Japanese street fashion, Guys fits, Japanese skater style*
+![封面](gallery/ig_cityboy_01.jpg)
 
-![From Japan Popeye Japanese Magazine for City Boys Issue May 2019 | ポパイ ...](gallery/japanese_city_boy_03.jpg)
-*From Japan Popeye Japanese Magazine for City Boys Issue May 2019 | ポパイ ...*
+**看点**: POPEYE 杂志风冬季 City Boy 穿搭，New Balance 鞋款搭配示范。经典宽松廓形 + 白袜堆叠。
 
-![风格穿搭参考](gallery/japanese_city_boy_04.jpg)
-*风格穿搭参考*
+### 🥈 kenta haga (@ken___archive) — 1 week outfit😎 cityboy 穿搭投稿
+> 🔗 [Reel](https://www.instagram.com/reel/C2JxmpbvhlU/)（需登录查看）
 
-![风格穿搭参考](gallery/japanese_city_boy_05.jpg)
-*风格穿搭参考*
+![封面](gallery/ig_cityboy_02.jpg)
 
-*本文基于多源研究整理，人工审核。*
+**看点**: 一周 City Boy 穿搭合集，日本博主的系统化搭配思路，展示 City Boy 从周一到周日的变化。
+
+### 🥉 Andy Yen — City 🏙️ walk #tokyo #cityboy #wtaps
+> 🔗 [Post](https://www.instagram.com/p/DE4DOBGzXX4/)（需登录查看）
+
+![封面](gallery/ig_cityboy_03.jpg)
+
+**标签**: #tokyo #city #cityboy #cityboyootd #wtaps
+**看点**: 东京街头的 City Boy 穿搭，WTAPS 军装元素 + 城市漫游氛围。
+
+### ④ CityBoy城市男孩穿搭平台 — POPEYE持って完全にCity Boy
+> 🔗 [Reel](https://www.instagram.com/reel/CiYsUWFAxwA/)（需登录查看）
+
+![封面](gallery/ig_cityboy_04.jpg)
+
+**标签**: #cityboy #popeye #ニット
+**看点**: 针织衫肩挂 + POPEYE 杂志 = 教科书级 City Boy 造型。中文 City Boy 穿搭平台的精选转发。
+
+### ⑤ 김게로 (gimgero) — Japanese Summer Style 여름 코디 모음
+> 🔗 [Post](https://www.instagram.com/p/DKekXPeyM22/)（需登录查看）
+
+![封面](gallery/ig_cityboy_05.jpg)
+
+**标签**: #japanesestyle #summeroutfit #cityboy
+**看点**: 韩国博主演绎的日系夏季 City Boy，证明 City Boy 是跨文化的穿搭语言。轻薄叠穿 + 单车场景。
+
+### 📊 Instagram 社区共识
+
+| 维度 | Instagram 观察 |
+|------|---------------|
+| **活跃地区** | 日本（东京为主）、韩国、台湾、香港 |
+| **热门标签** | #cityboy #cityboyootd #ootd #tokyo #popeye |
+| **关联品牌** | WTAPS, New Balance, POPEYE Magazine, ZOZO |
+| **内容形式** | Reel 短视频穿搭展示为主 |
+| **日文关键词** | お洒落(时尚)、着こなし(穿搭)、冬アウター(冬外套) |
+| **⚠️ 访问限制** | 所有帖子需登录 Instagram 才能查看详情 |
+
+---
+
+*本文基于多源研究 + 双平台社区采集整理，人工审核。*

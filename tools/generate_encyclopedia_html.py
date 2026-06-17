@@ -210,12 +210,34 @@ def generate_one(style_id, dry_run=False):
     info = registry.get(style_id, {})
     name_zh = info.get('name_zh', name_zh)
     name_en = info.get('name_en', name_en)
+
+    # Chinese label map
+    LABEL_ZH = {
+        'japanese': '日系', 'korean': '韩系', 'chinese': '中式', 'american': '美式',
+        'european': '欧式', 'street': '街头',
+        'contemporary_2000s': '2000年代', 'contemporary_2010s': '2010年代',
+        'classic': '经典', 'vintage': '复古', 'modern': '现代',
+        'casual': '休闲', 'smart_casual': '轻熟', 'formal': '正式',
+        'sport': '运动', 'minimal': '极简', 'workwear': '工装',
+        'social': '社交', 'daily': '日常', 'office': '通勤',
+        'outdoor': '户外', 'date': '约会', 'travel': '旅行',
+        'preppy': '学院', 'military': '军装', 'gorpcore': '山系',
+        'ivy': '常春藤', 'amekaji': '阿美咔叽',
+    }
+
     tags = []
     for dim in ['parent', 'era', 'formality', 'scene', 'aesthetic']:
         v = info.get(dim, '')
         if v:
-            tags.append(v.replace('_', ' '))
-    tags_html = ''.join(f'<span class="tag">{t}</span>' for t in tags[:5])
+            zh = LABEL_ZH.get(v, '')
+            tags.append(zh if zh else v.replace('_', ' '))
+    # Add style-specific keyword tags
+    style_keywords = {
+        'japanese_city_boy': ['City Boy', 'POPEYE', '宽松叠穿', '少年感'],
+    }
+    extra = style_keywords.get(style_id, [])
+    tags.extend(extra)
+    tags_html = ''.join(f'<span class="tag">{t}</span>' for t in tags[:12])
 
     body = md_to_html(text)
     html = HTML_TPL.format(

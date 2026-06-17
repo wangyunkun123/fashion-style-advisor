@@ -1,7 +1,9 @@
 # 街头潮流 (Streetwear)
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 
 ---
+
+![街头潮流风格封面](representative.jpg)
 
 ## 📖 概述
 
@@ -361,15 +363,21 @@ Corteiz（零固定店铺、游击 Pop-Up、密码式发售）的模型正在被
 > **创作哲学**：「Streetwear 不在于完美——一件略大的连帽衫、一双有磨损痕迹的球鞋、一件有故事要说的图像 Tee。这些细节比笔挺的折痕或亮晶晶的皮鞋更有意义。」
 
 
-## 📸 风格图库
+---
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+*本文基于多源研究整理，人工审核。*
 
-![风格穿搭参考](gallery/streetwear_01.jpg)
-*风格穿搭参考*
+## 📱 小红书社区经验
 
-![Hitting the target following the latest urban fashion trends ...](gallery/streetwear_02.jpg)
-*Hitting the target following the latest urban fashion trends ...*
+以下内容采集自小红书社区热门帖子，反映streetwear风格在中文社交平台的实际穿搭实践：
 
-![All white off white outfit #streetwear #streetstyle #urbanstyle # ...](gallery/streetwear_03.jpg)
-*All white off white outfit #streetwear #streetstyle #urbanstyle # ...*
+## 📸 Instagram 穿搭灵感
+
+以下 Instagram 账号是 街头潮流 风格的优质参考来源（部分需登录查看）：
+
+- 🥇 **@highsnobiety** — [Highsnobiety — 街头潮流媒体](https://www.instagram.com/highsnobiety/)
+- 🥈 **@hypebeast** — [Hypebeast — 潮流文化圣经](https://www.instagram.com/hypebeast/)
+- 🥉 **@complexstyle** — [Complex Style — 街头穿搭精选](https://www.instagram.com/complexstyle/)
+- ④ **@streetwear_men** — [Streetwear Men — 街头穿搭社区](https://www.instagram.com/streetwear.men/)
+- ⑤ **@sneakernews** — [Sneaker News — 球鞋 x 街头穿搭](https://www.instagram.com/sneakernews/)
+

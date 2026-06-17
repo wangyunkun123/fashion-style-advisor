@@ -1,7 +1,7 @@
 # 度假休闲 (Resort Vacation)
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 
----
+![度假休闲风格封面](representative.jpg)
 
 ## 📖 概述
 
@@ -295,16 +295,23 @@ Dior Men 和 Fendi 引领的潮流——用精裁西装面料制作的短裤套�
 
 > **风格箴言：** 度假休闲的本质是"精心营造的漫不经心"（studied nonchalance）。最好的度假装看起来像你随手从行李箱里抽出来就穿上了——但实际上，每一件面料、每一条褶皱、每一个卷起的袖口，都是深思熟虑的结果。
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映resort_vacation风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+- 🥇 **SENSTREET** ❤️22931 — [一篇看懂老钱顶豪衣橱隐形考量与关键单品](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
+- 🥈 **戎阁** ❤️6269 — [难怪大家都说现在的尺寸太离谱了…](https://www.xiaohongshu.com/explore/68ef48a800000000050035ac)
+- 🥉 **陈畅** ❤️5807 — [我的一周度假穿搭🏖️](https://www.xiaohongshu.com/explore/69ddb599000000001a028a0c)
+- ④ **王总kk** ❤️5626 — [情侣夏日穿搭可以准备起来了！](https://www.xiaohongshu.com/explore/69ad481200000000150208f0)
+- ⑤ **康有美美** ❤️5503 — [184&172🌞 |适合恋爱的季节](https://www.xiaohongshu.com/explore/69b65f6d000000002003a772)
 
-![风格穿搭参考](gallery/resort_vacation_01.jpg)
-*风格穿搭参考*
+## 📸 Instagram 穿搭灵感
 
-![Resort beachwear for men. Choosing shorts for vacation| El-Style](gallery/resort_vacation_02.jpg)
-*Resort beachwear for men. Choosing shorts for vacation| El-Style*
+以下 Instagram 账号是 度假休闲 风格的优质参考来源（部分需登录查看）：
 
-![White Linen Beach Outfit for Men | Summer Fits Men in 2024 | Linen ...](gallery/resort_vacation_03.jpg)
-*White Linen Beach Outfit for Men | Summer Fits Men in 2024 | Linen ...*
+- 🥇 **@mistermort** — [Mister Mort — 度假休闲穿搭灵感](https://www.instagram.com/mistermort/)
+- 🥈 **@resortecollection** — [Resorte — 度假男装品牌](https://www.instagram.com/orlebar_brown/)
+- 🥉 **@theresortcapsule** — [The Resort Capsule — 度假胶囊衣橱](https://www.instagram.com/tommybahama/)
+- ④ **@linenandloafers** — [Linen & Loafers — 亚麻度假风](https://www.instagram.com/frescobolcarioca/)
+- ⑤ **@summerstyleguide** — [Summer Style Guide — 夏日穿搭指南](https://www.instagram.com/clubmed/)
+

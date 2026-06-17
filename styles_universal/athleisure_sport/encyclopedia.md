@@ -1,7 +1,9 @@
 # 运动休闲 (Athleisure / Sport)
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 > **分类**: 当代2000s > 运动场景 > 极休闲 > 街头调性
+
+![运动休闲风格封面](representative.jpg)
 
 ## 📖 概述
 - **发源年代**: 2010s初期
@@ -117,16 +119,23 @@ Athleisure 不是一个单一体，而是多个子风格的集合：
 3. 选一个子风格深入，不要混搭太多种运动元素
 4. 品牌 Logo 作为点缀，不超过一处大面积露出
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映athleisure_sport风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+- 🥇 **毛豆** ❤️46018 — [破防了！男人过的都是什么好日子！](https://www.xiaohongshu.com/explore/687a2c750000000013012fe7)
+- 🥈 **woodyzone** ❤️35356 — [随性clean fit☕休闲帅气高级感](https://www.xiaohongshu.com/explore/67ac3cfa0000000018018335)
+- 🥉 **痴五安chammy** ❤️12684 — [如何摆脱廉价感 这期请务必看完！](https://www.xiaohongshu.com/explore/68821fea0000000010027030)
+- ④ **Bananain蕉内** ❤️7136 — [穿得更轻，更酷，更干爽😎](https://www.xiaohongshu.com/explore/68b4fb99000000001d035777)
+- ⑤ **Alllstone** ❤️6800 — [优衣库穿搭，3组春季轻盈出游男生穿搭](https://www.xiaohongshu.com/explore/67c12ce70000000007037cd0)
 
-![风格穿搭参考](gallery/athleisure_sport_01.jpg)
-*风格穿搭参考*
+## 📸 Instagram 穿搭灵感
 
-![Nike Tech Men's Fleece Joggers. Nike UK](gallery/athleisure_sport_02.jpg)
-*Nike Tech Men's Fleece Joggers. Nike UK*
+以下 Instagram 账号是 运动休闲 风格的优质参考来源（部分需登录查看）：
 
-![NIKE Tech Fleece Joggers HV0959 011 - Shiekh](gallery/athleisure_sport_03.jpg)
-*NIKE Tech Fleece Joggers HV0959 011 - Shiekh*
+- 🥇 **@lululemonmen** — [Lululemon Men — 运动休闲标杆品牌](https://www.instagram.com/lululemonmen/)
+- 🥈 **@nikemen** — [Nike Men — 运动生活方式穿搭](https://www.instagram.com/nikemen/)
+- 🥉 **@aloyoga** — [Alo Yoga Men — 高级运动休闲风](https://www.instagram.com/aloyoga/)
+- ④ **@vuoriclothing** — [Vuori — 加州运动休闲美学](https://www.instagram.com/vuoriclothing/)
+- ⑤ **@satisfyrunning** — [Satisfy Running — 跑步文化 x 时尚](https://www.instagram.com/satisfyrunning/)
+

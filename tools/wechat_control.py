@@ -750,6 +750,495 @@ def _finalize_add_item(item_data):
     }
 
 
+def match_for_new_item(new_item_tags):
+    """根据新衣标签，在现有衣橱中匹配可搭配的单品。
+
+    参数:
+        new_item_tags: dict, AI 分析出的新衣标签（与 tags JSON 同结构）
+
+    返回:
+        {category_code: [{id, name, brand, color, thumb, score, match_reasons}]}
+    """
+    tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+
+    # 加载所有衣橱单品标签
+    wardrobe_items = {}
+    for fn in sorted(os.listdir(tags_dir)):
+        if fn == 'SCORE_CACHE.json' or not fn.endswith('.json'):
+            continue
+        try:
+            with open(os.path.join(tags_dir, fn)) as f:
+                d = json.load(f)
+        except:
+            continue
+        cid = d.get('clothing_id', '')
+        if not cid or (d.get('meta') or {}).get('archived'):
+            continue
+        wardrobe_items[cid] = d
+
+    # 确定新衣的品类和互补品类
+    new_cat = new_item_tags.get('category', '')
+    new_cat_code = new_item_tags.get('category_code', '')
+
+    # 互补品类映射：新衣品类 → 需要匹配的品类
+    complementary_cats = {
+        'TS': ['PT', 'SH', 'SHOE', 'JK', 'HAT', 'BAG'],
+        'LS': ['PT', 'SH', 'SHOE', 'JK', 'HAT', 'BAG'],
+        'SHIRT': ['PT', 'SH', 'SHOE', 'JK', 'BAG'],
+        'TANK': ['PT', 'SH', 'SHOE', 'HAT'],
+        'JK': ['TS', 'LS', 'SHIRT', 'PT', 'SH', 'SHOE', 'BAG'],
+        'PT': ['TS', 'LS', 'SHIRT', 'TANK', 'SHOE', 'JK', 'BAG'],
+        'SH': ['TS', 'LS', 'SHIRT', 'TANK', 'SHOE', 'HAT'],
+        'SHOE': ['TS', 'LS', 'SHIRT', 'PT', 'SH', 'JK', 'SOCK'],
+        'BAG': ['TS', 'LS', 'SHIRT', 'JK', 'PT', 'SHOE'],
+        'HAT': ['TS', 'LS', 'SHIRT', 'JK', 'PT', 'SH', 'SHOE'],
+        'SOCK': ['SHOE', 'PT', 'SH'],
+        'SUN': ['TS', 'LS', 'SHIRT', 'JK'],
+        'ACC': ['TS', 'LS', 'SHIRT', 'JK'],
+    }
+    target_cats = complementary_cats.get(new_cat_code, ['TS', 'PT', 'SHOE'])
+
+    # 提取新衣特征
+    new_color = new_item_tags.get('color', {})
+    new_hue_family = new_color.get('hue_family', '')
+    new_hue_name = new_color.get('hue_name', '')
+    new_saturation = new_color.get('saturation', '')
+    new_lightness = new_color.get('lightness', '')
+    new_styles = set(new_item_tags.get('style_modifiers', []))
+    new_occasions = set(new_item_tags.get('occasions', []))
+    new_fabric = new_item_tags.get('fabric', {})
+    new_seasonality = set(new_fabric.get('seasonality', []))
+    new_formality = new_item_tags.get('formality', 3)
+    new_brand_name = (new_item_tags.get('brand') or {}).get('name', '')
+
+    # 配色和谐评分
+    def color_harmony_score(wardrobe_color):
+        wh = wardrobe_color.get('hue_family', '')
+        ws = wardrobe_color.get('saturation', '')
+        wl = wardrobe_color.get('lightness', '')
+        score = 50  # 基础分
+
+        # 同色系和谐
+        if wh and new_hue_family and wh == new_hue_family:
+            score += 20
+        # 中性色百搭
+        if wardrobe_color.get('is_neutral'):
+            score += 15
+        if new_color.get('is_neutral'):
+            score += 15
+        # 饱和度搭配（一高一低更好）
+        if new_saturation and ws:
+            if new_saturation != ws:
+                score += 10
+        # 明度对比
+        if new_lightness and wl:
+            if new_lightness != wl:
+                score += 8
+        return min(score, 100)
+
+    # 风格兼容评分
+    def style_compatibility_score(w_styles, w_formality):
+        score = 40
+        w_styles_set = set(w_styles)
+        # 风格标签重叠
+        overlap = new_styles & w_styles_set
+        score += len(overlap) * 12
+        # 正式度匹配
+        if new_formality and w_formality:
+            diff = abs(new_formality - w_formality)
+            if diff == 0:
+                score += 15
+            elif diff == 1:
+                score += 8
+        return min(score, 100)
+
+    # 场景兼容评分
+    def occasion_score(w_occasions):
+        score = 30
+        w_occ_set = set(w_occasions)
+        overlap = new_occasions & w_occ_set
+        score += len(overlap) * 15
+        return min(score, 100)
+
+    # 对所有衣橱单品打分
+    results_by_cat = {}
+    for cid, witem in wardrobe_items.items():
+        w_cat_code = witem.get('category_code', '')
+        if w_cat_code not in target_cats:
+            continue
+
+        w_color = witem.get('color', {})
+        w_styles = witem.get('style_modifiers', [])
+        w_occasions = witem.get('occasions', [])
+        w_formality = witem.get('formality', 3)
+        w_fabric = witem.get('fabric', {})
+        w_seasonality = set(w_fabric.get('seasonality', []))
+
+        # 三项评分
+        color_score = color_harmony_score(w_color)
+        style_score = style_compatibility_score(w_styles, w_formality)
+        occ_score = occasion_score(w_occasions)
+
+        # 季节加分
+        season_bonus = 0
+        if new_seasonality and w_seasonality:
+            if new_seasonality & w_seasonality:
+                season_bonus = 10
+
+        # 综合分（加权）
+        total = color_score * 0.35 + style_score * 0.35 + occ_score * 0.20 + season_bonus
+        total = round(min(total, 100))
+
+        # 匹配理由
+        reasons = []
+        if color_score >= 70:
+            reasons.append('配色和谐')
+        if style_score >= 70:
+            reasons.append('风格兼容')
+        if occ_score >= 60:
+            reasons.append('场景匹配')
+        if season_bonus > 0:
+            reasons.append('季节合适')
+        if new_brand_name and (witem.get('brand') or {}).get('name', '') == new_brand_name:
+            reasons.append('同品牌')
+            total = min(total + 5, 100)
+
+        # 单品信息
+        w_brand = (witem.get('brand') or {}).get('name', '') or ''
+        w_comment = (witem.get('meta') or {}).get('claude_fit_comment', '') or ''
+        thumb = _find_item_thumb(cid)
+
+        result = {
+            'id': cid,
+            'category': witem.get('category', ''),
+            'category_code': w_cat_code,
+            'brand': w_brand,
+            'color': w_color.get('hue_name', ''),
+            'color_hex': _color_name_to_hex(w_color.get('hue_name', '')),
+            'thumb': thumb,
+            'score': total,
+            'match_reasons': reasons,
+            'comment': w_comment[:40],
+        }
+
+        if w_cat_code not in results_by_cat:
+            results_by_cat[w_cat_code] = []
+        results_by_cat[w_cat_code].append(result)
+
+    # 每品类取 Top 5，按分数排序
+    matched = {}
+    cat_name_map = CATEGORY_CODE_TO_NAME
+    for cat_code, items in results_by_cat.items():
+        items.sort(key=lambda x: x['score'], reverse=True)
+        top_items = items[:5]
+        if top_items:
+            matched[cat_code] = {
+                'category_name': cat_name_map.get(cat_code, cat_code),
+                'items': top_items,
+            }
+
+    # 按品类优先级排序（上衣类 > 下装类 > 鞋 > 配饰）
+    priority_order = ['TS', 'LS', 'SHIRT', 'TANK', 'JK', 'PT', 'SH', 'SHOE', 'HAT', 'BAG', 'SOCK', 'SUN', 'ACC']
+    ordered = {}
+    for code in priority_order:
+        if code in matched:
+            ordered[code] = matched[code]
+
+    return ordered
+
+
+def _color_name_to_hex(name):
+    """颜色名 → hex 色值"""
+    m = {
+        '红': '#c0392b', '橙': '#e67e22', '黄': '#f1c40f', '绿': '#27ae60',
+        '青': '#1abc9c', '蓝': '#2980b9', '紫': '#8e44ad', '粉': '#e91e63',
+        '棕': '#795548', '灰': '#95a5a6', '白': '#ecf0f1', '黑': '#2c3e50',
+        '米': '#f5deb3', '卡其': '#c3b091', '藏青': '#1a3a5c', '酒红': '#722f37',
+        '墨绿': '#1a4028', '驼': '#c19a6b', '焦糖': '#af6b3d', '浅灰': '#bdc3c7',
+        '深灰': '#636e72', '银': '#bdc3c7', '金': '#d4a574', '杏': '#f5e6d3',
+        '军绿': '#5c6e4a', '深蓝': '#1e3a5f', '浅蓝': '#7ea3c8', '天蓝': '#8bb8d6',
+        '橙色': '#e67e22', '黄色': '#f1c40f', '绿色': '#27ae60', '蓝色': '#2980b9',
+        '紫色': '#8e44ad', '粉色': '#e91e63', '白色': '#ecf0f1', '黑色': '#2c3e50',
+    }
+    if not name:
+        return '#ccc'
+    for k, v in m.items():
+        if k in name:
+            return v
+    return '#999'
+
+
+def _run_preview_outfit(task_id, new_item, selected_ids):
+    """后台线程：以新衣为核心，AI 选品 + Seedream 生图预览"""
+    try:
+        tasks.update(task_id, status='running', message='正在AI选品搭配...')
+
+        # ── 1. 加载衣橱标签 ──
+        tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+        all_tags = {}
+        for fn in sorted(os.listdir(tags_dir)):
+            if fn == 'SCORE_CACHE.json' or not fn.endswith('.json'):
+                continue
+            try:
+                with open(os.path.join(tags_dir, fn)) as f:
+                    d = json.load(f)
+            except:
+                continue
+            cid = d.get('clothing_id', '')
+            if cid and not (d.get('meta') or {}).get('archived'):
+                all_tags[cid] = d
+
+        # ── 2. 确定新衣品类和互补需求 ──
+        new_cat_code = new_item.get('category_code', 'TS')
+        new_cat = new_item.get('category', '短袖上衣')
+
+        # 品类 → 需要搭配的品类及数量
+        outfit_template = {
+            'TS': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SHOE',), ('HAT','BAG','SOCK','SUN')],
+            'LS': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SHOE',), ('HAT','BAG','SOCK')],
+            'SHIRT': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SHOE',), ('BAG','HAT','SOCK')],
+            'TANK': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SHOE',), ('HAT','BAG')],
+            'JK': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SHOE',), ('BAG','HAT')],
+            'PT': [('LS','TS','SHIRT','TANK'), ('SHOE',), ('JK','BAG','HAT')],
+            'SH': [('LS','TS','SHIRT','TANK'), ('SHOE',), ('HAT','BAG','SOCK')],
+            'SHOE': [('LS','TS','SHIRT','TANK'), ('PT','SH'), ('SOCK','BAG')],
+        }
+
+        template = outfit_template.get(new_cat_code, [('TS',), ('PT','SH'), ('SHOE',)])
+
+        # ── 3. 选品（优先用 selected_ids，否则 AI 自动选）──
+        selected_items = []
+
+        if selected_ids:
+            # 用户手动选择
+            for sid in selected_ids:
+                if sid in all_tags:
+                    selected_items.append(all_tags[sid])
+        else:
+            # 自动选品：用匹配分数最高的单品
+            matches = match_for_new_item(new_item)
+            for slot_idx, slot_cats in enumerate(template):
+                # 跳过新衣自身所在品类
+                if new_cat_code in slot_cats:
+                    continue
+                picked = None
+                best_score = -1
+                for cat_code in slot_cats:
+                    if cat_code in matches:
+                        for item in matches[cat_code].get('items', []):
+                            mid = item['id']
+                            if mid not in [s.get('clothing_id','') for s in selected_items]:
+                                if item['score'] > best_score:
+                                    best_score = item['score']
+                                    picked = mid
+                if picked and picked in all_tags:
+                    selected_items.append(all_tags[picked])
+                    if len(selected_items) >= 3:
+                        break
+
+        if not selected_items:
+            tasks.update(task_id, status='error', message='未找到可搭配的单品，请先添加基础款到衣橱')
+            return
+
+        # ── 4. 构建穿搭方案 ──
+        outfit_items = [new_item] + selected_items[:4]
+
+        # 人物照
+        person_photo = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
+        if not os.path.exists(person_photo):
+            tasks.update(task_id, status='error', message='未找到人物参考照')
+            return
+
+        # ── 5. 创建临时目录 ──
+        preview_dir = os.path.join(PROJECT_DIR, 'outfits', '_preview')
+        shengtu_dir = os.path.join(preview_dir, '豆包生图')
+        for d in [preview_dir, shengtu_dir]:
+            if os.path.exists(d):
+                shutil.rmtree(d)
+            os.makedirs(d, exist_ok=True)
+
+        # ── 6. 复制人物照 + 单品参考图 ──
+        shutil.copy2(person_photo, os.path.join(shengtu_dir, '人物_IMG_8493.jpg'))
+
+        cat_to_prefix = {
+            '短袖上衣': '上衣', '长袖上衣': '上衣', '衬衣': '上衣', '背心': '上衣',
+            '外套': '外套', '长裤': '下装', '短裤': '下装',
+            '鞋子': '鞋子', '帽子': '帽子', '包': '包', '墨镜': '墨镜',
+            '手部配饰': '配饰', '袜子': '袜子',
+        }
+
+        reference_paths = [os.path.join(shengtu_dir, '人物_IMG_8493.jpg')]
+
+        for oi in outfit_items:
+            is_new = (oi is new_item)
+            cat_name = oi.get('category', '')
+            prefix = cat_to_prefix.get(cat_name, '配饰')
+            oid = oi.get('suggested_id', oi.get('clothing_id', 'new'))
+
+            if is_new:
+                # 新衣使用原始照片
+                src = oi.get('_temp_image_path', '')
+                if src and os.path.exists(src):
+                    dst = os.path.join(shengtu_dir, f'{prefix}_{oid}_new.jpg')
+                    shutil.copy2(src, dst)
+                    reference_paths.append(dst)
+            else:
+                # 衣橱单品使用抠图
+                cutout = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{oid}_cutout.png')
+                if os.path.exists(cutout):
+                    dst = os.path.join(shengtu_dir, f'{prefix}_{oid}.png')
+                    shutil.copy2(cutout, dst)
+                    reference_paths.append(dst)
+
+        tasks.update(task_id, status='running', message=f'已选 {len(outfit_items)} 件单品，正在生成效果图...')
+
+        # ── 7. 构建 Seedream Prompt ──
+        # 收集单品描述
+        item_descs = []
+        for oi in outfit_items:
+            is_new = (oi is new_item)
+            tag = '🆕新衣' if is_new else ''
+            c = oi.get('color', {})
+            b = oi.get('brand', {})
+            color_name = c.get('hue_name', '') if isinstance(c, dict) else ''
+            brand_name = b.get('name', '') if isinstance(b, dict) else ''
+            cat = oi.get('category', '')
+            item_descs.append(f"{tag}{brand_name} {color_name}{cat}".strip())
+
+        prompt = f"""一位亚洲年轻男性，身高178cm偏瘦，肤色偏白。身穿{','.join(item_descs)}。
+全身站立穿搭照，自然光线，干净简约背景，时尚杂志风格。
+展示完整穿搭效果，包含上衣、下装、鞋子和配饰的搭配。
+服装版型合身，配色协调，风格统一。
+高画质，真实感强，专业时尚摄影。"""
+
+        with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
+            f.write(prompt)
+
+        tasks.update(task_id, status='running', message='正在调用 AI 生图（约30秒）...')
+
+        # ── 8. 调用 Seedream API ──
+        import base64 as _b64
+        from PIL import Image as PILImage
+        import io as _io
+
+        # 加载配置
+        seedream_config_file = os.path.join(PROJECT_DIR, 'config', 'seedream.json')
+        local_config_file = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
+        sd_config = {}
+        for cfg_path in [seedream_config_file, local_config_file]:
+            if os.path.exists(cfg_path):
+                with open(cfg_path, 'r') as f:
+                    sd_config.update(json.load(f))
+
+        # 编码参考图
+        refs = []
+        NEUTRAL_GRAY = (217, 217, 217)
+        for rp in reference_paths:
+            img = PILImage.open(rp)
+            if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                if img.mode != 'RGBA':
+                    img = img.convert('RGBA')
+                bg = PILImage.new('RGB', img.size, NEUTRAL_GRAY)
+                bg.paste(img, mask=img.split()[3])
+                img = bg
+            elif img.mode not in ('RGB',):
+                img = img.convert('RGB')
+            w, h = img.size
+            max_size = 1024
+            if w > max_size or h > max_size:
+                ratio = max_size / max(w, h)
+                img = img.resize((int(w * ratio), int(h * ratio)), PILImage.LANCZOS)
+            buf = _io.BytesIO()
+            img.save(buf, format='JPEG', quality=70)
+            b64 = _b64.b64encode(buf.getvalue()).decode('utf-8')
+            refs.append(f"data:image/jpeg;base64,{b64}")
+            img.close()
+
+        payload = json.dumps({
+            "model": sd_config.get('model', 'doubao-seedream-5.0-lite'),
+            "prompt": prompt,
+            "image": refs,
+            "size": sd_config.get('size', '1024x1024'),
+            "response_format": "url",
+            "watermark": False,
+            "max_images": 2,
+        }).encode('utf-8')
+
+        api_url = sd_config.get('api_url', '')
+        api_key = sd_config.get('api_key', '')
+        req = urllib.request.Request(api_url, data=payload, headers={
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {api_key}',
+        })
+
+        try:
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                result = json.loads(resp.read().decode('utf-8'))
+        except Exception as e:
+            log(f"Seedream API 调用失败: {e}", "ERROR")
+            tasks.update(task_id, status='error', message=f'生图失败: {str(e)[:80]}')
+            return
+
+        # ── 9. 下载结果 ──
+        if 'data' not in result or not result['data']:
+            log(f"Seedream 无图片返回: {json.dumps(result, ensure_ascii=False)[:300]}", "WARN")
+            tasks.update(task_id, status='error', message='AI 生图未返回结果，请重试')
+            return
+
+        downloaded = []
+        for i, item in enumerate(result['data']):
+            url = item.get('url', '')
+            if not url:
+                continue
+            fname = f'预览效果_{i+1}.png'
+            spath = os.path.join(shengtu_dir, fname)
+            try:
+                urllib.request.urlretrieve(url, spath)
+                downloaded.append(spath)
+            except Exception as e:
+                log(f"下载失败: {e}", "WARN")
+
+        if not downloaded:
+            tasks.update(task_id, status='error', message='图片下载失败')
+            return
+
+        # ── 10. 构建返回结果 ──
+        outfit_detail = []
+        for oi in outfit_items:
+            is_new = (oi is new_item)
+            c = oi.get('color', {})
+            b = oi.get('brand', {})
+            outfit_detail.append({
+                'id': oi.get('suggested_id', oi.get('clothing_id', '')),
+                'category': oi.get('category', ''),
+                'color': (c.get('hue_name', '') if isinstance(c, dict) else ''),
+                'brand': (b.get('name', '') if isinstance(b, dict) else ''),
+                'is_new': is_new,
+            })
+
+        # 相对路径
+        rel_images = [os.path.relpath(dp, PROJECT_DIR) for dp in downloaded]
+        # 生成 CDN 预览 URL（直接通过本地 HTTP 服务）
+        image_urls = [f'/{p}' for p in rel_images]
+
+        result_data = {
+            'outfit_items': outfit_detail,
+            'image_urls': image_urls,
+            'prompt': prompt,
+        }
+
+        tasks.update(task_id, status='done', message=f'✅ 穿搭预览完成',
+                     result=json.dumps(result_data, ensure_ascii=False),
+                     image_path=rel_images[0],
+                     image_url=image_urls[0])
+
+    except Exception as e:
+        log(f"预览生图失败: {e}", "ERROR")
+        import traceback
+        traceback.print_exc()
+        tasks.update(task_id, status='error', message=f'预览失败: {str(e)[:80]}')
+
+
 def _run_add_analysis(task_id, image_b64_list):
     """后台线程：调用豆包视觉 API 分析衣物图片"""
     try:
@@ -2320,6 +2809,63 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             except: pass
             self._json_resp(200, {"ok": True, "added": added, "errors": errors,
                                   "message": f'已添加 {len(added)} 件单品' + (f'，{len(errors)} 件失败' if errors else '')})
+
+        # ─── 🆕 衣橱匹配：新衣与现有单品配对 ───
+        elif parsed.path == '/api/wardrobe/add/match':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"}); return
+            new_items = data.get('items', [])
+            task_id = data.get('task_id', '')
+            if not new_items:
+                self._json_resp(400, {"error": "请提供新衣分析结果"}); return
+
+            # 加载临时分析结果（补充 _temp_image_path）
+            if task_id:
+                incoming_dir = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming')
+                analysis_path = os.path.join(incoming_dir, f'analysis_{task_id}.json')
+                if os.path.exists(analysis_path):
+                    with open(analysis_path, 'r') as f:
+                        saved = json.load(f)
+                    saved_items = {str(i): it for i, it in enumerate(saved.get('items', []))}
+                    for i, item in enumerate(new_items):
+                        if not item.get('_temp_image_path'):
+                            item['_temp_image_path'] = saved_items.get(str(i), {}).get('_temp_image_path', '')
+
+            # 为每件新衣匹配
+            all_matches = []
+            for i, new_item in enumerate(new_items):
+                matches = match_for_new_item(new_item)
+                all_matches.append({
+                    'item_index': i,
+                    'suggested_id': new_item.get('suggested_id', ''),
+                    'category': new_item.get('category', ''),
+                    'category_code': new_item.get('category_code', ''),
+                    'color': new_item.get('color', {}),
+                    'matches': matches,
+                })
+            self._json_resp(200, {"ok": True, "match_results": all_matches})
+
+        # ─── 🆕 以新衣为核心 AI 生成穿搭 ───
+        elif parsed.path == '/api/wardrobe/add/generate-outfit':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"}); return
+            new_item = data.get('new_item', {})
+            selected_ids = data.get('selected_ids', [])
+            if not new_item:
+                self._json_resp(400, {"error": "请提供新衣信息"}); return
+
+            tid = tasks.create()
+            threading.Thread(target=_run_preview_outfit, args=(tid, new_item, selected_ids), daemon=True).start()
+            log(f"🪄 预览穿搭: {tid} (新衣={new_item.get('suggested_id','?')}, 匹配={selected_ids})")
+            self._json_resp(200, {"task_id": tid, "message": "正在生成穿搭预览..."})
 
         elif parsed.path == '/api/wardrobe/new-items/dismiss':
             length = int(self.headers.get('Content-Length', 0))

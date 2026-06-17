@@ -1,7 +1,9 @@
 # Clean Fit
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 > **分类**: 当代2020s > 极简调性 > 休闲
+
+![Clean Fit风格封面](representative.jpg)
 
 ## 📖 概述
 - **发源年代**: 2021年（标签诞生于中文互联网）
@@ -114,16 +116,23 @@ Clean Fit 不是凭空发明，它是极简主义美学在流媒体时代的"再
 3. 面料 > 品牌：选高支数棉、精纺羊毛，不选软塌材质
 4. 全身不超过3个颜色
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映clean_fit风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+- 🥇 **Silencetilldeat** ❤️45627 — [男装女穿|2026男装这么平价又好穿！？](https://www.xiaohongshu.com/explore/69703ecb000000000c0365b4)
+- 🥈 **SENSTREET** ❤️43313 — [风格解析 |一篇看懂Cleanfit穿搭与造型灵感](https://www.xiaohongshu.com/explore/682304e8000000002301163e)
+- 🥉 **woodyzone** ❤️35356 — [随性clean fit☕休闲帅气高级感](https://www.xiaohongshu.com/explore/67ac3cfa0000000018018335)
+- ④ **Silencetilldeat** ❤️19125 — [男装女穿|看起来很“贵”的男装店铺分享](https://www.xiaohongshu.com/explore/697c1f17000000000b011c44)
+- ⑤ **不想p** ❤️14826 — [快来种草穿搭好物吧～](https://www.xiaohongshu.com/explore/69ea28880000000019032403)
 
-![风格穿搭参考](gallery/clean_fit_01.jpg)
-*风格穿搭参考*
+## 📸 Instagram 穿搭灵感
 
-![Neutral color palette outfit for guys | Neutral tones fashion, Neutral ...](gallery/clean_fit_02.jpg)
-*Neutral color palette outfit for guys | Neutral tones fashion, Neutral ...*
+以下 Instagram 账号是 Clean Fit 风格的优质参考来源（部分需登录查看）：
 
-![5 Simple Casual Outfits For Men - LIFESTYLE BY PS](gallery/clean_fit_03.jpg)
-*5 Simple Casual Outfits For Men - LIFESTYLE BY PS*
+- 🥇 **@kenijima** — [Ken Iijima — Clean Fit/Vibe风灵魂人物](https://www.instagram.com/kenijima/)
+- 🥈 **@uniformdisplay** — [Uniform Display — 极简男装灵感](https://www.instagram.com/uniformdisplay/)
+- 🥉 **@thepacman82** — [Pacman — 极简质感穿搭博主](https://www.instagram.com/thepacman82/)
+- ④ **@minimal.house** — [Minimal House — 极简生活美学](https://www.instagram.com/minimalhouse1/)
+- ⑤ **@outfitgrid** — [Outfit Grid — 极简穿搭参考](https://www.instagram.com/outfitgrid/)
+

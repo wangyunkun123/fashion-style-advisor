@@ -2,6 +2,9 @@
   "mcpServers": {
     "xiaohongshu": {
       "baseUrl": "https://mcp.xiaohongshu.com/mcp"
+    },
+    "exa": {
+      "baseUrl": "https://mcp.exa.ai/mcp"
     }
   }
 }

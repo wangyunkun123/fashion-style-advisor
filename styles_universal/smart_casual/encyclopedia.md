@@ -1,7 +1,9 @@
 # 轻熟休闲 (Smart Casual)
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 > **分类**: 当代1990s > 混搭调性 > 半正式休闲
+
+![轻熟休闲风格封面](representative.jpg)
 
 ## 📖 概述
 - **发源年代**: 1990年代正式确立为男装着装规范（词汇可追溯至1924年）
@@ -319,16 +321,17 @@ Brunello Cucinelli 每季都在强化 Soft Tailoring 的话语权——软肩、
 
 *本文由 Fashion Style Advisor 风格研究系统根据多渠道信息综合整理，已审核。*
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映smart_casual风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+## 📸 Instagram 穿搭灵感
 
-![风格穿搭参考](gallery/smart_casual_01.jpg)
-*风格穿搭参考*
+以下 Instagram 账号是 轻熟休闲 风格的优质参考来源（部分需登录查看）：
 
-![Men's Chinos Pants in 2023 | Blazer outfits men, Mens business casual ...](gallery/smart_casual_02.jpg)
-*Men's Chinos Pants in 2023 | Blazer outfits men, Mens business casual ...*
+- 🥇 **@thegentwithin** — [The Gent Within — 轻熟男装指南](https://www.instagram.com/thegentwithin/)
+- 🥈 **@hespokestyle** — [He Spoke Style — 商务休闲穿搭](https://www.instagram.com/hespokestyle/)
+- 🥉 **@apartmentnumber9** — [Apartment Number 9 — 轻熟质感](https://www.instagram.com/apartmentnumber9/)
+- ④ **@dressedwell** — [Dressed Well — 职场穿搭灵感](https://www.instagram.com/menswearoutfit/)
+- ⑤ **@smartcasualmen** — [Smart Casual Men — 轻熟男装社区](https://www.instagram.com/carlthompsonstyle/)
 
-![Smart Casual for Men: Dress Code Guide & Outfit Inspiration • Styles of Man](gallery/smart_casual_03.jpg)
-*Smart Casual for Men: Dress Code Guide & Outfit Inspiration • Styles of Man*

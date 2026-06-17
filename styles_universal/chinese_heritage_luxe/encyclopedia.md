@@ -1,7 +1,9 @@
 # 中式国风质感 (Chinese Heritage Luxe)
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 > **分类**: 中式 > 当代2020s > 半正式 > 极简调性
+
+![中式国风质感风格封面](representative.jpg)
 
 ## 📖 概述
 - **发源年代**: 2018-2020（"国潮"运动催化）
@@ -108,16 +110,23 @@
 4. 质感 > 品牌——关注面料成分和手感，不追求Logo
 5. 配饰点睛——一只手串+一只皮质邮差包+一块简约手表，就足够
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映chinese_heritage_luxe风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+- 🥇 **SENSTREET** ❤️22931 — [一篇看懂老钱顶豪衣橱隐形考量与关键单品](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
+- 🥈 **萧惆怅** ❤️18496 — [你们俩涂得明白吗，去找个情缘来](https://www.xiaohongshu.com/explore/680b74ad000000001200db70)
+- 🥉 **胡兵** ❤️16832 — [今天这身，人不基础，衣服也不基础](https://www.xiaohongshu.com/explore/68bae2be000000001b021c56)
+- ④ **脑洞爆炸红** ❤️16774 — [《女生穿男装，真香！》](https://www.xiaohongshu.com/explore/6a1182ac00000000080037a9)
+- ⑤ **RMIUC** ❤️14145 — [你老公并不丑，他只是一直在等你买衣服👕](https://www.xiaohongshu.com/explore/6a27f785000000001700961f)
 
-![风格穿搭参考](gallery/chinese_heritage_luxe_01.jpg)
-*风格穿搭参考*
+## 📸 Instagram 穿搭灵感
 
-![Traditional Chinese Clothing For Men New Year Tang Costume Male Silk ...](gallery/chinese_heritage_luxe_02.jpg)
-*Traditional Chinese Clothing For Men New Year Tang Costume Male Silk ...*
+以下 Instagram 账号是 中式国风质感 风格的优质参考来源（部分需登录查看）：
 
-![Chinese traditional men's wear online](gallery/chinese_heritage_luxe_03.jpg)
-*Chinese traditional men's wear online*
+- 🥇 **@ziggy_chen** — [Ziggy Chen — 中式解构先锋设计师](https://www.instagram.com/ziggy_chen/)
+- 🥈 **@pronounce_studio** — [PRONOUNCE — 东西方融合男装](https://www.instagram.com/pronounce_studio/)
+- 🥉 **@fengchenwang** — [Feng Chen Wang — 新中式解构](https://www.instagram.com/fengchenwang/)
+- ④ **@sean_suen** — [SEAN SUEN — 东方现代男装](https://www.instagram.com/sean_suen/)
+- ⑤ **@m essential_official** — [M Essential — 新中式日常化](https://www.instagram.com/umawang.official/)
+

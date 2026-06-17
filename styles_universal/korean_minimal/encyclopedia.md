@@ -1,8 +1,10 @@
 # 韩系极简 (Korean Minimal)
 
-> **状态**: `reviewed` | **最后更新**: 2026-06-13
+> **状态**: `reviewed` | **最后更新**: 2026-06-17
 
 ---
+
+![韩系极简风格封面](representative.jpg)
 
 ## 📖 概述
 
@@ -358,16 +360,23 @@ K-Drama 角色穿搭（PPL 植入）直接驱动单品销量。2025年趋势是�
 
 > **风格金句**：韩系极简不是穿得少，而是每一件都在说话 —— 说得轻，但分量重。
 
+## 📱 小红书社区经验
 
-## 📸 风格图库
+以下内容采集自小红书社区热门帖子，反映korean_minimal风格在中文社交平台的实际穿搭实践：
 
-> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+- 🥇 **草鱼爱吃鱼zzz** ❤️17323 — [就是这个男装女穿爽！无性别阔感卫衣穿搭](https://www.xiaohongshu.com/explore/694a9bed000000001e003a07)
+- 🥈 **RMIUC** ❤️14145 — [你老公并不丑，他只是一直在等你买衣服👕](https://www.xiaohongshu.com/explore/6a27f785000000001700961f)
+- 🥉 **痴五安chammy** ❤️12684 — [如何摆脱廉价感 这期请务必看完！](https://www.xiaohongshu.com/explore/68821fea0000000010027030)
+- ④ **阿布dulla** ❤️10142 — [无logo才是高级感｜都市男士夏日穿搭天花板](https://www.xiaohongshu.com/explore/69e35c520000000023027ca0)
+- ⑤ **Alllstone** ❤️8648 — [优衣库U系列 | 大地色的高级感](https://www.xiaohongshu.com/explore/66ec16ee0000000027004cd0)
 
-![风格穿搭参考](gallery/korean_minimal_01.jpg)
-*风格穿搭参考*
+## 📸 Instagram 穿搭灵感
 
-![Pin by Joshua Cheng on Fall/Winter 2024 | Korean summer outfits, Korean ...](gallery/korean_minimal_02.jpg)
-*Pin by Joshua Cheng on Fall/Winter 2024 | Korean summer outfits, Korean ...*
+以下 Instagram 账号是 韩系极简 风格的优质参考来源（部分需登录查看）：
 
-![35 Date Outfit Ideas Casual Men Korean](gallery/korean_minimal_03.jpg)
-*35 Date Outfit Ideas Casual Men Korean*
+- 🥇 **@koreanfashionmen** — [Korean Fashion Men — 韩系男装灵感](https://www.instagram.com/koreanfashionmen/)
+- 🥈 **@seoulsociety** — [Seoul Society — 首尔街头穿搭](https://www.instagram.com/seoulsociety/)
+- 🥉 **@hoooodiefits** — [Hoodie Fits — 韩系简约穿搭](https://www.instagram.com/kore.men.street/)
+- ④ **@gentleman_sgram** — [Gentleman's Gram — 韩系轻熟男装](https://www.instagram.com/mens__minimal/)
+- ⑤ **@dailylook_kr** — [Daily Look KR — 韩系日常穿搭](https://www.instagram.com/korean.mens.fashion/)
+

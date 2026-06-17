@@ -21,6 +21,7 @@ import time
 import mimetypes
 import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
@@ -460,14 +461,15 @@ def get_wardrobe_summary():
         collection = (d.get('brand') or {}).get('collection', '') or ''
         color = (d.get('color') or {}).get('hue_name', '') or ''
         styles = d.get('style_modifiers', [])
+        occasions = d.get('occasions', [])
         comment = (d.get('meta') or {}).get('claude_fit_comment', '') or ''
         filename = filename_map.get(cid, '')
         if cat not in cats:
             cats[cat] = []
         cats[cat].append({
             'id': cid, 'brand': brand, 'collection': collection,
-            'color': color, 'styles': styles, 'comment': comment,
-            'filename': filename,
+            'color': color, 'styles': styles, 'occasions': occasions,
+            'comment': comment, 'filename': filename,
         })
 
     # 按固定品类顺序输出
@@ -478,8 +480,8 @@ def get_wardrobe_summary():
         if cat not in cats:
             continue
         lines.append(f'## {cat}')
-        lines.append('| ID | 品牌·系列 | 颜色 | 场景标签 | 穿搭提示 |')
-        lines.append('|-----|----------|------|---------|---------|')
+        lines.append('| ID | 品牌·系列 | 颜色 | 风格标签 | 适用场景 | 穿搭提示 |')
+        lines.append('|-----|----------|------|---------|---------|---------|')
         for it in cats[cat]:
             brand_str = it['brand']
             if it['collection']:
@@ -487,13 +489,15 @@ def get_wardrobe_summary():
             if not brand_str:
                 brand_str = '—'
             # 截断品牌名避免表格过宽
-            brand_str = brand_str[:28]
-            # 场景标签：取风格修饰符中非身形相关的
+            brand_str = brand_str[:24]
+            # 风格标签：取风格修饰符中非身形相关的
             scene_tags = [s for s in it['styles']
                           if not any(kw in s for kw in ['增加', '显白', '显瘦', '拉长', '遮盖', '修饰', '无明显'])]
             styles_str = ' · '.join(scene_tags) if scene_tags else '—'
-            comment_short = it['comment'][:55] if it['comment'] else '—'
-            lines.append(f'| {it["id"]} | {brand_str} | {it["color"]} | {styles_str} | {comment_short} |')
+            # 适用场景：直接来自 occasions 字段
+            occ_str = '、'.join(it['occasions']) if it['occasions'] else '日常'
+            comment_short = it['comment'][:50] if it['comment'] else '—'
+            lines.append(f'| {it["id"]} | {brand_str} | {it["color"]} | {styles_str} | {occ_str} | {comment_short} |')
         lines.append('')
 
     return '\n'.join(lines)
@@ -1486,15 +1490,14 @@ style: {plan.get('style', style_hint)}
         w = wardrobe.get(item_id)
         if not w:
             continue
-        base = os.path.splitext(w['filename'])[0]
-        cutout_name = f"{base}_cutout.png"
-        cutout_src = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', cutout_name)
+        # 抠图源文件命名格式: {ID}_cutout.png（如 ACC-004_cutout.png）
+        cutout_src = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{item_id}_cutout.png')
         # 必须以 ID_ 前缀命名，composite_v2 的 find_img() 才能匹配
-        dst_name = f"{item_id}_{cutout_name}"
         if os.path.exists(cutout_src):
+            dst_name = f"{item_id}_cutout.png"
             shutil.copy2(cutout_src, os.path.join(items_dir, dst_name))
         else:
-            log(f"⚠️ 抠图不存在: {cutout_name}", "WARN")
+            log(f"⚠️ 抠图不存在: {item_id}_cutout.png", "WARN")
 
     log(f"✅ 穿搭方案已创建: {outfit_dir}")
     return outfit_dir
@@ -1502,7 +1505,7 @@ style: {plan.get('style', style_hint)}
 OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾问。用户会提供完整衣柜档案和场景需求，你需要推荐一套全新穿搭方案。
 
 要求：
-1. 仔细分析场景需求（运动/休闲/通勤/约会等）
+1. 仔细分析场景需求（运动/休闲/通勤/约会等），衣柜表格有「适用场景」列标注每件单品的场景用途，优先匹配
 2. **避开最近已穿单品**：prompt 中会列出 📌 最近已穿的核心单品，必须至少换掉上衣/下装/鞋子中的两件，给出有新鲜感的搭配
 3. 所有单品 ID 必须从上方衣柜清单中选取，严禁编造不存在的 ID
 4. 考虑颜色搭配、风格统一、体型修饰
@@ -1584,6 +1587,7 @@ def run_pipeline(style_hint, task_id=None):
 为「{style_hint}」推荐一套穿搭。{ban_section}{recent_section}
 ⚠️ 上衣、下装、鞋子三者缺一不可，每项必须从下方衣柜表格中选取真实的单品ID。
 ⚠️ 永远不要输出 UNAVAILABLE 作为ID。表格里每个ID都可用。
+⚠️ 表格第5列「适用场景」标注了每件单品的场景用途，运动场景务必选对场景匹配的单品。
 
 以下是完整衣柜档案：
 ---
@@ -1745,8 +1749,8 @@ def _style_has_image(style_id):
         return f'/api/image?f=styles_universal/{style_id}/representative.jpg'
     return None
 
-def _load_style_cards(include_universal=False):
-    """加载风格卡片数据，返回 [{id, name_zh, name_en, description, category, has_encyclopedia, image}]"""
+def _load_style_cards(include_universal=False, with_top_items=False):
+    """加载风格卡片数据，返回 [{id, name_zh, name_en, description, category, has_encyclopedia, image, top_items?}]"""
     styles = []
     # B-line styles
     styles_dir = os.path.join(PROJECT_DIR, 'styles')
@@ -1759,7 +1763,7 @@ def _load_style_cards(include_universal=False):
                     d = json.load(f)
                 sid = d.get('style_id', fn.replace('.json', ''))
                 name_zh = d.get('name_zh', sid)
-                styles.append({
+                card = {
                     'id': sid,
                     'name_zh': name_zh,
                     'name_en': d.get('name_en', ''),
@@ -1768,7 +1772,32 @@ def _load_style_cards(include_universal=False):
                     'has_encyclopedia': os.path.exists(os.path.join(
                         PROJECT_DIR, 'styles_universal', sid, 'encyclopedia.md')),
                     'image': _style_has_image(sid),
-                })
+                }
+                # 计算 top 3 关联单品
+                if with_top_items:
+                    try:
+                        sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
+                        from style_matcher import rank_items_for_style
+                        top = rank_items_for_style(sid, top_n=3, min_score=20)
+                        def _thumb_url(cid):
+                            cutout = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{cid}_cutout.png')
+                            if os.path.exists(cutout):
+                                return f'/api/image?f=wardrobe/enhanced/{cid}_cutout.png'
+                            # fallback to items directory
+                            items_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'items')
+                            for fn in os.listdir(items_dir) if os.path.isdir(items_dir) else []:
+                                if fn.startswith(cid) and fn.lower().endswith(('.png','.jpg','.jpeg')):
+                                    return f'/api/image?f=wardrobe/items/{fn}'
+                            return ''
+                        card['top_items'] = [
+                            {'clothing_id': t['clothing_id'], 'category_code': t.get('category', '')[:4],
+                             'score': t['score'],
+                             'thumb': _thumb_url(t['clothing_id'])}
+                            for t in (top or [])[:3]
+                        ]
+                    except Exception:
+                        card['top_items'] = []
+                styles.append(card)
             except: pass
     # Universal styles (not already in B-line)
     if include_universal:
@@ -1784,7 +1813,6 @@ def _load_style_cards(include_universal=False):
                 try:
                     with open(enc) as f:
                         first_line = f.readline().strip()
-                    # Extract Chinese name from markdown title: "# 日系 City Boy (Japanese City Boy)"
                     name_zh = first_line.lstrip('# ').split('(')[0].strip() if first_line.startswith('#') else d
                     styles.append({
                         'id': d,
@@ -1794,6 +1822,7 @@ def _load_style_cards(include_universal=False):
                         'category': '',
                         'has_encyclopedia': True,
                         'image': _style_has_image(d),
+                        'top_items': [],
                     })
                 except: pass
     return styles
@@ -2034,8 +2063,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if os.path.exists(html_path):
                 with open(html_path, 'r', encoding='utf-8') as f:
                     html = f.read()
-                # 注入返回按钮
-                back_btn = '<button onclick="history.back()" style="position:fixed;top:16px;right:16px;background:#3a3028;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;cursor:pointer;z-index:999">← 返回</button>'
+                # 注入返回按钮（回到探索列表而非首页）
+                back_btn = '<button onclick="location.href=\'/?tab=explore\'" style="position:fixed;top:16px;right:16px;background:#3a3028;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.3)">← 返回列表</button>'
                 html = html.replace('</body>', back_btn + '</body>')
                 self._html_resp(200, html)
             else:
@@ -2386,9 +2415,16 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         if parsed.path == '/api/explore/tweak':
             try:
-                # 日常穿搭：用户风格指纹匹配的B线风格
-                styles = _load_style_cards()
-                self._json_resp(200, {'styles': styles[:8]})
+                # 日常穿搭：舒适区内风格（用户已穿过的8个老风格 + 相近新风格）
+                styles = _load_style_cards(with_top_items=True)
+                # 舒适区: 已穿的8个 + 相近的 scandi_minimalism, korean_light_mature
+                comfort_ids = {
+                    'athleisure_sport','chinese_heritage','clean_fit','japanese_city_boy',
+                    'korean_minimal','resort_vacation','smart_casual','streetwear',
+                    'scandi_minimalism','korean_light_mature'
+                }
+                tweak_styles = [s for s in styles if s['id'] in comfort_ids]
+                self._json_resp(200, {'styles': tweak_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
@@ -2396,10 +2432,13 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         if parsed.path == '/api/explore/transform':
             try:
-                # 改变自己：B线风格中随机选取
-                styles = _load_style_cards()
-                import random; random.shuffle(styles)
-                self._json_resp(200, {'styles': styles[:6]})
+                # 改变自己：中度探索（较舒适区推进一步的风格）
+                styles = _load_style_cards(with_top_items=True)
+                transform_ids = {
+                    'american_ivy_league', 'british_heritage', 'japanese_amekaji'
+                }
+                transform_styles = [s for s in styles if s['id'] in transform_ids]
+                self._json_resp(200, {'styles': transform_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
@@ -2407,14 +2446,14 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         if parsed.path == '/api/explore/cross':
             try:
-                # 大胆跨界：随机选两个B线风格
-                styles = _load_style_cards()
-                import random
-                if len(styles) >= 2:
-                    a, b = random.sample(styles, 2)
-                    self._json_resp(200, {'styles': [a, b], 'fusion': f'{a["name_zh"]} × {b["name_zh"]}'})
-                else:
-                    self._json_resp(200, {'styles': styles[:2], 'fusion': ''})
+                # 大胆跨界：显著偏离舒适区的冒险风格
+                styles = _load_style_cards(with_top_items=True)
+                cross_ids = {
+                    'american_workwear', 'contemporary_gorpcore', 'japanese_yama',
+                    'scene_blokecore', 'retro_90s_hiphop'
+                }
+                cross_styles = [s for s in styles if s['id'] in cross_ids]
+                self._json_resp(200, {'styles': cross_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
@@ -2423,8 +2462,22 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         if parsed.path == '/api/explore/trends':
             try:
                 # 时尚圈子：全部风格
-                styles = _load_style_cards(include_universal=True)
+                styles = _load_style_cards(include_universal=True, with_top_items=True)
                 self._json_resp(200, {'styles': styles, 'total': len(styles)})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        if parsed.path == '/api/explore/try-on':
+            try:
+                params = parse_qs(parsed.query)
+                style_id = params.get('style', [''])[0]
+                if not style_id:
+                    self._json_resp(400, {"error": "缺少风格 ID"})
+                    return
+                tid = _start_async_pipeline('generate', style_id)
+                self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_id} 穿搭"})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})

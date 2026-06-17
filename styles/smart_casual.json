@@ -4,6 +4,7 @@
   "name_en": "Smart Casual",
   "description": "比Clean Fit多一分成熟度，适合见客户、约会等半正式场景。用西装外套增加肩宽、衬衫提升精致感、西裤替代牛仔裤。沉稳色系有温度，不刻板。",
   "category": "半正式",
+  "intensity": 2,
 
   "fingerprint": {
     "silhouette": {

@@ -50,5 +50,12 @@
     "last_worn": null,
     "claude_fit_comment": "Uniqlo基础长袖,日系简约设计,高性价比,宽松版型增加上半身体量感,日常百搭基础款",
     "_statement_score": 0.2
-  }
+  },
+  "occasions": [],
+  "recommended_styles": [
+    "日系简约",
+    "City Boy",
+    "Clean Fit",
+    "极简主义"
+  ]
 }

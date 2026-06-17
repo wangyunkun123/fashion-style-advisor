@@ -18,7 +18,7 @@
   },
   "pattern": {
     "type": "印花",
-    "density": "稀疏",
+    "density": "",
     "logo_visible": true
   },
   "fabric": {
@@ -50,7 +50,8 @@
   },
   "occasions": [
     "日常通勤",
-    "周末休闲"
+    "周末休闲",
+    "极限运动"
   ],
   "recommended_styles": [
     "City Boy",

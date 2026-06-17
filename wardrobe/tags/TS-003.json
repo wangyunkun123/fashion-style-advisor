@@ -47,5 +47,14 @@
     "last_worn": null,
     "claude_fit_comment": "假两件设计和肌理面料能丰富视觉层次,合身剪裁对小肚子修饰有限",
     "_statement_score": 0.25
-  }
+  },
+  "occasions": [
+    "日常",
+    "通勤",
+    "居家"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "轻熟商务"
+  ]
 }

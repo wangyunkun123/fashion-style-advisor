@@ -4,6 +4,7 @@
   "name_en": "Clean Fit",
   "description": "极简干净，低饱和纯色为主，强调「质感 > 设计」。合身微宽松剪裁，不超过3种颜色，不要大面积印花或Logo。适合不想花时间搭配但想看起来讲究的场景。",
   "category": "日常休闲",
+  "intensity": 1,
 
   "fingerprint": {
     "silhouette": {

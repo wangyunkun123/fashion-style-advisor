@@ -51,5 +51,9 @@
     "last_worn": null,
     "claude_fit_comment": "Merrell户外机能风连帽外套,米灰拼灰褐多口袋设计,Gorpcore风格代表品牌,宽松版型大幅增加体量感,适合户外/机能风都市穿搭",
     "_statement_score": 0.3
-  }
+  },
+  "recommended_styles": [
+    "City Boy",
+    "户外机能"
+  ]
 }

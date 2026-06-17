@@ -48,5 +48,11 @@
     "last_worn": "2026-06-16T10:26:35.639662",
     "claude_fit_comment": "宽松直筒牛仔裤可为偏瘦的腿型增加体量感,浅色水洗显休闲随性",
     "_statement_score": 0.15
-  }
+  },
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "复古工装",
+    "极简主义"
+  ]
 }

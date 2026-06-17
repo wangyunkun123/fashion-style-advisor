@@ -17,18 +17,16 @@
     "length_ratio": "标准"
   },
   "pattern": {
-    "type": "Logo",
-    "density": "稀疏",
-    "logo_visible": true
+    "type": "新标签",
+    "density": "胸前logo",
+    "logo_visible": false
   },
   "fabric": {
-    "primary": "棉",
+    "primary": "其他(菠萝纹)",
     "texture": "平纹针织",
     "weight": "中厚",
     "seasonality": [
-      "春",
-      "夏",
-      "秋"
+      "夏"
     ]
   },
   "formality": 3,
@@ -50,6 +48,12 @@
     "_statement_score": 0.45
   },
   "occasions": [
-    "逛街"
+    "逛街",
+    "旅游",
+    "居家",
+    "日常"
+  ],
+  "recommended_styles": [
+    "Clean Fit"
   ]
 }

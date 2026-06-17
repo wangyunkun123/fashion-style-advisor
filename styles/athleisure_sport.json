@@ -4,6 +4,7 @@
   "name_en": "Athleisure / Sport",
   "description": "运动元素融入日常穿搭，不是纯运动服而是有运动感的休闲搭配。涵盖Athleisure、Blokecore（足球元素）、Tenniscore等子风格。功能面料、运动品牌、球队元素均可。",
   "category": "运动休闲",
+  "intensity": 2,
 
   "fingerprint": {
     "silhouette": {

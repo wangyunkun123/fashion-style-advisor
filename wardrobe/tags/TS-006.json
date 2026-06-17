@@ -27,8 +27,7 @@
     "weight": "中厚",
     "seasonality": [
       "春",
-      "夏",
-      "秋"
+      "夏"
     ]
   },
   "formality": 2,
@@ -49,5 +48,10 @@
     "last_worn": "2026-06-16T00:29:54.917915",
     "claude_fit_comment": "宽松黑色T恤搭配拼接口袋设计,可增加体量感且黑色显瘦,胸前细节转移视觉重心",
     "_statement_score": 0.25
-  }
+  },
+  "occasions": [],
+  "recommended_styles": [
+    "City Boy",
+    "高街暗黑"
+  ]
 }

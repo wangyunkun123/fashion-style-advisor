@@ -51,5 +51,12 @@
     "last_worn": null,
     "claude_fit_comment": "COMME des GARÇONS PLAY长袖,川久保玲亲民副线,Filip Pagowski设计大眼爱心超级符号,日系解构美学,中性宽松廓形,高端潮流基础款",
     "_statement_score": 0.35
-  }
+  },
+  "recommended_styles": [
+    "日系简约",
+    "韩系潮流",
+    "City Boy",
+    "街头潮流",
+    "高街暗黑"
+  ]
 }

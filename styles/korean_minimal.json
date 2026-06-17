@@ -4,6 +4,7 @@
   "name_en": "Korean Minimal",
   "description": "强调「上宽下窄」比例，柔和浅色系为主（薄荷绿、浅蓝、米白），衬衫单穿是核心穿法。适合偏白肤色，给人干净温柔的印象。比Clean Fit多一分柔和，比日系少一分宽松。",
   "category": "日常休闲",
+  "intensity": 1,
 
   "fingerprint": {
     "silhouette": {

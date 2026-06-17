@@ -17,9 +17,9 @@
     "length_ratio": "标准"
   },
   "pattern": {
-    "type": "Logo",
-    "density": "稀疏",
-    "logo_visible": true
+    "type": "胸前logo",
+    "density": "背后图案",
+    "logo_visible": false
   },
   "fabric": {
     "primary": "棉",
@@ -27,13 +27,12 @@
     "weight": "中厚",
     "seasonality": [
       "春",
-      "夏",
-      "秋"
+      "夏"
     ]
   },
   "formality": 2,
   "brand": {
-    "name": "SHINO",
+    "name": "HLA",
     "collection": null,
     "confidence": "确定"
   },
@@ -49,5 +48,12 @@
     "last_worn": "2026-06-14T20:59:34.954610",
     "claude_fit_comment": "落肩宽松T恤可有效增加肩宽和上半身体量感,米白色对皮肤友好",
     "_statement_score": 0.15
-  }
+  },
+  "recommended_styles": [
+    "City Boy",
+    "街头潮流"
+  ],
+  "occasions": [
+    "逛街"
+  ]
 }

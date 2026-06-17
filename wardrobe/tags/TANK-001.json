@@ -4,7 +4,7 @@
   "category_code": "TANK",
   "color": {
     "hue_family": "中性",
-    "hue_name": "军绿灰",
+    "hue_name": "军绿",
     "saturation": "低饱和",
     "lightness": "中明度",
     "is_neutral": true,
@@ -48,5 +48,10 @@
     "last_worn": null,
     "claude_fit_comment": "Cotton On澳洲休闲品牌基础背心,宽松版型增加上半身体量感,夏季基础内搭单品,可单穿或叠穿",
     "_statement_score": 0.0
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "复古工装",
+    "极简主义"
+  ]
 }

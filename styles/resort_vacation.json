@@ -4,6 +4,7 @@
   "name_en": "Resort / Vacation",
   "description": "热带印花 + 亚麻材质 + 宽松透气。北京夏季高温（35°C+）时自动推荐。夏威夷衬衫、亚麻短裤、渔夫帽、墨镜是标配。明亮自然色调，给人放松感。",
   "category": "度假",
+  "intensity": 3,
 
   "fingerprint": {
     "silhouette": {

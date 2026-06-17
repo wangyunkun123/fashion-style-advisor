@@ -74,7 +74,8 @@ python3 tools/rating_analyzer.py --summary   # 简要统计
 - **"重建原型"** → `python3 tools/build_prototype.py`
 - **"添加新衣服"** → 放入 wardrobe → 更新服装档案.md → auto_orient → enhance_clothing → 生成缩略图 `python3 tools/generate_thumbnails.py <ID>`
 - **"搜索图片"/"找图"** → `python3 tools/fashion_image_search.py --query "<关键词>"` — 免费服装图片搜索
-- **"采集小红书"** → `xhs search "<关键词>"` → `xhs read <id>` → 写入 `encyclopedia.md`「小红书社区经验」章节（详见 `tools/小红书采集流程.md`）
+- **"采集小红书"** → 两步走：① Playwright 浏览器搜索 `python3 tools/xiaohongshu_scraper.py --search "<关键词>"`（过一次验证码） → ② `xhs read <id> --json` 提取详情（无验证码） → 写入 `encyclopedia.md`（详见 `tools/小红书采集流程.md`）
+- **"XHS读笔记"** → `xhs read <note_id或url> --json`（免验证码，直接API读取）
 - **"采集Instagram"/"搜INS"** → `python3 tools/instagram_search.py --query "<关键词>"`（无需登录，详见 `tools/Instagram采集流程.md`）
 - **"双平台采集"** → 小红书 Top 5 + Instagram Top 5 → 下载封面 → 写入百科 + 更新 `images_meta.json`
 - **"新想法"** → 记录到 `系统升级建议.md`

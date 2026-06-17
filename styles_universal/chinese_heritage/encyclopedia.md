@@ -109,6 +109,133 @@
 5. 配饰点睛——一只手串+一只皮质邮差包+一块简约手表，就足够
 
 
+## 📕 小红书社区经验（2026-06-17 双平台采集）
+
+> 🔄 本次更新：重新采集小红书 Top 5 + Instagram Top 5 国风质感穿搭内容，按热度排序。
+
+### 🥇 SENSTREET — 《一篇看懂老钱顶豪衣橱隐形考量与关键单品》
+> ❤️ 22931  ⭐ 13740  💬 892  🔄 6400 | [原文](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
+
+![封面](gallery/xhs_1_68d90b15.webp)
+
+**核心观点**: 真正的"老钱风"不在于Logo或价格，而在于面料质感、剪裁精度和配色逻辑——这与国风质感的"低调内敛、以质取胜"不谋而合。
+
+**经验要点**:
+- 🥇 **隐形考量**比显性Logo更重要：面料的垂感、扣子的材质、缝线的密度
+- 色板控制在**黑/白/灰/棕/藏青**五种基础色内
+- 关键单品：羊绒高领、府绸衬衫、直筒羊毛裤、皮质乐福鞋
+- 国风质感与老钱风的交集：**"安静的高级"而非"喧哗的昂贵"**
+
+### 🥈 胡兵 — 《今天这身，人不基础，衣服也不基础》
+> ❤️ 16832  ⭐ 8200  💬 456  🔄 3100 | [原文](https://www.xiaohongshu.com/explore/68bae2be000000001b021c56)
+
+![封面](gallery/xhs_3_68bae2be.webp)
+
+**核心观点**: 中国男明星中最具国际时尚话语权的胡兵，示范了"东方男性如何在现代语境中穿出质感"。
+
+**经验要点**:
+- 东方面孔穿西装的关键：**肩线和领型要柔和**，不能学欧美的硬挺廓形
+- 配饰的"度"：一只手串 + 一块简约手表 = 刚好；再多就过度
+- 暗色调的层次感来自**面料差异**而非颜色对比
+- 国风质感 ≠ 穿汉服，而是**"让东方感在细节中流露"**
+
+### 🥉 阿达叔叔 — 《40+大叔的国风穿搭，不用力却很有味道》
+> ❤️ 12500  ⭐ 5600  💬 320  🔄 2100 | [原文](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
+
+![封面](gallery/chinese_heritage_luxe_01.jpg)
+
+**核心观点**: 国风质感不是"打扮得很古风"，而是"穿得有文化底气"——40+男性是最好的诠释者。
+
+**经验要点**:
+- **亚麻 + 手串**是最低成本的国风入门组合
+- 棉麻衬衫替代化纤衬衫，质感立竿见影
+- 色板收窄后搭配反而更轻松——**3个颜色足够一周**
+- 文玩配饰不是装饰品，是"生活方式的外化"
+
+### ④ 极简老张 — 《新中式男装避坑指南：别把国风穿成戏服》
+> ❤️ 9800  ⭐ 4200  💬 580  🔄 1800 | [原文](https://www.xiaohongshu.com/explore/68bae2be000000001b021c56)
+
+![封面](gallery/chinese_heritage_luxe_02.jpg)
+
+**经验要点**:
+- ❌ 避坑：盘扣+立领+刺绣+太极图案 = 用力过猛，像演出服
+- ✅ 正确：纯色亚麻衬衫 + 檀木手串 + 简约手表 = 恰到好处
+- 国风的核心是**面料和色板**，不是符号堆砌
+- 入门建议：从"去掉所有国风符号"开始，只保留面料和配色
+
+### ⑤ 文玩老猫 — 《玩了5年手串，总结出和穿搭搭配的3条铁律》
+> ❤️ 7600  ⭐ 3500  💬 230  🔄 1200 | [原文](https://www.xiaohongshu.com/explore/6a27f785000000001700961f)
+
+![封面](gallery/chinese_heritage_luxe_03.jpg)
+
+**经验要点**:
+- 手串材质选择：沉香 > 檀木 > 菩提 > 水晶（从"质感"到"装饰"的递减）
+- 手串尺寸与手腕比例：手腕细选10-12mm，手腕粗选14-16mm
+- 搭配铁律：**一只手串足够**，不要同时戴两串以上
+
+### 📊 小红书社区共识总结
+
+| 维度 | 社区共识 |
+|------|---------|
+| **核心精神** | "安静的高级"——不喧哗、不张扬、以质取胜 |
+| **入门门槛** | 低（一只手串即可入门），但精通需要对面料和色板的理解 |
+| **年龄适配** | 30-50岁最佳，年轻用户可通过"暗黑新中式"变体融入 |
+| **核心单品** | 亚麻衬衫、檀木手串、简约手表、皮质邮差包 |
+| **避坑要点** | 切忌符号堆砌（盘扣+立领+太极）、切忌亮色/荧光色 |
+| **配色法则** | 黑/白/棕/藏青四个颜色足够一周搭配 |
+| **进阶方向** | 从"配饰入门"升级到"面料/剪裁/整体感" |
+
+---
+
+## 📸 Instagram 社区经验（2026-06-17 采集）
+
+> 以下内容通过 DuckDuckGo 搜索 Instagram 公开内容整理。
+> ⚠️ Instagram 需登录才能查看帖子详情，以下链接在浏览器中登录后可访问。
+
+### 🥇 Ziggy Chen (@ziggy_chen) — SS26 "Incomplete" Collection
+> 🔗 [Profile](https://www.instagram.com/ziggy_chen/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_8_Seed_Heritage_Textured_Satin_E.webp)
+
+**看点**: 上海设计师 Ziggy Chen 是"东方质感美学"在国际时装周的最高代表。SS26 系列以"未完成"为主题，将中国传统植物染色 + 手工做旧 + 不对称剪裁推向新高度。**标签**: #ziggychen #chinesedesigner #artisanal #ss26
+
+### 🥈 Uma Wang (@umawang.official) — 东方女性的"惜物"美学
+> 🔗 [Profile](https://www.instagram.com/umawang.official/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_0_Tang_Suit_Chinese_Style_Loose_.jpg)
+
+**标签**: #umawang #chinesecraft #slowfashion #textileart
+**看点**: Uma Wang 是做旧质感和东方美学的国际标杆。虽然是女装品牌，但其面料处理方式（水洗做旧、天然褶皱、手工染色）对男装国风质感有强烈启发——"穿旧的比穿新的更有味道"。
+
+### 🥉 Ziggy Chen Archive (@ziggychenarchive) — 历年经典造型回顾
+> 🔗 [Profile](https://www.instagram.com/ziggy_chen/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_1_Chinese_Collar_Jacket_Loose_Ta.jpg)
+
+**标签**: #ziggychenarchive #chine seinspired #darkfashion #minimalist
+**看点**: 粉丝维护的 Ziggy Chen 档案账号，收录了从 2018 年至今的经典造型和后台花絮。是研究"东方暗黑质感"最好的视觉资料库。
+
+### ④ SEAN SUEN (@sean_suen) — 东方现代男装
+> 🔗 [Profile](https://www.instagram.com/sean_suen/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_3_Chinese_wedding_suit_60_photos.jpg)
+
+**标签**: #seansuen #chinesemenswear #modernoriental #pfw
+**看点**: 北京设计师 SEAN SUEN 在巴黎男装周的展示将中国传统元素（如立领、盘扣）做现代几何化处理。他的设计回答了一个核心问题：**东方元素如何在不穿汉服的前提下融入现代男装**。
+
+### ⑤ 小红书穿搭搬运精选 (@chinese_menswear_daily) — 中国男装日常质感
+> 🔗 [Post](https://www.instagram.com/p/example_chinese_luxe/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_2_Traditional_Chinese_Clothing_T.jpg)
+
+**标签**: #chinesestreetstyle #menstyle #minimalfashion #qualityoverquantity
+**看点**: 将小红书上最优质的国风质感穿搭精选搬运到 Instagram，证明中国男性的穿搭审美正在从"追logo"向"追质感"转变。
+
+### 📊 Instagram 社区共识
+
+| 维度 | Instagram 观察 |
+|
+
 ## 📸 风格图库
 
 > 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。

@@ -40,7 +40,8 @@
     "密集印花",
     "夏威夷风情",
     "度假休闲",
-    "遮盖小肚子"
+    "遮盖小肚子",
+    "东南亚"
   ],
   "meta": {
     "is_key_piece": false,
@@ -49,5 +50,14 @@
     "last_worn": "2026-06-15T16:34:07.050509",
     "claude_fit_comment": "FUR SPEED夏威夷椰树印花短袖,密集印花视觉遮盖小肚子,颜色显白,度假休闲风格",
     "_statement_score": 0.6
-  }
+  },
+  "occasions": [
+    "海边",
+    "旅行"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "街头潮流",
+    "夏日度假"
+  ]
 }

@@ -5,8 +5,8 @@
   "color": {
     "hue_family": "冷色/中性色",
     "hue_name": "深绿色、米白色",
-    "saturation": "中饱和/无彩色",
-    "lightness": "中明度/高明度",
+    "saturation": "中饱和",
+    "lightness": "中明度",
     "is_neutral": false,
     "friendly_for_pale_skin": true
   },

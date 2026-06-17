@@ -46,5 +46,15 @@
     "last_worn": "2026-06-15T08:34:29.861083",
     "claude_fit_comment": "Decathlon Artengo网球线运动短裤,宽松速干适合网球/运动场景,卡其灰低调耐脏,增加下半身体量感",
     "_statement_score": 0.05
-  }
+  },
+  "occasions": [
+    "网球"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "运动休闲",
+    "复古工装",
+    "意式运动"
+  ]
 }

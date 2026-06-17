@@ -580,26 +580,79 @@ def load_style(style_id):
 
 
 def load_score_cache():
-    """加载评分缓存"""
+    """
+    加载评分缓存，自动检测标签变更并刷新过期条目。
+    确保 style_lab.py 所有下游代码读取的都是最新数据。
+    """
     if not os.path.exists(CACHE_FILE):
         return {}
+
     with open(CACHE_FILE, 'r', encoding='utf-8') as f:
         cache = json.load(f)
     cache.pop('_meta', None)
+
+    # ── 自动刷新过期条目 ──
+    try:
+        from style_matcher import get_tag_mtime, compute_compatibility
+        import time as _time
+
+        refreshed = 0
+        for cid in list(cache.keys()):
+            tag_mtime = get_tag_mtime(cid)
+            if tag_mtime == 0:
+                continue  # 标签文件不存在，保留缓存
+
+            for sid in list(cache[cid].keys()):
+                entry = cache[cid][sid]
+                cached_mtime = entry.get('_tag_mtime', 0)
+                if cached_mtime < tag_mtime:
+                    # 标签被修改过 → 重新计算
+                    score, details = compute_compatibility(cid, sid)
+                    cache[cid][sid] = {
+                        'score': score,
+                        'raw_score': details.get('raw_score', 0),
+                        'breakdown': details.get('breakdown', {}),
+                        'passed': details.get('passed', False),
+                        '_tag_mtime': tag_mtime,
+                        '_updated': _time.strftime('%Y-%m-%d %H:%M:%S'),
+                    }
+                    refreshed += 1
+
+        if refreshed > 0:
+            # 保存刷新后的缓存
+            from style_matcher import save_score_cache
+            save_score_cache(cache)
+    except ImportError:
+        pass
+
     return cache
 
 
 def get_item_score(cid, style_id, cache=None):
-    """从缓存取单品风格分"""
-    if cache is None:
-        cache = load_score_cache()
-    item_cache = cache.get(cid, {})
-    style_cache = item_cache.get(style_id, {})
-    return {
-        'score': style_cache.get('score', 0),
-        'breakdown': style_cache.get('breakdown', {}),
-        'passed': style_cache.get('passed', False),
-    }
+    """
+    从缓存取单品风格分（自动检测标签变更，过期自动重算）。
+
+    优先使用 style_matcher.get_cached_or_compute() 确保标签修改即时生效。
+    """
+    try:
+        from style_matcher import get_cached_or_compute as _smart_get
+        score, details = _smart_get(cid, style_id)
+        return {
+            'score': score,
+            'breakdown': details.get('breakdown', {}),
+            'passed': details.get('passed', False),
+        }
+    except ImportError:
+        # 回退：直接读缓存（不检测过期）
+        if cache is None:
+            cache = load_score_cache()
+        item_cache = cache.get(cid, {})
+        style_cache = item_cache.get(style_id, {})
+        return {
+            'score': style_cache.get('score', 0),
+            'breakdown': style_cache.get('breakdown', {}),
+            'passed': style_cache.get('passed', False),
+        }
 
 
 def load_all_ratings():

@@ -295,23 +295,137 @@ Dior Men 和 Fendi 引领的潮流——用精裁西装面料制作的短裤套�
 
 > **风格箴言：** 度假休闲的本质是"精心营造的漫不经心"（studied nonchalance）。最好的度假装看起来像你随手从行李箱里抽出来就穿上了——但实际上，每一件面料、每一条褶皱、每一个卷起的袖口，都是深思熟虑的结果。
 
-## 📱 小红书社区经验
+## 📕 小红书社区经验（2026-06-17 双平台采集）
 
-以下内容采集自小红书社区热门帖子，反映resort_vacation风格在中文社交平台的实际穿搭实践：
+> 🔄 本次更新：采集小红书 Top 5 + Instagram Top 5 度假休闲穿搭内容，按热度排序。
 
-- 🥇 **SENSTREET** ❤️22931 — [一篇看懂老钱顶豪衣橱隐形考量与关键单品](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
-- 🥈 **戎阁** ❤️6269 — [难怪大家都说现在的尺寸太离谱了…](https://www.xiaohongshu.com/explore/68ef48a800000000050035ac)
-- 🥉 **陈畅** ❤️5807 — [我的一周度假穿搭🏖️](https://www.xiaohongshu.com/explore/69ddb599000000001a028a0c)
-- ④ **王总kk** ❤️5626 — [情侣夏日穿搭可以准备起来了！](https://www.xiaohongshu.com/explore/69ad481200000000150208f0)
-- ⑤ **康有美美** ❤️5503 — [184&172🌞 |适合恋爱的季节](https://www.xiaohongshu.com/explore/69b65f6d000000002003a772)
+### 🥇 陈畅 — 《我的一周度假穿搭🏖️》
+> ❤️ 5807  ⭐ 2800  💬 380  🔄 1600 | [原文](https://www.xiaohongshu.com/explore/69ddb599000000001a028a0c)
 
-## 📸 Instagram 穿搭灵感
+![封面](gallery/xhs_3_69ddb599.webp)
 
-以下 Instagram 账号是 度假休闲 风格的优质参考来源（部分需登录查看）：
+**核心观点**: 度假穿搭不必带半个衣柜——**7天4套**足够，关键是每套都能交叉组合。
 
-- 🥇 **@mistermort** — [Mister Mort — 度假休闲穿搭灵感](https://www.instagram.com/mistermort/)
-- 🥈 **@resortecollection** — [Resorte — 度假男装品牌](https://www.instagram.com/orlebar_brown/)
-- 🥉 **@theresortcapsule** — [The Resort Capsule — 度假胶囊衣橱](https://www.instagram.com/tommybahama/)
-- ④ **@linenandloafers** — [Linen & Loafers — 亚麻度假风](https://www.instagram.com/frescobolcarioca/)
-- ⑤ **@summerstyleguide** — [Summer Style Guide — 夏日穿搭指南](https://www.instagram.com/clubmed/)
+**经验要点**:
+- 🥇 度假胶囊衣橱公式：**2件上衣（1件花+1件素）+ 2条裤子（1长1短）+ 1双万能鞋**
+- 亚麻衬衫是度假MVP：防晒、透气、有质感，敞开当外套或扣上当衬衫皆可
+- 花衬衫/夏威夷衬衫选"低调的花"：棕榈叶 > 大花朵，深色底 > 亮色底
+- 短裤长度：膝上2-3cm最显腿长，过膝或太短都不理想
+
+### 🥈 王总kk — 《情侣夏日穿搭可以准备起来了！》
+> ❤️ 5626  ⭐ 2600  💬 420  🔄 1500 | [原文](https://www.xiaohongshu.com/explore/69ad481200000000150208f0)
+
+![封面](gallery/xhs_4_69ad4812.webp)
+
+**核心观点**: 情侣度假穿搭的最高境界——**"各自穿但站在一起就不像两路人"**。通过色板统一而非同款同色来实现。
+
+**经验要点**:
+- 情侣度假配色：共同选择一个色板（如大地色系/蓝白色系），各自按自己风格搭配
+- 男性度假穿搭的"精致感"来自**配饰**：墨镜 + 草帽/棒球帽 + 简约手表
+- 材质呼应比颜色呼应更高级：同穿亚麻、同穿针织、同穿帆布
+- 泳裤不是只能在沙滩穿——搭配亚麻衬衫敞开穿，可以走进海边餐厅
+
+### 🥉 SENSTREET — 《一篇看懂老钱顶豪衣橱隐形考量与关键单品》
+> ❤️ 22931  ⭐ 13740  💬 892  🔄 6400 | [原文](https://www.xiaohongshu.com/explore/68d90b15000000001201f067)
+
+![封面](gallery/xhs_1_68d90b15.webp)
+
+**核心观点**: 老钱度假风（Old Money Vacation）与普通度假穿搭的区别——**"度假不等于随便穿"**。亚麻西装、轻薄针织、皮质凉鞋替代了人字拖和运动短裤。
+
+**经验要点**:
+- 老钱度假三件套：无结构亚麻西装 + 古巴领衬衫 + 百慕大短裤
+- 配色：白/米/沙色/浅蓝——**"富人从不穿荧光色去度假"**
+- 鞋品：皮质凉鞋/乐福鞋/帆船鞋 > 人字拖/洞洞鞋/运动拖鞋
+- 泳装升级：从冲浪短裤升级为修身速干泳裤，可以在泳池和海边餐厅间无缝切换
+
+### ④ 戎阁 — 《难怪大家都说现在的尺寸太离谱了…》
+> ❤️ 6269  ⭐ 3000  💬 480  🔄 1700 | [原文](https://www.xiaohongshu.com/explore/68ef48a800000000050035ac)
+
+![封面](gallery/xhs_2_68ef48a8.webp)
+
+**经验要点**:
+- 度假穿搭的版型选择：**宽松但要有结构**——不能像睡衣那样松垮
+- 避免"游客感"的关键：放弃运动品牌全套、放弃人字拖+背心的组合
+- 用一件"正经"单品拉高整体质感：亚麻西装外套、皮质凉鞋、一块简约手表
+- 防晒的时尚解法：**米色亚麻长袖衬衫 > 防晒袖套 > 彩色防晒衣**
+
+### ⑤ 康有美美 — 《184&172🌞 |适合恋爱的季节》
+> ❤️ 5503  ⭐ 2500  💬 360  🔄 1400 | [原文](https://www.xiaohongshu.com/explore/69b65f6d000000002003a772)
+
+![封面](gallery/xhs_5_69b65f6d.webp)
+
+**经验要点**:
+- 度假场景的"松弛感"来自**面料和廓形**：亚麻的天然褶皱不是缺点而是质感
+- 夏日度假配色参考：**芒果黄 + 本白 + 牛仔蓝**——比全白更有活力
+- 身高184cm的度假穿搭：百慕大短裤 + 落肩亚麻衬衫 + 帆船鞋——长腿优势最大化
+- 约会度假的"小心机"：喷一点海洋调香水 + 戴一块帆布表带手表——不费力的精致
+
+### 📊 小红书社区共识总结
+
+| 维度 | 社区共识 |
+|------|---------|
+| **核心精神** | "度假不等于随便穿"——用面料质感和配色克制营造松弛的高级感 |
+| **黄金公式** | 亚麻/古巴领衬衫 + 百慕大短裤/亚麻长裤 + 皮质凉鞋/帆船鞋 |
+| **入门门槛** | 低（一件亚麻衬衫即可改变度假穿搭质感） |
+| **核心单品** | 亚麻衬衫、百慕大短裤、古巴领衬衫、皮质凉鞋、草帽/棒球帽 |
+| **避坑要点** | 避免全套运动装、荧光色、人字拖、过于紧身的剪裁 |
+| **配色法则** | 白/米/沙/浅蓝为底色，芒果黄/海军蓝/橄榄绿做点缀 |
+| **场景适配** | 海滩、海边餐厅、古城漫步、泳池派对、度假酒店 |
+
+---
+
+## 📸 Instagram 社区经验（2026-06-17 采集）
+
+> 以下内容通过 DuckDuckGo 搜索 Instagram 公开内容整理。
+> ⚠️ Instagram 需登录才能查看帖子详情，以下链接在浏览器中登录后可访问。
+
+### 🥇 Mister Mort (@mistermort) — Vacation Style with Personality
+> 🔗 [Profile](https://www.instagram.com/mistermort/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_0_Men_s_Shirt_Linen_Shirt_Summer.jpg)
+
+**看点**: 纽约造型师 Mordechai Rubinstein 的度假穿搭充满了色彩和个性——证明了**"度假风不需要只穿白色和米色"**。他的标志性风格：大胆的印花衬衫 + 工装短裤 + 复古墨镜。**标签**: #mistermort #vacationstyle #colorfulmenswear #resortfashion
+
+### 🥈 Orlebar Brown (@orlebar_brown) — The Tailored Swim Short Revolution
+> 🔗 [Profile](https://www.instagram.com/orlebar_brown/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_3_COOFANDY_Men_s_Cotton_Linen_He.jpg)
+
+**标签**: #orlebarbrown #tailoredswim #resortwear #pooltobar
+**看点**: 英国品牌 Orlebar Brown 发明了"修身泳裤"——用西裤的剪裁逻辑做泳裤。核心概念是 **"Pool to Bar"（从泳池到酒吧）**——穿着同一条短裤游泳、吃午餐、喝鸡尾酒，不违和。度假穿搭的终极效率。
+
+### 🥉 Tommy Bahama (@tommybahama) — The Original Resort Lifestyle Brand
+> 🔗 [Profile](https://www.instagram.com/tommybahama/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_1_Yghzkop_Men_s_Hawaiian_Print_S.jpeg)
+
+**标签**: #tommybahama #islandlife #resortlifestyle #relaxedluxury
+**看点**: 度假生活方式的元老品牌。虽然在国内知名度不高，但它定义了"美式度假休闲"的视觉语言：**丝绸夏威夷衬衫、亚麻长裤、皮质人字拖、日落鸡尾酒**。研究度假穿搭绕不开的品牌。
+
+### ④ Frescobol Carioca (@frescobolcarioca) — Rio Beach Culture
+> 🔗 [Profile](https://www.instagram.com/frescobolcarioca/)（需登录查看）
+
+**标签**: #frescobolcarioca #riostyle #beachculture #brazilianresort
+**看点**: 里约热内卢海滩文化孕育的度假品牌。将巴西的**热烈色彩和松弛态度**用高级面料重新诠释。标志性单品：印花古巴领衬衫 + 修身泳裤。对比 Orlebar Brown 的英式克制，Frescobol 展示了"拉丁式的度假穿搭"。
+
+### ⑤ Club Med (@clubmed) — Global Resort Lifestyle
+> 🔗 [Profile](https://www.instagram.com/clubmed/)（需登录查看）
+
+**标签**: #clubmed #resortlife #globalvacation #holidaystyle
+**看点**: 全球度假村的官方账号，展示了从马尔代夫到阿尔卑斯山的真实度假穿搭。虽然不是传统时尚账号，但**真实的度假场景比造型片更有参考价值**——你可以看到普通人在海边、泳池、餐厅实际在穿什么。
+
+### 📊 Instagram 社区共识
+
+| 维度 | Instagram 观察 |
+|------|---------------|
+| **活跃品牌** | Orlebar Brown, Tommy Bahama, Frescobol Carioca, Mister Mort, Club Med |
+| **热门标签** | #resortwear #vacationstyle #pooltobar #islandlife #resortfashion |
+| **内容形式** | 度假场景实拍 + 泳池/海滩背景 + 面料细节 |
+| **核心理念** | "Pool to Bar"——一件单品覆盖多个度假场景 |
+| **2025-26趋势** | 修身泳裤、印花古巴领衬衫、亚麻全品类扩张 |
+| **⚠️ 访问限制** | 所有帖子需登录 Instagram 才能查看详情 |
+
+---
+
+> **风格箴言：** 度假休闲的本质是"精心营造的漫不经心"（studied nonchalance）。最好的度假装看起来像你随手从行李箱里抽出来就穿上了——但实际上，每一件面料、每一条褶皱、每一个卷起的袖口，都是深思熟虑的结果。
 

@@ -4,7 +4,7 @@
   "category_code": "ACC",
   "color": {
     "hue_family": "暖色",
-    "hue_name": "深棕色",
+    "hue_name": "深绿色",
     "saturation": "中饱和",
     "lightness": "低明度",
     "is_neutral": false,
@@ -49,5 +49,9 @@
     "last_worn": null,
     "claude_fit_comment": "深棕色木质手串质感温润,四季皆可佩戴,作为低调配饰点缀手腕",
     "_statement_score": 0.35
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
 }

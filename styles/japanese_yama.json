@@ -1,0 +1,69 @@
+{
+  "style_id": "japanese_yama",
+  "name_zh": "日系山系",
+  "name_en": "Japanese Yama Style",
+  "description": "日本独有的将户外功能服装融入都市日常的穿搭美学。与Gorpcore共享底层逻辑但表达截然不同——配色更柔和克制、廓形更适合亚洲身型、品牌以日本本土为主。'山系'不仅是穿衣，更是一种'城市与自然之间自由切换'的生活态度。",
+  "category": "日系功能",
+  "intensity": 2,
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["宽松", "合身"],
+      "acceptable": ["廓形"],
+      "rejected": ["紧身", "修身"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["中性", "冷色"],
+      "allowed_hues": ["米白", "沙色", "卡其", "橄榄绿", "藏青", "雾蓝", "灰绿", "炭灰", "苔绿"],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "同色系渐变优于对比撞色——沙色→卡其→橄榄绿；永远有一件白色/米白单品作为底色"
+    },
+    "pattern": {
+      "preferred": ["纯色"],
+      "acceptable": ["拼接"],
+      "rejected": ["印花", "格纹", "大面积Logo"]
+    },
+    "fabric": {
+      "preferred": ["棉", "合成", "抓绒", "速干"],
+      "acceptable": ["帆布", "牛仔"],
+      "rejected": ["羊毛混纺", "丝质", "灯芯绒", "皮质"]
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": { "min": 1, "max": 2 }
+  },
+
+  "key_items": [
+    {"category_code": "JK", "fabric": ["合成", "抓绒", "棉"], "silhouette": ["宽松"], "bonus": 20, "reason": "轻量风壳/摇粒绒外套是山系核心——尼龙材质、哑光质感"},
+    {"category_code": "PT", "fabric": ["棉", "合成", "速干"], "silhouette": ["宽松"], "bonus": 18, "reason": "宽松锥形裤/机能工装裤——腰部抽绳，大腿有空间"},
+    {"category_code": "SHOE", "brand": ["Nike", "New Balance", "Salomon"], "bonus": 12, "reason": "越野跑鞋/复古跑鞋——Salomon XT-6或New Balance 990系列"},
+    {"category_code": "TS", "hue": ["白", "米白", "灰"], "pattern": "纯色", "bonus": 12, "reason": "白色/米白T恤是山系不变的底层——'底白法则'"},
+    {"category_code": "BAG", "fabric": ["合成", "帆布"], "bonus": 10, "reason": "机能胸包/腰包是山系配件灵魂——and wander/F/CE.风格"}
+  ],
+
+  "hard_constraints": [
+    {"field": "color.saturation", "operator": "neq", "value": "高饱和", "reason": "高饱和色违背山系'融于自然'的配色哲学"},
+    {"field": "pattern.type", "operator": "not_in", "value": ["印花", "格纹"], "reason": "图案破坏山系低调克制的户外美学"},
+    {"field": "fabric.primary", "operator": "not_in", "value": ["羊毛混纺", "丝质"], "reason": "精致面料与山系户外功能定位冲突"},
+    {"field": "silhouette.fit", "operator": "not_in", "value": ["紧身", "修身"], "reason": "山系廓形必须宽松——户外活动需要空间"}
+  ],
+
+  "soft_constraints": [
+    {"field": "color.hue", "operator": "in", "value": ["米白", "沙色", "卡其", "橄榄绿", "藏青", "雾蓝", "灰绿", "炭灰", "白"], "weight": 12},
+    {"field": "fabric.primary", "operator": "in", "value": ["棉", "合成", "抓绒", "速干", "帆布"], "weight": 10},
+    {"field": "silhouette.fit", "operator": "in", "value": ["宽松", "合身"], "weight": 8},
+    {"field": "color.saturation", "operator": "eq", "value": "低饱和", "weight": 7}
+  ],
+
+  "body_modifier_bonus": {
+    "增加上半身体量感": 5,
+    "遮盖小肚子": 6
+  },
+
+  "related_styles": ["contemporary_gorpcore", "japanese_city_boy", "athleisure_sport"],
+  "conflicting_styles": ["smart_casual", "chinese_heritage", "korean_light_mature", "american_ivy_league"]
+}

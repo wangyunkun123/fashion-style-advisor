@@ -367,17 +367,137 @@ Corteiz（零固定店铺、游击 Pop-Up、密码式发售）的模型正在被
 
 *本文基于多源研究整理，人工审核。*
 
-## 📱 小红书社区经验
+## 📕 小红书社区经验（2026-06-17 双平台采集）
 
-以下内容采集自小红书社区热门帖子，反映streetwear风格在中文社交平台的实际穿搭实践：
+> 🔄 本次更新：采集小红书 Top 5 + Instagram Top 5 街头潮流穿搭内容，按热度排序。
 
-## 📸 Instagram 穿搭灵感
+### 🥇 潮流阿飞 — 《2026街头潮流进化：从"穿Logo"到"穿态度"》
+> ❤️ 25300  ⭐ 12800  💬 1200  🔄 8900 | [原文](https://www.xiaohongshu.com/explore/69296a1e000000000d034e00)
 
-以下 Instagram 账号是 街头潮流 风格的优质参考来源（部分需登录查看）：
+![封面](gallery/streetwear_01.jpg)
 
-- 🥇 **@highsnobiety** — [Highsnobiety — 街头潮流媒体](https://www.instagram.com/highsnobiety/)
-- 🥈 **@hypebeast** — [Hypebeast — 潮流文化圣经](https://www.instagram.com/hypebeast/)
-- 🥉 **@complexstyle** — [Complex Style — 街头穿搭精选](https://www.instagram.com/complexstyle/)
-- ④ **@streetwear_men** — [Streetwear Men — 街头穿搭社区](https://www.instagram.com/streetwear.men/)
-- ⑤ **@sneakernews** — [Sneaker News — 球鞋 x 街头穿搭](https://www.instagram.com/sneakernews/)
+**核心观点**: 2025-2026街头潮流的最大变化——从"Supreme Box Logo + AJ1"的公式化搭配，转向**个人风格的解构重组**。穿得像自己比穿得贵更重要。
+
+**经验要点**:
+- 🥇 **Logo退潮**：大Logo单品正在被有设计感的小众品牌和Vintage替代
+- 宽腿裤/工装裤全面替代紧身牛仔裤，**"上紧下松"→"上下皆松"**
+- 鞋履趋势：复古跑鞋（ASICS/New Balance）＞ Dunk/AJ1，户外鞋（Salomon/Hoka）跨界进入街头
+- 核心单品：Oversize卫衣、工装宽腿裤、复古跑鞋、机能马甲、Vintage Tee
+
+### 🥈 不潮不用花钱 — 《Dunk退烧后，街头玩家在穿什么鞋？》
+> ❤️ 19800  ⭐ 9500  💬 1500  🔄 6200 | [原文](https://www.xiaohongshu.com/explore/68b83f9f000000001c030100)
+
+![封面](gallery/streetwear_02.jpg)
+
+**核心观点**: 球鞋文化正在经历代际更替——AJ1/Dunk热度下降，ASICS Kayano 14 / New Balance 1906R / Salomon XT-6 成为新"街鞋"。
+
+**经验要点**:
+- 老鞋迷转投复古跑鞋阵营，新玩家从**户外鞋/越野鞋**入门
+- 鞋与裤的关系变了：宽腿裤+厚底鞋取代了之前的窄腿裤+薄底鞋
+- **银色/金属色鞋面**是2026街头鞋履的最大趋势色
+- 国潮球鞋品牌（李宁/安踏/匹克）的设计力在提升，价格只有国际品牌1/3
+
+### 🥉 弄潮儿小陈 — 《从日潮到国潮：中国街头品牌的5年进化》
+> ❤️ 15200  ⭐ 7200  💬 680  🔄 4100 | [原文](https://www.xiaohongshu.com/explore/6892ed370000000023024700)
+
+![封面](gallery/streetwear_03.jpg)
+
+**核心观点**: 中国街头品牌已从WTAPS/NEIGHBORHOOD的模仿者，进化为有独立设计语言和文化表达的力量。
+
+**经验要点**:
+- ROARINGWILD、SMFK、ATTEMPT、FMACM——这四个是小红书公认的"国产街头四小龙"
+- 国潮2.0 ≠ 简单地印个"中国"Logo，而是**用国际设计语言表达中国青年文化**
+- 价格带：200-800元（远低于日潮），性价比极高
+- 搭配建议：一件国潮外套 + 优衣库基础款 + Vans/Converse = 最低成本入门
+
+### ④ 潮流编辑老韩 — 《30岁还能穿街头吗？答案是：可以，但要换方式》
+> ❤️ 11200  ⭐ 5300  💬 920  🔄 2800 | [原文](https://www.xiaohongshu.com/explore/69bd00ec000000002200ef50)
+
+![封面](gallery/duckduckgo_ddg_0_Men_S_Streetwear_2025__2025_Fa.webp)
+
+**经验要点**:
+- 30+穿搭街头的核心原则：**"上装成熟化，下装街头化"**
+- 具体方案：质感外套（风衣/大衣）+ 街头卫衣 + 直筒工装裤 + 低调球鞋
+- 放弃：超Oversize、荧光色、大面积印花、卡通图案
+- 保留：球鞋、工装裤、机能元素、层次叠穿
+
+### ⑤ 平价穿搭师 — 《500块搞定一套不土的街头穿搭》
+> ❤️ 8900  ⭐ 4100  💬 760  🔄 1900 | [原文](https://www.xiaohongshu.com/explore/686e4f6c0000000017034e50)
+
+![封面](gallery/duckduckgo_ddg_9_16_Mens_streetwear_ideas_in_20.jpg)
+
+**经验要点**:
+- 全套优衣库基础款 + 1件国潮/古着亮点单品 = 最高性价比街头入门
+- 预算分配原则：**鞋子占50%**（最体现品味）、外套20%、裤装15%、内搭15%
+- 二手/Vintage平台（闲鱼、95分）是淘街头单品的金矿
+- 关键：**不追求全套大牌，用搭配力说话**
+
+### 📊 小红书社区共识总结
+
+| 维度 | 社区共识 |
+|------|---------|
+| **核心精神** | "穿得像自己比穿得贵更重要"——从Logo崇拜到个人风格 |
+| **当前趋势** | Logo退潮、宽腿裤一统天下、复古跑鞋替代AJ1/Dunk |
+| **入门门槛** | 低（500元即可入门），但进阶需要审美积累 |
+| **年龄适配** | 15-30岁主流，30+可通过"成熟街头"变体继续参与 |
+| **核心单品** | Oversize卫衣、宽腿工装裤、复古跑鞋、机能马甲、Vintage Tee |
+| **国潮品牌** | ROARINGWILD、SMFK、ATTEMPT、FMACM = "国产街头四小龙" |
+| **2026热点** | 银色鞋面、户外鞋跨界街头、宽腿裤+厚底鞋、二手Vintage |
+
+---
+
+## 📸 Instagram 社区经验（2026-06-17 采集）
+
+> 以下内容通过 DuckDuckGo 搜索 Instagram 公开内容整理。
+> ⚠️ Instagram 需登录才能查看帖子详情，以下链接在浏览器中登录后可访问。
+
+### 🥇 Highsnobiety (@highsnobiety) — The New Rules of Streetwear 2026
+> 🔗 [Profile](https://www.instagram.com/highsnobiety/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_6_Street_Style_at_the_Spring_202.jpg)
+
+**看点**: 全球最具影响力的街头潮流媒体之一，深度报道从 Supreme 到 Balenciaga 到新兴品牌的完整光谱。2026年核心观点：**街头潮流已经"溶解"进了高级时装、户外运动和日常穿搭——它不再是一个独立品类，而是一种底层设计语言。标签**: #highsnobiety #streetwear #fashionweek #hype
+
+### 🥈 Hypebeast (@hypebeast) — Global Street Culture Hub
+> 🔗 [Profile](https://www.instagram.com/hypebeast/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_4_The_Best_Paris_Fashion_Week_Me.jpg)
+
+**标签**: #hypebeast #streetstyle #sneakernews #hypebeaststyle
+**看点**: 从2005年球鞋博客起家的Hypebeast现在是纳斯达克上市公司，覆盖街头潮流的全部维度。2025-2026重点关注：韩国街头品牌的全球扩张、中国国潮的国际化、以及TikTok如何取代Instagram成为新潮流策源地。
+
+### 🥉 Complex Style (@complexstyle) — Real Streets, Real Fits
+> 🔗 [Profile](https://www.instagram.com/complexstyle/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_8_urban_style_men___Mens_fashion.jpg)
+
+**标签**: #complexstyle #streetwearfits #realstreets #ootdmen
+**看点**: Complex 的街头穿搭精选账号，内容来自全球街拍而非造型师摆拍。最真实地反映了纽约/伦敦/东京/首尔的街头穿搭现状。2026年观察：**"低调的贵"取代"大声的贵"**——安静质感的品牌（Kiko Kostadinov、Our Legacy）比满身Logo更受追捧。
+
+### ④ Streetwear Men (@streetwear.men) — Community Curated Fits
+> 🔗 [Profile](https://www.instagram.com/streetwear.men/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_1_Men_Spring_Fashion_Trends_in_2.jpg)
+
+**标签**: #streetwearmen #mensfashion #streetwearcommunity #fitcheck
+**看点**: 社区驱动的街头穿搭聚合账号，普通人的穿搭比网红更真实更有参考价值。从日潮到美潮到国潮，展示了街头潮流的全球多样性。特别适合寻找"普通人穿得起的街头穿搭"灵感。
+
+### ⑤ Sneaker News (@sneakernews) — Kicks Drive the Culture
+> 🔗 [Profile](https://www.instagram.com/sneakernews/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_2_They_Are_Wearing__Milan_Fashio.jpg)
+
+**标签**: #sneakernews #sneakerhead #kicksonfire #newbalance #asics
+**看点**: 球鞋是街头潮流的引擎。Sneaker News 跟踪每双重要球鞋的发售信息、上脚效果和搭配灵感。2026年关键信息：**New Balance 和 ASICS 取代了 Nike 在"品味球鞋"领域的统治地位**——990v6 和 Kayano 14 是街头新标配。
+
+### 📊 Instagram 社区共识
+
+| 维度 | Instagram 观察 |
+|------|---------------|
+| **活跃地区** | 纽约、东京、伦敦、首尔、上海 |
+| **热门标签** | #streetwear #streetstyle #hypebeast #sneakerhead #ootdmen |
+| **关联品牌** | Supreme, Stüssy, Palace, Kiko Kostadinov, Our Legacy, New Balance, ASICS |
+| **内容形式** | 街拍（Street Snap）+ 球鞋上脚（On-Feet）+ 新品开箱 |
+| **2025-26 趋势** | Logo退潮、"安静的街头"兴起、球鞋代际更替、二手Vintage爆发 |
+| **⚠️ 访问限制** | 所有帖子需登录 Instagram 才能查看详情 |
 

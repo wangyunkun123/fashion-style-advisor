@@ -3,12 +3,12 @@
   "category": "短袖上衣",
   "category_code": "TS",
   "color": {
-    "hue_family": "中性",
+    "hue_family": "",
     "hue_name": "军绿灰",
     "saturation": "低饱和",
     "lightness": "中明度",
     "is_neutral": true,
-    "friendly_for_pale_skin": true
+    "friendly_for_pale_skin": false
   },
   "silhouette": {
     "fit": "宽松",
@@ -27,13 +27,12 @@
     "weight": "轻薄",
     "seasonality": [
       "春",
-      "夏",
-      "秋"
+      "夏"
     ]
   },
   "formality": 1,
   "brand": {
-    "name": "未知",
+    "name": "Decathlon 网球系列",
     "collection": null,
     "confidence": "未知"
   },
@@ -48,5 +47,16 @@
     "last_worn": "2026-06-17T17:10:20.397347",
     "claude_fit_comment": "落肩宽松运动版型可显著增加上半身体量感与肩宽,适合偏瘦体型",
     "_statement_score": 0.05
-  }
+  },
+  "occasions": [
+    "网球",
+    "运动"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "运动休闲",
+    "复古工装",
+    "意式运动"
+  ]
 }

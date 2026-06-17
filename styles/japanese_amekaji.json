@@ -1,0 +1,68 @@
+{
+  "style_id": "japanese_amekaji",
+  "name_zh": "日系阿美咔叽",
+  "name_en": "Japanese Amekaji",
+  "description": "日本对美式休闲服饰极致研究后的逆向输出——比美国人更懂美式风格。以赤耳丹宁、工装夹克、帆布鞋为核心，强调匠人精神、复古质感与「慢时尚」态度。",
+  "category": "日系复古",
+  "intensity": 2,
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["合身", "宽松"],
+      "acceptable": ["廓形"],
+      "rejected": ["紧身", "修身"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["中性", "冷色"],
+      "allowed_hues": ["靛蓝", "橄榄绿", "卡其", "黑", "灰", "白", "米白", "棕"],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "美式传统色板——靛蓝为主角，橄榄绿/卡其为配，白色打底"
+    },
+    "pattern": {
+      "preferred": ["纯色"],
+      "acceptable": ["条纹", "格纹"],
+      "rejected": ["印花", "大面积Logo"]
+    },
+    "fabric": {
+      "preferred": ["牛仔", "棉", "帆布", "皮质"],
+      "acceptable": ["羊毛混纺", "牛津纺", "针织"],
+      "rejected": ["速干", "合成", "丝质"]
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": { "min": 1, "max": 3 }
+  },
+
+  "key_items": [
+    {"category_code": "PT", "fabric": ["牛仔"], "bonus": 20, "reason": "赤耳原牛/水洗牛仔是阿美咔叽灵魂——日本品牌将其做到极致"},
+    {"category_code": "JK", "fabric": ["牛仔", "帆布", "棉"], "bonus": 18, "reason": "工装夹克/牛仔外套是阿美咔叽标志外层"},
+    {"category_code": "SHOE", "fabric": ["帆布", "皮质"], "bonus": 15, "reason": "帆布鞋(Converse/MoonStar)或工装靴是标配"},
+    {"category_code": "TS", "pattern": "纯色", "hue": ["白", "灰", "黑"], "bonus": 12, "reason": "纯白/灰重磅T恤是阿美咔叽内搭基底"},
+    {"category_code": "SHIRT", "fabric": ["棉", "牛津纺"], "bonus": 10, "reason": "钱布雷衬衫/格纹工装衬衫丰富层次"}
+  ],
+
+  "hard_constraints": [
+    {"field": "pattern.type", "operator": "not_in", "value": ["印花"], "reason": "印花破坏阿美咔叽复古质感"},
+    {"field": "fabric.primary", "operator": "not_in", "value": ["速干", "合成"], "reason": "运动科技面料与复古匠人精神冲突"},
+    {"field": "color.saturation", "operator": "neq", "value": "高饱和", "reason": "高饱和色违背阿美咔叽克制的复古色板"}
+  ],
+
+  "soft_constraints": [
+    {"field": "fabric.primary", "operator": "in", "value": ["牛仔", "棉", "帆布", "皮质"], "weight": 12},
+    {"field": "color.hue", "operator": "in", "value": ["靛蓝", "橄榄绿", "卡其", "棕", "白", "米白"], "weight": 10},
+    {"field": "silhouette.fit", "operator": "in", "value": ["合身", "宽松"], "weight": 6},
+    {"field": "pattern.type", "operator": "eq", "value": "纯色", "weight": 5}
+  ],
+
+  "body_modifier_bonus": {
+    "增加上半身体量感": 8,
+    "遮盖小肚子": 4
+  },
+
+  "related_styles": ["american_workwear", "japanese_city_boy", "british_heritage"],
+  "conflicting_styles": ["athleisure_sport", "scandi_minimalism", "korean_light_mature"]
+}

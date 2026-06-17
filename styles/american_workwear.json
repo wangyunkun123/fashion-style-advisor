@@ -1,0 +1,69 @@
+{
+  "style_id": "american_workwear",
+  "name_zh": "美式工装",
+  "name_en": "American Workwear",
+  "description": "以19-20世纪美国蓝领工装为原型的复古风格。核心面料为重型帆布、丹宁和鼹鼠皮布，强调功能性、耐久性和实用性。一件工装外套配现代基础款是最佳入门策略。",
+  "category": "复古休闲",
+  "intensity": 2,
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["宽松", "合身"],
+      "acceptable": ["廓形"],
+      "rejected": ["紧身", "修身"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["中性", "暖色"],
+      "allowed_hues": ["棕", "卡其", "靛蓝", "橄榄绿", "黑", "灰", "白", "米白"],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "大地色系为主，棕色+靛蓝+卡其天然和谐，一件单品作为色彩锚点"
+    },
+    "pattern": {
+      "preferred": ["纯色"],
+      "acceptable": ["条纹", "格纹"],
+      "rejected": ["印花", "大面积Logo", "拼接"]
+    },
+    "fabric": {
+      "preferred": ["牛仔", "帆布", "棉", "灯芯绒"],
+      "acceptable": ["皮质", "羊毛混纺", "牛津纺"],
+      "rejected": ["速干", "合成", "丝质"]
+    },
+    "layering": {
+      "level": "中低",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": { "min": 1, "max": 3 }
+  },
+
+  "key_items": [
+    {"category_code": "JK", "fabric": ["牛仔", "帆布"], "bonus": 20, "reason": "工装外套是风格灵魂——Chore Coat/Denim Jacket"},
+    {"category_code": "PT", "fabric": ["牛仔", "帆布"], "fit": ["宽松", "合身"], "bonus": 18, "reason": "原色丹宁/帆布工装裤是工装核心"},
+    {"category_code": "SHOE", "fabric": ["皮质"], "hue": ["棕", "卡其", "黑"], "bonus": 15, "reason": "工装靴(Timberland/Red Wing)是工装标志"},
+    {"category_code": "TS", "pattern": "纯色", "hue": ["白", "黑", "灰"], "bonus": 12, "reason": "重磅纯色T恤是工装内搭基础"},
+    {"category_code": "SHIRT", "fabric": ["棉", "牛津纺"], "bonus": 10, "reason": "钱布雷衬衫是美式工装夏季核心单品"}
+  ],
+
+  "hard_constraints": [
+    {"field": "pattern.type", "operator": "not_in", "value": ["印花"], "reason": "大面积印花破坏工装粗犷美学"},
+    {"field": "fabric.primary", "operator": "not_in", "value": ["速干", "丝质"], "reason": "速干/丝质面料与工装质感冲突"},
+    {"field": "color.saturation", "operator": "neq", "value": "高饱和", "reason": "高饱和色违背工装大地色系传统"}
+  ],
+
+  "soft_constraints": [
+    {"field": "fabric.primary", "operator": "in", "value": ["牛仔", "帆布", "棉", "灯芯绒", "皮质"], "weight": 12},
+    {"field": "color.hue_family", "operator": "in", "value": ["中性", "暖色"], "weight": 8},
+    {"field": "silhouette.fit", "operator": "in", "value": ["宽松", "合身"], "weight": 6},
+    {"field": "color.hue", "operator": "in", "value": ["棕", "卡其", "靛蓝", "橄榄绿"], "weight": 5},
+    {"field": "pattern.type", "operator": "eq", "value": "纯色", "weight": 4}
+  ],
+
+  "body_modifier_bonus": {
+    "增加上半身体量感": 8,
+    "遮盖小肚子": 5
+  },
+
+  "related_styles": ["japanese_amekaji", "british_heritage", "streetwear", "retro_90s_hiphop"],
+  "conflicting_styles": ["chinese_heritage", "korean_light_mature", "scandi_minimalism"]
+}

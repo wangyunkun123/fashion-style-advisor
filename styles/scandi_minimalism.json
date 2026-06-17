@@ -1,0 +1,68 @@
+{
+  "style_id": "scandi_minimalism",
+  "name_zh": "北欧极简",
+  "name_en": "Scandi Minimalism",
+  "description": "源自丹麦/瑞典的功能性极简穿搭哲学。以建筑感剪裁、全中性色板、高品质面料为核心，把'实用'穿成最高级的风格。比Clean Fit多一层质感追求——不是故意穿得平凡，而是把平凡做得不平凡。",
+  "category": "极简休闲",
+  "intensity": 1,
+
+  "fingerprint": {
+    "silhouette": {
+      "preferred": ["合身", "宽松"],
+      "acceptable": ["廓形"],
+      "rejected": ["紧身"]
+    },
+    "color_rules": {
+      "allowed_hue_families": ["中性", "冷色"],
+      "allowed_hues": ["黑", "白", "灰", "米白", "驼色", "炭灰", "沙色", "鼠尾草绿", "雾霾蓝"],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "全中性色搭配，用不同材质和灰度制造层次——黑白灰+一到两个自然色"
+    },
+    "pattern": {
+      "preferred": ["纯色"],
+      "acceptable": [],
+      "rejected": ["印花", "拼接", "大面积Logo", "格纹"]
+    },
+    "fabric": {
+      "preferred": ["棉", "羊毛混纺", "针织", "亚麻"],
+      "acceptable": ["灯芯绒", "皮质"],
+      "rejected": ["速干", "合成", "丝质"]
+    },
+    "layering": {
+      "level": "低中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": { "min": 2, "max": 4 }
+  },
+
+  "key_items": [
+    {"category_code": "TS", "pattern": "纯色", "hue": ["黑", "白", "灰", "米白"], "bonus": 20, "reason": "高品质纯色T恤是北欧极简的底层——质感比设计重要"},
+    {"category_code": "PT", "silhouette": ["合身", "宽松"], "hue": ["黑", "灰", "米白", "卡其"], "bonus": 18, "reason": "宽腿西裤/直筒裤是北欧极简廓形核心"},
+    {"category_code": "SHOE", "hue": ["白", "黑", "灰"], "pattern": "纯色", "bonus": 15, "reason": "极简纯白/纯黑球鞋，无Logo，质感优先"},
+    {"category_code": "LS", "fabric": ["针织", "棉"], "bonus": 12, "reason": "高领/圆领针织是北欧极简的标志层次"},
+    {"category_code": "JK", "hue": ["黑", "灰", "驼色", "米白"], "bonus": 10, "reason": "建筑感大衣/简约外套是北欧极简灵魂单品"}
+  ],
+
+  "hard_constraints": [
+    {"field": "pattern.type", "operator": "not_in", "value": ["印花", "拼接", "大面积Logo"], "reason": "图案和Logo破坏北欧极简的纯粹感"},
+    {"field": "color.saturation", "operator": "neq", "value": "高饱和", "reason": "高饱和色违背北欧极简克制美学"},
+    {"field": "fabric.primary", "operator": "not_in", "value": ["速干", "合成"], "reason": "运动科技面料质感不符北欧极简"}
+  ],
+
+  "soft_constraints": [
+    {"field": "color.saturation", "operator": "eq", "value": "低饱和", "weight": 12},
+    {"field": "pattern.type", "operator": "eq", "value": "纯色", "weight": 10},
+    {"field": "fabric.primary", "operator": "in", "value": ["棉", "羊毛混纺", "针织", "亚麻", "灯芯绒"], "weight": 8},
+    {"field": "color.hue", "operator": "in", "value": ["黑", "白", "灰", "米白", "驼色", "炭灰"], "weight": 6}
+  ],
+
+  "body_modifier_bonus": {
+    "增加上半身体量感": 5,
+    "遮盖小肚子": 4
+  },
+
+  "related_styles": ["clean_fit", "korean_minimal", "smart_casual"],
+  "conflicting_styles": ["streetwear", "athleisure_sport", "retro_90s_hiphop", "resort_vacation"]
+}

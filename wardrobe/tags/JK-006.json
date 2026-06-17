@@ -32,7 +32,7 @@
   },
   "formality": 2,
   "brand": {
-    "name": "未知",
+    "name": "棉先生",
     "collection": null,
     "confidence": "未知"
   },
@@ -48,5 +48,11 @@
     "last_worn": null,
     "claude_fit_comment": "宽松牛仔夹克带挺括大口袋设计,可增加肩宽与体量感同时遮盖小肚子,深蓝灰色耐看显瘦",
     "_statement_score": 0.15
-  }
+  },
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "复古工装",
+    "极简主义"
+  ]
 }

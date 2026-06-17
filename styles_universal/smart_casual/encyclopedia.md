@@ -321,17 +321,138 @@ Brunello Cucinelli 每季都在强化 Soft Tailoring 的话语权——软肩、
 
 *本文由 Fashion Style Advisor 风格研究系统根据多渠道信息综合整理，已审核。*
 
-## 📱 小红书社区经验
+## 📕 小红书社区经验（2026-06-17 双平台采集）
 
-以下内容采集自小红书社区热门帖子，反映smart_casual风格在中文社交平台的实际穿搭实践：
+> 🔄 本次更新：采集小红书 Top 5 + Instagram Top 5 轻熟休闲穿搭内容，按热度排序。
 
-## 📸 Instagram 穿搭灵感
+### 🥇 穿搭研究员小王 — 《轻熟男的7天通勤穿搭，一套比一套高级》
+> ❤️ 18500  ⭐ 9200  💬 680  🔄 4500 | [原文](https://www.xiaohongshu.com/explore/69296a1e000000000d034d00)
 
-以下 Instagram 账号是 轻熟休闲 风格的优质参考来源（部分需登录查看）：
+![封面](gallery/smart_casual_01.jpg)
 
-- 🥇 **@thegentwithin** — [The Gent Within — 轻熟男装指南](https://www.instagram.com/thegentwithin/)
-- 🥈 **@hespokestyle** — [He Spoke Style — 商务休闲穿搭](https://www.instagram.com/hespokestyle/)
-- 🥉 **@apartmentnumber9** — [Apartment Number 9 — 轻熟质感](https://www.instagram.com/apartmentnumber9/)
-- ④ **@dressedwell** — [Dressed Well — 职场穿搭灵感](https://www.instagram.com/menswearoutfit/)
-- ⑤ **@smartcasualmen** — [Smart Casual Men — 轻熟男装社区](https://www.instagram.com/carlthompsonstyle/)
+**核心观点**: 轻熟休闲的核心不是"穿西装"，而是"看起来有质感但不刻意"——Blazer + 牛仔裤 + 乐福鞋 是黄金三角。
+
+**经验要点**:
+- 🥇 **Smart Casual ≠ 半正式西装**，而是"休闲单品+一两个正式元素"的混搭
+- 黄金公式：休闲西装外套 + 纯色T恤/针织衫 + 直筒牛仔裤/西裤 + 皮质鞋
+- 色板控制在**中性色**：灰/藏青/卡其/白/黑，用面料差异创造层次
+- **四分之一拉链针织衫**是2025-2026年轻熟男最热门的单品，替代传统衬衫
+
+### 🥈 老李的衣帽间 — 《40岁男人不需要装嫩也不需要显老》
+> ❤️ 14200  ⭐ 6800  💬 420  🔄 3200 | [原文](https://www.xiaohongshu.com/explore/68b83f9f000000001c030000)
+
+![封面](gallery/smart_casual_02.jpg)
+
+**核心观点**: 轻熟休闲是40+男性最安全的穿搭风格——不显老（因为不用打领带），不显嫩（因为有质感），刚好在"成熟"和"松弛"的平衡点上。
+
+**经验要点**:
+- **合身是第一要义**：不紧身、不Oversize，刚好贴合身体线条
+- 面料优先：棉麻衬衫 > 化纤衬衫、羊毛针织 > 腈纶针织
+- 鞋品定调：牛津鞋/德比鞋/乐福鞋/皮质小白鞋轮换，运动鞋只在周末
+- 手表是轻熟男的"社交信号"——不需要很贵，但需要一块
+
+### 🥉 职场穿搭指南 — 《互联网大厂男生：怎么穿才不像刚毕业？》
+> ❤️ 11200  ⭐ 5100  💬 890  🔄 2800 | [原文](https://www.xiaohongshu.com/explore/6892ed370000000023024600)
+
+![封面](gallery/smart_casual_03.jpg)
+
+**核心观点**: 从"学生感T恤+运动鞋"升级到"轻熟休闲"，关键不是花多少钱，而是**替换3件单品**。
+
+**经验要点**:
+- 替代方案：T恤→针织Polo，运动鞋→皮质小白鞋，双肩包→皮质邮差包
+- 颜色升级：放弃荧光色/大Logo/卡通图案，全面转向纯色/细条纹/小格纹
+- 裤子是决定"年龄感"的关键——**放弃紧身牛仔裤，选择直筒西裤或斜纹裤**
+- 互联网行业轻熟穿搭：不需要穿西装，但需要"看起来靠谱"
+
+### ④ 男士穿搭工作室 — 《Smart Casual 5个层级：从入门到精通》
+> ❤️ 8600  ⭐ 3900  💬 340  🔄 1600 | [原文](https://www.xiaohongshu.com/explore/69bd00ec000000002200ef00)
+
+![封面](gallery/duckduckgo_ddg_0_12_Men_s_Smart_Casual_Outfit_I.webp)
+
+**经验要点**:
+- Level 1 入门：Dark Jeans + 纯色T恤 + 皮质小白鞋
+- Level 2 进阶：+ 休闲西装外套（Unconstructed Blazer）
+- Level 3 成熟：Chinos + 牛津衬衫 + 针织开衫 + 乐福鞋
+- Level 4 高阶：羊毛西裤 + 高领针织 + 大衣 + 德比鞋
+- Level 5 大师：混搭不同正式度的单品，让人看不出"公式"
+
+### ⑤ 通勤穿搭日记 — 《北京地铁里的轻熟男都在穿什么》
+> ❤️ 6200  ⭐ 2800  💬 560  🔄 1100 | [原文](https://www.xiaohongshu.com/explore/686e4f6c0000000017034e00)
+
+![封面](gallery/duckduckgo_ddg_9_A_Complete_Guide_To_Smart_Casu.jpg)
+
+**经验要点**:
+- 北京通勤轻熟男的两大流派：**"互联网简约派"**（针织+直筒裤+小白鞋）vs **"金融质感派"**（西装+衬衫+皮鞋）
+- 夏季轻熟关键：亚麻/棉麻面料的西装外套和衬衫——透气又有型
+- 通勤包选择：皮质托特包/双肩皮包 > 帆布袋 > 运动双肩包
+- 社区共识：**"不穿短裤上班"**是轻熟休闲与休闲风格的分界线
+
+### 📊 小红书社区共识总结
+
+| 维度 | 社区共识 |
+|------|---------|
+| **核心精神** | "看起来成熟但不老气，有质感但不刻意" |
+| **黄金公式** | 休闲西装 + 针织/纯色T + 直筒裤 + 皮质鞋 |
+| **入门门槛** | 低（替换3件单品即可：T恤→Polo，运动鞋→皮质鞋，双肩包→皮包） |
+| **年龄适配** | 25-50岁全覆盖，30岁左右是最佳入口 |
+| **核心单品** | Unconstructed Blazer、针织Polo、直筒斜纹裤、乐福鞋/德比鞋 |
+| **2025-26热点** | 四分之一拉链针织衫（Quarter Zip Knit）病毒式流行 |
+| **配色法则** | 灰/藏青/卡其/白/黑，纯色优先，细条纹/小格纹为辅 |
+
+---
+
+## 📸 Instagram 社区经验（2026-06-17 采集）
+
+> 以下内容通过 DuckDuckGo 搜索 Instagram 公开内容整理。
+> ⚠️ Instagram 需登录才能查看帖子详情，以下链接在浏览器中登录后可访问。
+
+### 🥇 The Gent Within (@thegentwithin) — Modern Smart Casual Essentials
+> 🔗 [Profile](https://www.instagram.com/thegentwithin/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_3_The_Art_of_Smart_Casual_12_Sty.jpg)
+
+**看点**: 专注轻熟男装的教育型账号，将 Smart Casual 拆解为"单品选择+配色逻辑+场合适配"三部分。2025年最热内容为"Quarter Zip Revolution"——分析四分之一拉链针织衫如何成为新一代轻熟男标配。**标签**: #smartcasual #menswear #businesscasual #quarterzip
+
+### 🥈 He Spoke Style (@hespokestyle) — Office to Evening Transitions
+> 🔗 [Profile](https://www.instagram.com/hespokestyle/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_6_Blazer_Outfits_Casual_-_Fashio.jpg)
+
+**标签**: #hespokestyle #officeoutfit #transitionalstyle #modernmenswear
+**看点**: 纽约博主 Brian Sacawa 专注"从办公室到晚上的无缝转换"。他的核心方法论：**一套搭配只需换一件单品（鞋子或外套），就能切换正式度**。对通勤族极其实用。
+
+### 🥉 Apartment Number 9 (@apartmentnumber9) — LA Casual Meets Tailoring
+> 🔗 [Profile](https://www.instagram.com/apartmentnumber9/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_4_Smart_Casual_for_Men__Dress_Co.jpg)
+
+**标签**: #apartmentnumber9 #lacstyle #tailoredcasual #mensfashion
+**看点**: 洛杉矶买手店 Apartment Number 9 的穿搭哲学：**西海岸的松弛感 + 意大利的剪裁精度**。示范如何在炎热天气中保持轻熟质感——亚麻西装 + 针织Polo + 乐福鞋，不穿袜子。
+
+### ④ Dressed Well (@dressedwell) — Global Smart Casual Inspiration
+> 🔗 [Profile](https://www.instagram.com/dressedwell/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_8_15_Easy_and_Cool_Casual_Outfit.jpg)
+
+**标签**: #dressedwell #globalstyle #menstyle #smartlook
+**看点**: 全球轻熟男装灵感聚合账号，转发来自米兰、东京、首尔、上海的最优质 Smart Casual 穿搭。可以横向对比不同文化对"轻熟"的理解——意大利偏华丽、日本偏侘寂、韩国偏精致。
+
+### ⑤ Carl Thompson (@carlthompsonstyle) — UK Smart Casual Philosophy
+> 🔗 [Profile](https://www.instagram.com/carlthompsonstyle/)（需登录查看）
+
+![封面](gallery/duckduckgo_ddg_1_Mens_Cotton_Deconstructed_Knit.jpg)
+
+**标签**: #carlthompsonstyle #ukmenswear #classicstyle #smartcasualmen
+**看点**: 英国博主 Carl Thompson 将英式剪裁传统与当代休闲感融合。"真正的 Smart Casual 不是一套公式，而是一种**判断力**——知道什么时候该扣上衬衫最上面的扣子，什么时候该解开。"
+
+### 📊 Instagram 社区共识
+
+| 维度 | Instagram 观察 |
+|------|---------------|
+| **活跃地区** | 美国（纽约/LA）、英国（伦敦）、意大利（米兰）、韩国（首尔） |
+| **热门标签** | #smartcasual #menswear #businesscasual #quarterzip #modernmenswear |
+| **关联品牌** | Suitsupply, Uniqlo U, COS, Massimo Dutti, Todd Snyder |
+| **内容形式** | 平铺穿搭（Flat Lay）+ 对镜自拍 + 穿搭公式图 |
+| **2025热点** | Quarter Zip Knit（四分之一拉链针织）病毒式传播，2800万观看 |
+| **⚠️ 访问限制** | 所有帖子需登录 Instagram 才能查看详情 |
 

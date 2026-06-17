@@ -31,7 +31,7 @@
   },
   "formality": 1,
   "brand": {
-    "name": "未知",
+    "name": "MUJI",
     "collection": null,
     "confidence": "未知"
   },
@@ -46,5 +46,9 @@
     "last_worn": "2026-06-14T20:21:00.137062",
     "claude_fit_comment": "基础灰色罗纹背心适合叠穿或夏季单穿,浅色显白,合身剪裁对小肚子无遮盖",
     "_statement_score": 0.0
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
 }

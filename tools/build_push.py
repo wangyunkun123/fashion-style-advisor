@@ -244,16 +244,23 @@ def match_style_id(outfit_data, outfit_dir):
 
 
 def get_item_score(cid, style_id):
-    """从缓存取单品风格分"""
-    if not os.path.exists(CACHE_FILE):
-        return None
-    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-        cache = json.load(f)
-    item_cache = cache.get(cid, {})
-    style_cache = item_cache.get(style_id, {})
-    score = style_cache.get('score', 0)
-    breakdown = style_cache.get('breakdown', {})
-    return {'score': score, 'breakdown': breakdown}
+    """
+    从缓存取单品风格分（自动检测标签变更，过期自动重算）。
+    """
+    try:
+        from style_matcher import get_cached_or_compute as _smart_get
+        score, details = _smart_get(cid, style_id)
+        return {'score': score, 'breakdown': details.get('breakdown', {})}
+    except ImportError:
+        if not os.path.exists(CACHE_FILE):
+            return None
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+            cache = json.load(f)
+        item_cache = cache.get(cid, {})
+        style_cache = item_cache.get(style_id, {})
+        score = style_cache.get('score', 0)
+        breakdown = style_cache.get('breakdown', {})
+        return {'score': score, 'breakdown': breakdown}
 
 
 def get_random_images(style_id, count=3):

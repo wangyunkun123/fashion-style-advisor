@@ -4,6 +4,7 @@
   "name_en": "Streetwear",
   "description": "有态度的穿搭，Oversized廓形 + 深色主调 + 跳色点缀。工装夹克、宽松牛仔裤、高帮帆布鞋、棒球帽是核心。适合创意工作/周末出街/音乐节。",
   "category": "休闲潮流",
+  "intensity": 3,
 
   "fingerprint": {
     "silhouette": {

@@ -12,7 +12,7 @@
   },
   "silhouette": {
     "fit": "宽松",
-    "shoulder_effect": "增加肩宽",
+    "shoulder_effect": "长款",
     "torso_effect": "增加上半身体量感",
     "length_ratio": "长款"
   },
@@ -48,5 +48,10 @@
     "last_worn": "2026-06-16T00:29:54.918222",
     "claude_fit_comment": "长款连帽风衣宽松廓形可大幅增加上半身体量感和肩宽,深色拼色设计显瘦且耐脏",
     "_statement_score": 0.05
-  }
+  },
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "极简主义"
+  ]
 }

@@ -254,7 +254,7 @@ def run_cli(args, cwd=PROJECT_DIR, timeout=300):
         if result.returncode != 0:
             err = result.stderr.strip()
             return f"❌ 执行失败 (code={result.returncode})\n{err[:800] if err else out[:800]}"
-        return out if out else "✅ 执行完成（无文本输出）"
+        return out  # 成功但无输出时返回空串，避免噪音
     except subprocess.TimeoutExpired:
         return "⏰ 命令超时，请稍后重试"
     except FileNotFoundError as e:
@@ -1720,6 +1720,7 @@ def run_pipeline(style_hint, task_id=None):
 
 def _run_pipeline_impl(style_hint, task_id=None):
     """管线实现 — 独立函数以便 run_pipeline 捕获异常"""
+    t_start = time.time()
     log(f"🚀 管线启动: {style_hint}")
 
     # ── 探测探索度 ──
@@ -1732,6 +1733,9 @@ def _run_pipeline_impl(style_hint, task_id=None):
     explore_label = ('大胆探索' if explore_level >= 0.8 else ('微调探索' if explore_level > 0 else '安全推荐'))
     log(f"📍 探索度: {explore_label}{' '+explore_emoji if explore_emoji else ''}")
     log_lines = []
+    # 统计
+    _api_calls = 0
+    _input_chars = 0
 
     def progress(msg):
         log(f"📍 {msg}")
@@ -1763,6 +1767,8 @@ def _run_pipeline_impl(style_hint, task_id=None):
     user_prompt = prompt_data['user_prompt']
     target_styles = prompt_data['target_styles']
     occasion = prompt_data['occasion']
+    # 初始 token 估算（中文约 2 chars/token）
+    _input_chars = len(system_prompt) + len(user_prompt)
 
     try:
         # ── Step 2: AI 创意选品（最多重试 JSON 解析）──
@@ -1772,6 +1778,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
             ], max_tokens=16384, timeout=180)
+            _api_calls += 1
 
             plan = extract_json(content)
             if plan:
@@ -1780,7 +1787,8 @@ def _run_pipeline_impl(style_hint, task_id=None):
             log(f"API 返回无法解析为 JSON (attempt {attempt+1}/2):\n{content[:500]}", "ERROR")
             if attempt == 0:
                 user_prompt += "\n\n⚠️ 你的回复必须是纯 JSON，不要包含任何解释、markdown代码块标记或额外文字。以 { 开头，以 } 结尾。"
-                progress('🔄 JSON解析失败，重试中...')
+                _input_chars += 120  # 追加的 JSON 格式提醒
+                log(f"🔄 JSON解析失败，重试中...")
                 time.sleep(2)
 
         if not plan:
@@ -1791,12 +1799,13 @@ def _run_pipeline_impl(style_hint, task_id=None):
         unavailable = [it for it in items if it.get('id', '') == 'UNAVAILABLE']
         if unavailable:
             log(f"⚠️ AI 返回了 UNAVAILABLE 单品，强制重试: {[it.get('category','') for it in unavailable]}", "WARN")
-            progress('🔄 检测到 UNAVAILABLE，强制重试...')
             user_prompt += "\n\n❌ 你上一次输出了 UNAVAILABLE。这是严重错误。衣柜中所有鞋子和裤子都可用。必须为上衣、下装、鞋子各选一个真实ID。"
+            _input_chars += 120
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
             ], max_tokens=16384, timeout=180)
+            _api_calls += 1
             plan = extract_json(content)
             if not plan:
                 raise ValueError("AI 穿搭分析返回格式异常（UNAVAILABLE重试后JSON解析失败）")
@@ -1807,7 +1816,6 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 raise ValueError("AI 两次返回 UNAVAILABLE，请稍后重试")
 
         # ── Step 3: 规则验证 ──
-        progress('🔍 规则验证中...')
         items = plan.get('items', [])
         passed, violations, warnings = validate_outfit(items, occasion)
 
@@ -1816,11 +1824,12 @@ def _run_pipeline_impl(style_hint, task_id=None):
             # 构建修正反馈
             violation_feedback = '\n'.join(f'❌ {v}' for v in violations)
             user_prompt += f"\n\n⚠️ 你的选品有以下问题，请修正后重新输出 JSON：\n{violation_feedback}\n\n注意：所有单品必须来自衣柜表格，不要输出UNAVAILABLE。"
-            progress('🔄 验证未通过，AI 修正中...')
+            _input_chars += 200
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
             ], max_tokens=16384, timeout=180)
+            _api_calls += 1
             plan = extract_json(content)
             if plan:
                 items = plan.get('items', [])
@@ -1842,9 +1851,9 @@ def _run_pipeline_impl(style_hint, task_id=None):
             warnings = warnings2 if plan else warnings
 
         if passed or not violations:
-            progress(f'✅ 验证通过' + (f' (⚠️ {len(warnings)}条提醒)' if warnings else ''))
+            log(f'✅ 验证通过' + (f' (⚠️ {len(warnings)}条提醒)' if warnings else ''))
         else:
-            progress(f'⚠️ 验证有{len(violations)}项违规（继续执行，请人工检查）')
+            log(f'⚠️ 验证有{len(violations)}项违规（继续执行，请人工检查）')
 
         # ── 穿搭评分 ──
         outfit_score = score_outfit(items, target_styles, occasion, 30, '晴')
@@ -1856,17 +1865,15 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
         # 执行文件操作
         outfit_dir = execute_outfit_plan(plan, today, style_hint)
-        progress(f'✅ 穿搭方案已创建')
+        progress(f'🤖 Step 1/5: AI 选品完成 ✅')
 
         progress('🎨 Step 2/5: Seedream AI 生图中...')
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
-        if out2:
-            progress(f'✅ Seedream 生图完成\n{out2[:300]}')
+        progress('🎨 Step 2/5: Seedream 生图完成 ✅')
 
         progress('🖼️ Step 3/5: 排版合成中...')
         out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
-        if out3:
-            progress(f'✅ 排版完成\n{out3[:300]}')
+        progress('🖼️ Step 3/5: 排版完成 ✅')
 
         progress('📤 Step 4/5: 推送 GitHub...')
         composite = find_latest_composite(today)
@@ -1874,8 +1881,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             run_cli(['git', 'add', '-A'], timeout=30)
             run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
             out4 = run_cli(['git', 'push'], timeout=60)
-            if out4:
-                progress(f'✅ 推送完成\n{out4[:300]}')
+            progress('📤 Step 4/5: 推送完成 ✅')
 
             github_url = get_github_raw_url(composite)
             comp_dir = os.path.dirname(composite)
@@ -1907,17 +1913,24 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
             # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
             try:
+                progress('📱 Step 5/5: 刷新控制台...')
                 run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
-                # 提交并推送最新原型
                 run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
                 run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
                 run_cli(['git', 'push'], timeout=30)
+                progress('📱 Step 5/5: 控制台已刷新 ✅')
             except Exception:
                 pass
 
+            # ── 统计摘要 ──
+            elapsed = time.time() - t_start
+            est_tokens = _input_chars // 2
+            summary_tail = f' | 📊 ~{est_tokens} tokens | ⏱️ ~{elapsed:.0f}s | 🔄 {_api_calls}次AI'
+            result_text += summary_tail
+
             # 更新控制台结果（与微信推送内容一致）
             if task_id:
-                tasks.update(task_id, status='done', message='✅ 全部完成',
+                tasks.update(task_id, status='done', message='✅ 全部完成 ' + summary_tail.strip(),
                              result=result_text, image_path=composite, image_url=github_url,
                              log='\n'.join(log_lines))
 

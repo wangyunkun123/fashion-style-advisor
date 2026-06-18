@@ -1930,6 +1930,10 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
             # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
             try:
+                # 清除置顶标记，新生成的穿搭自动顶替
+                pin_file = os.path.join(PROJECT_DIR, 'prototype', '.pinned')
+                if os.path.exists(pin_file):
+                    os.remove(pin_file)
                 progress('📱 Step 5/5: 刷新控制台...')
                 run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
                 run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
@@ -3483,6 +3487,27 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
                 return
+
+        elif parsed.path == '/api/pin':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try: data = json.loads(body)
+            except: self._json_resp(400, {"error": "invalid json"}); return
+            oid = data.get('outfit_id', '')
+            if not oid:
+                self._json_resp(400, {"error": "missing outfit_id"}); return
+            pin_file = os.path.join(PROJECT_DIR, 'prototype', '.pinned')
+            with open(pin_file, 'w') as f:
+                f.write(oid)
+            log(f"📌 放回主页: {oid}")
+            self._json_resp(200, {"status": "ok"})
+
+        elif parsed.path == '/api/unpin':
+            pin_file = os.path.join(PROJECT_DIR, 'prototype', '.pinned')
+            if os.path.exists(pin_file):
+                os.remove(pin_file)
+                log(f"📌 取消置顶")
+            self._json_resp(200, {"status": "ok"})
 
         else:
             self._json_resp(404, {"error": "not found"})

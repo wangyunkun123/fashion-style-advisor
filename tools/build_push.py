@@ -48,7 +48,6 @@ try:
     from tools.unified_pipeline import (
         load_lab_state, save_lab_state, update_lab_state,
         score_outfit, generate_narrative, determine_explore_level,
-        _get_wear_counts,
     )
     UNIFIED_AVAILABLE = True
 except ImportError:

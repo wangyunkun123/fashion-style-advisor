@@ -336,15 +336,13 @@ def find_latest_composite(date_str=None):
 
 # get_banned_items / get_recent_outfit_items
 # 已迁移至 tools/common.py，通过 _get_banned_items / _get_recent_outfits 使用
-
-
-CAT_EMOJI = {
+# 补充 CAT_EMOJI 模糊匹配键（format_outfit_summary 用部分关键词匹配）
+_CAT_EMOJI_EXTRA = {
     '上衣': '👕', '内搭': '👕', 'T恤': '👕', '短袖': '👕', '长袖': '👕',
-    '衬衫': '👔', '外套': '🧥', '外层': '🧥', '外搭': '🧥', '夹克': '🧥',
-    '下装': '👖', '裤子': '👖', '短裤': '🩳', '鞋子': '👟', '鞋': '👟',
-    '包': '🎒', '帽子': '🧢', '墨镜': '🕶️', '配饰': '⌚', '手表': '⌚',
-    '袜子': '🧦', '手串': '📿',
+    '衬衫': '👔', '下装': '👖', '裤子': '👖', '鞋': '👟', '外层': '🧥',
+    '外搭': '🧥', '夹克': '🧥', '手表': '⌚', '手串': '📿',
 }
+CAT_EMOJI = {**CAT_EMOJI, **_CAT_EMOJI_EXTRA}
 
 def format_outfit_summary(outfit_md_path):
     """从 outfit.md 提取穿搭摘要"""

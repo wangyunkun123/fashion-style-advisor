@@ -278,10 +278,16 @@ def main():
     # ═══════════════════════════════════════════
     # Pass 2: 配饰精确化（Pass1最佳 + 配饰图）
     # ═══════════════════════════════════════════
-    if not accessory_images:
-        print(f"\n{'─' * 60}")
-        print(f"⏭️  无配饰参考图，跳过 Pass 2")
-        print(f"{'─' * 60}")
+    if len(accessory_images) < 2:
+        if len(accessory_images) == 1:
+            print(f"\n{'─' * 60}")
+            print(f"⏭️  仅1件配饰（{os.path.basename(accessory_images[0])}），合并到 Pass 1，跳过 Pass 2")
+            print(f"{'─' * 60}")
+            core_images.append(accessory_images[0])
+        else:
+            print(f"\n{'─' * 60}")
+            print(f"⏭️  无配饰参考图，跳过 Pass 2")
+            print(f"{'─' * 60}")
     else:
         print(f"\n{'─' * 60}")
         print(f"🔄 Pass 2/2: 配饰精确化（1张底图 + {len(accessory_images)} 张配饰）")

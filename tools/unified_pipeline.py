@@ -368,19 +368,29 @@ def _get_scene_fit(clothing_id, occasion, scene_profiles=None):
 
 
 def _get_freshness(clothing_id, recent_outfits, wear_counts=None):
-    """计算新鲜度（同日温和，跨日严格）"""
+    """计算新鲜度（同日渐进惩罚，跨日严格）"""
     today_str = time.strftime('%Y-%m-%d')
     score = 50  # 基础新鲜度
 
-    # 区分同日/跨日
+    # 区分同日/跨日 — 同日渐进式惩罚
+    same_day_count = 0
+    cross_day = False
     for dir_name, ids in recent_outfits:
         if clothing_id in ids:
             is_today = dir_name.startswith(today_str) or dir_name.startswith('🆕今天')
             if is_today:
-                score -= 5   # 同日只轻罚（可复用）
+                same_day_count += 1  # 累计同天出现次数
             else:
-                score -= 20  # 跨日正常扣分
-            break
+                cross_day = True
+    if cross_day:
+        score -= 20  # 跨日正常扣分
+    # 同日渐进惩罚：第1次复用-5，第2次-15，第3次+-25
+    if same_day_count >= 3:
+        score -= 25
+    elif same_day_count >= 2:
+        score -= 15
+    elif same_day_count >= 1:
+        score -= 5
 
     # 从穿着次数统计
     if wear_counts and clothing_id in wear_counts:
@@ -494,7 +504,7 @@ def calculate_item_heat(item_id, wear_counts, all_clothes, three_star_counts):
 
 
 def get_cooldown(item_id, heat_level, category_code, days_since_last, three_star_count,
-                 is_same_day=False):
+                 is_same_day=False, same_day_count=0):
     """计算单品冷却状态
     返回: {
         'status': 'sameday'|'available'|'almost'|'cooling'|'awaken',
@@ -504,12 +514,23 @@ def get_cooldown(item_id, heat_level, category_code, days_since_last, three_star
         'heat_level': str,       # hot/warm/cold
     }
     """
-    # 同日 → 特殊处理
+    # 同日 → 渐进式限制（第1次复用宽松，第3次起强制换）
     if is_same_day:
-        return {
-            'status': 'sameday', 'icon': '🔄', 'days_since': 0,
-            'cooldown_days': 0, 'heat_level': heat_level,
-        }
+        if same_day_count >= 3:
+            return {
+                'status': 'sameday_blocked', 'icon': '⚠️', 'days_since': 0,
+                'cooldown_days': 1, 'heat_level': heat_level,
+            }
+        elif same_day_count >= 2:
+            return {
+                'status': 'sameday', 'icon': '🔄²', 'days_since': 0,
+                'cooldown_days': 0, 'heat_level': heat_level,
+            }
+        else:
+            return {
+                'status': 'sameday', 'icon': '🔄', 'days_since': 0,
+                'cooldown_days': 0, 'heat_level': heat_level,
+            }
 
     BASE = {'hot': 2, 'warm': 4, 'cold': 6}
     CAT_MULT = {
@@ -583,13 +604,13 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     three_star_counts = _get_three_star_counts()
 
     # ── 区分同日 vs 跨日最近已穿 ──
-    same_day_items = set()
+    same_day_items = {}  # {cid: count} — 同天出现次数
     cross_day_items = {}
     for dir_name, ids in recent_outfits:
         is_today = dir_name.startswith(today_str) or dir_name.startswith('🆕今天')
         for cid in ids:
             if is_today:
-                same_day_items.add(cid)
+                same_day_items[cid] = same_day_items.get(cid, 0) + 1
             else:
                 cross_day_items[cid] = cross_day_items.get(cid, 0) + 1
 
@@ -615,9 +636,10 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
         cat_code = item.get('category_code', '')
         days_since = item_last_worn.get(cid)  # None = 从未穿过
         is_same_day = cid in same_day_items
+        sd_count = same_day_items.get(cid, 0)
         heat_score, heat_level = calculate_item_heat(cid, wear_counts or {}, all_clothes, three_star_counts)
         cd = get_cooldown(cid, heat_level, cat_code, days_since,
-                          three_star_counts.get(cid, 0), is_same_day)
+                          three_star_counts.get(cid, 0), is_same_day, same_day_count=sd_count)
 
         # 新鲜度调整：融入冷却状态
         if cd['status'] == 'awaken':
@@ -626,6 +648,8 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
             freshness -= 10  # 冷却中减分
         elif cd['status'] == 'almost':
             freshness -= 5
+        elif cd['status'] == 'sameday_blocked':
+            freshness -= 20  # 同日第3次+ — 强烈不推荐
 
         # 如果从未穿过但冷却已满 → 额外加分（连续未选越久越推）
         if days_since is not None and days_since >= 10 and cd['status'] in ('available', 'awaken'):
@@ -656,10 +680,21 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
 
     # ── 冷却摘要（注入 prompt）──
     cooldown_summary_lines = []
-    # 同日
+    # 同日 — 渐进式提示
     if same_day_items:
+        # 分组：可复用 vs 已超限
+        reusable = [cid for cid, cnt in same_day_items.items() if cnt < 3]
+        blocked = [cid for cid, cnt in same_day_items.items() if cnt >= 3]
+        if blocked:
+            cooldown_summary_lines.append(
+                f'⚠️ 同日已超限（强制换掉）: {"、".join(sorted(blocked)[:10])}'
+            )
+        if reusable:
+            cooldown_summary_lines.append(
+                f'🔄 同日可复用: {"、".join(sorted(reusable)[:10])}'
+            )
         cooldown_summary_lines.append(
-            f'🔄 同日已生成 {same_day_count} 套（以下单品可复用，不强退）: {"、".join(sorted(same_day_items)[:10])}'
+            f'📊 同日已生成 {same_day_count} 套'
         )
     # 冷却中
     cooling = [(cid, cd) for cid, cd in all_cooldowns.items() if cd['status'] == 'cooling']
@@ -674,8 +709,10 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
 
     # ── 同日建议 ──
     same_day_hint = ''
+    blocked_items = [cid for cid, cnt in same_day_items.items() if cnt >= 3] if same_day_items else []
     if same_day_count >= 3:
-        same_day_hint = '⚠️ 今天已生成3套，必须换掉鞋子，上衣/下装至少再换1件。'
+        blocked_str = '、'.join(blocked_items[:8]) if blocked_items else ''
+        same_day_hint = f'⚠️ 今天已生成{same_day_count}套。以下单品已出现≥3次，必须换掉: {blocked_str}。鞋子必须换，上衣/下装至少再换1件。'
     elif same_day_count >= 2:
         same_day_hint = '🔄 今天第2套，建议换掉≥1件核心单品以体现变化。'
     elif same_day_count >= 1:
@@ -935,7 +972,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   "silhouette": "廓形节奏描述",
   "body_modifier": "身形修饰策略",
   "reasoning": "整体搭配理由（100-200字）",
-  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
 }}
 
 注意：
@@ -952,8 +989,6 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 
     user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
 {explore_header}{mandatory_section}风格需求：「{style_hint}」
-场合：{occasion}
-{ban_section}{recent_section}
 场合：{occasion}
 {ban_section}{recent_section}
 目标风格参考：

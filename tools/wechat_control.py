@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 穿搭助手 — 手机远程控制服务（交互式聊天版）
 
@@ -518,7 +519,7 @@ def get_wardrobe_summary():
 
     return '\n'.join(lines)
 
-def call_doubao_chat(messages, max_tokens=4096, timeout=120):
+def call_doubao_chat(messages, max_tokens=16384, timeout=120):
     """调用 doubao-seed-2.0-code 聊天 API"""
     payload = json.dumps({
         'model': CHAT_MODEL,
@@ -536,14 +537,16 @@ def call_doubao_chat(messages, max_tokens=4096, timeout=120):
         choice = result['choices'][0]
         msg = choice.get('message', {})
         content = msg.get('content', '')
-        # doubao 部分模型可能把内容放在 reasoning_content 里
+        # doubao 推理模型可能把内容放在 reasoning_content 里，content 为空
         if not content:
             reasoning = msg.get('reasoning_content', '')
             if reasoning:
-                log(f"⚠️ content 为空, reasoning_content 前200字: {reasoning[:200]}", "WARN")
-            # 记录完整响应用于排查
-            finish = choice.get('finish_reason', 'unknown')
-            log(f"⚠️ API 返回空 content, finish_reason={finish}, keys={list(msg.keys())}", "WARN")
+                log(f"⚠️ content 为空，从 reasoning_content 提取（前200字）: {reasoning[:200]}", "WARN")
+                # 尝试从 reasoning_content 中提取 JSON
+                content = reasoning
+            else:
+                finish = choice.get('finish_reason', 'unknown')
+                log(f"⚠️ API 返回空 content 且无 reasoning, finish_reason={finish}, keys={list(msg.keys())}", "WARN")
         return content
     except Exception as e:
         log(f"豆包 API 调用失败: {e}", "ERROR")
@@ -1360,7 +1363,7 @@ def _run_add_analysis(task_id, image_b64_list):
         tasks.update(task_id, status='running', message='AI正在识别品类/颜色/品牌/面料...')
 
         # 3. 调用豆包视觉 API
-        response_text = call_doubao_chat(messages, max_tokens=4096, timeout=180)
+        response_text = call_doubao_chat(messages, max_tokens=16384, timeout=180)
 
         if not response_text:
             tasks.update(task_id, status='error', message='AI 未返回结果，请重试')
@@ -1537,7 +1540,7 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
   "reasoning": "搭配理由（100-200字）",
   "color_logic": "配色逻辑",
   "keywords": "3-6个风格特征词，用顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。这是穿搭标签，不是用户指令，必须提取风格本身的美学特征",
-  "seedream_prompt": "英文 Seedream 生图提示词。必须包含以下7个维度，用逗号连接成一段自然的摄影指导（200-350字符）。禁止模板感，每次都要有变化：\n\n1.📷 摄影风格: 指定相机型号和镜头（如 Fujifilm X-T5 35mm f/1.4 / Leica M6 50mm / Sony A7IV 85mm f/1.4），加上摄影风格标签（fashion editorial photography / lookbook style / street style candid / cinematic portrait / photojournalism style）\n2.🎬 构图角度: 从以下随机选一个并创造性地变体—— low angle from knee height making subject look taller / eye-level centered with direct eye contact / slightly elevated angle with sky background / rule of thirds off-center composition / 3/4 waist-level framing for intimate feel / wide shot showing full environment\n3.✨ 光影气氛: 从以下随机选一个—— golden hour backlight with warm rim light on shoulders / overcast soft diffused light with even skin tones / late afternoon side light with long dramatic shadows / morning crisp light with clean blue sky bounce / dappled tree-filtered sunlight creating patchy light patterns / dusk ambient with warm street lamp glow\n4.🏃 动态姿势: ⚠️ 根据场景选择一个自然动态姿势，严禁使用\"standing\"一词！必须是在做某事—— walking mid-stride towards camera / leaning against textured wall with arms crossed / sitting on concrete ledge elbows on knees / looking back over shoulder mid-laugh / checking phone while walking absorbed in screen / adjusting hat/collar casually / mid-motion athletic action / crouching tying shoelace candid moment / crossing street with wind in hair\n5.👔 服装细节: 除了列出每件单品（颜色、面料、版型），还要描述它们如何随姿势自然呈现—— 如\"oversized tee draping loosely with movement\" / \"jeans creasing naturally at knees while walking\" / \"canvas shoes scuffing slightly on pavement\" / \"jacket billowing slightly in breeze\"\n6.🏙️ 场景环境: ⚠️ 禁止只用\"Beijing street\"！必须根据风格选择具体有辨识度的地点—— quiet Daikanyama residential street with minimal architecture / Shanghai French Concession plane tree avenue / Beijing hutong alley with grey brick walls and bicycles / Seoul Hongdae street art alley with colorful murals / modern glass office building lobby with polished concrete / rooftop terrace overlooking city skyline / outdoor tennis court with blue surface / park bench under large oak tree with dappled light / minimal cafe outdoor wooden deck with potted plants\n7.😊 情绪故事感: 选一个—— effortlessly cool candid caught off-guard / quiet contemplative moment looking out of frame / genuine joyful laugh mid-conversation / editorial sophistication sharp and clean / playful dynamic energy caught mid-motion / cinematic still like a movie frame / relaxed weekend ease nothing-to-do-today vibe\n\n禁止事项：\n❌ 严禁使用\"standing\"或\"standing casually\"（呆板站立）\n❌ 严禁只写\"high-quality portrait\"而无摄影参数\n❌ 严禁场景只写\"Beijing street\"\n❌ 严禁姿势和情绪留空\n❌ 严禁套用固定模板，每次必须有变化\n\n完整示例（模仿这种自然摄影指导的语气，但每次内容要不同）：\n\"Fashion editorial lookbook, shot on Fujifilm X-T5 35mm f/1.4, shallow depth of field with creamy bokeh. Low angle from knee height, rule of thirds composition. Golden hour backlight creating warm rim light on shoulders, sun-kissed skin. Walking confidently toward camera, mid-stride, one hand casually in jeans pocket, slight natural smile looking slightly off-frame. Oversized caramel tee draping loosely with movement, gray-blue jeans creasing naturally at knees. Background: quiet Daikanyama residential street, clean minimal architecture, soft afternoon shadows. Effortlessly cool candid energy, caught mid-motion, editorial street style.\""
+  "seedream_prompt": "英文 Seedream 生图提示词。必须包含以下7个维度，用逗号连接成一段自然的摄影指导（200-350字符）。禁止模板感，每次都要有变化：\n\n1.📷 摄影风格: 指定相机型号和镜头（如 Fujifilm X-T5 35mm f/1.4 / Leica M6 50mm / Sony A7IV 85mm f/1.4），加上摄影风格标签（fashion editorial photography / lookbook style / street style candid / cinematic portrait / photojournalism style）\n2.🎬 构图角度: ⚠️ 必须为全身照(full body head-to-toe)，鞋子必须完整可见不被裁切！从以下随机选一个并创造性地变体—— low angle from knee height making subject look taller and showing shoes prominently / eye-level full body shot head to toe with direct eye contact / slightly elevated angle with sky background full body / rule of thirds off-center composition showing entire outfit / wide shot showing full environment and full body / dynamic action shot full body with feet visible\n3.✨ 光影气氛: 从以下随机选一个—— golden hour backlight with warm rim light on shoulders / overcast soft diffused light with even skin tones / late afternoon side light with long dramatic shadows / morning crisp light with clean blue sky bounce / dappled tree-filtered sunlight creating patchy light patterns / dusk ambient with warm street lamp glow\n4.🏃 动态姿势: ⚠️ 根据场景选择一个自然动态姿势，严禁使用\"standing\"一词！必须是在做某事—— walking mid-stride towards camera / leaning against textured wall with arms crossed / sitting on concrete ledge elbows on knees / looking back over shoulder mid-laugh / checking phone while walking absorbed in screen / adjusting hat/collar casually / mid-motion athletic action / crouching tying shoelace candid moment / crossing street with wind in hair\n5.👔 服装细节: 除了列出每件单品（颜色、面料、版型），还要描述它们如何随姿势自然呈现—— 如\"oversized tee draping loosely with movement\" / \"jeans creasing naturally at knees while walking\" / \"canvas shoes scuffing slightly on pavement\" / \"jacket billowing slightly in breeze\"\n6.🏙️ 场景环境: ⚠️ 禁止只用\"Beijing street\"！必须根据风格选择具体有辨识度的地点—— quiet Daikanyama residential street with minimal architecture / Shanghai French Concession plane tree avenue / Beijing hutong alley with grey brick walls and bicycles / Seoul Hongdae street art alley with colorful murals / modern glass office building lobby with polished concrete / rooftop terrace overlooking city skyline / outdoor tennis court with blue surface / park bench under large oak tree with dappled light / minimal cafe outdoor wooden deck with potted plants\n7.😊 情绪故事感: 选一个—— effortlessly cool candid caught off-guard / quiet contemplative moment looking out of frame / genuine joyful laugh mid-conversation / editorial sophistication sharp and clean / playful dynamic energy caught mid-motion / cinematic still like a movie frame / relaxed weekend ease nothing-to-do-today vibe\n\n禁止事项：\n❌ 严禁使用\"standing\"或\"standing casually\"（呆板站立）\n❌ 严禁只写\"high-quality portrait\"而无摄影参数\n❌ 严禁场景只写\"Beijing street\"\n❌ 严禁姿势和情绪留空\n❌ 严禁套用固定模板，每次必须有变化\\n❌ 严禁半身/腰部以上构图（必须全身从头到脚 full body shot，鞋子完整可见）\n\n完整示例（模仿这种自然摄影指导的语气，但每次内容要不同）：\n\"Fashion editorial lookbook, shot on Fujifilm X-T5 35mm f/1.4, shallow depth of field with creamy bokeh. Low angle from knee height, rule of thirds composition. Golden hour backlight creating warm rim light on shoulders, sun-kissed skin. Walking confidently toward camera, mid-stride, one hand casually in jeans pocket, slight natural smile looking slightly off-frame. Oversized caramel tee draping loosely with movement, gray-blue jeans creasing naturally at knees. Background: quiet Daikanyama residential street, clean minimal architecture, soft afternoon shadows. Effortlessly cool candid energy, caught mid-motion, editorial street style.\""
 }
 
 注意：
@@ -1680,7 +1683,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=4096, timeout=180)
+            ], max_tokens=16384, timeout=180)
 
             plan = extract_json(content)
             if plan:
@@ -1705,7 +1708,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=4096, timeout=180)
+            ], max_tokens=16384, timeout=180)
             plan = extract_json(content)
             if not plan:
                 raise ValueError("AI 穿搭分析返回格式异常（UNAVAILABLE重试后JSON解析失败）")
@@ -1729,7 +1732,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=4096, timeout=180)
+            ], max_tokens=16384, timeout=180)
             plan = extract_json(content)
             if plan:
                 items = plan.get('items', [])

@@ -232,6 +232,7 @@ add_icons = {
     'image_icon': lu('image'),          # album/image icon
     'file_icon': lu('folder-open'),     # file picker icon
     'construction_icon': lu('construction'),  # under construction
+    'lock_icon': lu('lock'),                # privacy lock
 }
 
 # ── Rating UI icons ──
@@ -783,6 +784,65 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .feedback-btn-cancel{{background:#f0f4f8;color:var(--sub)}}
 .feedback-btn-confirm{{background:var(--navy);color:#fff}}
 .feedback-btn-confirm:disabled{{opacity:.5;pointer-events:none}}
+/* ═══ 我的形象页 ═══ */
+.profile-section{{padding:16px 20px}}
+.profile-section-title{{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}}
+.profile-privacy{{font-size:11px;color:var(--muted);background:#f8fafb;border-radius:10px;padding:10px 14px;margin:12px 20px 0;line-height:1.5;display:flex;align-items:flex-start;gap:6px}}
+.profile-privacy svg{{width:14px;height:14px;color:var(--navy);flex-shrink:0;margin-top:1px}}
+/* 照片上传区 */
+.photo-slots{{display:flex;gap:10px;padding:0 20px;margin-bottom:4px}}
+.photo-slot{{flex:1;text-align:center;background:#f8fafb;border-radius:14px;padding:10px 6px 12px;border:2px dashed #dde3ea;transition:border-color .25s;position:relative;min-width:0}}
+.photo-slot.has-photo{{border-color:var(--navy);border-style:solid;background:#eef5fb}}
+.photo-slot-label{{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px}}
+.photo-slot-badge{{display:inline-block;font-size:9px;padding:1px 7px;border-radius:8px;margin-bottom:6px;font-weight:600}}
+.photo-slot-badge.required{{background:#fce4ec;color:#c0392b}}
+.photo-slot-badge.recommended{{background:#e8f5e9;color:#2e7d32}}
+.photo-slot-badge.optional{{background:#f0f4f8;color:var(--muted)}}
+.photo-slot-preview{{width:100%;height:80px;border-radius:8px;object-fit:cover;margin-bottom:6px;background:#eef2f7;display:none}}
+.photo-slot.has-photo .photo-slot-preview{{display:block}}
+.photo-slot.has-photo .photo-slot-empty{{display:none}}
+.photo-slot-empty{{padding:12px 0;color:var(--muted);font-size:20px}}
+.photo-slot-actions{{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}}
+.photo-slot-btn{{width:28px;height:28px;border-radius:50%;border:1.5px solid #c5cdd5;background:#fff;color:var(--sub);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:all .2s;padding:0}}
+.photo-slot-btn:active{{background:var(--navy);color:#fff;border-color:var(--navy)}}
+.photo-hint{{font-size:10px;color:var(--muted);text-align:center;padding:4px 20px 0;line-height:1.4}}
+/* 开关 */
+.toggle-row{{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;margin:12px 20px;background:#f8fafb;border-radius:12px;gap:12px}}
+.toggle-label{{font-size:14px;font-weight:600;color:var(--text);flex:1}}
+.toggle-switch{{width:48px;height:28px;background:#c5cdd5;border-radius:14px;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0;-webkit-tap-highlight-color:transparent}}
+.toggle-switch.on{{background:var(--navy)}}
+.toggle-switch::after{{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .3s;box-shadow:0 1px 3px rgba(0,0,0,.15)}}
+.toggle-switch.on::after{{transform:translateX(20px)}}
+/* 分析按钮 */
+.analyze-row{{padding:0 20px;margin-bottom:14px}}
+.analyze-btn{{width:100%;padding:12px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}}
+.analyze-btn:active{{opacity:.85;transform:scale(.98)}}
+.analyze-btn:disabled{{opacity:.5;pointer-events:none}}
+/* 表单 */
+.profile-form{{padding:0 20px}}
+.profile-form-group{{margin-bottom:12px}}
+.profile-form-label{{font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px;display:block}}
+.profile-form-label .optional-tag{{font-size:10px;color:var(--muted);font-weight:400;margin-left:4px}}
+.profile-form-input{{width:100%;padding:10px 14px;border:1.5px solid #e2e7ec;border-radius:10px;font-size:14px;color:var(--text);background:#fff;outline:none;-webkit-appearance:none;box-sizing:border-box;transition:border-color .2s}}
+.profile-form-input:focus{{border-color:var(--navy)}}
+.profile-form-input::placeholder{{color:#bcc4cd}}
+/* 分段选择 */
+.seg-choice-row{{display:flex;gap:6px;flex-wrap:wrap}}
+.seg-choice{{padding:8px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid #e2e7ec;background:#fff;color:var(--sub);transition:all .2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}}
+.seg-choice.selected{{background:var(--navy);color:#fff;border-color:var(--navy)}}
+/* 引导语 */
+.profile-guide{{font-size:12px;color:var(--muted);text-align:center;padding:8px 20px;line-height:1.6;font-style:italic}}
+.profile-guide svg{{width:14px;height:14px;vertical-align:-2px;color:#e67e22}}
+/* 预览 */
+.profile-preview{{margin:8px 20px;padding:12px 16px;background:#fef9e7;border-radius:10px;font-size:12px;color:#8d6e00;line-height:1.6}}
+.profile-preview-title{{font-weight:600;margin-bottom:4px;font-size:11px;color:#b8860b}}
+/* 保存按钮 */
+.profile-save-row{{padding:12px 20px 20px;display:flex;gap:10px;align-items:center}}
+.profile-save-btn{{flex:1;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .2s}}
+.profile-save-btn:active{{opacity:.85;transform:scale(.98)}}
+.profile-save-btn:disabled{{opacity:.5;pointer-events:none}}
+.profile-save-btn.saved{{background:#27ae60}}
+.profile-reset-link{{font-size:11px;color:var(--muted);cursor:pointer;text-align:center;display:block;padding-bottom:24px;-webkit-tap-highlight-color:transparent}}
 </style></head><body><div id="app">
 
 <!-- ═══ 推荐页 ═══ -->
@@ -931,11 +991,165 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="page" id="page-profile">
 <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
 <div class="scroll-area">
-<div class="placeholder" style="padding:100px 20px">
-<div class="ph-icon">{construction_icon}</div>
-<div class="ph-text">施工中<br>敬请期待</div>
+<div class="profile-privacy"><span>{lock_icon}</span><span>照片仅存本地，生图时通过 API 传给 Seedream，不会公开</span></div>
+
+<div class="toggle-row">
+<span class="toggle-label">🪄 使用我的形象生成效果图</span>
+<div class="toggle-switch on" id="toggle-use-image" onclick="toggleUseImage()"></div>
+</div>
+
+<div id="profile-detail" style="display:block">
+<div class="profile-section">
+<div class="profile-section-title">📷 我的照片</div>
+<div class="photo-slots">
+<div class="photo-slot" id="slot-full">
+<div class="photo-slot-label">⭐ 正面全身</div>
+<div class="photo-slot-badge required">必须</div>
+<img class="photo-slot-preview" id="preview-full" src="">
+<div class="photo-slot-empty">📷</div>
+<div class="photo-slot-actions">
+<button class="photo-slot-btn" onclick="capturePhoto('full_body_front')" title="拍照">📷</button>
+<button class="photo-slot-btn" onclick="pickPhoto('full_body_front')" title="上传">⬆</button>
 </div>
 </div>
+<div class="photo-slot" id="slot-face">
+<div class="photo-slot-label">半身面部</div>
+<div class="photo-slot-badge recommended">推荐</div>
+<img class="photo-slot-preview" id="preview-face" src="">
+<div class="photo-slot-empty">📷</div>
+<div class="photo-slot-actions">
+<button class="photo-slot-btn" onclick="capturePhoto('face_closeup')" title="拍照">📷</button>
+<button class="photo-slot-btn" onclick="pickPhoto('face_closeup')" title="上传">⬆</button>
+</div>
+</div>
+<div class="photo-slot" id="slot-side">
+<div class="photo-slot-label">侧面全身</div>
+<div class="photo-slot-badge optional">可选</div>
+<img class="photo-slot-preview" id="preview-side" src="">
+<div class="photo-slot-empty">📷</div>
+<div class="photo-slot-actions">
+<button class="photo-slot-btn" onclick="capturePhoto('full_body_side')" title="拍照">📷</button>
+<button class="photo-slot-btn" onclick="pickPhoto('full_body_side')" title="上传">⬆</button>
+</div>
+</div>
+</div>
+<div class="photo-hint">💡 不上传照片将使用亚洲标准脸型与身形作为生图参考</div>
+<input type="file" id="profile-camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleProfilePhoto(this,'camera')">
+<input type="file" id="profile-album-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this,'album')">
+</div>
+
+<div class="analyze-row"><button class="analyze-btn" id="analyze-btn" onclick="analyzeProfilePhotos()">🔍 AI 分析照片中的身形</button></div>
+</div><!-- #profile-detail -->
+
+<div class="profile-section">
+<div class="profile-section-title">📏 基本信息</div>
+
+<div class="profile-form">
+
+<div class="profile-form-group">
+<label class="profile-form-label">性别</label>
+<div class="seg-choice-row" id="seg-gender">
+<div class="seg-choice selected" data-val="男" onclick="selectSeg(this,'seg-gender','__genderVal')">男</div>
+<div class="seg-choice" data-val="女" onclick="selectSeg(this,'seg-gender','__genderVal')">女</div>
+</div>
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">身高 · cm（自由填写）</label>
+<input class="profile-form-input" id="pf-height" type="text" placeholder="如 179" inputmode="numeric">
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">体重 · kg（自由填写）</label>
+<input class="profile-form-input" id="pf-weight" type="text" placeholder="如 68" inputmode="numeric">
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">年龄（自由填写）</label>
+<input class="profile-form-input" id="pf-age" type="text" placeholder="如 30" inputmode="numeric">
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">体型</label>
+<div class="seg-choice-row" id="seg-body">
+<div class="seg-choice" data-val="偏瘦" onclick="selectSeg(this,'seg-body','__bodyVal')">偏瘦</div>
+<div class="seg-choice" data-val="标准" onclick="selectSeg(this,'seg-body','__bodyVal')">标准</div>
+<div class="seg-choice" data-val="偏胖" onclick="selectSeg(this,'seg-body','__bodyVal')">偏胖</div>
+<div class="seg-choice" data-val="肌肉型" onclick="selectSeg(this,'seg-body','__bodyVal')">肌肉型</div>
+</div>
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">肤色</label>
+<div class="seg-choice-row" id="seg-skin">
+<div class="seg-choice" data-val="白皙" onclick="selectSeg(this,'seg-skin','__skinVal')">白皙</div>
+<div class="seg-choice" data-val="偏白" onclick="selectSeg(this,'seg-skin','__skinVal')">偏白</div>
+<div class="seg-choice" data-val="自然" onclick="selectSeg(this,'seg-skin','__skinVal')">自然</div>
+<div class="seg-choice" data-val="小麦" onclick="selectSeg(this,'seg-skin','__skinVal')">小麦</div>
+<div class="seg-choice" data-val="偏黄" onclick="selectSeg(this,'seg-skin','__skinVal')">偏黄</div>
+<div class="seg-choice" data-val="偏黑" onclick="selectSeg(this,'seg-skin','__skinVal')">偏黑</div>
+</div>
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">肩型</label>
+<div class="seg-choice-row" id="seg-shoulder">
+<div class="seg-choice" data-val="窄肩" onclick="selectSeg(this,'seg-shoulder','__shoulderVal')">窄肩</div>
+<div class="seg-choice" data-val="标准" onclick="selectSeg(this,'seg-shoulder','__shoulderVal')">标准</div>
+<div class="seg-choice" data-val="宽肩" onclick="selectSeg(this,'seg-shoulder','__shoulderVal')">宽肩</div>
+<div class="seg-choice" data-val="溜肩" onclick="selectSeg(this,'seg-shoulder','__shoulderVal')">溜肩</div>
+</div>
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">脸型</label>
+<div class="seg-choice-row" id="seg-face">
+<div class="seg-choice" data-val="圆脸" onclick="selectSeg(this,'seg-face','__faceVal')">圆脸</div>
+<div class="seg-choice" data-val="方脸" onclick="selectSeg(this,'seg-face','__faceVal')">方脸</div>
+<div class="seg-choice" data-val="长脸" onclick="selectSeg(this,'seg-face','__faceVal')">长脸</div>
+<div class="seg-choice" data-val="瓜子脸" onclick="selectSeg(this,'seg-face','__faceVal')">瓜子脸</div>
+<div class="seg-choice" data-val="椭圆脸" onclick="selectSeg(this,'seg-face','__faceVal')">椭圆脸</div>
+</div>
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">职业 <span class="optional-tag">选填 ✨</span></label>
+<input class="profile-form-input" id="pf-occupation" type="text" placeholder="如 自媒体">
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">风格偏好 <span class="optional-tag">选填 ✨</span></label>
+<input class="profile-form-input" id="pf-style-pref" type="text" placeholder="如 日系/Clean Fit">
+</div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">穿搭困扰 <span class="optional-tag">选填 ✨</span></label>
+<input class="profile-form-input" id="pf-pain-points" type="text" placeholder="如 不够时尚，不知如何搭配">
+</div>
+
+<div class="profile-guide" id="profile-guide" style="display:none"></div>
+
+<div class="profile-form-group">
+<label class="profile-form-label">🔒 身材秘密 <span class="optional-tag">选填</span></label>
+<textarea class="profile-form-input" id="pf-body-secrets" rows="3" placeholder="如 小肚子、大腿粗、肩膀窄、平胸…&#10;勇敢说出你的身材劣势，AI 才能更好地帮你扬长避短 ✨" style="resize:vertical;min-height:72px;line-height:1.6"></textarea>
+<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5">💬 这不是缺点，是你的独特身材特征。告诉 AI 才知道该用上宽下窄遮肚子、还是用落肩剪裁修饰窄肩</div>
+</div>
+
+</div><!-- .profile-form -->
+</div>
+
+<div class="profile-preview" id="profile-preview" style="display:none">
+<div class="profile-preview-title">💬 AI 将这样描述你：</div>
+<div id="profile-preview-text"></div>
+</div>
+
+<a class="profile-reset-link" onclick="resetProfile()">· 恢复默认 ·</a>
+
+<div class="profile-save-row">
+<button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">保存形象信息</button>
+</div>
+
+</div><!-- .scroll-area -->
 </div>
 
 </div>
@@ -1110,9 +1324,27 @@ function loadExploreTrends(){{var el=document.getElementById('exp-trends-content
 function tryExplore(){{var inp=document.getElementById('exp-input');var msg=inp.value.trim();if(!msg)return;showProgress();fetch('/api/chat',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{message:msg}})}}).then(r=>r.json()).then(d=>{{if(d.task_id){{__activePollId=d.task_id;pollTask(d.task_id)}}else{{document.getElementById('progress-title').textContent=d.result||'已发送';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block'}}}})}}
 function tryStyle(styleId,btn){{btn.classList.add('loading');btn.textContent='生成中...';fetch('/api/explore/try-on?style='+encodeURIComponent(styleId)).then(function(r){{return r.json()}}).then(function(d){{if(d.task_id){{showProgress();__activePollId=d.task_id;pollTask(d.task_id)}}else{{btn.classList.remove('loading');btn.textContent='🧪 试穿'}}}}).catch(function(e){{btn.classList.remove('loading');btn.textContent='🧪 试穿';alert('生成失败，请重试')}})}}
 /* 探索页子页切换 */
-(function(){{var expSeg=document.getElementById('exp-seg');if(expSeg){{expSeg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;expSeg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;document.querySelectorAll('#page-explore .exp-sub').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='block';if(sub==='tweak'){{loadExploreTweak()}}else if(sub==='transform'){{loadExploreTransform()}}else if(sub==='cross'){{loadExploreCross()}}else if(sub==='trends'){{loadExploreTrends()}}}})}};var __expLoaded=false;document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{if(this.dataset.page==='explore'&&!__expLoaded){{__expLoaded=true;setTimeout(loadExploreTweak,100)}}}})}})}})();
-/* ═══ 我的页 ═══ */
-function loadProfile(){{/* 施工中 */}}
+(function(){{var expSeg=document.getElementById('exp-seg');if(expSeg){{expSeg.addEventListener('click',function(e){{var b=e.target.closest('.seg-btn');if(!b)return;expSeg.querySelectorAll('.seg-btn').forEach(function(s){{s.classList.remove('active')}});b.classList.add('active');var sub=b.dataset.sub;document.querySelectorAll('#page-explore .exp-sub').forEach(function(sp){{sp.style.display='none'}});var t=document.getElementById('sub-'+sub);if(t)t.style.display='block';if(sub==='tweak'){{loadExploreTweak()}}else if(sub==='transform'){{loadExploreTransform()}}else if(sub==='cross'){{loadExploreCross()}}else if(sub==='trends'){{loadExploreTrends()}}}})}};var __expLoaded=false;document.querySelectorAll('#tab-bar .tab').forEach(function(tab){{tab.addEventListener('click',function(){{if(this.dataset.page==='explore'&&!__expLoaded){{__expLoaded=true;setTimeout(loadExploreTweak,100)}}if(this.dataset.page==='profile'&&!__profileLoaded){{setTimeout(loadProfile,100)}}}})}})}})();
+/* ═══ 我的形象页 ═══ */
+var __profilePhotos={{}};/* {{slot:b64data}} compressed thumbnails */
+var __profilePhotoSlot=null;/* current uploading slot */
+var __genderVal='男',__bodyVal='',__skinVal='',__shoulderVal='',__faceVal='';
+function selectSeg(el,groupId,varName){{el.parentElement.querySelectorAll('.seg-choice').forEach(function(c){{c.classList.remove('selected')}});el.classList.add('selected');window[varName]=el.dataset.val;updateProfilePreview();updateProfileGuide()}}
+function capturePhoto(slot){{__profilePhotoSlot=slot;document.getElementById('profile-camera-input').click()}}
+function pickPhoto(slot){{__profilePhotoSlot=slot;document.getElementById('profile-album-input').click()}}
+/* 前端图片压缩 - 性能关键：将10MB+照片压缩到~100KB */
+function compressImage(file, maxW, quality, callback){{var reader=new FileReader();reader.onload=function(e){{var img=new Image();img.onload=function(){{var c=document.createElement('canvas');var w=img.width,h=img.height;if(w>maxW){{h=Math.round(h*maxW/w);w=maxW}}c.width=w;c.height=h;var ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);callback(c.toDataURL('image/jpeg',quality||0.75))}};img.src=e.target.result}};reader.readAsDataURL(file)}}
+function handleProfilePhoto(input,source){{var f=input.files[0];if(!f)return;var slot=__profilePhotoSlot;var slotId='slot-'+slot.replace(/_/g,'-').replace('full-body-front','full').replace('face-closeup','face').replace('full-body-side','side');var el=document.getElementById(slotId);if(el){{el.classList.add('has-photo');var previewImg=el.querySelector('.photo-slot-preview');if(previewImg){{previewImg.src='';previewImg.style.display='none'}}var emptyEl=el.querySelector('.photo-slot-empty');if(emptyEl)emptyEl.textContent='压缩中...'}}compressImage(f,1024,0.75,function(b64){{__profilePhotos[slot]=b64;if(el){{var pi=el.querySelector('.photo-slot-preview');if(pi){{pi.src=b64;pi.style.display='block'}}var ee=el.querySelector('.photo-slot-empty');if(ee)ee.textContent='📷'}};/* 自动上传到服务器 */fetch('/api/profile/photos/upload',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{slot:slot,image:b64}})}}).then(function(r){{return r.json()}}).then(function(d){{if(!d.ok)console.warn('Photo upload failed:',d.error)}}).catch(function(){{}});updateProfileGuide()}});input.value=''}}
+function toggleUseImage(){{var t=document.getElementById('toggle-use-image');t.classList.toggle('on');var detail=document.getElementById('profile-detail');var isOn=t.classList.contains('on');detail.style.display=isOn?'block':'none'}}
+function updateProfileGuide(){{var emptyFields=[];var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();if(!occ)emptyFields.push('职业');if(!pref)emptyFields.push('偏好');if(!pain)emptyFields.push('困扰');var guide=document.getElementById('profile-guide');if(emptyFields.length===3){{guide.style.display='block';guide.innerHTML='<span>✨ 职业、偏好、困扰均留空 — AI 将完全自由探索，可能发现你意想不到的风格</span>'}}else if(emptyFields.length===2){{guide.style.display='block';guide.innerHTML='<span>✨ '+emptyFields.join('、')+'留空 — AI 将在这两个方面自由探索</span>'}}else if(emptyFields.length===1){{guide.style.display='block';guide.innerHTML='<span>✨ '+emptyFields[0]+'留空 — AI 将不受限制自由发挥</span>'}}else{{guide.style.display='none'}};updateProfilePreview()}}
+function updateProfilePreview(){{var p=document.getElementById('profile-preview');var t=document.getElementById('profile-preview-text');var gender=__genderVal||'男';var h=document.getElementById('pf-height').value.trim();var w=document.getElementById('pf-weight').value.trim();var age=document.getElementById('pf-age').value.trim();var bt=__bodyVal;var st=__skinVal;var should=__shoulderVal;var face=__faceVal;var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();var secrets=document.getElementById('pf-body-secrets').value.trim();var parts=[];if(age)parts.push(age+'岁');parts.push(gender==='女'?'女性':'男性');if(h)parts.push(h+'cm');if(w)parts.push(w+'kg');if(bt)parts.push(bt);if(st)parts.push(st+'肤色');if(should)parts.push(should);if(face)parts.push(face);var extra=[];if(occ)extra.push('职业: '+occ);if(pref)extra.push('偏好: '+pref);if(pain)extra.push('困扰: '+pain);if(parts.length>3||extra.length||secrets){{p.style.display='block';var previewText='\"'+parts.join('，')+'\"';if(extra.length)previewText+='\\n'+extra.join(' · ');if(secrets)previewText+='\\n🔒 身材秘密: '+secrets;t.textContent=previewText;t.style.whiteSpace='pre-line'}}else{{p.style.display='none'}}}}
+function analyzeProfilePhotos(){{var b64s=[];Object.keys(__profilePhotos).forEach(function(s){{b64s.push({{slot:s,b64:__profilePhotos[s]}})}});if(!b64s.length){{alert('请先上传至少一张照片');return}}var btn=document.getElementById('analyze-btn');btn.disabled=true;btn.textContent='📤 上传照片...';fetch('/api/profile/analyze',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{images:b64s}})}}).then(r=>r.json()).then(function(d){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';if(d.ok&&d.analysis){{var a=d.analysis;if(a.gender){{__genderVal=a.gender;setSegVal('seg-gender',a.gender);window.__genderVal=a.gender}}if(a.estimated_height_cm&&parseInt(a.estimated_height_cm)>0)document.getElementById('pf-height').value=a.estimated_height_cm;if(a.body_type){{__bodyVal=a.body_type;setSegVal('seg-body',a.body_type)}}if(a.skin_tone){{__skinVal=a.skin_tone;setSegVal('seg-skin',a.skin_tone)}}if(a.shoulder_type){{__shoulderVal=a.shoulder_type;setSegVal('seg-shoulder',a.shoulder_type)}}if(a.face_shape){{__faceVal=a.face_shape;setSegVal('seg-face',a.face_shape)}}updateProfilePreview();updateProfileGuide();alert('✅ AI 分析完成，请核对并修正')}}else{{alert('AI 分析失败，请手动填写')}}}}).catch(function(e){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';alert('网络错误: '+e.message)}})}}
+function setSegVal(groupId,val){{var grp=document.getElementById(groupId);if(!grp)return;var found=false;grp.querySelectorAll('.seg-choice').forEach(function(c){{c.classList.remove('selected');if(c.dataset.val===val){{c.classList.add('selected');found=true}}}});if(!found){{var first=grp.querySelector('.seg-choice');if(first)first.classList.add('selected')}}}}
+function saveProfile(){{var btn=document.getElementById('profile-save-btn');btn.disabled=true;btn.textContent='保存中...';var h=document.getElementById('pf-height').value.trim();var w=document.getElementById('pf-weight').value.trim();var age=document.getElementById('pf-age').value.trim();var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();var bodySecrets=document.getElementById('pf-body-secrets').value.trim();var useImg=document.getElementById('toggle-use-image').classList.contains('on');var data={{use_my_image:useImg,gender:__genderVal,height_cm:h,weight_kg:w,age:age,body_type:__bodyVal,skin_tone:__skinVal,shoulder_type:__shoulderVal,face_shape:__faceVal,occupation:occ,style_preference:pref,pain_points:pain,body_secrets:bodySecrets}};fetch('/api/profile/save',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(data)}}).then(r=>r.json()).then(function(d){{if(d.ok){{btn.textContent='✅ 已保存';btn.classList.add('saved');setTimeout(function(){{btn.textContent='保存形象信息';btn.classList.remove('saved');btn.disabled=false}},2000)}}else{{btn.disabled=false;btn.textContent='保存失败，重试'}}}}).catch(function(e){{btn.disabled=false;btn.textContent='网络错误，重试'}})}}
+function resetProfile(){{if(!confirm('确定恢复默认吗？所有形象数据将被清除。'))return;fetch('/api/profile/reset').then(function(){{location.reload()}}).catch(function(){{location.reload()}})}}
+/* ═══ 加载我的形象 ═══ */
+var __profileLoaded=false;
+function loadProfile(){{if(__profileLoaded)return;__profileLoaded=true;fetch('/api/profile').then(r=>r.json()).then(function(d){{var p=d.profile;if(!p)return;if(p.gender){{__genderVal=p.gender;setSegVal('seg-gender',p.gender)}}if(p.height)document.getElementById('pf-height').value=p.height;if(p.weight)document.getElementById('pf-weight').value=p.weight;if(p.age)document.getElementById('pf-age').value=p.age;if(p.body_type){{__bodyVal=p.body_type;setSegVal('seg-body',p.body_type)}}if(p.skin_tone){{__skinVal=p.skin_tone;setSegVal('seg-skin',p.skin_tone)}}if(p.shoulder_type){{__shoulderVal=p.shoulder_type;setSegVal('seg-shoulder',p.shoulder_type)}}if(p.face_shape){{__faceVal=p.face_shape;setSegVal('seg-face',p.face_shape)}}if(p.occupation)document.getElementById('pf-occupation').value=p.occupation;if(p.style_preference)document.getElementById('pf-style-pref').value=p.style_preference;if(p.pain_points)document.getElementById('pf-pain-points').value=p.pain_points;if(p.body_secrets)document.getElementById('pf-body-secrets').value=p.body_secrets;var toggle=document.getElementById('toggle-use-image');var detail=document.getElementById('profile-detail');if(p.use_my_image===false){{toggle.classList.remove('on');detail.style.display='none'}}else{{toggle.classList.add('on');detail.style.display='block'}}/* load photos */if(p.photos){{Object.keys(p.photos).forEach(function(slot){{var slotId='slot-'+slot.replace(/_/g,'-').replace('full-body-front','full').replace('face-closeup','face').replace('full-body-side','side');var el=document.getElementById(slotId);if(el&&p.photos[slot]){{el.classList.add('has-photo');var img=el.querySelector('.photo-slot-preview');if(img)img.src='../'+p.photos[slot]+'?t='+Date.now()}}}})}}updateProfilePreview();updateProfileGuide()}}).catch(function(){{}})}}
 function setPreference(mode){{fetch('/setpref?mode='+mode).catch(function(){{}})}}
 /* ═══ 添加页 ═══ */
 var __addImages=[];
@@ -1412,6 +1644,7 @@ html = html.format(
     camera_icon=add_icons['camera_icon'], upload_icon=add_icons['upload_icon'],
     camera_lg_icon=add_icons['camera_lg_icon'], image_icon=add_icons['image_icon'],
     file_icon=add_icons['file_icon'], construction_icon=add_icons['construction_icon'],
+    lock_icon=add_icons['lock_icon'],
 )
 
 # Replace JS relative path prefix '../' with CDN variable

@@ -194,6 +194,76 @@ DEFAULT_PHOTO_DIRECTION = {
 }
 
 
+def _get_persona_description():
+    """从 config/user_profile.json 构建人物描述，替代硬编码"""
+    up = load_json(os.path.join(CONFIG_DIR, 'user_profile.json'))
+    body = up.get('body', {}) if up else {}
+    lifestyle = up.get('lifestyle', {}) if up else {}
+    gender = up.get('gender', '男') if up else '男'
+
+    h = body.get('height_cm', '')
+    w = body.get('weight_kg', '')
+    age = body.get('age', '')
+    bt = body.get('body_type', '')
+    st = body.get('skin_tone', '')
+    shoulder = body.get('shoulder_type', '')
+    face = body.get('face_shape', '')
+    occ = lifestyle.get('occupation', '')
+    style_pref = lifestyle.get('style_preference', '')
+
+    # 构建描述段落
+    parts = []
+    if age:
+        parts.append(f'{age}岁')
+    parts.append('男性' if gender == '男' else '女性')
+    if h:
+        parts.append(f'{h}cm')
+    if w:
+        parts.append(f'{w}kg')
+    if bt:
+        parts.append(f'{bt}体型')
+    if st:
+        parts.append(f'{st}肤色')
+    if shoulder:
+        parts.append(f'{shoulder}')
+
+    base_desc = '一位 ' + '，'.join(parts) if parts else '一位亚洲成人'
+
+    # 身形修饰策略
+    modifier_lines = []
+    if bt == '偏瘦':
+        modifier_lines.append('偏瘦体型优先选增加肩宽/体量感的单品')
+        if h and int(h) >= 175:
+            modifier_lines.append(f'身高{h}cm偏瘦，适合落肩宽松剪裁增加横向视觉')
+    elif bt == '偏胖':
+        modifier_lines.append('偏胖体型优先选竖向线条、深色系拉长身形')
+        modifier_lines.append('避开横条纹和过于紧身的单品')
+    elif bt == '肌肉型':
+        modifier_lines.append('肌肉型体型可选修身剪裁展示线条，也可选宽松款走休闲路线')
+    if st and st in ('白皙', '偏白'):
+        modifier_lines.append('肤色偏白对颜色包容度高，可驾驭浅色系和亮色系')
+    elif st and st in ('小麦', '偏黄', '偏黑'):
+        modifier_lines.append('肤色偏深优先选低饱和暖色调，避免荧光色')
+
+    # 身材秘密（用户自述的身材痛点，直接注入 prompt）
+    body_secrets = up.get('body_secrets', '') if up else ''
+    if body_secrets:
+        modifier_lines.insert(0, f'⚠️ 身材痛点（用户自述）: {body_secrets}')
+        modifier_lines.append('请根据上述身材痛点，在选品时主动扬长避短：遮住或修饰用户提到的部位，用剪裁和面料转移视觉焦点')
+
+    # 着装背景
+    context_lines = []
+    if occ:
+        context_lines.append(f'职业: {occ}')
+    if style_pref:
+        context_lines.append(f'风格偏好: {style_pref}')
+
+    modifier_text = '\n'.join(f'□ {x}' for x in modifier_lines) if modifier_lines else ''
+    context_text = '\n'.join(context_lines) if context_lines else ''
+
+    return base_desc, modifier_text, context_text
+
+
 def get_photo_direction(style_ids):
     """根据目标风格返回摄影指导参数"""
     directions = []
@@ -933,21 +1003,28 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 
     # ── 9. 加载推荐规则的质量检查清单 ──
     rules = load_rules()
-    quality_checklist = """
-⚠️ 推荐质量检查（请在选品时逐项确认）：
+    # ── 0.5. 用户形象描述（从 config/user_profile.json 动态读取）──
+    persona_desc, persona_modifier, persona_context = _get_persona_description()
+
+    quality_checklist = f"""⚠️ 推荐质量检查（请在选品时逐项确认）：
 □ 三件套齐全：上衣 + 下装 + 鞋子，缺一不可
 □ 配色协调：无红绿/橙蓝等冲突撞色，整体色调统一
 □ 风格连贯：每件单品对目标风格的匹配分 ≥ 30
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
-□ 体型修饰：偏瘦体型优先选增加肩宽/体量感的单品（179cm偏瘦白皙）
+□ 体型修饰：{persona_desc}
+{persona_modifier}
 □ 面料舒适：优先棉/麻/亚麻等亲肤面料
-□ 衬肤色：偏白肤色优先选低饱和冷色调
+□ 衬肤色：根据用户肤色选择合适颜色
 """
 
     # ── 10. 组装 system prompt ──
+    context_section = ''
+    if persona_context:
+        context_section = f'\n用户背景: {persona_context}'
+
     system_prompt = f"""你是一位专攻亚洲男性穿搭的 AI 时尚顾问。
 
-你的任务是根据完整的衣柜数据（含风格匹配分、场景适配分、新鲜度），为一位 30岁亚洲男性（179cm偏瘦白皙）推荐穿搭方案。
+你的任务是根据完整的衣柜数据（含风格匹配分、场景适配分、新鲜度），为一位用户（{persona_desc}）推荐穿搭方案。{context_section}
 
 选品原则：
 1. 锚点优先：先确定今日的主角单品（表现力最强的核心件），再围绕它搭配同伴
@@ -955,7 +1032,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 3. 新鲜感：避开最近已穿单品，优先选新鲜度高的
 4. 颜色故事：确定主色调 → 辅助色 → 跳色（如有），避免冲突撞色
 5. 廓形节奏：上宽下窄 或 外松内紧，保持整体节奏
-6. 身形修饰：偏瘦体型选有体量感的单品增加肩宽/胸围视觉
+6. 身形修饰：根据用户体型选择修饰策略（如上宽下窄、竖向线条等）
 
 {quality_checklist}
 
@@ -1140,9 +1217,20 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
                 violations.append(f'{cid}: 商务场合禁止球衣/运动外套')
 
         # 运动
-        if occasion in ('跑步', '网球', '运动', '健身'):
-            if cat == 'SHOE' and cid in ('SHOE-001', 'SHOE-002', 'SHOE-004', 'SHOE-006', 'SHOE-007', 'SHOE-009'):
-                violations.append(f'{cid}: 运动场景必须有功能运动鞋，不可选皮鞋/靴子/帆布鞋')
+        if occasion in ('跑步', '网球', '运动', '健身', '篮球', '足球', '羽毛球'):
+            if cat == 'SHOE':
+                # 检查鞋子的场合标签是否包含运动相关
+                shoe_occasions = d['detail'].get('occasions', []) or []
+                shoe_styles = d['detail'].get('style_modifiers', []) or []
+                shoe_tags = ' '.join(shoe_occasions + shoe_styles).lower()
+                # 非运动鞋的特征词
+                non_sport_keywords = ['拖鞋', '凉鞋', '工装', '帆布', '皮鞋', '靴子', '沙滩', '居家', '板鞋', '高帮', '布鞋']
+                is_non_sport = any(kw in shoe_tags for kw in non_sport_keywords)
+                # 运动鞋的特征词
+                sport_keywords = ['网球', '跑步', '运动', '训练', '健身', '篮球', '足球', '羽毛球', 'court', 'run', 'train', 'sport']
+                is_sport = any(kw in shoe_tags for kw in sport_keywords)
+                if is_non_sport and not is_sport:
+                    violations.append(f'{cid}: 运动场景必须有功能运动鞋，不可选拖鞋/凉鞋/皮鞋/靴子/帆布鞋/工装靴')
             if cid in ('ACC-001', 'ACC-002'):
                 violations.append(f'{cid}: 运动场景禁戴手串')
             if cat == 'PT' and cid in ('PT-001', 'PT-005', 'PT-006'):

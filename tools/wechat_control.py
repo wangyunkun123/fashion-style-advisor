@@ -622,6 +622,49 @@ def extract_json(text):
             pass
     return None
 
+def _get_person_photos():
+    """根据 config/user_profile.json 获取用户个人照片路径列表
+    返回: [photo_path, ...] 或空列表（无照片/关闭形象）
+    """
+    up_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
+    if not os.path.exists(up_path):
+        # 无档案，fallback 到旧照片
+        old = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
+        return [old] if os.path.exists(old) else []
+
+    try:
+        with open(up_path) as f:
+            up = json.load(f)
+    except Exception:
+        return []
+
+    # 检查开关：use_my_image 为 false 时不传人物照
+    if up.get('use_my_image') is False:
+        log("👤 用户关闭了形象使用，不传人物参考图")
+        return []
+
+    photos = up.get('photos', {})
+    result = []
+
+    # 按优先级：正面全身 → 半身面部 → 侧面全身
+    slot_order = ['full_body_front', 'face_closeup', 'full_body_side']
+    for slot in slot_order:
+        rel_path = photos.get(slot, '')
+        if rel_path:
+            abs_path = os.path.join(PROJECT_DIR, rel_path)
+            if os.path.exists(abs_path):
+                result.append(abs_path)
+
+    # Fallback：用户开了开关但没上传照片，用旧的
+    if not result:
+        old = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
+        if os.path.exists(old):
+            log("👤 无用户照片，fallback 到 IMG_8493.jpg")
+            result.append(old)
+
+    return result
+
+
 # ── 衣橱入库辅助函数 ──────────────────────────────────
 
 def _get_next_id(category_code):
@@ -1126,11 +1169,9 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
         # ── 4. 构建穿搭方案 ──
         outfit_items = [new_item] + selected_items[:4]
 
-        # 人物照
-        person_photo = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
-        if not os.path.exists(person_photo):
-            tasks.update(task_id, status='error', message='未找到人物参考照')
-            return
+        # 人物照（从用户形象读取）
+        person_photos = _get_person_photos()
+        has_person = len(person_photos) > 0
 
         # ── 5. 创建临时目录 ──
         preview_dir = os.path.join(PROJECT_DIR, 'outfits', '_preview')
@@ -1141,7 +1182,15 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
             os.makedirs(d, exist_ok=True)
 
         # ── 6. 复制人物照 + 单品参考图 ──
-        shutil.copy2(person_photo, os.path.join(shengtu_dir, '人物_IMG_8493.jpg'))
+        reference_paths = []
+        if has_person:
+            for i, pp in enumerate(person_photos):
+                ext = os.path.splitext(pp)[1] or '.jpg'
+                dst = os.path.join(shengtu_dir, f'人物_{i+1}{ext}')
+                shutil.copy2(pp, dst)
+                reference_paths.append(dst)
+        else:
+            log("👤 无人物参考照，仅用服装抠图生成", "WARN")
 
         cat_to_prefix = {
             '短袖上衣': '上衣', '长袖上衣': '上衣', '衬衣': '上衣', '背心': '上衣',
@@ -1149,8 +1198,6 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
             '鞋子': '鞋子', '帽子': '帽子', '包': '包', '墨镜': '墨镜',
             '手部配饰': '配饰', '袜子': '袜子',
         }
-
-        reference_paths = [os.path.join(shengtu_dir, '人物_IMG_8493.jpg')]
 
         for oi in outfit_items:
             is_new = (oi is new_item)
@@ -1538,10 +1585,14 @@ style: {plan.get('style', style_hint)}
     with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
         f.write(seedream_prompt)
 
-    # ── 3. 复制人物照片 ──
-    person_photo = os.path.join(PROJECT_DIR, 'profile', 'photos', 'IMG_8493.jpg')
-    if os.path.exists(person_photo):
-        shutil.copy2(person_photo, os.path.join(shengtu_dir, '人物_IMG_8493.jpg'))
+    # ── 3. 复制人物照片（从用户形象读取）──
+    person_photos = _get_person_photos()
+    if person_photos:
+        for i, pp in enumerate(person_photos):
+            ext = os.path.splitext(pp)[1] or '.jpg'
+            shutil.copy2(pp, os.path.join(shengtu_dir, f'人物_{i+1}{ext}'))
+    else:
+        log("👤 无人物参考照，仅用服装抠图生成", "WARN")
 
     # ── 4. 复制抠图到豆包生图/（用抠图做 Seedream 参考图，非原始照片）──
     for it in items:
@@ -2695,38 +2746,83 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         if parsed.path == '/api/profile':
             try:
+                # ── 优先读取 user_profile.json，fallback analysis.md ──
+                up_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
                 analysis_path = os.path.join(PROJECT_DIR, 'profile', 'analysis.md')
-                profile = {'height': '', 'weight': '', 'body_type': '', 'skin_tone': '', 'style_preference': '', 'occupation': ''}
-                if os.path.exists(analysis_path):
+
+                if os.path.exists(up_path):
+                    with open(up_path) as f:
+                        up = json.load(f)
+                else:
+                    up = {}
+
+                body = up.get('body', {})
+                lifestyle = up.get('lifestyle', {})
+                profile = {
+                    'use_my_image': up.get('use_my_image', True),
+                    'gender': up.get('gender', '男'),
+                    'photos': up.get('photos', {}),
+                    'height': str(body.get('height_cm', '')),
+                    'weight': str(body.get('weight_kg', '')),
+                    'age': str(body.get('age', '')),
+                    'body_type': body.get('body_type', ''),
+                    'skin_tone': body.get('skin_tone', ''),
+                    'shoulder_type': body.get('shoulder_type', ''),
+                    'face_shape': body.get('face_shape', ''),
+                    'occupation': lifestyle.get('occupation', ''),
+                    'style_preference': lifestyle.get('style_preference', ''),
+                    'pain_points': lifestyle.get('pain_points', ''),
+                    'body_secrets': up.get('body_secrets', ''),
+                }
+
+                # Fallback: 从 analysis.md 填充空字段
+                if os.path.exists(analysis_path) and not up:
                     with open(analysis_path) as f:
                         content = f.read()
                     for line in content.split('\n'):
                         line = line.strip()
-                        if '身高' in line or 'height' in line.lower():
+                        if '身高' in line and not profile['height']:
                             m = re.search(r'(\d{3})\s*cm', line)
-                            if m: profile['height'] = m.group(1) + 'cm'
-                        elif '体重' in line or 'weight' in line.lower():
+                            if m: profile['height'] = m.group(1)
+                        elif '体重' in line and not profile['weight']:
                             m = re.search(r'(\d+)\s*kg', line)
-                            if m: profile['weight'] = m.group(1) + 'kg'
-                        elif '身形' in line or 'body' in line.lower():
-                            for bt in ['偏瘦','标准','偏胖','H型','倒三角','矩形']:
+                            if m: profile['weight'] = m.group(1)
+                        elif ('身形' in line or '体型' in line) and not profile['body_type']:
+                            for bt in ['偏瘦','标准','偏胖','H型','倒三角','矩形','肌肉型']:
                                 if bt in line: profile['body_type'] = bt; break
-                        elif '肤色' in line or 'skin' in line.lower():
+                        elif '肤色' in line and not profile['skin_tone']:
                             for st in ['白皙','偏白','自然','小麦','偏黄']:
                                 if st in line: profile['skin_tone'] = st; break
-                        elif '风格' in line or 'style' in line.lower():
+                        elif '风格' in line and not profile['style_preference']:
                             m = re.search(r'[：:]\s*(.+)', line)
                             if m: profile['style_preference'] = m.group(1).strip()[:60]
-                        elif '职业' in line or 'occupation' in line.lower():
+                        elif '职业' in line and not profile['occupation']:
                             m = re.search(r'[：:]\s*(.+)', line)
                             if m: profile['occupation'] = m.group(1).strip()[:30]
+
                 # Also load stats
-                records = _load_recent_outfits(100)
-                total_outfits = len(records)
-                rated = [r for r in records if r.get('rating')]
-                avg_rating = round(sum(r['rating'] for r in rated)/len(rated), 1) if rated else 0
+                outfits_dir = os.path.join(PROJECT_DIR, 'outfits')
+                total_outfits = 0
+                rated_list = []
+                if os.path.isdir(outfits_dir):
+                    for d in os.listdir(outfits_dir):
+                        dp = os.path.join(outfits_dir, d)
+                        if not os.path.isdir(dp) or d.startswith('.') or d.startswith('_'):
+                            continue
+                        total_outfits += 1
+                        rp = os.path.join(dp, 'rating.json')
+                        if os.path.exists(rp):
+                            try:
+                                with open(rp) as f:
+                                    r = json.load(f)
+                                rt = r.get('rating', 0)
+                                if rt:
+                                    rated_list.append(rt)
+                            except Exception:
+                                pass
+                avg_rating = round(sum(rated_list)/len(rated_list), 1) if rated_list else 0
                 profile['total_outfits'] = total_outfits
-                profile['rated_count'] = len(rated)
+                profile['rated_count'] = len(rated_list)
                 profile['avg_rating'] = avg_rating
                 self._json_resp(200, {'profile': profile})
                 return
@@ -3174,6 +3270,177 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         json.dump(new_data, f, ensure_ascii=False, indent=2)
                     log(f"🔔 新单品徽标已消除: {cid}")
             self._json_resp(200, {"ok": True})
+
+        # ─── 我的形象 API (POST) ───
+
+        elif parsed.path == '/api/profile/save':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            try:
+                profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
+                existing = {}
+                if os.path.exists(profile_path):
+                    with open(profile_path) as f:
+                        existing = json.load(f)
+                photos = data.get('photos', {})
+                if not photos:
+                    photos = existing.get('photos', {})
+                profile = {
+                    'use_my_image': data.get('use_my_image', True),
+                    'gender': data.get('gender', '男'),
+                    'photos': photos,
+                    'body': {
+                        'height_cm': data.get('height_cm', ''),
+                        'weight_kg': data.get('weight_kg', ''),
+                        'age': data.get('age', ''),
+                        'body_type': data.get('body_type', ''),
+                        'skin_tone': data.get('skin_tone', ''),
+                        'shoulder_type': data.get('shoulder_type', ''),
+                        'face_shape': data.get('face_shape', ''),
+                    },
+                    'lifestyle': {
+                        'occupation': data.get('occupation', ''),
+                        'style_preference': data.get('style_preference', ''),
+                        'pain_points': data.get('pain_points', ''),
+                    },
+                    'body_secrets': data.get('body_secrets', ''),
+                    'updated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                }
+                os.makedirs(os.path.dirname(profile_path), exist_ok=True)
+                with open(profile_path, 'w', encoding='utf-8') as f:
+                    json.dump(profile, f, ensure_ascii=False, indent=2)
+                log(f"👤 形象档案已保存")
+                self._json_resp(200, {"ok": True, "profile": profile})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        elif parsed.path == '/api/profile/photos/upload':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            try:
+                import base64 as _b64
+                slot = data.get('slot', 'full_body_front')
+                image_b64 = data.get('image', '')
+                if not image_b64:
+                    self._json_resp(400, {"error": "no image data"})
+                    return
+                if ',' in image_b64 and ';base64' in image_b64:
+                    image_b64 = image_b64.split(',', 1)[1]
+
+                photo_dir = os.path.join(PROJECT_DIR, 'profile', 'photos')
+                os.makedirs(photo_dir, exist_ok=True)
+                slot_names = {
+                    'full_body_front': 'user_full_front.jpg',
+                    'face_closeup': 'user_face.jpg',
+                    'full_body_side': 'user_side.jpg',
+                }
+                filename = slot_names.get(slot, f'user_{slot}.jpg')
+                filepath = os.path.join(photo_dir, filename)
+                with open(filepath, 'wb') as f:
+                    f.write(_b64.b64decode(image_b64))
+
+                # update profile
+                profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
+                profile = {}
+                if os.path.exists(profile_path):
+                    with open(profile_path) as f:
+                        profile = json.load(f)
+                if 'photos' not in profile:
+                    profile['photos'] = {}
+                profile['photos'][slot] = f'profile/photos/{filename}'
+                profile['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
+                with open(profile_path, 'w', encoding='utf-8') as f:
+                    json.dump(profile, f, ensure_ascii=False, indent=2)
+                log(f"📷 照片已上传: {slot} → {filename}")
+                self._json_resp(200, {"ok": True, "slot": slot, "path": f'profile/photos/{filename}'})
+                return
+            except Exception as e:
+                log(f"照片上传失败: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        elif parsed.path == '/api/profile/analyze':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            try:
+                import base64 as _b64
+                image_b64s = data.get('images', [])
+                if not image_b64s:
+                    self._json_resp(400, {"error": "请先上传至少一张照片"})
+                    return
+                user_content = []
+                for img in image_b64s:
+                    b64_data = img.get('b64', '')
+                    if ',' in b64_data and ';base64' in b64_data:
+                        b64_data = b64_data.split(',', 1)[1]
+                    slot_labels = {
+                        'full_body_front': '正面全身照',
+                        'face_closeup': '半身面部照',
+                        'full_body_side': '侧面全身照',
+                    }
+                    label = slot_labels.get(img.get('slot', ''), '照片')
+                    user_content.append({
+                        'type': 'image_url',
+                        'image_url': {'url': f'data:image/jpeg;base64,{b64_data}'}
+                    })
+                    user_content.append({'type': 'text', 'text': f'[上图: {label}]'})
+                user_content.append({
+                    'type': 'text',
+                    'text': (
+                        '请分析以上照片中人物的身体特征。只返回JSON，不要其他文字。\n'
+                        '{\n'
+                        '  "gender": "男 或 女",\n'
+                        '  "body_type": "偏瘦 / 标准 / 偏胖 / 肌肉型",\n'
+                        '  "skin_tone": "白皙 / 偏白 / 自然 / 小麦 / 偏黄 / 偏黑",\n'
+                        '  "shoulder_type": "窄肩 / 标准 / 宽肩 / 溜肩（不确定就填标准）",\n'
+                        '  "face_shape": "圆脸 / 方脸 / 长脸 / 瓜子脸 / 椭圆脸（不确定就填空字符串）",\n'
+                        '  "estimated_height_cm": "估算身高cm数（不确定填0）",\n'
+                        '  "analysis_notes": "简短分析说明（1-2句中文）"\n'
+                        '}'
+                    )
+                })
+                messages = [{'role': 'user', 'content': user_content}]
+                response_text = call_doubao_chat(messages, max_tokens=1024, timeout=60)
+                analysis = extract_json(response_text)
+                if not analysis:
+                    self._json_resp(200, {"ok": False, "error": "AI 分析失败，请手动填写"})
+                    return
+                log(f"🔍 AI 身形分析完成: {analysis.get('body_type', '?')} {analysis.get('skin_tone', '?')}")
+                self._json_resp(200, {"ok": True, "analysis": analysis})
+                return
+            except Exception as e:
+                log(f"AI 分析失败: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        elif parsed.path == '/api/profile/reset':
+            try:
+                profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
+                if os.path.exists(profile_path):
+                    os.remove(profile_path)
+                log(f"👤 形象档案已重置")
+                self._json_resp(200, {"ok": True})
+                return
+            except Exception as e:
+                self._json_resp(500, {"error": str(e)})
+                return
 
         else:
             self._json_resp(404, {"error": "not found"})

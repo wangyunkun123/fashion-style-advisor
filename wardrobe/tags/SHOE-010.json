@@ -31,15 +31,15 @@
   },
   "formality": 1,
   "brand": {
-    "name": "Puma",
+    "name": "Puma拖鞋",
     "collection": null,
     "confidence": "确定"
   },
   "style_modifiers": [
     "颜色显白",
     "休闲居家",
-    "运动品牌",
-    "经典Logo"
+    "经典Logo",
+    "拖鞋"
   ],
   "meta": {
     "is_key_piece": false,
@@ -48,5 +48,13 @@
     "last_worn": null,
     "claude_fit_comment": "Puma经典拖鞋,米白拼黑配色,Logo醒目,适合居家/夏季短途休闲,运动品牌休闲线",
     "_statement_score": 0.2
-  }
+  },
+  "occasions": [
+    "海边",
+    "居家"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "街头潮流"
+  ]
 }

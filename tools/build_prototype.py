@@ -1600,9 +1600,11 @@ def gen_history_card(outfit, idx):
     # Color palette — only shown in expanded view
     palette_html = build_palette_html(outfit).replace('palette-strip', 'h-exp-palette')
     odir = outfit['dir'].replace("'", "\\'")
-    # Expanded: left image, right 2x4 grid, bottom row: pin left + palette right
-    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div><div class="h-exp-bottom"><button class="pin-btn" onclick="event.stopPropagation();pinToHome(\'{oid}\')">📌 放回主页</button>{palette}</div>'.format(
-        img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html, palette=palette_html, oid=odir)
+    # Rationale
+    rationale_html = build_rationale_html(outfit)
+    # Expanded: left image, right 2x4 grid, rationale, bottom row: pin left + palette right
+    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>{rationale}<div class="h-exp-bottom"><button class="pin-btn" onclick="event.stopPropagation();pinToHome(\'{oid}\')">📌 放回主页</button>{palette}</div>'.format(
+        img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html, rationale=rationale_html, palette=palette_html, oid=odir)
     # Small thumbnail for collapsed state
     thumb_small = ''
     if outfit.get('char_img'):

@@ -1760,9 +1760,13 @@ def _run_pipeline_impl(style_hint, task_id=None):
             log_lines.append(msg)
             tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
 
-    today = time.strftime('%Y-%m-%d')
+    def step_done():
+        if log_lines:
+            log_lines[-1] = '✅ ' + log_lines[-1]
+        if task_id:
+            tasks.update(task_id, status='running', log='\n'.join(log_lines))
 
-    progress('🤖 Step 1/5: AI 智能选品（数据增强）...')
+    today = time.strftime('%Y-%m-%d')
 
     # ── Step 0: 从用户输入提取场合 + 指定单品 ──
     occasion = extract_occasion(style_hint)
@@ -1772,7 +1776,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
     if mandatory_items:
         log(f"📍 指定单品: {[(m[0], f'{m[1]:.0%}') for m in mandatory_items]}")
 
-    # ── Step 1: 构建数据增强 prompt（统一管线）──
+    # ── 构建数据增强 prompt（统一管线）──
     prompt_data = build_enhanced_prompt(
         style_hint=style_hint,
         occasion=occasion,
@@ -1787,8 +1791,15 @@ def _run_pipeline_impl(style_hint, task_id=None):
     # 初始 token 估算（中文约 2 chars/token）
     _input_chars = len(system_prompt) + len(user_prompt)
 
+    # ── 预估 ──
+    est_tokens_init = _input_chars // 2
+    progress(f'📊 预计 ~90-150s · ~{est_tokens_init} tokens')
+
+    # ── Step 1: AI 选品 ──
+    progress('🤖 AI 智能选品')
+
     try:
-        # ── Step 2: AI 创意选品（最多重试 JSON 解析）──
+        # ── AI 创意选品（最多重试 JSON 解析）──
         plan = None
         for attempt in range(2):
             content = call_doubao_chat([
@@ -1882,23 +1893,23 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
         # 执行文件操作
         outfit_dir = execute_outfit_plan(plan, today, style_hint)
-        progress(f'🤖 Step 1/5: AI 选品完成 ✅')
+        step_done()
 
-        progress('🎨 Step 2/5: Seedream AI 生图中...')
+        progress('🎨 Seedream AI 生图')
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
-        progress('🎨 Step 2/5: Seedream 生图完成 ✅')
+        step_done()
 
-        progress('🖼️ Step 3/5: 排版合成中...')
+        progress('🖼️ 排版合成')
         out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
-        progress('🖼️ Step 3/5: 排版完成 ✅')
+        step_done()
 
-        progress('📤 Step 4/5: 推送 GitHub...')
+        progress('📤 推送 GitHub')
         composite = find_latest_composite(today)
         if composite and os.path.exists(composite):
             run_cli(['git', 'add', '-A'], timeout=30)
             run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
             out4 = run_cli(['git', 'push'], timeout=60)
-            progress('📤 Step 4/5: 推送完成 ✅')
+            step_done()
 
             github_url = get_github_raw_url(composite)
             comp_dir = os.path.dirname(composite)
@@ -1906,8 +1917,6 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 comp_dir = os.path.dirname(comp_dir)
             outfit_md = os.path.join(comp_dir, 'outfit.md')
             summary = format_outfit_summary(outfit_md)
-            # 控制台用简介版（清爽易读），微信按用户偏好推送
-            result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
             # 微信推送：build_push 按用户偏好推送完整内容
             push_enabled = config.get('wechat_push_enabled', True)
@@ -1930,25 +1939,24 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
             # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
             try:
-                progress('📱 Step 5/5: 刷新控制台...')
+                progress('📱 刷新控制台')
                 run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
                 run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
                 run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
                 run_cli(['git', 'push'], timeout=30)
-                progress('📱 Step 5/5: 控制台已刷新 ✅')
+                step_done()
             except Exception:
                 pass
 
             # ── 统计摘要 ──
             elapsed = time.time() - t_start
             est_tokens = _input_chars // 2
-            summary_tail = f' | 📊 ~{est_tokens} tokens | ⏱️ ~{elapsed:.0f}s | 🔄 {_api_calls}次AI'
-            result_text += summary_tail
+            stats_line = f'⏱️ ~{elapsed:.0f}s · 📊 ~{est_tokens} tokens · 🔄 {_api_calls}次AI'
 
-            # 更新控制台结果（与微信推送内容一致）
+            # 更新控制台结果（只显示统计，不展示图片和摘要）
             if task_id:
-                tasks.update(task_id, status='done', message='✅ 全部完成 ' + summary_tail.strip(),
-                             result=result_text, image_path=composite, image_url=github_url,
+                tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
+                             image_path=composite, image_url=github_url,
                              log='\n'.join(log_lines))
 
             # 保存历史记录
@@ -1957,7 +1965,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 'style': style_hint,
                 'status': 'done',
                 'image_url': github_url,
-                'result': result_text,
+                'stats': stats_line,
             })
         else:
             if task_id:

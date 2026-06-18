@@ -96,76 +96,60 @@ def _get_git_commit():
             _get_git_commit._cache = 'main'
     return _get_git_commit._cache
 
-def _find_item_thumb(clothing_id):
-    """查找单品缩略图（优先抠图缩略 > 抠图大图 > 原图缩略，兜底 outfit items/）
-    返回相对路径 + ?v=mtime"""
+def _find_item_asset(clothing_id, dir_globs):
+    """通用单品资源查找：按优先级遍历 (目录, glob模式) 列表，返回首个匹配的相对路径"""
     import glob as _glob, os as _os
-    enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
-    if _os.path.exists(enhanced_dir):
-        # Priority 1: cutout thumbnails (抠图小缩略，CDN 友好)
-        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout_thumb*')
-        matches = _glob.glob(pattern)
-        if matches:
-            p = _os.path.relpath(matches[0], PROJECT_DIR)
-            mtime = int(_os.path.getmtime(matches[0]))
-            return f'{p}?v={mtime}'
-        # Priority 2: regular thumbnails (原图缩略)
-        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_thumb.*')
-        matches = _glob.glob(pattern)
-        if matches:
-            p = _os.path.relpath(matches[0], PROJECT_DIR)
-            mtime = int(_os.path.getmtime(matches[0]))
-            return f'{p}?v={mtime}'
-        # Priority 3: full-size cutout files
-        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout.png')
-        matches = _glob.glob(pattern)
-        if matches:
-            p = _os.path.relpath(matches[0], PROJECT_DIR)
-            mtime = int(_os.path.getmtime(matches[0]))
-            return f'{p}?v={mtime}'
-    # Fallback: Search in all outfit items/ dirs (newest first)
-    outfits_dir = _os.path.join(PROJECT_DIR, 'outfits')
-    if _os.path.exists(outfits_dir):
-        for d in sorted(_os.listdir(outfits_dir), reverse=True):
-            dp = _os.path.join(outfits_dir, d)
-            if not _os.path.isdir(dp): continue
-            items_dir = _os.path.join(dp, 'items')
-            if not _os.path.exists(items_dir): continue
-            pattern = _os.path.join(items_dir, f'{clothing_id}_*cutout*')
+    for dir_spec, pattern_template in dir_globs:
+        # 支持 callable（延迟遍历 outfits 子目录）
+        if callable(dir_spec):
+            for dp in dir_spec():
+                if not _os.path.exists(dp): continue
+                pattern = _os.path.join(dp, pattern_template.format(cid=clothing_id))
+                matches = _glob.glob(pattern)
+                if matches:
+                    p = _os.path.relpath(matches[0], PROJECT_DIR)
+                    return f'{p}?v={int(_os.path.getmtime(matches[0]))}'
+        else:
+            if not _os.path.exists(dir_spec): continue
+            pattern = _os.path.join(dir_spec, pattern_template.format(cid=clothing_id))
             matches = _glob.glob(pattern)
             if matches:
                 p = _os.path.relpath(matches[0], PROJECT_DIR)
-                mtime = int(_os.path.getmtime(matches[0]))
-                return f'{p}?v={mtime}'
+                return f'{p}?v={int(_os.path.getmtime(matches[0]))}'
     return ''
 
-def _find_item_cutout(clothing_id):
-    """查找单品大图（抠图），用于详情弹窗 hero 展示"""
-    import glob as _glob, os as _os
-    # Priority: outfit items/ dirs (newest first, already resized for display)
+
+def _outfit_items_dirs():
+    """遍历 outfits/*/items/ 目录，最新优先"""
+    import os as _os
     outfits_dir = _os.path.join(PROJECT_DIR, 'outfits')
-    if _os.path.exists(outfits_dir):
-        for d in sorted(_os.listdir(outfits_dir), reverse=True):
-            dp = _os.path.join(outfits_dir, d)
-            if not _os.path.isdir(dp): continue
-            items_dir = _os.path.join(dp, 'items')
-            if not _os.path.exists(items_dir): continue
-            pattern = _os.path.join(items_dir, f'{clothing_id}_*cutout*')
-            matches = _glob.glob(pattern)
-            if matches:
-                p = _os.path.relpath(matches[0], PROJECT_DIR)
-                mtime = int(_os.path.getmtime(matches[0]))
-                return f'{p}?v={mtime}'
-    # Fallback: wardrobe/enhanced/ cutout
+    if not _os.path.exists(outfits_dir): return
+    for d in sorted(_os.listdir(outfits_dir), reverse=True):
+        dp = _os.path.join(outfits_dir, d)
+        if not _os.path.isdir(dp): continue
+        items_dir = _os.path.join(dp, 'items')
+        if _os.path.exists(items_dir):
+            yield items_dir
+
+
+def _find_item_thumb(clothing_id):
+    """查找单品缩略图（enhanced 优先: cutout_thumb > thumb > cutout → 兜底 outfit items/"""
+    import os as _os
     enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
-    if _os.path.exists(enhanced_dir):
-        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout*')
-        matches = _glob.glob(pattern)
-        if matches:
-            p = _os.path.relpath(matches[0], PROJECT_DIR)
-            mtime = int(_os.path.getmtime(matches[0]))
-            return f'{p}?v={mtime}'
-    return ''
+    gl = [(enhanced_dir, '{cid}_*cutout_thumb*'),
+          (enhanced_dir, '{cid}_thumb.*'),
+          (enhanced_dir, '{cid}_*cutout.png'),
+          (_outfit_items_dirs, '{cid}_*cutout*')]
+    return _find_item_asset(clothing_id, gl)
+
+
+def _find_item_cutout(clothing_id):
+    """查找单品抠图大图（outfit items/ 优先 → 兜底 enhanced/）"""
+    import os as _os
+    enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+    gl = [(_outfit_items_dirs, '{cid}_*cutout*'),
+          (enhanced_dir, '{cid}_*cutout*')]
+    return _find_item_asset(clothing_id, gl)
 
 # ── 任务管理器 ────────────────────────────────────────
 class TaskManager:

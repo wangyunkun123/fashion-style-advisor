@@ -61,12 +61,14 @@ try:
 except ImportError:
     UNIFIED_AVAILABLE = False
 
+# 共享函数
+from tools.common import load_style_fingerprint, load_all_clothing
+
 # 风格实验室（保留 generate_alt_section 用于"今天也适合"）
 try:
     from style_lab import (
         generate_alt_section,
         get_user_comfort_zone,
-        load_all_clothing,
     )
     STYLE_LAB_AVAILABLE = True
 except ImportError:
@@ -155,15 +157,6 @@ def load_encyclopedia(style_id):
         'brands': brands, 'icons': icons,
         'encyclopedia_url': f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
     }
-
-
-def load_style_fingerprint(style_id):
-    """从个人指纹中取配色逻辑"""
-    path = os.path.join(STYLES_DIR, f'{style_id}.json')
-    if not os.path.exists(path):
-        return {}
-    with open(path, 'r', encoding='utf-8')  as f:
-        return json.load(f)
 
 
 def load_outfit_data(outfit_dir):

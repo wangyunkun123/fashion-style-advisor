@@ -64,17 +64,7 @@ TARGET_HUES = {
 # 1. 数据加载
 # ============================================================
 
-def load_all_clothing():
-    """加载所有衣服标签，返回 {clothing_id: tag_dict}"""
-    items = {}
-    for fpath in sorted(glob.glob(os.path.join(TAGS_DIR, '*.json'))):
-        bn = os.path.basename(fpath)
-        if bn.startswith('SCORE_CACHE') or bn == 'README.json':
-            continue
-        with open(fpath, 'r', encoding='utf-8') as f:
-            item = json.load(f)
-            items[item['clothing_id']] = item
-    return items
+from tools.common import load_all_clothing
 
 
 def load_state():

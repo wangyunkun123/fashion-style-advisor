@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""共享工具函数 — 消除跨文件重复定义"""
+import os, json, glob, re
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJ_DIR = os.path.join(BASE_DIR, '..')
+TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
+STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
+CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
+
+# 所有品类 ID 正则（消除 7 处重复定义）
+ITEM_ID_PATTERN = re.compile(
+    r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+'
+    r'|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)'
+)
+
+# 品类代码统一配置
+CAT_CONFIG = {
+    'TS':    {'emoji': '👕', 'icon_key': 'tshirt',  'cn': '短袖上衣', 'sort':  5},
+    'LS':    {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '长袖上衣', 'sort':  4},
+    'SHIRT': {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '衬衣',     'sort':  3},
+    'TANK':  {'emoji': '🎽', 'icon_key': 'tshirt',  'cn': '背心',     'sort':  6},
+    'JK':    {'emoji': '🧥', 'icon_key': 'tshirt',  'cn': '外套',     'sort':  1},
+    'PT':    {'emoji': '👖', 'icon_key': 'pants',   'cn': '长裤',     'sort':  7},
+    'SH':    {'emoji': '🩳', 'icon_key': 'pants',   'cn': '短裤',     'sort':  8},
+    'SHOE':  {'emoji': '👟', 'icon_key': 'shoe',    'cn': '鞋子',     'sort': 12},
+    'BAG':   {'emoji': '🎒', 'icon_key': 'bag',     'cn': '包',       'sort': 10},
+    'HAT':   {'emoji': '🧢', 'icon_key': 'hat',     'cn': '帽子',     'sort':  0},
+    'SOCK':  {'emoji': '🧦', 'icon_key': 'sock',    'cn': '袜子',     'sort': 13},
+    'SUN':   {'emoji': '🕶', 'icon_key': 'sun',     'cn': '墨镜',     'sort':  2},
+    'ACC':   {'emoji': '⌚', 'icon_key': 'acc',     'cn': '手部配饰', 'sort': 11},
+}
+CAT_SORT_ORDER = sorted(CAT_CONFIG.keys(), key=lambda k: CAT_CONFIG[k]['sort'])
+
+
+def load_all_clothing():
+    """加载所有衣服标签，返回 {clothing_id: tag_dict}"""
+    items = {}
+    for fpath in sorted(glob.glob(os.path.join(TAGS_DIR, '*.json'))):
+        fname = os.path.basename(fpath)
+        if fname.startswith('SCORE_CACHE') or fname == 'README.json' or fname.startswith('.id_to_cutout'):
+            continue
+        try:
+            with open(fpath, 'r', encoding='utf-8') as f:
+                item = json.load(f)
+            cid = item.get('clothing_id', '')
+            if cid and not (item.get('meta') or {}).get('archived'):
+                items[cid] = item
+        except Exception:
+            pass
+    return items
+
+
+def load_score_cache():
+    """加载评分缓存，返回 dict（已剥离 _meta）"""
+    if not os.path.exists(CACHE_FILE):
+        return {}
+    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+        cache = json.load(f)
+    cache.pop('_meta', None)
+    return cache
+
+
+def load_style_fingerprint(style_id):
+    """加载风格指纹 JSON"""
+    path = os.path.join(STYLES_DIR, f'{style_id}.json')
+    if not os.path.exists(path):
+        return {}
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.load(f)

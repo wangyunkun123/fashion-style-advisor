@@ -551,20 +551,7 @@ def match_scene_profile(outfit_items, occasion='日常'):
             score -= 20
 
     return max(0, min(100, score + 30))
-def load_all_clothing():
-    """加载所有衣服标签"""
-    items = {}
-    for fpath in sorted(glob.glob(os.path.join(TAGS_DIR, '*.json'))):
-        fname = os.path.basename(fpath)
-        if fname.startswith('SCORE_CACHE') or fname.startswith('.id_to_cutout'):
-            continue
-        try:
-            with open(fpath, 'r', encoding='utf-8') as f:
-                item = json.load(f)
-            items[item['clothing_id']] = item
-        except:
-            pass
-    return items
+from tools.common import load_all_clothing
 
 
 def load_all_styles():

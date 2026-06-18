@@ -58,16 +58,7 @@ def load_clothing(clothing_id):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def load_all_clothing():
-    """加载所有衣服标签，返回 {clothing_id: tag_dict}"""
-    items = {}
-    for fpath in sorted(glob.glob(os.path.join(TAGS_DIR, '*.json'))):
-        if os.path.basename(fpath).startswith('SCORE_CACHE'):
-            continue
-        with open(fpath, 'r', encoding='utf-8') as f:
-            item = json.load(f)
-            items[item['clothing_id']] = item
-    return items
+from tools.common import load_all_clothing
 
 
 def get_tag_mtime(clothing_id):
@@ -78,12 +69,7 @@ def get_tag_mtime(clothing_id):
     return 0
 
 
-def load_score_cache():
-    """加载评分缓存（含元数据）"""
-    if not os.path.exists(CACHE_FILE):
-        return {}
-    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-        return json.load(f)
+from tools.common import load_score_cache
 
 
 def save_score_cache(cache):

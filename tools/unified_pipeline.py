@@ -295,25 +295,8 @@ def load_json(path):
         return json.load(f)
 
 
-def load_all_clothing():
-    """加载所有衣服标签"""
-    items = {}
-    for fname in sorted(os.listdir(TAGS_DIR)):
-        if fname == 'SCORE_CACHE.json' or not fname.endswith('.json'):
-            continue
-        try:
-            with open(os.path.join(TAGS_DIR, fname)) as f:
-                d = json.load(f)
-            cid = d.get('clothing_id', '')
-            if cid and not (d.get('meta') or {}).get('archived'):
-                items[cid] = d
-        except Exception:
-            pass
-    return items
-
-
-def load_score_cache():
-    return load_json(CACHE_FILE)
+from tools.common import (load_all_clothing, load_score_cache,
+                         load_style_fingerprint, ITEM_ID_PATTERN)
 
 
 def load_scene_profiles():
@@ -322,11 +305,6 @@ def load_scene_profiles():
 
 def load_strategies():
     return load_json(STRATEGIES_FILE)
-
-
-def load_style_fingerprint(style_id):
-    path = os.path.join(STYLES_DIR, f'{style_id}.json')
-    return load_json(path)
 
 
 def load_lab_state():
@@ -526,7 +504,7 @@ def _get_three_star_counts():
                 with open(md) as f:
                     content = f.read()
                 ids = set(re.findall(
-                    r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                    ITEM_ID_PATTERN,
                     content
                 ))
                 for cid in ids:
@@ -642,7 +620,7 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
         try:
             with open(md) as f:
                 ids = list(set(re.findall(
-                    r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                    ITEM_ID_PATTERN,
                     f.read()
                 )))
         except Exception:
@@ -1488,7 +1466,7 @@ def _get_banned_items():
                         with open(md, 'r') as f:
                             content = f.read()
                         ids = re.findall(
-                            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                            ITEM_ID_PATTERN,
                             content
                         )
                         banned.extend(ids)
@@ -1513,7 +1491,7 @@ def _get_recent_outfits(limit=7):
             with open(md, 'r') as f:
                 content = f.read()
             ids = list(set(re.findall(
-                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                ITEM_ID_PATTERN,
                 content
             )))
             core = [i for i in ids if i.split('-')[0] in CORE_CATS]
@@ -1540,7 +1518,7 @@ def _get_wear_counts():
             with open(md, 'r') as f:
                 content = f.read()
             ids = re.findall(
-                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                ITEM_ID_PATTERN,
                 content
             )
             for i in set(ids):
@@ -1926,7 +1904,7 @@ def main():
             content = f.read()
         # 提取单品ID
         ids = list(set(re.findall(
-            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+            ITEM_ID_PATTERN,
             content
         )))
         items = [{'id': i} for i in ids]

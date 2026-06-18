@@ -665,6 +665,90 @@ def _get_person_photos():
     return result
 
 
+def _remove_person_background(src_path):
+    """对人物照片 AI 去背景，保存为透明 PNG 抠图。
+    返回: cutout_path（与源文件同目录，_cutout 后缀）
+    如果抠图已存在且比源文件新，跳过。
+    """
+    base = os.path.splitext(src_path)[0]
+    dst_path = base + '_cutout.png'
+
+    if os.path.exists(dst_path):
+        if os.path.getmtime(dst_path) >= os.path.getmtime(src_path):
+            return dst_path
+
+    log(f"🧹 人物抠图中: {os.path.basename(src_path)}...")
+    try:
+        from rembg import remove
+        from PIL import Image as _PILImg, ImageOps as _PILOps
+    except ImportError as e:
+        log(f"⚠️ rembg 不可用: {e}，跳过抠图")
+        return src_path
+
+    img = _PILImg.open(src_path)
+    img = _PILOps.exif_transpose(img)
+
+    cutout = remove(img, alpha_matting=True,
+                    alpha_matting_foreground_threshold=240,
+                    alpha_matting_background_threshold=10,
+                    alpha_matting_erode_size=4)
+    if cutout.mode != 'RGBA':
+        cutout = cutout.convert('RGBA')
+
+    # 最长边 1024px（与 generate.py compress_image 一致）
+    w, h = cutout.size
+    if max(w, h) > 1024:
+        ratio = 1024 / max(w, h)
+        cutout = cutout.resize((int(w * ratio), int(h * ratio)), _PILImg.LANCZOS)
+
+    cutout.save(dst_path, 'PNG')
+    log(f"   ✅ 抠图完成: {os.path.basename(dst_path)} ({cutout.width}x{cutout.height})")
+    return dst_path
+
+
+def _select_person_photos_for_prompt(person_photos, seedream_prompt):
+    """根据 prompt 构图角度选择匹配的人物参考图。
+    person_photos: [全身正面, 面部近照, 侧面全身]
+    seedream_prompt: 英文生图提示词
+
+    规则:
+    - 侧面构图(looking back / side profile / over shoulder) → 侧面照 + 面部近照
+    - 正面/默认构图 → 全身正面 + 面部近照
+    - 面部近照永远保留（锁定五官）
+    返回: 筛选后的照片列表
+    """
+    if len(person_photos) <= 1:
+        return person_photos
+
+    prompt_lower = seedream_prompt.lower()
+
+    # 侧面构图关键词
+    side_keywords = [
+        'side profile', 'looking back', 'over shoulder', 'side view',
+        'side angle', 'side shot', 'profile view', 'turning away',
+        'mid-laugh', 'looking over', 'glancing back'
+    ]
+    is_side = any(kw in prompt_lower for kw in side_keywords)
+
+    face_photo = person_photos[1] if len(person_photos) > 1 else None
+
+    if is_side:
+        result = []
+        if len(person_photos) > 2:
+            result.append(person_photos[2])  # 侧面照
+        if face_photo:
+            result.append(face_photo)
+        log(f"📐 侧面构图 → 用侧面照 + 面部 ({len(result)}张)")
+        return result or person_photos
+
+    # 正面构图（默认）
+    result = [person_photos[0]]  # 全身正面
+    if face_photo:
+        result.append(face_photo)
+    log(f"📐 正面构图 → 用全身正面 + 面部 ({len(result)}张)")
+    return result
+
+
 # ── 衣橱入库辅助函数 ──────────────────────────────────
 
 def _get_next_id(category_code):
@@ -1181,13 +1265,16 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
                 shutil.rmtree(d)
             os.makedirs(d, exist_ok=True)
 
-        # ── 6. 复制人物照 + 单品参考图 ──
+        # ── 6. 复制人物照（去背景抠图）+ 单品参考图 ──
         reference_paths = []
         if has_person:
-            for i, pp in enumerate(person_photos):
-                ext = os.path.splitext(pp)[1] or '.jpg'
+            person_cutouts = [_remove_person_background(pp) for pp in person_photos]
+            # 预览默认用全身正面 + 面部（不选角度，因为 prompt 尚未生成）
+            preview_photos = person_cutouts[:2] if len(person_cutouts) >= 2 else person_cutouts
+            for i, cp in enumerate(preview_photos):
+                ext = os.path.splitext(cp)[1] or '.png'
                 dst = os.path.join(shengtu_dir, f'人物_{i+1}{ext}')
-                shutil.copy2(pp, dst)
+                shutil.copy2(cp, dst)
                 reference_paths.append(dst)
         else:
             log("👤 无人物参考照，仅用服装抠图生成", "WARN")
@@ -1585,12 +1672,21 @@ style: {plan.get('style', style_hint)}
     with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
         f.write(seedream_prompt)
 
-    # ── 3. 复制人物照片（从用户形象读取）──
-    person_photos = _get_person_photos()
-    if person_photos:
-        for i, pp in enumerate(person_photos):
-            ext = os.path.splitext(pp)[1] or '.jpg'
-            shutil.copy2(pp, os.path.join(shengtu_dir, f'人物_{i+1}{ext}'))
+    # ── 3. 人物照片去背景 + 复制到豆包生图/ ──
+    person_photos_raw = _get_person_photos()
+    if person_photos_raw:
+        # 3a. 对每张人物照 AI 去背景（生成透明 PNG 抠图）
+        person_cutouts = []
+        for pp in person_photos_raw:
+            cutout = _remove_person_background(pp)
+            person_cutouts.append(cutout)
+        # 3b. 根据 prompt 构图角度选择匹配的照片
+        selected = _select_person_photos_for_prompt(person_cutouts, seedream_prompt)
+        # 3c. 复制抠图到豆包生图（透明 PNG，generate.py 的 compress_image 自动补灰底）
+        for i, cp in enumerate(selected):
+            ext = os.path.splitext(cp)[1] or '.png'
+            shutil.copy2(cp, os.path.join(shengtu_dir, f'人物_{i+1}{ext}'))
+        log(f"👤 人物抠图: {len(person_cutouts)}张 → 按构图选{len(selected)}张")
     else:
         log("👤 无人物参考照，仅用服装抠图生成", "WARN")
 
@@ -3364,6 +3460,13 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 with open(profile_path, 'w', encoding='utf-8') as f:
                     json.dump(profile, f, ensure_ascii=False, indent=2)
                 log(f"📷 照片已上传: {slot} → {filename}")
+                # 异步去背景（不阻塞上传响应）
+                def _bg_remove():
+                    try:
+                        _remove_person_background(filepath)
+                    except Exception as e2:
+                        log(f"⚠️ 上传后抠图失败: {e2}")
+                threading.Thread(target=_bg_remove, daemon=True).start()
                 self._json_resp(200, {"ok": True, "slot": slot, "path": f'profile/photos/{filename}'})
                 return
             except Exception as e:

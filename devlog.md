@@ -1,5 +1,27 @@
 # 开发日志
 
+## 2026-06-19: 管线优化日
+
+> 详见 `devlog/2026-06-19.md`
+
+- **进度精简**：双消息→单消息+打勾，加预估时间/token，去排版图和文字摘要
+- **管线瘦身**：5步→3步，移除 composite_v2.py + build_push.py + format_outfit_summary()
+- **配件场景化**：按场景需要选择，有理由才加，不铺满；面料去 blanket
+- **表情控制**：Seedream prompt 加 natural relaxed expression，禁面瘫脸
+- **Pass 2 阈值**：1件配件并入 Pass 1，2+才跑两轮
+- **死代码清理**：删 496 行（build_narrative_prompt/run_unified_pipeline/CLI main）
+- **质量检查对齐**：两处 prompt 统一 11 项
+
+## 2026-06-18: 推荐理由 + 放回主页 + 穿搭技巧
+
+> 详见 `devlog/2026-06-18.md`
+
+- **推荐理由 & 穿搭技巧**：Hero 新增两个区块，AI 自动生成 rationale + dressing_tips
+- **放回主页**：历史卡片「📌 放回主页」按钮，纯前端 DOM 即时替换
+- **5 套最爱补全**：补全推荐理由+技巧内容，修正风格标签
+- **CSS 修复**：配色圆点居中、pinToHome 去「取消」文字
+- **归档品修复**：API 可见 + 彻底删除 + 即时刷新
+
 ## 2026-06-17/18: 第四阶段 — 手机端完整实现 + 代码精简优化
 
 ### 手机端建设

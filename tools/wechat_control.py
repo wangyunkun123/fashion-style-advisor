@@ -265,11 +265,13 @@ def match_command(message):
         style = (m.group(1) or '').strip()
         return ('generate', style)
 
-    if re.search(r'推荐|穿搭|穿什么|怎么穿|搭配|今天穿', msg):
+    # 穿搭推荐请求 — 扩展关键词覆盖运动/场景类
+    if re.search(r'推荐|穿搭|穿什么|怎么穿|搭配|今天穿|打|运动|约会|通勤|跑步|网球|健身|聚会|度假|户外', msg):
         return ('recommend', msg)
 
+    # 短中文文本默认当作推荐请求（如"晚上打网球"）
     if len(msg) <= 20 and re.search(r'[一-鿿]', msg):
-        return ('generate', msg)
+        return ('recommend', msg)
 
     return ('unknown', msg)
 
@@ -1556,6 +1558,59 @@ def _detect_bline_from_hint(style_hint):
         return False, False
 
 
+def extract_occasion(style_hint):
+    """从用户输入中提取场合/场景关键词，返回 (occasion, weather_note)"""
+    hint = style_hint or ''
+
+    # 场合关键词 → occasion 映射（按优先级排序）
+    SCENE_KEYWORDS = [
+        # 运动场景（精确匹配优先）
+        (['网球', 'tennis'], '网球'),
+        (['羽毛球', 'badminton'], '羽毛球'),
+        (['跑步', 'running', '慢跑', '夜跑', '晨跑'], '跑步'),
+        (['健身', 'gym', '健身房', '举铁', '力量训练'], '健身'),
+        (['篮球', 'basketball'], '篮球'),
+        (['足球', 'football', 'soccer'], '足球'),
+        (['运动', '锻炼', '体育', 'sport'], '运动'),
+        # 生活场景
+        (['约会', 'date', '相亲', '见面', '聚餐'], '约会'),
+        (['通勤', '上班', '工作', 'office', '开会', '商务', '正式', '面试'], '通勤'),
+        (['聚会', '派对', 'party', '蹦迪', '夜店', '酒吧'], '聚会'),
+        (['度假', '旅行', '旅游', 'vacation', '海边', '沙滩', '海岛', '泳池'], '度假'),
+        (['户外', '爬山', '登山', '徒步', '露营', '野餐', 'hiking'], '户外'),
+        (['居家', '在家', '宅', '家里'], '居家'),
+    ]
+
+    for keywords, occasion in SCENE_KEYWORDS:
+        for kw in keywords:
+            if kw in hint.lower():
+                return occasion
+
+    # 时间段提示
+    time_hint = ''
+    if any(w in hint for w in ['晚上', '夜晚', '晚间', '夜间', '傍晚']):
+        time_hint = '晚上'
+    elif any(w in hint for w in ['早上', '早晨', '清晨', '上午']):
+        time_hint = '早上'
+
+    return '日常'
+
+
+def extract_mandatory_items(style_hint, min_confidence=0.20):
+    """从用户输入中提取指定单品 → [(item_id, confidence, reason), ...]
+
+    例: "大黄靴" → [(SHOE-007, 0.85, "昵称:Timberland | 俗称:大黄靴"), ...]
+    只返回置信度 ≥ min_confidence 的结果
+    """
+    from tools.unified_pipeline import find_items_by_description
+    matches = find_items_by_description(style_hint)
+    # 过滤低置信度结果
+    filtered = [(mid, conf, reason) for mid, conf, reason in matches if conf >= min_confidence]
+    if filtered:
+        log(f"🔍 单品识别: {style_hint!r} → {[(m[0], f'{m[1]:.0%}') for m in filtered[:5]]}")
+    return filtered
+
+
 def run_pipeline(style_hint, task_id=None):
     """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
     import traceback as _tb
@@ -1597,11 +1652,20 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
     progress('🤖 Step 1/5: AI 智能选品（数据增强）...')
 
+    # ── Step 0: 从用户输入提取场合 + 指定单品 ──
+    occasion = extract_occasion(style_hint)
+    log(f"📍 场景提取: {style_hint!r} → occasion={occasion}")
+
+    mandatory_items = extract_mandatory_items(style_hint)
+    if mandatory_items:
+        log(f"📍 指定单品: {[(m[0], f'{m[1]:.0%}') for m in mandatory_items]}")
+
     # ── Step 1: 构建数据增强 prompt（统一管线）──
     prompt_data = build_enhanced_prompt(
         style_hint=style_hint,
-        occasion='日常',  # TODO: 后续从用户输入提取
+        occasion=occasion,
         explore_level=explore_level,
+        mandatory_items=mandatory_items if mandatory_items else None,
     )
 
     system_prompt = prompt_data['system_prompt']

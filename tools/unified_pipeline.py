@@ -368,13 +368,18 @@ def _get_scene_fit(clothing_id, occasion, scene_profiles=None):
 
 
 def _get_freshness(clothing_id, recent_outfits, wear_counts=None):
-    """计算新鲜度"""
+    """计算新鲜度（同日温和，跨日严格）"""
+    today_str = time.strftime('%Y-%m-%d')
     score = 50  # 基础新鲜度
 
-    # 7天内穿过 → 扣分
+    # 区分同日/跨日
     for dir_name, ids in recent_outfits:
         if clothing_id in ids:
-            score -= 20
+            is_today = dir_name.startswith(today_str) or dir_name.startswith('🆕今天')
+            if is_today:
+                score -= 5   # 同日只轻罚（可复用）
+            else:
+                score -= 20  # 跨日正常扣分
             break
 
     # 从穿着次数统计
@@ -412,47 +417,221 @@ def _get_personal_affinity(clothing_id, banned_items, rating_history=None):
     return max(score, 0)
 
 
+# ============================================================
+# 单品热度 & 冷却系统（avoidance_rules_v2）
+# ============================================================
+
+def _get_item_last_worn(all_outfits_with_dates):
+    """从 [(date_str, item_ids), ...] 计算每件单品最近穿着距今天数"""
+    from datetime import datetime as _dt
+    today = _dt.now()
+    last_worn = {}
+    for date_str, ids in all_outfits_with_dates:
+        try:
+            d = _dt.strptime(date_str, '%Y-%m-%d')
+            for cid in ids:
+                if cid not in last_worn or d > last_worn[cid]:
+                    last_worn[cid] = d
+        except Exception:
+            pass
+    result = {}
+    for cid, last_date in last_worn.items():
+        result[cid] = (today - last_date).days
+    return result
+
+
+def _get_three_star_counts():
+    """统计每件单品在3星outfit中出现的次数"""
+    counts = {}
+    for d in sorted(os.listdir(OUTFITS_DIR)):
+        rp = os.path.join(OUTFITS_DIR, d, 'rating.json')
+        if not os.path.exists(rp):
+            continue
+        try:
+            with open(rp) as f:
+                r = json.load(f)
+            if r.get('rating') != 3:
+                continue
+            md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
+            if os.path.exists(md):
+                with open(md) as f:
+                    content = f.read()
+                ids = set(re.findall(
+                    r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                    content
+                ))
+                for cid in ids:
+                    counts[cid] = counts.get(cid, 0) + 1
+        except Exception:
+            pass
+    return counts
+
+
+def calculate_item_heat(item_id, wear_counts, all_clothes, three_star_counts):
+    """计算单品热度 → (heat_score: int, heat_level: 'hot'|'warm'|'cold')"""
+    count = wear_counts.get(item_id, 0)
+    item = all_clothes.get(item_id, {})
+    occasions = item.get('occasions', []) or []
+    stars = three_star_counts.get(item_id, 0)
+
+    # 新衣服（0次穿着）默认温门，不加冷却限制
+    if count == 0:
+        return (40, 'warm')
+
+    max_wears = max(wear_counts.values()) if wear_counts else 1
+    wear_score = min(count / max(8, max_wears) * 100, 100)
+    occasion_score = min(len(occasions) / 3 * 100, 100) if occasions else 30  # 无场合数据给基础分
+    rating_score = min(stars * 25, 100)
+
+    heat = wear_score * 0.70 + occasion_score * 0.15 + rating_score * 0.15
+
+    if heat >= 50:
+        return (round(heat), 'hot')
+    elif heat >= 25:
+        return (round(heat), 'warm')
+    else:
+        return (round(heat), 'cold')
+
+
+def get_cooldown(item_id, heat_level, category_code, days_since_last, three_star_count,
+                 is_same_day=False):
+    """计算单品冷却状态
+    返回: {
+        'status': 'sameday'|'available'|'almost'|'cooling'|'awaken',
+        'icon': '🔄'|'🟢'|'🟡'|'🔴'|'💡',
+        'days_since': int,       # 距上次穿着天数
+        'cooldown_days': int,    # 需要冷却的天数
+        'heat_level': str,       # hot/warm/cold
+    }
+    """
+    # 同日 → 特殊处理
+    if is_same_day:
+        return {
+            'status': 'sameday', 'icon': '🔄', 'days_since': 0,
+            'cooldown_days': 0, 'heat_level': heat_level,
+        }
+
+    BASE = {'hot': 2, 'warm': 4, 'cold': 6}
+    CAT_MULT = {
+        'SHOE': 0.8, 'PT': 1.0, 'SH': 1.0,
+        'TS': 1.2, 'LS': 1.2, 'SHIRT': 1.2, 'TANK': 1.2,
+        'JK': 1.0,
+        'HAT': 0.7, 'BAG': 0.7, 'SUN': 0.7, 'ACC': 0.7, 'SOCK': 0.7,
+    }
+
+    base = BASE.get(heat_level, 4)
+    mult = CAT_MULT.get(category_code, 1.0)
+    bonus = min(three_star_count, 2)
+
+    cooldown = max(1, int(base * mult - bonus))
+
+    # 从未穿过 → 可用
+    if days_since_last is None or days_since_last >= 365:
+        status = 'awaken' if heat_level == 'cold' else 'available'
+    elif days_since_last >= cooldown:
+        status = 'awaken' if heat_level == 'cold' else 'available'
+    elif days_since_last >= cooldown - 1:
+        status = 'almost'
+    else:
+        status = 'cooling'
+
+    icon = {'available': '🟢', 'almost': '🟡', 'cooling': '🔴', 'awaken': '💡🟢'}.get(status, '🟢')
+
+    return {
+        'status': status, 'icon': icon, 'days_since': days_since_last or 0,
+        'cooldown_days': cooldown, 'heat_level': heat_level,
+    }
+
+
 def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
                          wear_counts=None, cache=None):
-    """构建数据增强版衣柜表格 — AI 看到每件单品带四维数据"""
+    """构建数据增强版衣柜表格 — 每个单品带风格/场景/新鲜度/冷却五维数据"""
     all_clothes = load_all_clothing()
     cache = cache or load_score_cache()
     scene_profiles = load_scene_profiles()
+    today_str = time.strftime('%Y-%m-%d')
 
-    # 加载评分历史
+    # ── 评分历史 ──
     rating_history = []
+    all_outfits_dates = []  # [(date_str, [item_ids]), ...]
     for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
         rp = os.path.join(OUTFITS_DIR, d, 'rating.json')
+        md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
+        if not os.path.exists(md):
+            continue
+        try:
+            with open(md) as f:
+                ids = list(set(re.findall(
+                    r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                    f.read()
+                )))
+        except Exception:
+            ids = []
+        date_str = d[:10] if len(d) >= 10 else ''
+        all_outfits_dates.append((date_str, ids))
+
         if os.path.exists(rp):
             try:
                 with open(rp) as f:
                     r = json.load(f)
-                # 提取单品列表
-                md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
-                if os.path.exists(md):
-                    with open(md) as f:
-                        ids = list(set(re.findall(
-                            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                            f.read()
-                        )))
-                    rating_history.append({'rating': r.get('rating', 0), 'items': ids})
+                rating_history.append({'rating': r.get('rating', 0), 'items': ids})
             except Exception:
                 pass
 
-    # 按品类组织
+    # ── 预计算: 最后穿着天数 / 3星次数 ──
+    item_last_worn = _get_item_last_worn(all_outfits_dates)
+    three_star_counts = _get_three_star_counts()
+
+    # ── 区分同日 vs 跨日最近已穿 ──
+    same_day_items = set()
+    cross_day_items = {}
+    for dir_name, ids in recent_outfits:
+        is_today = dir_name.startswith(today_str) or dir_name.startswith('🆕今天')
+        for cid in ids:
+            if is_today:
+                same_day_items.add(cid)
+            else:
+                cross_day_items[cid] = cross_day_items.get(cid, 0) + 1
+
+    # ── 计算同日生成次数 ──
+    same_day_count = sum(1 for dn, _ in recent_outfits if dn.startswith(today_str) or dn.startswith('🆕今天'))
+
+    # ── 按品类组织 ──
     cats = {}
+    all_cooldowns = {}  # 汇总冷却状态供 prompt 摘要用
+
     for cid, item in all_clothes.items():
         cat = item.get('category', '其他')
         if cat not in cats:
             cats[cat] = []
 
-        # 四维数据
+        # 五维数据
         style_matches = _get_style_match_data(cid, target_styles, cache)
         scene_fit = _get_scene_fit(cid, occasion, scene_profiles)
         freshness = _get_freshness(cid, recent_outfits, wear_counts)
         personal = _get_personal_affinity(cid, banned_items, rating_history)
 
-        # 最佳风格匹配分（取最高）
+        # ── 冷却计算 ──
+        cat_code = item.get('category_code', '')
+        days_since = item_last_worn.get(cid)  # None = 从未穿过
+        is_same_day = cid in same_day_items
+        heat_score, heat_level = calculate_item_heat(cid, wear_counts or {}, all_clothes, three_star_counts)
+        cd = get_cooldown(cid, heat_level, cat_code, days_since,
+                          three_star_counts.get(cid, 0), is_same_day)
+
+        # 新鲜度调整：融入冷却状态
+        if cd['status'] == 'awaken':
+            freshness += 15  # 冷门唤醒加分
+        elif cd['status'] == 'cooling':
+            freshness -= 10  # 冷却中减分
+        elif cd['status'] == 'almost':
+            freshness -= 5
+
+        # 如果从未穿过但冷却已满 → 额外加分（连续未选越久越推）
+        if days_since is not None and days_since >= 10 and cd['status'] in ('available', 'awaken'):
+            freshness += 10
+
+        # 最佳风格匹配分
         best_style = max(style_matches.values(), key=lambda x: x['score']) if style_matches else {'score': 0, 'is_key': False}
         best_style_id = max(style_matches, key=lambda x: style_matches[x]['score']) if style_matches else '—'
 
@@ -471,9 +650,38 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
             'scene_reason': scene_fit['reason'],
             'freshness': freshness,
             'personal': personal,
+            'cooldown': cd,
         })
+        all_cooldowns[cid] = cd
 
-    # 按固定品类顺序输出
+    # ── 冷却摘要（注入 prompt）──
+    cooldown_summary_lines = []
+    # 同日
+    if same_day_items:
+        cooldown_summary_lines.append(
+            f'🔄 同日已生成 {same_day_count} 套（以下单品可复用，不强退）: {"、".join(sorted(same_day_items)[:10])}'
+        )
+    # 冷却中
+    cooling = [(cid, cd) for cid, cd in all_cooldowns.items() if cd['status'] == 'cooling']
+    if cooling:
+        items_str = '、'.join(f"{cid}{cd['icon']}" for cid, cd in cooling[:10])
+        cooldown_summary_lines.append(f'🔴 冷却中（尽量不选）: {items_str}')
+    # 唤醒
+    awaken = [(cid, cd) for cid, cd in all_cooldowns.items() if cd['status'] == 'awaken']
+    if awaken:
+        items_str = '、'.join(f"{cid}💡" for cid, _ in awaken[:10])
+        cooldown_summary_lines.append(f'💡 沉睡单品（优先唤醒）: {items_str}')
+
+    # ── 同日建议 ──
+    same_day_hint = ''
+    if same_day_count >= 3:
+        same_day_hint = '⚠️ 今天已生成3套，必须换掉鞋子，上衣/下装至少再换1件。'
+    elif same_day_count >= 2:
+        same_day_hint = '🔄 今天第2套，建议换掉≥1件核心单品以体现变化。'
+    elif same_day_count >= 1:
+        same_day_hint = '🔄 今天已有1套，可以参考但不必完全避开。'
+
+    # ── 表格输出 ──
     cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
                  '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
     lines = []
@@ -481,23 +689,43 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
         if cat not in cats:
             continue
         lines.append(f'## {cat}')
-        # 增强版表头：增加匹配分/场景/新鲜度
-        lines.append('| ID | 品牌 | 颜色·面料 | 场景 | 风格匹配 | 场景适配 | 新鲜度 |')
-        lines.append('|-----|------|----------|------|---------|---------|--------|')
+        lines.append('| ID | 品牌 | 颜色·面料 | 场景 | 风格 | 场景 | 新鲜 | 冷却 |')
+        lines.append('|-----|------|----------|------|------|------|------|------|')
         for it in sorted(cats[cat], key=lambda x: -x['style_score']):
             brand = it['brand']
             if it['collection']:
                 brand += ' ' + it['collection']
             key_mark = '⭐' if it['style_key'] else ''
             fresh_icon = '🆕' if it['freshness'] >= 65 else ('🔄' if it['freshness'] <= 35 else '')
+            cd = it['cooldown']
+            if cd['status'] == 'sameday':
+                cd_str = '🔄'
+            elif cd['status'] == 'cooling':
+                cd_str = f"🔴{cd['cooldown_days']}d"
+            elif cd['status'] == 'almost':
+                cd_str = f"🟡{cd['cooldown_days']}d"
+            elif cd['status'] == 'awaken':
+                cd_str = '💡'
+            else:
+                cd_str = '🟢'
             lines.append(
-                f'| {it["id"]} | {brand[:22]} | {it["color"]}·{it["fabric"][:6]} | '
-                f'{it["scenes"][:12]} | {it["style_score"]}{key_mark} | '
-                f'{it["scene_fit"]} | {it["freshness"]}{fresh_icon} |'
+                f'| {it["id"]} | {brand[:20]} | {it["color"]}·{it["fabric"][:6]} | '
+                f'{it["scenes"][:10]} | {it["style_score"]}{key_mark} | '
+                f'{it["scene_fit"]} | {it["freshness"]}{fresh_icon} | {cd_str} |'
             )
         lines.append('')
 
-    return '\n'.join(lines)
+    wardrobe_text = '\n'.join(lines)
+
+    # ── 组装完整输出 ──
+    prefix = ''
+    if cooldown_summary_lines:
+        prefix = '📌 冷却状态速览:\n' + '\n'.join(cooldown_summary_lines) + '\n'
+        if same_day_hint:
+            prefix += same_day_hint + '\n'
+        prefix += '\n'
+
+    return prefix + wardrobe_text
 
 
 def get_strategy_prompt(strategy_id, boldness='micro'):
@@ -552,10 +780,34 @@ def pick_strategy(explore_level, comfort_zone=None):
 
 
 def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
-                          explore_level=0.0, target_styles=None):
-    """构建数据增强的 AI prompt — Step 1 核心输出"""
+                          explore_level=0.0, target_styles=None, mandatory_items=None):
+    """构建数据增强的 AI prompt — Step 1 核心输出
+
+    mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
+    """
 
     today = time.strftime('%Y-%m-%d')
+
+    # ── 0. 强制单品（用户指定）──
+    mandatory_section = ''
+    if mandatory_items:
+        all_clothes = load_all_clothing()
+        mandatory_lines = []
+        for mid, conf, reason in mandatory_items:
+            item = all_clothes.get(mid, {})
+            brand = (item.get('brand') or {}).get('name', '—')
+            color = (item.get('color') or {}).get('hue_name', '—')
+            cat = item.get('category', '—')
+            mandatory_lines.append(
+                f'  🎯 {mid} | {brand} | {color}·{cat} | 匹配: {reason} (置信度{conf:.0%})'
+            )
+        if mandatory_lines:
+            mandatory_section = (
+                '🎯🎯🎯 用户指定单品（硬性要求 — 必须使用，不可替换）🎯🎯🎯\n' +
+                '\n'.join(mandatory_lines) + '\n' +
+                '⚠️ 以上单品必须出现在 items 数组中。请以它们为锚点，围绕它们搭配其他单品。\n'
+                '⚠️ 如果指定的是鞋子/下装/上衣，该品类不得再选其他单品。\n\n'
+            )
 
     # ── 1. 获取推荐风格 ──
     if target_styles is None:
@@ -627,7 +879,15 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
             label = dir_name.split('_', 1)[-1] if '_' in dir_name else dir_name[:10]
             recent_lines.append(f"  {label}: {'、'.join(ids[:8])}")
         if recent_lines:
-            recent_section = '\n📌 最近7天已穿（请至少换掉上衣/下装/鞋子中的两件）:\n' + '\n'.join(recent_lines) + '\n'
+            recent_section = (
+                '\n📌 最近已穿（严格避穿规则）:\n' +
+                '\n'.join(recent_lines) + '\n' +
+                '⚠️ 避穿规则：\n'
+                '  1. 鞋子如果在最近2套中出现过 → 必须换掉（硬性要求）\n'
+                '  2. 上衣+下装+鞋子三件核心单品，至少换掉2件\n'
+                '  3. 同一件单品连续穿2天以上 → 扣分（新鲜度已反映）\n'
+                '  4. 目标：让用户感受到每天的穿搭有明显变化\n'
+            )
 
     # ── 8. 构建增强衣柜表 ──
     wardrobe_table = build_wardrobe_table(
@@ -691,8 +951,9 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         explore_header = f'\n{emoji} 探索模式 | 探索度: {explore_level}\n'
 
     user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
-{explore_header}
-风格需求：「{style_hint}」
+{explore_header}{mandatory_section}风格需求：「{style_hint}」
+场合：{occasion}
+{ban_section}{recent_section}
 场合：{occasion}
 {ban_section}{recent_section}
 目标风格参考：
@@ -1116,15 +1377,14 @@ def _get_banned_items():
 
 
 def _get_recent_outfits(limit=7):
-    """获取最近 N 套穿搭的核心单品"""
+    """获取最近 N 套穿搭的核心单品（含今天已生成的，避免同天重复）"""
     today = time.strftime('%Y-%m-%d')
     recent = []
     for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
         dp = os.path.join(OUTFITS_DIR, d)
         if not os.path.isdir(dp) or d.startswith('.'):
             continue
-        if d.startswith(today):
-            continue
+        # ⚠️ 不再跳过当天 — 同天已生成的 outfit 也必须可见，防止连穿同款
         md = os.path.join(dp, 'outfit.md')
         if not os.path.exists(md):
             continue
@@ -1137,7 +1397,9 @@ def _get_recent_outfits(limit=7):
             )))
             core = [i for i in ids if i.split('-')[0] in CORE_CATS]
             if core:
-                recent.append((d, core))
+                # 当天outfit加 🆕 标记
+                label = f'🆕今天 {d}' if d.startswith(today) else d
+                recent.append((label, core))
         except Exception:
             pass
         if len(recent) >= limit:
@@ -1165,6 +1427,211 @@ def _get_wear_counts():
         except Exception:
             pass
     return counts
+
+
+def find_items_by_description(description, all_clothes=None):
+    """从用户自然语言描述中匹配衣柜单品 → [(item_id, confidence, reason), ...]
+
+    支持: 品牌名/颜色/品类/面料/图案/昵称/穿着场景 的模糊匹配
+    例: "大黄靴" → [(SHOE-007, 0.85, "Timberland·小麦棕·工装靴"), ...]
+    """
+    if all_clothes is None:
+        all_clothes = load_all_clothing()
+
+    desc = description.strip()
+    if not desc:
+        return []
+
+    # ── 品类关键词映射 ──
+    CAT_KEYWORDS = {
+        '靴': ['靴', 'boot', '工装靴', '切尔西', '靴子'],
+        '鞋': ['鞋', 'shoe', '运动鞋', '帆布鞋', '篮球鞋', '足球鞋', '网球鞋', '跑鞋', '德比鞋', '乐福鞋', '老爹鞋', '拖鞋'],
+        '外套': ['外套', '夹克', 'jacket', '风衣', '大衣', '西装', '卫衣', '棒球服', '冲锋衣', '连帽'],
+        '上衣': ['上衣', 'T恤', 't恤', 'tee', '短袖', '长袖', '衬衫', '衬衣', 'polo', 'POLO', '亨利衫', '卫衣', 'hoodie', '背心', '球衣'],
+        '裤': ['裤', 'pant', '牛仔裤', '西裤', '工装裤', '短裤', '运动裤', '卫裤', '休闲裤', '直筒', '束脚'],
+        '包': ['包', 'bag', '背包', '托特', 'tote', '斜挎'],
+        '帽': ['帽', 'hat', 'cap', '棒球帽', '渔夫帽', 'bucket'],
+        '墨镜': ['墨镜', '太阳镜', 'sunglass'],
+        '配饰': ['手表', '手链', '手串', '项链', '戒指', '手环', 'watch'],
+    }
+
+    # ── 颜色关键词映射 ──
+    COLOR_KEYWORDS = {
+        '黄': ['黄', '姜黄', '焦糖', '小麦', '卡其', '驼', '橙', '荧光橙'],
+        '红': ['红', '正红', '深红', '酒红', '粉', '玫红', '砖红'],
+        '蓝': ['蓝', '藏青', '牛仔蓝', '灰蓝', '水洗蓝', '深蓝', '浅蓝', '靛蓝', '天蓝'],
+        '绿': ['绿', '军绿', '墨绿', '深绿', '牛油果绿', '橄榄绿', '灰绿', '草绿'],
+        '白': ['白', '米白', '象牙白', '奶油', '纯白', '灰白'],
+        '黑': ['黑', '纯黑', '深黑', '暗黑'],
+        '灰': ['灰', '麻灰', '深灰', '浅灰', '灰褐', '炭灰', '灰蓝'],
+        '棕': ['棕', '褐', '深棕', '浅棕', '咖啡', '巧克力'],
+        '紫': ['紫', '紫罗兰', '薰衣草'],
+    }
+
+    results = []
+
+    for cid, item in all_clothes.items():
+        score = 0.0
+        reasons = []
+
+        brand = (item.get('brand') or {}).get('name', '')
+        collection = (item.get('brand') or {}).get('collection', '') or ''
+        cat = item.get('category', '')
+        cat_code = item.get('category_code', '')
+        color = item.get('color') or {}
+        hue_name = color.get('hue_name', '')
+        hue_family = color.get('hue_family', '')
+        fabric_primary = (item.get('fabric') or {}).get('primary', '')
+        pattern_type = (item.get('pattern') or {}).get('type', '')
+        occasions = item.get('occasions', [])
+        style_mods = item.get('style_modifiers', [])
+        fit_comment = (item.get('meta') or {}).get('claude_fit_comment', '')
+        design_features = (item.get('design_features') or {})
+
+        # ── 1. 品牌匹配（精确+模糊）──
+        if brand and brand != '未知':
+            brand_lower = brand.lower()
+            if brand_lower in desc.lower():
+                score += 0.40
+                reasons.append(f'品牌:{brand}')
+            # 品牌中英文昵称
+            BRAND_ALIASES = {
+                'timberland': ['踢不烂', '大黄靴', 'timberland'],
+                'converse': ['匡威', 'converse', 'all star', 'chuck taylor'],
+                'nike': ['耐克', 'nike', 'aj', 'air jordan'],
+                'adidas': ['阿迪', '阿迪达斯', 'adidas', '三叶草'],
+                'jordan': ['乔丹', 'jordan', 'aj'],
+                'uniqlo': ['优衣库', 'uniqlo'],
+                'fila': ['斐乐', 'fila'],
+                'puma': ['彪马', 'puma'],
+                'hla': ['海澜之家', 'hla'],
+                'cdg': ['cdg', 'comme des', '川久保玲', 'play'],
+                'merrell': ['merrell', '迈乐'],
+            }
+            for brand_key, aliases in BRAND_ALIASES.items():
+                if any(a in desc.lower() for a in aliases):
+                    if brand_key in brand_lower:
+                        score += 0.40
+                        reasons.append(f'昵称:{brand}')
+                        break
+
+        # ── 2. 品类匹配 ──
+        cat_matched = False
+        for cat_group, keywords in CAT_KEYWORDS.items():
+            for kw in keywords:
+                if kw in desc:
+                    # 检查 item 的品类是否属于这一组
+                    if kw in cat or any(cat_kw in cat for cat_kw in keywords):
+                        score += 0.25
+                        reasons.append(f'品类:{kw}')
+                        cat_matched = True
+                        break
+            if cat_matched:
+                break
+
+        # ── 3. 颜色匹配 ──
+        if hue_name or hue_family:
+            all_color_text = f'{hue_name} {hue_family} {fabric_primary} {fit_comment}'
+            for color_group, color_kws in COLOR_KEYWORDS.items():
+                # 用户描述中有该颜色词
+                if any(kw in desc for kw in color_kws):
+                    # 单品颜色属于该色系
+                    if any(kw in all_color_text for kw in color_kws):
+                        score += 0.20
+                        reasons.append(f'颜色:{color_group}({hue_name})')
+                        break
+
+        # ── 4. 面料/材质匹配 ──
+        FABRIC_KEYWORDS = ['帆布', '皮质', '牛仔', '棉', '麻', '羊毛', '丝', '针织', '速干',
+                           '灯芯绒', '合成', '木质', '皮革', '皮']
+        for fkw in FABRIC_KEYWORDS:
+            if fkw in desc and fkw in fabric_primary:
+                score += 0.15
+                reasons.append(f'面料:{fkw}')
+                break
+
+        # ── 5. 昵称/俗称匹配（从 fit_comment 中搜）──
+        NICKNAMES = {
+            '大黄靴': ['大黄靴', '大黄'],
+            '小白鞋': ['小白鞋'],
+            '老爹鞋': ['老爹鞋'],
+            '马丁靴': ['马丁靴', '马丁'],
+            '切尔西': ['切尔西', 'chelsea'],
+            '椰子': ['椰子', 'yeezy'],
+            '空军一号': ['空军一号', 'air force'],
+            'aj': ['aj', 'air jordan', '乔丹'],
+            '匡威': ['匡威', 'converse', 'all star'],
+            '德比': ['德比', 'derby'],
+            '渔夫帽': ['渔夫帽', 'bucket hat'],
+            '棒球帽': ['棒球帽'],
+        }
+        search_text = f'{brand} {collection} {hue_name} {fabric_primary} {fit_comment} {" ".join(occasions)} {" ".join(style_mods)}'
+        for _, aliases in NICKNAMES.items():
+            for alias in aliases:
+                if alias in desc.lower() and alias in search_text.lower():
+                    score += 0.30
+                    reasons.append(f'俗称:{alias}')
+                    break
+
+        # ── 6. 场景匹配 ──
+        for occ in occasions:
+            if occ in desc:
+                score += 0.10
+                reasons.append(f'场景:{occ}')
+                break
+
+        # ── 7. 运动专项匹配（网球/篮球/足球/跑步）──
+        SPORT_KEYWORDS = {
+            '网球': ['网球', 'tennis', 'court lite'],
+            '篮球': ['篮球', 'basketball', 'aj', 'air jordan', 'jordan', '勇士'],
+            '足球': ['足球', 'football', 'soccer', '曼联', 'man united', '曼城', '猎鹰', 'predator'],
+            '跑步': ['跑步', 'running', 'run', '跑鞋'],
+            '健身': ['健身', 'gym', '训练', 'train', '举铁'],
+        }
+        for sport, sport_kws in SPORT_KEYWORDS.items():
+            if any(kw in desc.lower() for kw in sport_kws):
+                if any(kw in search_text.lower() for kw in sport_kws):
+                    score += 0.18
+                    reasons.append(f'运动:{sport}')
+                    break
+
+        # ── 8. 图案/纹理匹配（条纹/格纹/印花等）──
+        PATTERN_KEYWORDS = ['条纹', '格纹', '格子', '印花', '素色', '迷彩', '拼接', '菠萝纹', '椰树']
+        for pkw in PATTERN_KEYWORDS:
+            if pkw in desc and pkw in search_text:
+                score += 0.18
+                reasons.append(f'图案:{pkw}')
+                break
+
+        # ── 9. 风格特征匹配（工装/机能/复古/宽松等）──
+        STYLE_FREE_KEYWORDS = ['工装', '机能', '复古', '宽松', '修身', '合身', '落肩',
+                               '高帮', '低帮', '厚底', '束脚', '直筒', '连帽', '立领']
+        for skw in STYLE_FREE_KEYWORDS:
+            if skw in desc and skw in search_text:
+                score += 0.12
+                reasons.append(f'特征:{skw}')
+                break
+
+        # ── 10. 自由文本命中（fit_comment 和 collection 中搜用户关键词）──
+        # 对2字以上的中文词在 fit_comment 中做自由搜索
+        import re as _re
+        free_words = _re.findall(r'[一-鿿]{2,}', desc)
+        for word in free_words:
+            # 跳过已匹配的通用词
+            if word in ('我想', '今天', '穿什么', '怎么穿', '推荐', '穿搭', '一套', '搭配',
+                        '晚上', '早上', '白天', '明天', '今天穿', '想穿', '需要'):
+                continue
+            if word in fit_comment:
+                score += 0.10
+                reasons.append(f'描述命中:{word}')
+                break
+
+        if score > 0:
+            results.append((cid, min(score, 0.99), ' | '.join(reasons)))
+
+    # 按分数降序排列
+    results.sort(key=lambda x: -x[1])
+    return results
 
 
 def determine_explore_level(style_hint, force_explore=None):
@@ -1215,7 +1682,8 @@ def update_lab_state(items):
 # ============================================================
 
 def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
-                         explore_level=None, target_styles=None, call_ai_fn=None):
+                         explore_level=None, target_styles=None, call_ai_fn=None,
+                         mandatory_items=None):
     """
     统一推荐管线主入口。
 
@@ -1227,6 +1695,7 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
       explore_level: 探索度 (None=自动检测, 0.0=安全, 0.5=微调, 1.0=大胆)
       target_styles: 手动指定风格列表
       call_ai_fn: AI调用函数 fn(system_prompt, user_prompt) -> str
+      mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
 
     返回:
       {
@@ -1250,6 +1719,7 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
         weather_cond=weather_cond,
         explore_level=explore_level,
         target_styles=target_styles,
+        mandatory_items=mandatory_items,
     )
 
     # ── Step 2: AI 创意选品 ──

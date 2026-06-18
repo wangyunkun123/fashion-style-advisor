@@ -32,7 +32,48 @@
 - JSON 标签是唯一数据源，禁止手改服装档案就以为完事
 
 ### 备份
-- `phase-4` 标签 → `0529a73`
+- `phase-4` 标签 → `de55827`
+
+---
+
+## 2026-06-18: 代码精简优化 + 文档补全
+
+### 上午：代码结构梳理
+- 4 个 Explore Agent 并行扫描 `wechat_control.py`(174KB) / `build_prototype.py`(171KB) / `unified_pipeline.py`(84KB) / `composite_v2.py`+`build_push.py`
+- 发现：死函数 6 个、跨文件重复定义 15+ 处、未用导入 8 个、内联 HTML 臃肿 ~200 行
+
+### 下午：三层精简
+
+**第一层 — 快速修剪**
+| 文件 | 删除内容 |
+|------|---------|
+| `composite_v2.py` | `_get_ark_key()` + `wrap_text()` + 5 未用导入 |
+| `build_prototype.py` | `build_hero_item_card()` + `import random` + 4 未用 kwargs + `junk_patterns` 常量化 |
+| `wechat_control.py` | `OUTFIT_SYSTEM_PROMPT`(30行) + `_detect_bline_from_hint()` + `CATEGORY_NAMES` 合并到 `CATEGORY_CODE_TO_NAME` |
+| `unified_pipeline.py` | `load_style_defaults()` + `load_rules()` + `RULES_FILE` + `DEFAULTS_FILE` + 2 未用导入 |
+| `build_push.py` | `ALT_STYLES` 常量化 |
+
+**第二层 — 去重合并**
+- 新建 `tools/common.py` 共享模块（170 行）
+  - `load_all_clothing()` — 4 处定义 → 1 处
+  - `load_score_cache()` — 3 处 → 1 处
+  - `load_style_fingerprint()` — 2 处 → 1 处
+  - `load_encyclopedia()` — 2 处 → 1 处
+  - `ITEM_ID_PATTERN` — 6 处内联正则 → 1 个编译常量
+  - `CAT_CONFIG` — 统一品类配置（消歧 5+ 处不一致映射）
+- `wechat_control.py` 内部合并：
+  - `_find_item_thumb` + `_find_item_cutout` → `_find_item_asset` 通用查找
+  - `get_cdn_url()` 复用 `_get_git_commit()`
+
+### 晚间：文档同步
+- 补全 `项目进程.md`（Phase 3/4 详情 + 四大类操作速查 + 标签速查表）
+- 更新 `devlog.md` 第四阶段总结 + 今日操作记录
+- `phase-4` 标签 → `de55827`（含推荐逻辑完善）
+
+### 统计
+- 3 次提交：`d136119`(🔥) `2da45d1`(📦) `65298ba`(🔧) `de55827`(📋)
+- 净删 ~350 行冗余代码
+- 新建 `tools/common.py` 消除 6 种跨文件重复
 
 ---
 

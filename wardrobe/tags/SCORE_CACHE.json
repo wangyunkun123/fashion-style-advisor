@@ -6430,7 +6430,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 5,
+      "score": 10,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -10756,7 +10756,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 53,
+      "score": 58,
       "raw_score": 42,
       "breakdown": {
         "soft_constraints": 5,
@@ -14961,7 +14961,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 70,
+      "score": 75,
       "raw_score": 62,
       "breakdown": {
         "soft_constraints": 20,
@@ -16139,7 +16139,7 @@
   "_meta": {
     "last_rebuild": "2026-06-18 14:13:35",
     "total_entries": 77,
-    "last_feedback": "2026-06-18T18:21:31.958057",
-    "last_action": "clean_fit+5 (3件)"
+    "last_feedback": "2026-06-18T18:46:47.867679",
+    "last_action": "japanese_city_boy+5 (3件)"
   }
 }

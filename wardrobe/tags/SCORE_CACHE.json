@@ -2155,7 +2155,7 @@
       "_updated": "2026-06-17 22:46:44"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -3255,7 +3255,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -4858,7 +4858,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 48,
+      "score": 53,
       "raw_score": 42,
       "breakdown": {
         "soft_constraints": 20,
@@ -7395,7 +7395,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -10756,7 +10756,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 48,
+      "score": 53,
       "raw_score": 42,
       "breakdown": {
         "soft_constraints": 5,
@@ -11379,7 +11379,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 33,
+      "score": 38,
       "raw_score": 29,
       "breakdown": {
         "soft_constraints": 10,
@@ -14539,7 +14539,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -16139,7 +16139,7 @@
   "_meta": {
     "last_rebuild": "2026-06-17 23:02:42",
     "total_entries": 77,
-    "last_feedback": "2026-06-18T11:08:52.507132",
-    "last_action": "japanese_city_boy+5 (3件)"
+    "last_feedback": "2026-06-18T12:20:34.098168",
+    "last_action": "japanese_city_boy+5 (7件)"
   }
 }

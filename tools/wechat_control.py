@@ -768,6 +768,19 @@ def _finalize_add_item(item_data):
         enhanced_jpg = os.path.join(cutout_dir, dest_filename)
         enhance_image(dest_path, cutout_path, enhanced_jpg)
         log(f"图片增强完成: {cid}")
+        # 生成抠图缩略图（200px宽，用于衣橱列表CDN加速）
+        try:
+            from PIL import Image as _PILImage
+            img = _PILImage.open(cutout_path)
+            w, h = img.size
+            if w > 200:
+                ratio = 200 / w
+                img = img.resize((200, int(h * ratio)), _PILImage.LANCZOS)
+            thumb_path = os.path.join(cutout_dir, f'{cid}_cutout_thumb.png')
+            img.save(thumb_path, 'PNG', optimize=True)
+            log(f"抠图缩略图: {cid} ({os.path.getsize(thumb_path)//1024}KB)")
+        except Exception as e:
+            log(f"缩略图生成失败（非致命）: {e}", "WARN")
     except Exception as e:
         log(f"图片增强失败（非致命）: {e}", "WARN")
 
@@ -3013,6 +3026,19 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         w, h = img.size
                         img.close()
                         _transform_img(fpath, w, h)
+            # 从变换后的 _cutout.png 重新生成 _cutout_thumb.png
+            cutout_path = os.path.join(enhanced_dir, f'{cid}_cutout.png')
+            if os.path.exists(cutout_path):
+                try:
+                    img = _PILImage.open(cutout_path)
+                    w, h = img.size
+                    if w > 200:
+                        ratio = 200 / w
+                        img = img.resize((200, int(h * ratio)), _PILImage.LANCZOS)
+                    thumb_path = os.path.join(enhanced_dir, f'{cid}_cutout_thumb.png')
+                    img.save(thumb_path, 'PNG', optimize=True)
+                except Exception as e:
+                    log(f"缩略图更新失败 {cid}: {e}", "WARN")
             log(f"图片变换: {cid} rotate={degrees} scale={scale} pan=({tx},{ty}) -> {transformed} files")
             self._json_resp(200, {"ok": True, "transformed": transformed})
 

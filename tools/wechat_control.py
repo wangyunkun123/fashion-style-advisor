@@ -1893,7 +1893,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
         progress(f'✅ 穿搭方案已创建')
 
         progress('🎨 Step 2/5: Seedream AI 生图中...')
-        out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=120)
+        out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
         if out2:
             progress(f'✅ Seedream 生图完成\n{out2[:300]}')
 

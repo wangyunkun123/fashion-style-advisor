@@ -145,17 +145,23 @@ def parse(d):
     return items
 
 def find_ai(d):
-    for sub in ['generated','上身效果','豆包生图']:
+    # 参考图前缀（用户照片 + 服装抠图），这些不是 AI 生图结果
+    REF_PREFIXES = ('人物_', '上衣_', '下装_', '鞋子_', '帽子_', '包_', '墨镜_', '袜子_', '配饰_')
+    for sub in ['generated','上身效果']:
         sd=os.path.join(d,sub)
         if not os.path.exists(sd): continue
         files = sorted(os.listdir(sd))
-        # 豆包生图目录优先匹配人物图（人物_xxx.jpg），避免误取单品图
-        if sub == '豆包生图':
-            for f in files:
-                if f.startswith('人物') and f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.'):
-                    return os.path.join(sd, f)
         for f in files:
             if f.lower().endswith(('.jpg','.jpeg','.png')) and not f.startswith('.') and not f.startswith('_'): return os.path.join(sd,f)
+    # 豆包生图目录：排除参考图，只取 AI 生图结果
+    sd=os.path.join(d,'豆包生图')
+    if os.path.exists(sd):
+        files = sorted(os.listdir(sd))
+        for f in files:
+            if not f.lower().endswith(('.jpg','.jpeg','.png')): continue
+            if f.startswith('.') or f.startswith('_'): continue
+            if any(f.startswith(p) for p in REF_PREFIXES): continue
+            return os.path.join(sd, f)
 
 def find_img(dd,item):
     for f in sorted(os.listdir(dd)):

@@ -62,12 +62,16 @@ def compress_image(path, max_size=1024, quality=70):
 
 
 def collect_core_images(doubao_dir):
-    """Pass 1 核心参考图：人物 + 上衣 + 下装 + 鞋子"""
+    """Pass 1 核心参考图：人物（所有）+ 上衣 + 下装 + 鞋子"""
     images = []
+    # 收集所有人物参考照（全身正面 + 面部近照 + 侧面），最多3张
+    person_count = 0
     for f in sorted(os.listdir(doubao_dir)):
         if f.startswith("人物_") and f.lower().endswith(('.jpg', '.jpeg', '.png')):
             images.append(os.path.join(doubao_dir, f))
-            break
+            person_count += 1
+            if person_count >= 3:
+                break
     for prefix in ['上衣_', '下装_', '鞋子_']:
         for f in sorted(os.listdir(doubao_dir)):
             if f.startswith(prefix) and f.lower().endswith(('.jpg', '.jpeg', '.png')):

@@ -975,7 +975,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
 □ 体型修饰：{persona_desc}
 {persona_modifier}
-□ 面料舒适：优先棉/麻/亚麻等亲肤面料
+□ 面料匹配场景：夏季上衣→透气(棉/麻/速干)，运动→速干，下装/鞋/配件不受面料限制
 □ 衬肤色：根据用户肤色选择合适颜色
 """
 
@@ -1805,7 +1805,7 @@ def build_selection_prompt(style_hint, occasion='日常', temp_high=30, weather_
 □ 风格连贯：每件单品对目标风格匹配分 ≥ 30
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
 □ 体型修饰：{persona_desc}，{persona_modifier}
-□ 面料舒适：优先棉/麻/亚麻等亲肤面料
+□ 面料匹配场景：夏季上衣→透气(棉/麻/速干)，运动→速干，下装/鞋/配件不受面料限制
 □ 衬肤色：根据用户肤色选择合适颜色
 □ 运动场景只选1件上衣+1件下装+1双运动鞋，可叠加功能性配件
 □ 严禁添加第二件上衣，除非场景明确需要

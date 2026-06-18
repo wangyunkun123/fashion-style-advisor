@@ -33,8 +33,12 @@ CAT_CONFIG = {
 CAT_SORT_ORDER = sorted(CAT_CONFIG.keys(), key=lambda k: CAT_CONFIG[k]['sort'])
 
 
-def load_all_clothing():
-    """加载所有衣服标签，返回 {clothing_id: tag_dict}"""
+def load_all_clothing(include_archived=False):
+    """加载所有衣服标签，返回 {clothing_id: tag_dict}
+
+    Args:
+        include_archived: 是否包含已归档（旧衣库）单品的，默认 False
+    """
     items = {}
     for fpath in sorted(glob.glob(os.path.join(TAGS_DIR, '*.json'))):
         fname = os.path.basename(fpath)
@@ -44,8 +48,11 @@ def load_all_clothing():
             with open(fpath, 'r', encoding='utf-8') as f:
                 item = json.load(f)
             cid = item.get('clothing_id', '')
-            if cid and not (item.get('meta') or {}).get('archived'):
-                items[cid] = item
+            if not cid:
+                continue
+            if not include_archived and (item.get('meta') or {}).get('archived'):
+                continue
+            items[cid] = item
         except Exception:
             pass
     return items

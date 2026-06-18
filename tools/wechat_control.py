@@ -2523,7 +2523,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         if parsed.path == '/api/wardrobe/items':
             try:
                 from wardrobe_advisor import load_all_clothing
-                wardrobe = load_all_clothing()
+                wardrobe = load_all_clothing(include_archived=True)
                 items = []
                 for cid, item in sorted(wardrobe.items()):
                     meta = item.get('meta', {})
@@ -3053,13 +3053,45 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 # 删除 enhanced 目录下的图片
                 enhanced_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
                 if os.path.exists(enhanced_dir):
-                    for pattern in [f'{cid}_cutout.*', f'{cid}_thumb.*']:
+                    for pattern in [f'{cid}_*']:
                         for fpath in _glob.glob(os.path.join(enhanced_dir, pattern)):
                             os.remove(fpath)
                             deleted_files.append(fpath)
+                # 清理评分缓存 SCORE_CACHE.json
+                score_cache_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', 'SCORE_CACHE.json')
+                if os.path.exists(score_cache_path):
+                    with open(score_cache_path, 'r', encoding='utf-8') as f:
+                        score_cache = json.load(f)
+                    if cid in score_cache:
+                        del score_cache[cid]
+                        with open(score_cache_path, 'w', encoding='utf-8') as f:
+                            json.dump(score_cache, f, ensure_ascii=False, indent=2)
+                        deleted_files.append(f'{score_cache_path} (entry: {cid})')
+                # 清理 cutout 映射 .id_to_cutout.json
+                cutout_map_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', '.id_to_cutout.json')
+                if os.path.exists(cutout_map_path):
+                    with open(cutout_map_path, 'r', encoding='utf-8') as f:
+                        cutout_map = json.load(f)
+                    if cid in cutout_map:
+                        del cutout_map[cid]
+                        with open(cutout_map_path, 'w', encoding='utf-8') as f:
+                            json.dump(cutout_map, f, ensure_ascii=False, indent=2)
+                        deleted_files.append(f'{cutout_map_path} (entry: {cid})')
+                # 删除品类目录下的原始照片
+                categories_dir = os.path.join(PROJECT_DIR, 'wardrobe')
+                for cat_dir in os.listdir(categories_dir):
+                    cat_path = os.path.join(categories_dir, cat_dir)
+                    if not os.path.isdir(cat_path) or cat_dir.startswith('_') or cat_dir in ('tags', 'enhanced'):
+                        continue
+                    for fname in os.listdir(cat_path):
+                        if fname.startswith(cid):
+                            fpath = os.path.join(cat_path, fname)
+                            if os.path.isfile(fpath):
+                                os.remove(fpath)
+                                deleted_files.append(fpath)
                 # 穿搭方案中的图片保留不删（已使用的历史记录）
                 log(f"单品已删除: {cid} ({len(deleted_files)} files)")
-                self._json_resp(200, {"ok": True, "deleted": len(deleted_files)})
+                self._json_resp(200, {"ok": True, "deleted": len(deleted_files), "files": deleted_files})
             except Exception as e:
                 log(f"删除单品失败 {cid}: {e}", "ERROR")
                 self._json_resp(500, {"error": str(e)})

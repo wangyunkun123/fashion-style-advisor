@@ -1614,7 +1614,7 @@ if not fav_cards: fav_cards = '<div style="padding:16px;color:var(--muted);font-
 
 # ── Hero: check for pinned outfit first, then latest ──
 pinned_id = None
-pin_file = os.path.join(PROJECT_DIR, 'prototype', '.pinned')
+pin_file = os.path.join(PROJ, 'prototype', '.pinned')
 if os.path.exists(pin_file):
     with open(pin_file) as f:
         pinned_id = f.read().strip()

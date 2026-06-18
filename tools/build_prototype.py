@@ -213,6 +213,15 @@ add_icons = {
     'construction_icon': lu('construction'),  # under construction
 }
 
+# ── Rating UI icons ──
+star_filled_svg = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'
+star_outline_svg = lu('star') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'
+check_svg = lu('check') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>'
+x_svg = lu('x') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+style_icon_svg = lu('palette') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>'
+scene_icon_svg = lu('map-pin') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'
+combo_icon_svg = lu('shirt') or '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>'
+
 # ── Build HTML ──
 def tab_btn(key, label, active=False):
     cls = 'tab active' if active else 'tab'
@@ -698,6 +707,58 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .wrd-loading::before{{content:'⏳';display:block;font-size:32px;margin-bottom:10px}}
 .wrd-empty{{text-align:center;padding:30px 20px;color:var(--muted);font-size:12px}}
 .filtered{{display:none!important}}
+/* ── Rating buttons ── */
+.hero-rate{{text-align:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}}
+.rate-label{{font-size:12px;color:var(--sub);margin-bottom:10px}}
+.star-row{{display:inline-flex;gap:2px;align-items:center;vertical-align:middle}}
+.star-row .sr-btn{{width:24px;height:24px;padding:0;background:transparent;border:none;cursor:pointer;color:var(--border);transition:all .15s;-webkit-tap-highlight-color:transparent}}
+.star-row .sr-btn svg{{width:100%;height:100%;display:block}}
+.star-row .sr-btn.filled{{color:#e88a3c}}
+.star-row .sr-btn:active{{transform:scale(.9)}}
+.hero-rate .star-row{{gap:4px}}
+.hero-rate .sr-btn{{width:30px;height:30px}}
+.rate-tip{{font-size:10px;color:var(--sub);margin-top:4px}}
+.cancel-rating{{font-size:10px;color:var(--muted);cursor:pointer;margin-left:6px;text-decoration:underline;-webkit-tap-highlight-color:transparent;display:none}}
+.cancel-rating.visible{{display:inline}}
+.hist-stars{{display:inline-flex;gap:1px;vertical-align:middle;margin-left:4px}}
+.hist-stars .sr-btn{{width:16px;height:16px}}
+.hist-stars .cancel-rating{{font-size:9px}}
+/* Feedback modal — reason cards (Step 1) */
+.reason-cards{{display:flex;flex-direction:column;gap:10px;padding:0 20px 16px}}
+.reason-card{{display:flex;align-items:center;gap:14px;padding:16px;border-radius:12px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;background:var(--white)}}
+.reason-card:active{{transform:scale(.98);border-color:var(--navy);background:#f4f7fb}}
+.reason-card .rc-icon{{width:36px;height:36px;border-radius:10px;background:#f0f4f8;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--navy)}}
+.reason-card .rc-icon svg{{width:20px;height:20px}}
+.reason-card .rc-text{{flex:1;min-width:0}}
+.reason-card .rc-title{{font-size:14px;font-weight:600;color:var(--text)}}
+.reason-card .rc-desc{{font-size:11px;color:var(--sub);margin-top:2px}}
+/* Feedback modal (bottom sheet for 1-star item selection) */
+.feedback-overlay{{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,40,56,.6);z-index:185;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);justify-content:center;align-items:flex-end}}
+.feedback-overlay.show{{display:flex}}
+.feedback-modal{{background:var(--white);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:500px;max-height:85vh;display:flex;flex-direction:column;animation:slideUp .3s ease}}
+.feedback-header{{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;border-bottom:1px solid var(--border)}}
+.feedback-title{{font-size:16px;font-weight:700;color:var(--text)}}
+.feedback-close{{width:28px;height:28px;border-radius:50%;background:#f0f4f8;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}}
+.feedback-close svg{{width:16px;height:16px}}
+.feedback-body{{padding:0 0 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}}
+.feedback-hint{{font-size:12px;color:var(--sub);padding:12px 20px 8px;line-height:1.5}}
+.feedback-items{{display:flex;flex-direction:column;gap:2px;padding:0 16px}}
+.feedback-item{{display:flex;align-items:center;gap:10px;padding:12px 8px;border-radius:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;border:1.5px solid transparent}}
+.feedback-item:active{{transform:scale(.98)}}
+.feedback-item.selected{{background:#fef9f2;border-color:#e88a3c}}
+.feedback-item .fi-check{{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}}
+.feedback-item.selected .fi-check{{background:#e88a3c;border-color:#e88a3c;color:#fff}}
+.feedback-item .fi-check svg{{width:12px;height:12px;display:none}}
+.feedback-item.selected .fi-check svg{{display:block}}
+.feedback-item .fi-icon{{width:16px;height:16px;color:var(--navy);flex-shrink:0}}
+.feedback-item .fi-icon svg{{width:100%;height:100%}}
+.feedback-item .fi-id{{font-size:9px;font-family:monospace;color:var(--muted);background:#f0f4f8;padding:2px 5px;border-radius:4px;flex-shrink:0}}
+.feedback-item .fi-name{{font-size:12px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.feedback-footer{{padding:12px 20px 20px;display:flex;gap:10px}}
+.feedback-footer button{{flex:1;padding:12px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent;transition:all .2s}}
+.feedback-btn-cancel{{background:#f0f4f8;color:var(--sub)}}
+.feedback-btn-confirm{{background:var(--navy);color:#fff}}
+.feedback-btn-confirm:disabled{{opacity:.5;pointer-events:none}}
 </style></head><body><div id="app">
 
 <!-- ═══ 推荐页 ═══ -->
@@ -719,6 +780,12 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="hero-meta">{hero_meta}</div>
 <div class="item-list">{hero_items_html}</div>
 {palette_html}
+<div class="hero-rate" data-oid="{hero_outfit_id}">
+<div class="rate-label">给这套穿搭评分</div>
+<div class="star-row" id="hero-star-row">{hero_star_html}</div>
+<div class="rate-tip">多多评价，让 AI 更懂你的风格 ✨</div>
+<span class="cancel-rating{cancel_visible}" id="hero-cancel" onclick="cancelRating('{hero_outfit_id}')">取消评分</span>
+</div>
 </div></div>
 
 <div class="section-header">其他推荐</div>
@@ -852,6 +919,51 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <!-- Tab Bar -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><span class="close">&times;</span><img id="lightbox-img" src=""></div>
 
+<!-- Feedback Modal (1-star: Step1 reason → Step2 items) -->
+<div class="feedback-overlay" id="feedback-overlay" onclick="if(event.target===this)closeFeedbackModal()">
+<div class="feedback-modal">
+<div class="feedback-header">
+<span class="feedback-title" id="feedback-title">为什么不满意？</span>
+<span class="feedback-close" onclick="closeFeedbackModal()">__X_SVG__</span>
+</div>
+<!-- Step 1: 选择原因 -->
+<div class="feedback-body" id="feedback-step1">
+<div class="feedback-hint">告诉我们哪里不满意，AI 会针对性优化</div>
+<div class="reason-cards">
+<div class="reason-card" onclick="selectReason('style_mismatch')">
+<div class="rc-icon">__STYLE_ICON__</div>
+<div class="rc-text">
+<div class="rc-title">风格不喜欢</div>
+<div class="rc-desc">减少此类风格的推荐频率</div>
+</div>
+</div>
+<div class="reason-card" onclick="selectReason('scene_mismatch')">
+<div class="rc-icon">__SCENE_ICON__</div>
+<div class="rc-text">
+<div class="rc-title">场景不适合</div>
+<div class="rc-desc">在此场景下不再推荐类似穿搭</div>
+</div>
+</div>
+<div class="reason-card" onclick="showItemStep()">
+<div class="rc-icon">__COMBO_ICON__</div>
+<div class="rc-text">
+<div class="rc-title">搭配有问题</div>
+<div class="rc-desc">选择不满意的单品，减少一起出现的概率</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2: 选择单品（仅搭配有问题） -->
+<div class="feedback-body" id="feedback-step2" style="display:none">
+<div class="feedback-hint">选择你觉得不满意的单品（可多选），系统将减少它们一起出现的概率</div>
+<div class="feedback-items" id="feedback-items"></div>
+<div class="feedback-footer">
+<button class="feedback-btn-cancel" onclick="closeFeedbackModal()">取消</button>
+<button class="feedback-btn-confirm" id="feedback-confirm-btn" onclick="confirmFeedback()" disabled>确认</button>
+</div>
+</div>
+</div></div>
+
 <!-- Progress Overlay -->
 <div class="progress-overlay" id="progress-overlay">
 <div class="progress-card">
@@ -913,6 +1025,43 @@ function cancelChipEdit(){{__editingTagIdx=-1;__editingTagGroup='';__editingTagF
 function addChip(groupId){{var data=__currentItemData;if(!data)return;var grp=getTagGroups(data).find(function(g){{return g.id===groupId}});if(!grp||grp.readonly)return;var newVal='新标签';if(groupId==='brand'){{if(!data.brand)data.brand={{}};if(!data.brand.name){{data.brand.name=newVal;__editingTagField='name'}}else{{newVal=data.brand.name;__editingTagField='name'}}}}else if(groupId==='color'){{if(!data.color)data.color={{}};var _c=data.color;if(!_c.hue_family){{_c.hue_family=newVal;__editingTagField='hue_family'}}else if(!_c.hue_name){{_c.hue_name=newVal;__editingTagField='hue_name'}}else if(!_c.saturation){{_c.saturation=newVal;__editingTagField='saturation'}}else if(!_c.lightness){{_c.lightness=newVal;__editingTagField='lightness'}}else{{if(!_c.extra)_c.extra=[];_c.extra.push(newVal);__editingTagField='extra_'+(_c.extra.length-1)}}}}else if(groupId==='fabric'){{if(!data.fabric)data.fabric={{}};var _f=data.fabric;if(!_f.primary){{_f.primary=newVal;__editingTagField='primary'}}else if(!_f.texture){{_f.texture=newVal;__editingTagField='texture'}}else if(!_f.weight){{_f.weight=newVal;__editingTagField='weight'}}else{{_f.primary=newVal;__editingTagField='primary'}}}}else if(groupId==='silhouette'){{if(!data.silhouette)data.silhouette={{}};var _s=data.silhouette;if(!_s.fit){{_s.fit=newVal;__editingTagField='fit'}}else if(!_s.shoulder_effect||_s.shoulder_effect==='无特殊效果'){{_s.shoulder_effect=newVal;__editingTagField='shoulder_effect'}}else if(!_s.torso_effect||_s.torso_effect==='无特殊效果'){{_s.torso_effect=newVal;__editingTagField='torso_effect'}}else{{_s.fit=newVal;__editingTagField='fit'}}}}else if(groupId==='pattern'){{if(!data.pattern)data.pattern={{}};var _p=data.pattern;if(!_p.type||_p.type==='纯色'){{_p.type=newVal;__editingTagField='type'}}else if(!_p.density||_p.density==='无'){{_p.density=newVal;__editingTagField='density'}}else{{if(!_p.extra)_p.extra=[];_p.extra.push(newVal);__editingTagField='extra_'+(_p.extra.length-1)}}}}else if(groupId==='season'){{if(!data.fabric)data.fabric={{}};if(!data.fabric.seasonality)data.fabric.seasonality=[];data.fabric.seasonality.push(newVal);__editingTagField='season_'+(data.fabric.seasonality.length-1)}}else if(groupId==='occasions'){{if(!data.occasions)data.occasions=[];data.occasions.push(newVal);__editingTagField='occ_'+(data.occasions.length-1)}}else if(groupId==='style_modifiers'){{if(!data.style_modifiers)data.style_modifiers=[];data.style_modifiers.push(newVal);__editingTagField='sm_'+(data.style_modifiers.length-1)}}renderItemCard(data);__editingTagGroup=groupId;var el=document.getElementById('im-chip-editor');el.style.display='block';el.innerHTML='<div class=\"im-tag-detail\"><input id=\"im-chip-input\" value=\"'+escHtml(newVal)+'\"><div class=\"im-tag-detail-btns\"><button class=\"im-btn-save\" onclick=\"saveChipEdit()\">确认</button><button class=\"im-btn-cancel\" onclick=\"cancelChipEdit()\">取消</button></div></div>';var inp=document.getElementById('im-chip-input');inp.focus();inp.select()}}
 function removeChip(groupId,idx){{var data=__currentItemData;if(!data)return;var grp=getTagGroups(data).find(function(g){{return g.id===groupId}});var tag=grp&&idx<grp.tags.length?grp.tags[idx]:null;var fld=tag?tag.f:'';if(groupId==='brand'){{if(data.brand)data.brand.name=''}}else if(groupId==='color'){{var c=data.color||{{}};if(fld==='is_neutral')c.is_neutral=false;else if(fld==='friendly_for_pale_skin')c.friendly_for_pale_skin=false;else if(fld&&fld.indexOf('extra_')===0){{var ri=parseInt(fld.split('_')[1]);if(!isNaN(ri)&&ri>=0&&c.extra)c.extra.splice(ri,1)}}else if(fld)c[fld]='';data.color=c}}else if(groupId==='fabric'){{var f=data.fabric||{{}};if(fld)f[fld]='';data.fabric=f}}else if(groupId==='silhouette'){{var s=data.silhouette||{{}};if(fld)s[fld]=(fld==='fit'?'':'无特殊效果');data.silhouette=s}}else if(groupId==='pattern'){{var p=data.pattern||{{}};if(fld==='logo_visible')p.logo_visible=false;else if(fld&&fld.indexOf('extra_')===0){{var rj=parseInt(fld.split('_')[1]);if(!isNaN(rj)&&rj>=0&&p.extra)p.extra.splice(rj,1)}}else if(fld)p[fld]=(fld==='type'?'纯色':(fld==='density'?'无':''));data.pattern=p}}else if(groupId==='season'){{if(data.fabric&&data.fabric.seasonality)data.fabric.seasonality.splice(idx,1)}}else if(groupId==='occasions'){{if(data.occasions)data.occasions.splice(idx,1)}}else if(groupId==='style_modifiers'){{if(data.style_modifiers)data.style_modifiers.splice(idx,1)}}renderItemCard(data)}}
 function showToast(msg,color){{var t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:'+(color||'#1e3a5f')+';color:#fff;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;z-index:300;box-shadow:0 8px 32px rgba(0,0,0,.25);animation:fadeInUp .3s ease';document.body.appendChild(t);setTimeout(function(){{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(function(){{t.remove()}},300)}},1800)}}
+function rateOutfit(btn,n,isHist){{var oid,stars,cancelEl;if(isHist){{var ss=btn.closest('.hist-stars');oid=ss?ss.dataset.oid:'';stars=ss?ss.querySelectorAll('.sr-btn'):[];cancelEl=ss?ss.querySelector('.cancel-rating'):null}}else{{var heroRate=btn.closest('.hero-rate');oid=heroRate?heroRate.dataset.oid:'';stars=document.querySelectorAll('#hero-star-row .sr-btn');cancelEl=document.getElementById('hero-cancel')}}
+if(!oid){{showToast('无法获取穿搭ID','#c4523c');return}}
+var currentFilled=0;stars.forEach(function(s,i){{if(s.classList.contains('filled'))currentFilled=i+1}});
+if(n===currentFilled&&currentFilled>0){{if(confirm('确定取消评分吗？'))cancelRating(oid,stars,cancelEl);return}}
+if(n===1){{showReasonModal(oid,stars,cancelEl,isHist);return}}
+doRate(oid,n,stars,cancelEl,isHist)}}
+var __feedbackOid='',__feedbackStars=null,__feedbackCancelEl=null,__feedbackIsHist=false,__selectedFeedbackItems=[];
+function showReasonModal(oid,stars,cancelEl,isHist){{__feedbackOid=oid;__feedbackStars=stars;__feedbackCancelEl=cancelEl;__feedbackIsHist=isHist;
+document.getElementById('feedback-title').textContent='为什么不满意？';
+document.getElementById('feedback-step1').style.display='block';
+document.getElementById('feedback-step2').style.display='none';
+document.getElementById('feedback-overlay').classList.add('show')}}
+function selectReason(reason){{if(!__feedbackOid)return;
+var fb={{reason:reason,detail:''}};
+var msgs={{style_mismatch:'已记录，将减少此类风格推荐',scene_mismatch:'已记录，此场景不再推荐类似穿搭',item_issue:'已记录'}};
+var msg=msgs[reason]||'已记录';
+doRate(__feedbackOid,1,__feedbackStars,__feedbackCancelEl,__feedbackIsHist,fb);
+closeFeedbackModal();
+showToast(msg,'#c4523c')}}
+function showItemStep(){{if(!__feedbackOid)return;
+document.getElementById('feedback-title').textContent='哪些单品不满意？';
+document.getElementById('feedback-step1').style.display='none';
+document.getElementById('feedback-step2').style.display='block';
+fetch('/api/outfit/'+encodeURIComponent(__feedbackOid)).then(function(r){{return r.json()}}).then(function(d){{var itemsHtml='';var items=d.items||[];
+items.forEach(function(it){{itemsHtml+='<div class="feedback-item" data-item-id="'+escHtml(it.id)+'" onclick="toggleFeedbackItem(this)"><span class="fi-check">__CHECK_SVG__</span><span class="fi-icon">__TSHIRT_SVG__</span><span class="fi-id">'+escHtml(it.id)+'</span><span class="fi-name">'+escHtml(it.name||it.id)+'</span></div>'}});
+document.getElementById('feedback-items').innerHTML=itemsHtml||'<div style="padding:20px;text-align:center;color:var(--muted)">暂无单品数据</div>';
+__selectedFeedbackItems=[];updateFeedbackConfirmBtn()}}).catch(function(){{showToast('加载单品失败','#c4523c')}})}}
+function toggleFeedbackItem(el){{el.classList.toggle('selected');var iid=el.dataset.itemId;var idx=__selectedFeedbackItems.indexOf(iid);if(idx>=0)__selectedFeedbackItems.splice(idx,1);else __selectedFeedbackItems.push(iid);updateFeedbackConfirmBtn()}}
+function updateFeedbackConfirmBtn(){{var btn=document.getElementById('feedback-confirm-btn');if(btn){{btn.textContent='确认('+(__selectedFeedbackItems.length?'选'+__selectedFeedbackItems.length+'项':'跳过')+')';btn.disabled=false}}}}
+function closeFeedbackModal(){{document.getElementById('feedback-overlay').classList.remove('show');__feedbackOid='';__selectedFeedbackItems=[]}}
+function confirmFeedback(){{if(!__feedbackOid){{closeFeedbackModal();return}}
+var fb=__selectedFeedbackItems.length?{{reason:'item_issue',banned_items:__selectedFeedbackItems}}:{{reason:'item_issue',detail:''}};
+doRate(__feedbackOid,1,__feedbackStars,__feedbackCancelEl,__feedbackIsHist,fb);closeFeedbackModal()}}
+function syncAllStars(oid,n){{var allRows=document.querySelectorAll('.hist-stars[data-oid="'+oid+'"]');allRows.forEach(function(row){{var btns=row.querySelectorAll('.sr-btn');btns.forEach(function(b,i){{b.classList.toggle('filled',i<n)}});var cl=row.querySelector('.cancel-rating');if(cl)cl.classList.toggle('visible',n>0)}});var heroRate=document.querySelector('.hero-rate[data-oid="'+oid+'"]');if(heroRate){{var heroStars=heroRate.querySelectorAll('.sr-btn');heroStars.forEach(function(b,i){{b.classList.toggle('filled',i<n)}})}}var heroCancel=document.getElementById('hero-cancel');if(heroCancel)heroCancel.classList.toggle('visible',n>0)}}
+function doRate(oid,n,stars,cancelEl,isHist,feedback){{var body={{outfit_id:oid,rating:n,rated_at:new Date().toISOString()}};if(feedback)body.feedback=feedback;
+fetch('/rate',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(body)}}).then(function(r){{return r.json()}}).then(function(d){{if(d.status==='ok'){{if(stars)stars.forEach(function(s,i){{s.classList.toggle('filled',i<n)}});if(cancelEl)cancelEl.classList.toggle('visible',true);syncAllStars(oid,n);showToast({{1:'已记录，会减少此类推荐',2:'已记录一般',3:'感谢好评！✨'}}[n]||'评分已记录',n===1?'#c4523c':'#2e7d32')}}}}).catch(function(){{showToast('网络错误','#c4523c')}})}}
+function cancelRating(oid,stars,cancelEl){{fetch('/rate/cancel',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{outfit_id:oid}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.status==='ok'){{if(stars)stars.forEach(function(s){{s.classList.remove('filled')}});if(cancelEl)cancelEl.classList.remove('visible');syncAllStars(oid,0);showToast('评分已取消','#1e3a5f')}}}}).catch(function(){{showToast('网络错误','#c4523c')}})}}
 function saveAllChanges(){{if(!__currentItemId||!__currentItemData)return;var data=__currentItemData;var btn=document.querySelector('.im-btn-save-tags');if(btn){{btn.textContent='保存中...';btn.disabled=true}}var hasRotation=__imgRotation%360!==0;var doSave=function(){{var newStyles=matchStyles(data);data.recommended_styles=newStyles;var updates={{}};if(data.brand)updates.brand=data.brand;if(data.color)updates.color=data.color;if(data.fabric)updates.fabric=data.fabric;if(data.silhouette)updates.silhouette=data.silhouette;if(data.pattern)updates.pattern=data.pattern;if(data.occasions!==undefined)updates.occasions=data.occasions;if(data.style_modifiers!==undefined)updates.style_modifiers=data.style_modifiers;updates.recommended_styles=newStyles;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(updates)}}).then(function(r){{return r.json()}}).then(function(d){{if(btn)btn.disabled=false;if(d.ok){{showToast('✅ 保存成功','#2e7d32');var hadRotation=hasRotation;__imgRotation=0;renderItemCard(data,!!hadRotation);if(hadRotation){{fetch('/api/wardrobe/items').then(function(r){{return r.json()}}).then(function(d2){{__wrdData=d2.items;renderCatRows(d2.items)}})}}setTimeout(function(){{var b=document.querySelector('.im-btn-save-tags');if(b)b.textContent='💾 保存修改'}},800)}}else{{showToast('❌ 保存失败','#c4523c');if(btn)btn.textContent='💾 保存修改'}}}}).catch(function(){{if(btn){{btn.disabled=false;btn.textContent='💾 保存修改'}}showToast('❌ 网络错误','#c4523c')}})}};if(hasRotation){{fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId)+'/transform',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{rotate:__imgRotation,scale:1.0,translate_x:0,translate_y:0}})}}).then(function(r){{return r.json()}}).then(function(){{doSave()}}).catch(function(){{doSave()}})}}else{{doSave()}}}}
 function boostItem(){{if(!__currentItemId||!__currentItemData)return;var cur=(__currentItemData.meta&&__currentItemData.meta.boost_score)||0;var newBoost=cur+1;if(!__currentItemData.meta)__currentItemData.meta={{}};__currentItemData.meta.boost_score=newBoost;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{meta:{{boost_score:newBoost}}}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok)renderItemCard(__currentItemData)}})}}
 function archiveItem(){{if(!__currentItemId||!confirm('确定移入旧衣库吗？'))return;fetch('/api/wardrobe/item/'+encodeURIComponent(__currentItemId),{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{meta:{{archived:true}}}})}}).then(function(r){{return r.json()}}).then(function(d){{if(d.ok){{closeItemModal();loadWardrobe()}}}})}}
@@ -1007,6 +1156,33 @@ STYLE_KW_DICT = [
     (['丹宁','牛仔','denim'], '丹宁材质'),
 ]
 
+# ── Encyclopedia keyword cache ──
+_STYLE_ENC_KW_CACHE = {}
+def _build_enc_cache():
+    enc_dir = os.path.join(PROJ, 'styles_universal')
+    if not os.path.isdir(enc_dir): return
+    for edir in sorted(os.listdir(enc_dir)):
+        ep = os.path.join(enc_dir, edir, 'encyclopedia.md')
+        if not os.path.exists(ep): continue
+        try:
+            with open(ep) as f:
+                first_line = f.readline()
+                title_m = re.search(r"#\s*(.+)", first_line)
+                title_clean = title_m.group(1).lower().replace(' ','').replace('-','').replace('_','') if title_m else ''
+                if not title_clean: continue
+                for cline in f:
+                    m = re.search(r"\*{0,2}风格关键词\*{0,2}[：:]\s*(.+)", cline)
+                    if m:
+                        kws = [kw.strip()[:8] for kw in re.split(r"[、,，\s]+", m.group(1)) if len(kw.strip())>=2]
+                        _STYLE_ENC_KW_CACHE[title_clean] = kws
+                        parts = title_clean.split('(')[0] if '(' in title_clean else title_clean
+                        if parts and parts != title_clean:
+                            _STYLE_ENC_KW_CACHE[parts] = kws
+                        break
+        except: pass
+_build_enc_cache()
+
+
 def extract_tags(outfit):
     """Extract style tags: outfit.md keywords → content matching → style name"""
     tags = []
@@ -1034,16 +1210,23 @@ def extract_tags(outfit):
                     kw = kw.strip()
                     if kw and len(kw)>=2 and kw not in tags:
                         tags.append(kw[:8])
-        # Strategy 2: 风格笔记 section (bullet points)
+        # Basic junk filter: clear obviously bad tags so next strategies can contribute
+        junk_patterns = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
+                         r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
+        tags = [t for t in tags if not any(re.search(pat, t) for pat in junk_patterns)]
+        # Strategy 2.5: 从风格百科缓存查关键词
         if not tags:
-            in_notes = False
-            for line in content.split('\n'):
-                if '风格笔记' in line: in_notes = True; continue
-                if in_notes and line.strip().startswith('##'): break
-                if in_notes and line.strip().startswith('- '):
-                    kw = line.strip()[2:].split('：')[0].split('—')[0].strip()[:8]
-                    if kw and len(kw)>=2: tags.append(kw)
-        # Strategy 3: Content keyword matching
+            style_name = outfit.get('style','')
+            if style_name and _STYLE_ENC_KW_CACHE:
+                sn = style_name.lower().replace(' ','').replace('-','').replace('_','')
+                if sn in _STYLE_ENC_KW_CACHE:
+                    tags = list(_STYLE_ENC_KW_CACHE[sn])
+                else:
+                    for k, v in _STYLE_ENC_KW_CACHE.items():
+                        if sn in k or k in sn:
+                            tags = list(v)
+                            break
+        # Strategy 3: Content keyword matching (renamed from Strategy 3)
         if not tags:
             # Search whole outfit.md content for known style keywords
             matched = set()
@@ -1061,6 +1244,13 @@ def extract_tags(outfit):
             for sep in ['丨','｜','/','·','-',' ']:
                 combined = combined.replace(sep, ' ')
             tags = [w.strip()[:8] for w in combined.split() if len(w.strip())>=2][:4]
+    # Quality filter: remove junk tags
+    junk_patterns = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
+                     r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
+    tags = [t for t in tags if not any(re.search(pat, t) for pat in junk_patterns)]
+    # Also remove style name clones
+    style_clean = outfit.get('style','').lower().replace(' ','').replace('-','').replace('_','')
+    tags = [t for t in tags if not (t.strip().lower().replace(" ","").replace("-","").replace("_","") in style_clean or style_clean in t.strip().lower().replace(" ","").replace("-","").replace("_","") or len(t.strip().lower().replace(" ","").replace("-","").replace("_","")) < 2)]
     return tags[:4]
 
 def gen_history_card(outfit, idx):
@@ -1092,7 +1282,17 @@ def gen_history_card(outfit, idx):
     # Style tags from real data
     tags = extract_tags(outfit)
     tags_html = '<div class="h-tags">' + ''.join(['<span>{}</span>'.format(t[:8]) for t in tags]) + '</div>'
-    rating_str = ' ⭐'*outfit['rating'] if outfit['rating'] else ''
+    # Interactive SVG star rating for history cards
+    rating_val = outfit['rating'] or 0
+    ods = outfit['dir'].replace("'", "\\'").replace('"', '&quot;')
+    stars_html = '<span class="star-row">'
+    for s in range(1, 4):
+        filled = ' filled' if s <= rating_val else ''
+        svg = star_filled_svg if s <= rating_val else star_outline_svg
+        stars_html += '<button class="sr-btn{}" data-r="{}" onclick="event.stopPropagation();rateOutfit(this,{},true)">{}</button>'.format(filled, s, s, svg)
+    stars_html += '</span>'
+    cancel_link = '<span class="cancel-rating{}" onclick="event.stopPropagation();cancelRating(\'{}\')">取消</span>'.format(' visible' if rating_val > 0 else '', ods) if rating_val > 0 else ''
+    rating_html = '<span class="hist-stars" data-oid="{}">{}{}</span>'.format(ods, stars_html, cancel_link)
     # Character image
     img_tag = ''
     if outfit.get('char_img'):
@@ -1110,7 +1310,7 @@ def gen_history_card(outfit, idx):
         thumb_small = '<img class="h-thumb-sm" src="{}" loading="lazy">'.format(outfit['char_img'])
     # Header: style + tags only (no palette when collapsed)
     tag_info_html = '<div class="fav-style">{style}{rating}</div>{tags}'.format(
-        style=outfit['style'][:30], rating=rating_str, tags=tags_html)
+        style=outfit['style'][:30], rating=rating_html, tags=tags_html)
     return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
@@ -1126,8 +1326,12 @@ if not today:
     today = scan_outfits(limit=1)  # fallback: latest outfit from any date
 if today:
     ho = today[0]
+    hero_outfit_id = ho['dir']
     hero_img = ho['char_img']
-    hero_style = ho['style'][:30]
+    # 标题格式：用户指令 · 风格名
+    scene_name = ho.get('dir', '').split('_',1)[-1] if '_' in ho.get('dir','') else ''
+    style_name = ho['style'][:25] if ho.get('style') else ''
+    hero_style = '{} · {}'.format(scene_name.rstrip('。,，. ')[:20], style_name) if scene_name and style_name else (style_name or scene_name or '今日穿搭')
     hero_meta = '{} · {}'.format(ho['date'], (ho.get('weather','') or '晴 22~34°C')[:30])
     tags = extract_tags(ho)
     hero_tags_html = ''.join('<span>{}</span>'.format(t) for t in tags)
@@ -1136,6 +1340,13 @@ if today:
         item_icons.get({'TS':'tshirt','LS':'tshirt','SHIRT':'tshirt','TANK':'tshirt','JK':'tshirt','PT':'pants','SH':'pants','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}.get(it['id'].split('-')[0],'tshirt'),''),
         it.get('cat',''), it['id'], it['name'], it.get('thumb','')
     ) for it in ho['items'][:8])
+    # Star rating row
+    hero_rating_val = ho.get('rating') or 0
+    hero_star_html = ''
+    for s in range(1, 4):
+        filled = ' filled' if s <= hero_rating_val else ''
+        hero_star_html += '<button class="sr-btn{}" data-r="{}" onclick="rateOutfit(this,{})">{}</button>'.format(filled, s, s, star_filled_svg if s <= hero_rating_val else star_outline_svg)
+    cancel_visible = ' visible' if hero_rating_val > 0 else ''
 else:
     # Absolute fallback: no outfits exist at all — show placeholder
     hero_img = ''
@@ -1144,15 +1355,29 @@ else:
     hero_tags_html = '<span>等待首套穿搭</span>'
     palette_html = ''
     hero_items_html = ''
+    hero_star_html = ''
+    cancel_visible = ''
+    hero_outfit_id = ''
 
 card1 = mini_card('日系 City Boy', ['TS-011 落肩T恤', 'SHIRT-001 条纹衬衫', 'PT-001 宽松牛仔裤', 'SHOE-009 AF1'])
 card2 = mini_card('轻熟休闲', ['SHIRT-003 牛津衬衫', 'PT-005 休闲西裤', 'SHOE-009 皮质板鞋', 'ACC-001 手串'])
 card3 = mini_card('韩系简约', ['TS-010 条纹T恤', 'PT-006 直筒牛仔裤', 'SHOE-005 网球鞋', 'HAT-004 棒球帽'])
 
+# Post-process: inject evaluated SVG strings into JS
+html = html.replace('__CHECK_SVG__', check_svg)
+html = html.replace('__TSHIRT_SVG__', item_icons.get('tshirt', ''))
+html = html.replace('__STARF_SVG__', star_filled_svg)
+html = html.replace('__STARO_SVG__', star_outline_svg)
+html = html.replace('__X_SVG__', x_svg)
+html = html.replace('__STYLE_ICON__', style_icon_svg)
+html = html.replace('__SCENE_ICON__', scene_icon_svg)
+html = html.replace('__COMBO_ICON__', combo_icon_svg)
+
 html = html.format(
     tabs=tabs_html,
     hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
     hero_tags_html=hero_tags_html, palette_html=palette_html, hero_items_html=hero_items_html,
+    hero_outfit_id=hero_outfit_id, hero_star_html=hero_star_html, cancel_visible=cancel_visible,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
     camera_icon=add_icons['camera_icon'], upload_icon=add_icons['upload_icon'],

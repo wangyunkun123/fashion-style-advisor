@@ -172,6 +172,10 @@ tasks = TaskManager()
 # ── Server酱推送 ──────────────────────────────────────
 def push_wechat(title, content=""):
     """推送到微信。自动将 GitHub Raw URL 转换为 jsDelivr CDN（国内访问更快）"""
+    # 配置开关 —— 设为 false 可临时停用微信推送
+    if not config.get('wechat_push_enabled', True):
+        log(f"⏸️ 微信推送已暂停: {title}")
+        return None
     # 自动转换 GitHub Raw → jsDelivr CDN
     content = re.sub(
         r'https://raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/(.+)',
@@ -319,15 +323,22 @@ def get_banned_items():
             with open(rating_file, 'r') as f:
                 rating_data = json.load(f)
             if rating_data.get('rating') == 1:
-                md = os.path.join(dp, 'outfit.md')
-                if os.path.exists(md):
-                    with open(md, 'r') as f:
-                        content = f.read()
-                    ids = re.findall(
-                        r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                        content
-                    )
-                    banned.extend(ids)
+                # 精准禁用：优先使用用户标记的 banned_items
+                feedback = rating_data.get('feedback', {}) or {}
+                precise_banned = feedback.get('banned_items', [])
+                if precise_banned and isinstance(precise_banned, list):
+                    banned.extend(precise_banned)
+                else:
+                    # 旧数据兼容：没有 banned_items 则全部禁用
+                    md = os.path.join(dp, 'outfit.md')
+                    if os.path.exists(md):
+                        with open(md, 'r') as f:
+                            content = f.read()
+                        ids = re.findall(
+                            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                            content
+                        )
+                        banned.extend(ids)
         except:
             pass
     return list(set(banned))
@@ -1523,15 +1534,15 @@ OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾�
   ],
   "reasoning": "搭配理由（100-200字）",
   "color_logic": "配色逻辑",
-  "keywords": "风格关键词",
-  "seedream_prompt": "英文 Seedream 生图提示词，描述一个30岁亚洲男性179cm偏瘦白皙，穿着上述服装的全身照，高质量写真风格"
+  "keywords": "3-6个风格特征词，用顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。这是穿搭标签，不是用户指令，必须提取风格本身的美学特征",
+  "seedream_prompt": "英文 Seedream 生图提示词。必须包含以下7个维度，用逗号连接成一段自然的摄影指导（200-350字符）。禁止模板感，每次都要有变化：\n\n1.📷 摄影风格: 指定相机型号和镜头（如 Fujifilm X-T5 35mm f/1.4 / Leica M6 50mm / Sony A7IV 85mm f/1.4），加上摄影风格标签（fashion editorial photography / lookbook style / street style candid / cinematic portrait / photojournalism style）\n2.🎬 构图角度: 从以下随机选一个并创造性地变体—— low angle from knee height making subject look taller / eye-level centered with direct eye contact / slightly elevated angle with sky background / rule of thirds off-center composition / 3/4 waist-level framing for intimate feel / wide shot showing full environment\n3.✨ 光影气氛: 从以下随机选一个—— golden hour backlight with warm rim light on shoulders / overcast soft diffused light with even skin tones / late afternoon side light with long dramatic shadows / morning crisp light with clean blue sky bounce / dappled tree-filtered sunlight creating patchy light patterns / dusk ambient with warm street lamp glow\n4.🏃 动态姿势: ⚠️ 根据场景选择一个自然动态姿势，严禁使用\"standing\"一词！必须是在做某事—— walking mid-stride towards camera / leaning against textured wall with arms crossed / sitting on concrete ledge elbows on knees / looking back over shoulder mid-laugh / checking phone while walking absorbed in screen / adjusting hat/collar casually / mid-motion athletic action / crouching tying shoelace candid moment / crossing street with wind in hair\n5.👔 服装细节: 除了列出每件单品（颜色、面料、版型），还要描述它们如何随姿势自然呈现—— 如\"oversized tee draping loosely with movement\" / \"jeans creasing naturally at knees while walking\" / \"canvas shoes scuffing slightly on pavement\" / \"jacket billowing slightly in breeze\"\n6.🏙️ 场景环境: ⚠️ 禁止只用\"Beijing street\"！必须根据风格选择具体有辨识度的地点—— quiet Daikanyama residential street with minimal architecture / Shanghai French Concession plane tree avenue / Beijing hutong alley with grey brick walls and bicycles / Seoul Hongdae street art alley with colorful murals / modern glass office building lobby with polished concrete / rooftop terrace overlooking city skyline / outdoor tennis court with blue surface / park bench under large oak tree with dappled light / minimal cafe outdoor wooden deck with potted plants\n7.😊 情绪故事感: 选一个—— effortlessly cool candid caught off-guard / quiet contemplative moment looking out of frame / genuine joyful laugh mid-conversation / editorial sophistication sharp and clean / playful dynamic energy caught mid-motion / cinematic still like a movie frame / relaxed weekend ease nothing-to-do-today vibe\n\n禁止事项：\n❌ 严禁使用\"standing\"或\"standing casually\"（呆板站立）\n❌ 严禁只写\"high-quality portrait\"而无摄影参数\n❌ 严禁场景只写\"Beijing street\"\n❌ 严禁姿势和情绪留空\n❌ 严禁套用固定模板，每次必须有变化\n\n完整示例（模仿这种自然摄影指导的语气，但每次内容要不同）：\n\"Fashion editorial lookbook, shot on Fujifilm X-T5 35mm f/1.4, shallow depth of field with creamy bokeh. Low angle from knee height, rule of thirds composition. Golden hour backlight creating warm rim light on shoulders, sun-kissed skin. Walking confidently toward camera, mid-stride, one hand casually in jeans pocket, slight natural smile looking slightly off-frame. Oversized caramel tee draping loosely with movement, gray-blue jeans creasing naturally at knees. Background: quiet Daikanyama residential street, clean minimal architecture, soft afternoon shadows. Effortlessly cool candid energy, caught mid-motion, editorial street style.\""
 }
 
 注意：
 - 每套穿搭必须包含：上衣、下装、鞋子（三者缺一不可，这是硬性要求）
 - 帽子、包、袜子、墨镜、配饰等根据场景酌情添加
 - ACC-003 是 Apple Watch 表带套组（含米兰尼斯/回环/运动三款表带），推荐时需指定使用哪款表带
-- seedream_prompt 必须是英文，详细描述服装细节和场景氛围
+- seedream_prompt 必须是英文，200-350字符，严格遵循7维度和禁止事项
 - 除用户明确标记为「一星差评禁用」的单品外，所有单品均可自由选用，同一单品可以出现在不同风格的穿搭中
 - ⚠️ 场景匹配：运动场景（网球/跑步/健身）必须选功能运动鞋/跑鞋/网球鞋，不可选工装靴、帆布鞋、拖鞋、亚麻裤等非运动单品"""
 
@@ -2725,6 +2736,34 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             except Exception as e:
                 log(f"⚠️ 反馈更新失败: {e}", "WARN")
             self._json_resp(200, {"status": "ok"})
+        elif parsed.path == '/rate/cancel' and self.command == 'POST':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try: data = json.loads(body)
+            except: self._json_resp(400, {"error": "invalid json"}); return
+            oid = data.get('outfit_id', '')
+            d = os.path.join(PROJECT_DIR, 'outfits', oid)
+            if not os.path.exists(d): self._json_resp(404, {"error": "outfit not found"}); return
+            rating_file = os.path.join(d, 'rating.json')
+            old_rating = 0
+            old_feedback = None
+            if os.path.exists(rating_file):
+                try:
+                    with open(rating_file, 'r') as f:
+                        old_data = json.load(f)
+                    old_rating = old_data.get('rating', 0)
+                    old_feedback = old_data.get('feedback')
+                except: pass
+                os.remove(rating_file)
+                log(f"🗑️ 评分取消: {oid} (原评分: {old_rating})")
+            # 逆转评分反馈
+            if old_rating > 0:
+                try:
+                    from style_lab import apply_rating_feedback
+                    apply_rating_feedback(d, -old_rating, old_feedback)
+                except Exception as e:
+                    log(f"⚠️ 反馈撤销失败: {e}", "WARN")
+            self._json_resp(200, {"status": "ok", "message": "评分已取消"})
         elif parsed.path.startswith('/api/wardrobe/item/') and parsed.path.endswith('/delete'):
             # 彻底删除单品
             cid = parsed.path.split('/api/wardrobe/item/')[-1].replace('/delete', '').strip()

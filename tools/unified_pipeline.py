@@ -65,6 +65,159 @@ CORE_CATS = {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'SH', 'PT', 'SHOE'}
 
 
 # ============================================================
+# 风格 → 摄影参数映射表（用于 Seedream prompt 优化）
+# ============================================================
+
+STYLE_PHOTO_MAP = {
+    'japanese_city_boy': {
+        'camera': 'Fujifilm X-T5 35mm f/1.4, film simulation, slight grain',
+        'angle': 'eye-level slightly off-center, intimate street snap framing',
+        'light': 'overcast soft diffused light, even skin tones, subtle shadow definition',
+        'pose': 'hands in jacket pockets, relaxed weight shift to one leg, looking down at phone with quiet focus, headphones visible',
+        'scene': 'quiet Daikanyama residential street, clean minimal architecture, potted plants, soft afternoon',
+        'vibe': 'effortlessly cool candid snap, Japanese magazine editorial, caught in a quiet moment',
+    },
+    'japanese_amekaji': {
+        'camera': 'Leica M6 50mm Summicron, Kodak Portra 400 film look, warm grain',
+        'pose': 'leaning against vintage motorcycle or brick wall, arms crossed, gazing off-frame with rugged calm',
+        'scene': 'vintage Americana shop front, aged brick wall, worn leather textures, late afternoon',
+        'vibe': 'timeless rugged charm, American heritage filtered through Japanese precision',
+    },
+    'japanese_yama': {
+        'camera': 'Sony A7IV 24-70mm f/2.8, crisp outdoor rendering',
+        'pose': 'walking on forest trail, one hand adjusting backpack strap, looking ahead at the path, mid-stride',
+        'scene': 'wooded mountain trail, dappled sunlight through trees, fresh greenery, morning mist',
+        'vibe': 'outdoor explorer energy, at peace in nature, functional yet stylish',
+    },
+    'korean_minimal': {
+        'camera': 'Sony A7IV 85mm f/1.4 GM, crisp modern rendering, clean bokeh',
+        'pose': 'leaning against white gallery wall, one hand touching collar, direct but soft eye contact',
+        'scene': 'minimalist gallery space, white walls, polished concrete floors, single art piece',
+        'vibe': 'architectural editorial, sharp and clean, understated confidence',
+    },
+    'korean_light_mature': {
+        'camera': 'Fujifilm X-T5 56mm f/1.2, soft portrait rendering',
+        'angle': 'waist-level framing, slight Dutch angle for dynamic tension',
+        'pose': 'sitting at outdoor cafe table, one hand holding coffee cup, looking up at someone entering frame, slight knowing smile',
+        'scene': 'Seoul Garosu-gil cafe terrace, plane tree shade, afternoon light through leaves',
+        'vibe': 'K-drama still cut, soft romantic warmth, mature yet approachable',
+    },
+    'clean_fit': {
+        'camera': 'Sony A7IV 50mm f/1.4, clinically sharp, minimal color grade',
+        'pose': 'standing with deliberate posture, weight evenly distributed, looking directly at camera with quiet confidence',
+        'scene': 'modern minimalist architecture, white and grey tones, clean geometric lines, morning crisp light',
+        'vibe': 'editorial precision, Scandinavian cool, nothing out of place',
+    },
+    'streetwear': {
+        'camera': 'Fujifilm X-T5 23mm f/1.4, wide street framing',
+        'angle': 'low angle from ground level, making subject look commanding',
+        'pose': 'walking confidently mid-stride, one hand in pocket, looking ahead with quiet swagger, wind catching oversized hoodie',
+        'scene': 'Harajuku backstreet with colorful signage, or Shanghai art district with graffiti walls, urban texture',
+        'vibe': 'papaprazzi-style spontaneous shot, caught mid-motion, alive and dynamic',
+    },
+    'american_ivy_league': {
+        'camera': 'Leica M6 35mm, Kodak Ektar 100 film look, rich but natural colors',
+        'pose': 'walking across university quad with books in one hand, looking at watch, purposeful stride, slight smile',
+        'scene': 'university campus, ivy-covered brick buildings, oak trees, morning crisp light, students in background blurred',
+        'vibe': 'timeless academic elegance, quiet privilege, effortless polish',
+    },
+    'american_workwear': {
+        'camera': 'Fujifilm X-T5 35mm, desaturated warm tones',
+        'pose': 'crouching to pick up tool bag, or wiping hands on a rag, rugged functional movement',
+        'scene': 'industrial loft space or workshop, exposed brick, raw wood textures, late afternoon side light',
+        'vibe': 'rugged authenticity, functional strength, blue-collar heritage elevated',
+    },
+    'athleisure_sport': {
+        'camera': 'Sony A7IV 70-200mm f/2.8, fast action capable',
+        'pose': 'mid-stride running or serving a tennis ball, athletic dynamic motion, muscles engaged, slight sweat glow',
+        'scene': 'outdoor tennis court with blue surface, or running track with morning light, or basketball court',
+        'vibe': 'peak performance energy, athletic grace, sport-meets-style',
+    },
+    'british_heritage': {
+        'camera': 'Leica M6 50mm, moody desaturated rendering, English overcast',
+        'pose': 'adjusting coat collar against light drizzle, looking back over shoulder, windswept hair',
+        'scene': 'London mews lane, cobblestones, brick archways, grey overcast sky, classic black cab in distance',
+        'vibe': 'understated British elegance, weather-beaten charm, heritage with an edge',
+    },
+    'smart_casual': {
+        'camera': 'Sony A7IV 50mm f/1.4, clean corporate rendering',
+        'pose': 'checking wristwatch while walking through modern lobby, leather bag across body, focused but relaxed expression',
+        'scene': 'modern glass office building lobby, polished concrete and steel, morning rush hour energy, blurred professionals in background',
+        'vibe': 'urban professional energy, polished but approachable, modern gentleman',
+    },
+    'scandi_minimalism': {
+        'camera': 'Sony A7IV 35mm f/2.8, neutral color profile, crisp',
+        'pose': 'sitting on a simple wooden bench, looking out of frame contemplatively, hands resting lightly on lap',
+        'scene': 'Copenhagen waterfront, clean lines, muted earth tones, overcast soft light, bicycle leaning nearby',
+        'vibe': 'quiet contemplation, less-but-better philosophy, effortless restraint',
+    },
+    'scene_blokecore': {
+        'camera': 'Fujifilm X-T5 23mm, vibrant color, documentary style',
+        'pose': 'walking toward stadium entrance, scarf swinging, mid-laugh with friends (out of frame), match-day energy',
+        'scene': 'football stadium exterior on match day, crowd in team colors, overcast English sky, brick stadium facade',
+        'vibe': 'terrace culture energy, authentic fan spirit, football-meets-fashion',
+    },
+    'retro_90s_hiphop': {
+        'camera': 'Contax T2 38mm, 35mm film grain, 90s snapshot aesthetic',
+        'pose': 'mid-dance move or adjusting baseball cap low over eyes, relaxed swagger, one shoulder dropped',
+        'scene': 'Brooklyn basketball court, chain-link fence, boombox nearby, golden hour warm tones',
+        'vibe': 'golden era energy, authentic hip-hop culture, street legend casual',
+    },
+    'chinese_heritage': {
+        'camera': 'Fujifilm X-T5 35mm, muted warm tones, cultural documentary',
+        'pose': 'standing in traditional garden courtyard, one hand touching wooden pillar, looking at koi pond, quiet contemplation',
+        'scene': 'Suzhou classical garden, white walls with grey tile roofs, bamboo shadows, morning mist',
+        'vibe': 'cultural depth and quiet confidence, heritage reimagined for modern life',
+    },
+    'resort_vacation': {
+        'camera': 'Fujifilm X-T5 23mm, bright and airy, vacation snapshot',
+        'pose': 'walking barefoot on beach edge, holding sandals in one hand, looking at horizon, slight laugh caught by sea breeze',
+        'scene': 'tropical beach at golden hour, gentle waves, palm tree silhouettes, or infinity pool overlooking ocean',
+        'vibe': 'complete relaxation, nothing-to-do-today, sun-kissed and carefree',
+    },
+    'contemporary_gorpcore': {
+        'camera': 'Sony A7IV 24-70mm f/2.8, outdoor adventure crisp',
+        'pose': 'checking map on phone while hiking, or adjusting technical jacket hood, functional movement in nature',
+        'scene': 'mountain trail with city skyline visible in far distance, morning fog rolling in, technical outdoor gear visible',
+        'vibe': 'urban-to-wilderness, functional tech meets nature, adventure-ready confidence',
+    },
+}
+
+# 默认摄影参数（当风格无映射时使用）
+DEFAULT_PHOTO_DIRECTION = {
+    'camera': 'Fujifilm X-T5 35mm f/1.4, shallow DOF',
+    'angle': 'low angle from knee height, rule of thirds',
+    'light': 'golden hour backlight, warm rim light',
+    'pose': 'walking mid-stride toward camera, one hand casually in pocket, natural movement',
+    'scene': 'modern urban street, soft afternoon light, clean background',
+    'vibe': 'editorial fashion photography, effortlessly cool, candid energy',
+}
+
+
+def get_photo_direction(style_ids):
+    """根据目标风格返回摄影指导参数"""
+    directions = []
+    for sid in style_ids:
+        if sid in STYLE_PHOTO_MAP:
+            directions.append(STYLE_PHOTO_MAP[sid])
+    if not directions:
+        directions = [DEFAULT_PHOTO_DIRECTION]
+    # 取第一个匹配的风格作为主方向
+    d = directions[0]
+    return (
+        f"📷 摄影指导（用于 seedream_prompt 创作）：\n"
+        f"  相机: {d['camera']}\n"
+        f"  构图: {d.get('angle', 'low angle, rule of thirds')}\n"
+        f"  光影: {d['light']}\n"
+        f"  姿势: {d['pose']}\n"
+        f"  场景: {d['scene']}\n"
+        f"  情绪: {d['vibe']}\n"
+        f"  ⚠️ 这些参数要融入 seedream_prompt，但不要逐字复制，要自然改写。\n"
+        f"  ⚠️ 姿势必须动态（禁止 standing），场景必须具体有辨识度。"
+    )
+
+
+# ============================================================
 # 数据加载
 # ============================================================
 
@@ -458,6 +611,9 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
             if color_logic:
                 style_descs.append(f'     配色逻辑: {color_logic[:50]}')
 
+    # ── 5.5. 摄影指导（基于风格自动匹配）──
+    photo_direction = get_photo_direction(target_styles)
+
     # ── 6. 构建禁用文本 ──
     ban_section = ''
     if banned_items:
@@ -519,7 +675,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   "silhouette": "廓形节奏描述",
   "body_modifier": "身形修饰策略",
   "reasoning": "整体搭配理由（100-200字）",
-  "seedream_prompt": "英文 Seedream 生图提示词，描述30岁亚洲男性179cm偏瘦白皙，穿着完整搭配的全身照，高质量写真风格"
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
 }}
 
 注意：
@@ -543,6 +699,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 {chr(10).join(style_descs)}
 {scene_text}
 {strategy_text}
+{photo_direction}
 ─── 衣柜档案（含风格匹配分/场景适配/新鲜度）───
 
 {wardrobe_table}
@@ -937,15 +1094,22 @@ def _get_banned_items():
             with open(rating_file, 'r') as f:
                 rating_data = json.load(f)
             if rating_data.get('rating') == 1:
-                md = os.path.join(dp, 'outfit.md')
-                if os.path.exists(md):
-                    with open(md, 'r') as f:
-                        content = f.read()
-                    ids = re.findall(
-                        r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                        content
-                    )
-                    banned.extend(ids)
+                # 精准禁用：优先使用用户标记的 banned_items
+                feedback = rating_data.get('feedback', {}) or {}
+                precise_banned = feedback.get('banned_items', [])
+                if precise_banned and isinstance(precise_banned, list):
+                    banned.extend(precise_banned)
+                else:
+                    # 旧数据兼容：没有 banned_items 则全部禁用
+                    md = os.path.join(dp, 'outfit.md')
+                    if os.path.exists(md):
+                        with open(md, 'r') as f:
+                            content = f.read()
+                        ids = re.findall(
+                            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
+                            content
+                        )
+                        banned.extend(ids)
         except Exception:
             pass
     return list(set(banned))

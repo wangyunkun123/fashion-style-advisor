@@ -286,14 +286,20 @@ def main():
             accessory_hints.append(f"image {i+2} = {basename}")
 
         pass2_prompt = (
-            f"Image 1 is a base outfit photo. Keep the person's face, body pose, "
-            f"skin tone, hairstyle, and the basic clothing (top, pants, shoes) EXACTLY "
-            f"as shown in image 1 — do not alter them. "
+            f"Image 1 is a base outfit photo serving as the identity and style anchor. "
+            f"Preserve the person's facial identity, skin tone, and the overall outfit "
+            f"(top, pants, shoes) shown in image 1 — these are the core to keep. "
+            f"However, you may subtly improve the pose, expression, camera angle, or "
+            f"background to make the image more dynamic and editorial — avoid stiff "
+            f"standing posture. A slight change in stance, hand position, or head tilt "
+            f"is welcome if it adds natural energy. "
             f"Images 2-{len(pass2_images)} are reference cutouts of accessories to ADD or REFINE: "
             f"{'; '.join(accessory_hints)}. "
-            f"Accurately render these specific accessories onto the person in image 1. "
-            f"The overall scene, lighting, and background should remain consistent with image 1. "
-            f"Full-body fashion portrait, high quality, photorealistic."
+            f"Accurately render these specific accessories onto the person, matching "
+            f"the lighting and style of image 1. "
+            f"The output should feel like a natural, more polished evolution of image 1 "
+            f"— same person, same outfit, but more alive and editorial. "
+            f"Fashion editorial photography, high quality, photorealistic."
         )
 
         start2 = time.time()

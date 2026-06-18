@@ -5521,7 +5521,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 56,
+      "score": 36,
       "raw_score": 49,
       "breakdown": {
         "soft_constraints": 25,
@@ -6199,7 +6199,7 @@
       "_updated": "2026-06-17 23:02:42"
     },
     "japanese_city_boy": {
-      "score": 50,
+      "score": 30,
       "raw_score": 44,
       "breakdown": {
         "soft_constraints": 20,
@@ -6631,7 +6631,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 44,
+      "score": 9,
       "raw_score": 39,
       "breakdown": {
         "soft_constraints": 15,
@@ -10093,7 +10093,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 19,
+      "score": 5,
       "raw_score": 17,
       "breakdown": {
         "soft_constraints": 10,
@@ -13951,7 +13951,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 10,
+      "score": 5,
       "raw_score": 9,
       "breakdown": {
         "soft_constraints": 0,
@@ -14730,7 +14730,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 80,
+      "score": 50,
       "raw_score": 70,
       "breakdown": {
         "soft_constraints": 20,
@@ -15162,7 +15162,7 @@
       "_updated": "2026-06-17 23:02:42"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -15514,7 +15514,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -15941,7 +15941,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 85,
+      "score": 65,
       "raw_score": 75,
       "breakdown": {
         "soft_constraints": 25,
@@ -16138,6 +16138,8 @@
   },
   "_meta": {
     "last_rebuild": "2026-06-17 23:02:42",
-    "total_entries": 77
+    "total_entries": 77,
+    "last_feedback": "2026-06-18T10:08:30.367050",
+    "last_action": "japanese_city_boy+5 (8件)"
   }
 }

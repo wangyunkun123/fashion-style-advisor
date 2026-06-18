@@ -89,8 +89,12 @@ def apply_rating_feedback(outfit_dir, rating, feedback=None):
     ⭐ + 单品问题    → 特定单品 -15
     ⭐ + 场景不合适  → 单品不罚（记录偏好，后续避免该场景推此风格）
     """
-    if rating not in (1, 2, 3):
+    if rating not in (1, 2, 3, -1, -2, -3):
         return
+
+    # 评分逆转：负数表示取消之前的评分
+    sign = -1 if rating < 0 else 1
+    abs_rating = abs(rating)
 
     # 解析 outfit.md
     md_path = os.path.join(outfit_dir, 'outfit.md')
@@ -135,30 +139,35 @@ def apply_rating_feedback(outfit_dir, rating, feedback=None):
             cache['_meta']['last_action'] = log_msg
         return changed
 
-    if rating == 3:
-        # 满意 → 全面加分
-        n = adjust(item_ids, 5, f'{style_id}+5 ({len(item_ids)}件)')
+    if abs_rating == 3:
+        # 满意 → 全面加分（取消时则减分）
+        n = adjust(item_ids, sign * 5, f'{style_id}{"+" if sign>0 else "-"}5 ({len(item_ids)}件)')
 
-    elif rating == 1:
+    elif abs_rating == 1:
         reason = (feedback or {}).get('reason', '') if feedback else ''
         detail = (feedback or {}).get('detail', '') if feedback else ''
+        banned = (feedback or {}).get('banned_items', []) if feedback else []
 
         if reason == 'style_mismatch':
             # 风格不喜欢 → 全面减分
-            adjust(item_ids, -10, f'{style_id} 风格不喜欢 -10')
+            adjust(item_ids, sign * -10, f'{style_id} 风格不喜欢 {"-" if sign>0 else "+"}10')
 
         elif reason == 'combo_dislike':
             # 搭配不满意 → 轻微减分
-            adjust(item_ids, -8, f'{style_id} 搭配不满意 -8')
+            adjust(item_ids, sign * -8, f'{style_id} 搭配不满意 {"-" if sign>0 else "+"}8')
 
         elif reason == 'item_issue':
-            # 单品问题 → 从 detail 中提取特定 ID 重罚
-            bad_ids = re.findall(r'\b([A-Z]+-\d+)\b', detail)
-            if bad_ids:
-                adjust(bad_ids, -15, f'单品问题 -15: {bad_ids}')
+            # 精准禁用：优先使用 banned_items 数组
+            if banned and isinstance(banned, list):
+                adjust(banned, sign * -15, f'单品问题 {"-" if sign>0 else "+"}15: {banned}')
             else:
-                # 没找到具体 ID，回退到减所有
-                adjust(item_ids, -10, f'{style_id} 单品问题(无具体ID) -10')
+                # 回退到从 detail 中提取 ID
+                bad_ids = re.findall(r'\b([A-Z]+-\d+)\b', detail)
+                if bad_ids:
+                    adjust(bad_ids, sign * -15, f'单品问题 {"-" if sign>0 else "+"}15: {bad_ids}')
+                else:
+                    # 没找到具体 ID，回退到减所有
+                    adjust(item_ids, sign * -10, f'{style_id} 单品问题(无具体ID) {"-" if sign>0 else "+"}10')
 
         elif reason == 'scene_mismatch':
             # 场景不合适 → 不罚单品，记录偏好

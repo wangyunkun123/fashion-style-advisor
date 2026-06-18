@@ -451,6 +451,13 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
+/* Rationale */
+.rationale-box{{padding-top:10px;border-top:1px solid var(--border)}}
+.rationale-box .ra-title{{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px}}
+.rationale-box .ra-text{{font-size:12px;color:var(--text);line-height:1.75}}
+.rationale-tips{{margin-top:8px;display:flex;flex-direction:column;gap:3px}}
+.rationale-tips .rt-item{{font-size:11px;color:var(--sub);line-height:1.6;padding-left:12px;position:relative}}
+.rt-dot{{position:absolute;left:0;top:5px;width:5px;height:5px;border-radius:50%;background:var(--navy)}}
 
 /* Hero item grid — 2 cols */
 .hero-item-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}}

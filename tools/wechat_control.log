@@ -1716,3 +1716,9 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [01:29:52] [INFO] 💬 面板: http://localhost:8765/
 [01:29:52] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
 [01:29:52] [INFO] 📤 已推送上线通知
+[01:32:29] [INFO] =======================================================
+[01:32:29] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:32:29] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:32:29] [INFO] 💬 面板: http://localhost:8765/
+[01:32:29] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[01:32:29] [INFO] 📤 已推送上线通知

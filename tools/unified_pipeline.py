@@ -277,6 +277,7 @@ def get_photo_direction(style_ids):
         f"  姿势: {d.get('pose', 'walking mid-stride, natural movement')}\n"
         f"  场景: {d.get('scene', 'modern urban street, soft afternoon light')}\n"
         f"  情绪: {d.get('vibe', 'editorial fashion photography, candid energy')}\n"
+        f"  表情: natural relaxed expression, slight smile or soft neutral, not stiff editorial blank stare\n"
         f"  ⚠️ 这些参数要融入 seedream_prompt，但不要逐字复制，要自然改写。\n"
         f"  ⚠️ 姿势必须动态（禁止 standing），场景必须具体有辨识度。"
     )
@@ -1014,7 +1015,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
   "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
   "dressing_tips": ["穿搭技巧1：具体可操作的建议，如裤脚怎么挽、T恤怎么塞、鞋带怎么系等，基于所选单品特征", "穿搭技巧2（可选，数组长度1-2）"],
-  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
 }}
 
 注意：
@@ -1913,7 +1914,7 @@ def build_narrative_prompt(selected_items, target_styles, style_hint, occasion,
   "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述",
   "rationale": "推荐理由（100-200字）：消费者视角一段话，场景/风格/体型/单品角度，自然口语化",
   "dressing_tips": ["穿搭技巧1：具体可操作建议，基于单品特征", "穿搭技巧2（可选）"],
-  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)。必须融合📷摄影指导中的相机/构图/光影/姿势/场景/情绪，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)。"
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)。必须融合📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。"
 }}"""
 
     # ── 注入第一轮的颜色故事和廓形 ──

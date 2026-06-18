@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Build mobile-v2.html prototype with proper icons from icon library"""
-import re, os, json, time, random, subprocess
+import re, os, json, time, subprocess
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(BASE, '..')
 OUTFITS_DIR = os.path.join(PROJ, 'outfits')
+
+# 标签质量过滤器 — 去除日期/指令类噪音
+JUNK_PATTERNS = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
+                 r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
 
 # CDN base for fast mobile image loading (jsDelivr)
 _CDN_COMMIT = ''
@@ -226,13 +230,9 @@ ico = {
 
 # ── Add page icons ──
 add_icons = {
-    'camera_icon': lu('camera'),        # segmented tab icon
-    'upload_icon': lu('upload'),        # segmented tab icon
-    'camera_lg_icon': lu('camera'),     # large camera icon
+    'camera_lg_icon': lu('camera'),     # camera icon
     'image_icon': lu('image'),          # album/image icon
-    'file_icon': lu('folder-open'),     # file picker icon
-    'construction_icon': lu('construction'),  # under construction
-    'lock_icon': lu('lock'),                # privacy lock
+    'lock_icon': lu('lock'),            # privacy lock
 }
 
 # ── Rating UI icons ──
@@ -347,18 +347,6 @@ def split_brand_desc(name):
             desc = name.replace(b, '').strip()
             return (b, desc)
     return ('', name)
-
-def build_hero_item_card(icon_svg, iid, name, cat='', thumb=''):
-    """Build a compact hero item card (brand + desc on two lines)"""
-    brand, desc = split_brand_desc(name)
-    thumb_html = ''
-    if thumb:
-        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(cdn_url(thumb))
-    ico = '<span class="item-emoji">{}</span>'.format(icon_svg) if icon_svg else ''
-    bid = '<span class="ir-id">{}</span>'.format(iid)
-    brand_html = '<span class="ir-brand">{}</span>'.format(brand) if brand else ''
-    desc_html = '<span class="ir-desc">{}</span>'.format(desc if desc else name[:18])
-    return '<div class="hero-item">{}{}{}{}{}</div>'.format(ico, bid, brand_html, desc_html, thumb_html)
 
 def mini_card(style_name, all_items):
     # Show first 3 items collapsed, rest in detail
@@ -1472,9 +1460,7 @@ def extract_tags(outfit):
                     if kw and len(kw)>=2 and kw not in tags:
                         tags.append(kw[:8])
         # Basic junk filter: clear obviously bad tags so next strategies can contribute
-        junk_patterns = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
-                         r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
-        tags = [t for t in tags if not any(re.search(pat, t) for pat in junk_patterns)]
+        tags = [t for t in tags if not any(re.search(pat, t) for pat in JUNK_PATTERNS)]
         # Strategy 2.5: 从风格百科缓存查关键词
         if not tags:
             style_name = outfit.get('style','')
@@ -1506,9 +1492,7 @@ def extract_tags(outfit):
                 combined = combined.replace(sep, ' ')
             tags = [w.strip()[:8] for w in combined.split() if len(w.strip())>=2][:4]
     # Quality filter: remove junk tags
-    junk_patterns = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
-                     r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
-    tags = [t for t in tags if not any(re.search(pat, t) for pat in junk_patterns)]
+    tags = [t for t in tags if not any(re.search(pat, t) for pat in JUNK_PATTERNS)]
     # Also remove style name clones
     style_clean = outfit.get('style','').lower().replace(' ','').replace('-','').replace('_','')
     tags = [t for t in tags if not (t.strip().lower().replace(" ","").replace("-","").replace("_","") in style_clean or style_clean in t.strip().lower().replace(" ","").replace("-","").replace("_","") or len(t.strip().lower().replace(" ","").replace("-","").replace("_","")) < 2)]
@@ -1641,9 +1625,7 @@ html = html.format(
     hero_outfit_id=hero_outfit_id, hero_star_html=hero_star_html, cancel_visible=cancel_visible,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,
-    camera_icon=add_icons['camera_icon'], upload_icon=add_icons['upload_icon'],
     camera_lg_icon=add_icons['camera_lg_icon'], image_icon=add_icons['image_icon'],
-    file_icon=add_icons['file_icon'], construction_icon=add_icons['construction_icon'],
     lock_icon=add_icons['lock_icon'],
 )
 

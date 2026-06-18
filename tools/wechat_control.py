@@ -79,13 +79,6 @@ CATEGORY_MAP = {
 }
 
 # ── 品类代码 → 中文名 ──────────────────────────────────
-CATEGORY_NAMES = {
-    'TS': 'T恤/短袖', 'LS': '长袖上衣', 'SHIRT': '衬衫', 'TANK': '背心',
-    'JK': '外套/夹克', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
-    'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '太阳镜', 'ACC': '配饰',
-}
-
-# ── 品类代码 → CATEGORY_MAP 中文名（用于入库）──
 CATEGORY_CODE_TO_NAME = {
     'TS': '短袖上衣', 'LS': '长袖上衣', 'SHIRT': '衬衣', 'TANK': '背心',
     'JK': '外套', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
@@ -1728,47 +1721,6 @@ style: {plan.get('style', style_hint)}
     log(f"✅ 穿搭方案已创建: {outfit_dir}")
     return outfit_dir
 
-OUTFIT_SYSTEM_PROMPT = """你是一位专攻亚洲男性穿搭的 AI 时尚顾问。用户会提供完整衣柜档案和场景需求，你需要推荐一套全新穿搭方案。
-
-要求：
-1. 仔细分析场景需求（运动/休闲/通勤/约会等），衣柜表格有「适用场景」列标注每件单品的场景用途，优先匹配
-2. **避开最近已穿单品**：prompt 中会列出 📌 最近已穿的核心单品，必须至少换掉上衣/下装/鞋子中的两件，给出有新鲜感的搭配
-3. 所有单品 ID 必须从上方衣柜清单中选取，严禁编造不存在的 ID
-4. 考虑颜色搭配、风格统一、体型修饰
-5. 输出严格的 JSON 格式，不要包含任何其他文字
-
-输出 JSON 格式：
-{
-  "weather_note": "天气描述",
-  "style": "风格标签",
-  "items": [
-    {"category": "上衣", "id": "TS-xxx", "name": "单品描述", "color": "颜色"}
-  ],
-  "reasoning": "搭配理由（100-200字）",
-  "color_logic": "配色逻辑",
-  "keywords": "3-6个风格特征词，用顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。这是穿搭标签，不是用户指令，必须提取风格本身的美学特征",
-  "seedream_prompt": "英文 Seedream 生图提示词。必须包含以下7个维度，用逗号连接成一段自然的摄影指导（200-350字符）。禁止模板感，每次都要有变化：\n\n1.📷 摄影风格: 指定相机型号和镜头（如 Fujifilm X-T5 35mm f/1.4 / Leica M6 50mm / Sony A7IV 85mm f/1.4），加上摄影风格标签（fashion editorial photography / lookbook style / street style candid / cinematic portrait / photojournalism style）\n2.🎬 构图角度: ⚠️ 必须为全身照(full body head-to-toe)，鞋子必须完整可见不被裁切！从以下随机选一个并创造性地变体—— low angle from knee height making subject look taller and showing shoes prominently / eye-level full body shot head to toe with direct eye contact / slightly elevated angle with sky background full body / rule of thirds off-center composition showing entire outfit / wide shot showing full environment and full body / dynamic action shot full body with feet visible\n3.✨ 光影气氛: 从以下随机选一个—— golden hour backlight with warm rim light on shoulders / overcast soft diffused light with even skin tones / late afternoon side light with long dramatic shadows / morning crisp light with clean blue sky bounce / dappled tree-filtered sunlight creating patchy light patterns / dusk ambient with warm street lamp glow\n4.🏃 动态姿势: ⚠️ 根据场景选择一个自然动态姿势，严禁使用\"standing\"一词！必须是在做某事—— walking mid-stride towards camera / leaning against textured wall with arms crossed / sitting on concrete ledge elbows on knees / looking back over shoulder mid-laugh / checking phone while walking absorbed in screen / adjusting hat/collar casually / mid-motion athletic action / crouching tying shoelace candid moment / crossing street with wind in hair\n5.👔 服装细节: 除了列出每件单品（颜色、面料、版型），还要描述它们如何随姿势自然呈现—— 如\"oversized tee draping loosely with movement\" / \"jeans creasing naturally at knees while walking\" / \"canvas shoes scuffing slightly on pavement\" / \"jacket billowing slightly in breeze\"\n6.🏙️ 场景环境: ⚠️ 禁止只用\"Beijing street\"！必须根据风格选择具体有辨识度的地点—— quiet Daikanyama residential street with minimal architecture / Shanghai French Concession plane tree avenue / Beijing hutong alley with grey brick walls and bicycles / Seoul Hongdae street art alley with colorful murals / modern glass office building lobby with polished concrete / rooftop terrace overlooking city skyline / outdoor tennis court with blue surface / park bench under large oak tree with dappled light / minimal cafe outdoor wooden deck with potted plants\n7.😊 情绪故事感: 选一个—— effortlessly cool candid caught off-guard / quiet contemplative moment looking out of frame / genuine joyful laugh mid-conversation / editorial sophistication sharp and clean / playful dynamic energy caught mid-motion / cinematic still like a movie frame / relaxed weekend ease nothing-to-do-today vibe\n\n禁止事项：\n❌ 严禁使用\"standing\"或\"standing casually\"（呆板站立）\n❌ 严禁只写\"high-quality portrait\"而无摄影参数\n❌ 严禁场景只写\"Beijing street\"\n❌ 严禁姿势和情绪留空\n❌ 严禁套用固定模板，每次必须有变化\\n❌ 严禁半身/腰部以上构图（必须全身从头到脚 full body shot，鞋子完整可见）\n❌ 严禁在 seedream_prompt 中描述 items 列表之外的任何服装单品！例如 items 只有 tee+jeans+sneakers 就绝不能出现 jacket/coat/vest/hat/bag 等未选单品，一件不多一件不少严格对应\n\n完整示例（模仿这种自然摄影指导的语气，但每次内容要不同）：\n\"Fashion editorial lookbook, shot on Fujifilm X-T5 35mm f/1.4, shallow depth of field with creamy bokeh. Low angle from knee height, rule of thirds composition. Golden hour backlight creating warm rim light on shoulders, sun-kissed skin. Walking confidently toward camera, mid-stride, one hand casually in jeans pocket, slight natural smile looking slightly off-frame. Oversized caramel tee draping loosely with movement, gray-blue jeans creasing naturally at knees. Background: quiet Daikanyama residential street, clean minimal architecture, soft afternoon shadows. Effortlessly cool candid energy, caught mid-motion, editorial street style.\""
-}
-
-注意：
-- 每套穿搭必须包含：上衣、下装、鞋子（三者缺一不可，这是硬性要求）
-- 帽子、包、袜子、墨镜、配饰等根据场景酌情添加
-- ACC-003 是 Apple Watch 表带套组（含米兰尼斯/回环/运动三款表带），推荐时需指定使用哪款表带
-- seedream_prompt 必须是英文，200-350字符，严格遵循7维度和禁止事项
-- ⚠️ seedream_prompt 描述的服装必须严格等于 items 列表，严禁添加列表外的任何单品（哪怕 reasoning 中提到了也不行）
-- 除用户明确标记为「一星差评禁用」的单品外，所有单品均可自由选用，同一单品可以出现在不同风格的穿搭中
-- ⚠️ 场景匹配：运动场景（网球/跑步/健身）必须选功能运动鞋/跑鞋/网球鞋，不可选工装靴、帆布鞋、拖鞋、亚麻裤等非运动单品"""
-
-
-def _detect_bline_from_hint(style_hint):
-    """从 style_hint 检测 B线触发词"""
-    try:
-        from style_lab import detect_bline_trigger
-        return detect_bline_trigger(style_hint)
-    except ImportError:
-        return False, False
-
-
 def extract_occasion(style_hint):
     """从用户输入中提取场合/场景关键词，返回 (occasion, weather_note)"""
     hint = style_hint or ''
@@ -2283,14 +2235,10 @@ def _handle_favorites(handler):
 
 def get_cdn_url(rel_path):
     """构建 jsDelivr CDN URL"""
-    try:
-        h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True,
-                     text=True, cwd=PROJECT_DIR).stdout.strip()
-        if h:
-            import urllib.parse
-            return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{urllib.parse.quote(rel_path, safe="/")}'
-    except:
-        pass
+    h = _get_git_commit()
+    if h:
+        import urllib.parse
+        return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{urllib.parse.quote(rel_path, safe="/")}'
     return ''
 
 
@@ -2601,7 +2549,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     items.append({
                         'id': cid,
                         'name': meta.get('claude_fit_comment', item.get('category', ''))[:40],
-                        'category': CATEGORY_NAMES.get(cat_code, cat_code),
+                        'category': CATEGORY_CODE_TO_NAME.get(cat_code, cat_code),
                         'category_code': cat_code,
                         'brand': brand.get('name', ''),
                         'color': color.get('hue_name', ''),
@@ -2724,7 +2672,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 cat_gaps = {}
                 for code, g in gaps.items():
                     cat_gaps[code] = {
-                        'name': CATEGORY_NAMES.get(code, code),
+                        'name': CATEGORY_CODE_TO_NAME.get(code, code),
                         'actual': g['actual'],
                         'ideal_lo': g['ideal'][0],
                         'ideal_hi': g['ideal'][1],

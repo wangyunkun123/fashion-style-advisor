@@ -30,8 +30,7 @@ import os
 import re
 import sys
 import time
-import urllib.request
-from datetime import datetime, timedelta
+from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.dirname(BASE_DIR)
@@ -42,10 +41,8 @@ CONFIG_DIR = os.path.join(PROJ_DIR, 'config')
 STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
 OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
 CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
-RULES_FILE = os.path.join(CONFIG_DIR, 'recommendation_rules.json')
 SCENE_FILE = os.path.join(CONFIG_DIR, 'scene_profiles.json')
 STRATEGIES_FILE = os.path.join(CONFIG_DIR, 'explore_strategies.json')
-DEFAULTS_FILE = os.path.join(CONFIG_DIR, 'style_defaults.json')
 LAB_STATE_FILE = os.path.join(CONFIG_DIR, 'style_lab_state.json')
 
 # ── 品类映射 ──
@@ -319,20 +316,12 @@ def load_score_cache():
     return load_json(CACHE_FILE)
 
 
-def load_rules():
-    return load_json(RULES_FILE)
-
-
 def load_scene_profiles():
     return load_json(SCENE_FILE)
 
 
 def load_strategies():
     return load_json(STRATEGIES_FILE)
-
-
-def load_style_defaults():
-    return load_json(DEFAULTS_FILE)
 
 
 def load_style_fingerprint(style_id):
@@ -1001,8 +990,6 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         target_styles, occasion, recent_outfits, banned_items, wear_counts
     )
 
-    # ── 9. 加载推荐规则的质量检查清单 ──
-    rules = load_rules()
     # ── 0.5. 用户形象描述（从 config/user_profile.json 动态读取）──
     persona_desc, persona_modifier, persona_context = _get_persona_description()
 

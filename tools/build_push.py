@@ -16,6 +16,9 @@ STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
 TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
 CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 
+# 备用风格推荐列表（当 style_lab 不可用时使用）
+ALT_STYLES = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
+
 # jsDelivr base（动态获取最新 commit hash，绕过 CDN 缓存）
 def _get_cdn_base():
     try:
@@ -548,13 +551,11 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         else:
             # 降级：硬编码备用
             base = get_push_base_url()
-            alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-            alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
+            alt_names = [f"[{n}]({base}/try/{i})" for i,n in ALT_STYLES if i != style_id]
             parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
     else:
         base = get_push_base_url()
-        alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
-        alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
+        alt_names = [f"[{n}]({base}/try/{i})" for i,n in ALT_STYLES if i != style_id]
         parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
     # ━━━ 状态更新（统一管线）━━━

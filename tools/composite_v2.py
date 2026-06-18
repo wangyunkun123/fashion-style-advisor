@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 """穿搭排版 v2 方案1 — ACOC Lookbook 直角网格风"""
-import os, sys, re, glob, math, json, base64, urllib.request, io
-from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
+import os, sys, re, math, json
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTFIT_BASE = os.path.join(BASE_DIR, '..', 'outfits')
 WARDROBE_ENHANCED = os.path.join(BASE_DIR, '..', 'wardrobe', 'enhanced')
-CONFIG_FILE = os.path.join(BASE_DIR, '..', 'config', 'seedream.local.json')
-def _get_ark_key():
-    if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, 'r') as f:
-            return json.load(f).get('api_key', '')
-    return os.environ.get('ARK_API_KEY', '')
 
 BASE_DIR_FONTS = os.path.dirname(os.path.abspath(__file__))
 FONTS = {
@@ -255,30 +249,6 @@ def parse_style_info(outfit_dir):
     return notes[:5]
 
 
-def wrap_text(text, font, max_width):
-    """中文换行：标点处优先断，行首不留标点"""
-    PUNCT = '，,.。、：；！？'
-    lines = []
-    line = ''
-    for ch in text:
-        test = line + ch
-        if font.getbbox(test)[2] <= max_width:
-            line = test
-        else:
-            if line:
-                cut = len(line)
-                for p in PUNCT:
-                    idx = line.rfind(p, max(0, len(line)-10))
-                    if idx > 0 and font.getbbox(line[:idx+1])[2] <= max_width:
-                        cut = min(cut, idx+1)
-                lines.append(line[:cut])
-                rest = line[cut:].lstrip(PUNCT)
-                line = rest
-            if ch not in PUNCT:
-                line += ch
-    if line.strip():
-        lines.append(line)
-    return lines
 def composite(ai_path,items,output_path):
     ai_img=Image.open(ai_path).convert('RGB'); ai_w,ai_h=ai_img.size
     dd=os.path.join(os.path.dirname(ai_path),'..','items')

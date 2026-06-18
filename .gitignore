@@ -26,8 +26,9 @@ venv/
 *.local.json
 config/seedream.local.json
 
-# 自动生成的增强图片（可重新生成）
-wardrobe/enhanced/
+# 自动生成的增强图片（仅忽略大体积抠图，缩略图入库）
+wardrobe/enhanced/*_cutout.png
+!wardrobe/enhanced/*_cutout_thumb.png
 
 # Claude
 .claude/

@@ -551,7 +551,7 @@ def match_scene_profile(outfit_items, occasion='日常'):
             score -= 20
 
     return max(0, min(100, score + 30))
-from tools.common import load_all_clothing
+from tools.common import load_all_clothing, load_encyclopedia
 
 
 def load_all_styles():
@@ -680,47 +680,6 @@ def load_all_ratings():
         except:
             pass
     return ratings
-
-
-def load_encyclopedia(style_id):
-    """加载百科数据（复用 build_push 模式）"""
-    path = os.path.join(STYLES_UNI_DIR, style_id, 'encyclopedia.md')
-    if not os.path.exists(path):
-        return None
-    with open(path, 'r', encoding='utf-8') as f:
-        text = f.read()
-
-    one_liner = ''
-    for line in text.split('\n'):
-        if '一句话定义' in line:
-            m = re.search(r'[：:]\s*(.+)', line)
-            if m:
-                one_liner = m.group(1).strip()
-            break
-
-    origin = ''
-    in_origin = False
-    for line in text.split('\n'):
-        if '### 起源' in line or '## 📜' in line:
-            in_origin = True
-            continue
-        if in_origin and line.strip() and not line.startswith('#') and not line.startswith('>'):
-            candidate = line.strip().lstrip('- ').strip()
-            if len(candidate) > 30:
-                origin = candidate[:140] + '...' if len(candidate) > 140 else candidate
-                break
-
-    quote = ''
-    for line in text.split('\n'):
-        if line.strip().startswith('>') and len(line) > 20:
-            quote = line.strip().lstrip('> ').strip()
-            if '：' in quote or '——' in quote or '"' in quote:
-                break
-
-    return {
-        'one_liner': one_liner, 'origin': origin, 'quote': quote,
-        'encyclopedia_url': f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
-    }
 
 
 def load_defaults_config():

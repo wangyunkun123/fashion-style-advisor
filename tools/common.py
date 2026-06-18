@@ -68,3 +68,84 @@ def load_style_fingerprint(style_id):
         return {}
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
+
+
+STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
+CDN_BASE = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
+
+
+def load_encyclopedia(style_id):
+    """从百科中提取冷知识、名人、品牌信息"""
+    path = os.path.join(STYLES_UNI_DIR, style_id, 'encyclopedia.md')
+    if not os.path.exists(path):
+        return None
+    with open(path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    # 一句话定义
+    one_liner = ''
+    for line in text.split('\n'):
+        if '一句话定义' in line:
+            m = re.search(r'[：:]\s*(.+)', line)
+            if m:
+                one_liner = m.group(1).strip()
+            break
+
+    # 起源/冷知识
+    origin = ''
+    in_origin = False
+    for line in text.split('\n'):
+        if '### 起源' in line or '## 📜' in line:
+            in_origin = True
+            continue
+        if in_origin and line.strip() and not line.startswith('#') and not line.startswith('>'):
+            candidate = line.strip().lstrip('- ').strip()
+            if len(candidate) > 30:
+                origin = candidate[:140] + '...' if len(candidate) > 140 else candidate
+                break
+
+    # 名人引用
+    quote = ''
+    for line in text.split('\n'):
+        if line.strip().startswith('>') and len(line) > 20:
+            quote = line.strip().lstrip('> ').strip()
+            if '：' in quote or '——' in quote or '"' in quote:
+                break
+
+    # 品牌代表（前3个）
+    brands = []
+    in_brands = False
+    for line in text.split('\n'):
+        if '## 🏷️' in line or '代表品牌' in line:
+            in_brands = True
+            continue
+        if in_brands and line.startswith('##'):
+            break
+        if in_brands:
+            m = re.match(r'^- \*\*(.+?)\*\*.*?[—]\s*(.+)$', line)
+            if m:
+                brands.append({'name': m.group(1).strip(), 'desc': m.group(2).strip()[:60]})
+            if len(brands) >= 3:
+                break
+
+    # 风格偶像（前2个）
+    icons = []
+    in_icons = False
+    for line in text.split('\n'):
+        if '## 👤' in line or '风格偶像' in line:
+            in_icons = True
+            continue
+        if in_icons and line.startswith('##'):
+            break
+        if in_icons:
+            m = re.match(r'^\|\s*\*\*(.+?)\*\*\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|', line)
+            if m:
+                icons.append({'name': m.group(1).strip(), 'role': m.group(2).strip(), 'why': m.group(3).strip()[:60]})
+            if len(icons) >= 2:
+                break
+
+    return {
+        'one_liner': one_liner, 'origin': origin, 'quote': quote,
+        'brands': brands, 'icons': icons,
+        'encyclopedia_url': f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
+    }

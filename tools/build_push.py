@@ -62,7 +62,7 @@ except ImportError:
     UNIFIED_AVAILABLE = False
 
 # 共享函数
-from tools.common import load_style_fingerprint, load_all_clothing
+from tools.common import load_style_fingerprint, load_all_clothing, load_encyclopedia
 
 # 风格实验室（保留 generate_alt_section 用于"今天也适合"）
 try:
@@ -78,86 +78,6 @@ except ImportError:
 # ============================================================
 # 1. 内容提取
 # ============================================================
-
-def load_encyclopedia(style_id):
-    """从百科中提取冷知识、名人、品牌信息"""
-    path = os.path.join(STYLES_UNI_DIR, style_id, 'encyclopedia.md')
-    if not os.path.exists(path):
-        return None
-    with open(path, 'r', encoding='utf-8') as f:
-        text = f.read()
-
-    # 提取一句话定义
-    one_liner = ''
-    for line in text.split('\n'):
-        if '一句话定义' in line:
-            m = re.search(r'[：:]\s*(.+)', line)
-            if m:
-                one_liner = m.group(1).strip()
-            break
-
-    # 提取趣味冷知识（截短到适合推送）
-    origin = ''
-    in_origin = False
-    for line in text.split('\n'):
-        if '### 起源' in line or '## 📜' in line:
-            in_origin = True
-            continue
-        if in_origin and line.strip() and not line.startswith('#') and not line.startswith('>'):
-            candidate = line.strip().lstrip('- ').strip()
-            if len(candidate) > 30:
-                if len(candidate) > 140:
-                    origin = candidate[:140] + '...'
-                else:
-                    origin = candidate
-                break
-
-    # 提取名人引用
-    quote = ''
-    for line in text.split('\n'):
-        if line.strip().startswith('>') and len(line) > 20:
-            quote = line.strip().lstrip('> ').strip()
-            if '：' in quote or '——' in quote or '"' in quote:
-                break
-
-    # 提取品牌代表（从品牌章节取前3个核心品牌）
-    brands = []
-    in_brands = False
-    for line in text.split('\n'):
-        if '## 🏷️' in line or '代表品牌' in line:
-            in_brands = True
-            continue
-        if in_brands and line.startswith('##'):
-            break
-        if in_brands:
-            m = re.match(r'^- \*\*(.+?)\*\*.*?[—]\s*(.+)$', line)
-            if m:
-                brands.append({'name': m.group(1).strip(), 'desc': m.group(2).strip()[:60]})
-            if len(brands) >= 3:
-                break
-
-    # 提取风格偶像（取前2个）
-    icons = []
-    in_icons = False
-    for line in text.split('\n'):
-        if '## 👤' in line or '风格偶像' in line:
-            in_icons = True
-            continue
-        if in_icons and line.startswith('##'):
-            break
-        if in_icons:
-            m = re.match(r'^\|\s*\*\*(.+?)\*\*\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|', line)
-            if m:
-                icons.append({'name': m.group(1).strip(), 'role': m.group(2).strip(), 'why': m.group(3).strip()[:60]})
-            if len(icons) >= 2:
-                break
-
-    return {
-        'one_liner': one_liner, 'origin': origin, 'quote': quote,
-        'brands': brands, 'icons': icons,
-        'encyclopedia_url': f'https://htmlpreview.github.io/?{CDN_BASE}/styles_universal/{style_id}/encyclopedia.html',
-    }
-
 
 def load_outfit_data(outfit_dir):
     """解析穿搭目录"""

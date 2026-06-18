@@ -11,6 +11,7 @@
 启动: bash tools/start_wechat_control.sh
 """
 
+import io
 import json
 import os
 import re
@@ -91,10 +92,45 @@ CATEGORY_CODE_TO_NAME = {
     'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '墨镜', 'ACC': '手部配饰',
 }
 
+def _get_git_commit():
+    """获取当前 Git commit hash（缓存）"""
+    if not hasattr(_get_git_commit, '_cache'):
+        try:
+            r = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                              capture_output=True, text=True, cwd=PROJECT_DIR, timeout=5)
+            _get_git_commit._cache = r.stdout.strip()
+        except Exception:
+            _get_git_commit._cache = 'main'
+    return _get_git_commit._cache
+
 def _find_item_thumb(clothing_id):
-    """查找单品抠图缩略图路径（优先 items/ 目录，其次 wardrobe/enhanced/）"""
+    """查找单品缩略图（优先抠图缩略 > 抠图大图 > 原图缩略，兜底 outfit items/）
+    返回相对路径 + ?v=mtime"""
     import glob as _glob, os as _os
-    # Search in all outfit items/ dirs first (newest first)
+    enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+    if _os.path.exists(enhanced_dir):
+        # Priority 1: cutout thumbnails (抠图小缩略，CDN 友好)
+        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout_thumb*')
+        matches = _glob.glob(pattern)
+        if matches:
+            p = _os.path.relpath(matches[0], PROJECT_DIR)
+            mtime = int(_os.path.getmtime(matches[0]))
+            return f'{p}?v={mtime}'
+        # Priority 2: regular thumbnails (原图缩略)
+        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_thumb.*')
+        matches = _glob.glob(pattern)
+        if matches:
+            p = _os.path.relpath(matches[0], PROJECT_DIR)
+            mtime = int(_os.path.getmtime(matches[0]))
+            return f'{p}?v={mtime}'
+        # Priority 3: full-size cutout files
+        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout.png')
+        matches = _glob.glob(pattern)
+        if matches:
+            p = _os.path.relpath(matches[0], PROJECT_DIR)
+            mtime = int(_os.path.getmtime(matches[0]))
+            return f'{p}?v={mtime}'
+    # Fallback: Search in all outfit items/ dirs (newest first)
     outfits_dir = _os.path.join(PROJECT_DIR, 'outfits')
     if _os.path.exists(outfits_dir):
         for d in sorted(_os.listdir(outfits_dir), reverse=True):
@@ -108,18 +144,29 @@ def _find_item_thumb(clothing_id):
                 p = _os.path.relpath(matches[0], PROJECT_DIR)
                 mtime = int(_os.path.getmtime(matches[0]))
                 return f'{p}?v={mtime}'
-    # Fallback to wardrobe/enhanced/ — try cutout first, then thumb
+    return ''
+
+def _find_item_cutout(clothing_id):
+    """查找单品大图（抠图），用于详情弹窗 hero 展示"""
+    import glob as _glob, os as _os
+    # Priority: outfit items/ dirs (newest first, already resized for display)
+    outfits_dir = _os.path.join(PROJECT_DIR, 'outfits')
+    if _os.path.exists(outfits_dir):
+        for d in sorted(_os.listdir(outfits_dir), reverse=True):
+            dp = _os.path.join(outfits_dir, d)
+            if not _os.path.isdir(dp): continue
+            items_dir = _os.path.join(dp, 'items')
+            if not _os.path.exists(items_dir): continue
+            pattern = _os.path.join(items_dir, f'{clothing_id}_*cutout*')
+            matches = _glob.glob(pattern)
+            if matches:
+                p = _os.path.relpath(matches[0], PROJECT_DIR)
+                mtime = int(_os.path.getmtime(matches[0]))
+                return f'{p}?v={mtime}'
+    # Fallback: wardrobe/enhanced/ cutout
     enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
     if _os.path.exists(enhanced_dir):
-        # Priority 1: cutout files
         pattern = _os.path.join(enhanced_dir, f'{clothing_id}_*cutout*')
-        matches = _glob.glob(pattern)
-        if matches:
-            p = _os.path.relpath(matches[0], PROJECT_DIR)
-            mtime = int(_os.path.getmtime(matches[0]))
-            return f'{p}?v={mtime}'
-        # Priority 2: generated thumbnails
-        pattern = _os.path.join(enhanced_dir, f'{clothing_id}_thumb.*')
         matches = _glob.glob(pattern)
         if matches:
             p = _os.path.relpath(matches[0], PROJECT_DIR)
@@ -1880,10 +1927,12 @@ def execute_action(action, extra, task_id=None):
     return "❌ 未知错误"
 
 def _style_has_image(style_id):
-    """检查风格是否有代表性图片"""
+    """检查风格是否有代表性图片，返回 CDN URL"""
     img_path = os.path.join(PROJECT_DIR, 'styles_universal', style_id, 'representative.jpg')
     if os.path.exists(img_path):
-        return f'/api/image?f=styles_universal/{style_id}/representative.jpg'
+        rel = f'styles_universal/{style_id}/representative.jpg'
+        commit = _get_git_commit()
+        return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{rel}'
     return None
 
 def _load_style_cards(include_universal=False, with_top_items=False):
@@ -1917,14 +1966,13 @@ def _load_style_cards(include_universal=False, with_top_items=False):
                         from style_matcher import rank_items_for_style
                         top = rank_items_for_style(sid, top_n=8, min_score=10)
                         def _thumb_url(cid):
-                            cutout = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{cid}_cutout.png')
-                            if os.path.exists(cutout):
-                                return f'/api/image?f=wardrobe/enhanced/{cid}_cutout.png'
-                            # fallback to items directory
-                            items_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'items')
-                            for fn in os.listdir(items_dir) if os.path.isdir(items_dir) else []:
-                                if fn.startswith(cid) and fn.lower().endswith(('.png','.jpg','.jpeg')):
-                                    return f'/api/image?f=wardrobe/items/{fn}'
+                            # Use CDN-friendly thumb path (same as wardrobe list)
+                            rel = _find_item_thumb(cid)
+                            if rel:
+                                # _find_item_thumb returns 'path?v=mtime', strip v= for CDN
+                                path = rel.split('?')[0]
+                                commit = _get_git_commit()
+                                return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{path}'
                             return ''
                         card['top_items'] = [
                             {'clothing_id': t['clothing_id'], 'category_code': t.get('category', '')[:4],
@@ -2285,12 +2333,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             ct = mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
             with open(file_abs, 'rb') as f:
                 data = f.read()
-            self.send_response(200)
-            self.send_header('Content-Type', ct)
-            self.send_header('Content-Length', str(len(data)))
-            self.send_header('Cache-Control', 'public, max-age=300')
-            self.end_headers()
-            self.wfile.write(data)
+            self._send_body(200, data, ct, {'Cache-Control': 'public, max-age=300'})
             return
 
         # 日志查看（纯文本，可 curl）
@@ -2367,7 +2410,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             try:
                 with open(tag_path, 'r', encoding='utf-8') as f:
                     tag_data = json.load(f)
-                tag_data['_thumb'] = _find_item_thumb(cid)
+                # Detail modal: prefer cutout for full-size display
+                tag_data['_thumb'] = _find_item_cutout(cid) or _find_item_thumb(cid)
                 self._json_resp(200, tag_data)
                 return
             except Exception as e:
@@ -2764,8 +2808,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             ext = os.path.splitext(fp)[1].lower()
             mime = {'png':'image/png','jpg':'image/jpeg','jpeg':'image/jpeg','gif':'image/gif','svg':'image/svg+xml'}.get(ext,'application/octet-stream')
             with open(fp,'rb') as f: data = f.read()
-            self.send_response(200); self.send_header('Content-Type',mime); self.send_header('Content-Length',len(data)); self.end_headers()
-            self.wfile.write(data)
+            self._send_body(200, data, mime, {'Cache-Control': 'public, max-age=3600'})
             return
 
         self._json_resp(404, {"error": "not found"})
@@ -3109,30 +3152,44 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         else:
             self._json_resp(404, {"error": "not found"})
 
+    def _maybe_gzip(self, body):
+        """如果客户端支持 gzip 则压缩，返回 (compressed_body, is_gzip)"""
+        accept = self.headers.get('Accept-Encoding', '')
+        if 'gzip' in accept and len(body) > 1024:
+            import gzip
+            buf = io.BytesIO()
+            with gzip.GzipFile(fileobj=buf, mode='wb', compresslevel=6) as f:
+                f.write(body)
+            return buf.getvalue(), True
+        return body, False
+
+    def _send_body(self, code, body, content_type, extra_headers=None):
+        """发送响应（自动 gzip 压缩）"""
+        compressed, is_gzip = self._maybe_gzip(body)
+        self.send_response(code)
+        self.send_header('Content-Type', content_type)
+        self.send_header('Content-Length', str(len(compressed)))
+        if is_gzip:
+            self.send_header('Content-Encoding', 'gzip')
+            self.send_header('Vary', 'Accept-Encoding')
+        if extra_headers:
+            for k, v in extra_headers.items():
+                self.send_header(k, v)
+        self.end_headers()
+        self.wfile.write(compressed)
+
     def _json_resp(self, code, data):
         body = json.dumps(data, ensure_ascii=False).encode('utf-8')
-        self.send_response(code)
-        self.send_header('Content-Type', 'application/json; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        self._send_body(code, body, 'application/json; charset=utf-8')
 
     def _html_resp(self, code, html):
         body = html.encode('utf-8')
-        self.send_response(code)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
-        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-        self.end_headers()
-        self.wfile.write(body)
+        self._send_body(code, body, 'text/html; charset=utf-8',
+                        {'Cache-Control': 'public, max-age=60, must-revalidate'})
 
     def _text_resp(self, code, text):
         body = text.encode('utf-8')
-        self.send_response(code)
-        self.send_header('Content-Type', 'text/plain; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        self._send_body(code, body, 'text/plain; charset=utf-8')
 
     def log_message(self, format, *args):
         pass  # 禁用默认HTTP日志，改用自定义log函数

@@ -336,34 +336,6 @@ def find_latest_composite(date_str=None):
 
 # get_banned_items / get_recent_outfit_items
 # 已迁移至 tools/common.py，通过 _get_banned_items / _get_recent_outfits 使用
-# 补充 CAT_EMOJI 模糊匹配键（format_outfit_summary 用部分关键词匹配）
-_CAT_EMOJI_EXTRA = {
-    '上衣': '👕', '内搭': '👕', 'T恤': '👕', '短袖': '👕', '长袖': '👕',
-    '衬衫': '👔', '下装': '👖', '裤子': '👖', '鞋': '👟', '外层': '🧥',
-    '外搭': '🧥', '夹克': '🧥', '手表': '⌚', '手串': '📿',
-}
-CAT_EMOJI = {**CAT_EMOJI, **_CAT_EMOJI_EXTRA}
-
-def format_outfit_summary(outfit_md_path):
-    """从 outfit.md 提取穿搭摘要"""
-    try:
-        with open(outfit_md_path, 'r') as f:
-            content = f.read()
-        items = re.findall(
-            r'^\|\s*([^|]+?)\s*\|\s*(?:\*\*)?(\w+-\d+)(?:\*\*)?\s*\|\s*([^|]+?)\s*(?:\||$)',
-            content, re.MULTILINE
-        )
-        lines = []
-        for cat, item_id, name in [(c.strip(), i, n.strip()) for c, i, n in items]:
-            emoji = ''
-            for key, val in CAT_EMOJI.items():
-                if key in cat:
-                    emoji = val
-                    break
-            lines.append(f"- {emoji} **{item_id}** {name}" if emoji else f"- **{item_id}** {name}")
-        return '\n'.join(lines) if lines else ''
-    except:
-        return ''
 
 # ── 衣柜解析 ──────────────────────────────────────────
 def parse_wardrobe():
@@ -1793,7 +1765,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
     # ── 预估 ──
     est_tokens_init = _input_chars // 2
-    progress(f'📊 预计 ~90-150s · ~{est_tokens_init} tokens')
+    progress(f'📊 预计 ~60-100s · ~{est_tokens_init} tokens')
 
     # ── Step 1: AI 选品 ──
     progress('🤖 AI 智能选品')
@@ -1899,78 +1871,53 @@ def _run_pipeline_impl(style_hint, task_id=None):
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
         step_done()
 
-        progress('🖼️ 排版合成')
-        out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
+        progress('📤 推送 + 刷新')
+        # 找生成的 AI 效果图（用于历史记录）
+        gen_img = None
+        for sub in ['上身效果', '豆包生图']:
+            sd = os.path.join(outfit_dir, sub)
+            if os.path.exists(sd):
+                for f in sorted(os.listdir(sd)):
+                    if f.endswith(('.jpg', '.png')) and not f.startswith('.'):
+                        gen_img = os.path.join(sd, f)
+                        break
+            if gen_img:
+                break
+
+        run_cli(['git', 'add', '-A'], timeout=30)
+        run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
+        run_cli(['git', 'push'], timeout=60)
+
+        # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
+        try:
+            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
+            run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
+            run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
+            run_cli(['git', 'push'], timeout=30)
+        except Exception:
+            pass
         step_done()
 
-        progress('📤 推送 GitHub')
-        composite = find_latest_composite(today)
-        if composite and os.path.exists(composite):
-            run_cli(['git', 'add', '-A'], timeout=30)
-            run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
-            out4 = run_cli(['git', 'push'], timeout=60)
-            step_done()
+        # ── 统计摘要 ──
+        elapsed = time.time() - t_start
+        est_tokens = _input_chars // 2
+        stats_line = f'⏱️ ~{elapsed:.0f}s · 📊 ~{est_tokens} tokens · 🔄 {_api_calls}次AI'
 
-            github_url = get_github_raw_url(composite)
-            comp_dir = os.path.dirname(composite)
-            if '_方案' in os.path.basename(composite):
-                comp_dir = os.path.dirname(comp_dir)
-            outfit_md = os.path.join(comp_dir, 'outfit.md')
-            summary = format_outfit_summary(outfit_md)
+        # 更新控制台结果（只显示统计，不展示图片和摘要）
+        if task_id:
+            github_url = get_github_raw_url(gen_img) if gen_img else None
+            tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
+                         image_path=gen_img, image_url=github_url,
+                         log='\n'.join(log_lines))
 
-            # 微信推送：build_push 按用户偏好推送完整内容
-            push_enabled = config.get('wechat_push_enabled', True)
-            if push_enabled:
-                try:
-                    # 统一管线：不再需要 --no-bline（AB线已合并）
-                    run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
-                    # build_push 可能生成了 _swatches.png 等新文件，提交并推送
-                    run_cli(['git', 'add', '-A'], timeout=10)
-                    run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
-                    run_cli(['git', 'push'], timeout=30)
-                except Exception:
-                    content = f"![效果图]({github_url})\n\n"
-                    if summary:
-                        content += f"**单品清单**\n{summary}\n\n"
-                    content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-                    push_wechat(f"👔 {style_hint}", content)
-            else:
-                log(f"⏸️ 跳过微信推送内容生成（wechat_push_enabled=false），节省 ~120s")
-
-            # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
-            try:
-                progress('📱 刷新控制台')
-                run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
-                run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
-                run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
-                run_cli(['git', 'push'], timeout=30)
-                step_done()
-            except Exception:
-                pass
-
-            # ── 统计摘要 ──
-            elapsed = time.time() - t_start
-            est_tokens = _input_chars // 2
-            stats_line = f'⏱️ ~{elapsed:.0f}s · 📊 ~{est_tokens} tokens · 🔄 {_api_calls}次AI'
-
-            # 更新控制台结果（只显示统计，不展示图片和摘要）
-            if task_id:
-                tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
-                             image_path=composite, image_url=github_url,
-                             log='\n'.join(log_lines))
-
-            # 保存历史记录
-            save_history({
-                'time': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'style': style_hint,
-                'status': 'done',
-                'image_url': github_url,
-                'stats': stats_line,
-            })
-        else:
-            if task_id:
-                tasks.update(task_id, status='error', message='未找到排版图', log='\n'.join(log_lines))
-            push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志")
+        # 保存历史记录
+        save_history({
+            'time': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'style': style_hint,
+            'status': 'done',
+            'image_url': github_url if gen_img else None,
+            'stats': stats_line,
+        })
     except Exception as e:
         if task_id:
             tasks.update(task_id, status='error', message=str(e)[:200], log='\n'.join(log_lines))

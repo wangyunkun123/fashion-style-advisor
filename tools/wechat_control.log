@@ -1550,3 +1550,67 @@ ModuleNotFoundError: No module named 'tools'
 [20:26:02] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
 [20:26:02] [INFO] 📤 已推送上线通知
 [20:26:45] [INFO] 单品已删除: SHOE-011 (4 files)
+[00:04:24] [INFO] 💬 聊天: generate | 今日 换搭，要去朋友家做客
+[00:04:24] [INFO] 🚀 管线启动: 今日 换搭，要去朋友家做客
+[00:04:24] [ERROR] 管线异常: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/rabbit/Claude code/Fashion/tools/common.py)
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1776, in run_pipeline
+    ], max_tokens=16384, timeout=180)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1793, in _run_pipeline_impl
+    unavailable = [it for it in items if it.get('id', '') == 'UNAVAILABLE']
+  File "/Users/rabbit/Claude code/Fashion/tools/unified_pipeline.py", line 49, in <module>
+    from tools.common import (
+ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/rabbit/Claude code/Fashion/tools/common.py)
+
+[00:15:54] [INFO] 💬 聊天: recommend | 明天要去朋友家做客
+[00:15:54] [INFO] 🚀 管线启动: 明天要去朋友家做客
+[00:15:54] [ERROR] 管线异常: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/rabbit/Claude code/Fashion/tools/common.py)
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1776, in run_pipeline
+    plan = extract_json(content)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1793, in _run_pipeline_impl
+    log(f"⚠️ AI 返回了 UNAVAILABLE 单品，强制重试: {[it.get('category','') for it in unavailable]}", "WARN")
+  File "/Users/rabbit/Claude code/Fashion/tools/unified_pipeline.py", line 49, in <module>
+    from tools.common import (
+ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/rabbit/Claude code/Fashion/tools/common.py)
+
+[00:16:46] [INFO] =======================================================
+[00:16:46] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:16:46] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:16:46] [INFO] 💬 面板: http://localhost:8765/
+[00:16:46] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[00:16:46] [INFO] 📤 已推送上线通知
+[00:17:40] [INFO] 💬 聊天: recommend | 明天去朋友家做客
+[00:17:40] [INFO] 🚀 管线启动: 明天去朋友家做客
+[00:17:40] [INFO] 📍 探索度: 微调探索 🧪
+[00:17:40] [INFO] 📍 🤖 Step 1/5: AI 智能选品（数据增强）...
+[00:17:40] [INFO] 📍 场景提取: '明天去朋友家做客' → occasion=日常
+[00:18:09] [INFO] 📍 🔍 规则验证中...
+[00:18:09] [INFO] 📍 ✅ 验证通过
+[00:18:09] [INFO] 📊 穿搭评分: 62分 — 🧪 探索向，可能惊喜可能翻车
+[00:18:09] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[00:18:09] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[00:18:09] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_明天去朋友家做客
+[00:18:09] [INFO] 📍 ✅ 穿搭方案已创建
+[00:18:09] [INFO] 📍 🎨 Step 2/5: Seedream AI 生图中...
+[00:18:47] [INFO] 📍 ✅ Seedream 生图完成
+============================================================
+🎨 Seedream API 两轮接力生图
+============================================================
+🔍 关键词匹配: 2026-06-19_明天去朋友家做客
+
+📁 2026-06-19_明天去朋友家做客
+
+🧥 核心参考图: 5 张
+   ▸ 人物_1.png
+   ▸ 人物_2.png
+   ▸ 上衣_TS-011.png
+   ▸ 下装_PT-002.png
+   ▸ 鞋子_SHOE-002.png
+🎒 配
+[00:18:47] [INFO] 📍 🖼️ Step 3/5: 排版合成中...
+[00:18:47] [INFO] 📍 ✅ 排版完成
+==================================================
+👔 方案1 ACOC网格风
+💾 上身效果_1_方案1.jpg (3200x2304) ✅
+[00:18:47] [INFO] 📍 📤 Step 4/5: 推送 GitHub...

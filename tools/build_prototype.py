@@ -164,27 +164,27 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
         # Parse 推荐理由 and 穿搭技巧
         rationale = ''
         dressing_tips = []
-        in_tip_section = False
+        in_section = None  # 'rationale' or 'tips'
         for line in content.split('\n'):
             s = line.strip()
-            if '推荐理由' in s and s.startswith('##'):
+            if s.startswith('## 推荐理由'):
+                in_section = 'rationale'
                 m = re.search(r'[：:]\s*(.+)', s)
                 if m: rationale = m.group(1).strip()
-                in_tip_section = False
                 continue
-            if '穿搭技巧' in s and s.startswith('##'):
-                in_tip_section = True
+            if s.startswith('## 穿搭技巧'):
+                in_section = 'tips'
                 continue
-            if in_tip_section:
-                if s.startswith('##'):
-                    in_tip_section = False
-                    continue
+            if s.startswith('##'):
+                in_section = None
+                continue
+            if in_section == 'rationale' and s:
+                rationale = (rationale + ' ' + s).strip()
+            elif in_section == 'tips' and s:
                 if s.startswith('- '):
                     dressing_tips.append(s[2:].strip())
-                elif s and not s.startswith('#'):
+                else:
                     dressing_tips.append(s)
-            elif rationale and s and not s.startswith('##'):
-                rationale += ' ' + s
         results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'char_img': char_img, 'weather': weather, 'temp': temp_str, 'uv': uv_str,
             'rationale': rationale, 'dressing_tips': dressing_tips})
         if len(results) >= limit: break
@@ -1399,7 +1399,7 @@ function toggleMatchSelect(el,itemId){{var idx=__selectedMatchIds.indexOf(itemId
 function generatePreviewOutfit(){{if(!__addAnalysisData||!__addAnalysisData.items||!__addAnalysisData.items.length)return;var btn=document.getElementById('preview-gen-btn');if(btn){{btn.disabled=true;btn.textContent='生成中...'}}var sel=document.getElementById('selected-count');if(sel)sel.textContent=__selectedMatchIds.length;showProgress();document.getElementById('progress-title').textContent='正在AI生成穿搭预览...';document.getElementById('progress-steps').innerHTML='<div style=\"text-align:center;padding:20px;color:#fff\">AI 选品搭配 + 生图约需 30 秒...</div>';fetch('/api/wardrobe/add/generate-outfit',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{new_item:__addAnalysisData.items[0],selected_ids:__selectedMatchIds}})}}).then(r=>r.json()).then(function(d){{if(d.task_id){{__activePollId=d.task_id;pollPreviewTask(d.task_id)}}else{{var ptitle=document.getElementById('progress-title');ptitle.textContent='❌ 生成失败';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}}}}).catch(function(e){{document.getElementById('progress-title').textContent='网络错误';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}})}}
 function pollPreviewTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(tid!==__activePollId)return;var title=document.getElementById('progress-title');var steps=document.getElementById('progress-steps');var spinner=document.getElementById('progress-spinner');var closeBtn=document.getElementById('progress-close');var btn=document.getElementById('preview-gen-btn');if(d.status==='done'){{spinner.style.display='none';closeBtn.style.display='inline-block';closeBtn.onclick=function(){{closeProgress()}};title.textContent='✅ 穿搭预览完成';steps.innerHTML='';try{{var result=JSON.parse(d.result);__previewOutfitData=result;if(result.image_urls&&result.image_urls.length){{steps.innerHTML='<img class=\"progress-result-img\" src=\"'+escHtml(result.image_urls[0])+'\" loading=\"lazy\" style=\"max-width:100%;border-radius:8px\">'}}if(result.outfit_items){{var itemsHtml=result.outfit_items.map(function(oi){{var badge=oi.is_new?'<span class=\"opi-badge new\">🆕 新衣</span>':'<span class=\"opi-badge existing\">衣橱</span>';return'<div class=\"op-item\">'+badge+'<span class=\"opi-name\">'+escHtml(oi.brand||'')+' '+escHtml(oi.color||'')+escHtml(oi.category||'')+'</span></div>'}}).join('');steps.innerHTML+='<div style=\"margin-top:12px;text-align:left;color:var(--text);font-size:12px\">'+itemsHtml+'</div>'}}}}catch(e){{steps.innerHTML='<div style=\"color:var(--text)\">预览完成，刷新页面查看</div>'}}if(btn){{btn.disabled=false;btn.textContent='🪄 换一种搭配'}}}}else if(d.status==='error'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='❌ 生成失败';steps.innerHTML='<div style=\"color:#c4523c\">'+escHtml(d.message||'未知错误')+'</div>';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}}else{{title.textContent=d.message||'生成中...';setTimeout(function(){{pollPreviewTask(tid)}},2000)}}}}).catch(function(){{setTimeout(function(){{pollPreviewTask(tid)}},2000)}})}}
 function pinToHome(outfitId){{localStorage.setItem('pinned_outfit',outfitId);var card=document.querySelector('.fav-card[data-oid="'+outfitId+'"]');if(!card){{return}}var imgEl=card.querySelector('.h-char-img-lg');var heroImg=document.querySelector('.hero-img img');if(imgEl&&heroImg){{heroImg.src=imgEl.src}}var styleEl=card.querySelector('.fav-style');var heroStyle=document.querySelector('.hero-style');if(styleEl&&heroStyle){{var tn=styleEl.childNodes[0];var styleName=(tn&&tn.nodeType===3)?tn.nodeValue.trim():'';var scene=outfitId.replace(/^\d{{4}}-\d{{2}}-\d{{2}}_/,'');heroStyle.textContent=scene+' · '+styleName}}var tagsEl=card.querySelector('.h-tags');var heroTags=document.querySelector('.style-tags');if(tagsEl&&heroTags){{heroTags.innerHTML=tagsEl.innerHTML}}var itemRows=card.querySelectorAll('.h-square-grid .item-row');var heroItems=document.querySelector('.hero-card .item-list');if(itemRows.length&&heroItems){{var itemsHtml='';itemRows.forEach(function(row){{var emoji=row.querySelector('.item-emoji');var idEl=row.querySelector('.item-id');var brandEl=row.querySelector('.ir-brand');var descEl=row.querySelector('.ir-desc');var thumbEl=row.querySelector('.item-img');var emojiHtml=emoji?emoji.outerHTML:'';var idText=idEl?idEl.textContent:'';var brandText=brandEl?brandEl.textContent:'';var descText=descEl?descEl.textContent:'';var thumbHtml=thumbEl?'<img class="item-thumb" src="'+thumbEl.src+'" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">':'';var catMap={{'TS':'上衣','LS':'上衣','SHIRT':'上衣','TANK':'上衣','JK':'上衣','PT':'下装','SH':'下装','SHOE':'鞋子','HAT':'帽子','BAG':'包','SOCK':'袜子','SUN':'墨镜','ACC':'配饰'}};var cat=catMap[idText.split('-')[0]]||'';var name=brandText+' '+descText;itemsHtml+='<div class="item-row"><span class="item-emoji">'+emojiHtml+'</span><span class="item-cat">'+cat+'</span><span class="item-id">'+idText+'</span><span class="item-name">'+name+'</span>'+thumbHtml+'</div>'}});heroItems.innerHTML=itemsHtml}}var paletteEl=card.querySelector('.h-exp-palette');var heroPalette=document.querySelector('.hero-card .palette-strip');if(paletteEl&&heroPalette){{heroPalette.outerHTML=paletteEl.outerHTML.replace('h-exp-palette','palette-strip')}}var dateMeta=card.getAttribute('data-date')||'';if(dateMeta){{var heroMeta=document.querySelector('.hero-meta');if(heroMeta)heroMeta.textContent=dateMeta}}showToast('📌 已放回主页','#1e3a5f')}}
-function initPinnedOutfit(){{var pinned=localStorage.getItem('pinned_outfit');if(pinned){{pinToHome(pinned)}}}}
+function initPinnedOutfit(){{var pinned=localStorage.getItem('pinned_outfit');if(!pinned)return;var heroOid=document.querySelector('.hero-rate');var curOid=heroOid?heroOid.dataset.oid:'';if(!curOid||curOid===pinned||document.querySelector('.hero-style')&&document.querySelector('.hero-style').textContent==='暂无推荐'){{pinToHome(pinned)}}}}
 document.addEventListener('DOMContentLoaded',function(){{initPinnedOutfit()}});
 </script>
 </body></html>'''

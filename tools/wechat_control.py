@@ -1887,19 +1887,23 @@ def _run_pipeline_impl(style_hint, task_id=None):
             result_text = f"👔 **{style_hint}**\n\n{summary}" if summary else f"👔 **{style_hint}**"
 
             # 微信推送：build_push 按用户偏好推送完整内容
-            try:
-                # 统一管线：不再需要 --no-bline（AB线已合并）
-                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
-                # build_push 可能生成了 _swatches.png 等新文件，提交并推送
-                run_cli(['git', 'add', '-A'], timeout=10)
-                run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
-                run_cli(['git', 'push'], timeout=30)
-            except Exception:
-                content = f"![效果图]({github_url})\n\n"
-                if summary:
-                    content += f"**单品清单**\n{summary}\n\n"
-                content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
-                push_wechat(f"👔 {style_hint}", content)
+            push_enabled = config.get('wechat_push_enabled', True)
+            if push_enabled:
+                try:
+                    # 统一管线：不再需要 --no-bline（AB线已合并）
+                    run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
+                    # build_push 可能生成了 _swatches.png 等新文件，提交并推送
+                    run_cli(['git', 'add', '-A'], timeout=10)
+                    run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
+                    run_cli(['git', 'push'], timeout=30)
+                except Exception:
+                    content = f"![效果图]({github_url})\n\n"
+                    if summary:
+                        content += f"**单品清单**\n{summary}\n\n"
+                    content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
+                    push_wechat(f"👔 {style_hint}", content)
+            else:
+                log(f"⏸️ 跳过微信推送内容生成（wechat_push_enabled=false），节省 ~120s")
 
             # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
             try:

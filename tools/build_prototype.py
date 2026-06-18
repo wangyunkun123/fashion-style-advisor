@@ -161,7 +161,32 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             elif '晴' in weather: uv_str = '强'
             elif '多云' in weather: uv_str = '中等'
             elif '雾' in weather or '阴' in weather: uv_str = '弱'
-        results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'char_img': char_img, 'weather': weather, 'temp': temp_str, 'uv': uv_str})
+        # Parse 推荐理由 and 穿搭技巧
+        rationale = ''
+        dressing_tips = []
+        in_tip_section = False
+        for line in content.split('\n'):
+            s = line.strip()
+            if '推荐理由' in s and s.startswith('##'):
+                m = re.search(r'[：:]\s*(.+)', s)
+                if m: rationale = m.group(1).strip()
+                in_tip_section = False
+                continue
+            if '穿搭技巧' in s and s.startswith('##'):
+                in_tip_section = True
+                continue
+            if in_tip_section:
+                if s.startswith('##'):
+                    in_tip_section = False
+                    continue
+                if s.startswith('- '):
+                    dressing_tips.append(s[2:].strip())
+                elif s and not s.startswith('#'):
+                    dressing_tips.append(s)
+            elif rationale and s and not s.startswith('##'):
+                rationale += ' ' + s
+        results.append({'dir': d, 'date': date_str, 'style': style or scene[:30], 'items': items, 'rating': rating, 'char_img': char_img, 'weather': weather, 'temp': temp_str, 'uv': uv_str,
+            'rationale': rationale, 'dressing_tips': dressing_tips})
         if len(results) >= limit: break
     return results
 
@@ -311,6 +336,35 @@ def extract_palette(outfit):
                             seen.add(hex_c)
                     break
     return colors[:5]
+
+def _escape_html(text):
+    """Escape HTML special characters"""
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
+
+
+def build_rationale_html(outfit):
+    """Build rationale + dressing tips HTML block"""
+    rationale = outfit.get('rationale', '')
+    tips = outfit.get('dressing_tips', [])
+
+    if not rationale and not tips:
+        return ''
+
+    parts = ['<div class="rationale-box">']
+
+    if rationale:
+        parts.append('<div class="ra-title">推荐理由</div>')
+        parts.append('<div class="ra-text">{}</div>'.format(_escape_html(rationale)))
+
+    if tips:
+        parts.append('<div class="rationale-tips">')
+        for tip in tips:
+            parts.append('<div class="rt-item"><span class="rt-dot"></span>{}</div>'.format(_escape_html(tip)))
+        parts.append('</div>')
+
+    parts.append('</div>')
+    return '\n'.join(parts)
+
 
 def build_palette_html(outfit):
     """Build palette strip HTML from outfit colors"""
@@ -481,6 +535,8 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-square-grid .item-row.expanded .item-img{{display:block;border-radius:6px}}
 .h-exp-palette{{display:flex;align-items:center;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}}
 .h-exp-palette .pal-dot{{width:16px;height:16px;border-radius:3px;border:1px solid var(--border)}}
+.pin-btn{{display:inline-block;margin-top:10px;padding:6px 14px;background:var(--white);border:1px solid var(--navy);border-radius:16px;color:var(--navy);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}}
+.pin-btn:active{{background:var(--navy);color:#fff}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
 .placeholder{{text-align:center;padding:60px 20px;cursor:pointer}}
@@ -838,6 +894,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="hero-meta">{hero_meta}</div>
 <div class="item-list">{hero_items_html}</div>
 {palette_html}
+{rationale_html}
 <div class="hero-rate" data-oid="{hero_outfit_id}">
 <div class="rate-label">给这套穿搭评分</div>
 <div class="star-row" id="hero-star-row">{hero_star_html}</div>
@@ -1341,6 +1398,9 @@ function renderMatchSection(matchResults){{if(!matchResults||!matchResults.lengt
 function toggleMatchSelect(el,itemId){{var idx=__selectedMatchIds.indexOf(itemId);if(idx>=0){{__selectedMatchIds.splice(idx,1);el.classList.remove('selected')}}else{{__selectedMatchIds.push(itemId);el.classList.add('selected')}}var cnt=document.getElementById('selected-count');if(cnt)cnt.textContent=__selectedMatchIds.length}}
 function generatePreviewOutfit(){{if(!__addAnalysisData||!__addAnalysisData.items||!__addAnalysisData.items.length)return;var btn=document.getElementById('preview-gen-btn');if(btn){{btn.disabled=true;btn.textContent='生成中...'}}var sel=document.getElementById('selected-count');if(sel)sel.textContent=__selectedMatchIds.length;showProgress();document.getElementById('progress-title').textContent='正在AI生成穿搭预览...';document.getElementById('progress-steps').innerHTML='<div style=\"text-align:center;padding:20px;color:#fff\">AI 选品搭配 + 生图约需 30 秒...</div>';fetch('/api/wardrobe/add/generate-outfit',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{new_item:__addAnalysisData.items[0],selected_ids:__selectedMatchIds}})}}).then(r=>r.json()).then(function(d){{if(d.task_id){{__activePollId=d.task_id;pollPreviewTask(d.task_id)}}else{{var ptitle=document.getElementById('progress-title');ptitle.textContent='❌ 生成失败';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}}}}).catch(function(e){{document.getElementById('progress-title').textContent='网络错误';document.getElementById('progress-spinner').style.display='none';document.getElementById('progress-close').style.display='inline-block';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}})}}
 function pollPreviewTask(tid){{fetch('/api/task/'+tid).then(r=>r.json()).then(function(d){{if(tid!==__activePollId)return;var title=document.getElementById('progress-title');var steps=document.getElementById('progress-steps');var spinner=document.getElementById('progress-spinner');var closeBtn=document.getElementById('progress-close');var btn=document.getElementById('preview-gen-btn');if(d.status==='done'){{spinner.style.display='none';closeBtn.style.display='inline-block';closeBtn.onclick=function(){{closeProgress()}};title.textContent='✅ 穿搭预览完成';steps.innerHTML='';try{{var result=JSON.parse(d.result);__previewOutfitData=result;if(result.image_urls&&result.image_urls.length){{steps.innerHTML='<img class=\"progress-result-img\" src=\"'+escHtml(result.image_urls[0])+'\" loading=\"lazy\" style=\"max-width:100%;border-radius:8px\">'}}if(result.outfit_items){{var itemsHtml=result.outfit_items.map(function(oi){{var badge=oi.is_new?'<span class=\"opi-badge new\">🆕 新衣</span>':'<span class=\"opi-badge existing\">衣橱</span>';return'<div class=\"op-item\">'+badge+'<span class=\"opi-name\">'+escHtml(oi.brand||'')+' '+escHtml(oi.color||'')+escHtml(oi.category||'')+'</span></div>'}}).join('');steps.innerHTML+='<div style=\"margin-top:12px;text-align:left;color:var(--text);font-size:12px\">'+itemsHtml+'</div>'}}}}catch(e){{steps.innerHTML='<div style=\"color:var(--text)\">预览完成，刷新页面查看</div>'}}if(btn){{btn.disabled=false;btn.textContent='🪄 换一种搭配'}}}}else if(d.status==='error'){{spinner.style.display='none';closeBtn.style.display='inline-block';title.textContent='❌ 生成失败';steps.innerHTML='<div style=\"color:#c4523c\">'+escHtml(d.message||'未知错误')+'</div>';if(btn){{btn.disabled=false;btn.textContent='🪄 重试生成'}}}}else{{title.textContent=d.message||'生成中...';setTimeout(function(){{pollPreviewTask(tid)}},2000)}}}}).catch(function(){{setTimeout(function(){{pollPreviewTask(tid)}},2000)}})}}
+function pinToHome(outfitId){{localStorage.setItem('pinned_outfit',outfitId);var card=document.querySelector('.fav-card[data-oid="'+outfitId+'"]');if(!card){{return}}var imgEl=card.querySelector('.h-char-img-lg');var heroImg=document.querySelector('.hero-img img');if(imgEl&&heroImg){{heroImg.src=imgEl.src}}var styleEl=card.querySelector('.fav-style');if(styleEl){{var styleText=styleEl.textContent.replace(/[⭐]+/g,'').trim();var heroStyle=document.querySelector('.hero-style');if(heroStyle)heroStyle.textContent=styleText}}var tagsEl=card.querySelector('.h-tags');var heroTags=document.querySelector('.style-tags');if(tagsEl&&heroTags){{heroTags.innerHTML=tagsEl.innerHTML}}var itemRows=card.querySelectorAll('.h-square-grid .item-row');var heroItems=document.querySelector('.hero-card .item-list');if(itemRows.length&&heroItems){{var itemsHtml='';itemRows.forEach(function(row){{var emoji=row.querySelector('.item-emoji');var idEl=row.querySelector('.item-id');var brandEl=row.querySelector('.ir-brand');var descEl=row.querySelector('.ir-desc');var thumbEl=row.querySelector('.item-img');var emojiHtml=emoji?emoji.outerHTML:'';var idText=idEl?idEl.textContent:'';var brandText=brandEl?brandEl.textContent:'';var descText=descEl?descEl.textContent:'';var thumbHtml=thumbEl?'<img class="item-thumb" src="'+thumbEl.src+'" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">':'';var catMap={{'TS':'上衣','LS':'上衣','SHIRT':'上衣','TANK':'上衣','JK':'上衣','PT':'下装','SH':'下装','SHOE':'鞋子','HAT':'帽子','BAG':'包','SOCK':'袜子','SUN':'墨镜','ACC':'配饰'}};var cat=catMap[idText.split('-')[0]]||'';var name=brandText+' '+descText;itemsHtml+='<div class="item-row"><span class="item-emoji">'+emojiHtml+'</span><span class="item-cat">'+cat+'</span><span class="item-id">'+idText+'</span><span class="item-name">'+name+'</span>'+thumbHtml+'</div>'}});heroItems.innerHTML=itemsHtml}}var paletteEl=card.querySelector('.h-exp-palette');var heroPalette=document.querySelector('.hero-card .palette-strip');if(paletteEl&&heroPalette){{heroPalette.outerHTML=paletteEl.outerHTML.replace('h-exp-palette','palette-strip')}}var dateMeta=card.getAttribute('data-date')||'';if(dateMeta){{var heroMeta=document.querySelector('.hero-meta');if(heroMeta)heroMeta.textContent=dateMeta}}showToast('📌 已放回主页','#1e3a5f')}}
+function initPinnedOutfit(){{var pinned=localStorage.getItem('pinned_outfit');if(pinned){{pinToHome(pinned)}}}}
+document.addEventListener('DOMContentLoaded',function(){{initPinnedOutfit()}});
 </script>
 </body></html>'''
 
@@ -1542,7 +1602,9 @@ def gen_history_card(outfit, idx):
     # Header: style + tags only (no palette when collapsed)
     tag_info_html = '<div class="fav-style">{style}{rating}</div>{tags}'.format(
         style=outfit['style'][:30], rating=rating_html, tags=tags_html)
-    return '<div class="fav-card" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
+    odir = outfit['dir'].replace("'", "\\'")
+    odate = outfit.get('date', '')
+    return '<div class="fav-card" data-oid="{oid}" data-date="{odate}" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}<button class="pin-btn" onclick="event.stopPropagation();pinToHome(\'{oid}\')">📌 放回主页</button></div></div>'.format(oid=odir, odate=odate, idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)
@@ -1567,6 +1629,7 @@ if today:
     tags = extract_tags(ho)
     hero_tags_html = ''.join('<span>{}</span>'.format(t) for t in tags)
     palette_html = build_palette_html(ho)
+    rationale_html = build_rationale_html(ho)
     hero_items_html = ''.join(item_row(
         item_icons.get({'TS':'tshirt','LS':'tshirt','SHIRT':'tshirt','TANK':'tshirt','JK':'tshirt','PT':'pants','SH':'pants','SHOE':'shoe','HAT':'hat','BAG':'bag','SOCK':'sock','SUN':'sun','ACC':'acc'}.get(it['id'].split('-')[0],'tshirt'),''),
         it.get('cat',''), it['id'], it['name'], it.get('thumb','')
@@ -1585,6 +1648,7 @@ else:
     hero_meta = '今天还没有生成穿搭，请先点击下方按钮生成'
     hero_tags_html = '<span>等待首套穿搭</span>'
     palette_html = ''
+    rationale_html = ''
     hero_items_html = ''
     hero_star_html = ''
     cancel_visible = ''
@@ -1607,7 +1671,7 @@ html = html.replace('__COMBO_ICON__', combo_icon_svg)
 html = html.format(
     tabs=tabs_html,
     hero_img=hero_img, hero_style=hero_style, hero_meta=hero_meta,
-    hero_tags_html=hero_tags_html, palette_html=palette_html, hero_items_html=hero_items_html,
+    hero_tags_html=hero_tags_html, palette_html=palette_html, rationale_html=rationale_html, hero_items_html=hero_items_html,
     hero_outfit_id=hero_outfit_id, hero_star_html=hero_star_html, cancel_visible=cancel_visible,
     today_cards=today_cards, fav_cards=fav_cards,
     card1=card1, card2=card2, card3=card3,

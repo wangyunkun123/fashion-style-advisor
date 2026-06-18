@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-06-19 00:30:00",
+    "style": "明天上午出门逛街",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_明天上午出门逛街/上身效果/上身效果_1_方案1.jpg?t=1781800191",
+    "result": "👔 **明天上午出门逛街**\n\n- 👕 **TS-005** HLA 米白棉短袖\n- 👖 **PT-002** 未知 卡其色棉长裤\n- 👟 **SHOE-008** Jordan 复古帆布拼色系列红白拼色"
+  },
+  {
     "time": "2026-06-19 00:19:01",
     "style": "明天去朋友家做客",
     "status": "done",

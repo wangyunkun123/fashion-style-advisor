@@ -1526,6 +1526,15 @@ def _run_add_analysis(task_id, image_b64_list):
         tasks.update(task_id, status='error', message=f'分析失败: {str(e)[:80]}')
 
 
+def _format_tips(tips):
+    """Format dressing tips as markdown bullet list"""
+    if not tips:
+        return ''
+    if isinstance(tips, str):
+        return f'- {tips}'
+    return '\n'.join(f'- {t}' for t in tips if t)
+
+
 def execute_outfit_plan(plan, today, style_hint):
     """根据 AI 方案创建目录、写入文件、复制图片"""
     wardrobe = parse_wardrobe()
@@ -1569,6 +1578,14 @@ style: {plan.get('style', style_hint)}
 ## 配色逻辑
 
 {plan.get('color_logic', '')}
+
+## 推荐理由
+
+{plan.get('rationale', '')}
+
+## 穿搭技巧
+
+{_format_tips(plan.get('dressing_tips', []))}
 
 ## 风格关键词
 

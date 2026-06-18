@@ -1011,7 +1011,9 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   "silhouette": "廓形节奏描述",
   "body_modifier": "身形修饰策略",
   "keywords": "3-6个风格特征词，用中文顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。⚠️这是穿搭风格标签，不是用户指令！必须从搭配本身提取美学特征，严禁照抄用户输入",
-  "reasoning": "整体搭配理由（100-200字）",
+  "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
+  "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
+  "dressing_tips": ["穿搭技巧1：具体可操作的建议，如裤脚怎么挽、T恤怎么塞、鞋带怎么系等，基于所选单品特征", "穿搭技巧2（可选，数组长度1-2）"],
   "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
 }}
 
@@ -1021,7 +1023,9 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 - ⚠️ 严禁添加第二件上衣（如长袖/衬衫/外套叠穿），除非场景明确需要（如寒冷天气）
 - 运动场景（网球/跑步/健身）只选1件上衣+1件下装+1双运动鞋，不要加多余层次
 - 所有ID必须从衣柜表格中选取，严禁编造
-- 永远不要输出 UNAVAILABLE 作为ID"""
+- 永远不要输出 UNAVAILABLE 作为ID
+- 推荐理由(rationale)必须面向消费者，强调「穿上为什么好看」，不是搭配逻辑阐述
+- 穿搭技巧(dressing_tips)必须具体可操作，基于所选单品的特征（如特定鞋型、裤型、领型），数组长度1-2"""
 
     # ── 11. 组装 user prompt ──
     explore_header = ''
@@ -1901,7 +1905,9 @@ def build_narrative_prompt(selected_items, target_styles, style_hint, occasion,
 输出严格 JSON（不要其他文字）：
 {{
   "keywords": "3-6个风格特征词，用中文顿号分隔（从搭配本身提取美学特征，不要照抄用户输入）",
-  "reasoning": "整体搭配理由（100-200字）",
+  "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述",
+  "rationale": "推荐理由（100-200字）：消费者视角一段话，场景/风格/体型/单品角度，自然口语化",
+  "dressing_tips": ["穿搭技巧1：具体可操作建议，基于单品特征", "穿搭技巧2（可选）"],
   "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)。必须融合📷摄影指导中的相机/构图/光影/姿势/场景/情绪，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)。"
 }}"""
 
@@ -1931,7 +1937,7 @@ def build_narrative_prompt(selected_items, target_styles, style_hint, occasion,
 
 {photo_direction}
 
-─── 请输出 JSON（keywords + reasoning + seedream_prompt）。───"""
+─── 请输出 JSON（keywords + reasoning + rationale + dressing_tips + seedream_prompt）。───"""
 
     return {
         'system_prompt': system_prompt,
@@ -2100,12 +2106,18 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
     if narrative_result:
         plan['keywords'] = narrative_result.get('keywords', '')
         plan['reasoning'] = narrative_result.get('reasoning', '')
+        plan['rationale'] = narrative_result.get('rationale', '')
+        plan['dressing_tips'] = narrative_result.get('dressing_tips', [])
         plan['seedream_prompt'] = narrative_result.get('seedream_prompt', '')
         plan['style'] = narrative_result.get('style', style_hint)
 
     # ── 确保必要字段存在 ──
     if not plan.get('keywords'):
         plan['keywords'] = style_hint
+    if not plan.get('rationale'):
+        plan['rationale'] = ''
+    if not plan.get('dressing_tips'):
+        plan['dressing_tips'] = []
     if not plan.get('reasoning'):
         reason_parts = []
         for it in plan.get('items', [])[:3]:

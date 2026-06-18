@@ -2995,7 +2995,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     return False
             enhanced_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
             if os.path.exists(enhanced_dir):
-                for pattern in [f'{cid}_cutout.*', f'{cid}_thumb.*']:
+                for pattern in [f'{cid}_cutout.*', f'{cid}_cutout_thumb.*', f'{cid}_thumb.*']:
                     for fpath in _glob.glob(os.path.join(enhanced_dir, pattern)):
                         img = _PILImage.open(fpath)
                         w, h = img.size

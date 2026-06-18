@@ -1762,3 +1762,9 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [02:20:08] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_一套周末 casual 穿搭
 [02:20:08] [INFO] 📍 🎨 Seedream AI 生图
 [02:21:09] [INFO] 📍 📤 推送 + 刷新
+[02:35:17] [INFO] =======================================================
+[02:35:17] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[02:35:17] [INFO] 📡 服务: http://0.0.0.0:8765
+[02:35:17] [INFO] 💬 面板: http://localhost:8765/
+[02:35:17] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[02:35:17] [INFO] 📤 已推送上线通知

@@ -450,7 +450,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 /* Palette strip */
 .palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
-.pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);display:inline-block}}
+.pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);flex-shrink:0}}
 /* Rationale */
 .rationale-box{{padding-top:10px;border-top:1px solid var(--border)}}
 .rationale-box .ra-title{{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px}}

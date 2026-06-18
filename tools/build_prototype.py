@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Build mobile-v2.html prototype with proper icons from icon library"""
-import re, os, json, time, subprocess
+import re, os, sys, json, time, subprocess
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.join(BASE, '..')
 OUTFITS_DIR = os.path.join(PROJ, 'outfits')
+
+# 确保项目根目录在 sys.path 中（支持直接运行和模块导入两种方式）
+if PROJ not in sys.path:
+    sys.path.insert(0, PROJ)
 
 # 标签质量过滤器 — 去除日期/指令类噪音
 JUNK_PATTERNS = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',

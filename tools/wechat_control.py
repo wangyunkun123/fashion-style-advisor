@@ -1901,6 +1901,16 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 content += f"🔗 [GitHub](https://github.com/wangyunkun123/fashion-style-advisor)"
                 push_wechat(f"👔 {style_hint}", content)
 
+            # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
+            try:
+                run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
+                # 提交并推送最新原型
+                run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
+                run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
+                run_cli(['git', 'push'], timeout=30)
+            except Exception:
+                pass
+
             # 更新控制台结果（与微信推送内容一致）
             if task_id:
                 tasks.update(task_id, status='done', message='✅ 全部完成',
@@ -1919,16 +1929,6 @@ def _run_pipeline_impl(style_hint, task_id=None):
             if task_id:
                 tasks.update(task_id, status='error', message='未找到排版图', log='\n'.join(log_lines))
             push_wechat(f"⚠️ {style_hint} 未找到效果图", "请检查 Mac 上的生成日志")
-
-        # ── 原型重建：无论成功失败都要更新（Hero/历史列表/单品等）──
-        try:
-            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
-            # 提交并推送最新原型
-            run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
-            run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
-            run_cli(['git', 'push'], timeout=30)
-        except Exception:
-            pass
     except Exception as e:
         if task_id:
             tasks.update(task_id, status='error', message=str(e)[:200], log='\n'.join(log_lines))

@@ -11,26 +11,8 @@ OUTFITS_DIR = os.path.join(PROJ, 'outfits')
 JUNK_PATTERNS = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
                  r'^第\d+', r'^请', r'^帮我', r'^我想', r'^需要', r'^场景', r'^。$', r'^$']
 
-# CDN base for fast mobile image loading (jsDelivr)
-_CDN_COMMIT = ''
-def _get_cdn_commit():
-    global _CDN_COMMIT
-    if _CDN_COMMIT:
-        return _CDN_COMMIT
-    try:
-        r = subprocess.run(['git','rev-parse','--short','HEAD'],
-                          capture_output=True, text=True, cwd=PROJ, timeout=5)
-        _CDN_COMMIT = r.stdout.strip()
-    except Exception:
-        _CDN_COMMIT = 'main'
-    return _CDN_COMMIT
-
-def cdn_url(rel_path):
-    """Convert relative path to jsDelivr CDN URL"""
-    commit = _get_cdn_commit()
-    # rel_path like '../outfits/.../img.png' -> remove '../'
-    clean = rel_path.lstrip('./') if rel_path.startswith('..') else rel_path
-    return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{clean}'
+# CDN — 从 common 统一导入
+from tools.common import get_git_commit, cdn_url
 
 def simplify_name(iid, name):
     """Simplify item name: brand + description, remove filler terms only"""
@@ -1633,7 +1615,7 @@ html = html.format(
 # Pattern: '.../...'+func() → __CDN__+func()
 html = html.replace("'../'+", "__CDN__+")
 # Set CDN value
-cdn_base = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{}/'.format(_get_cdn_commit())
+cdn_base = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{}/'.format(get_git_commit())
 html = html.replace("var __CDN__='';", "var __CDN__='{}';".format(cdn_base))
 
 out = os.path.join(PROJ, 'prototype', 'mobile-v2.html')

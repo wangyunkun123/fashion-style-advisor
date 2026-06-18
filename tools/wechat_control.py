@@ -60,8 +60,7 @@ API_KEY = config.get('api_key', '')
 API_CHAT_URL = 'https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions'
 CHAT_MODEL = 'doubao-seed-2.0-code'
 
-# ── 品类到目录/前缀映射 ──────────────────────────────────
-# wardrobe.md 品类 → 目录名 → 豆包生图前缀
+# ── 品类到目录/前缀映射（本地特有，非通用映射）──
 CATEGORY_MAP = {
     '短袖上衣': {'dir': '短袖上衣', 'prefix': '上衣'},
     '长袖上衣': {'dir': '长袖上衣', 'prefix': '上衣'},
@@ -78,23 +77,23 @@ CATEGORY_MAP = {
     '袜子':     {'dir': '袜子',     'prefix': '袜子'},
 }
 
-# ── 品类代码 → 中文名 ──────────────────────────────────
-CATEGORY_CODE_TO_NAME = {
-    'TS': '短袖上衣', 'LS': '长袖上衣', 'SHIRT': '衬衣', 'TANK': '背心',
-    'JK': '外套', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
-    'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '墨镜', 'ACC': '手部配饰',
-}
+# ── 品类映射（从 common 统一导入）──
+from tools.common import (
+    CAT_CONFIG, cat_code_to_name as _cat_cn, cat_emoji as _cat_emoji,
+    CORE_CATS, ITEM_ID_PATTERN,
+    get_git_commit, get_cdn_base, cdn_url,
+    get_banned_items as _get_banned_items,
+    get_recent_outfits as _get_recent_outfits,
+    get_wear_counts,
+    parse_outfit_md, load_all_clothing as _load_all_clothing,
+)
+CATEGORY_CODE_TO_NAME = {k: v['cn'] for k, v in CAT_CONFIG.items()}
+CAT_EMOJI = {v['cn']: v['emoji'] for k, v in CAT_CONFIG.items()}
+# 品类代码 → emoji 直接映射
+CAT_CODE_EMOJI = {k: v['emoji'] for k, v in CAT_CONFIG.items()}
 
-def _get_git_commit():
-    """获取当前 Git commit hash（缓存）"""
-    if not hasattr(_get_git_commit, '_cache'):
-        try:
-            r = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
-                              capture_output=True, text=True, cwd=PROJECT_DIR, timeout=5)
-            _get_git_commit._cache = r.stdout.strip()
-        except Exception:
-            _get_git_commit._cache = 'main'
-    return _get_git_commit._cache
+# _get_git_commit / get_banned_items / get_recent_outfit_items
+# 已迁移至 tools/common.py，通过顶部 import 直接使用
 
 def _find_item_asset(clothing_id, dir_globs):
     """通用单品资源查找：按优先级遍历 (目录, glob模式) 列表，返回首个匹配的相对路径"""
@@ -335,72 +334,8 @@ def find_latest_composite(date_str=None):
     candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
     return candidates[0]
 
-def get_banned_items():
-    """获取因一星评价被禁用的单品清单 — 只有用户明确打一星才禁用"""
-    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    banned = []
-    for d in os.listdir(outfit_base):
-        dp = os.path.join(outfit_base, d)
-        if not os.path.isdir(dp):
-            continue
-        rating_file = os.path.join(dp, 'rating.json')
-        if not os.path.exists(rating_file):
-            continue
-        try:
-            with open(rating_file, 'r') as f:
-                rating_data = json.load(f)
-            if rating_data.get('rating') == 1:
-                # 精准禁用：优先使用用户标记的 banned_items
-                feedback = rating_data.get('feedback', {}) or {}
-                precise_banned = feedback.get('banned_items', [])
-                if precise_banned and isinstance(precise_banned, list):
-                    banned.extend(precise_banned)
-                else:
-                    # 旧数据兼容：没有 banned_items 则全部禁用
-                    md = os.path.join(dp, 'outfit.md')
-                    if os.path.exists(md):
-                        with open(md, 'r') as f:
-                            content = f.read()
-                        ids = re.findall(
-                            r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                            content
-                        )
-                        banned.extend(ids)
-        except:
-            pass
-    return list(set(banned))
-
-
-def get_recent_outfit_items(limit=3):
-    """获取最近 N 套穿搭中已使用的核心单品 ID（去重），用于避免重复推荐"""
-    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    today = time.strftime('%Y-%m-%d')
-    recent = []  # [(date_label, [core_ids]), ...]
-    for d in sorted(os.listdir(outfit_base), reverse=True):
-        dp = os.path.join(outfit_base, d)
-        if not os.path.isdir(dp) or d.startswith('.'):
-            continue
-        if d.startswith(today):
-            continue  # 跳过今天的
-        md = os.path.join(dp, 'outfit.md')
-        if not os.path.exists(md):
-            continue
-        try:
-            with open(md, 'r') as f:
-                content = f.read()
-            ids = list(set(re.findall(
-                r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)',
-                content
-            )))
-            # 只关注核心品类（上衣/下装/鞋子）
-            core = [i for i in ids if i.startswith(('TS-', 'LS-', 'TANK-', 'SHIRT-', 'JK-', 'SH-', 'PT-', 'SHOE-'))]
-            if core:
-                recent.append((d, core))
-        except:
-            pass
-        if len(recent) >= limit:
-            break
-    return recent
+# get_banned_items / get_recent_outfit_items
+# 已迁移至 tools/common.py，通过 _get_banned_items / _get_recent_outfits 使用
 
 
 CAT_EMOJI = {
@@ -2035,7 +1970,7 @@ def _style_has_image(style_id):
     img_path = os.path.join(PROJECT_DIR, 'styles_universal', style_id, 'representative.jpg')
     if os.path.exists(img_path):
         rel = f'styles_universal/{style_id}/representative.jpg'
-        commit = _get_git_commit()
+        commit = get_git_commit()
         return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{rel}'
     return None
 
@@ -2075,7 +2010,7 @@ def _load_style_cards(include_universal=False, with_top_items=False):
                             if rel:
                                 # _find_item_thumb returns 'path?v=mtime', strip v= for CDN
                                 path = rel.split('?')[0]
-                                commit = _get_git_commit()
+                                commit = get_git_commit()
                                 return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{path}'
                             return ''
                         card['top_items'] = [
@@ -2219,7 +2154,7 @@ def _handle_favorites(handler):
 
 def get_cdn_url(rel_path):
     """构建 jsDelivr CDN URL"""
-    h = _get_git_commit()
+    h = get_git_commit()
     if h:
         import urllib.parse
         return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{urllib.parse.quote(rel_path, safe="/")}'

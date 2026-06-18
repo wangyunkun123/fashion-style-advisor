@@ -19,16 +19,9 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 # 备用风格推荐列表（当 style_lab 不可用时使用）
 ALT_STYLES = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
 
-# jsDelivr base（动态获取最新 commit hash，绕过 CDN 缓存）
-def _get_cdn_base():
-    try:
-        import subprocess as _sp
-        h = _sp.run(['git', 'rev-parse', '--short', 'HEAD'],
-                   capture_output=True, text=True, cwd=PROJ_DIR).stdout.strip()
-        if h: return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}'
-    except: pass
-    return 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
-CDN_BASE = _get_cdn_base()
+# jsDelivr base — 从 common 统一导入
+from tools.common import get_cdn_base, get_git_commit, cat_emoji, parse_outfit_md, get_banned_items, get_recent_outfits, get_wear_counts
+CDN_BASE = get_cdn_base()
 
 # 推送偏好设置 URL
 def get_push_base_url():
@@ -80,54 +73,14 @@ except ImportError:
 # ============================================================
 
 def load_outfit_data(outfit_dir):
-    """解析穿搭目录"""
-    # 读取 outfit.md
+    """解析穿搭目录 — 委托 common.parse_outfit_md"""
     md_path = os.path.join(outfit_dir, 'outfit.md')
-    if not os.path.exists(md_path):
+    data = parse_outfit_md(md_path)
+    if not data:
         return None
-
-    with open(md_path, 'r', encoding='utf-8') as f:
-        text = f.read()
-
-    data = {'items': [], 'style_id': None, 'weather': '', 'date': ''}
-
-    # 提取日期
-    m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(outfit_dir))
-    if m:
-        data['date'] = m.group(1)
-
-    # 提取风格
-    m = re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)', text)
-    if m:
-        data['style_raw'] = (m.group(1) or m.group(2)).strip()
-
-    # 提取天气
-    m = re.search(r'天气.*?[：:]\s*(.+)', text)
-    if m:
-        data['weather'] = m.group(1).strip()
-
-    # 提取单品表格
-    in_table = False
-    for line in text.split('\n'):
-        s = line.strip()
-        if '单品清单' in s:
-            in_table = True
-            continue
-        if in_table and s.startswith('##'):
-            break
-        if not in_table or not s.startswith('|') or '---' in s:
-            continue
-        cells = [c.strip().replace('**', '') for c in s.split('|')]
-        if len(cells) < 5:
-            continue
-        cid = cells[2]
-        if not re.match(r'^[A-Z]+-\d+', cid):
-            continue
-        name = cells[3]
-        score_text = cells[4]
-        reason = cells[5] if len(cells) > 5 else ''
-        data['items'].append({'id': cid, 'name': name, 'score': score_text, 'reason': reason})
-
+    # 兼容旧字段名
+    data['style_raw'] = data.get('style', '')
+    data['style_id'] = None
     return data
 
 
@@ -373,7 +326,7 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
         score_info = get_item_score(cid, style_id)
         score = score_info['score'] if score_info else '?'
         key_reason = get_key_item_reason(cid, style_id)
-        emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
+        emoji = cat_emoji(cid.split('-')[0])
         reason = key_reason or it.get('reason', '')
         score_str = f"{score}分" if isinstance(score, int) else str(score)
         item_lines.append(f"{emoji} **{name}**\n`{cid}` · 匹配度 {score_str}")

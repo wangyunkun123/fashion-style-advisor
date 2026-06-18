@@ -45,20 +45,18 @@ SCENE_FILE = os.path.join(CONFIG_DIR, 'scene_profiles.json')
 STRATEGIES_FILE = os.path.join(CONFIG_DIR, 'explore_strategies.json')
 LAB_STATE_FILE = os.path.join(CONFIG_DIR, 'style_lab_state.json')
 
-# ── 品类映射 ──
-CAT_CODE_TO_NAME = {
-    'TS': '短袖上衣', 'LS': '长袖上衣', 'SHIRT': '衬衣', 'TANK': '背心',
-    'JK': '外套', 'PT': '长裤', 'SH': '短裤', 'SHOE': '鞋子',
-    'BAG': '包', 'HAT': '帽子', 'SOCK': '袜子', 'SUN': '墨镜', 'ACC': '手部配饰',
-}
+# ── 品类映射（从 common 统一导入，消除重复定义）──
+from tools.common import (
+    CAT_CONFIG, cat_code_to_name, cat_emoji, cat_icon_key,
+    CORE_CATS, ITEM_ID_PATTERN,
+    get_git_commit, get_cdn_base, cdn_url,
+    parse_outfit_md, get_banned_items, get_recent_outfits, get_wear_counts,
+    load_all_clothing, load_score_cache, load_style_fingerprint,
+)
 
-CAT_EMOJI = {
-    'TS': '👕', 'LS': '👕', 'SHIRT': '👔', 'TANK': '🎽',
-    'JK': '🧥', 'PT': '👖', 'SH': '🩳', 'SHOE': '👟',
-    'BAG': '🎒', 'HAT': '🧢', 'SOCK': '🧦', 'SUN': '🕶️', 'ACC': '💍',
-}
-
-CORE_CATS = {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'SH', 'PT', 'SHOE'}
+# 兼容旧代码的本地别名
+CAT_CODE_TO_NAME = {k: v['cn'] for k, v in CAT_CONFIG.items()}
+CAT_EMOJI = {k: v['emoji'] for k, v in CAT_CONFIG.items()}
 
 
 # ============================================================
@@ -295,8 +293,7 @@ def load_json(path):
         return json.load(f)
 
 
-from tools.common import (load_all_clothing, load_score_cache,
-                         load_style_fingerprint, ITEM_ID_PATTERN)
+# common 导入已在上方统一完成
 
 
 def load_scene_profiles():
@@ -892,10 +889,10 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         target_styles = ['clean_fit', 'japanese_city_boy']
 
     # ── 2. 加载上下文数据 ──
-    banned_items = _get_banned_items()
-    recent_outfits = _get_recent_outfits(limit=7)
+    banned_items = get_banned_items()
+    recent_outfits = get_recent_outfits(limit=7)
     # 获取穿着次数（近似值）
-    wear_counts = _get_wear_counts()
+    wear_counts = get_wear_counts()
 
     # ── 3. 加载场景画像 ──
     scene_profiles = load_scene_profiles().get('profiles', {})
@@ -1440,92 +1437,8 @@ def generate_narrative(items, target_styles, explore_level, outfit_score):
 # 辅助函数
 # ============================================================
 
-def _get_banned_items():
-    """获取一星差评禁用的单品清单"""
-    banned = []
-    for d in os.listdir(OUTFITS_DIR):
-        dp = os.path.join(OUTFITS_DIR, d)
-        if not os.path.isdir(dp):
-            continue
-        rating_file = os.path.join(dp, 'rating.json')
-        if not os.path.exists(rating_file):
-            continue
-        try:
-            with open(rating_file, 'r') as f:
-                rating_data = json.load(f)
-            if rating_data.get('rating') == 1:
-                # 精准禁用：优先使用用户标记的 banned_items
-                feedback = rating_data.get('feedback', {}) or {}
-                precise_banned = feedback.get('banned_items', [])
-                if precise_banned and isinstance(precise_banned, list):
-                    banned.extend(precise_banned)
-                else:
-                    # 旧数据兼容：没有 banned_items 则全部禁用
-                    md = os.path.join(dp, 'outfit.md')
-                    if os.path.exists(md):
-                        with open(md, 'r') as f:
-                            content = f.read()
-                        ids = re.findall(
-                            ITEM_ID_PATTERN,
-                            content
-                        )
-                        banned.extend(ids)
-        except Exception:
-            pass
-    return list(set(banned))
-
-
-def _get_recent_outfits(limit=7):
-    """获取最近 N 套穿搭的核心单品（含今天已生成的，避免同天重复）"""
-    today = time.strftime('%Y-%m-%d')
-    recent = []
-    for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
-        dp = os.path.join(OUTFITS_DIR, d)
-        if not os.path.isdir(dp) or d.startswith('.'):
-            continue
-        # ⚠️ 不再跳过当天 — 同天已生成的 outfit 也必须可见，防止连穿同款
-        md = os.path.join(dp, 'outfit.md')
-        if not os.path.exists(md):
-            continue
-        try:
-            with open(md, 'r') as f:
-                content = f.read()
-            ids = list(set(re.findall(
-                ITEM_ID_PATTERN,
-                content
-            )))
-            core = [i for i in ids if i.split('-')[0] in CORE_CATS]
-            if core:
-                # 当天outfit加 🆕 标记
-                label = f'🆕今天 {d}' if d.startswith(today) else d
-                recent.append((label, core))
-        except Exception:
-            pass
-        if len(recent) >= limit:
-            break
-    return recent
-
-
-def _get_wear_counts():
-    """统计每件单品的穿着次数"""
-    counts = {}
-    for d in os.listdir(OUTFITS_DIR):
-        dp = os.path.join(OUTFITS_DIR, d)
-        md = os.path.join(dp, 'outfit.md')
-        if not os.path.exists(md):
-            continue
-        try:
-            with open(md, 'r') as f:
-                content = f.read()
-            ids = re.findall(
-                ITEM_ID_PATTERN,
-                content
-            )
-            for i in set(ids):
-                counts[i] = counts.get(i, 0) + 1
-        except Exception:
-            pass
-    return counts
+# _get_banned_items / _get_recent_outfits / _get_wear_counts
+# 已迁移至 tools/common.py，通过顶部 import 直接使用 get_banned_items() 等函数
 
 
 def find_items_by_description(description, all_clothes=None):
@@ -1777,6 +1690,256 @@ def update_lab_state(items):
 
 
 # ============================================================
+# Step 1a: 选品 Prompt（精简版 — 只做单品选择）
+# ============================================================
+
+def build_selection_prompt(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
+                           explore_level=0.0, target_styles=None, mandatory_items=None):
+    """构建第一轮「选品」prompt — 只关注单品选择，不含叙事/生图"""
+
+    today = time.strftime('%Y-%m-%d')
+
+    # ── 0. 强制单品 ──
+    mandatory_section = ''
+    if mandatory_items:
+        all_clothes = load_all_clothing()
+        mandatory_lines = []
+        for mid, conf, reason in mandatory_items:
+            item = all_clothes.get(mid, {})
+            brand = (item.get('brand') or {}).get('name', '—')
+            color = (item.get('color') or {}).get('hue_name', '—')
+            cat = item.get('category', '—')
+            mandatory_lines.append(
+                f'  🎯 {mid} | {brand} | {color}·{cat} | 匹配: {reason} (置信度{conf:.0%})'
+            )
+        if mandatory_lines:
+            mandatory_section = (
+                '🎯🎯🎯 用户指定单品（硬性要求 — 必须使用，不可替换）🎯🎯🎯\n' +
+                '\n'.join(mandatory_lines) + '\n' +
+                '⚠️ 以上单品必须出现在 items 数组中。\n\n'
+            )
+
+    # ── 1. 风格 ──
+    if target_styles is None:
+        from tools.style_matcher import auto_suggest_style
+        suggestions = auto_suggest_style(temp_high, weather_cond, occasion)
+        target_styles = [s['style_id'] for s in suggestions[:3]]
+    if not target_styles:
+        target_styles = ['clean_fit', 'japanese_city_boy']
+
+    # ── 2. 上下文数据 ──
+    banned_items = get_banned_items()
+    recent_outfits = get_recent_outfits(limit=7)
+    wear_counts = get_wear_counts()
+
+    # ── 3. 场景 ──
+    scene_profiles = load_scene_profiles().get('profiles', {})
+    scene_profile = scene_profiles.get(occasion, scene_profiles.get('日常', {}))
+    scene_text = ''
+    if scene_profile:
+        required = ' + '.join(scene_profile.get('required', []))
+        avoid = '、'.join(scene_profile.get('avoid', [])) or '无'
+        keywords = '、'.join(scene_profile.get('keywords', [])) or '无'
+        scene_text = f"""
+📋 场景：{occasion}
+- 必备品类：{required}
+- 避雷品类：{avoid}
+- 关键词匹配：{keywords}
+"""
+
+    # ── 4. 探索策略 ──
+    strategy_text = ''
+    if explore_level > 0:
+        strategy, boldness = pick_strategy(explore_level)
+        if strategy:
+            strategy_text = '\n' + get_strategy_prompt(strategy['id'], boldness) + '\n'
+
+    # ── 5. 禁用 ──
+    ban_section = ''
+    if banned_items:
+        ban_section = f'\n🚫 禁用单品: {"、".join(banned_items)}\n'
+
+    # ── 6. 最近已穿 ──
+    recent_section = ''
+    if recent_outfits:
+        recent_lines = []
+        for dir_name, ids in recent_outfits:
+            label = dir_name.split('_', 1)[-1] if '_' in dir_name else dir_name[:10]
+            recent_lines.append(f"  {label}: {'、'.join(ids[:8])}")
+        if recent_lines:
+            recent_section = (
+                '\n📌 最近已穿（严格避穿）:\n' +
+                '\n'.join(recent_lines) + '\n' +
+                '⚠️ 鞋子在最近2套中出现过→必须换。上衣+下装+鞋子至少换2件。\n'
+            )
+
+    # ── 7. 衣柜表 ──
+    wardrobe_table = build_wardrobe_table(
+        target_styles, occasion, recent_outfits, banned_items, wear_counts
+    )
+
+    # ── 8. 人物描述 ──
+    persona_desc, persona_modifier, persona_context = _get_persona_description()
+
+    # ── 9. 组装 prompt ──
+    context_section = ''
+    if persona_context:
+        context_section = f'\n用户背景: {persona_context}'
+
+    system_prompt = f"""你是专攻亚洲男性穿搭的 AI 时尚顾问。你的任务是根据衣柜数据，为一位用户（{persona_desc}）选出今日穿搭单品。{context_section}
+
+选品原则：
+1. 锚点优先：先确定主角单品，再围绕它搭配同伴
+2. 场景匹配：使用场景画像中的必备品类
+3. 新鲜感：避开最近已穿单品
+4. 廓形节奏：上宽下窄或外松内紧
+5. 身形修饰：{persona_desc}，{persona_modifier}
+
+⚠️ 质量检查：
+□ 三件套齐全：上衣 + 下装 + 鞋子
+□ 风格连贯：每件单品对目标风格匹配分 ≥ 30
+□ 运动场景只选1件上衣+1件下装+1双运动鞋，不要多余层次
+□ 严禁添加第二件上衣，除非场景明确需要
+□ 所有 ID 从衣柜表格中选取，严禁编造
+□ 永远不要输出 UNAVAILABLE
+
+输出严格 JSON（不要其他文字）：
+{{
+  "anchor": {{"id": "PT-004", "role": "今日主角"}},
+  "items": [
+    {{"category": "上衣", "id": "TS-xxx", "name": "品牌+颜色", "color": "颜色", "reason": "选品理由"}},
+    {{"category": "下装", "id": "PT-xxx", "name": "...", "color": "...", "reason": "..."}},
+    {{"category": "鞋子", "id": "SHOE-xxx", "name": "...", "color": "...", "reason": "..."}}
+  ],
+  "color_story": "主色调+辅助色的配色逻辑",
+  "silhouette": "廓形节奏描述"
+}}"""
+
+    style_descs = []
+    for sid in target_styles[:3]:
+        sf = load_style_fingerprint(sid)
+        if sf:
+            style_descs.append(f'  🎯 {sf.get("name_zh", sid)} ({sid})')
+
+    explore_header = ''
+    if explore_level > 0:
+        emoji = '🚀' if explore_level >= 0.8 else '🧪'
+        explore_header = f'\n{emoji} 探索度: {explore_level}\n'
+
+    user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
+{explore_header}{mandatory_section}风格需求：「{style_hint}」
+场合：{occasion}
+{ban_section}{recent_section}
+目标风格：
+{chr(10).join(style_descs)}
+{scene_text}
+{strategy_text}
+─── 衣柜档案 ───
+
+{wardrobe_table}
+
+─── 请输出 JSON 格式的穿搭方案（只需 items/color_story/silhouette/anchor，不需要 narrative/seedream_prompt）。───"""
+
+    return {
+        'system_prompt': system_prompt,
+        'user_prompt': user_prompt,
+        'target_styles': target_styles,
+        'banned_items': banned_items,
+        'recent_outfits': recent_outfits,
+        'occasion': occasion,
+        'scene_profile': scene_profile,
+        'explore_level': explore_level,
+    }
+
+
+# ============================================================
+# Step 1b: 叙事 Prompt（第二轮 — 基于已选单品生成叙事+生图）
+# ============================================================
+
+def build_narrative_prompt(selected_items, target_styles, style_hint, occasion,
+                           explore_level, persona_desc):
+    """构建第二轮「叙事+生图」prompt — 基于已确认的单品生成完整内容"""
+
+    all_clothes = load_all_clothing()
+
+    # ── 已选单品清单 ──
+    item_lines = []
+    for it in selected_items:
+        cid = it.get('id', '')
+        detail = all_clothes.get(cid, {})
+        brand = (detail.get('brand') or {}).get('name', '—')
+        color = (detail.get('color') or {}).get('hue_name', '')
+        fabric = (detail.get('fabric') or {}).get('primary', '')
+        item_lines.append(
+            f"  {cid} | {brand} | {color}·{fabric} | {it.get('category', '')}"
+        )
+
+    # ── 风格描述 ──
+    style_descs = []
+    for sid in target_styles[:3]:
+        sf = load_style_fingerprint(sid)
+        if sf:
+            name = sf.get('name_zh', sid)
+            desc = sf.get('description', '')[:60]
+            color_logic = sf.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '')
+            style_descs.append(f'  🎯 {name} ({sid}): {desc}')
+            if color_logic:
+                style_descs.append(f'     配色逻辑: {color_logic[:50]}')
+
+    # ── 摄影指导 ──
+    photo_direction = get_photo_direction(target_styles)
+
+    # ── 颜色故事和廓形（从第一轮结果中提取）──
+    color_story = ''
+    silhouette = ''
+    # 这些会从第一轮 JSON 结果中传入
+
+    system_prompt = f"""你是专攻亚洲男性穿搭的 AI 时尚顾问。你的任务是基于已经选好的单品，生成穿搭叙事、风格关键词和 Seedream 生图 prompt。
+
+用户形象：{persona_desc}
+
+输出严格 JSON（不要其他文字）：
+{{
+  "keywords": "3-6个风格特征词，用中文顿号分隔（从搭配本身提取美学特征，不要照抄用户输入）",
+  "reasoning": "整体搭配理由（100-200字）",
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)。必须融合📷摄影指导中的相机/构图/光影/姿势/场景/情绪，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)。"
+}}"""
+
+    # ── 注入第一轮的颜色故事和廓形 ──
+    color_story_text = ''
+    silhouette_text = ''
+    for it in selected_items:
+        if 'color_story' in it:
+            color_story_text = it.get('color_story', '')
+        if 'silhouette' in it:
+            silhouette_text = it.get('silhouette', '')
+    # color_story/silhouette 可能在顶层
+    if not color_story_text:
+        # 从 items 中提取颜色
+        colors = [it.get('color', '') for it in selected_items if it.get('color')]
+        if colors:
+            color_story_text = ' → '.join(colors)
+
+    user_prompt = f"""已选单品：
+{chr(10).join(item_lines)}
+
+颜色故事：{color_story_text or '由你分析'}
+廓形节奏：{silhouette_text or '由你分析'}
+
+目标风格：
+{chr(10).join(style_descs)}
+
+{photo_direction}
+
+─── 请输出 JSON（keywords + reasoning + seedream_prompt）。───"""
+
+    return {
+        'system_prompt': system_prompt,
+        'user_prompt': user_prompt,
+    }
+
+
+# ============================================================
 # 主入口
 # ============================================================
 
@@ -1784,28 +1947,221 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
                          explore_level=None, target_styles=None, call_ai_fn=None,
                          mandatory_items=None):
     """
-    统一推荐管线主入口。
+    统一推荐管线主入口（两轮 prompt + 重试闭环）。
 
     参数:
       style_hint: 风格提示词（如 "日常通勤"）
-      occasion: 场合 (运动/通勤/约会/聚会/度假/户外/居家/日常)
+      occasion: 场合
       temp_high: 最高温度
       weather_cond: 天气状况
-      explore_level: 探索度 (None=自动检测, 0.0=安全, 0.5=微调, 1.0=大胆)
+      explore_level: 探索度 (None=自动, 0.0=安全, 0.5=微调, 1.0=大胆)
       target_styles: 手动指定风格列表
       call_ai_fn: AI调用函数 fn(system_prompt, user_prompt) -> str
-      mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
+      mandatory_items: [(item_id, confidence, reason), ...]
 
     返回:
       {
-        'plan': {...},           # AI 选品结果
+        'plan': {...},           # AI 选品结果（含 narrative/seedream_prompt）
         'validation': {...},     # 验证结果
         'outfit_score': {...},   # 穿搭评分
         'narrative': '...',      # 叙事文本
         'prompt_data': {...},    # 构建的 prompt（调试用）
         'explore_level': 0.0,    # 实际探索度
+        'attempts': 1,           # 选品尝试次数
       }
     """
+    # ── 确定探索度 ──
+    if explore_level is None:
+        explore_level = determine_explore_level(style_hint)
+
+    # ── 选品默认 AI 函数 ──
+    if call_ai_fn is None:
+        from tools.wechat_control import call_doubao_chat, extract_json as _extract_json
+
+        def _default_ai(sys_p, usr_p):
+            content = call_doubao_chat([
+                {'role': 'system', 'content': sys_p},
+                {'role': 'user', 'content': usr_p},
+            ], max_tokens=4096, timeout=180)
+            return content
+
+        def _parse_json(content):
+            return _extract_json(content)
+
+        call_ai_fn = _default_ai
+        parse_fn = _parse_json
+    else:
+        def parse_fn(content):
+            try:
+                return json.loads(content)
+            except Exception:
+                m = re.search(r'\{.*\}', content, re.DOTALL)
+                return json.loads(m.group(0)) if m else None
+
+    # ═══════════════════════════════════════════════════════════
+    # Round 1: 选品（含重试闭环，最多 3 次）
+    # ═══════════════════════════════════════════════════════════
+    sel_data = build_selection_prompt(
+        style_hint=style_hint,
+        occasion=occasion,
+        temp_high=temp_high,
+        weather_cond=weather_cond,
+        explore_level=explore_level,
+        target_styles=target_styles,
+        mandatory_items=mandatory_items,
+    )
+
+    MAX_ATTEMPTS = 3
+    plan = None
+    all_violations = []
+    attempt = 0
+
+    for attempt in range(MAX_ATTEMPTS):
+        # 重试时注入违规反馈
+        user_prompt = sel_data['user_prompt']
+        if attempt > 0 and all_violations:
+            feedback_lines = '\n'.join(f'  ❌ {v}' for v in all_violations)
+            user_prompt += f"""
+
+🚨🚨🚨 上一轮验证未通过！请仔细修正以下问题后重新选品 🚨🚨🚨
+违规项：
+{feedback_lines}
+
+修正要求：
+- 逐一确认上述每条违规是否已解决
+- 如果涉及单品选择问题，必须替换相关单品
+- 确保所有 ID 来自衣柜表格
+- 确保三件套齐全、场景匹配、温度合理"""
+            log_retry = f'[RETRY] 尝试 {attempt+1}/{MAX_ATTEMPTS}，上次违规: {all_violations}'
+            try:
+                with open(os.path.join(BASE_DIR, 'wechat_control.log'), 'a') as lf:
+                    lf.write(f'{time.strftime("%H:%M:%S")} {log_retry}\n')
+            except Exception:
+                pass
+
+        content = call_ai_fn(sel_data['system_prompt'], user_prompt)
+        plan = parse_fn(content)
+
+        if not plan:
+            all_violations = ['AI 返回无法解析的 JSON']
+            continue
+
+        items = plan.get('items', [])
+        if not items:
+            all_violations = ['AI 未返回任何单品']
+            continue
+
+        # 检查 UNAVAILABLE
+        unavailable = [it for it in items if it.get('id', '') == 'UNAVAILABLE']
+        if unavailable:
+            all_violations = [f'AI 返回 UNAVAILABLE: {[it.get("category","?") for it in unavailable]}']
+            continue
+
+        # 规则验证
+        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond)
+
+        if passed:
+            break
+
+        all_violations = violations
+
+    # ── 构建验证结果 ──
+    validation = {
+        'passed': len(all_violations) == 0,
+        'violations': all_violations,
+        'warnings': warnings if attempt > 0 else [],
+        'attempts': attempt + 1,
+    }
+
+    if not plan:
+        return {
+            'error': f'选品失败（{MAX_ATTEMPTS}次尝试后仍未通过验证）',
+            'validation': validation,
+            'prompt_data': sel_data,
+        }
+
+    # ═══════════════════════════════════════════════════════════
+    # Round 2: 叙事 + 生图 prompt（基于已确认的单品）
+    # ═══════════════════════════════════════════════════════════
+    persona_desc, persona_modifier, _ = _get_persona_description()
+    narrative_data = build_narrative_prompt(
+        selected_items=plan.get('items', []),
+        target_styles=sel_data['target_styles'],
+        style_hint=style_hint,
+        occasion=occasion,
+        explore_level=explore_level,
+        persona_desc=persona_desc,
+    )
+
+    narrative_content = call_ai_fn(narrative_data['system_prompt'], narrative_data['user_prompt'])
+    narrative_result = parse_fn(narrative_content)
+
+    # ── 合并两轮结果 ──
+    if narrative_result:
+        plan['keywords'] = narrative_result.get('keywords', '')
+        plan['reasoning'] = narrative_result.get('reasoning', '')
+        plan['seedream_prompt'] = narrative_result.get('seedream_prompt', '')
+        plan['style'] = narrative_result.get('style', style_hint)
+
+    # ── 确保必要字段存在 ──
+    if not plan.get('keywords'):
+        plan['keywords'] = style_hint
+    if not plan.get('reasoning'):
+        reason_parts = []
+        for it in plan.get('items', [])[:3]:
+            reason_parts.append(f'{it.get("name", "")}: {it.get("reason", "")}')
+        plan['reasoning'] = '；'.join(reason_parts) if reason_parts else f'{style_hint}风格穿搭'
+    if not plan.get('seedream_prompt'):
+        # 兜底 seedream prompt
+        items_desc = ', '.join(
+            f'{it.get("name", it.get("id", ""))} ({it.get("color", "")})'
+            for it in plan.get('items', [])[:4]
+        )
+        plan['seedream_prompt'] = (
+            f'Asian male fashion model, full body shot, wearing {items_desc}, '
+            f'{style_hint} style, editorial photography, natural lighting, '
+            f'dynamic pose walking on modern city street, Fujifilm X-T5 35mm f/1.4, '
+            f'shallow depth of field, fashion magazine quality'
+        )
+
+    # ── Step 4: 穿搭评分 ──
+    outfit_score = score_outfit(
+        plan.get('items', []), sel_data['target_styles'],
+        occasion, temp_high, weather_cond
+    )
+
+    # ── Step 5: 生成叙事 ──
+    narrative = generate_narrative(
+        plan.get('items', []), sel_data['target_styles'],
+        explore_level, outfit_score
+    )
+
+    # ── 更新状态 ──
+    update_lab_state(plan.get('items', []))
+
+    return {
+        'plan': plan,
+        'validation': validation,
+        'outfit_score': outfit_score,
+        'narrative': narrative,
+        'prompt_data': {
+            'target_styles': sel_data['target_styles'],
+            'explore_level': explore_level,
+            'occasion': occasion,
+        },
+        'explore_level': explore_level,
+        'attempts': attempt + 1,
+    }
+
+
+# ============================================================
+# 旧版入口（保留向后兼容）
+# ============================================================
+
+def run_unified_pipeline_v1(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
+                         explore_level=None, target_styles=None, call_ai_fn=None,
+                         mandatory_items=None):
+    """旧版单轮 prompt 入口 — 保留向后兼容，新代码请用 run_unified_pipeline"""
     # ── 确定探索度 ──
     if explore_level is None:
         explore_level = determine_explore_level(style_hint)
@@ -1822,7 +2178,6 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
     )
 
     # ── Step 2: AI 创意选品 ──
-    # 如果没传 AI 函数，使用默认的豆包调用
     if call_ai_fn is None:
         from tools.wechat_control import call_doubao_chat, extract_json
         content = call_doubao_chat([
@@ -1832,7 +2187,6 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
         plan = extract_json(content)
     else:
         content = call_ai_fn(prompt_data['system_prompt'], prompt_data['user_prompt'])
-        # 尝试解析 JSON
         try:
             plan = json.loads(content)
         except Exception:
@@ -1842,7 +2196,6 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
     if not plan:
         return {'error': 'AI 选品失败，无法解析 JSON', 'prompt_data': prompt_data}
 
-    # 安全检查：如果 AI 返回 UNAVAILABLE，标记错误
     items = plan.get('items', [])
     unavailable = [it for it in items if it.get('id', '') == 'UNAVAILABLE']
     if unavailable:
@@ -1852,7 +2205,6 @@ def run_unified_pipeline(style_hint, occasion='日常', temp_high=30, weather_co
     # ── Step 3: 规则验证 ──
     passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond)
 
-    # 如果验证失败，构建反馈供 AI 修正
     validation = {
         'passed': passed,
         'violations': violations,

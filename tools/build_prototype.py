@@ -448,11 +448,11 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .lightbox img{{max-width:90%;max-height:80%;object-fit:contain;border-radius:8px}}
 .lightbox .close{{position:absolute;top:20px;right:24px;color:#fff;font-size:32px;cursor:pointer;z-index:201}}
 /* Palette strip */
-.palette-strip{{display:flex;align-items:center;gap:4px;padding-top:10px;border-top:1px solid var(--border)}}
+.palette-strip{{display:flex;align-items:center;gap:4px;padding:10px 0;border-top:1px solid var(--border)}}
 .pal-label{{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-right:6px}}
 .pal-dot{{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);flex-shrink:0}}
 /* Rationale */
-.rationale-box{{padding-top:10px;border-top:1px solid var(--border)}}
+.rationale-box{{padding:10px 0;border-top:1px solid var(--border)}}
 .rationale-box .ra-title{{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:6px}}
 .rationale-box .ra-text{{font-size:12px;color:var(--text);line-height:1.75}}
 .rationale-tips{{margin-top:8px;display:flex;flex-direction:column;gap:3px}}
@@ -540,7 +540,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-square-grid .item-row.expanded{{grid-column:1 / -1;grid-row:span 2;padding:4px;z-index:2}}
 .h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .ir-brand,.h-square-grid .item-row.expanded .ir-desc{{display:none}}
 .h-square-grid .item-row.expanded .item-img{{display:block;border-radius:6px}}
-.h-exp-palette{{display:flex;align-items:center;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}}
+.h-exp-palette{{display:flex;align-items:center;gap:4px;margin-top:8px;padding:8px 0;border-top:1px solid var(--border)}}
 .h-exp-palette .pal-dot{{width:16px;height:16px;border-radius:3px;border:1px solid var(--border)}}
 .pin-btn{{display:inline-block;margin-top:10px;padding:6px 14px;background:var(--white);border:1px solid var(--navy);border-radius:16px;color:var(--navy);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}}
 .pin-btn:active{{background:var(--navy);color:#fff}}

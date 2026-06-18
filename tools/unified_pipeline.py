@@ -271,12 +271,12 @@ def get_photo_direction(style_ids):
     d = directions[0]
     return (
         f"📷 摄影指导（用于 seedream_prompt 创作）：\n"
-        f"  相机: {d['camera']}\n"
+        f"  相机: {d.get('camera', 'Sony A7IV 50mm f/1.4')}\n"
         f"  构图: {d.get('angle', 'low angle, rule of thirds')}\n"
-        f"  光影: {d['light']}\n"
-        f"  姿势: {d['pose']}\n"
-        f"  场景: {d['scene']}\n"
-        f"  情绪: {d['vibe']}\n"
+        f"  光影: {d.get('light', 'golden hour backlight, warm rim light')}\n"
+        f"  姿势: {d.get('pose', 'walking mid-stride, natural movement')}\n"
+        f"  场景: {d.get('scene', 'modern urban street, soft afternoon light')}\n"
+        f"  情绪: {d.get('vibe', 'editorial fashion photography, candid energy')}\n"
         f"  ⚠️ 这些参数要融入 seedream_prompt，但不要逐字复制，要自然改写。\n"
         f"  ⚠️ 姿势必须动态（禁止 standing），场景必须具体有辨识度。"
     )

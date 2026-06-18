@@ -1,5 +1,41 @@
 # 开发日志
 
+## 2026-06-17/18: 第四阶段 — 手机端完整实现 + 代码精简优化
+
+### 手机端建设
+- **推荐页完整改版**：Hero 区（AI 生图 + 风格标签 + 配色条）→ 单品清单（3 列网格 + Clothing-Icons 图标）→ 其他推荐（横向卡片 + 换一批）→ 历史推荐（可展开穿搭卡片 + 评分）
+- **Tab Bar 五大页面**：🧠推荐 / 🧪探索 / 👔衣橱 / ➕添加 / ⚙️设置，全部联通 API
+- **评分系统集成**：⭐⭐⭐ 三级评分直达，Hero 区和历史卡片均可评分
+- **内容同步机制**：手机控制台与微信推送使用完全相同的内容（三层防御：stdout → 缓存 → 摘要）
+
+### 统一推荐管线
+- **AB 线合并**：`unified_pipeline.py` — AI 主导 + 数据支撑 + 规则验证
+- **风格匹配**：五层评分引擎（文化/美学/场景/身形/新鲜度）
+- **场景适配**：运动场景强制功能鞋、功能面料，从 JSON 标签动态读取场景标签
+- **单品禁用**：仅一星差评才禁用单品，不再按"已穿过"盲目避开
+
+### 两轮接力生图
+- **Pass 1**：人物 + 上衣 + 下装 + 鞋子 → Seedream 基础穿搭（4 张）
+- **Pass 2**：Pass1 最佳图 + 帽子/包/墨镜/袜子/配饰 → 精确配饰（2 张）
+- 抠图透明自动补中性灰底 (#D9D9D9)
+- Seedream prompt 七段结构：摄影风格/构图/光影/姿势/服装细节/场景/情绪
+
+### 代码精简优化（三层）
+- **第一层**：删除死函数 6 个（`_get_ark_key`/`wrap_text`/`build_hero_item_card`/`_detect_bline_from_hint`/`load_style_defaults`/`load_rules`）、未用导入 8 个、死常量 `OUTFIT_SYSTEM_PROMPT`
+- **第二层**：创建 `tools/common.py` 共享模块，消除 15+ 处跨文件重复定义（`load_all_clothing` ×4→1、`load_score_cache` ×3→1、`load_style_fingerprint` ×2→1、`load_encyclopedia` ×2→1、`ITEM_ID_PATTERN` ×6→1）
+- **第三层**：wechat_control 内部合并（`_find_item_thumb`+`_find_item_cutout`→`_find_item_asset`）、常量提取（`JUNK_PATTERNS`/`ALT_STYLES`）、`CATEGORY_NAMES`+`CATEGORY_CODE_TO_NAME` 合并
+
+### 质量守则落实
+- 配色色块先 git push 再发微信（防止 CDN 拿不到图片）
+- 手机端 Hero 图优先 AI 原始生图
+- 每次生成新穿搭后必须运行 `build_prototype.py` 重建原型
+- JSON 标签是唯一数据源，禁止手改服装档案就以为完事
+
+### 备份
+- `phase-4` 标签 → `0529a73`
+
+---
+
 ## 2026-06-16/17: 手机端三大模块 — 风格图库 + 探索页图片化 + 智能添加页
 
 ### 手机端优化

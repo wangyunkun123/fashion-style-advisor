@@ -971,6 +971,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   "color_story": "主色调+辅助色+跳色的完整配色逻辑",
   "silhouette": "廓形节奏描述",
   "body_modifier": "身形修饰策略",
+  "keywords": "3-6个风格特征词，用中文顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。⚠️这是穿搭风格标签，不是用户指令！必须从搭配本身提取美学特征，严禁照抄用户输入",
   "reasoning": "整体搭配理由（100-200字）",
   "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
 }}
@@ -978,6 +979,8 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 注意：
 - 每套必须包含上衣、下装、鞋子（硬性要求，缺一不可）
 - 帽子、包、袜子、墨镜、配饰酌情添加（不是必须）
+- ⚠️ 严禁添加第二件上衣（如长袖/衬衫/外套叠穿），除非场景明确需要（如寒冷天气）
+- 运动场景（网球/跑步/健身）只选1件上衣+1件下装+1双运动鞋，不要加多余层次
 - 所有ID必须从衣柜表格中选取，严禁编造
 - 永远不要输出 UNAVAILABLE 作为ID"""
 
@@ -1056,10 +1059,13 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
     shoe_count = cat_codes.count('SHOE')
     pt_count = cat_codes.count('PT')
     sh_count = cat_codes.count('SH')
+    top_count = sum(1 for c in cat_codes if c in ('TS', 'LS', 'SHIRT', 'TANK'))
     if jk_count > 1:
         violations.append('禁止两件外套')
     if shoe_count > 1:
         violations.append('禁止两双鞋')
+    if top_count > 1:
+        violations.append(f'禁止{top_count}件上衣（只能选1件上衣，不要叠穿长短袖/衬衫）')
     if pt_count > 1 and sh_count > 0:
         warnings.append('同时有长裤和短裤，建议只选一种下装')
     if pt_count > 1 or sh_count > 1:
@@ -1073,6 +1079,11 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
         cid = d['id']
         cat = d['detail'].get('category_code', '')
         fabric = (d['detail'].get('fabric') or {}).get('primary', '')
+
+        # 运动场景 + 长袖 = 不合理（即使晚上也不需要长袖运动）
+        if occasion in ('网球', '跑步', '健身', '篮球', '足球', '羽毛球', '运动') and cat in ('LS', 'SHIRT'):
+            if temp_high >= 25:
+                violations.append(f'{cid}: 运动场景+气温≥25°C禁止长袖/衬衫')
 
         # ≥35°C 禁长袖上衣
         if temp_high >= 35 and cat in ('LS', 'SHIRT'):

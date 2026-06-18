@@ -1468,7 +1468,7 @@ style: {plan.get('style', style_hint)}
 
 ## 风格关键词
 
-{plan.get('keywords', style_hint)}
+{plan.get('keywords', plan.get('style', '日常穿搭'))}
 """
     with open(os.path.join(outfit_dir, 'outfit.md'), 'w') as f:
         f.write(outfit_md)
@@ -1599,19 +1599,30 @@ def extract_occasion(style_hint):
     return '日常'
 
 
-def extract_mandatory_items(style_hint, min_confidence=0.20):
+def extract_mandatory_items(style_hint, min_confidence=0.40):
     """从用户输入中提取指定单品 → [(item_id, confidence, reason), ...]
 
     例: "大黄靴" → [(SHOE-007, 0.85, "昵称:Timberland | 俗称:大黄靴"), ...]
-    只返回置信度 ≥ min_confidence 的结果
+    只返回置信度 ≥ min_confidence 的结果。
+    ⚠️ 阈值设为 0.40：场景词（如"网球"）只匹配 ~28%，不会误判为强制单品；
+    明确指定单品（如"大黄靴"75%）才会被识别。
     """
     from tools.unified_pipeline import find_items_by_description
     matches = find_items_by_description(style_hint)
     # 过滤低置信度结果
     filtered = [(mid, conf, reason) for mid, conf, reason in matches if conf >= min_confidence]
-    if filtered:
-        log(f"🔍 单品识别: {style_hint!r} → {[(m[0], f'{m[1]:.0%}') for m in filtered[:5]]}")
-    return filtered
+    # 去重：每品类只保留置信度最高的1个，总共最多3个
+    seen_cats = {}
+    deduped = []
+    for mid, conf, reason in filtered:
+        cat = mid.split('-')[0] if '-' in mid else ''
+        if cat not in seen_cats:
+            seen_cats[cat] = (mid, conf, reason)
+            deduped.append((mid, conf, reason))
+    deduped = deduped[:3]
+    if deduped:
+        log(f"🔍 单品识别: {style_hint!r} → {[(m[0], f'{m[1]:.0%}') for m in deduped]}")
+    return deduped
 
 
 def run_pipeline(style_hint, task_id=None):
@@ -1739,7 +1750,14 @@ def _run_pipeline_impl(style_hint, task_id=None):
                 passed2, violations2, warnings2 = validate_outfit(items, occasion)
                 if not passed2:
                     log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
-                    # 两次都不通过，仍然继续（不阻止管线），但在日志中标记
+                    # 检查是否有致命违规（场景/天气相关），有则中止管线
+                    critical_keywords = ['运动场景', '避雷品类', '禁止', '缺少']
+                    critical = [v for v in violations2 if any(kw in v for kw in critical_keywords)]
+                    if critical:
+                        err_msg = f"AI 修正后仍有{len(critical)}项致命违规，中止管线: {'; '.join(critical)}"
+                        log(err_msg, "ERROR")
+                        raise ValueError(err_msg)
+                    # 非致命违规继续但标记
                     violations.extend(violations2)
                 else:
                     log(f"✅ 修正后验证通过")

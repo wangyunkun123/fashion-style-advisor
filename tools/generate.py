@@ -235,6 +235,20 @@ def main():
     print(f"🔄 Pass 1/2: 基础穿搭（{len(core_images)} 张参考图）")
     print(f"{'─' * 60}")
 
+    # 标注参考图用途：帮助 Seedream 区分面部/身体/服装
+    person_imgs = [img for img in core_images if os.path.basename(img).startswith('人物_')]
+    cloth_imgs = [img for img in core_images if not os.path.basename(img).startswith('人物_')]
+    ref_labels = []
+    for i, pimg in enumerate(person_imgs):
+        label = "full body reference for body shape and proportions" if i == 0 else "face closeup reference for EXACT facial identity and features"
+        ref_labels.append(f"image {i+1} is {label}")
+    if cloth_imgs:
+        c_start = len(person_imgs) + 1
+        c_end = c_start + len(cloth_imgs) - 1
+        ref_labels.append(f"images {c_start}-{c_end} are clothing items to accurately render onto the person")
+    ref_guide = f"[Reference: {'; '.join(ref_labels)}. Use the face closeup for facial identity, the full body shot for proportions, and render the clothing items naturally on the person.] "
+    prompt = ref_guide + prompt
+
     start = time.time()
     result1 = call_seedream(prompt, core_images)
 

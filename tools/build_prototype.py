@@ -540,9 +540,10 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 .h-square-grid .item-row.expanded{{grid-column:1 / -1;grid-row:span 2;padding:4px;z-index:2}}
 .h-square-grid .item-row.expanded .ir-top,.h-square-grid .item-row.expanded .ir-brand,.h-square-grid .item-row.expanded .ir-desc{{display:none}}
 .h-square-grid .item-row.expanded .item-img{{display:block;border-radius:6px}}
-.h-exp-palette{{display:flex;align-items:center;gap:4px;margin-top:8px;padding:8px 0;border-top:1px solid var(--border)}}
+.h-exp-bottom{{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}}
+.h-exp-palette{{display:flex;align-items:center;gap:4px}}
 .h-exp-palette .pal-dot{{width:16px;height:16px;border-radius:3px;border:1px solid var(--border)}}
-.pin-btn{{display:inline-block;margin-top:10px;padding:6px 14px;background:var(--white);border:1px solid var(--navy);border-radius:16px;color:var(--navy);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}}
+.pin-btn{{padding:5px 12px;background:var(--white);border:1px solid var(--navy);border-radius:16px;color:var(--navy);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;flex-shrink:0}}
 .pin-btn:active{{background:var(--navy);color:#fff}}
 .h-square-grid .item-img{{display:none;width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px}}
 .h-square-grid .item-row.showing-img .item-img{{display:block}}
@@ -1598,9 +1599,10 @@ def gen_history_card(outfit, idx):
         img_tag = '<div class="h-char-img" style="background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#c8d4e2;font-size:16px">暂无</div>'
     # Color palette — only shown in expanded view
     palette_html = build_palette_html(outfit).replace('palette-strip', 'h-exp-palette')
-    # Expanded: left image, right 2x4 grid, palette below grid
-    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div>{palette}'.format(
-        img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html, palette=palette_html)
+    odir = outfit['dir'].replace("'", "\\'")
+    # Expanded: left image, right 2x4 grid, bottom row: pin left + palette right
+    expanded_html = '<div class="h-expand-row">{img}<div class="h-square-grid">{items}</div></div><div class="h-exp-bottom"><button class="pin-btn" onclick="event.stopPropagation();pinToHome(\'{oid}\')">📌 放回主页</button>{palette}</div>'.format(
+        img=img_tag.replace('h-char-img','h-char-img-lg'), items=items_html, palette=palette_html, oid=odir)
     # Small thumbnail for collapsed state
     thumb_small = ''
     if outfit.get('char_img'):
@@ -1608,9 +1610,8 @@ def gen_history_card(outfit, idx):
     # Header: style + tags only (no palette when collapsed)
     tag_info_html = '<div class="fav-style">{style}{rating}</div>{tags}'.format(
         style=outfit['style'][:30], rating=rating_html, tags=tags_html)
-    odir = outfit['dir'].replace("'", "\\'")
     odate = outfit.get('date', '')
-    return '<div class="fav-card" data-oid="{oid}" data-date="{odate}" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}<button class="pin-btn" onclick="event.stopPropagation();pinToHome(\'{oid}\')">📌 放回主页</button></div></div>'.format(oid=odir, odate=odate, idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
+    return '<div class="fav-card" data-oid="{oid}" data-date="{odate}" onclick="this.classList.toggle(\'expanded\')"><div class="fav-num">{idx}</div><div class="fav-info">{tag_info}</div>{thumb}<div class="fav-arrow">▾</div><div class="fav-expand">{expanded}</div></div>'.format(oid=odir, odate=odate, idx=idx, tag_info=tag_info_html, thumb=thumb_small, expanded=expanded_html)
 
 today_outfits = scan_outfits(date_filter=time.strftime('%Y-%m-%d'), limit=10)
 fav_outfits = scan_outfits(rating_filter=3, limit=10)

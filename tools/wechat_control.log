@@ -1739,3 +1739,26 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [02:18:22] [INFO] 📍 🖼️ Step 3/5: 排版合成中...
 [02:18:23] [INFO] 📍 🖼️ Step 3/5: 排版完成 ✅
 [02:18:23] [INFO] 📍 📤 Step 4/5: 推送 GitHub...
+[02:18:33] [INFO] 📍 📤 Step 4/5: 推送完成 ✅
+[02:18:33] [INFO] ⏸️ 跳过微信推送内容生成（wechat_push_enabled=false），节省 ~120s
+[02:18:33] [INFO] 📍 📱 Step 5/5: 刷新控制台...
+[02:18:38] [INFO] 📍 📱 Step 5/5: 控制台已刷新 ✅
+[02:19:16] [INFO] =======================================================
+[02:19:16] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[02:19:16] [INFO] 📡 服务: http://0.0.0.0:8765
+[02:19:16] [INFO] 💬 面板: http://localhost:8765/
+[02:19:16] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[02:19:16] [INFO] 📤 已推送上线通知
+[02:19:23] [INFO] 💬 聊天: recommend | 一套周末 casual 穿搭
+[02:19:23] [INFO] 🚀 管线启动: 一套周末 casual 穿搭
+[02:19:23] [INFO] 📍 探索度: 微调探索 🧪
+[02:19:23] [INFO] 📍 场景提取: '一套周末 casual 穿搭' → occasion=日常
+[02:19:23] [INFO] 📍 📊 预计 ~60-100s · ~4998 tokens
+[02:19:23] [INFO] 📍 🤖 AI 智能选品
+[02:20:08] [INFO] ✅ 验证通过
+[02:20:08] [INFO] 📊 穿搭评分: 64分 — 🧪 探索向，可能惊喜可能翻车
+[02:20:08] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[02:20:08] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[02:20:08] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_一套周末 casual 穿搭
+[02:20:08] [INFO] 📍 🎨 Seedream AI 生图
+[02:21:09] [INFO] 📍 📤 推送 + 刷新

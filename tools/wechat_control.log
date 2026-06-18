@@ -1722,3 +1722,20 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [01:32:29] [INFO] 💬 面板: http://localhost:8765/
 [01:32:29] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
 [01:32:29] [INFO] 📤 已推送上线通知
+[02:16:55] [INFO] 💬 聊天: today | 
+[02:16:58] [INFO] 💬 聊天: recommend | 一套周末 casual 穿搭
+[02:16:58] [INFO] 🚀 管线启动: 一套周末 casual 穿搭
+[02:16:58] [INFO] 📍 探索度: 安全推荐
+[02:16:58] [INFO] 📍 🤖 Step 1/5: AI 智能选品（数据增强）...
+[02:16:58] [INFO] 📍 场景提取: '一套周末 casual 穿搭' → occasion=日常
+[02:17:42] [INFO] ✅ 验证通过
+[02:17:42] [INFO] 📊 穿搭评分: 59分 — ⚠️ 评分偏低，建议重新选品
+[02:17:42] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[02:17:42] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[02:17:42] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_一套周末 casual 穿搭
+[02:17:42] [INFO] 📍 🤖 Step 1/5: AI 选品完成 ✅
+[02:17:42] [INFO] 📍 🎨 Step 2/5: Seedream AI 生图中...
+[02:18:22] [INFO] 📍 🎨 Step 2/5: Seedream 生图完成 ✅
+[02:18:22] [INFO] 📍 🖼️ Step 3/5: 排版合成中...
+[02:18:23] [INFO] 📍 🖼️ Step 3/5: 排版完成 ✅
+[02:18:23] [INFO] 📍 📤 Step 4/5: 推送 GitHub...

@@ -1,5 +1,5 @@
 {
-  "total_recommendations": 30,
+  "total_recommendations": 31,
   "bline_count": 3,
   "bold_count": 0,
   "last_recommendation_time": "2026-06-17T23:01:41.619992",
@@ -53,5 +53,11 @@
     "PT-004": 1,
     "SHOE-008": 1,
     "HAT-002": 1
+  },
+  "last_updated": "2026-06-18 09:09:06",
+  "item_wear_counts": {
+    "TS-005": 1,
+    "PT-006": 1,
+    "SHOE-006": 1
   }
 }

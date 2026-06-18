@@ -47,24 +47,22 @@ except ImportError:
     weather_line = weather_advice = analyze_weather = None
     def fetch_weather(loc): return None
 
-# 风格实验室（B线探索引擎）
+# 统一推荐管线
+try:
+    from tools.unified_pipeline import (
+        load_lab_state, save_lab_state, update_lab_state,
+        score_outfit, generate_narrative, determine_explore_level,
+        _get_wear_counts,
+    )
+    UNIFIED_AVAILABLE = True
+except ImportError:
+    UNIFIED_AVAILABLE = False
+
+# 风格实验室（保留 generate_alt_section 用于"今天也适合"）
 try:
     from style_lab import (
-        load_state as load_lab_state,
-        save_state as save_lab_state,
-        should_use_bline,
-        should_use_bold,
-        find_anchor_items,
-        analyze_item_appeal,
-        generate_exploration_directions,
-        find_companions,
-        assemble_exploratory_outfit,
-        generate_exploration_narrative,
-        pick_explore_strategies,
         generate_alt_section,
         get_user_comfort_zone,
-        increment_state as increment_lab_state,
-        update_item_wear_count,
         load_all_clothing,
     )
     STYLE_LAB_AVAILABLE = True
@@ -348,129 +346,74 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     temp_high = analysis['forecast']['max'] if analysis else 30
     weather_cond = analysis['current']['desc'] if analysis else '晴'
 
-    # ━━━ B线决策 ━━━
-    is_bline = False
-    is_bold = False
-    boldness = 'micro'
-    exploration_outfit = None
+    # ━━━ 统一管线状态（无AB线之分）━━━
+    state = None
     comfort_zone = None
-    bline_appeal = None       # 缓存：避免 prepare_bline_outfit 重复计算
-    bline_narrative = None    # 缓存：避免重复生成叙事
-    bline_encyc = None        # 缓存：避免重复加载百科
-
+    if UNIFIED_AVAILABLE:
+        try:
+            state = load_lab_state()
+        except Exception:
+            pass
     if STYLE_LAB_AVAILABLE:
-        state = load_lab_state()
-        is_bline = (force_line == 'B') or (force_line is None and should_use_bline(state))
-        if is_bline:
-            is_bold = (force_boldness == 'bold') or (force_boldness is None and should_use_bold(state))
-            boldness = 'bold' if is_bold else 'micro'
+        try:
+            comfort_zone = get_user_comfort_zone()
+        except Exception:
+            pass
 
-        if is_bline:
-            try:
-                all_clothing = load_all_clothing()
-                comfort_zone = get_user_comfort_zone()
-
-                # ① 先选策略
-                strategies = pick_explore_strategies(boldness)
-                hint = strategies[0].get('anchor_hint', {}) if strategies else {}
-                rule = strategies[0].get('companion_rule', '') if strategies else ''
-                if len(strategies) > 1:
-                    rule += ' | ' + strategies[1].get('companion_rule', '')
-
-                # ② 策略驱动找核心单品（审美优先）
-                anchors = find_anchor_items(state, min_statement_score=0.10, max_wear_count=3,
-                                            count=5, strategy_hint=hint, comfort_zone=comfort_zone)
-                if anchors:
-                    anchor_data = anchors[0]
-                    anchor_item = anchor_data['item']
-                    bline_appeal = analyze_item_appeal(anchor_item)
-
-                    # ③ 生成探索方向
-                    directions = generate_exploration_directions(
-                        anchor_item, temp_high, weather_cond, '日常', boldness, comfort_zone
-                    )
-                    if directions:
-                        directions[0]['strategies'] = strategies
-                        directions[0]['companion_rule'] = rule
-
-                    if directions:
-                        direction = directions[0]
-                        companions = find_companions(anchor_item, direction, all_clothing, temp_high, weather_cond, companion_rule=rule)
-                        strategies = pick_explore_strategies(boldness)
-                        direction['strategies'] = strategies  # 注入方向数据
-                        exploration_outfit = assemble_exploratory_outfit(direction, anchor_item, companions, strategies)
-                        style_id = direction['target_style_id']
-                        # 预加载百科（避免 prepare_bline_outfit 重复加载）
-                        bline_encyc = load_encyclopedia(style_id)
-                        # 预生成探索叙事
-                        bline_narrative = generate_exploration_narrative(direction, anchor_item, companions)
-            except Exception as e:
-                is_bline = False
-                is_bold = False
-                exploration_outfit = None
-    else:
-        state = None
-
-    # ━━━ 现有逻辑：风格匹配和百科加载 ━━━
+    # ━━━ 风格匹配和百科加载 ━━━
     encyc = load_encyclopedia(style_id)
     style = load_style_fingerprint(style_id)
     main_items = [it for it in data['items'] if it['score'] and it['score'] != '—']
     acc_items = [it for it in data['items'] if it['score'] == '—' or not it['score']]
     style_name = style.get('name_zh', '日系CityBoy') if style else '今日推荐'
 
-    # ━━━ A线风格笔记（无则生成并重跑排版）━━━
-    if not is_bline:
-        md_path = os.path.join(outfit_dir, 'outfit.md')
-        with open(md_path, 'r') as f:
-            md_text = f.read()
-        if True:  # 每次都确保风格笔记最新
-            # 先清除旧风格笔记
-            if '## 风格笔记' in md_text:
-                md_text = md_text.split('## 风格笔记')[0].rstrip()
-                with open(md_path, 'w') as f:
-                    f.write(md_text)
-            # 从风格指纹提取关键特征
-            style_desc = ''
-            if encyc:
-                style_desc = encyc.get('one_liner', '')
-            if not style_desc and style:
-                style_desc = style.get('description', '')
-            # 清理括号内容，取前24字
-            style_desc = re.sub(r'[（(][^）)]*[）)]', '', style_desc).strip()
-            style_desc = style_desc[:24] if style_desc else ''
-            silhouette = style.get('fingerprint', {}).get('silhouette', {}) if style else {}
-            color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '') if style else ''
-            # 提取穿法要点
-            wear_tips = []
-            for it in data.get('items', [])[:2]:
-                r = it.get('reason', '')
-                if r:
-                    wear_tips.append(r[:20])
-            # 生成简洁笔记（每条尽量短以利卡片展示）
-            notes = []
-            notes.append(f'- {style_name}：{style_desc}' if style_desc else f'- {style_name}风格')
-            if color_logic:
-                notes.append(f'- {color_logic[:24]}')
-            for tip in wear_tips:
-                notes.append(f'- {tip}')
-            notes_str = '\n'.join(notes)
-            with open(md_path, 'a') as f:
-                f.write(f'\n## 风格笔记\n\n{notes_str}\n')
-            # 重跑排版
-            import subprocess
-            subprocess.run([sys.executable, os.path.join(BASE_DIR, 'composite_v2.py'), outfit_dir],
-                          cwd=PROJ_DIR, capture_output=True, timeout=60)
+    # ━━━ 风格笔记（无则生成并重跑排版）━━━
+    md_path = os.path.join(outfit_dir, 'outfit.md')
+    with open(md_path, 'r') as f:
+        md_text = f.read()
+
+    # 先清除旧风格笔记
+    if '## 风格笔记' in md_text:
+        md_text = md_text.split('## 风格笔记')[0].rstrip()
+        with open(md_path, 'w') as f:
+            f.write(md_text)
+    # 从风格指纹提取关键特征
+    style_desc = ''
+    if encyc:
+        style_desc = encyc.get('one_liner', '')
+    if not style_desc and style:
+        style_desc = style.get('description', '')
+    # 清理括号内容，取前24字
+    style_desc = re.sub(r'[（(][^）)]*[）)]', '', style_desc).strip()
+    style_desc = style_desc[:24] if style_desc else ''
+    silhouette = style.get('fingerprint', {}).get('silhouette', {}) if style else {}
+    color_logic = style.get('fingerprint', {}).get('color_rules', {}).get('color_logic', '') if style else ''
+    # 提取穿法要点
+    wear_tips = []
+    for it in data.get('items', [])[:2]:
+        r = it.get('reason', '')
+        if r:
+            wear_tips.append(r[:20])
+    # 生成简洁笔记（每条尽量短以利卡片展示）
+    notes = []
+    notes.append(f'- {style_name}：{style_desc}' if style_desc else f'- {style_name}风格')
+    if color_logic:
+        notes.append(f'- {color_logic[:24]}')
+    for tip in wear_tips:
+        notes.append(f'- {tip}')
+    notes_str = '\n'.join(notes)
+    with open(md_path, 'a') as f:
+        f.write(f'\n## 风格笔记\n\n{notes_str}\n')
+    # 重跑排版
+    import subprocess
+    subprocess.run([sys.executable, os.path.join(BASE_DIR, 'composite_v2.py'), outfit_dir],
+                  cwd=PROJ_DIR, capture_output=True, timeout=60)
 
     # ━━━ 标题区 ━━━
     outfit_name = os.path.basename(outfit_dir).split('_', 1)[-1] if '_' in os.path.basename(outfit_dir) else ''
 
-    # B线标题加标记
-    line_tag = ''
-    if is_bline:
-        line_tag = ' 🧪' if boldness == 'micro' else ' 🚀'
-
     header_lines = [
-        f"👔 {outfit_name}{line_tag}",
+        f"👔 {outfit_name}",
         f"📅 {data.get('date', '')}",
     ]
     # 优先用实时天气，回退到md中的天气（已在函数顶部 fetch）
@@ -484,38 +427,16 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
     parts.append('\n\n'.join(header_lines))
 
     # ━━━ 效果图 ━━━
-    # B线：运行完整生图管线（豆包生图 → 抠图排版 → Git push → CDN）
-    if is_bline and exploration_outfit:
-        try:
-            from style_lab import prepare_bline_outfit
-            anchor = exploration_outfit['anchor_item']
-            companions = exploration_outfit.get('companions', [])
-            direction = exploration_outfit['direction']
-
-            print(f"  [B线] 启动生图管线... 锚点: {anchor['clothing_id']}")
-            bline_outfit_dir, img_path, cdn_url = prepare_bline_outfit(
-                anchor, companions, direction, temp_high, weather_cond,
-                appeal=bline_appeal, narrative=bline_narrative, encyc=bline_encyc,
-                all_clothing=all_clothing if is_bline else None
-            )
-            if img_path and cdn_url:
-                parts.append(f"![风格实验室效果图]({cdn_url})")
-            else:
-                parts.append(f"🧪 本次风格实验围绕核心单品 **{anchor['clothing_id']}** 展开，搭配方案见下方。")
-        except Exception as e:
-            print(f"  [B线] 生图管线异常: {e}")
-            parts.append(f"🧪 本次风格实验围绕核心单品 **{exploration_outfit['anchor_item']['clothing_id']}** 展开，搭配方案见下方。")
-    else:
-        ai_paths = []
-        for img_dir in ['上身效果', '豆包生图']:
-            ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*方案1.jpg')))
-            if not ai_paths:
-                ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*.jpg')))
-            if ai_paths:
-                break
+    ai_paths = []
+    for img_dir in ['上身效果', '豆包生图']:
+        ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*方案1.jpg')))
+        if not ai_paths:
+            ai_paths = sorted(glob.glob(os.path.join(outfit_dir, img_dir, '*.jpg')))
         if ai_paths:
-            rel = os.path.relpath(ai_paths[0], PROJ_DIR)
-            parts.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
+            break
+    if ai_paths:
+        rel = os.path.relpath(ai_paths[0], PROJ_DIR)
+        parts.append(f"![效果图]({CDN_BASE}/{urllib.parse.quote(rel, safe='/')})")
 
     # ━━━ 风格故事 ━━━
     if encyc:
@@ -530,56 +451,24 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             parts.append("━━━ 📖 风格故事 ━━━\n\n" + '\n\n'.join(story))
 
     # ━━━ 今日搭配 ━━━
-    # B线：用探索方案重建搭配内容
-    if is_bline and exploration_outfit:
-        item_lines = []
-        # 锚点单品
-        anchor = exploration_outfit['anchor_item']
-        cid = anchor['clothing_id']
-        name = f"{anchor.get('brand', {}).get('name', '')} {anchor['color']['hue_name']}"
+    item_lines = []
+    for it in main_items:
+        cid = it['id']  ;  name = it['name']
+        score_info = get_item_score(cid, style_id)
+        score = score_info['score'] if score_info else '?'
+        key_reason = get_key_item_reason(cid, style_id)
         emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
-        item_lines.append(f"{emoji} **{name}** ⭐ 核心单品\n`{cid}` · 表现力 {exploration_outfit['direction'].get('anchor_score','?')}分")
-        item_lines.append(f"*{bline_appeal.get('visual_signature', '') if bline_appeal else ''} · 探索基点*")
-
-        # 同伴单品
-        for comp in exploration_outfit.get('companions', [])[:5]:
-            item = comp['item']
-            cid2 = item['clothing_id']
-            name2 = f"{item.get('brand', {}).get('name', '')} {item['color']['hue_name']}"
-            emoji2 = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid2.split('-')[0],'👔')
-            score2 = comp.get('style_score', '?')
-            item_lines.append(f"{emoji2} **{name2}**\n`{cid2}` · 风格匹配 {score2}分")
-
-        if item_lines:
-            parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n\n'.join(item_lines))
-
-        # ━━━ 风格实验室叙事 ━━━
-        narrative = bline_narrative or ''
-        if narrative:
-            parts.append("━━━ 🧪 风格实验室 ━━━\n\n" + narrative)
-
-    else:
-        # A线：原有的今日搭配逻辑
-        item_lines = []
-        for it in main_items:
-            cid = it['id']  ;  name = it['name']
-            score_info = get_item_score(cid, style_id)
-            score = score_info['score'] if score_info else '?'
-            key_reason = get_key_item_reason(cid, style_id)
-            emoji = {'SHIRT':'👔','TS':'👕','LS':'🧥','JK':'🧥','PT':'👖','SH':'🩳','SHOE':'👟','HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍','TANK':'🎽'}.get(cid.split('-')[0],'👔')
-            reason = key_reason or it.get('reason', '')
-            score_str = f"{score}分" if isinstance(score, int) else str(score)
-            item_lines.append(f"{emoji} **{name}**\n`{cid}` · 匹配度 {score_str}")
-            if reason:
-                item_lines.append(f"*{reason}*")
-        if acc_items:
-            for it in acc_items:
-                e = {'HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍'}.get(it['id'].split('-')[0],'🔹')
-                item_lines.append(f"{e} {it['name']} `{it['id']}`")
-        if item_lines:
-            parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n\n'.join(item_lines))
-
-        # A线推送也加入「今天也适合」（在参考图之后、配色之后）
+        reason = key_reason or it.get('reason', '')
+        score_str = f"{score}分" if isinstance(score, int) else str(score)
+        item_lines.append(f"{emoji} **{name}**\n`{cid}` · 匹配度 {score_str}")
+        if reason:
+            item_lines.append(f"*{reason}*")
+    if acc_items:
+        for it in acc_items:
+            e = {'HAT':'🧢','SOCK':'🧦','BAG':'🎒','SUN':'🕶️','ACC':'💍'}.get(it['id'].split('-')[0],'🔹')
+            item_lines.append(f"{e} {it['name']} `{it['id']}`")
+    if item_lines:
+        parts.append("━━━ 👔 今日搭配 ━━━\n\n" + '\n\n'.join(item_lines))
 
     # ━━━ 参考图片 ━━━
     ref_imgs = get_random_images(style_id, 3)
@@ -637,12 +526,12 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             color_parts.append(color_logic)
         parts.append("━━━ 🎨 配色 ━━━\n\n" + '\n\n'.join(color_parts))
 
-    # ━━━ 今天也适合（动态生成）━━━
+    # ━━━ 今天也适合（统一管线，无AB线之分）━━━
     if STYLE_LAB_AVAILABLE:
         alt_items = generate_alt_section(
-            primary_line=('B' if is_bline else 'A'),
-            is_bline=is_bline,
-            is_bold=is_bold,
+            primary_line='A',  # 统一用 A 线逻辑（安全推荐）
+            is_bline=False,
+            is_bold=False,
             primary_style_id=style_id,
             weather_temp=temp_high,
             weather_cond=weather_cond,
@@ -663,33 +552,26 @@ def build_push(outfit_dir, force_line=None, force_boldness=None):
             alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
             parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
     else:
-        # 无 style_lab 时保持原有硬编码
         base = get_push_base_url()
         alt_styles = [('korean_minimal','韩系简约'),('clean_fit','Clean Fit'),('smart_casual','轻熟休闲'),('athleisure_sport','运动休闲')]
         alt_names = [f"[{n}]({base}/try/{i})" for i,n in alt_styles if i != style_id]
         parts.append("━━━ 🔄 今天也适合 ━━━\n\n" + ' · '.join(alt_names[:3]))
 
-    # ━━━ 状态更新 ━━━
-    if STYLE_LAB_AVAILABLE and state is not None:
-        # 收集本套穿搭涉及的单品 ID
+    # ━━━ 状态更新（统一管线）━━━
+    if UNIFIED_AVAILABLE and state is not None:
         outfit_item_ids = []
-        if is_bline and exploration_outfit:
-            outfit_item_ids.append(exploration_outfit['anchor_item']['clothing_id'])
-            for c in exploration_outfit.get('companions', []):
-                outfit_item_ids.append(c['item']['clothing_id'])
-        else:
-            for it in data['items']:
-                outfit_item_ids.append(it['id'])
+        for it in data['items']:
+            outfit_item_ids.append(it['id'])
+        # 使用统一管线的状态更新
+        try:
+            from tools.unified_pipeline import update_lab_state
+            items_for_state = [{'id': iid} for iid in outfit_item_ids]
+            state = update_lab_state(items_for_state)
+        except Exception:
+            state['total_recommendations'] = state.get('total_recommendations', 0) + 1
+            save_lab_state(state)
 
-        state = increment_lab_state(state, is_bline, is_bold, outfit_item_ids)
-
-        # 回写单品穿着次数
-        for iid in set(outfit_item_ids):
-            update_item_wear_count(iid)
-
-        save_lab_state(state)
-
-    rating_dir = bline_outfit_dir if is_bline and bline_outfit_dir else outfit_dir
+    rating_dir = outfit_dir
     return B.join(parts), style_name, outfit_name, rating_dir
 
 
@@ -774,12 +656,9 @@ def build_simple(outfit_dir):
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--bline|--explore] [--bold|--adventure] [--no-bline] [--stdout]")
-        print("  B线触发词(微调): 探索 新尝试 新鲜 微调 不一样 换个口味 挖掘 冷门 尝鲜")
-        print("  B线触发词(大胆): 大胆 另类 冒险 突破 跨界 出格 惊喜 前卫 个性 疯狂")
+        print("用法: python3 tools/build_push.py <outfit_dir> [--preview] [--simple|--rich|--both] [--stdout]")
         print("  偏好设置: python3 tools/build_push.py --set simple|rich|both")
         print("  --stdout: 输出 JSON 到 stdout 供控制台同步（手机控制台自动使用）")
-        print("  --no-bline: 强制关闭 B线探索（手机控制台自动使用）")
         return
 
     # 设置偏好
@@ -803,29 +682,9 @@ def main():
         if arg in ('--simple', '--rich', '--both'):
             force_mode = arg.lstrip('--')
 
-    # B线参数：CLI 标志 + 触发词检测
+    # 统一管线：不再区分 AB 线，force_line 和 force_boldness 仅为向后兼容保留
     force_line = None
     force_boldness = None
-    # --no-bline：强制关闭 B线（手机控制台调用时使用，防止 build_push 独立触发 B线替换 outfit）
-    if '--no-bline' in sys.argv:
-        force_line = 'A'
-    if '--bline' in sys.argv or '--explore' in sys.argv:
-        force_line = 'B'
-    if '--bold' in sys.argv or '--adventure' in sys.argv:
-        force_line = 'B'
-        force_boldness = 'bold'
-    # 从 outfit 目录名自动检测触发词（仅在未明确指定时）
-    if force_line is None:
-        try:
-            from style_lab import detect_bline_trigger
-            dir_name = os.path.basename(outfit_dir)
-            is_bl, is_bd = detect_bline_trigger(dir_name)
-            if is_bl:
-                force_line = 'B'
-                if is_bd:
-                    force_boldness = 'bold'
-        except ImportError:
-            pass
 
     mode = force_mode or get_preference()
 

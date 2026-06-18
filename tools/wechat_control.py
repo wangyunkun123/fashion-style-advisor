@@ -25,6 +25,9 @@ from urllib.parse import parse_qs
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
+# 确保项目根目录在 sys.path（daemon 线程可能需要）
+if PROJECT_DIR not in sys.path:
+    sys.path.insert(0, PROJECT_DIR)
 CONFIG_FILE = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
 LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
 HISTORY_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_history.json')
@@ -1543,10 +1546,34 @@ def _detect_bline_from_hint(style_hint):
 
 
 def run_pipeline(style_hint, task_id=None):
-    """完整生图管线: API穿搭分析 → Seedream生图 → 排版 → 推送"""
-    is_bline, is_bold = _detect_bline_from_hint(style_hint)
-    bline_tag = '🚀' if is_bold else ('🧪' if is_bline else '')
-    log(f"🚀 管线启动: {style_hint} {'| B线'+('大胆' if is_bold else '微调') if is_bline else ''}")
+    """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
+    import traceback as _tb
+    try:
+        return _run_pipeline_impl(style_hint, task_id)
+    except Exception as _e:
+        _err = f"管线异常: {_e}\n{_tb.format_exc()}"
+        log(_err, "ERROR")
+        # 写 stderr 确保可见
+        import sys as _sys
+        _sys.stderr.write(_err + '\n')
+        _sys.stderr.flush()
+        if task_id:
+            tasks.update(task_id, status='failed', message=f'管线失败: {_e}', log=_err[:500])
+
+
+def _run_pipeline_impl(style_hint, task_id=None):
+    """管线实现 — 独立函数以便 run_pipeline 捕获异常"""
+    log(f"🚀 管线启动: {style_hint}")
+
+    # ── 探测探索度 ──
+    from tools.unified_pipeline import (
+        determine_explore_level, build_enhanced_prompt, validate_outfit,
+        score_outfit, generate_narrative, update_lab_state
+    )
+    explore_level = determine_explore_level(style_hint)
+    explore_emoji = '🚀' if explore_level >= 0.8 else ('🧪' if explore_level > 0 else '')
+    explore_label = ('大胆探索' if explore_level >= 0.8 else ('微调探索' if explore_level > 0 else '安全推荐'))
+    log(f"📍 探索度: {explore_label}{' '+explore_emoji if explore_emoji else ''}")
     log_lines = []
 
     def progress(msg):
@@ -1556,48 +1583,23 @@ def run_pipeline(style_hint, task_id=None):
             tasks.update(task_id, status='running', message=msg, log='\n'.join(log_lines))
 
     today = time.strftime('%Y-%m-%d')
-    banned_items = get_banned_items()
 
-    progress('🤖 Step 1/4: AI 分析穿搭方案...')
+    progress('🤖 Step 1/5: AI 智能选品（数据增强）...')
 
-    # ── 构建衣柜上下文 ──
-    wardrobe_summary = get_wardrobe_summary()
+    # ── Step 1: 构建数据增强 prompt（统一管线）──
+    prompt_data = build_enhanced_prompt(
+        style_hint=style_hint,
+        occasion='日常',  # TODO: 后续从用户输入提取
+        explore_level=explore_level,
+    )
 
-    system_prompt = OUTFIT_SYSTEM_PROMPT
-
-    # 构建 prompt：无禁用单品时不提"禁用"概念，避免触发 AI 的"避免复用"本能
-    ban_section = ''
-    if banned_items:
-        banned_str = '、'.join(banned_items)
-        ban_section = f'\n🚫 一星差评禁用单品（严禁使用以下ID）: {banned_str}\n'
-
-    # 获取最近已穿单品，避免重复推荐
-    recent_outfits = get_recent_outfit_items(limit=3)
-    recent_section = ''
-    if recent_outfits:
-        recent_lines = []
-        for dir_name, ids in recent_outfits:
-            label = dir_name.split('_', 1)[-1] if '_' in dir_name else dir_name[:10]
-            recent_lines.append(f"  {label}: {'、'.join(ids)}")
-        if recent_lines:
-            recent_section = '\n📌 最近已穿（请避开这些核心单品，至少换掉上衣/下装/鞋子中的两件）:\n' + '\n'.join(recent_lines) + '\n'
-
-    user_prompt = f"""今天是{today}，北京6月中旬天气（晴/多云，22-34°C）。
-
-为「{style_hint}」推荐一套穿搭。{ban_section}{recent_section}
-⚠️ 上衣、下装、鞋子三者缺一不可，每项必须从下方衣柜表格中选取真实的单品ID。
-⚠️ 永远不要输出 UNAVAILABLE 作为ID。表格里每个ID都可用。
-⚠️ 表格第5列「适用场景」标注了每件单品的场景用途，运动场景务必选对场景匹配的单品。
-
-以下是完整衣柜档案：
----
-{wardrobe_summary}
----
-
-请输出 JSON 格式的穿搭方案。"""
+    system_prompt = prompt_data['system_prompt']
+    user_prompt = prompt_data['user_prompt']
+    target_styles = prompt_data['target_styles']
+    occasion = prompt_data['occasion']
 
     try:
-        # 调用 API 获取穿搭方案（最多重试一次）
+        # ── Step 2: AI 创意选品（最多重试 JSON 解析）──
         plan = None
         for attempt in range(2):
             content = call_doubao_chat([
@@ -1611,10 +1613,9 @@ def run_pipeline(style_hint, task_id=None):
 
             log(f"API 返回无法解析为 JSON (attempt {attempt+1}/2):\n{content[:500]}", "ERROR")
             if attempt == 0:
-                # 重试：追加强制 JSON 指令
                 user_prompt += "\n\n⚠️ 你的回复必须是纯 JSON，不要包含任何解释、markdown代码块标记或额外文字。以 { 开头，以 } 结尾。"
                 progress('🔄 JSON解析失败，重试中...')
-                time.sleep(2)  # 短暂冷却
+                time.sleep(2)
 
         if not plan:
             raise ValueError("AI 穿搭分析返回格式异常，已重试1次仍失败，请稍后再试")
@@ -1625,8 +1626,7 @@ def run_pipeline(style_hint, task_id=None):
         if unavailable:
             log(f"⚠️ AI 返回了 UNAVAILABLE 单品，强制重试: {[it.get('category','') for it in unavailable]}", "WARN")
             progress('🔄 检测到 UNAVAILABLE，强制重试...')
-            # 重试：追加极强指令
-            user_prompt += "\n\n❌ 你上一次输出了 UNAVAILABLE。这是严重错误。衣柜中所有鞋子和裤子都可用。必须为上衣、下装、鞋子各选一个真实ID（如 SHOE-005、SH-003）。"
+            user_prompt += "\n\n❌ 你上一次输出了 UNAVAILABLE。这是严重错误。衣柜中所有鞋子和裤子都可用。必须为上衣、下装、鞋子各选一个真实ID。"
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
@@ -1640,21 +1640,62 @@ def run_pipeline(style_hint, task_id=None):
                 log(f"⚠️ 重试后仍返回 UNAVAILABLE: {[it.get('category','') for it in unavailable2]}", "ERROR")
                 raise ValueError("AI 两次返回 UNAVAILABLE，请稍后重试")
 
+        # ── Step 3: 规则验证 ──
+        progress('🔍 规则验证中...')
+        items = plan.get('items', [])
+        passed, violations, warnings = validate_outfit(items, occasion)
+
+        if not passed:
+            log(f"⚠️ 验证未通过: {violations}", "WARN")
+            # 构建修正反馈
+            violation_feedback = '\n'.join(f'❌ {v}' for v in violations)
+            user_prompt += f"\n\n⚠️ 你的选品有以下问题，请修正后重新输出 JSON：\n{violation_feedback}\n\n注意：所有单品必须来自衣柜表格，不要输出UNAVAILABLE。"
+            progress('🔄 验证未通过，AI 修正中...')
+            content = call_doubao_chat([
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt},
+            ], max_tokens=4096, timeout=180)
+            plan = extract_json(content)
+            if plan:
+                items = plan.get('items', [])
+                passed2, violations2, warnings2 = validate_outfit(items, occasion)
+                if not passed2:
+                    log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
+                    # 两次都不通过，仍然继续（不阻止管线），但在日志中标记
+                    violations.extend(violations2)
+                else:
+                    log(f"✅ 修正后验证通过")
+                    violations = []
+            warnings = warnings2 if plan else warnings
+
+        if passed or not violations:
+            progress(f'✅ 验证通过' + (f' (⚠️ {len(warnings)}条提醒)' if warnings else ''))
+        else:
+            progress(f'⚠️ 验证有{len(violations)}项违规（继续执行，请人工检查）')
+
+        # ── 穿搭评分 ──
+        outfit_score = score_outfit(items, target_styles, occasion, 30, '晴')
+        narrative = generate_narrative(items, target_styles, explore_level, outfit_score)
+        log(f"📊 穿搭评分: {outfit_score['total']}分 — {outfit_score['label']}")
+
+        # ── 更新状态 ──
+        update_lab_state(items)
+
         # 执行文件操作
         outfit_dir = execute_outfit_plan(plan, today, style_hint)
         progress(f'✅ 穿搭方案已创建')
 
-        progress('🎨 Step 2/4: Seedream AI 生图中...')
+        progress('🎨 Step 2/5: Seedream AI 生图中...')
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=120)
         if out2:
             progress(f'✅ Seedream 生图完成\n{out2[:300]}')
 
-        progress('🖼️ Step 3/4: 排版合成中...')
+        progress('🖼️ Step 3/5: 排版合成中...')
         out3 = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=120)
         if out3:
             progress(f'✅ 排版完成\n{out3[:300]}')
 
-        progress('📤 Step 4/4: 推送 GitHub...')
+        progress('📤 Step 4/5: 推送 GitHub...')
         composite = find_latest_composite(today)
         if composite and os.path.exists(composite):
             run_cli(['git', 'add', '-A'], timeout=30)
@@ -1674,8 +1715,8 @@ def run_pipeline(style_hint, task_id=None):
 
             # 微信推送：build_push 按用户偏好推送完整内容
             try:
-                # --no-bline 防止 build_push 独立触发 B线替换 outfit 内容
-                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich', '--no-bline'], timeout=120)
+                # 统一管线：不再需要 --no-bline（AB线已合并）
+                run_cli(['python3', 'tools/build_push.py', outfit_dir, '--rich'], timeout=120)
                 # build_push 可能生成了 _swatches.png 等新文件，提交并推送
                 run_cli(['git', 'add', '-A'], timeout=10)
                 run_cli(['git', 'commit', '-m', '📱 手机端穿搭推送'], timeout=10)
@@ -1778,7 +1819,7 @@ def _load_style_cards(include_universal=False, with_top_items=False):
                     try:
                         sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
                         from style_matcher import rank_items_for_style
-                        top = rank_items_for_style(sid, top_n=3, min_score=20)
+                        top = rank_items_for_style(sid, top_n=8, min_score=10)
                         def _thumb_url(cid):
                             cutout = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{cid}_cutout.png')
                             if os.path.exists(cutout):
@@ -2064,7 +2105,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 with open(html_path, 'r', encoding='utf-8') as f:
                     html = f.read()
                 # 注入返回按钮（回到探索列表而非首页）
-                back_btn = '<button onclick="location.href=\'/?tab=explore\'" style="position:fixed;top:16px;right:16px;background:#3a3028;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.3)">← 返回列表</button>'
+                back_btn = '<button onclick="location.href=\'/\'" style="position:fixed;top:16px;right:16px;background:#3a3028;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-size:14px;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.3)">← 返回</button>'
                 html = html.replace('</body>', back_btn + '</body>')
                 self._html_resp(200, html)
             else:

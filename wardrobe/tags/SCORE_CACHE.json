@@ -6618,7 +6618,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 55,
+      "score": 60,
       "raw_score": 48,
       "breakdown": {
         "soft_constraints": 23,
@@ -10080,7 +10080,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 15,
+      "score": 20,
       "raw_score": 13,
       "breakdown": {
         "soft_constraints": 13,
@@ -15486,7 +15486,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 41,
+      "score": 46,
       "raw_score": 36,
       "breakdown": {
         "soft_constraints": 18,
@@ -15933,7 +15933,7 @@
   "_meta": {
     "last_rebuild": "2026-06-18 14:13:35",
     "total_entries": 77,
-    "last_feedback": "2026-06-19T01:17:33.560878",
-    "last_action": "korean_minimal-5 (3件)"
+    "last_feedback": "2026-06-19T02:49:31.024757",
+    "last_action": "clean_fit+5 (3件)"
   }
 }

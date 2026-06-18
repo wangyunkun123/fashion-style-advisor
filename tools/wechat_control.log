@@ -1800,3 +1800,17 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [02:47:27] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_刚才那套错了，我想要横向条纹短袖穿
 [02:47:27] [INFO] 📍 🎨 Seedream AI 生图
 [02:48:06] [INFO] 📍 📤 推送 + 刷新
+[02:49:31] [INFO] ⭐ 评分: 2026-06-19_刚才那套错了，我想要横向条纹短袖穿 → 3星
+[02:50:08] [INFO] 💬 聊天: recommend | 我想要一套英伦穿搭
+[02:50:08] [INFO] 🚀 管线启动: 我想要一套英伦穿搭
+[02:50:08] [INFO] 📍 探索度: 安全推荐
+[02:50:08] [INFO] 📍 场景提取: '我想要一套英伦穿搭' → occasion=日常
+[02:50:08] [INFO] 📍 📊 预计 ~60-100s · ~5022 tokens
+[02:50:08] [INFO] 📍 🤖 AI 智能选品
+[02:50:35] [INFO] ✅ 验证通过
+[02:50:35] [INFO] 📊 穿搭评分: 59分 — ⚠️ 评分偏低，建议重新选品
+[02:50:35] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[02:50:35] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[02:50:35] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_我想要一套英伦穿搭
+[02:50:35] [INFO] 📍 🎨 Seedream AI 生图
+[02:51:10] [INFO] 📍 📤 推送 + 刷新

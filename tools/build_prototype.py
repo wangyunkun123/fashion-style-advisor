@@ -68,7 +68,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
     dirs = [d for d in os.listdir(OUTFITS_DIR)
             if os.path.isdir(os.path.join(OUTFITS_DIR, d))
             and not d.startswith('.') and not d.startswith('_')]
-    dirs.sort(key=lambda d: d[:10], reverse=True)
+    dirs.sort(key=lambda d: os.path.getctime(os.path.join(OUTFITS_DIR, d)), reverse=True)
     for d in dirs:
         dp = os.path.join(OUTFITS_DIR, d)
         md_path = os.path.join(dp, 'outfit.md')

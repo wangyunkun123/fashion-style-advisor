@@ -1715,7 +1715,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
     # ── 探测探索度 ──
     from tools.unified_pipeline import (
         determine_explore_level, build_enhanced_prompt, validate_outfit,
-        score_outfit, generate_narrative, update_lab_state
+        score_outfit, update_lab_state
     )
     explore_level = determine_explore_level(style_hint)
     explore_emoji = '🚀' if explore_level >= 0.8 else ('🧪' if explore_level > 0 else '')
@@ -1740,6 +1740,16 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
     today = time.strftime('%Y-%m-%d')
 
+    # ── 天气（统一获取，全管线复用）──
+    wdata = fetch_weather('Beijing')
+    analysis = analyze_weather(wdata) if wdata else None
+    temp_high = analysis['forecast']['max'] if analysis else 30
+    weather_cond = analysis['current']['desc'] if analysis else '晴'
+    log(f"📍 天气: {temp_high}°C {weather_cond}")
+
+    # ── 衣橱数据（加载一次，管线内传递复用）──
+    all_clothes = _load_all_clothing()
+
     # ── Step 0: 从用户输入提取场合 + 指定单品 ──
     occasion = extract_occasion(style_hint)
     log(f"📍 场景提取: {style_hint!r} → occasion={occasion}")
@@ -1752,6 +1762,8 @@ def _run_pipeline_impl(style_hint, task_id=None):
     prompt_data = build_enhanced_prompt(
         style_hint=style_hint,
         occasion=occasion,
+        temp_high=temp_high,
+        weather_cond=weather_cond,
         explore_level=explore_level,
         mandatory_items=mandatory_items if mandatory_items else None,
     )
@@ -1817,7 +1829,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
 
         # ── Step 3: 规则验证 ──
         items = plan.get('items', [])
-        passed, violations, warnings = validate_outfit(items, occasion)
+        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes)
 
         if not passed:
             log(f"⚠️ 验证未通过: {violations}", "WARN")
@@ -1833,7 +1845,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             plan = extract_json(content)
             if plan:
                 items = plan.get('items', [])
-                passed2, violations2, warnings2 = validate_outfit(items, occasion)
+                passed2, violations2, warnings2 = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes)
                 if not passed2:
                     log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
                     # 检查是否有致命违规（场景/天气相关），有则中止管线
@@ -1855,20 +1867,57 @@ def _run_pipeline_impl(style_hint, task_id=None):
         else:
             log(f'⚠️ 验证有{len(violations)}项违规（继续执行，请人工检查）')
 
-        # ── 穿搭评分 ──
-        outfit_score = score_outfit(items, target_styles, occasion, 30, '晴')
-        narrative = generate_narrative(items, target_styles, explore_level, outfit_score)
-        log(f"📊 穿搭评分: {outfit_score['total']}分 — {outfit_score['label']}")
+        # ── R1 穿搭评分 ──
+        outfit_score = score_outfit(items, target_styles, occasion, temp_high, weather_cond, all_clothes=all_clothes)
+        log(f"📊 R1 选品评分: {outfit_score['total']}分 — {outfit_score['label']}")
+
+        # ── Round 2: AI 创作（基于已选单品生成叙事/技巧/生图 prompt）──
+        progress('✍️ AI 创作叙事+生图')
+        from tools.unified_pipeline import build_creation_prompt
+        photo_direction = prompt_data.get('photo_direction', '')
+        r2_prompt = build_creation_prompt(
+            plan, photo_direction, target_styles, style_hint,
+            occasion, explore_level, temp_high, weather_cond
+        )
+        r2_content = call_doubao_chat([
+            {'role': 'system', 'content': r2_prompt['system_prompt']},
+            {'role': 'user', 'content': r2_prompt['user_prompt']},
+        ], max_tokens=8192, timeout=120)
+        _api_calls += 1
+
+        r2_output = extract_json(r2_content)
+        if r2_output:
+            # 合并 R2 创作内容到 plan
+            plan['keywords'] = r2_output.get('keywords', '')
+            plan['reasoning'] = r2_output.get('reasoning', '')
+            plan['rationale'] = r2_output.get('rationale', '')
+            plan['dressing_tips'] = r2_output.get('dressing_tips', [])
+            plan['seedream_prompt'] = r2_output.get('seedream_prompt', '')
+            plan['color_logic'] = plan.get('color_story', '')  # execute_outfit_plan 用 color_logic
+            log(f"✅ R2 创作完成: seedream_prompt={len(plan['seedream_prompt'])}字符, tips={len(plan.get('dressing_tips',[]))}条")
+        else:
+            log(f"⚠️ R2 创作 JSON 解析失败，使用降级内容", "WARN")
+            # 降级：手动填充必填字段
+            plan['keywords'] = plan.get('style', '日常穿搭')
+            plan['reasoning'] = f'{plan.get("color_story", "")} · {plan.get("silhouette", "")}'
+            plan['rationale'] = f'这套{plan.get("style", "穿搭")}适合{occasion}场景，配色{plan.get("color_story", "和谐")}，廓形{plan.get("silhouette", "舒适")}。'
+            plan['dressing_tips'] = []
+            plan['seedream_prompt'] = ''
+            plan['color_logic'] = plan.get('color_story', '')
+        step_done()
 
         # ── 更新状态 ──
         update_lab_state(items)
 
-        # 执行文件操作
+        # 执行文件操作（需 seedream_prompt 已填入 plan）
         outfit_dir = execute_outfit_plan(plan, today, style_hint)
         step_done()
 
         progress('🎨 Seedream AI 生图')
         out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
+        # 检测生图失败：run_cli 返回以 ❌ 开头的错误信息
+        if out2 and ('❌' in out2[:200] or '失败' in out2[:200]):
+            raise RuntimeError(f'Seedream 生图失败: {out2[:300]}')
         step_done()
 
         progress('📤 推送 + 刷新')
@@ -1884,18 +1933,16 @@ def _run_pipeline_impl(style_hint, task_id=None):
             if gen_img:
                 break
 
+        # ── 原型重建：必须在 git push 之前完成（客户端轮询到 done 后会立即刷新页面）──
+        try:
+            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
+        except Exception:
+            pass
+
+        # ── 一次性 git 提交（合并 generate + prototype 产物）──
         run_cli(['git', 'add', '-A'], timeout=30)
         run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
         run_cli(['git', 'push'], timeout=60)
-
-        # ── 原型重建：必须在标记 done 之前完成（客户端轮询到 done 后会立即刷新页面）──
-        try:
-            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
-            run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
-            run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
-            run_cli(['git', 'push'], timeout=30)
-        except Exception:
-            pass
         step_done()
 
         # ── 统计摘要 ──
@@ -2959,6 +3006,25 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 except Exception as e:
                     log(f"⚠️ 反馈撤销失败: {e}", "WARN")
             self._json_resp(200, {"status": "ok", "message": "评分已取消"})
+        elif parsed.path == '/api/ratings' and self.command == 'POST':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length).decode('utf-8')
+            try: data = json.loads(body)
+            except: self._json_resp(400, {"error": "invalid json"}); return
+            ids = data.get('ids', [])
+            ratings = {}
+            for oid in ids:
+                d = os.path.join(PROJECT_DIR, 'outfits', oid)
+                rf = os.path.join(d, 'rating.json')
+                if os.path.exists(rf):
+                    try:
+                        with open(rf) as f:
+                            rd = json.load(f)
+                        ratings[oid] = rd.get('rating', 0)
+                    except: pass
+                else:
+                    ratings[oid] = 0
+            self._json_resp(200, {"ratings": ratings})
         elif parsed.path.startswith('/api/wardrobe/item/') and parsed.path.endswith('/delete'):
             # 彻底删除单品
             cid = parsed.path.split('/api/wardrobe/item/')[-1].replace('/delete', '').strip()

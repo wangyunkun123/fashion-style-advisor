@@ -5508,7 +5508,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 60,
+      "score": 70,
       "raw_score": 48,
       "breakdown": {
         "soft_constraints": 23,
@@ -5988,7 +5988,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 50,
+      "score": 60,
       "raw_score": 44,
       "breakdown": {
         "soft_constraints": 20,
@@ -6618,7 +6618,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 60,
+      "score": 55,
       "raw_score": 48,
       "breakdown": {
         "soft_constraints": 23,
@@ -8161,7 +8161,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 32,
+      "score": 42,
       "raw_score": 28,
       "breakdown": {
         "soft_constraints": 18,
@@ -9862,7 +9862,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 27,
+      "score": 37,
       "raw_score": 24,
       "breakdown": {
         "soft_constraints": 10,
@@ -10080,7 +10080,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 20,
+      "score": 15,
       "raw_score": 13,
       "breakdown": {
         "soft_constraints": 13,
@@ -10743,7 +10743,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 55,
+      "score": 65,
       "raw_score": 48,
       "breakdown": {
         "soft_constraints": 15,
@@ -14755,7 +14755,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 75,
+      "score": 85,
       "raw_score": 62,
       "breakdown": {
         "soft_constraints": 20,
@@ -15486,7 +15486,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 46,
+      "score": 41,
       "raw_score": 36,
       "breakdown": {
         "soft_constraints": 18,
@@ -15933,7 +15933,7 @@
   "_meta": {
     "last_rebuild": "2026-06-18 14:13:35",
     "total_entries": 77,
-    "last_feedback": "2026-06-19T02:49:31.024757",
-    "last_action": "clean_fit+5 (3件)"
+    "last_feedback": "2026-06-19T10:15:32.641406",
+    "last_action": "japanese_city_boy-5 (3件)"
   }
 }

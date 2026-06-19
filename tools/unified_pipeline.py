@@ -842,7 +842,7 @@ def pick_strategy(explore_level, comfort_zone=None):
 
 def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
                           explore_level=0.0, target_styles=None, mandatory_items=None):
-    """构建数据增强的 AI prompt — Step 1 核心输出
+    """构建 Round 1「选品」prompt — 只做单品选择，不含叙事/生图
 
     mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
     """
@@ -976,7 +976,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 
     system_prompt = f"""你是一位专攻亚洲男性穿搭的 AI 时尚顾问。
 
-你的任务是根据完整的衣柜数据（含风格匹配分、场景适配分、新鲜度），为一位用户（{persona_desc}）推荐穿搭方案。{context_section}
+你的任务是根据完整的衣柜数据（含风格匹配分、场景适配分、新鲜度），为一位用户（{persona_desc}）选出今日穿搭单品。{context_section}
 
 选品原则：
 1. 锚点优先：先确定今日的主角单品（表现力最强的核心件），再围绕它搭配同伴
@@ -999,12 +999,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
   ],
   "color_story": "主色调+辅助色+跳色的完整配色逻辑",
   "silhouette": "廓形节奏描述",
-  "body_modifier": "身形修饰策略",
-  "keywords": "3-6个风格特征词，用中文顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。⚠️这是穿搭风格标签，不是用户指令！必须从搭配本身提取美学特征，严禁照抄用户输入",
-  "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
-  "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
-  "dressing_tips": ["穿搭技巧1：具体可操作的建议，如裤脚怎么挽、T恤怎么塞、鞋带怎么系等，基于所选单品特征", "穿搭技巧2（可选，数组长度1-2）"],
-  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合上方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，但用自己的语言自然改写，不要逐字复制。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
+  "body_modifier": "身形修饰策略"
 }}
 
 注意：
@@ -1013,9 +1008,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 - ⚠️ 严禁添加第二件上衣（如长袖/衬衫/外套叠穿），除非场景明确需要（如寒冷天气）
 - 运动场景（网球/跑步/健身）只选1件上衣+1件下装+1双运动鞋，可叠加功能性配件（帽子/运动包/运动墨镜/运动袜）
 - 所有ID必须从衣柜表格中选取，严禁编造
-- 永远不要输出 UNAVAILABLE 作为ID
-- 推荐理由(rationale)必须面向消费者，强调「穿上为什么好看」，不是搭配逻辑阐述
-- 穿搭技巧(dressing_tips)必须具体可操作，基于所选单品的特征（如特定鞋型、裤型、领型），数组长度1-2"""
+- 永远不要输出 UNAVAILABLE 作为ID"""
 
     # ── 11. 组装 user prompt ──
     explore_header = ''
@@ -1031,12 +1024,11 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 {chr(10).join(style_descs)}
 {scene_text}
 {strategy_text}
-{photo_direction}
 ─── 衣柜档案（含风格匹配分/场景适配/新鲜度）───
 
 {wardrobe_table}
 
-─── 请输出 JSON 格式的穿搭方案。───"""
+─── 请输出 JSON 格式的穿搭方案（只需 items/color_story/silhouette/anchor/body_modifier，本轮不需要 seedream_prompt 或穿搭技巧）。───"""
 
     return {
         'system_prompt': system_prompt,
@@ -1047,6 +1039,115 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         'occasion': occasion,
         'scene_profile': scene_profile,
         'explore_level': explore_level,
+        'photo_direction': photo_direction,  # 保留给 Round 2 使用
+    }
+
+
+# ============================================================
+# Round 2: 创作 Prompt（基于已选单品生成叙事/技巧/生图）
+# ============================================================
+
+def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
+                          occasion, explore_level, temp_high, weather_cond):
+    """构建 Round 2「创作」prompt — 基于已选单品，生成 seedream_prompt/穿搭技巧/推荐理由/关键词
+
+    selection: Round 1 的 AI 输出 dict，含 items/color_story/silhouette/anchor/style
+    """
+    all_clothes = load_all_clothing()
+    today = time.strftime('%Y-%m-%d')
+
+    # ── 构建单品详情文本 ──
+    item_lines = []
+    for it in selection.get('items', []):
+        cid = it['id']
+        detail = all_clothes.get(cid, {})
+        brand = (detail.get('brand') or {}).get('name', '')
+        collection = (detail.get('brand') or {}).get('collection', '') or ''
+        color = (detail.get('color') or {}).get('hue_name', '')
+        fabric = (detail.get('fabric') or {}).get('primary', '')
+        fit = (detail.get('silhouette') or {}).get('fit', '')
+        comment = (detail.get('meta') or {}).get('claude_fit_comment', '')
+        occasions = detail.get('occasions', [])
+        cat = it.get('category', '')
+
+        brand_str = f'{brand} {collection}'.strip()
+        item_lines.append(
+            f'  {cat} | {cid} | {brand_str} | {color} | {fabric} | 版型:{fit} | '
+            f'场景:{"、".join(occasions) if occasions else "日常"} | {comment} | '
+            f'选品理由: {it.get("reason", "")}'
+        )
+
+    items_text = '\n'.join(item_lines)
+    color_story = selection.get('color_story', '')
+    silhouette = selection.get('silhouette', '')
+    anchor = selection.get('anchor', {})
+    anchor_text = f'{anchor.get("id", "")} — {anchor.get("role", "")}' if anchor else '无'
+
+    # ── 风格描述 ──
+    style_descs = []
+    for sid in target_styles[:3]:
+        sf = load_style_fingerprint(sid)
+        if sf:
+            style_descs.append(f'  🎯 {sf.get("name_zh", sid)} ({sid}): {sf.get("description", "")[:80]}')
+
+    # ── 探索度 ──
+    explore_note = ''
+    if explore_level > 0:
+        emoji = '🚀' if explore_level >= 0.8 else '🧪'
+        explore_note = f'\n{emoji} 探索度: {explore_level} — 鼓励创意发挥\n'
+
+    system_prompt = f"""你是专攻亚洲男性穿搭的 AI 时尚顾问（创作模式）。
+
+你的任务是基于已选定的穿搭单品，生成面向消费者的穿搭叙事内容。单品已经确定，你不需要再选品。
+
+输出严格的 JSON 格式（不要任何其他文字）：
+{{
+  "keywords": "3-6个风格特征词，用中文顿号分隔（如：宽松廓形、少年感、帆布鞋、白袜、日系休闲）。⚠️这是穿搭风格标签，不是用户指令！必须从搭配本身提取美学特征，严禁照抄用户输入",
+  "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
+  "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
+  "dressing_tips": ["穿搭技巧1：基于所选单品的独特特征（特定颜色/面料/廓形/品牌设计细节/鞋型/领型），而非通用建议", "穿搭技巧2：必须与技巧1来自不同类别，数组长度1-2"],
+  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
+}}
+
+注意：
+- 推荐理由(rationale)必须面向消费者，强调「穿上为什么好看」，不是搭配逻辑阐述
+- ⚠️ 穿搭技巧(dressing_tips)关键规则：
+  1. 两条技巧必须来自不同类别（见下方技巧类型池），严禁同类重复
+  2. 严禁使用「下摆塞前腰1/3」或任何形式的塞衣摆——这是最偷懒的通用技巧，除非该上衣的设计本身就是为塞入穿着（如正式衬衫配西裤）。绝大多数休闲T恤/衬衫应该自然垂坠或仅在特定姿势下微塞
+  3. 每条技巧必须引用所选单品的具体特征：颜色名、面料、廓形、品牌设计细节、鞋型、领型等。不能说「上衣塞进去」，要说「因为TS-009是落肩宽松版型，自然垂坠的下摆刚好在臀围线上方，配合直筒牛仔裤能拉长腿部比例」
+  4. 优先选择最能体现这套穿搭独特性的技巧，而非百搭通用技巧
+
+技巧类型池（两条技巧必须从不同类别选取）：
+🎨 颜色呼应：上下装配色逻辑、同色系跳色、补色碰撞、鞋与上衣/帽子的颜色链
+👖 裤脚处理：卷边宽度与鞋型关系、堆叠vs九分的场景选择、裤线与鞋帮的衔接
+👟 鞋袜搭配：鞋带系法、袜长与鞋帮高度配合、袜色作为跳色、特定鞋型的穿法（如高帮帆布鞋不系最上两颗扣）
+🧥 廓形节奏：宽松与修身的上下比例、衣长与裤长的视觉分割点、袖口翻卷露出小臂的显瘦原理
+🔗 配饰用法：帽子正戴/反戴的场景逻辑、包带长度与背法、墨镜/手表/项链的画龙点睛位置
+🏷️ 品牌/设计细节：特定单品的隐藏穿法（如可拆卸标签、双面穿、隐藏口袋）、设计师意图的体现
+🏃 场景专属：运动时配件的功能用法、雨天材质保护、户外防晒/防风的具体操作
+📐 面料处理：亚麻的自然褶皱感、丹宁的折痕养成、速干面料的透气穿法"""
+
+    sep = chr(10)
+    user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
+风格需求：「{style_hint}」| 场合：{occasion}{explore_note}
+目标风格参考：
+{sep.join(style_descs)}
+
+─── 已选穿搭方案 ───
+锚点: {anchor_text}
+配色: {color_story}
+廓形: {silhouette}
+
+单品清单：
+{items_text}
+
+{photo_direction}
+
+─── 请基于以上已确定的单品，输出 JSON 格式的创作内容（keywords/reasoning/rationale/dressing_tips/seedream_prompt）。───"""
+
+    return {
+        'system_prompt': system_prompt,
+        'user_prompt': user_prompt,
     }
 
 
@@ -1054,7 +1155,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 # Step 3: 规则自动验证
 # ============================================================
 
-def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
+def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', all_clothes=None):
     """验证 AI 选品是否通过所有规则门"""
     violations = []
     warnings = []
@@ -1062,8 +1163,9 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
     if not items:
         return False, ['无任何单品'], []
 
-    # 加载单品详情
-    all_clothes = load_all_clothing()
+    # 加载单品详情（支持外部传入复用）
+    if all_clothes is None:
+        all_clothes = load_all_clothing()
     outfit_details = []
     for it in items:
         cid = it.get('id', '')
@@ -1254,12 +1356,13 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴'):
 # Step 4: 穿搭评分卡
 # ============================================================
 
-def score_outfit(items, target_styles, occasion, temp_high, weather_cond):
+def score_outfit(items, target_styles, occasion, temp_high, weather_cond, all_clothes=None):
     """对整套穿搭打分（outfit 级评分）"""
     if not items:
         return {'total': 0, 'label': '无效'}
 
-    all_clothes = load_all_clothing()
+    if all_clothes is None:
+        all_clothes = load_all_clothing()
     cache = load_score_cache()
 
     # ── 1. 单品平均质量 (40%) ──
@@ -1682,171 +1785,4 @@ def update_lab_state(items):
     save_lab_state(state)
     return state
 
-
-# ============================================================
-# Step 1a: 选品 Prompt（精简版 — 只做单品选择）
-# ============================================================
-
-def build_selection_prompt(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
-                           explore_level=0.0, target_styles=None, mandatory_items=None):
-    """构建第一轮「选品」prompt — 只关注单品选择，不含叙事/生图"""
-
-    today = time.strftime('%Y-%m-%d')
-
-    # ── 0. 强制单品 ──
-    mandatory_section = ''
-    if mandatory_items:
-        all_clothes = load_all_clothing()
-        mandatory_lines = []
-        for mid, conf, reason in mandatory_items:
-            item = all_clothes.get(mid, {})
-            brand = (item.get('brand') or {}).get('name', '—')
-            color = (item.get('color') or {}).get('hue_name', '—')
-            cat = item.get('category', '—')
-            mandatory_lines.append(
-                f'  🎯 {mid} | {brand} | {color}·{cat} | 匹配: {reason} (置信度{conf:.0%})'
-            )
-        if mandatory_lines:
-            mandatory_section = (
-                '🎯🎯🎯 用户指定单品（硬性要求 — 必须使用，不可替换）🎯🎯🎯\n' +
-                '\n'.join(mandatory_lines) + '\n' +
-                '⚠️ 以上单品必须出现在 items 数组中。\n\n'
-            )
-
-    # ── 1. 风格 ──
-    if target_styles is None:
-        from tools.style_matcher import auto_suggest_style
-        suggestions = auto_suggest_style(temp_high, weather_cond, occasion)
-        target_styles = [s['style_id'] for s in suggestions[:3]]
-    if not target_styles:
-        target_styles = ['clean_fit', 'japanese_city_boy']
-
-    # ── 2. 上下文数据 ──
-    banned_items = get_banned_items()
-    recent_outfits = get_recent_outfits(limit=7)
-    wear_counts = get_wear_counts()
-
-    # ── 3. 场景 ──
-    scene_profiles = load_scene_profiles().get('profiles', {})
-    scene_profile = scene_profiles.get(occasion, scene_profiles.get('日常', {}))
-    scene_text = ''
-    if scene_profile:
-        required = ' + '.join(scene_profile.get('required', []))
-        avoid = '、'.join(scene_profile.get('avoid', [])) or '无'
-        keywords = '、'.join(scene_profile.get('keywords', [])) or '无'
-        scene_text = f"""
-📋 场景：{occasion}
-- 必备品类：{required}
-- 避雷品类：{avoid}
-- 关键词匹配：{keywords}
-"""
-
-    # ── 4. 探索策略 ──
-    strategy_text = ''
-    if explore_level > 0:
-        strategy, boldness = pick_strategy(explore_level)
-        if strategy:
-            strategy_text = '\n' + get_strategy_prompt(strategy['id'], boldness) + '\n'
-
-    # ── 5. 禁用 ──
-    ban_section = ''
-    if banned_items:
-        ban_section = f'\n🚫 禁用单品: {"、".join(banned_items)}\n'
-
-    # ── 6. 最近已穿 ──
-    recent_section = ''
-    if recent_outfits:
-        recent_lines = []
-        for dir_name, ids in recent_outfits:
-            label = dir_name.split('_', 1)[-1] if '_' in dir_name else dir_name[:10]
-            recent_lines.append(f"  {label}: {'、'.join(ids[:8])}")
-        if recent_lines:
-            recent_section = (
-                '\n📌 最近已穿（严格避穿）:\n' +
-                '\n'.join(recent_lines) + '\n' +
-                '⚠️ 鞋子在最近2套中出现过→必须换。上衣+下装+鞋子至少换2件。\n'
-            )
-
-    # ── 7. 衣柜表 ──
-    wardrobe_table = build_wardrobe_table(
-        target_styles, occasion, recent_outfits, banned_items, wear_counts
-    )
-
-    # ── 8. 人物描述 ──
-    persona_desc, persona_modifier, persona_context = _get_persona_description()
-
-    # ── 9. 组装 prompt ──
-    context_section = ''
-    if persona_context:
-        context_section = f'\n用户背景: {persona_context}'
-
-    system_prompt = f"""你是专攻亚洲男性穿搭的 AI 时尚顾问。你的任务是根据衣柜数据，为一位用户（{persona_desc}）选出今日穿搭单品。{context_section}
-
-选品原则：
-1. 锚点优先：先确定主角单品，再围绕它搭配同伴
-2. 场景匹配：使用场景画像中的必备品类
-3. 新鲜感：避开最近已穿单品
-4. 廓形节奏：上宽下窄或外松内紧
-5. 身形修饰：{persona_desc}，{persona_modifier}
-
-⚠️ 质量检查：
-□ 三件套齐全：上衣 + 下装 + 鞋子，配件按场景需要灵活选择，有理由才加不铺满
-□ 配色协调：无冲突撞色，整体色调统一
-□ 风格连贯：每件单品对目标风格匹配分 ≥ 30
-□ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
-□ 体型修饰：{persona_desc}，{persona_modifier}
-□ 面料匹配场景：夏季上衣→透气(棉/麻/速干)，运动→速干，下装/鞋/配件不受面料限制
-□ 衬肤色：根据用户肤色选择合适颜色
-□ 运动场景只选1件上衣+1件下装+1双运动鞋，可叠加功能性配件
-□ 严禁添加第二件上衣，除非场景明确需要
-□ 所有 ID 从衣柜表格中选取，严禁编造
-□ 永远不要输出 UNAVAILABLE
-
-输出严格 JSON（不要其他文字）：
-{{
-  "anchor": {{"id": "PT-004", "role": "今日主角"}},
-  "items": [
-    {{"category": "上衣", "id": "TS-xxx", "name": "品牌+颜色", "color": "颜色", "reason": "选品理由"}},
-    {{"category": "下装", "id": "PT-xxx", "name": "...", "color": "...", "reason": "..."}},
-    {{"category": "鞋子", "id": "SHOE-xxx", "name": "...", "color": "...", "reason": "..."}}
-  ],
-  "color_story": "主色调+辅助色的配色逻辑",
-  "silhouette": "廓形节奏描述"
-}}"""
-
-    style_descs = []
-    for sid in target_styles[:3]:
-        sf = load_style_fingerprint(sid)
-        if sf:
-            style_descs.append(f'  🎯 {sf.get("name_zh", sid)} ({sid})')
-
-    explore_header = ''
-    if explore_level > 0:
-        emoji = '🚀' if explore_level >= 0.8 else '🧪'
-        explore_header = f'\n{emoji} 探索度: {explore_level}\n'
-
-    user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
-{explore_header}{mandatory_section}风格需求：「{style_hint}」
-场合：{occasion}
-{ban_section}{recent_section}
-目标风格：
-{chr(10).join(style_descs)}
-{scene_text}
-{strategy_text}
-─── 衣柜档案 ───
-
-{wardrobe_table}
-
-─── 请输出 JSON 格式的穿搭方案（只需 items/color_story/silhouette/anchor，不需要 narrative/seedream_prompt）。───"""
-
-    return {
-        'system_prompt': system_prompt,
-        'user_prompt': user_prompt,
-        'target_styles': target_styles,
-        'banned_items': banned_items,
-        'recent_outfits': recent_outfits,
-        'occasion': occasion,
-        'scene_profile': scene_profile,
-        'explore_level': explore_level,
-    }
 

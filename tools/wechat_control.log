@@ -1889,3 +1889,15 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [15:02:57] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_clean_fit
 [15:02:57] [INFO] 📍 🎨 Seedream AI 生图
 [15:03:34] [INFO] 📍 📤 推送 + 刷新
+[15:07:40] [INFO] 🚀 管线启动: korean_minimal
+[15:07:40] [INFO] 📍 探索度: 微调探索 🧪
+[15:07:40] [INFO] 📍 场景提取: 'korean_minimal' → occasion=日常
+[15:07:40] [INFO] 📍 📊 预计 ~60-100s · ~5099 tokens
+[15:07:40] [INFO] 📍 🤖 AI 智能选品
+[15:08:25] [INFO] ✅ 验证通过 (⚠️ 2条提醒)
+[15:08:25] [INFO] 📊 穿搭评分: 50分 — ⚠️ 评分偏低，建议重新选品
+[15:08:25] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[15:08:25] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[15:08:25] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_korean_minimal
+[15:08:25] [INFO] 📍 🎨 Seedream AI 生图
+[15:10:56] [INFO] 📍 📤 推送 + 刷新

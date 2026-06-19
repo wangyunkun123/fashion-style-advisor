@@ -1877,3 +1877,15 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [11:09:44] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_天气闷热，需要一套衣服
 [11:09:44] [INFO] 📍 🎨 Seedream AI 生图
 [11:10:24] [INFO] 📍 📤 推送 + 刷新
+[15:02:24] [INFO] 🚀 管线启动: clean_fit
+[15:02:24] [INFO] 📍 探索度: 安全推荐
+[15:02:24] [INFO] 📍 场景提取: 'clean_fit' → occasion=日常
+[15:02:25] [INFO] 📍 📊 预计 ~60-100s · ~5028 tokens
+[15:02:25] [INFO] 📍 🤖 AI 智能选品
+[15:02:57] [INFO] ✅ 验证通过
+[15:02:57] [INFO] 📊 穿搭评分: 61分 — 🧪 探索向，可能惊喜可能翻车
+[15:02:57] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[15:02:57] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[15:02:57] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_clean_fit
+[15:02:57] [INFO] 📍 🎨 Seedream AI 生图
+[15:03:34] [INFO] 📍 📤 推送 + 刷新

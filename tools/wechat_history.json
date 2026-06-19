@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-06-19 11:10:37",
+    "style": "天气闷热，需要一套衣服",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_天气闷热，需要一套衣服/上身效果/上身效果_1.png?t=1781838637",
+    "stats": "⏱️ ~78s · 📊 ~5025 tokens · 🔄 1次AI"
+  },
+  {
     "time": "2026-06-19 10:58:02",
     "style": "一会要出门遛狗",
     "status": "done",

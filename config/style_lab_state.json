@@ -1,5 +1,5 @@
 {
-  "total_recommendations": 59,
+  "total_recommendations": 60,
   "bline_count": 3,
   "bold_count": 0,
   "last_recommendation_time": "2026-06-17T23:01:41.619992",
@@ -54,16 +54,16 @@
     "SHOE-008": 1,
     "HAT-002": 1
   },
-  "last_updated": "2026-06-19 11:09:44",
+  "last_updated": "2026-06-19 15:02:57",
   "item_wear_counts": {
     "TS-005": 6,
-    "PT-006": 7,
+    "PT-006": 8,
     "SHOE-006": 6,
     "TS-001": 2,
     "PT-005": 4,
     "TS-010": 3,
-    "TS-006": 4,
-    "SHOE-007": 3,
+    "TS-006": 5,
+    "SHOE-007": 4,
     "TS-004": 1,
     "SH-005": 2,
     "SHOE-009": 7,

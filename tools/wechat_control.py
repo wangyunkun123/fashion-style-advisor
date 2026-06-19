@@ -1147,16 +1147,15 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
                 shutil.rmtree(d)
             os.makedirs(d, exist_ok=True)
 
-        # ── 6. 复制人物照（去背景抠图）+ 单品参考图 ──
+        # ── 6. 复制人物照（原图直出，不去背景）+ 单品参考图 ──
         reference_paths = []
         if has_person:
-            person_cutouts = [_remove_person_background(pp) for pp in person_photos]
-            # 预览默认用全身正面 + 面部（不选角度，因为 prompt 尚未生成）
-            preview_photos = person_cutouts[:2] if len(person_cutouts) >= 2 else person_cutouts
-            for i, cp in enumerate(preview_photos):
-                ext = os.path.splitext(cp)[1] or '.png'
+            # 只取全身正面 1 张原图
+            preview_photos = person_photos[:1]
+            for i, pp in enumerate(preview_photos):
+                ext = os.path.splitext(pp)[1] or '.jpg'
                 dst = os.path.join(shengtu_dir, f'人物_{i+1}{ext}')
-                shutil.copy2(cp, dst)
+                shutil.copy2(pp, dst)
                 reference_paths.append(dst)
         else:
             log("👤 无人物参考照，仅用服装抠图生成", "WARN")
@@ -1571,21 +1570,15 @@ style: {plan.get('style', style_hint)}
     with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
         f.write(seedream_prompt)
 
-    # ── 3. 人物照片去背景 + 复制到豆包生图/ ──
+    # ── 3. 人物照片（原图直出，1张全身正面，不去背景）──
     person_photos_raw = _get_person_photos()
     if person_photos_raw:
-        # 3a. 对每张人物照 AI 去背景（生成透明 PNG 抠图）
-        person_cutouts = []
-        for pp in person_photos_raw:
-            cutout = _remove_person_background(pp)
-            person_cutouts.append(cutout)
-        # 3b. 根据 prompt 构图角度选择匹配的照片
-        selected = _select_person_photos_for_prompt(person_cutouts, seedream_prompt)
-        # 3c. 复制抠图到豆包生图（透明 PNG，generate.py 的 compress_image 自动补灰底）
-        for i, cp in enumerate(selected):
-            ext = os.path.splitext(cp)[1] or '.png'
-            shutil.copy2(cp, os.path.join(shengtu_dir, f'人物_{i+1}{ext}'))
-        log(f"👤 人物抠图: {len(person_cutouts)}张 → 按构图选{len(selected)}张")
+        # 只取全身正面照 1 张，不抠图不附加面部近照
+        selected = person_photos_raw[:1]
+        for i, pp in enumerate(selected):
+            ext = os.path.splitext(pp)[1] or '.jpg'
+            shutil.copy2(pp, os.path.join(shengtu_dir, f'人物_{i+1}{ext}'))
+        log(f"👤 人物照: {len(selected)}张（原图）")
     else:
         log("👤 无人物参考照，仅用服装抠图生成", "WARN")
 

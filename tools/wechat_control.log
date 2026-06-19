@@ -1913,3 +1913,18 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [15:14:09] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-19_scene_blokecore
 [15:14:09] [INFO] 📍 🎨 Seedream AI 生图
 [15:14:48] [INFO] 📍 📤 推送 + 刷新
+[00:12:21] [INFO] ⭐ 评分: 2026-06-19_天气闷热，需要一套衣服 → 3星
+[00:14:00] [INFO] ⭐ 评分: 2026-06-19_今日想穿棕色棉麻短裤 → 3星
+[00:15:28] [INFO] 💬 聊天: recommend | 明天要去长辈家做客
+[00:15:28] [INFO] 🚀 管线启动: 明天要去长辈家做客
+[00:15:28] [INFO] 📍 探索度: 安全推荐
+[00:15:28] [INFO] 📍 场景提取: '明天要去长辈家做客' → occasion=日常
+[00:15:29] [INFO] 📍 📊 预计 ~60-100s · ~4972 tokens
+[00:15:29] [INFO] 📍 🤖 AI 智能选品
+[00:16:51] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[00:16:51] [INFO] 📊 穿搭评分: 60分 — 🧪 探索向，可能惊喜可能翻车
+[00:16:51] [INFO] 📐 正面构图 → 用全身正面 + 面部 (2张)
+[00:16:51] [INFO] 👤 人物抠图: 3张 → 按构图选2张
+[00:16:51] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-20_明天要去长辈家做客
+[00:16:51] [INFO] 📍 🎨 Seedream AI 生图
+[00:17:24] [INFO] 📍 📤 推送 + 刷新

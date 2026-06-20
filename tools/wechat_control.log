@@ -1928,3 +1928,85 @@ ImportError: cannot import name 'cat_code_to_name' from 'tools.common' (/Users/r
 [00:16:51] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-20_明天要去长辈家做客
 [00:16:51] [INFO] 📍 🎨 Seedream AI 生图
 [00:17:24] [INFO] 📍 📤 推送 + 刷新
+[00:18:38] [INFO] ⭐ 评分: 2026-06-20_明天要去长辈家做客 → 3星
+[10:35:22] [INFO] =======================================================
+[10:35:22] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[10:35:22] [INFO] 📡 服务: http://0.0.0.0:8765
+[10:35:22] [INFO] 💬 面板: http://localhost:8765/
+[10:35:22] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[10:35:22] [INFO] 📤 已推送上线通知
+[00:13:23] [INFO] 💬 聊天: recommend | 早晨要去打匹克球
+[00:13:23] [INFO] 🚀 管线启动: 早晨要去打匹克球
+[00:13:23] [INFO] 📍 探索度: 安全推荐
+[00:13:23] [ERROR] 管线异常: name 'fetch_weather' is not defined
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1691, in run_pipeline
+    return _run_pipeline_impl(style_hint, task_id)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1737, in _run_pipeline_impl
+    wdata = fetch_weather('Beijing')
+NameError: name 'fetch_weather' is not defined
+
+[00:58:16] [INFO] 💬 聊天: recommend | 早晨打匹克球穿搭
+[00:58:16] [INFO] 🚀 管线启动: 早晨打匹克球穿搭
+[00:58:16] [INFO] 📍 探索度: 安全推荐
+[00:58:16] [ERROR] 管线异常: name 'fetch_weather' is not defined
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1691, in run_pipeline
+    return _run_pipeline_impl(style_hint, task_id)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1737, in _run_pipeline_impl
+    wdata = fetch_weather('Beijing')
+NameError: name 'fetch_weather' is not defined
+
+[00:59:09] [INFO] =======================================================
+[00:59:09] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:59:09] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:59:09] [INFO] 💬 面板: http://localhost:8765/
+[00:59:09] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[00:59:09] [INFO] 📤 已推送上线通知
+[01:00:47] [INFO] 💬 聊天: recommend | 早晨打匹克球穿搭
+[01:00:47] [INFO] 🚀 管线启动: 早晨打匹克球穿搭
+[01:00:47] [INFO] 📍 探索度: 安全推荐
+[01:00:49] [INFO] 📍 天气: 31°C 霾
+[01:00:49] [INFO] 📍 场景提取: '早晨打匹克球穿搭' → occasion=日常
+[01:00:49] [INFO] 📍 📊 预计 ~60-100s · ~4255 tokens
+[01:00:49] [INFO] 📍 🤖 AI 智能选品
+[01:01:54] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[01:01:54] [INFO] 📊 R1 选品评分: 45分 — ⚠️ 评分偏低，建议重新选品
+[01:01:54] [INFO] 📍 ✍️ AI 创作叙事+生图
+[01:02:58] [INFO] ✅ R2 创作完成: seedream_prompt=350字符, tips=2条
+[01:02:58] [INFO] 👤 人物照: 1张（原图）
+[01:02:58] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_早晨打匹克球穿搭
+[01:02:58] [INFO] 📍 🎨 Seedream AI 生图
+[01:03:37] [INFO] ⏸️ 微信推送已暂停: ❌ 早晨打匹克球穿搭 生成失败
+[01:19:22] [INFO] 💬 聊天: recommend | 今天早上要去打匹克球
+[01:19:22] [INFO] 🚀 管线启动: 今天早上要去打匹克球
+[01:19:22] [INFO] 📍 探索度: 微调探索 🧪
+[01:19:23] [INFO] 📍 天气: 29°C 霾
+[01:19:23] [INFO] 📍 场景提取: '今天早上要去打匹克球' → occasion=日常
+[01:19:24] [INFO] 📍 📊 预计 ~60-100s · ~4359 tokens
+[01:19:24] [INFO] 📍 🤖 AI 智能选品
+[01:20:40] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[01:20:40] [INFO] 📊 R1 选品评分: 41分 — ⚠️ 评分偏低，建议重新选品
+[01:20:40] [INFO] 📍 ✍️ AI 创作叙事+生图
+[01:22:07] [INFO] ✅ R2 创作完成: seedream_prompt=347字符, tips=2条
+[01:22:07] [INFO] 👤 人物照: 1张（原图）
+[01:22:07] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_今天早上要去打匹克球
+[01:22:07] [INFO] 📍 🎨 Seedream AI 生图
+[01:22:59] [INFO] ⏸️ 微信推送已暂停: ❌ 今天早上要去打匹克球 生成失败
+[01:40:47] [INFO] 💬 聊天: unknown | recommend
+[01:40:47] [INFO] 指令: unknown | recommend
+[01:40:52] [INFO] 💬 聊天: generate | 场景穿搭 blokecore
+[01:40:52] [INFO] 🚀 管线启动: 场景穿搭 blokecore
+[01:40:52] [INFO] 📍 探索度: 安全推荐
+[01:40:53] [INFO] 📍 天气: 29°C 霾
+[01:40:53] [INFO] 📍 场景提取: '场景穿搭 blokecore' → occasion=日常
+[01:40:53] [INFO] 📍 📊 预计 ~60-100s · ~4295 tokens
+[01:40:53] [INFO] 📍 🤖 AI 智能选品
+[01:41:52] [INFO] ✅ 验证通过
+[01:41:52] [INFO] 📊 R1 选品评分: 67分 — 🧪 探索向，可能惊喜可能翻车
+[01:41:52] [INFO] 📍 ✍️ AI 创作叙事+生图
+[01:42:08] [INFO] ✅ R2 创作完成: seedream_prompt=580字符, tips=2条
+[01:42:08] [INFO] 👤 人物照: 1张（原图）
+[01:42:08] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_场景穿搭 blokecore
+[01:42:08] [INFO] 📍 🎨 Seedream AI 生图
+[01:42:45] [INFO] 📍 📤 推送 + 刷新

@@ -1944,7 +1944,10 @@ def _run_pipeline_impl(style_hint, task_id=None):
             tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
                          image_path=gen_img, image_url=local_img_url,
                          log='\n'.join(log_lines))
-        step_done()
+        # step_done 在 tasks.update 之前调用会覆盖 status
+        # 这里手动补 done 标记
+        if log_lines:
+            log_lines[-1] = '✅ ' + log_lines[-1]
 
         # ── 后台推送（不阻塞用户看图）──
         def _background_push():

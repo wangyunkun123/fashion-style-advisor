@@ -57,7 +57,7 @@ STYLE_PHOTO_MAP = {
         'camera': 'Fujifilm X-T5 35mm f/1.4, film simulation, slight grain',
         'angle': 'eye-level slightly off-center, intimate street snap framing',
         'light': 'overcast soft diffused light, even skin tones, subtle shadow definition',
-        'pose': 'hands in jacket pockets, relaxed weight shift to one leg, looking down at phone with quiet focus, headphones visible',
+        'pose': 'hands in jacket pockets, relaxed weight shift to one leg, looking down at phone with quiet focus',
         'scene': 'quiet Daikanyama residential street, clean minimal architecture, potted plants, soft afternoon',
         'vibe': 'effortlessly cool candid snap, Japanese magazine editorial, caught in a quiet moment',
     },

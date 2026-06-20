@@ -38,7 +38,8 @@
   },
   "style_modifiers": [
     "颜色显白",
-    "运动机能感"
+    "运动机能感",
+    "网球发带"
   ],
   "meta": {
     "is_key_piece": false,
@@ -47,5 +48,12 @@
     "last_worn": null,
     "claude_fit_comment": "双面拼色发带/围脖功能性强,适合运动或户外场景增添细节层次",
     "_statement_score": 0.35
-  }
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "运动休闲",
+    "复古工装",
+    "意式运动",
+    "户外机能"
+  ]
 }

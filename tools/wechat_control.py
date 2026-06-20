@@ -46,6 +46,9 @@ def log(msg, level='INFO'):
     except:
         pass
 
+# ── 天气模块 ──────────────────────────────────────────
+from tools.weather_advisor import fetch_weather, analyze_weather
+
 # ── 加载配置 ──────────────────────────────────────────
 with open(CONFIG_FILE, 'r') as f:
     config = json.load(f)

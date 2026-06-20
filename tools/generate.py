@@ -264,6 +264,8 @@ def main():
     # ═══════════════════════════════════════════
     # Pass 2: 配饰精确化（Pass1最佳 + 配饰图）
     # ═══════════════════════════════════════════
+    result2 = None
+    elapsed2 = 0
     if len(accessory_images) < 2:
         if len(accessory_images) == 1:
             print(f"\n{'─' * 60}")
@@ -339,7 +341,7 @@ def main():
                 total_elapsed = elapsed1 + elapsed2
             else:
                 total_elapsed = elapsed1
-        total_elapsed = elapsed1 + (elapsed2 if 'elapsed2' in dir() else 0)
+        total_elapsed = elapsed1 + elapsed2
 
     total_elapsed = elapsed1
     if accessory_images and result2:

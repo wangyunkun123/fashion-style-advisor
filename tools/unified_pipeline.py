@@ -137,7 +137,7 @@ STYLE_PHOTO_MAP = {
     },
     'scene_blokecore': {
         'camera': 'Fujifilm X-T5 23mm, vibrant color, documentary style',
-        'pose': 'walking toward stadium entrance, scarf swinging, mid-laugh with friends (out of frame), match-day energy',
+        'pose': 'walking toward stadium entrance, mid-laugh with friends (out of frame), match-day energy',
         'scene': 'football stadium exterior on match day, crowd in team colors, overcast English sky, brick stadium facade',
         'vibe': 'terrace culture energy, authentic fan spirit, football-meets-fashion',
     },

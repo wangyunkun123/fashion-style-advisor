@@ -1929,16 +1929,23 @@ def _run_pipeline_impl(style_hint, task_id=None):
             if gen_img:
                 break
 
-        # ── 原型重建：必须在 git push 之前完成（客户端轮询到 done 后会立即刷新页面）──
+        # ── 先 commit+push 图片（让 CDN 拿到新的 commit hash）──
+        run_cli(['git', 'add', '-A'], timeout=30)
+        run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
+        run_cli(['git', 'push'], timeout=60)
+
+        # ── 原型重建：push 之后再做（此时 HEAD 已是最新，CDN hash 正确）──
         try:
             run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
         except Exception:
             pass
 
-        # ── 一次性 git 提交（合并 generate + prototype 产物）──
-        run_cli(['git', 'add', '-A'], timeout=30)
-        run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
-        run_cli(['git', 'push'], timeout=60)
+        # ── 如果原型有更新，单独 push ──
+        proto_status = run_cli(['git', 'status', '--short', 'prototype/mobile-v2.html'], timeout=10)
+        if proto_status.strip():
+            run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
+            run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
+            run_cli(['git', 'push'], timeout=30)
         step_done()
 
         # ── 统计摘要 ──

@@ -589,8 +589,10 @@ def get_cooldown(item_id, heat_level, category_code, days_since_last, three_star
 
 
 def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
-                         wear_counts=None, cache=None):
-    """构建数据增强版衣柜表格 — 每个单品带风格/场景/新鲜度/冷却五维数据"""
+                         wear_counts=None, cache=None, temp_high=25):
+    """构建数据增强版衣柜表格 — 每个单品带风格/场景/新鲜度/冷却五维数据
+    temp_high: 最高温度，用于过滤不合适季节的单品
+    """
     all_clothes = load_all_clothing()
     cache = cache or load_score_cache()
     scene_profiles = load_scene_profiles()
@@ -742,6 +744,33 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     elif same_day_count >= 1:
         same_day_hint = '🔄 今天已有1套，可以参考但不必完全避开。'
 
+    # ── 温度过滤：跳过不适合当前季节的单品 ──
+    HOT_THRESHOLD = 25   # >25°C 跳过非夏季品类
+    COLD_THRESHOLD = 15  # <15°C 确保保暖品类
+    skipped_cats = []
+    for cat in list(cats.keys()):
+        items_in_cat = cats[cat]
+        if temp_high >= HOT_THRESHOLD:
+            # 炎热：跳过外套、长袖上衣
+            if cat in ('外套', '长袖上衣'):
+                skipped_cats.append(f'{cat}({len(items_in_cat)}件，天热跳过)')
+                del cats[cat]
+        elif temp_high <= COLD_THRESHOLD:
+            # 寒冷：跳过背心、短裤
+            if cat in ('背心', '短裤'):
+                skipped_cats.append(f'{cat}({len(items_in_cat)}件，天冷跳过)')
+                del cats[cat]
+    if skipped_cats:
+        skipped_str = '、'.join(skipped_cats)
+        cooldown_summary_lines.insert(0, f'🌡️ 温度{temp_high}°C — 自动跳过: {skipped_str}')
+
+    # ── 温度过低保险：确保外套和长袖存在 ──
+    if temp_high <= COLD_THRESHOLD:
+        if '外套' not in cats or len(cats.get('外套', [])) == 0:
+            cooldown_summary_lines.insert(0, '🧥 低温保险: 请务必选择外套 + 长袖上衣')
+        if '长袖上衣' not in cats or len(cats.get('长袖上衣', [])) == 0:
+            cooldown_summary_lines.insert(0, '🧥 低温保险: 请务必选择长袖上衣 + 外套')
+
     # ── 表格输出 ──
     cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
                  '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
@@ -750,29 +779,31 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
         if cat not in cats:
             continue
         lines.append(f'## {cat}')
-        lines.append('| ID | 品牌 | 颜色·面料 | 场景 | 风格 | 场景 | 新鲜 | 冷却 |')
-        lines.append('|-----|------|----------|------|------|------|------|------|')
+        # 合并评分列：风格40% + 场景30% + 新鲜30% → 综合分
+        lines.append('| ID | 品牌 | 颜色·面料 | 场景用途 | 综合 | 冷却 |')
+        lines.append('|-----|------|----------|---------|------|------|')
         for it in sorted(cats[cat], key=lambda x: -x['style_score']):
             brand = it['brand']
             if it['collection']:
                 brand += ' ' + it['collection']
+            # 综合分 = 风格×0.4 + 场景×0.3 + 新鲜×0.3
+            composite = int(it['style_score'] * 0.4 + it['scene_fit'] * 0.3 + it['freshness'] * 0.3)
             key_mark = '⭐' if it['style_key'] else ''
-            fresh_icon = '🆕' if it['freshness'] >= 65 else ('🔄' if it['freshness'] <= 35 else '')
+            comp_str = f'{composite}{key_mark}'
             cd = it['cooldown']
-            if cd['status'] == 'sameday':
-                cd_str = '🔄'
+            if cd['status'] == 'sameday_blocked':
+                cd_str = '🚫同天'
             elif cd['status'] == 'cooling':
                 cd_str = f"🔴{cd['cooldown_days']}d"
             elif cd['status'] == 'almost':
                 cd_str = f"🟡{cd['cooldown_days']}d"
             elif cd['status'] == 'awaken':
-                cd_str = '💡'
+                cd_str = '💡唤醒'
             else:
                 cd_str = '🟢'
             lines.append(
-                f'| {it["id"]} | {brand[:20]} | {it["color"]}·{it["fabric"][:6]} | '
-                f'{it["scenes"][:10]} | {it["style_score"]}{key_mark} | '
-                f'{it["scene_fit"]} | {it["freshness"]}{fresh_icon} | {cd_str} |'
+                f'| {it["id"]} | {brand[:22]} | {it["color"]}·{it["fabric"][:8]} | '
+                f'{it["scenes"][:12]} | {comp_str:>4} | {cd_str} |'
             )
         lines.append('')
 
@@ -952,7 +983,8 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 
     # ── 8. 构建增强衣柜表 ──
     wardrobe_table = build_wardrobe_table(
-        target_styles, occasion, recent_outfits, banned_items, wear_counts
+        target_styles, occasion, recent_outfits, banned_items, wear_counts,
+        temp_high=temp_high
     )
 
     # ── 0.5. 用户形象描述（从 config/user_profile.json 动态读取）──

@@ -1785,7 +1785,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=16384, timeout=180)
+            ], max_tokens=4096, timeout=180)
             _api_calls += 1
 
             plan = extract_json(content)
@@ -1812,7 +1812,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=16384, timeout=180)
+            ], max_tokens=4096, timeout=180)
             _api_calls += 1
             plan = extract_json(content)
             if not plan:
@@ -1836,7 +1836,7 @@ def _run_pipeline_impl(style_hint, task_id=None):
             content = call_doubao_chat([
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_prompt},
-            ], max_tokens=16384, timeout=180)
+            ], max_tokens=4096, timeout=180)
             _api_calls += 1
             plan = extract_json(content)
             if plan:

@@ -1938,7 +1938,8 @@ def _run_pipeline_impl(style_hint, task_id=None):
         local_img_url = None
         if gen_img:
             rel_path = os.path.relpath(gen_img, PROJECT_DIR)
-            local_img_url = f'/api/image?f={rel_path}'
+            from urllib.parse import quote
+            local_img_url = f'/api/image?f={quote(rel_path)}'
 
         if task_id:
             tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',

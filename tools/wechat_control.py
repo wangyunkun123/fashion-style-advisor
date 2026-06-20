@@ -1929,43 +1929,55 @@ def _run_pipeline_impl(style_hint, task_id=None):
             if gen_img:
                 break
 
-        # ── 先 commit+push 图片（让 CDN 拿到新的 commit hash）──
-        run_cli(['git', 'add', '-A'], timeout=30)
-        run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
-        run_cli(['git', 'push'], timeout=60)
-
-        # ── 原型重建：push 之后再做（此时 HEAD 已是最新，CDN hash 正确）──
-        try:
-            run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
-        except Exception:
-            pass
-
-        # ── 如果原型有更新，单独 push ──
-        proto_status = run_cli(['git', 'status', '--short', 'prototype/mobile-v2.html'], timeout=10)
-        if proto_status.strip():
-            run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
-            run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
-            run_cli(['git', 'push'], timeout=30)
-        step_done()
-
         # ── 统计摘要 ──
         elapsed = time.time() - t_start
         est_tokens = _input_chars // 2
         stats_line = f'⏱️ ~{elapsed:.0f}s · 📊 ~{est_tokens} tokens · 🔄 {_api_calls}次AI'
 
-        # 更新控制台结果（只显示统计，不展示图片和摘要）
+        # ── 立即返回本地图片 URL（手机秒看，不等 push）──
+        local_img_url = None
+        if gen_img:
+            rel_path = os.path.relpath(gen_img, PROJECT_DIR)
+            local_img_url = f'/api/image?f={rel_path}'
+
         if task_id:
-            github_url = get_github_raw_url(gen_img) if gen_img else None
             tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
-                         image_path=gen_img, image_url=github_url,
+                         image_path=gen_img, image_url=local_img_url,
                          log='\n'.join(log_lines))
+        step_done()
+
+        # ── 后台推送（不阻塞用户看图）──
+        def _background_push():
+            try:
+                # composite 排版
+                run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=60)
+                # git push 图片
+                run_cli(['git', 'add', '-A'], timeout=30)
+                run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
+                run_cli(['git', 'push'], timeout=60)
+                # 重建原型（此时 HEAD 是最新，CDN hash 正确）
+                try:
+                    run_cli(['python3', 'tools/build_prototype.py'], timeout=30)
+                except Exception:
+                    pass
+                # 原型有更新则 push
+                proto_status = run_cli(['git', 'status', '--short', 'prototype/mobile-v2.html'], timeout=10)
+                if proto_status.strip():
+                    run_cli(['git', 'add', 'prototype/mobile-v2.html'], timeout=10)
+                    run_cli(['git', 'commit', '-m', '📱 重建原型'], timeout=10)
+                    run_cli(['git', 'push'], timeout=30)
+                log(f'📤 后台推送完成: {style_hint}')
+            except Exception as e:
+                log(f'⚠️ 后台推送失败: {e}', 'WARN')
+
+        threading.Thread(target=_background_push, daemon=True).start()
 
         # 保存历史记录
         save_history({
             'time': time.strftime('%Y-%m-%d %H:%M:%S'),
             'style': style_hint,
             'status': 'done',
-            'image_url': github_url if gen_img else None,
+            'image_url': local_img_url if gen_img else None,
             'stats': stats_line,
         })
     except Exception as e:

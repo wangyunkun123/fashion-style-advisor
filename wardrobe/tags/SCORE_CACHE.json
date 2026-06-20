@@ -2579,7 +2579,7 @@
       "_updated": "2026-06-17 23:02:42"
     },
     "clean_fit": {
-      "score": 8,
+      "score": 13,
       "raw_score": 7,
       "breakdown": {
         "soft_constraints": 5,
@@ -7387,7 +7387,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -9231,7 +9231,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 28,
+      "score": 33,
       "raw_score": 25,
       "breakdown": {
         "soft_constraints": 15,
@@ -15132,7 +15132,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "japanese_city_boy": {
-      "score": 22,
+      "score": 7,
       "raw_score": 19,
       "breakdown": {
         "soft_constraints": 0,
@@ -15300,7 +15300,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "clean_fit": {
-      "score": 0,
+      "score": 5,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
@@ -15933,7 +15933,7 @@
   "_meta": {
     "last_rebuild": "2026-06-18 14:13:35",
     "total_entries": 77,
-    "last_feedback": "2026-06-20T00:18:38.906425",
-    "last_action": "korean_minimal+5 (3件)"
+    "last_feedback": "2026-06-21T02:42:50.442392",
+    "last_action": "clean_fit+5 (4件)"
   }
 }

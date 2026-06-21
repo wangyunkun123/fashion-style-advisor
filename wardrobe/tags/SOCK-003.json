@@ -11,8 +11,8 @@
     "friendly_for_pale_skin": true
   },
   "silhouette": {
-    "fit": "合身",
-    "shoulder_effect": "无特殊效果",
+    "fit": "",
+    "shoulder_effect": "船袜",
     "torso_effect": "无特殊效果",
     "length_ratio": "标准"
   },
@@ -47,5 +47,8 @@
     "last_worn": null,
     "claude_fit_comment": "砖红配花卉提花船袜色彩温暖且图案精致,适合秋冬增添细节趣味",
     "_statement_score": 0.5
-  }
+  },
+  "recommended_styles": [
+    "街头潮流"
+  ]
 }

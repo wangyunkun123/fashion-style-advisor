@@ -2173,3 +2173,41 @@ NameError: name 'fetch_weather' is not defined
 [03:07:10] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_一套今日穿搭
 [03:07:10] [INFO] 📍 🎨 Seedream AI 生图
 [03:07:49] [INFO] 📍 📤 推送 + 刷新
+[03:08:30] [INFO] 📤 后台推送完成: 一套今日穿搭
+[09:40:15] [INFO] 标签更新: SOCK-004
+[09:40:55] [INFO] 标签更新: SOCK-003
+[09:41:11] [INFO] 标签更新: SOCK-002
+[09:41:23] [INFO] 标签更新: SOCK-001
+[09:41:47] [INFO] 标签更新: SOCK-005
+[09:42:03] [INFO] 标签更新: SOCK-006
+[09:42:14] [INFO] 🚀 管线启动: chinese_heritage
+[09:42:14] [INFO] 📍 探索度: 安全推荐
+[09:42:15] [INFO] 📍 天气: 29°C 晴
+[09:42:15] [INFO] 📍 场景提取: 'chinese_heritage' → occasion=日常
+[09:42:15] [INFO] 📍 📊 预计 ~60-100s · ~3579 tokens
+[09:42:15] [INFO] 📍 🤖 AI 智能选品
+[09:44:31] [WARN] ⚠️ API 返回空 content 且无 reasoning, finish_reason=length, keys=['content', 'role']
+[09:44:31] [ERROR] API 返回无法解析为 JSON (attempt 1/2):
+
+[09:44:31] [INFO] 🔄 JSON解析失败，重试中...
+[09:46:43] [ERROR] API 返回无法解析为 JSON (attempt 2/2):
+{"anchor":{"id":"PT-002","role":"今日主角 — 卡其棉长裤奠定新中式暖土色基底"},"style":"chinese_heritage","items":[{"category":"上衣","id":"TS-011","name":"UNIQLO 米白棉短袖","color":"米白","reason":"米白纯色像宣纸底色，干净克制，棉质适合29°C晴天；与卡其裤组合出新中式日常的温润感，也避开了近期高频上衣。"},{"category":"下装","id":"PT-002","name":"未知 卡其色棉长裤","color":"卡其色","reason":"卡其棉质比牛仔和羊毛更适合夏季日常，暖土色有东方陶土感，是整套的风格锚点；长裤线条比短裤更稳重，适合chinese_heritage。"},{"category":"鞋子","id":"SHOE-006","name":"Converse Chuck Taylor高帮系列 姜黄色帆布鞋","color":"姜黄色","reason":"避开最近两套鞋子，姜黄色作为小面积跳色呼应传统暖色系，不与米
+[09:46:43] [INFO] ⏸️ 微信推送已暂停: ❌ chinese_heritage 生成失败
+[09:49:53] [INFO] 🚀 管线启动: chinese_heritage
+[09:49:53] [INFO] 📍 探索度: 安全推荐
+[09:49:54] [INFO] 📍 天气: 29°C 晴
+[09:49:54] [INFO] 📍 场景提取: 'chinese_heritage' → occasion=日常
+[09:49:54] [INFO] 📍 📊 预计 ~60-100s · ~3579 tokens
+[09:49:54] [INFO] 📍 🤖 AI 智能选品
+[09:52:17] [WARN] ⚠️ API 返回空 content 且无 reasoning, finish_reason=length, keys=['content', 'role']
+[09:52:17] [ERROR] API 返回无法解析为 JSON (attempt 1/2):
+
+[09:52:17] [INFO] 🔄 JSON解析失败，重试中...
+[09:53:08] [INFO] ✅ 验证通过
+[09:53:08] [INFO] 📊 R1 选品评分: 54分 — ⚠️ 评分偏低，建议重新选品
+[09:53:08] [INFO] 📍 ✍️ AI 创作叙事+生图
+[09:54:07] [INFO] ✅ R2 创作完成: seedream_prompt=354字符, tips=2条
+[09:54:07] [INFO] 👤 人物照: 1张（原图）
+[09:54:07] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_chinese_heritage
+[09:54:07] [INFO] 📍 🎨 Seedream AI 生图
+[09:54:41] [INFO] 📍 📤 推送 + 刷新

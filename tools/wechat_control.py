@@ -733,8 +733,9 @@ def _register_new_item(cid, category_name):
 
 def _resize_image_for_api(image_path, max_size=1024):
     """将图片缩放到 max_size px，返回 JPEG bytes"""
-    from PIL import Image as PILImage
+    from PIL import Image as PILImage, ImageOps
     img = PILImage.open(image_path)
+    img = ImageOps.exif_transpose(img)  # 自动旋转校准（手机拍照 EXIF 方向修正）
     if img.mode in ('RGBA', 'P', 'LA'):
         rgb = PILImage.new('RGB', img.size, (255, 255, 255))
         if img.mode == 'P':

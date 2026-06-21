@@ -1,0 +1,54 @@
+{
+  "clothing_id": "PT-007",
+  "category": "长裤",
+  "category_code": "PT",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "灰卡其色",
+    "saturation": "低饱和",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松直筒",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "遮盖腹部",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉混纺",
+    "texture": "轻薄平纹/皱感棉布",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏",
+      "初秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲",
+    "松紧抽绳腰",
+    "极简",
+    "日系宽松"
+  ],
+  "meta": {
+    "claude_fit_comment": "松紧抽绳腰配宽松直筒版型，穿着舒适随性，对腰腹和腿型包容度高。"
+  },
+  "occasions": [
+    "日常休闲",
+    "居家",
+    "旅行"
+  ]
+}

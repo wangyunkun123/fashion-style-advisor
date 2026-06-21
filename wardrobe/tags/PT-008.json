@@ -1,0 +1,54 @@
+{
+  "clothing_id": "PT-008",
+  "category": "长裤",
+  "category_code": "PT",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "橄榄灰色",
+    "saturation": "低饱和",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松锥形",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "遮盖腹部",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "棉混纺",
+    "texture": "微皱梭织斜纹",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲",
+    "工装感",
+    "日系宽松",
+    "低饱和基础款"
+  ],
+  "meta": {
+    "claude_fit_comment": "宽松锥形裤型配合中腰与微收裤脚，舒适遮肉，适合休闲与轻通勤穿搭。"
+  },
+  "occasions": [
+    "日常休闲",
+    "通勤",
+    "旅行"
+  ]
+}

@@ -1589,16 +1589,8 @@ def gen_history_card(outfit, idx):
         # Never empty icon — fallback to tshirt
         ico = item_icons.get(ico_key) or item_icons.get('tshirt', '')
         img_html = ''
-        if it.get('cutout'):
-            # 抠图大图用本地 /api/image 端点（cutout 被 gitignore，CDN 拿不到）
-            from urllib.parse import quote
-            cutout_path = it['cutout']
-            if cutout_path.startswith('..'):
-                cutout_path = cutout_path[3:]  # strip ../ prefix
-            elif cutout_path.startswith('/'):
-                cutout_path = cutout_path[1:]
-            img_html = '<img class="item-img" src="/api/image?f={}" loading="lazy">'.format(quote(cutout_path))
-        elif it.get('thumb'):
+        # 历史卡片优先用 CDN 缩略图（/api/image 走 Funnel 不可靠）
+        if it.get('thumb'):
             img_html = '<img class="item-img" src="{}" loading="lazy">'.format(cdn_url(it['thumb']))
         # Split brand from description using original full name
         full_name = it.get('full_name', it['name'])

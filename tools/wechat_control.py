@@ -645,6 +645,11 @@ def _select_person_photos_for_prompt(person_photos, seedream_prompt):
 
 # ── 衣橱入库辅助函数 ──────────────────────────────────
 
+def _id_exists_on_disk(cid):
+    """检查某个 clothing ID 的标签文件是否已存在"""
+    tag_path = os.path.join(PROJECT_DIR, 'wardrobe', 'tags', f'{cid}.json')
+    return os.path.exists(tag_path)
+
 def _get_next_id(category_code):
     """扫描 wardrobe/tags/ 获取某品类下一个可用 ID"""
     existing = []
@@ -1473,7 +1478,8 @@ def _run_add_analysis(task_id, image_b64_list):
             tasks.update(task_id, status='error', message='未在图片中识别到服装单品')
             return
 
-        # 5. 为每件单品分配建议 ID 和补充信息
+        # 5. 为每件单品分配建议 ID 和补充信息（同批次去重）
+        assigned_ids = set()
         for i, item in enumerate(items):
             cc = item.get('category_code', 'TS')
             # 验证品类代码
@@ -1481,7 +1487,13 @@ def _run_add_analysis(task_id, image_b64_list):
                 cc = 'TS'  # fallback
             item['category_code'] = cc
             item['category'] = CATEGORY_CODE_TO_NAME.get(cc, item.get('category', '短袖上衣'))
-            item['suggested_id'] = _get_next_id(cc)
+            sid = _get_next_id(cc)
+            # 同批次多件同品类时确保 ID 不重复（批量分析可能同时识别多件长裤/上衣等）
+            while sid in assigned_ids or _id_exists_on_disk(sid):
+                prefix, num = sid.rsplit('-', 1)
+                sid = f'{prefix}-{int(num)+1:03d}'
+            assigned_ids.add(sid)
+            item['suggested_id'] = sid
             item['_temp_image_path'] = temp_paths[i] if i < len(temp_paths) else ''
             # 补充默认值
             if 'color' not in item: item['color'] = {}

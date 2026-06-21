@@ -2076,10 +2076,19 @@ def _load_style_cards(include_universal=False, with_top_items=False):
                                 commit = get_git_commit()
                                 return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{path}'
                             return ''
+                        def _cutout_url(cid):
+                            # 🆕 本地大图（抠图），用于弹窗查看细节
+                            from urllib.parse import quote
+                            cutout = _find_item_cutout(cid)
+                            if cutout:
+                                path = cutout.split('?')[0]
+                                return f'/api/image?f={quote(path)}'
+                            return ''
                         card['top_items'] = [
                             {'clothing_id': t['clothing_id'], 'category_code': t.get('category', '')[:4],
                              'score': t['score'],
-                             'thumb': _thumb_url(t['clothing_id'])}
+                             'thumb': _thumb_url(t['clothing_id']),
+                             'cutout': _cutout_url(t['clothing_id'])}
                             for t in (top or [])[:3]
                         ]
                     except Exception:
@@ -2628,6 +2637,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         'usage_count': item.get('wear_count', 0),
                         'last_used': witem.get('meta', {}).get('last_worn') or '从未',
                         'thumb': _find_item_thumb(cid),
+                        'cutout': _find_item_cutout(cid),
                         'category_code': witem.get('category_code', '?'),
                         'is_key': witem.get('meta', {}).get('is_key_piece', False),
                     })

@@ -88,7 +88,7 @@ STYLE_PHOTO_MAP = {
     },
     'clean_fit': {
         'camera': 'Sony A7IV 50mm f/1.4, clinically sharp, minimal color grade',
-        'pose': 'standing with deliberate posture, weight evenly distributed, looking directly at camera with quiet confidence',
+        'pose': 'leaning against a minimalist concrete wall, weight shifted to one leg, one hand adjusting cuff, direct gaze with quiet confidence',
         'scene': 'modern minimalist architecture, white and grey tones, clean geometric lines, morning crisp light',
         'vibe': 'editorial precision, Scandinavian cool, nothing out of place',
     },
@@ -149,7 +149,7 @@ STYLE_PHOTO_MAP = {
     },
     'chinese_heritage': {
         'camera': 'Fujifilm X-T5 35mm, muted warm tones, cultural documentary',
-        'pose': 'standing in traditional garden courtyard, one hand touching wooden pillar, looking at koi pond, quiet contemplation',
+        'pose': 'walking slowly along a moon gate corridor, one hand brushing bamboo leaves, pausing by koi pond with quiet contemplation',
         'scene': 'Suzhou classical garden, white walls with grey tile roofs, bamboo shadows, morning mist',
         'vibe': 'cultural depth and quiet confidence, heritage reimagined for modern life',
     },

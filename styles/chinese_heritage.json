@@ -5,6 +5,7 @@
   "description": "基于手串、文玩配件的自然延伸。不是传统汉服，而是以质感配件 + 暗色调 + 自然面料构建低调东方感。适合文化场合、品茶、见长辈。沉香手串、檀木配饰是标志。",
   "category": "质感休闲",
   "intensity": 4,
+  "tier": "bold",
 
   "fingerprint": {
     "silhouette": {

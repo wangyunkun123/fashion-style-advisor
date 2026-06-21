@@ -2728,7 +2728,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 styles = _load_style_cards(with_top_items=True)
                 cross_ids = {
                     'american_workwear', 'contemporary_gorpcore', 'japanese_yama',
-                    'scene_blokecore', 'retro_90s_hiphop'
+                    'scene_blokecore', 'retro_90s_hiphop', 'chinese_heritage'
                 }
                 cross_styles = [s for s in styles if s['id'] in cross_ids]
                 self._json_resp(200, {'styles': cross_styles})

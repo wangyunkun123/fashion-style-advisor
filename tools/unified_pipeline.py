@@ -942,6 +942,38 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         target_styles.insert(0, matched_style)
         target_styles = target_styles[:4]  # 最多4个
 
+    # ── 1.6. 推荐等级过滤：core(始终) / explore(≥0.5) / bold(≥0.8) ──
+    # 用户主动指定的风格（matched_style）不受等级限制
+    TIER_THRESHOLDS = {'core': 0.0, 'explore': 0.5, 'bold': 0.8}
+    filtered_styles = []
+    for sid in target_styles:
+        if sid == matched_style:
+            filtered_styles.append(sid)
+            continue
+        try:
+            sf = load_style_fingerprint(sid)
+            tier = sf.get('tier', 'core')
+        except Exception:
+            tier = 'core'
+        threshold = TIER_THRESHOLDS.get(tier, 0.0)
+        if explore_level >= threshold:
+            filtered_styles.append(sid)
+    # 大胆混搭模式：补充所有 bold 等级风格到候选池
+    if explore_level >= 0.8:
+        for fn in sorted(os.listdir(STYLES_DIR)):
+            if not fn.endswith('.json'):
+                continue
+            sid = fn[:-5]
+            if sid in filtered_styles or sid == matched_style:
+                continue
+            try:
+                sf = load_style_fingerprint(sid)
+                if sf.get('tier') == 'bold':
+                    filtered_styles.append(sid)
+            except Exception:
+                pass
+    target_styles = filtered_styles if filtered_styles else target_styles[:1]
+
     # ── 2. 加载上下文数据 ──
     banned_items = get_banned_items()
     recent_outfits = get_recent_outfits(limit=7)

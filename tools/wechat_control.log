@@ -24,3 +24,60 @@
 [12:46:47] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_scandi_minimalism
 [12:46:47] [INFO] 📍 🎨 Seedream AI 生图
 [12:47:22] [INFO] 📍 📤 推送 + 刷新
+[12:47:34] [INFO] 📤 后台推送完成: scandi_minimalism
+[13:09:28] [INFO] ⭐ 评分: 2026-06-21_scandi_minimalism → 3星
+[13:09:28] [INFO] ⭐ 评分: 2026-06-21_scandi_minimalism → 3星
+[19:41:24] [INFO] 📸 衣橱添加: 1782042084674 (1 张图片)
+[19:41:46] [INFO] 📸 衣橱添加: 1782042106335 (1 张图片)
+[19:41:58] [INFO] 衣物分析完成: 1782042106335 → 1 件
+[19:45:05] [INFO] =======================================================
+[19:45:05] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[19:45:05] [INFO] 📡 服务: http://0.0.0.0:8765
+[19:45:05] [INFO] 💬 面板: http://localhost:8765/
+[19:45:05] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[19:45:05] [INFO] 📤 已推送上线通知
+[19:45:20] [INFO] 📸 衣橱添加(binary): 1782042320169 (1 张图片, 1801KB)
+[19:45:42] [INFO] 衣物分析完成: 1782042320169 → 1 件
+[20:10:34] [INFO] 📸 衣橱添加(binary): 1782043834892 (1 张图片, 2010KB)
+[20:10:45] [INFO] 衣物分析完成: 1782043834892 → 1 件
+[20:11:35] [INFO] =======================================================
+[20:11:35] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[20:11:35] [INFO] 📡 服务: http://0.0.0.0:8765
+[20:11:35] [INFO] 💬 面板: http://localhost:8765/
+[20:11:35] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[20:11:35] [INFO] 📤 已推送上线通知
+[20:12:47] [INFO] =======================================================
+[20:12:47] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[20:12:47] [INFO] 📡 服务: http://0.0.0.0:8765
+[20:12:47] [INFO] 💬 面板: http://localhost:8765/
+[20:12:47] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[20:12:47] [INFO] 📤 已推送上线通知
+[20:12:59] [INFO] 📸 衣橱添加(binary): 1782043979866 (1 张图片, 1801KB)
+[20:13:10] [INFO] 衣物分析完成: 1782043979866 → 1 件
+[20:18:38] [INFO] 📸 衣橱添加(binary): 1782044318023 (1 张图片, 1801KB)
+[20:18:38] [INFO] 📸 衣橱添加(binary): 1782044318034 (1 张图片, 8KB)
+[20:18:38] [INFO] 📸 衣橱添加: 1782044318036 (1 张图片)
+[20:18:49] [INFO] 衣物分析完成: 1782044318023 → 1 件
+[20:19:02] [INFO] 📸 衣橱添加(binary): 1782044342233 (1 张图片, 8KB)
+[20:22:53] [INFO] 📸 衣橱添加(binary): 1782044573372 (1 张图片, 1801KB)
+[20:22:53] [INFO] 📸 衣橱添加: 1782044573378 (1 张图片)
+[20:22:53] [ERROR] 衣物分析失败: cannot identify image file '/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782044573378_0.jpg'
+[20:23:01] [INFO] 衣物分析完成: 1782044573372 → 1 件
+[20:23:03] [INFO] 📸 衣橱添加: 1782044583190 (1 张图片)
+[20:23:03] [ERROR] 衣物分析失败: cannot identify image file '/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782044583190_0.jpg'
+[20:23:38] [INFO] 📸 衣橱添加: 1782044618084 (1 张图片)
+[20:23:38] [ERROR] 衣物分析失败: cannot identify image file '/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782044618084_0.jpg'
+[20:24:26] [INFO] 📸 衣橱添加: 1782044666685 (1 张图片)
+[20:24:26] [ERROR] 衣物分析失败: cannot identify image file '/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782044666685_0.jpg'
+[20:26:07] [INFO] 📸 衣橱添加: 1782044767227 (1 张图片)
+[20:26:07] [ERROR] 衣物分析失败: cannot identify image file '/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782044767227_0.jpg'
+[20:26:27] [INFO] 📸 衣橱添加(binary): 1782044787317 (1 张图片, 128KB)
+[20:26:42] [INFO] 衣物分析完成: 1782044787317 → 1 件
+[20:28:34] [INFO] 📸 衣橱添加(binary): 1782044914960 (1 张图片, 144KB)
+[20:28:44] [INFO] 衣物分析完成: 1782044914960 → 1 件
+[20:29:28] [INFO] 🪄 预览穿搭: 1782044968564 (新衣=HAT-006, 匹配=[])
+[20:31:48] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/帽子/Image_20260621_203148_HAT-006.jpg
+[20:31:59] [INFO] 图片增强完成: HAT-006
+[20:31:59] [INFO] 抠图缩略图: HAT-006 (21KB)
+[20:31:59] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/HAT-006.json
+[20:31:59] [INFO] 已追加到服装档案: HAT-006

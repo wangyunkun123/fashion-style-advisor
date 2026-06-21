@@ -265,7 +265,7 @@ def tab_btn(key, label, active=False):
 def item_row(icon_svg, cat, iid, name, thumb=''):
     thumb_html = ''
     if thumb:
-        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(cdn_url(thumb))
+        thumb_html = '<img class="item-thumb" src="{}" onclick="event.stopPropagation();showImg(this.src)" loading="lazy">'.format(thumb)
     return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(icon_svg, cat, iid, name, thumb_html)
 
 # ── Chinese color → hex mapping ──

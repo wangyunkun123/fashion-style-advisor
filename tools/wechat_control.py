@@ -2697,7 +2697,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 styles = _load_style_cards(with_top_items=True)
                 # 舒适区: 已穿的8个 + 相近的 scandi_minimalism, korean_light_mature
                 comfort_ids = {
-                    'athleisure_sport','chinese_heritage','clean_fit','japanese_city_boy',
+                    'athleisure_sport','clean_fit','japanese_city_boy',
                     'korean_minimal','resort_vacation','smart_casual','streetwear',
                     'scandi_minimalism','korean_light_mature'
                 }

@@ -35,6 +35,15 @@ CONFIG_FILE = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
 LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
 HISTORY_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_history.json')
 
+# ── 管线状态（每日自动推荐 + 并发控制）──
+_pipeline_running = False
+_pipeline_lock = threading.Lock()
+_pipeline_status = {
+    'last_run': None,      # ISO timestamp
+    'last_error': None,    # 错误信息或 None
+    'total_runs': 0        # 累计推荐次数
+}
+
 # ── 日志 ────────────────────────────────────────────
 def log(msg, level='INFO'):
     """写日志到文件 + stdout"""
@@ -153,6 +162,48 @@ def _find_item_cutout(clothing_id):
     gl = [(enhanced_dir, '{cid}_cutout.png'),        # 精确匹配完整抠图，排除缩略图
           (_outfit_items_dirs, '{cid}_*cutout*')]
     return _find_item_asset(clothing_id, gl)
+
+
+def _find_report_item_thumbnail(item_id):
+    """查找报告用的单品缩略图 URL，优先 CDN"""
+    thumb_path = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{item_id}_cutout_thumb.png')
+    if os.path.exists(thumb_path):
+        try:
+            h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                             capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
+            return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/wardrobe/enhanced/{item_id}_cutout_thumb.png'
+        except Exception:
+            return f'/wardrobe/enhanced/{item_id}_cutout_thumb.png'
+    return ''
+
+
+def _find_report_style_image(style_id):
+    """查找某风格评分最高的 outfit 效果图 CDN URL"""
+    best_img = ''
+    best_rating = -1
+    outfits_base = os.path.join(PROJECT_DIR, 'outfits')
+    if not os.path.isdir(outfits_base):
+        return ''
+    for d in sorted(os.listdir(outfits_base), reverse=True):
+        rpath = os.path.join(outfits_base, d, 'rating.json')
+        img_path = os.path.join(outfits_base, d, '上身效果', '上身效果_1.png')
+        if not os.path.exists(rpath) or not os.path.exists(img_path):
+            continue
+        try:
+            with open(rpath) as f:
+                r = json.load(f)
+            if r.get('style_id', '') == style_id and r.get('rating', 0) > best_rating:
+                best_rating = r['rating']
+                try:
+                    h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                                     capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
+                    best_img = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/outfits/{d}/上身效果/上身效果_1.png'
+                except Exception:
+                    best_img = f'/outfits/{d}/上身效果/上身效果_1.png'
+        except Exception:
+            pass
+    return best_img
+
 
 # ── 任务管理器 ────────────────────────────────────────
 class TaskManager:
@@ -1792,18 +1843,36 @@ def extract_mandatory_items(style_hint, min_confidence=0.40):
 
 def run_pipeline(style_hint, task_id=None):
     """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
+    global _pipeline_running, _pipeline_status
     import traceback as _tb
+
+    # 防并发锁
+    with _pipeline_lock:
+        if _pipeline_running:
+            log(f"⚠️ 管线忙碌，拒绝新请求: {style_hint}")
+            if task_id:
+                tasks.update(task_id, status='error', message='已有推荐任务运行中，请稍后重试')
+            return None
+        _pipeline_running = True
+
     try:
-        return _run_pipeline_impl(style_hint, task_id)
+        result = _run_pipeline_impl(style_hint, task_id)
+        _pipeline_status['last_run'] = time.strftime('%Y-%m-%dT%H:%M:%S')
+        _pipeline_status['last_error'] = None
+        _pipeline_status['total_runs'] += 1
+        return result
     except Exception as _e:
         _err = f"管线异常: {_e}\n{_tb.format_exc()}"
         log(_err, "ERROR")
-        # 写 stderr 确保可见
+        _pipeline_status['last_error'] = str(_e)[:200]
         import sys as _sys
         _sys.stderr.write(_err + '\n')
         _sys.stderr.flush()
         if task_id:
             tasks.update(task_id, status='failed', message=f'管线失败: {_e}', log=_err[:500])
+    finally:
+        with _pipeline_lock:
+            _pipeline_running = False
 
 
 def _run_pipeline_impl(style_hint, task_id=None):
@@ -2344,8 +2413,8 @@ class WebhookHandler(BaseHTTPRequestHandler):
             msg = qs.get('t', [''])[0] or qs.get('text', [''])[0]
             if msg:
                 action, extra = match_command(msg)
-                if action in ('generate', 'recommend'):
-                    tid = _start_async_pipeline(action, extra)
+                if action in ('generate', 'recommend', 'today'):
+                    tid = _start_async_pipeline('recommend', extra or '今日穿搭')
                     self._html_resp(200, REDIRECT_HTML)
                 else:
                     result = execute_action(action, extra)
@@ -2736,6 +2805,127 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 self._json_resp(500, {"error": str(e)})
                 return
 
+        # 周报/月报 API
+        if parsed.path == '/api/report':
+            try:
+                from rating_analyzer import (load_all_ratings, analyze, filter_ratings_by_days,
+                                             find_neutral_patterns, STYLE_NAMES)
+                TAGS_DIR = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+                params = parse_qs(parsed.query or '')
+                period = params.get('period', ['weekly'])[0]
+
+                all_ratings = load_all_ratings()
+
+                if period == 'weekly':
+                    ratings = filter_ratings_by_days(all_ratings, 7)
+                    if not ratings:
+                        ratings = filter_ratings_by_days(all_ratings, 14)
+                    prev_ratings = filter_ratings_by_days(all_ratings, 14)
+                    prev_ratings = [r for r in prev_ratings if r not in ratings]
+                else:
+                    ratings = all_ratings
+                    prev_ratings = []
+
+                if not ratings:
+                    self._json_resp(200, {'period': period, 'empty': True, 'message': '暂无评分数据'})
+                    return
+
+                analysis = analyze(ratings)
+                prev_analysis = analyze(prev_ratings) if prev_ratings else None
+
+                # 日期范围
+                dates = sorted(set(r.get('outfit_id', '')[:10] for r in ratings))
+                date_range = f"{dates[0][5:]} → {dates[-1][5:]}" if len(dates) > 1 else (dates[0][5:] if dates else '')
+
+                # 趋势
+                trend = 0
+                trend_label = ''
+                if prev_analysis and prev_analysis['total'] >= 1:
+                    trend = round(analysis['avg_rating'] - prev_analysis['avg_rating'], 1)
+                    if trend > 0.2:
+                        trend_label = f'📈 较上周 ↑ {trend:+.1f}'
+                    elif trend < -0.2:
+                        trend_label = f'📉 较上周 ↓ {trend:+.1f}'
+                    else:
+                        trend_label = '📊 较上周持平'
+
+                # 风格排行 + 穿搭图
+                top_styles = []
+                for sid, data in sorted(analysis['by_style'].items(), key=lambda x: -x[1]['avg'])[:3]:
+                    image_url = _find_report_style_image(sid)
+                    top_styles.append({
+                        'id': sid,
+                        'name': STYLE_NAMES.get(sid, sid),
+                        'count': data['total'],
+                        'avg_rating': data['avg'],
+                        'image_url': image_url,
+                    })
+
+                # 最爱单品 + 缩略图
+                top_items = []
+                for iid, cnt in list(analysis['items_liked'].items())[:5]:
+                    name = iid
+                    desc = ''
+                    tag_path = os.path.join(TAGS_DIR, f'{iid}.json')
+                    if os.path.exists(tag_path):
+                        with open(tag_path) as f:
+                            tag = json.load(f)
+                        name = tag.get('brand', {}).get('name', '') or tag.get('category_display', iid)
+                        hue = tag.get('color', {}).get('hue_name', '')
+                        series = tag.get('brand', {}).get('series', '') or tag.get('style_culture', {}).get('aesthetic', '')
+                        desc_parts = [p for p in [hue, series] if p]
+                        desc = ' · '.join(desc_parts) if desc_parts else tag.get('claude_fit_comment', '')[:30]
+                    if not name or name == iid:
+                        name = iid
+                    thumb_url = _find_report_item_thumbnail(iid)
+                    top_items.append({
+                        'id': iid,
+                        'name': name,
+                        'description': desc,
+                        'count': cnt,
+                        'thumbnail_url': thumb_url,
+                    })
+
+                result = {
+                    'period': period,
+                    'date_range': date_range,
+                    'total_ratings': analysis['total'],
+                    'satisfaction_rate': analysis['satisfaction_rate'],
+                    'neutral_rate': analysis['neutral_rate'],
+                    'disappoint_rate': analysis['disappoint_rate'],
+                    'avg_rating': analysis['avg_rating'],
+                    'trend': trend,
+                    'trend_label': trend_label,
+                    'top_styles': top_styles,
+                    'top_items': top_items,
+                }
+
+                if period == 'monthly':
+                    neutral = find_neutral_patterns(all_ratings)
+                    result['neutral_analysis'] = neutral['summary'] if neutral else []
+                    # AI 建议
+                    suggestions = []
+                    if analysis['satisfaction_rate'] >= 60:
+                        suggestions.append('✅ 整体满意度良好，继续当前推荐策略')
+                    elif analysis['satisfaction_rate'] >= 40:
+                        suggestions.append('⚠️ 满意度中等，建议调整推荐权重')
+                    else:
+                        suggestions.append('❌ 满意度偏低，需要重新评估风格匹配')
+                    sorted_styles = sorted(analysis['by_style'].items(), key=lambda x: -x[1]['avg'])
+                    if len(sorted_styles) >= 2:
+                        best = sorted_styles[0]
+                        worst = sorted_styles[-1]
+                        if best[0] != worst[0] and worst[1]['avg'] < 2:
+                            suggestions.append(f"💡 建议增加 {STYLE_NAMES.get(best[0], best[0])} 推荐，减少 {STYLE_NAMES.get(worst[0], worst[0])}")
+                    result['suggestions'] = suggestions
+
+                self._json_resp(200, result)
+                return
+            except Exception as e:
+                log(f"周报API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
         # 冷门单品
         if parsed.path == '/api/wardrobe/cold-items':
             try:
@@ -3066,9 +3256,26 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._json_resp(200, latest or {"empty": True})
             return
 
-        # 健康检查
+        # 健康检查（含今日推荐状态）
         if parsed.path == '/health':
-            self._json_resp(200, {"status": "ok", "service": "Fashion 穿搭助手", "time": time.strftime("%H:%M:%S")})
+            today_str = time.strftime('%Y-%m-%d')
+            today_ok = False
+            outfits_base = os.path.join(PROJECT_DIR, 'outfits')
+            if os.path.isdir(outfits_base):
+                for d in sorted(os.listdir(outfits_base), reverse=True):
+                    if d.startswith(today_str):
+                        md = os.path.join(outfits_base, d, 'outfit.md')
+                        if os.path.exists(md) and os.path.getsize(md) > 50:
+                            today_ok = True
+                        break
+            self._json_resp(200, {
+                "status": "ok",
+                "service": "Fashion 穿搭助手",
+                "time": time.strftime("%H:%M:%S"),
+                "today_ok": today_ok,
+                "running": _pipeline_running,
+                "latest_date": today_str if today_ok else (_pipeline_status.get('last_run','')[:10] if _pipeline_status.get('last_run') else None)
+            })
             return
 
         # 静态文件（图片等）

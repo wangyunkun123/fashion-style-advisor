@@ -659,6 +659,8 @@ def _get_next_id(category_code):
     return f'{category_code}-{next_num:03d}'
 
 
+_wardrobe_lock = threading.Lock()  # 保护服装档案.md 和 new_items.json 的并发写入
+
 def _append_to_wardrobe_md(cid, category_name, filename, tag_data):
     """向 wardrobe/服装档案.md 对应品类表格追加一行"""
     md_path = os.path.join(PROJECT_DIR, 'wardrobe', '服装档案.md')
@@ -666,48 +668,49 @@ def _append_to_wardrobe_md(cid, category_name, filename, tag_data):
         log(f"服装档案.md 不存在", "WARN")
         return
 
-    with open(md_path, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+    with _wardrobe_lock:
+        with open(md_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
 
-    # 找到品类章节和其表格的 |---| 分隔行
-    cat_header = f'## {category_name}'
-    in_section = False
-    insert_after = -1
+        # 找到品类章节和其表格的 |---| 分隔行
+        cat_header = f'## {category_name}'
+        in_section = False
+        insert_after = -1
 
-    for i, line in enumerate(lines):
-        if line.strip() == cat_header:
-            in_section = True
-            continue
-        if in_section and line.startswith('|---'):
-            insert_after = i
-            # 往后找该表格的最后一行数据
-            for j in range(i + 1, len(lines)):
-                if lines[j].startswith('|') and not lines[j].startswith('|---'):
-                    insert_after = j
-                elif not lines[j].startswith('|') and lines[j].strip():
-                    break  # 遇到非表格内容，停止
-            break
+        for i, line in enumerate(lines):
+            if line.strip() == cat_header:
+                in_section = True
+                continue
+            if in_section and line.startswith('|---'):
+                insert_after = i
+                # 往后找该表格的最后一行数据
+                for j in range(i + 1, len(lines)):
+                    if lines[j].startswith('|') and not lines[j].startswith('|---'):
+                        insert_after = j
+                    elif not lines[j].startswith('|') and lines[j].strip():
+                        break  # 遇到非表格内容，停止
+                break
 
-    if insert_after < 0:
-        log(f"未找到品类 {category_name} 的表格位置", "WARN")
-        return
+        if insert_after < 0:
+            log(f"未找到品类 {category_name} 的表格位置", "WARN")
+            return
 
-    # 构建新行
-    color_info = tag_data.get('color', {})
-    color_str = color_info.get('hue_name', '未知')
-    brand_info = tag_data.get('brand', {})
-    fabric_info = tag_data.get('fabric', {})
-    style_tags = '、'.join(tag_data.get('style_modifiers', [])) or '基础款'
-    occasions = '、'.join(tag_data.get('occasions', [])) or '日常'
-    fit_comment = tag_data.get('meta', {}).get('claude_fit_comment', '')
-    fit_note = fit_comment[:40] if fit_comment else 'AI 识别入库'
+        # 构建新行
+        color_info = tag_data.get('color', {})
+        color_str = color_info.get('hue_name', '未知')
+        brand_info = tag_data.get('brand', {})
+        fabric_info = tag_data.get('fabric', {})
+        style_tags = '、'.join(tag_data.get('style_modifiers', [])) or '基础款'
+        occasions = '、'.join(tag_data.get('occasions', [])) or '日常'
+        fit_comment = tag_data.get('meta', {}).get('claude_fit_comment', '')
+        fit_note = fit_comment[:40] if fit_comment else 'AI 识别入库'
 
-    new_row = f'| {cid} | {filename} | {color_str} | {brand_info.get("name", "")} {fabric_info.get("primary", "")} | {style_tags} | {fit_note} | {occasions} |\n'
+        new_row = f'| {cid} | {filename} | {color_str} | {brand_info.get("name", "")} {fabric_info.get("primary", "")} | {style_tags} | {fit_note} | {occasions} |\n'
 
-    lines.insert(insert_after + 1, new_row)
+        lines.insert(insert_after + 1, new_row)
 
-    with open(md_path, 'w', encoding='utf-8') as f:
-        f.writelines(lines)
+        with open(md_path, 'w', encoding='utf-8') as f:
+            f.writelines(lines)
 
     log(f"已追加到服装档案: {cid}")
 
@@ -715,20 +718,21 @@ def _append_to_wardrobe_md(cid, category_name, filename, tag_data):
 def _register_new_item(cid, category_name):
     """注册新单品到 config/new_items.json"""
     new_path = os.path.join(PROJECT_DIR, 'config', 'new_items.json')
-    items = {}
-    if os.path.exists(new_path):
-        try:
-            with open(new_path, 'r') as f:
-                items = json.load(f).get('items', {})
-        except:
-            pass
-    items[cid] = {
-        'added_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
-        'category': category_name,
-    }
-    os.makedirs(os.path.dirname(new_path), exist_ok=True)
-    with open(new_path, 'w') as f:
-        json.dump({'items': items}, f, ensure_ascii=False, indent=2)
+    with _wardrobe_lock:
+        items = {}
+        if os.path.exists(new_path):
+            try:
+                with open(new_path, 'r') as f:
+                    items = json.load(f).get('items', {})
+            except:
+                pass
+        items[cid] = {
+            'added_at': time.strftime('%Y-%m-%dT%H:%M:%S'),
+            'category': category_name,
+        }
+        os.makedirs(os.path.dirname(new_path), exist_ok=True)
+        with open(new_path, 'w') as f:
+            json.dump({'items': items}, f, ensure_ascii=False, indent=2)
 
 
 def _resize_image_for_api(image_path, max_size=1024):
@@ -3314,13 +3318,27 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         item['_temp_image_path'] = saved_items.get(str(i), {}).get('_temp_image_path', '')
             added = []
             errors = []
-            for item in items:
+            # 并行入库：每件单品独立处理（image copy/enhance/tags 互不冲突）
+            results_lock = threading.Lock()
+            def _process_item(idx, item):
                 try:
                     result = _finalize_add_item(item)
-                    added.append(result)
+                    with results_lock:
+                        added.append((idx, result))
                 except Exception as e:
                     log(f"入库失败: {e}", "ERROR")
-                    errors.append(str(e))
+                    with results_lock:
+                        errors.append(str(e))
+            threads = []
+            for i, item in enumerate(items):
+                t = threading.Thread(target=_process_item, args=(i, item), daemon=True)
+                t.start()
+                threads.append(t)
+            for t in threads:
+                t.join()
+            # 恢复原始顺序
+            added.sort(key=lambda x: x[0])
+            added = [r for _, r in added]
             # 清理临时文件
             try:
                 os.remove(analysis_path)

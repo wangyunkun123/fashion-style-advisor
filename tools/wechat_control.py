@@ -149,7 +149,7 @@ def _find_item_cutout(clothing_id):
     """查找单品抠图大图（enhanced/ 优先 — 用户调整版为准 → 兜底 outfit items/）"""
     import os as _os
     enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
-    gl = [(enhanced_dir, '{cid}_*cutout*'),
+    gl = [(enhanced_dir, '{cid}_cutout.png'),        # 精确匹配完整抠图，排除缩略图
           (_outfit_items_dirs, '{cid}_*cutout*')]
     return _find_item_asset(clothing_id, gl)
 

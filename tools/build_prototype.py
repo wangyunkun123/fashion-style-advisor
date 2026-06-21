@@ -142,9 +142,21 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
                     char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
                     break
             if char_img: break
-        # Build item thumbnails
+        # Build item thumbnails — 衣橱增强版优先（用户调整版为准）
         items_dir = os.path.join(dp, 'items')
+        enhanced_dir = os.path.join(PROJ, 'wardrobe', 'enhanced')
         for it in items:
+            thumb_found = False
+            # 优先取衣橱增强版缩略图（用户旋转/调整后的版本）
+            for pat in [f"{it['id']}_cutout_thumb.png", f"{it['id']}_cutout.png"]:
+                ep = os.path.join(enhanced_dir, pat)
+                if os.path.exists(ep):
+                    it['thumb'] = os.path.join('..', 'wardrobe', 'enhanced', pat)
+                    thumb_found = True
+                    break
+            if thumb_found:
+                continue
+            # 兜底：outfit 历史副本
             if os.path.exists(items_dir):
                 for f in os.listdir(items_dir):
                     if f.startswith(it['id']+'_') and f.endswith('.png'):

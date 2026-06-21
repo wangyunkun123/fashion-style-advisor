@@ -6,3 +6,21 @@
 [11:44:28] [INFO] 📤 已推送上线通知
 [11:44:36] [INFO] 📸 衣橱添加: 1782013476349 (1 张图片)
 [11:44:47] [INFO] 衣物分析完成: 1782013476349 → 1 件
+[11:50:16] [INFO] 图片变换: SUN-001 rotate=180 scale=1.0 pan=(0,0) -> 6 files
+[11:50:16] [INFO] 标签更新: SUN-001
+[11:51:37] [INFO] 图片变换: BAG-006 rotate=180 scale=1.0 pan=(0,0) -> 6 files
+[11:51:37] [INFO] 标签更新: BAG-006
+[12:44:27] [INFO] 🚀 管线启动: scandi_minimalism
+[12:44:27] [INFO] 📍 探索度: 安全推荐
+[12:44:28] [INFO] 📍 天气: 31°C 晴
+[12:44:28] [INFO] 📍 场景提取: 'scandi_minimalism' → occasion=日常
+[12:44:28] [INFO] 📍 📊 预计 ~60-100s · ~3593 tokens
+[12:44:28] [INFO] 📍 🤖 AI 智能选品
+[12:45:42] [INFO] ✅ 验证通过
+[12:45:42] [INFO] 📊 R1 选品评分: 56分 — ⚠️ 评分偏低，建议重新选品
+[12:45:42] [INFO] 📍 ✍️ AI 创作叙事+生图
+[12:46:47] [INFO] ✅ R2 创作完成: seedream_prompt=368字符, tips=2条
+[12:46:47] [INFO] 👤 人物照: 1张（原图）
+[12:46:47] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-21_scandi_minimalism
+[12:46:47] [INFO] 📍 🎨 Seedream AI 生图
+[12:47:22] [INFO] 📍 📤 推送 + 刷新

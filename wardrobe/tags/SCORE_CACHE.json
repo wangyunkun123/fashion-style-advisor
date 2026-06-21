@@ -1934,16 +1934,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "chinese_heritage": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "clean_fit": {
       "score": 14,
@@ -1955,24 +1955,24 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_city_boy": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "korean_minimal": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "resort_vacation": {
       "score": 20,
@@ -1984,8 +1984,8 @@
         "body_modifier": 8
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "smart_casual": {
       "score": 30,
@@ -1997,8 +1997,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "streetwear": {
       "score": 11,
@@ -2010,8 +2010,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "american_workwear": {
       "score": 24,
@@ -2023,8 +2023,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "scene_blokecore": {
       "score": 23,
@@ -2036,32 +2036,32 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "scandi_minimalism": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "american_ivy_league": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "british_heritage": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "contemporary_gorpcore": {
       "score": 36,
@@ -2073,16 +2073,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_amekaji": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_yama": {
       "score": 34,
@@ -2094,16 +2094,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "korean_light_mature": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     },
     "retro_90s_hiphop": {
       "score": 30,
@@ -2115,8 +2115,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781611470.5639634,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013897.6972868,
+      "_updated": "2026-06-21 12:44:07"
     }
   },
   "BAG-007": {
@@ -12449,16 +12449,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "chinese_heritage": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "clean_fit": {
       "score": 38,
@@ -12470,24 +12470,24 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_city_boy": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "korean_minimal": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "resort_vacation": {
       "score": 38,
@@ -12499,8 +12499,8 @@
         "body_modifier": 8
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "smart_casual": {
       "score": 20,
@@ -12512,8 +12512,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "streetwear": {
       "score": 11,
@@ -12525,8 +12525,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 21:48:31"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "american_workwear": {
       "score": 32,
@@ -12538,8 +12538,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "scene_blokecore": {
       "score": 23,
@@ -12551,32 +12551,32 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "scandi_minimalism": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:42:41"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "american_ivy_league": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "british_heritage": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "contemporary_gorpcore": {
       "score": 25,
@@ -12588,16 +12588,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_amekaji": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "japanese_yama": {
       "score": 40,
@@ -12609,16 +12609,16 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "korean_light_mature": {
       "score": 0,
       "raw_score": 0,
       "breakdown": {},
       "passed": false,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     },
     "retro_90s_hiphop": {
       "score": 30,
@@ -12630,8 +12630,8 @@
         "body_modifier": 0
       },
       "passed": true,
-      "_tag_mtime": 1781703780.805648,
-      "_updated": "2026-06-17 22:46:44"
+      "_tag_mtime": 1782013816.9271598,
+      "_updated": "2026-06-21 12:44:07"
     }
   },
   "SUN-002": {
@@ -15931,7 +15931,7 @@
     }
   },
   "_meta": {
-    "last_rebuild": "2026-06-21 09:42:11",
+    "last_rebuild": "2026-06-21 12:44:07",
     "total_entries": 76
   }
 }

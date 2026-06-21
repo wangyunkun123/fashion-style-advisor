@@ -909,6 +909,39 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     if not target_styles:
         target_styles = ['clean_fit', 'japanese_city_boy']
 
+    # ── 1.5. 用户指定风格优先：如果 style_hint 匹配已知 style_id 或中文名，强制置顶 ──
+    hint_lower = style_hint.lower().replace(' ', '_').replace('-', '_')
+    matched_style = None
+    _best_match_len = 0  # 最长中文匹配优先
+    if os.path.exists(STYLES_DIR):
+        for fn in sorted(os.listdir(STYLES_DIR)):
+            if not fn.endswith('.json'):
+                continue
+            sid = fn[:-5]  # 去掉 .json
+            # 英文ID匹配（精确匹配直接采用）
+            if sid in hint_lower or hint_lower in sid:
+                matched_style = sid
+                break
+            # 中文名匹配：提取 style_hint 中的中文片段
+            try:
+                sf = load_style_fingerprint(sid)
+                name_zh = sf.get('name_zh', '')
+            except Exception:
+                name_zh = ''
+            if name_zh:
+                import re as _re
+                cn_blocks = _re.findall(r'[一-鿿]+', style_hint)
+                for block in cn_blocks:
+                    for n in range(min(4, len(block)), 1, -1):
+                        for i in range(len(block) - n + 1):
+                            chunk = block[i:i+n]
+                            if chunk in name_zh and len(chunk) > _best_match_len:
+                                matched_style = sid
+                                _best_match_len = len(chunk)
+    if matched_style and matched_style not in target_styles:
+        target_styles.insert(0, matched_style)
+        target_styles = target_styles[:4]  # 最多4个
+
     # ── 2. 加载上下文数据 ──
     banned_items = get_banned_items()
     recent_outfits = get_recent_outfits(limit=7)

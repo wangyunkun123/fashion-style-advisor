@@ -33,7 +33,7 @@
   },
   "formality": 2,
   "brand": {
-    "name": "未知",
+    "name": "Dickies",
     "collection": "",
     "confidence": "未知"
   },
@@ -50,5 +50,12 @@
     "日常休闲",
     "通勤",
     "旅行"
+  ],
+  "recommended_styles": [
+    "日系简约",
+    "City Boy",
+    "Clean Fit",
+    "轻熟商务",
+    "复古工装"
   ]
 }

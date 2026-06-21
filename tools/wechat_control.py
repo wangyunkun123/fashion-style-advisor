@@ -1520,7 +1520,7 @@ def _format_tips(tips):
 
 def execute_outfit_plan(plan, today, style_hint):
     """根据 AI 方案创建目录、写入文件、复制图片"""
-    wardrobe = parse_wardrobe()
+    wardrobe = _load_all_clothing()  # 从 JSON 标签读取（category_code + category 等完整数据）
     outfit_dir = os.path.join(PROJECT_DIR, 'outfits', f'{today}_{style_hint}')
     shengtu_dir = os.path.join(outfit_dir, '豆包生图')
     items_dir = os.path.join(outfit_dir, 'items')

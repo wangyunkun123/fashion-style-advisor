@@ -283,7 +283,17 @@ def tab_btn(key, label, active=False):
 def item_row(icon_svg, cat, iid, name, thumb='', cutout=''):
     thumb_html = ''
     if thumb:
-        cutout_src = cutout or thumb
+        # 缩略图用 CDN，点开放大走 /api/image（享受 600px 缩图 + ETag 缓存）
+        if cutout:
+            from urllib.parse import quote
+            cp = cutout
+            if cp.startswith('..'):
+                cp = cp[3:]  # strip ../
+            elif cp.startswith('/'):
+                cp = cp[1:]
+            cutout_src = '/api/image?f=' + quote(cp)
+        else:
+            cutout_src = thumb
         thumb_html = '<img class="item-thumb" src="{}" data-cutout="{}" onclick="event.stopPropagation();showImg(this.dataset.cutout)" loading="lazy">'.format(thumb, cutout_src)
     return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(icon_svg, cat, iid, name, thumb_html)
 

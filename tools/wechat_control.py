@@ -452,37 +452,46 @@ def get_wardrobe_summary():
     return '\n'.join(lines)
 
 def call_doubao_chat(messages, max_tokens=16384, timeout=120):
-    """调用 doubao-seed-2.0-code 聊天 API"""
-    payload = json.dumps({
-        'model': CHAT_MODEL,
-        'messages': messages,
-        'max_tokens': max_tokens,
-        'temperature': 0.7,
-    }).encode('utf-8')
-    req = urllib.request.Request(API_CHAT_URL, data=payload, headers={
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': f'Bearer {API_KEY}',
-    })
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            result = json.loads(resp.read().decode('utf-8'))
-        choice = result['choices'][0]
-        msg = choice.get('message', {})
-        content = msg.get('content', '')
-        # doubao 推理模型可能把内容放在 reasoning_content 里，content 为空
-        if not content:
-            reasoning = msg.get('reasoning_content', '')
-            if reasoning:
-                log(f"⚠️ content 为空，从 reasoning_content 提取（前200字）: {reasoning[:200]}", "WARN")
-                # 尝试从 reasoning_content 中提取 JSON
-                content = reasoning
-            else:
-                finish = choice.get('finish_reason', 'unknown')
-                log(f"⚠️ API 返回空 content 且无 reasoning, finish_reason={finish}, keys={list(msg.keys())}", "WARN")
-        return content
-    except Exception as e:
-        log(f"豆包 API 调用失败: {e}", "ERROR")
-        raise
+    """调用 doubao-seed-2.0-code 聊天 API
+    自动检测 finish_reason=length 并用更大 max_tokens 重试
+    """
+    _max_tokens = max_tokens
+    for _attempt in range(2):
+        payload = json.dumps({
+            'model': CHAT_MODEL,
+            'messages': messages,
+            'max_tokens': _max_tokens,
+            'temperature': 0.7,
+        }).encode('utf-8')
+        req = urllib.request.Request(API_CHAT_URL, data=payload, headers={
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': f'Bearer {API_KEY}',
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                result = json.loads(resp.read().decode('utf-8'))
+            choice = result['choices'][0]
+            msg = choice.get('message', {})
+            content = msg.get('content', '')
+            finish_reason = choice.get('finish_reason', '')
+            # doubao 推理模型可能把内容放在 reasoning_content 里，content 为空
+            if not content:
+                reasoning = msg.get('reasoning_content', '')
+                if reasoning:
+                    log(f"⚠️ content 为空，从 reasoning_content 提取（前200字）: {reasoning[:200]}", "WARN")
+                    content = reasoning
+                else:
+                    log(f"⚠️ API 返回空 content 且无 reasoning, finish_reason={finish_reason}, keys={list(msg.keys())}", "WARN")
+            # 检测截断：finish_reason=length 且 max_tokens 可扩容
+            if finish_reason == 'length' and _max_tokens < 16384:
+                log(f"⚠️ 输出截断(finish_reason=length)，扩容 max_tokens {_max_tokens}→16384 重试")
+                _max_tokens = 16384
+                continue
+            return content
+        except Exception as e:
+            log(f"豆包 API 调用失败: {e}", "ERROR")
+            raise
+    return content  # 最终尝试的返回
 
 def extract_json(text):
     """从 AI 回复中提取 JSON 对象"""

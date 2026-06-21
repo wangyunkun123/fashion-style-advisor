@@ -1,5 +1,28 @@
 # 开发日志
 
+## 2026-06-22: 每日自动推荐 + 手机端健康检查 + 穿搭周报系统
+
+- **每日 cron**：Claude Cron 每天 5:57 触发完整穿搭管线（避开整点高峰），失败自动重试一次
+- **管线并发锁**：`run_pipeline()` 入口加 `threading.Lock`，运行中拒绝重复请求，`/health` 实时返回 `running` 状态
+- **手机端健康检查**：页面加载 JS 调 `/health` 判断 `today_ok`
+  - ✅ 已有 → 正常展示 Hero 卡片
+  - 🔄 运行中 → 加载动画 + 每 5s 轮询
+  - ❌ 未生成 → 琥珀色警告卡片 + 「⚡ 立即生成」按钮（调 `/api/chat` → 轮询 task → 自动刷新）
+- **GET /cmd 补今天穿什么**：`match_command` 的 `today` 动作加入 GET 白名单，cron 用 `curl -G --data-urlencode` 触发
+- **改动**：`wechat_control.py` +56 行 / `build_prototype.py` +28 行（CSS+HTML+JS）/ `.claude/scheduled_tasks.json` +1 任务
+- **Karpathy 视角参与设计**：用 March of Nines 思维设计失败兜底，用「Don't be a hero」原则选最简方案
+
+## 2026-06-22: 衣橱图片去重清理
+
+> 详见 `devlog/2026-06-22.md`
+
+- **PT-007/PT-008 合并**：入库时 PT-008 被错误分配了 PT-007 的图 A（MD5 一致），删除 PT-007 重复图保留正确映射
+- **SH-004 残留清除**：6/17 已删 tags/JSON 但留下档案条目+原图+enhanced 3 文件，全清
+- **TS-005 中文冗余**：标准命名 + 中文命名并存，删中文版 2 个
+- **enhanced JPG 拷贝清理**：82 个原始图拷贝（品类目录均有原图），安全删除
+- **后续待处理**：146 个 Image_ 命名抠图冗余（需先统一代码查找逻辑再删），已写 memory 提醒
+- **清理统计**：90 文件 + 1 条目，enhanced/ 396 → 308 (-22%)
+
 ## 2026-06-19: 管线优化日
 
 > 详见 `devlog/2026-06-19.md`

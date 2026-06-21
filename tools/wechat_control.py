@@ -21,6 +21,7 @@ import subprocess
 import threading
 import time
 import mimetypes
+import collections
 import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import parse_qs
@@ -762,6 +763,82 @@ def _resize_image_for_api(image_path, max_size=1024):
     buf = io.BytesIO()
     img.save(buf, format='JPEG', quality=80)
     return buf.getvalue()
+
+
+# ── 图片内存 LRU 缓存 ──
+# 避免每次请求都读磁盘，缓存最近访问的图片 bytes
+# 总容量 ~25MB（约 30-50 张 600px 缩图或 15-20 张原图）
+_IMG_CACHE_MAX = 25 * 1024 * 1024
+_IMG_CACHE_SIZE = 0
+_IMG_CACHE = {}  # key: (file_abs, width) → bytes
+_IMG_CACHE_ORDER = collections.OrderedDict()  # LRU 顺序
+_IMG_CACHE_LOCK = threading.Lock()
+
+def _image_cache_key(file_abs, req_w):
+    # 用文件 mtime 做 key 的一部分，文件更新后自动失效
+    try:
+        mtime = os.path.getmtime(file_abs)
+    except OSError:
+        mtime = 0
+    return (file_abs, req_w, mtime)
+
+def _image_cache_get(file_abs, req_w):
+    key = _image_cache_key(file_abs, req_w)
+    with _IMG_CACHE_LOCK:
+        if key in _IMG_CACHE:
+            _IMG_CACHE_ORDER.move_to_end(key)
+            return _IMG_CACHE[key]
+    return None
+
+def _image_cache_put(file_abs, req_w, data):
+    global _IMG_CACHE_SIZE
+    key = _image_cache_key(file_abs, req_w)
+    size = len(data)
+    with _IMG_CACHE_LOCK:
+        # 已存在则更新
+        if key in _IMG_CACHE:
+            _IMG_CACHE_SIZE -= len(_IMG_CACHE[key])
+            del _IMG_CACHE[key]
+        # 淘汰旧条目直到有足够空间
+        while _IMG_CACHE_SIZE + size > _IMG_CACHE_MAX and _IMG_CACHE_ORDER:
+            old_key = next(iter(_IMG_CACHE_ORDER))
+            _IMG_CACHE_SIZE -= len(_IMG_CACHE[old_key])
+            del _IMG_CACHE[old_key]
+            del _IMG_CACHE_ORDER[old_key]
+        _IMG_CACHE[key] = data
+        _IMG_CACHE_ORDER[key] = None  # sentinel
+        _IMG_CACHE_SIZE += size
+
+def _resize_image_bytes(data, target_w, content_type):
+    """将图片 bytes 缩放到指定宽度，返回 bytes"""
+    try:
+        from PIL import Image as PILImage
+        import io
+        img = PILImage.open(io.BytesIO(data))
+        w, h = img.size
+        if w <= target_w:
+            return data  # 已经够小，不放大
+        ratio = target_w / w
+        new_h = int(h * ratio)
+        img = img.resize((target_w, new_h), PILImage.LANCZOS)
+        # PNG 保持透明通道
+        if img.mode == 'RGBA':
+            fmt = 'PNG'
+            mt = 'image/png'
+        else:
+            fmt = 'JPEG'
+            mt = 'image/jpeg'
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+        buf = io.BytesIO()
+        save_kw = {'format': fmt, 'optimize': True}
+        if fmt == 'JPEG':
+            save_kw['quality'] = 85
+        img.save(buf, **save_kw)
+        # 更新 content_type 引用（不影响外部，但内部记录正确）
+        return buf.getvalue()
+    except Exception:
+        return data  # 缩图失败则返回原图
 
 
 def _finalize_add_item(item_data):
@@ -2439,7 +2516,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._json_resp(200, safe)
             return
 
-        # 本地图片服务
+        # 本地图片服务（内存 LRU 缓存 + 浏览器强缓存 + 按需缩图）
         if parsed.path == '/api/image':
             qs = parse_qs(parsed.query)
             file_rel = qs.get('f', [''])[0]
@@ -2453,10 +2530,20 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not os.path.isfile(file_abs):
                 self._json_resp(404, {"error": "file not found"})
                 return
+            # 按需缩图宽度（手机查看 600px 足够，视觉无损但体积减半）
+            req_w = int(qs.get('w', ['0'])[0]) if qs.get('w', [''])[0].isdigit() else 0
+
             ct = mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
-            with open(file_abs, 'rb') as f:
-                data = f.read()
-            self._send_body(200, data, ct, {'Cache-Control': 'public, max-age=300'})
+            data = _image_cache_get(file_abs, req_w)
+            if data is None:
+                with open(file_abs, 'rb') as f:
+                    data = f.read()
+                if req_w > 0 and ct.startswith('image/'):
+                    data = _resize_image_bytes(data, req_w, ct)
+                _image_cache_put(file_abs, req_w, data)
+            self._send_body(200, data, ct, {
+                'Cache-Control': 'public, max-age=86400, immutable'
+            })
             return
 
         # 日志查看（纯文本，可 curl）

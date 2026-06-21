@@ -2534,6 +2534,19 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             req_w = int(qs.get('w', ['0'])[0]) if qs.get('w', [''])[0].isdigit() else 0
 
             ct = mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
+            # ETag: mtime + size + width，文件修改后自动变化，浏览器 revalidate
+            try:
+                fstat = os.stat(file_abs)
+                etag = f'"{fstat.st_mtime}-{fstat.st_size}-w{req_w}"'
+            except OSError:
+                etag = None
+            # 检查浏览器缓存是否有效（If-None-Match）
+            if etag and self.headers.get('If-None-Match') == etag:
+                self._send_body(304, b'', ct, {
+                    'Cache-Control': 'public, max-age=86400',
+                    'ETag': etag
+                })
+                return
             data = _image_cache_get(file_abs, req_w)
             if data is None:
                 with open(file_abs, 'rb') as f:
@@ -2541,9 +2554,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 if req_w > 0 and ct.startswith('image/'):
                     data = _resize_image_bytes(data, req_w, ct)
                 _image_cache_put(file_abs, req_w, data)
-            self._send_body(200, data, ct, {
-                'Cache-Control': 'public, max-age=86400, immutable'
-            })
+            headers = {'Cache-Control': 'public, max-age=86400'}
+            if etag:
+                headers['ETag'] = etag
+            self._send_body(200, data, ct, headers)
             return
 
         # 日志查看（纯文本，可 curl）

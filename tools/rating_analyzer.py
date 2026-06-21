@@ -9,7 +9,7 @@
 """
 
 import os, sys, json, glob, re
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import Counter, defaultdict
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -105,6 +105,97 @@ def analyze(ratings):
         'items_disliked': dict(items_disliked.most_common(5)),
         'feedback_reasons': feedback_reasons,
     }
+
+
+def filter_ratings_by_days(ratings, days=7):
+    """只保留最近 N 天的评分（按 outfit 目录日期前缀筛选）"""
+    cutoff = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
+    filtered = []
+    for r in ratings:
+        oid = r.get('outfit_id', '')
+        # outfit_id 即目录名，如 "2026-06-15_夏日CleanFit"
+        date_prefix = oid[:10] if len(oid) >= 10 else ''
+        if date_prefix >= cutoff:
+            filtered.append(r)
+    return filtered
+
+
+def generate_weekly_report():
+    """生成周报（近7天数据，轻量格式）"""
+    all_ratings = load_all_ratings()
+    if not all_ratings:
+        return "📊 暂无评分数据，无法生成周报"
+
+    ratings = filter_ratings_by_days(all_ratings, 7)
+    if not ratings:
+        # 尝试扩大范围到14天，如果7天没数据
+        ratings = filter_ratings_by_days(all_ratings, 14)
+        if not ratings:
+            return "📊 近两周暂无新评分，周报暂不生成"
+
+    analysis = analyze(ratings)
+
+    # 上周对比（8-14天前的数据）
+    prev_ratings = filter_ratings_by_days(all_ratings, 14)
+    prev_ratings = [r for r in prev_ratings if r not in ratings]  # 减去本周的
+    prev_analysis = analyze(prev_ratings) if prev_ratings else None
+
+    # 日期范围
+    if ratings:
+        dates = sorted(set(r.get('outfit_id', '')[:10] for r in ratings))
+        date_range = f"{dates[0]} → {dates[-1]}" if len(dates) > 1 else dates[0]
+    else:
+        date_range = "近7天"
+
+    lines = [
+        f"📊 穿搭周报",
+        f"📅 {date_range} | 本周 {analysis['total']} 次评分",
+        "",
+        "━━━ 📈 本周满意度 ━━━",
+        f"❤️ 满意: {analysis['satisfaction_rate']}% ({analysis['by_score'].get(3,0)}次)",
+        f"🤔 一般: {analysis['neutral_rate']}% ({analysis['by_score'].get(2,0)}次)",
+        f"💔 失望: {analysis['disappoint_rate']}% ({analysis['by_score'].get(1,0)}次)",
+        f"📊 平均分: {analysis['avg_rating']}/3",
+    ]
+
+    # 趋势对比
+    if prev_analysis and prev_analysis['total'] >= 1:
+        trend = analysis['avg_rating'] - prev_analysis['avg_rating']
+        if trend > 0.2:
+            lines.append(f"📈 较上周 ↑ {trend:+.1f}（进步中）")
+        elif trend < -0.2:
+            lines.append(f"📉 较上周 ↓ {trend:+.1f}（需关注）")
+        else:
+            lines.append(f"📊 较上周持平（{trend:+.1f}）")
+
+    # 本周风格
+    if analysis['by_style']:
+        lines.append("")
+        lines.append("━━━ 🎯 本周风格 ━━━")
+        sorted_styles = sorted(analysis['by_style'].items(), key=lambda x: -x[1]['avg'])
+        for sid, data in sorted_styles[:3]:
+            name = STYLE_NAMES.get(sid, sid)
+            lines.append(f"  {name}: {data['avg']}分 ({data['total']}次)")
+
+    # 最爱单品 Top 3
+    if analysis['items_liked']:
+        lines.append("")
+        lines.append("━━━ 👔 本周最爱 ━━━")
+        for iid, cnt in list(analysis['items_liked'].items())[:3]:
+            tag_path = os.path.join(TAGS_DIR, f'{iid}.json')
+            name = iid
+            if os.path.exists(tag_path):
+                with open(tag_path) as f:
+                    tag = json.load(f)
+                name = f"{iid} ({tag.get('color',{}).get('hue_name','')} {tag.get('brand',{}).get('name','')})"
+            lines.append(f"  👍 {name} — {cnt}次满意")
+
+    # 简短的月度入口引导
+    lines.append("")
+    lines.append("━━━━━━━━━━━━━━")
+    lines.append("💡 查看完整月度报告？在手机端说「偏好报告」即可")
+
+    return '\n'.join(lines)
 
 
 def find_neutral_patterns(ratings):
@@ -222,7 +313,9 @@ def generate_report():
 
 
 def main():
-    if '--report' in sys.argv:
+    if '--weekly' in sys.argv:
+        print(generate_weekly_report())
+    elif '--report' in sys.argv:
         print(generate_report())
     elif '--summary' in sys.argv:
         ratings = load_all_ratings()

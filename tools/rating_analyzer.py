@@ -18,13 +18,71 @@ OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
 TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
 PREFS_FILE = os.path.join(PROJ_DIR, 'config', 'user_prefs.json')
 
-# 风格名映射
+# 风格名映射（与 styles/*.json 的 style_id → name_zh 对应）
 STYLE_NAMES = {
-    'clean_fit': 'Clean Fit', 'japanese_city_boy': '日系City Boy',
-    'smart_casual': '轻熟休闲', 'athleisure_sport': '运动休闲',
-    'korean_minimal': '韩系简约', 'resort_vacation': '度假休闲',
-    'streetwear': '街头潮流', 'chinese_heritage_luxe': '国风质感',
+    'clean_fit': 'Clean Fit',
+    'japanese_city_boy': '日系 City Boy',
+    'smart_casual': '轻熟休闲',
+    'athleisure_sport': '运动休闲',
+    'korean_minimal': '韩系简约',
+    'resort_vacation': '度假休闲',
+    'streetwear': '街头潮流',
+    'chinese_heritage': '国风质感',
+    'american_ivy_league': '美式常春藤',
+    'american_workwear': '美式工装',
+    'british_heritage': '英伦遗产',
+    'contemporary_gorpcore': '户外机能风',
+    'japanese_amekaji': '日系阿美咔叽',
+    'japanese_yama': '日系山系',
+    'korean_light_mature': '韩式轻熟风',
+    'retro_90s_hiphop': '90s嘻哈风',
+    'scandi_minimalism': '北欧极简',
+    'scene_blokecore': '足球看台风',
 }
+# 中文名反向映射（用于从 outfit.md 中提取的风格名反查 style_id）
+STYLE_NAME_TO_ID = {v: k for k, v in STYLE_NAMES.items()}
+# 关键词回退匹配（按特异性排序，优先匹配更具体的关键词）
+STYLE_KEYWORDS = [
+    ('blokecore', 'scene_blokecore'),
+    ('city boy', 'japanese_city_boy'),
+    ('clean fit', 'clean_fit'),
+    ('clean', 'clean_fit'),
+    ('gorpcore', 'contemporary_gorpcore'),
+    ('athleisure', 'athleisure_sport'),
+    ('scandi', 'scandi_minimalism'),
+    ('北欧', 'scandi_minimalism'),
+    ('极简', 'scandi_minimalism'),
+    ('国风', 'chinese_heritage'),
+    ('新中式', 'chinese_heritage'),
+    ('网球', 'athleisure_sport'),
+    ('跑步', 'athleisure_sport'),
+    ('运动', 'athleisure_sport'),
+    ('足球', 'scene_blokecore'),
+    ('英伦', 'british_heritage'),
+    ('british', 'british_heritage'),
+    ('常春藤', 'american_ivy_league'),
+    ('ivy', 'american_ivy_league'),
+    ('工装', 'american_workwear'),
+    ('workwear', 'american_workwear'),
+    ('美式', 'american_ivy_league'),
+    ('阿美咔叽', 'japanese_amekaji'),
+    ('amekaji', 'japanese_amekaji'),
+    ('山系', 'japanese_yama'),
+    ('yama', 'japanese_yama'),
+    ('户外', 'contemporary_gorpcore'),
+    ('机能', 'contemporary_gorpcore'),
+    ('韩系', 'korean_minimal'),
+    ('韩式', 'korean_minimal'),
+    ('轻熟', 'korean_light_mature'),
+    ('日系', 'japanese_city_boy'),
+    ('度假', 'resort_vacation'),
+    ('热带', 'resort_vacation'),
+    ('街头', 'streetwear'),
+    ('潮流', 'streetwear'),
+    ('嘻哈', 'retro_90s_hiphop'),
+    ('hiphop', 'retro_90s_hiphop'),
+    ('休闲', 'smart_casual'),
+]
 
 def load_all_ratings():
     """加载所有评分数据"""
@@ -36,19 +94,42 @@ def load_all_ratings():
         try:
             with open(rpath, 'r') as f:
                 r = json.load(f)
-            # 补充 style_id
+            # 补充 style_id（从 outfit.md 解析）
             if 'style_id' not in r:
                 md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
                 if os.path.exists(md):
                     with open(md) as f2:
                         txt = f2.read()
-                    m = re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)', txt)
+                    # 匹配三种格式：**风格**: xxx / 风格: xxx / YAML frontmatter style: xxx
+                    m = re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)|^style[：:]\s*(.+)', txt, re.MULTILINE)
                     if m:
-                        raw = (m.group(1) or m.group(2)).strip()
-                        for kid, kname in STYLE_NAMES.items():
-                            if kname.lower().replace(' ', '') in raw.lower().replace(' ', ''):
-                                r['style_id'] = kid
-                                break
+                        raw = (m.group(1) or m.group(2) or m.group(3)).strip()
+                        # 1) 直接匹配 style_id（如 frontmatter 写 style: japanese_city_boy）
+                        if raw in STYLE_NAMES:
+                            r['style_id'] = raw
+                        else:
+                            # 2) 中文名直接查表
+                            found = False
+                            for zh_name, sid in STYLE_NAME_TO_ID.items():
+                                if zh_name.lower().replace(' ', '') in raw.lower().replace(' ', ''):
+                                    r['style_id'] = sid
+                                    found = True
+                                    break
+                            # 3) 英文名模糊匹配（如 style: clean_fit）
+                            if not found:
+                                for sid in STYLE_NAMES:
+                                    if sid.lower().replace('_', '') in raw.lower().replace('_', '').replace(' ', ''):
+                                        r['style_id'] = sid
+                                        found = True
+                                        break
+                            # 4) 关键词回退（freeform 描述如"美式复古休闲"→american_ivy_league）
+                            if not found:
+                                raw_lower = raw.lower().replace(' ', '')
+                                for kw, sid in STYLE_KEYWORDS:
+                                    if kw.replace(' ', '') in raw_lower:
+                                        r['style_id'] = sid
+                                        found = True
+                                        break
             if 'style_id' not in r:
                 r['style_id'] = 'unknown'
             ratings.append(r)

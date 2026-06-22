@@ -177,8 +177,43 @@ def _find_report_item_thumbnail(item_id):
     return ''
 
 
+def _resolve_outfit_style(outfit_dir):
+    """从 outfit.md 解析 style_id（与 rating_analyzer.load_all_ratings 逻辑一致）"""
+    import re as _re
+    md_path = os.path.join(PROJECT_DIR, 'outfits', outfit_dir, 'outfit.md')
+    if not os.path.exists(md_path):
+        return None
+    try:
+        from rating_analyzer import STYLE_NAMES, STYLE_NAME_TO_ID, STYLE_KEYWORDS
+    except Exception:
+        return None
+    with open(md_path) as f:
+        txt = f.read()
+    m = _re.search(r'\*\*风格\*\*[：:]\s*(.+)|风格[：:]\s*(.+)|^style[：:]\s*(.+)', txt, _re.MULTILINE)
+    if not m:
+        return None
+    raw = (m.group(1) or m.group(2) or m.group(3)).strip()
+    # 1) 直接匹配 style_id
+    if raw in STYLE_NAMES:
+        return raw
+    # 2) 中文名查表
+    for zh_name, sid in STYLE_NAME_TO_ID.items():
+        if zh_name.lower().replace(' ', '') in raw.lower().replace(' ', ''):
+            return sid
+    # 3) 英文名模糊匹配
+    for sid in STYLE_NAMES:
+        if sid.lower().replace('_', '') in raw.lower().replace('_', '').replace(' ', ''):
+            return sid
+    # 4) 关键词回退
+    raw_lower = raw.lower().replace(' ', '')
+    for kw, sid in STYLE_KEYWORDS:
+        if kw.replace(' ', '') in raw_lower:
+            return sid
+    return None
+
+
 def _find_report_style_image(style_id):
-    """查找某风格评分最高的 outfit 效果图 CDN URL"""
+    """查找某风格评分最高的 outfit 效果图 CDN URL（全局扫描）"""
     best_img = ''
     best_rating = -1
     outfits_base = os.path.join(PROJECT_DIR, 'outfits')
@@ -192,7 +227,9 @@ def _find_report_style_image(style_id):
         try:
             with open(rpath) as f:
                 r = json.load(f)
-            if r.get('style_id', '') == style_id and r.get('rating', 0) > best_rating:
+            # 从 outfit.md 解析 style_id（rating.json 中可能没有此字段）
+            resolved = r.get('style_id') or _resolve_outfit_style(d)
+            if resolved == style_id and r.get('rating', 0) > best_rating:
                 best_rating = r['rating']
                 try:
                     h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
@@ -203,6 +240,27 @@ def _find_report_style_image(style_id):
         except Exception:
             pass
     return best_img
+
+
+def _find_report_style_image_for_period(style_id, ratings):
+    """从指定周期的评分中找到该风格最高分的 outfit，返回其效果图 CDN URL"""
+    best_oid = None
+    best_rating = -1
+    for r in ratings:
+        if r.get('style_id') == style_id and r.get('rating', 0) > best_rating:
+            best_rating = r['rating']
+            best_oid = r.get('outfit_id')
+    if not best_oid:
+        return ''
+    img_path = os.path.join(PROJECT_DIR, 'outfits', best_oid, '上身效果', '上身效果_1.png')
+    if not os.path.exists(img_path):
+        return ''
+    try:
+        h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                         capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
+        return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/outfits/{best_oid}/上身效果/上身效果_1.png'
+    except Exception:
+        return f'/outfits/{best_oid}/上身效果/上身效果_1.png'
 
 
 # ── 任务管理器 ────────────────────────────────────────
@@ -898,8 +956,24 @@ def _finalize_add_item(item_data):
     if not cid:
         raise ValueError("缺少 clothing ID")
 
-    category_name = item_data.get('category', '')
+    # 防止多批次并发时的 ID 碰撞：入库前重新检查 ID 是否已被占用
     category_code = item_data.get('category_code', '')
+    if category_code and _id_exists_on_disk(cid):
+        prefix = category_code
+        existing = []
+        tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+        for fn in os.listdir(tags_dir):
+            if fn.startswith(f'{prefix}-') and fn.endswith('.json'):
+                m = re.search(rf'{prefix}-(\d+)', fn)
+                if m:
+                    existing.append(int(m.group(1)))
+        next_num = max(existing) + 1 if existing else 1
+        new_cid = f'{prefix}-{next_num:03d}'
+        log(f"⚠️ ID 碰撞: {cid} 已被占用，自动分配 {new_cid}")
+        cid = new_cid
+        item_data['suggested_id'] = cid
+
+    category_name = item_data.get('category', '')
 
     # 获取品类目录名
     cat_info = CATEGORY_MAP.get(category_name, {})
@@ -1568,7 +1642,8 @@ def _run_add_analysis(task_id, image_b64_list):
       "formality": 3,
       "meta": {
         "claude_fit_comment": "一句话总结版型与适配度"
-      }
+      },
+      "source_image": 1
     }
   ]
 }
@@ -1576,6 +1651,7 @@ def _run_add_analysis(task_id, image_b64_list):
 注意：
 - 严格只输出JSON，不要包含markdown代码块标记或解释文字
 - 如果图片中没有服装单品，返回 {"items": []}
+- source_image 必须是该单品所在图片的编号（1-based，对应【图片 N】标注），一件单品只能属于一张图片
 - 仔细区分品类：有领子扣子的是衬衣(SHIRT)，无领T恤根据袖长分短袖(TS)或长袖(LS)
 - 品牌识别：看到明显logo或认识标志性款式的填品牌名，否则填"未知"，confidence相应降低
 - 颜色描述要具体（如"浅灰蓝"而非"蓝色"）
@@ -1622,7 +1698,14 @@ def _run_add_analysis(task_id, image_b64_list):
                 sid = f'{prefix}-{int(num)+1:03d}'
             assigned_ids.add(sid)
             item['suggested_id'] = sid
-            item['_temp_image_path'] = temp_paths[i] if i < len(temp_paths) else ''
+            # 根据 AI 返回的 source_image 字段映射到正确的临时图片
+            src_idx = item.get('source_image', 1) - 1  # AI 返回 1-based
+            if 0 <= src_idx < len(temp_paths):
+                item['_temp_image_path'] = temp_paths[src_idx]
+            elif temp_paths:
+                item['_temp_image_path'] = temp_paths[0]  # fallback
+            else:
+                item['_temp_image_path'] = ''
             # 补充默认值
             if 'color' not in item: item['color'] = {}
             if 'brand' not in item: item['brand'] = {'name': '未知', 'collection': None, 'confidence': '未知'}
@@ -2577,6 +2660,21 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             tid = parsed.path.split('/')[-1]
             task = tasks.get(tid)
             if task is None:
+                # 🔧 内存中任务丢失时（如服务器重启），回退到磁盘分析文件
+                analysis_path = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming', f'analysis_{tid}.json')
+                if os.path.exists(analysis_path):
+                    with open(analysis_path, 'r') as f:
+                        analysis = json.load(f)
+                    self._json_resp(200, {
+                        'id': tid,
+                        'status': 'done',
+                        'message': f'识别完成，共 {len(analysis.get("items", []))} 件单品',
+                        'result': json.dumps(analysis, ensure_ascii=False),
+                        'image_path': '',
+                        'image_url': '',
+                        'log': '',
+                    })
+                    return
                 self._json_resp(404, {"error": "task not found"})
                 return
             tasks.cleanup()
@@ -2849,10 +2947,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     else:
                         trend_label = '📊 较上周持平'
 
-                # 风格排行 + 穿搭图
+                # 风格排行 + 穿搭图（优先从当前周期评分中找图）
                 top_styles = []
                 for sid, data in sorted(analysis['by_style'].items(), key=lambda x: -x[1]['avg'])[:3]:
-                    image_url = _find_report_style_image(sid)
+                    image_url = _find_report_style_image_for_period(sid, ratings) or _find_report_style_image(sid)
                     top_styles.append({
                         'id': sid,
                         'name': STYLE_NAMES.get(sid, sid),

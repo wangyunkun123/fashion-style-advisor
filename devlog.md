@@ -12,6 +12,16 @@
 - **改动**：`wechat_control.py` +56 行 / `build_prototype.py` +28 行（CSS+HTML+JS）/ `.claude/scheduled_tasks.json` +1 任务
 - **Karpathy 视角参与设计**：用 March of Nines 思维设计失败兜底，用「Don't be a hero」原则选最简方案
 
+## 2026-06-22: 周报增强 + 衣橱上传管线 6坑修复
+
+> 详见 `devlog/2026-06-22.md`
+
+- **风格 unknown→0**: STYLE_NAMES 8→18 + YAML frontmatter 解析 + 34条关键词回退
+- **风格卡片图片**: 从周期内最高分 outfit 提取效果图，周报/月报各自独立
+- **报告栏去图标**: 📊 统一去除
+- **上传管线 6 坑**: Funnel超时/任务状态丢失/多件同图/ID碰撞/错误隐藏/多图映射错位 — 全部修复并写 memory
+- **改动**: `rating_analyzer.py` +35行 / `wechat_control.py` +135行 / `build_prototype.py` +10行 / `mobile-v2.html` 同步
+
 ## 2026-06-22: 衣橱图片去重清理
 
 > 详见 `devlog/2026-06-22.md`

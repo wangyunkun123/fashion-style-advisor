@@ -2292,7 +2292,7 @@ style: {plan.get('style', style_hint)}
         f.write(seedream_prompt)
 
     # ── 3. 人物照片（原图直出，1张全身正面，不去背景）──
-    person_photos_raw = _get_person_photos()
+    person_photos_raw = get_person_photos()
     if person_photos_raw:
         # 只取全身正面照 1 张，不抠图不附加面部近照
         selected = person_photos_raw[:1]

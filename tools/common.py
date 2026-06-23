@@ -17,25 +17,34 @@ CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 # ── 所有品类 ID 正则（消除 7+ 处重复定义）────────────────────
 ITEM_ID_PATTERN = re.compile(
     r'\b(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+'
-    r'|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+)'
+    r'|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+'
+    r'|DRESS-\d+|SKIRT-\d+|JMP-\d+|BLOUSE-\d+|KNIT-\d+)'
 )
 
 # ── 品类代码统一配置（单一真相源）────────────────────────────
 # 所有文件从此获取品类名/emoji/图标/CSS排序，不再各自维护映射表
+# 🔧 2026-06-24: 新增女性品类 DRESS/SKIRT/JMP/BLOUSE/KNIT
 CAT_CONFIG = {
-    'TS':    {'emoji': '👕', 'icon_key': 'tshirt',  'cn': '短袖上衣', 'sort':  5},
-    'LS':    {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '长袖上衣', 'sort':  4},
-    'SHIRT': {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '衬衣',     'sort':  3},
-    'TANK':  {'emoji': '🎽', 'icon_key': 'tshirt',  'cn': '背心',     'sort':  6},
-    'JK':    {'emoji': '🧥', 'icon_key': 'tshirt',  'cn': '外套',     'sort':  1},
-    'PT':    {'emoji': '👖', 'icon_key': 'pants',   'cn': '长裤',     'sort':  7},
-    'SH':    {'emoji': '🩳', 'icon_key': 'pants',   'cn': '短裤',     'sort':  8},
-    'SHOE':  {'emoji': '👟', 'icon_key': 'shoe',    'cn': '鞋子',     'sort': 12},
-    'BAG':   {'emoji': '🎒', 'icon_key': 'bag',     'cn': '包',       'sort': 10},
-    'HAT':   {'emoji': '🧢', 'icon_key': 'hat',     'cn': '帽子',     'sort':  0},
-    'SOCK':  {'emoji': '🧦', 'icon_key': 'sock',    'cn': '袜子',     'sort': 13},
-    'SUN':   {'emoji': '🕶', 'icon_key': 'sun',     'cn': '墨镜',     'sort':  2},
-    'ACC':   {'emoji': '⌚', 'icon_key': 'acc',     'cn': '手部配饰', 'sort': 11},
+    # ── 中性/男装品类 ──
+    'TS':    {'emoji': '👕', 'icon_key': 'tshirt',  'cn': '短袖上衣', 'sort':  5, 'gender': 'both'},
+    'LS':    {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '长袖上衣', 'sort':  4, 'gender': 'both'},
+    'SHIRT': {'emoji': '👔', 'icon_key': 'tshirt',  'cn': '衬衣',     'sort':  3, 'gender': 'both'},
+    'TANK':  {'emoji': '🎽', 'icon_key': 'tshirt',  'cn': '背心',     'sort':  6, 'gender': 'both'},
+    'JK':    {'emoji': '🧥', 'icon_key': 'tshirt',  'cn': '外套',     'sort':  1, 'gender': 'both'},
+    'PT':    {'emoji': '👖', 'icon_key': 'pants',   'cn': '长裤',     'sort':  7, 'gender': 'both'},
+    'SH':    {'emoji': '🩳', 'icon_key': 'pants',   'cn': '短裤',     'sort':  8, 'gender': 'both'},
+    'SHOE':  {'emoji': '👟', 'icon_key': 'shoe',    'cn': '鞋子',     'sort': 12, 'gender': 'both'},
+    'BAG':   {'emoji': '🎒', 'icon_key': 'bag',     'cn': '包',       'sort': 10, 'gender': 'both'},
+    'HAT':   {'emoji': '🧢', 'icon_key': 'hat',     'cn': '帽子',     'sort':  0, 'gender': 'both'},
+    'SOCK':  {'emoji': '🧦', 'icon_key': 'sock',    'cn': '袜子',     'sort': 13, 'gender': 'both'},
+    'SUN':   {'emoji': '🕶', 'icon_key': 'sun',     'cn': '墨镜',     'sort':  2, 'gender': 'both'},
+    'ACC':   {'emoji': '⌚', 'icon_key': 'acc',     'cn': '手部配饰', 'sort': 11, 'gender': 'both'},
+    # ── 女性专属品类 ──
+    'DRESS': {'emoji': '👗', 'icon_key': 'tshirt',  'cn': '连衣裙',   'sort': 14, 'gender': 'female'},
+    'SKIRT': {'emoji': '🩰', 'icon_key': 'pants',   'cn': '半身裙',   'sort': 15, 'gender': 'female'},
+    'JMP':   {'emoji': '🪭', 'icon_key': 'tshirt',  'cn': '连体裤',   'sort': 16, 'gender': 'female'},
+    'BLOUSE':{'emoji': '👚', 'icon_key': 'tshirt',  'cn': '女士衬衫', 'sort':  3, 'gender': 'female'},
+    'KNIT':  {'emoji': '🧶', 'icon_key': 'tshirt',  'cn': '针织衫',   'sort':  4, 'gender': 'both'},
 }
 CAT_SORT_ORDER = sorted(CAT_CONFIG.keys(), key=lambda k: CAT_CONFIG[k]['sort'])
 
@@ -53,13 +62,128 @@ def cat_icon_key(code):
     return CAT_CONFIG.get(code, {}).get('icon_key', 'tshirt')
 
 # 核心品类（上衣/下装/鞋子 — 用于选品验证）
-CORE_CATS = {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'SH', 'PT', 'SHOE'}
+CORE_CATS = {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'SH', 'PT', 'SHOE', 'DRESS', 'SKIRT', 'JMP', 'BLOUSE', 'KNIT'}
 
 # 品类代码 → 分类目录映射（用于 wardrobe 目录结构）
 CAT_DIR_MAP = {v['cn']: k for k, v in CAT_CONFIG.items()}
 # 反向：分类中文名 → 品类代码
 for _code, _cfg in CAT_CONFIG.items():
     CAT_DIR_MAP[_cfg['cn']] = _code
+
+
+# ── 品类别名解析（fuzzy dedup）────────────────────────────────
+# VLM 输出的品类名可能五花八门，此函数做标准化映射
+# 数据源: config/category_aliases.json（用户修正时自动追加）
+_alias_cache = None
+_alias_load_time = 0
+
+def _load_aliases():
+    """加载品类别名配置（60s 缓存）"""
+    global _alias_cache, _alias_load_time
+    now = time.time()
+    if _alias_cache is not None and now - _alias_load_time < 60:
+        return _alias_cache
+    alias_path = os.path.join(PROJ_DIR, 'config', 'category_aliases.json')
+    try:
+        with open(alias_path, 'r') as f:
+            data = json.load(f)
+        _alias_cache = data.get('aliases', {})
+        _alias_load_time = now
+        return _alias_cache
+    except Exception:
+        return {}
+
+
+def resolve_category_code(raw_name, gender='male'):
+    """将 VLM 输出的原始品类名映射到标准品类代码。
+
+    Args:
+        raw_name: VLM 输出的品类名称（如 "短袖T恤"、"midi dress"、"连身裙"）
+        gender: 用户性别，用于优先匹配对应性别的品类
+
+    Returns:
+        (standard_code, standard_cn_name, confidence)
+        如 ('TS', '短袖上衣', 'fuzzy') 或 ('TS', '短袖上衣', 'exact')
+        无法匹配时返回 (None, raw_name, 'unknown')
+    """
+    if not raw_name:
+        return (None, '', 'unknown')
+
+    raw = raw_name.strip()
+
+    # Step 1: 直接匹配品类代码
+    if raw.upper() in CAT_CONFIG:
+        code = raw.upper()
+        return (code, CAT_CONFIG[code]['cn'], 'exact')
+
+    # Step 2: 精确匹配中文标准名
+    for code, cfg in CAT_CONFIG.items():
+        if cfg['cn'] == raw:
+            return (code, cfg['cn'], 'exact')
+
+    # Step 3: Fuzzy match via aliases
+    aliases = _load_aliases()
+    best_code = None
+    best_len = 0
+
+    for code, alias_list in aliases.items():
+        if code not in CAT_CONFIG:
+            continue
+        for alias in alias_list:
+            # 完全匹配别名
+            if alias.lower() == raw.lower():
+                return (code, CAT_CONFIG[code]['cn'], 'alias_exact')
+            # 包含匹配（取最长匹配）
+            if alias.lower() in raw.lower() or raw.lower() in alias.lower():
+                if len(alias) > best_len:
+                    best_len = len(alias)
+                    best_code = code
+
+    if best_code and best_len >= 2:
+        return (best_code, CAT_CONFIG[best_code]['cn'], 'fuzzy')
+
+    # Step 4: 根据性别偏好猜测
+    if gender == 'female':
+        if any(kw in raw for kw in ['裙', 'dress', 'skirt']):
+            if '半身' in raw or '短裙' in raw or 'skirt' in raw.lower():
+                return ('SKIRT', '半身裙', 'keyword')
+            return ('DRESS', '连衣裙', 'keyword')
+        if any(kw in raw for kw in ['连体', 'jumpsuit', 'romper']):
+            return ('JMP', '连体裤', 'keyword')
+        if any(kw in raw for kw in ['雪纺', '真丝', 'blouse', '女士衬衫', '荷叶边', '飘带']):
+            return ('BLOUSE', '女士衬衫', 'keyword')
+
+    if any(kw in raw for kw in ['针织', '毛衣', '毛衫', 'knit', 'sweater', 'cardigan', '羊绒', '羊毛']):
+        return ('KNIT', '针织衫', 'keyword')
+
+    # Step 5: 无法匹配，返回原始名称供人工确认
+    return (None, raw, 'unknown')
+
+
+def add_category_alias(code, alias_name):
+    """用户修正品类后，将别名追加到映射表（数据飞轮）"""
+    if code not in CAT_CONFIG:
+        return False
+    alias_path = os.path.join(PROJ_DIR, 'config', 'category_aliases.json')
+    try:
+        with open(alias_path, 'r') as f:
+            data = json.load(f)
+        aliases = data.get('aliases', {})
+        if code not in aliases:
+            aliases[code] = []
+        if alias_name not in aliases[code]:
+            aliases[code].append(alias_name)
+            data['aliases'] = aliases
+            data['_last_updated'] = time.strftime('%Y-%m-%d %H:%M:%S')
+            with open(alias_path, 'w') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            # 清除缓存强制重新加载
+            global _alias_cache
+            _alias_cache = None
+            return True
+    except Exception:
+        pass
+    return False
 
 
 # ═══════════════════════════════════════════════════════════════

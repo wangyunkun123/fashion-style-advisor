@@ -1,0 +1,24 @@
+{
+  "_description": "品类别名映射 — VLM 可能输出各种中文/英文品类名，此文件做 fuzzy dedup 到标准品类代码。用户修正品类时自动追加。",
+  "_last_updated": "2026-06-24",
+  "aliases": {
+    "DRESS": ["连衣裙", "连身裙", "长裙", "短裙连衣裙", "中长裙连衣裙", "吊带裙", "礼服裙", "衬衫裙", "裹身裙", "茶歇裙", "midi dress", "maxi dress", "mini dress", "slip dress", "wrap dress", "shirt dress"],
+    "SKIRT": ["半身裙", "短裙", "长裙", "中长裙", "百褶裙", "A字裙", "包臀裙", "伞裙", "迷笛裙", "mini skirt", "midi skirt", "maxi skirt", "pleated skirt", "pencil skirt", "a-line skirt"],
+    "JMP": ["连体裤", "连体衣", "连身裤", "吊带连体裤", "工装连体裤", "jumpsuit", "romper", "playsuit", "boilersuit", "连体短裤"],
+    "BLOUSE": ["女士衬衫", "女式衬衫", "雪纺衫", "真丝衬衫", "飘带衬衫", "荷叶边衬衫", "blouse", "silk blouse", "chiffon blouse", "ruffle blouse"],
+    "KNIT": ["针织衫", "毛衣", "针织上衣", "羊绒衫", "羊毛衫", "开衫", "套头毛衣", "高领毛衣", "knit", "knitwear", "sweater", "cardigan", "cashmere sweater", "wool sweater", "turtleneck"],
+    "TS": ["短袖上衣", "短袖T恤", "T恤", "短袖", "t-shirt", "tee", "短袖衬衫"],
+    "LS": ["长袖上衣", "长袖T恤", "长袖", "打底衫", "秋衣", "long sleeve", "long sleeve tee", "长袖打底"],
+    "SHIRT": ["衬衣", "衬衫", "正装衬衫", "牛津纺衬衫", "休闲衬衫", "button-down", "oxford shirt", "dress shirt", "casual shirt", "正式衬衫"],
+    "TANK": ["背心", "吊带", "无袖上衣", "tank top", "sleeveless", "马甲背心", "无袖"],
+    "JK": ["外套", "夹克", "大衣", "风衣", "羽绒服", "棉服", "棒球夹克", "西装外套", "jacket", "coat", "blazer", "outerwear", "parka", "bomber", "西装"],
+    "PT": ["长裤", "休闲裤", "西裤", "牛仔裤", "工装裤", "直筒裤", "阔腿裤", "pants", "trousers", "jeans", "chinos", "cargo pants", "slacks"],
+    "SH": ["短裤", "休闲短裤", "运动短裤", "牛仔短裤", "shorts", "bermuda shorts", "cargo shorts"],
+    "SHOE": ["鞋子", "运动鞋", "皮鞋", "帆布鞋", "靴子", "凉鞋", "高跟鞋", "平底鞋", "乐福鞋", "sneakers", "shoes", "boots", "loafers", "heels", "sandals", "flats"],
+    "BAG": ["包", "背包", "手提包", "斜挎包", "托特包", "单肩包", "双肩包", "bag", "backpack", "tote", "crossbody", "shoulder bag", "手袋"],
+    "HAT": ["帽子", "棒球帽", "渔夫帽", "贝雷帽", "草帽", "毛线帽", "cap", "hat", "baseball cap", "bucket hat", "beanie", "beret"],
+    "SOCK": ["袜子", "短袜", "长袜", "船袜", "运动袜", "socks", "ankle socks", "crew socks"],
+    "SUN": ["墨镜", "太阳镜", "太阳眼镜", "sunglasses", "shades"],
+    "ACC": ["配饰", "手链", "手镯", "手表", "项链", "耳环", "戒指", "皮带", "腰带", "丝巾", "围巾", "accessory", "bracelet", "watch", "necklace", "belt", "scarf", "手部配饰"]
+  }
+}

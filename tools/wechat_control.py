@@ -77,6 +77,12 @@ CATEGORY_MAP = {
     '墨镜':     {'dir': '墨镜',     'prefix': '墨镜'},
     '手部配饰': {'dir': '手部配饰', 'prefix': '配饰'},
     '袜子':     {'dir': '袜子',     'prefix': '袜子'},
+    # 🆕 女性品类
+    '连衣裙':   {'dir': '连衣裙',   'prefix': '连衣裙'},
+    '半身裙':   {'dir': '半身裙',   'prefix': '下装'},
+    '连体裤':   {'dir': '连体裤',   'prefix': '连体裤'},
+    '女士衬衫': {'dir': '女士衬衫', 'prefix': '上衣'},
+    '针织衫':   {'dir': '针织衫',   'prefix': '上衣'},
 }
 
 # ── 品类映射（从 common 统一导入）──
@@ -88,6 +94,7 @@ from tools.common import (
     get_recent_outfits as _get_recent_outfits,
     get_wear_counts,
     parse_outfit_md, load_all_clothing as _load_all_clothing,
+    resolve_category_code, add_category_alias,
 )
 
 # ── 多用户支持 ────────────────────────────────────────
@@ -1270,8 +1277,19 @@ def _append_to_wardrobe_md(cid, category_name, filename, tag_data, uid=None):
                 break
 
         if insert_after < 0:
-            log(f"未找到品类 {category_name} 的表格位置", "WARN")
-            return
+            # 🆕 品类章节不存在 — 自动创建（支持新增品类）
+            log(f"品类 {category_name} 章节不存在，自动创建", "INFO")
+            # 构建新章节
+            cat_emoji_str = _cat_emoji(cid.split('-')[0]) if '-' in cid else '👔'
+            new_section = [
+                f'\n## {category_name}\n',
+                f'\n',
+                f'| ID | 图片 | 颜色 | 品牌/面料 | 风格标签 | 适配说明 | 场景 |\n',
+                f'|----|------|------|-----------|----------|----------|------|\n',
+            ]
+            # 追加到文件末尾
+            lines.extend(['\n'] + new_section)
+            insert_after = len(lines) - 1
 
         # 构建新行
         color_info = tag_data.get('color', {})
@@ -2016,15 +2034,16 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                 "text": f"【图片 {i+1}】"
             })
 
-        # 构建分析指令
+        # 构建分析指令 — 🆕 品类自由输出 + fuzzy dedup
         analysis_prompt = """你是一位专业的服装鉴定师。请仔细分析以上每张图片中的服装单品，输出严格的JSON格式结果。
 
 对每件单品，按以下结构输出：
 {
   "items": [
     {
-      "category_code": "品类代码，必须是以下之一: TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰)",
-      "category": "中文品类名，如 短袖上衣、衬衣、长裤",
+      "category_code": "品类简称（建议填，但不确定可以填'??'），如 TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰), DRESS(连衣裙), SKIRT(半身裙), JMP(连体裤), BLOUSE(女士衬衫), KNIT(针织衫)。
+      如果不确定或品类不在以上列表中，填'??'，系统会自动归类。",
+      "category": "中文品类名。这是最重要的字段，请尽量准确描述这是哪种服装，如：短袖上衣、连衣裙、百褶裙、针织开衫、阔腿裤、连体短裤、雪纺衬衫。系统会根据此字段自动分类。",
       "color": {
         "hue_family": "暖色/冷色/中性色",
         "hue_name": "具体颜色名，如 藏青色、米白色、焦糖色、浅灰色",
@@ -2045,10 +2064,10 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         "seasonality": ["春","夏"]
       },
       "silhouette": {
-        "fit": "合身/宽松/修身/oversize/直筒/锥形/阔腿",
+        "fit": "合身/宽松/修身/oversize/直筒/锥形/阔腿/A字/收腰",
         "shoulder_effect": "无特殊效果/增加肩宽/落肩/插肩",
         "torso_effect": "无特殊效果/显瘦/遮盖腹部/拉长比例",
-        "length_ratio": "标准/短款/长款/及膝/过膝"
+        "length_ratio": "标准/短款/长款/及膝/过膝/及踝"
       },
       "pattern": {
         "type": "纯色/条纹/格纹/印花/Logo/迷彩/扎染/拼接/文字",
@@ -2070,10 +2089,10 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 - 严格只输出JSON，不要包含markdown代码块标记或解释文字
 - 如果图片中没有服装单品，返回 {"items": []}
 - source_image 必须是该单品所在图片的编号（1-based，对应【图片 N】标注），一件单品只能属于一张图片
-- 仔细区分品类：有领子扣子的是衬衣(SHIRT)，无领T恤根据袖长分短袖(TS)或长袖(LS)
-- 品牌识别：看到明显logo或认识标志性款式的填品牌名，否则填"未知"，confidence相应降低
-- 颜色描述要具体（如"浅灰蓝"而非"蓝色"）
-- formality 1=极休闲(运动/居家) 2=休闲(日常) 3=中间(通勤) 4=正式(商务) 5=极正式(礼服)"""
+- 🆕 category字段必须填准确的中文品类名，系统会用此字段自动分类到衣橱
+- 🆕 对于女性服装，请区分：连衣裙(一件式连身裙) vs 半身裙(只有下半身)；连体裤(上下连身) vs 背心+长裤(两件分开)
+- 🆕 针织衫/毛衣/开衫请归类为"针织衫"，雪纺/真丝/荷叶边女士衬衫归类为"女士衬衫"
+- 🆕 如果服装有遮挡或不完整，在 meta.claude_fit_comment 中注明"部分遮挡"或"不完整可见"""
 
         content_blocks.append({"type": "text", "text": analysis_prompt})
 
@@ -2117,14 +2136,51 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             return
 
         # 5. 为每件单品分配建议 ID 和补充信息（同批次去重）
+        # 🆕 Phase 1: 品类 fuzzy dedup — AI 输出自由品类名，系统自动标准化
         assigned_ids = set()
         for i, item in enumerate(items):
-            cc = item.get('category_code', 'TS')
-            # 验证品类代码
-            if cc not in CATEGORY_CODE_TO_NAME:
-                cc = 'TS'  # fallback
-            item['category_code'] = cc
-            item['category'] = CATEGORY_CODE_TO_NAME.get(cc, item.get('category', '短袖上衣'))
+            cc = item.get('category_code', '??')
+            raw_category = item.get('category', '')
+
+            # Step 1: 尝试验证 AI 给的 category_code
+            if cc in CATEGORY_CODE_TO_NAME and cc != '??':
+                item['category_code'] = cc
+                item['category'] = CATEGORY_CODE_TO_NAME[cc]
+            else:
+                # Step 2: 用 fuzzy resolver 根据中文品类名匹配标准代码
+                # 读取用户性别以优化匹配
+                _gender = 'male'
+                if uid and uid != 'default':
+                    try:
+                        _profile_path = os.path.join(resolve_user_dir(uid), 'profile.json')
+                        if os.path.exists(_profile_path):
+                            with open(_profile_path) as _pf:
+                                _gender = json.load(_pf).get('gender', 'male')
+                    except Exception:
+                        pass
+                resolved_cc, resolved_cn, confidence = resolve_category_code(raw_category, _gender)
+
+                if resolved_cc and resolved_cc in CATEGORY_CODE_TO_NAME:
+                    item['category_code'] = resolved_cc
+                    item['category'] = resolved_cn
+                    if confidence == 'unknown' or confidence == 'keyword':
+                        # 低置信度匹配，标记给前端提示用户核对
+                        item['meta'] = item.get('meta', {})
+                        item['meta']['category_confidence'] = confidence
+                        item['meta']['category_original'] = raw_category
+                elif raw_category:
+                    # 完全无法匹配，尝试用品类名首词猜测
+                    item['category'] = raw_category
+                    # 根据性别给默认品类
+                    item['category_code'] = 'DRESS' if _gender == 'female' and '裙' in raw_category else 'TS'
+                    item['meta'] = item.get('meta', {})
+                    item['meta']['category_confidence'] = 'unknown'
+                    item['meta']['category_original'] = raw_category
+                else:
+                    item['category_code'] = 'TS'
+                    item['category'] = '短袖上衣'
+
+            cc = item['category_code']
             sid = _get_next_id(cc, uid)
             # 同批次多件同品类时确保 ID 不重复（批量分析可能同时识别多件长裤/上衣等）
             while sid in assigned_ids or _id_exists_on_disk(sid, uid):

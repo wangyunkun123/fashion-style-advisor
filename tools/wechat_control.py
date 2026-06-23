@@ -4885,9 +4885,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._json_resp(413, {'error': '请求体过大，最大 50MB'})
             return
 
-        # 记录关键 API 请求（用于故障排查）
-        if any(self.path.startswith(p) for p in ('/api/wardrobe/add', '/api/onboarding/wardrobe/add')):
-            log(f'📨 POST {self.path} (Content-Length={_cl_str}, Content-Type={self.headers.get("Content-Type","?")[:50]})')
+        # 记录所有 POST 请求（用于故障排查）
+        log(f'📨 POST {self.path} (Content-Length={_cl_str}, CT={self.headers.get("Content-Type","?")[:40]})')
 
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(self.path)

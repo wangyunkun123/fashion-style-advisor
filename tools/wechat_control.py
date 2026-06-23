@@ -4870,10 +4870,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
     def do_POST(self):
         """API 端点"""
-        # 🔍 DEBUG: 记录所有 POST 请求
-        _cl_str = self.headers.get('Content-Length', '0')
-        log(f'📨 POST {self.path} (Content-Length={_cl_str}, Content-Type={self.headers.get("Content-Type","?")[:60]})', 'DEBUG')
         # 请求体大小上限 50MB，防止 OOM
+        _cl_str = self.headers.get('Content-Length', '0')
         try:
             _cl = int(_cl_str)
         except (ValueError, TypeError):
@@ -5540,7 +5538,6 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         # ─── 衣橱添加入库 ───
         elif parsed.path == '/api/wardrobe/add':
-            log(f'🔍 到达上传处理: Content-Length={self.headers.get("Content-Length","?")}', 'DEBUG')
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length)
             content_type = self.headers.get('Content-Type', '')
@@ -6075,10 +6072,36 @@ def main():
 
     server = ThreadingHTTPServer(('0.0.0.0', port), WebhookHandler)
 
+    # ── Tailscale Funnel 自动启动 ──
+    _funnel_ok = False
+    try:
+        _funnel_check = subprocess.run(
+            ['tailscale', 'funnel', 'status'],
+            capture_output=True, text=True, timeout=5
+        )
+        if 'Funnel on' not in (_funnel_check.stdout or ''):
+            log("🌐 自动启用 Tailscale Funnel...")
+            subprocess.run(
+                ['tailscale', 'funnel', '--bg', '--https', '443', f'http://localhost:{port}'],
+                capture_output=True, timeout=10
+            )
+            _funnel_ok = True
+        elif f'http://localhost:{port}' in (_funnel_check.stdout or '') or f'http://127.0.0.1:{port}' in (_funnel_check.stdout or ''):
+            _funnel_ok = True
+        else:
+            log(f"⚠️ Funnel 端口不一致，重置...")
+            subprocess.run(['tailscale', 'funnel', '--https=443', 'off'], capture_output=True, timeout=5)
+            subprocess.run(['tailscale', 'funnel', '--bg', '--https', '443', f'http://localhost:{port}'], capture_output=True, timeout=10)
+            _funnel_ok = True
+    except Exception as e:
+        log(f"⚠️ Funnel 启动失败: {e}")
+
     log("=" * 55)
     log("👔 Fashion 穿搭助手 — 交互式聊天")
     log(f"📡 服务: http://0.0.0.0:{port}")
     log(f"💬 面板: http://localhost:{port}/")
+    if _funnel_ok:
+        log("🌐 Funnel: 已就绪")
 
     # ── 启动恢复：扫描磁盘上的中断任务，分析类自动重试 ──
     interrupted, retried, retry_queue = tasks.recover_on_startup()

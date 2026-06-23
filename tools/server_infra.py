@@ -501,16 +501,8 @@ def collect_health_data(task_manager, outfits_base=None):
     active_tasks = task_manager.get_active_count() if task_manager else 0
     uptime_seconds = get_uptime_seconds()
 
-    # 检查 Tailscale Funnel 状态
-    funnel_active = False
-    try:
-        import subprocess as _sp
-        result = _sp.run(['tailscale', 'funnel', 'status'],
-                        capture_output=True, text=True, timeout=5)
-        if 'Funnel on' in (result.stdout or '') and ('http://localhost:' in (result.stdout or '') or 'http://127.0.0.1:' in (result.stdout or '')):
-            funnel_active = True
-    except Exception:
-        pass
+    # 检查 Tailscale Funnel 状态（缓存 60s，避免阻塞 /health）
+    funnel_active = _cached_funnel_status()
 
     pipeline_status = state.get_pipeline_status()
 
@@ -529,3 +521,27 @@ def collect_health_data(task_manager, outfits_base=None):
                        (pipeline_status.get('last_run', '')[:10]
                         if pipeline_status.get('last_run') else None))
     }
+
+
+# ── Funnel 状态缓存（60s TTL，避免每次 /health 都阻塞 5s）──
+_funnel_cache = {'active': False, 'ts': 0}
+
+
+def _cached_funnel_status():
+    """缓存 Tailscale Funnel 状态，60s TTL"""
+    now = time.time()
+    if now - _funnel_cache['ts'] < 60:
+        return _funnel_cache['active']
+    try:
+        import subprocess as _sp
+        result = _sp.run(['tailscale', 'funnel', 'status'],
+                        capture_output=True, text=True, timeout=3)
+        active = ('Funnel on' in (result.stdout or '') and
+                  ('http://localhost:' in (result.stdout or '') or
+                   'http://127.0.0.1:' in (result.stdout or '')))
+        _funnel_cache['active'] = active
+        _funnel_cache['ts'] = now
+        return active
+    except Exception:
+        _funnel_cache['ts'] = now  # 也缓存失败，避免反复阻塞
+        return _funnel_cache['active']

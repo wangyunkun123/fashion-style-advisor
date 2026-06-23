@@ -102,7 +102,7 @@ from tools.user_manager import (
     update_last_active as _update_user_active,
 )
 from tools.common import resolve_user_dir, resolve_wardrobe_dir, resolve_outfits_dir, resolve_tags_dir
-from tools.image_cache import image_cache_get, image_cache_put, resize_image_bytes
+from tools.image_cache import image_cache_get, image_cache_put, resize_image_bytes, pre_compress_dir
 from tools.ai_api import call_doubao_chat, extract_json, resize_image_for_api
 from tools.photo_utils import get_person_photos, remove_person_background, select_person_photos_for_prompt
 from tools.history import load_history, save_history, HISTORY_FILE
@@ -2893,17 +2893,27 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             raise RuntimeError(f'Seedream 生图失败: {out2[:300] if out2 else "无输出（可能超时）"}')
         step_done()
 
+        # ── 预压缩：生图完成后立即生成 900w JPEG，手机首次加载秒开 ──
+        progress('🎨 预压缩生图')
+        sd_effect = os.path.join(outfit_dir, '上身效果')
+        if os.path.exists(sd_effect):
+            n = pre_compress_dir(sd_effect, widths=(900,), quality=85)
+            if n:
+                log(f'📐 预压缩: {n} 张 900w JPEG（上身效果）')
+
         progress('📤 推送 + 刷新')
         # 找生成的 AI 效果图（仅上身效果，豆包生图里是抠图素材非结果图）
         gen_img = None
         sd = os.path.join(outfit_dir, '上身效果')
         if os.path.exists(sd):
-            # 优先：上身效果_1（Pass1最佳图）> 方案图 > 任意图
+            # 优先：预压缩 900w > 上身效果_1（Pass1最佳图）> 方案图 > 任意图
             priority = [f for f in sorted(os.listdir(sd))
-                       if f.endswith(('.jpg', '.png')) and not f.startswith('.')]
-            preferred = [f for f in priority if '上身效果_1' in f and '方案' not in f]
-            fallback = [f for f in priority if '上身效果_1' in f]
-            pick = (preferred or fallback or priority)[:1]
+                       if f.endswith(('.jpg', '.png', '.webp')) and not f.startswith('.')]
+            # 🆕 压缩版最优先（体积小 90%+）
+            compressed = [f for f in priority if '_900w' in f and '上身效果_1' in f and '方案' not in f]
+            preferred = [f for f in priority if '上身效果_1' in f and '方案' not in f and '_900w' not in f]
+            fallback = [f for f in priority if '上身效果_1' in f and '_900w' not in f]
+            pick = (compressed or preferred or fallback or priority)[:1]
             if pick:
                 gen_img = os.path.join(sd, pick[0])
 
@@ -2947,6 +2957,12 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
                     log(f'⚠️ 排版可能失败: {_out[:200]}')
                 else:
                     log(f'📐 排版完成')
+                    # 预压缩排版图（900w JPEG，CDN/手机加载秒开）
+                    sdc = os.path.join(outfit_dir, '上身效果')
+                    if os.path.exists(sdc):
+                        nc = pre_compress_dir(sdc, widths=(900,), quality=85)
+                        if nc:
+                            log(f'📐 排版预压缩: {nc} 张 900w JPEG')
 
                 # ── Step 2: git add + commit + push（带重试）──
                 run_cli(['git', 'add', '-A'], timeout=30)
@@ -4065,6 +4081,37 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 return
             # 按需缩图宽度（默认900px，手机3x retina够用，体积减90%+；传 ?w=0 可取原图）
             req_w = int(qs.get('w', ['900'])[0]) if qs.get('w', [''])[0].isdigit() else 900
+
+            # 🆕 预压缩版优先：请求原图但有 _900w.jpg 则直接返回压缩版
+            if req_w > 0 and '_900w' not in file_rel and '_600w' not in file_rel and '_300w' not in file_rel:
+                base, _ext = os.path.splitext(file_abs)
+                sibling = f'{base}_{req_w}w.jpg'
+                if os.path.isfile(sibling):
+                    file_abs = sibling
+                    ct = 'image/jpeg'
+                    # 更新 ETag 源文件（压缩版修改时间可能不同）
+                    try:
+                        fstat_s = os.stat(sibling)
+                        etag_pre = f'"{fstat_s.st_mtime}-{fstat_s.st_size}-w{req_w}"'
+                    except OSError:
+                        etag_pre = None
+                    if etag_pre and self.headers.get('If-None-Match') == etag_pre:
+                        self._send_body(304, b'', ct, {
+                            'Cache-Control': 'public, max-age=86400',
+                            'ETag': etag_pre
+                        })
+                        return
+                    # 从压缩版读取（已是目标尺寸，跳过 resize）
+                    data_pre = image_cache_get(file_abs, 0)
+                    if data_pre is None:
+                        with open(file_abs, 'rb') as f:
+                            data_pre = f.read()
+                        image_cache_put(file_abs, 0, data_pre)
+                    headers_pre = {'Cache-Control': 'public, max-age=86400'}
+                    if etag_pre:
+                        headers_pre['ETag'] = etag_pre
+                    self._send_body(200, data_pre, ct, headers_pre)
+                    return
 
             ct = mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
             # ETag: mtime + size + width，文件修改后自动变化，浏览器 revalidate

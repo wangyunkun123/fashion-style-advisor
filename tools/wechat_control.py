@@ -3752,6 +3752,11 @@ class WebhookHandler(BaseHTTPRequestHandler):
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(self.path)
 
+        # 追踪手机端连接（仅记录关键路径，避免日志泛滥）
+        if parsed.path in ('/', '/api/task/', '/api/health') or parsed.path.startswith('/api/task/'):
+            ua = self.headers.get('User-Agent', '?')[:60]
+            log(f'📱 GET {parsed.path} (UA={ua})')
+
         # ── 多用户路由 ──
         user_id, need_onboarding = _resolve_user_from_request(self)
         self.user_id = user_id

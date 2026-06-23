@@ -2035,6 +2035,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         _parse_success = False
         try:
             from tools.cloth_parser import parse_clothing as _parse_clothing, create_clean_cutout as _create_cutout
+            from tools.complete_clothing import complete_clothing as _complete_clothing
             tasks.update(task_id, status='running', message=f'正在检测服装单品...')
             for i, tp in enumerate(temp_paths):
                 try:
@@ -2043,18 +2044,39 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                         for item in items:
                             # 🆕 用 SegFormer mask 抠图去背景（比 rembg 更准，专为服装训练）
                             cutout = _create_cutout(item['crop_image'], item['mask'])
-                            all_crops.append((cutout['cutout_jpg'], i, item['category_code'], item['completeness'], item.get('mask')))
+                            clean_img = cutout['cutout_jpg']
+                            was_completed = False
+                            # 🆕 不完整服装 → AI 补全
+                            if item['completeness'] == 'partial':
+                                tasks.update(task_id, status='running',
+                                           message=f'正在AI补全 {item["category_name"]}...')
+                                try:
+                                    comp_result = _complete_clothing(
+                                        clean_img, mask=item.get('mask'),
+                                        category_hint=item['category_code'],
+                                        completeness='partial',
+                                        max_retries=1, timeout=120
+                                    )
+                                    if comp_result.get('completed_image'):
+                                        clean_img = comp_result['completed_image']
+                                        was_completed = True
+                                        log(f'{_rid} ✨ {item["category_code"]} AI补全成功')
+                                    else:
+                                        log(f'{_rid} ⚠️ {item["category_code"]} 补全未成功: {comp_result.get("error","")[:80]}')
+                                except Exception as _ce:
+                                    log(f'{_rid} ⚠️ {item["category_code"]} 补全异常: {_ce}')
+                            all_crops.append((clean_img, i, item['category_code'], item['completeness'], item.get('mask'), was_completed))
                         log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装 + 已抠图: '
                             f'{", ".join(it["category_code"]+"("+str(it["area_pct"])+"%)" for it in items)}')
                     else:
                         # 无检测结果 → 整张图作为 fallback（可能是干净背景单品图）
                         img = PILImage.open(tp).convert('RGB')
-                        all_crops.append((img, i, '??', 'full', None))
+                        all_crops.append((img, i, '??', 'full', None, False))
                         log(f'{_rid} 📐 图片{i+1} 未检测到单品区域，使用整图分析')
                 except Exception as _pe:
                     log(f'{_rid} ⚠️ 图片{i+1} 布料解析失败: {_pe}，使用整图分析')
                     img = PILImage.open(tp).convert('RGB')
-                    all_crops.append((img, i, '??', 'full', None))
+                    all_crops.append((img, i, '??', 'full', None, False))
             _parse_success = len(all_crops) > 0
             if _parse_success and any(c[2] != '??' for c in all_crops):
                 tasks.update(task_id, status='running', message=f'检测到 {len(all_crops)} 件服装，正在逐一分析...')
@@ -2068,7 +2090,10 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             # 用裁剪图构建新 temp_paths
             crop_temp_paths = []
             crop_source_map = {}  # crop_index → original temp_path index
-            for ci, (crop_img, src_idx, cat_hint, completeness) in enumerate(all_crops):
+            for ci, crop_data in enumerate(all_crops):
+                crop_img, src_idx = crop_data[0], crop_data[1]
+                cat_hint, completeness = crop_data[2], crop_data[3]
+                was_completed = crop_data[5] if len(crop_data) > 5 else False
                 crop_path = os.path.join(incoming_dir, f'crop_{task_id}_{ci}.jpg')
                 crop_img.save(crop_path, 'JPEG', quality=85)
                 crop_temp_paths.append(crop_path)
@@ -2269,6 +2294,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                 if all_crops and src_idx < len(all_crops):
                     _cp = all_crops[src_idx]
                     item['meta']['completeness'] = _cp[3]  # 'full' or 'partial'
+                    item['meta']['ai_completed'] = _cp[5] if len(_cp) > 5 else False
                     if _cp[3] == 'partial':
                         item['meta']['claude_fit_comment'] = (
                             item['meta'].get('claude_fit_comment', '') + ' [⚠️部分遮挡]').strip()

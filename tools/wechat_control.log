@@ -1248,3 +1248,14 @@ Conte
 [07:45:23] [INFO] 已追加到服装档案: SH-009
 [07:49:15] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=626, CT=application/json)
 [07:49:15] [INFO] 标签更新: SHOE-001
+[07:49:55] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[07:49:55] [INFO] 所有任务已结束（等待 0s）
+[07:49:55] [INFO] Watchdog 已停止
+[07:49:55] [INFO] 👋 服务已关闭
+[07:49:55] [INFO] =======================================================
+[07:49:55] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[07:49:55] [INFO] 📡 服务: http://0.0.0.0:8765
+[07:49:55] [INFO] 💬 面板: http://localhost:8765/
+[07:49:55] [INFO] 🌐 Funnel: 已就绪
+[07:49:55] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:49:55] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)

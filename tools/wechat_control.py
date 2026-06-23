@@ -15,7 +15,6 @@ import io
 import json
 import os
 import re
-import signal
 import sys
 import shutil
 import subprocess
@@ -38,29 +37,23 @@ PROJECT_DIR = os.path.dirname(BASE_DIR)
 if PROJECT_DIR not in sys.path:
     sys.path.insert(0, PROJECT_DIR)
 CONFIG_FILE = os.path.join(PROJECT_DIR, 'config', 'seedream.local.json')
-LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
-# ── 管线状态（每日自动推荐 + 并发控制）──
-_pipeline_running = False
-_pipeline_lock = threading.Lock()
-_proto_rebuild_lock = threading.Lock()  # 防止并发的 build_prototype 进程写入同一文件
-_server_start_time = time.time()  # 进程启动时间（用于 /health 上报 uptime）
-_pipeline_status = {
-    'last_run': None,      # ISO timestamp
-    'last_error': None,    # 错误信息或 None
-    'total_runs': 0        # 累计推荐次数
-}
 
-# ── 日志 ────────────────────────────────────────────
-def log(msg, level='INFO'):
-    """写日志到文件 + stdout"""
-    ts = time.strftime('%H:%M:%S')
-    line = f"[{ts}] [{level}] {msg}"
-    print(line)
-    try:
-        with open(LOG_FILE, 'a') as f:
-            f.write(line + '\n')
-    except:
-        pass
+# ── 基础设施层导入（TaskManager/日志/信号/线程安全）──
+from tools.server_infra import (
+    PROJECT_DIR as _INFRA_PRJ,  # 同值，仅作交叉验证
+    LOG_FILE,
+    log,
+    safe_daemon,
+    install_excepthook,
+    state as shared_state,  # SharedState 全局实例（别名避免与 do_GET 内的 load_state() 冲突）
+    TaskManager,
+    setup_signal_handlers,
+    collect_health_data,
+)
+install_excepthook()
+
+# 兼容旧代码的别名（逐步迁移中）
+_proto_rebuild_lock = shared_state.proto_rebuild_lock
 
 # ── 天气模块 ──────────────────────────────────────────
 from tools.weather_advisor import fetch_weather, analyze_weather
@@ -109,42 +102,9 @@ from tools.ai_api import call_doubao_chat, extract_json, resize_image_for_api
 from tools.photo_utils import get_person_photos, remove_person_background, select_person_photos_for_prompt
 from tools.history import load_history, save_history, HISTORY_FILE
 
-# ── 全局异常钩子：守护线程崩溃不静默消失 ──
-_original_excepthook = sys.excepthook
-
-def _global_excepthook(exc_type, exc_value, exc_tb):
-    """捕获守护线程中的未处理异常，写日志 + stderr"""
-    import traceback as _tb_module
-    err = ''.join(_tb_module.format_exception(exc_type, exc_value, exc_tb))
-    try:
-        log(f"未捕获异常: {err}", "CRITICAL")
-    except Exception:
-        pass
-    sys.stderr.write(f"[CRASH] {time.strftime('%Y-%m-%d %H:%M:%S')} {err}\n")
-    sys.stderr.flush()
-    _original_excepthook(exc_type, exc_value, exc_tb)
-
-sys.excepthook = _global_excepthook
-
-# ── 后台线程安全装饰器 ──
-def _safe_daemon(name):
-    """装饰器：包裹守护线程目标，自动捕获异常并标记任务为 error"""
-    def decorator(fn):
-        def wrapper(*args, **kwargs):
-            try:
-                return fn(*args, **kwargs)
-            except Exception as e:
-                import traceback as _tb_module
-                err = _tb_module.format_exc()
-                log(f"后台线程 [{name}] 崩溃: {err}", "CRITICAL")
-                # 尝试标记关联任务为 error（首个参数通常是 task_id）
-                if args and isinstance(args[0], str) and args[0].isdigit():
-                    try:
-                        tasks.update(args[0], status='error', message=f'后台任务崩溃: {str(e)[:100]}')
-                    except Exception:
-                        pass
-        return wrapper
-    return decorator
+# ── _safe_daemon / _global_excepthook 已迁移至 tools.server_infra ──
+# 使用 safe_daemon(name, task_manager=tasks) 替代原 _safe_daemon(name)
+# install_excepthook() 已在模块导入时调用
 
 def _resolve_user_from_request(handler):
     """从请求中解析用户 ID。返回 (user_id, need_onboarding)。
@@ -362,85 +322,7 @@ def _find_report_style_image_for_period(style_id, ratings):
 
 
 # ── 任务管理器 ────────────────────────────────────────
-class TaskManager:
-    """线程安全的任务状态追踪（内存 + 磁盘写穿，重启不丢）"""
-    def __init__(self):
-        self._tasks = {}
-        self._lock = threading.Lock()
-        self._ttl = 3600  # 1小时后过期
-        self._disk_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
-        os.makedirs(self._disk_dir, exist_ok=True)
-
-    def _write_disk(self, tid):
-        """写穿磁盘：内存任务 → outfits/_tasks/{tid}.json"""
-        try:
-            t = self._tasks.get(tid)
-            if t:
-                with open(os.path.join(self._disk_dir, f'{tid}.json'), 'w') as tf:
-                    json.dump(t, tf, ensure_ascii=False, indent=2)
-        except Exception:
-            pass  # 磁盘写入失败不影响内存运行
-
-    def create(self):
-        tid = str(int(time.time() * 1000))
-        with self._lock:
-            self._tasks[tid] = {
-                'id': tid,
-                'status': 'queued',
-                'message': '排队中...',
-                'result': '',
-                'image_path': '',
-                'image_url': '',
-                'log': '',
-                'created_at': time.time()
-            }
-        self._write_disk(tid)
-        return tid
-
-    def update(self, tid, **kwargs):
-        with self._lock:
-            if tid in self._tasks:
-                self._tasks[tid].update(kwargs)
-        self._write_disk(tid)
-
-    def get(self, tid, allow_disk_fallback=True):
-        with self._lock:
-            task = self._tasks.get(tid)
-            if task:
-                return dict(task)
-        # 磁盘回退：服务重启后内存丢失，从 outfits/_tasks/ 恢复
-        if allow_disk_fallback:
-            disk_path = os.path.join(self._disk_dir, f'{tid}.json')
-            if os.path.exists(disk_path):
-                try:
-                    with open(disk_path, 'r') as tf:
-                        return json.load(tf)
-                except Exception:
-                    pass
-        return None
-
-    def cleanup(self):
-        now = time.time()
-        with self._lock:
-            expired = [tid for tid, t in self._tasks.items()
-                       if now - t['created_at'] > self._ttl]
-            for tid in expired:
-                del self._tasks[tid]
-        # 同步清理过期磁盘文件
-        try:
-            if os.path.isdir(self._disk_dir):
-                for fn in os.listdir(self._disk_dir):
-                    if not fn.endswith('.json'):
-                        continue
-                    fpath = os.path.join(self._disk_dir, fn)
-                    if now - os.path.getmtime(fpath) > self._ttl:
-                        try:
-                            os.remove(fpath)
-                        except OSError:
-                            pass
-        except Exception:
-            pass
-
+# TaskManager 已迁移至 tools.server_infra，此处创建实例
 tasks = TaskManager()
 
 # ── 历史记录 ──────────────────────────────────────────
@@ -1814,7 +1696,7 @@ def _color_name_to_hex(name):
     return '#999'
 
 
-@_safe_daemon('preview_outfit')
+@safe_daemon('preview_outfit', task_manager=tasks)
 def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
     """后台线程：以新衣为核心，AI 选品 + Seedream 生图预览"""
     try:
@@ -2097,7 +1979,7 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
         tasks.update(task_id, status='error', message=f'预览失败: {str(e)[:80]}')
 
 
-@_safe_daemon('add_analysis')
+@safe_daemon('add_analysis', task_manager=tasks)
 def _run_add_analysis(task_id, image_b64_list, uid=None):
     """后台线程：调用豆包视觉 API 分析衣物图片（多用户感知）"""
     try:
@@ -2207,7 +2089,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None):
         tasks.update(task_id, status='running', message='AI正在识别品类/颜色/品牌/面料...')
 
         # 3. 调用豆包视觉 API
-        response_text = call_doubao_chat(messages, max_tokens=16384, timeout=180)
+        response_text = call_doubao_chat(messages, max_tokens=16384, timeout=120)
 
         if not response_text:
             tasks.update(task_id, status='error', message='AI 未返回结果，请重试')
@@ -2477,39 +2359,39 @@ def extract_mandatory_items(style_hint, min_confidence=0.40):
     return deduped
 
 
-@_safe_daemon('pipeline')
+@safe_daemon('pipeline', task_manager=tasks)
 def run_pipeline(style_hint, task_id=None, user_id=None):
     """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
-    global _pipeline_running, _pipeline_status
     import traceback as _tb
 
-    # 防并发锁
-    with _pipeline_lock:
-        if _pipeline_running:
-            log(f"⚠️ 管线忙碌，拒绝新请求: {style_hint}")
-            if task_id:
-                tasks.update(task_id, status='error', message='已有推荐任务运行中，请稍后重试')
-            return None
-        _pipeline_running = True
+    # 防并发锁（SharedState 线程安全）
+    if not shared_state.try_start_pipeline():
+        log(f"⚠️ 管线忙碌，拒绝新请求: {style_hint}")
+        if task_id:
+            tasks.update(task_id, status='error', message='已有推荐任务运行中，请稍后重试')
+        return None
 
     try:
         result = _run_pipeline_impl(style_hint, task_id, user_id)
-        _pipeline_status['last_run'] = time.strftime('%Y-%m-%dT%H:%M:%S')
-        _pipeline_status['last_error'] = None
-        _pipeline_status['total_runs'] += 1
+        shared_state.update_pipeline_status(
+            last_run=time.strftime('%Y-%m-%dT%H:%M:%S'),
+            last_error=None
+        )
+        # total_runs 自增（读-改-写原子性由 SharedState 保证）
+        st = shared_state.get_pipeline_status()
+        shared_state.update_pipeline_status(total_runs=st.get('total_runs', 0) + 1)
         return result
     except Exception as _e:
         _err = f"管线异常: {_e}\n{_tb.format_exc()}"
         log(_err, "ERROR")
-        _pipeline_status['last_error'] = str(_e)[:200]
+        shared_state.update_pipeline_status(last_error=str(_e)[:200])
         import sys as _sys
         _sys.stderr.write(_err + '\n')
         _sys.stderr.flush()
         if task_id:
             tasks.update(task_id, status='failed', message=f'管线失败: {_e}', log=_err[:500])
     finally:
-        with _pipeline_lock:
-            _pipeline_running = False
+        shared_state.end_pipeline()
 
 
 def _build_admin_html():
@@ -4915,40 +4797,14 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             self._json_resp(200, latest or {"empty": True})
             return
 
-        # 健康检查（含今日推荐状态）
+        # 健康检查（含今日推荐状态 + Funnel 状态 + 系统资源）
         if parsed.path == '/health':
-            import resource as _resource
-            today_str = time.strftime('%Y-%m-%d')
-            today_ok = False
-            # 用户感知的 outfits 路径
             _uid = self.user_id if self.user_id != 'default' else None
             outfits_base = resolve_outfits_dir(_uid)
-            if os.path.isdir(outfits_base):
-                for d in sorted(os.listdir(outfits_base), reverse=True):
-                    if d.startswith(today_str):
-                        md = os.path.join(outfits_base, d, 'outfit.md')
-                        if os.path.exists(md) and os.path.getsize(md) > 50:
-                            today_ok = True
-                        break
-            # 系统资源
-            mem_bytes = _resource.getrusage(_resource.RUSAGE_SELF).ru_maxrss
-            mem_mb = round(mem_bytes / (1024 * 1024), 1)
-            disk_stat = os.statvfs(PROJECT_DIR)
-            disk_free_gb = round((disk_stat.f_bavail * disk_stat.f_frsize) / (1024**3), 1)
-            active_tasks = sum(1 for t in tasks._tasks.values() if t.get('status') in ('queued', 'running'))
-            uptime_seconds = int(time.time() - _server_start_time)
-            self._json_resp(200, {
-                "status": "ok",
-                "service": "Fashion 穿搭助手",
-                "time": time.strftime("%H:%M:%S"),
-                "uptime_seconds": uptime_seconds,
-                "memory_mb": mem_mb,
-                "disk_free_gb": disk_free_gb,
-                "active_tasks": active_tasks,
-                "today_ok": today_ok,
-                "running": _pipeline_running,
-                "latest_date": today_str if today_ok else (_pipeline_status.get('last_run','')[:10] if _pipeline_status.get('last_run') else None)
-            })
+            health = collect_health_data(tasks, outfits_base)
+            # 补充管线运行状态
+            health['running'] = shared_state.pipeline_running
+            self._json_resp(200, health)
             return
 
         # 女性风格列表（供 onboarding 使用）
@@ -6211,52 +6067,24 @@ def main():
     log(f"📡 服务: http://0.0.0.0:{port}")
     log(f"💬 面板: http://localhost:{port}/")
 
-    # ── 启动恢复：扫描磁盘上的中断任务（Phase 4）──
-    _tasks_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
-    if os.path.isdir(_tasks_dir):
-        recovered = 0
-        for fn in os.listdir(_tasks_dir):
-            if not fn.endswith('.json'):
-                continue
-            fpath = os.path.join(_tasks_dir, fn)
-            try:
-                with open(fpath, 'r') as tf:
-                    t = json.load(tf)
-                if t.get('status', '') in ('queued', 'running', ''):
-                    t['status'] = 'interrupted'
-                    t['message'] = '服务已重启，任务中断'
-                    with open(fpath, 'w') as tf:
-                        json.dump(t, tf, ensure_ascii=False, indent=2)
-                    recovered += 1
-            except Exception:
-                pass
-        if recovered:
-            log(f"♻️ 恢复 {recovered} 个中断任务（标记为 interrupted）")
+    # ── 启动恢复：扫描磁盘上的中断任务，分析类自动重试 ──
+    interrupted, retried = tasks.recover_on_startup()
+    if interrupted or retried:
+        log(f"♻️ 启动恢复: {interrupted} 个中断, {retried} 个自动重试")
 
-    # ── 信号处理：优雅关闭（Phase 3a）──
+    # ── Watchdog：自动检测超时任务（running > 5min → error）──
+    tasks.start_watchdog(interval=30)
+
+    # ── 信号处理：优雅关闭（等待活跃任务完成）──
     _shutdown_flag = threading.Event()
-
-    def _handle_signal(signum, frame):
-        sig_name = {signal.SIGTERM: 'SIGTERM', signal.SIGHUP: 'SIGHUP', signal.SIGINT: 'SIGINT'}.get(signum, str(signum))
-        log(f"收到信号 {sig_name}，优雅关闭中...")
-        # 将进行中的任务落盘标记为 interrupted
-        for tid, tsk in list(tasks._tasks.items()):
-            if tsk.get('status') in ('queued', 'running'):
-                tasks.update(tid, status='interrupted', message=f'服务重启中 (signal {sig_name})')
-        _shutdown_flag.set()
-        server.shutdown()
-
-    signal.signal(signal.SIGTERM, _handle_signal)
-    signal.signal(signal.SIGHUP, _handle_signal)
-    signal.signal(signal.SIGINT, _handle_signal)
-
-    log("🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)")
+    setup_signal_handlers(server, tasks, _shutdown_flag, graceful_timeout=15)
 
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass  # SIGINT handler 已处理
     finally:
+        tasks.stop_watchdog()
         log("👋 服务已关闭")
         server.server_close()
 

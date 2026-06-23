@@ -5418,3 +5418,39 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 [2026-06-23 23:19:41] 端口 8765 已被占用，跳过启动
 [2026-06-23 23:19:51] 端口 8765 已被占用，跳过启动
 [2026-06-23 23:20:01] 服务运行中 (端口 8765 已占用)
+[2026-06-23 23:34:56] 🚀 启动 Fashion 穿搭助手服务...
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 53519)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 4806, in do_GET
+    health['running'] = state.pipeline_running
+UnboundLocalError: local variable 'state' referenced before assignment
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 53524)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 4806, in do_GET
+    health['running'] = state.pipeline_running
+UnboundLocalError: local variable 'state' referenced before assignment
+----------------------------------------
+[2026-06-23 23:36:16] 🚀 启动 Fashion 穿搭助手服务...

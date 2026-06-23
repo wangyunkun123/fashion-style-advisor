@@ -769,3 +769,17 @@ NameError: name 'sys' is not defined
 [00:03:20] [INFO] 📍 📤 推送 + 刷新
 [00:03:23] [INFO] 📐 排版完成
 [00:03:24] [INFO] 📐 排版预压缩: 4 张 900w JPEG
+[00:03:36] [INFO] 📤 Git push 成功 (尝试 1/3)
+[00:03:37] [INFO] 📱 主原型: 重建
+[00:03:42] [INFO] 📤 后台推送完成: 打网球穿搭
+[00:08:24] [INFO] 📸 衣橱添加(binary): 1782230904240 (1 张图片, 76KB)
+[00:08:41] [INFO] 衣物分析完成: 1782230904240 → 1 件
+[00:09:04] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/衬衣/Image_20260624_000904_SHIRT-006.jpg
+[00:09:04] [INFO] 图片处理完成: SHIRT-006 (缩略图 20KB)
+[00:09:04] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SHIRT-006.json
+[00:09:04] [INFO] 已追加到服装档案: SHIRT-006
+[00:09:37] [INFO] 📸 衣橱添加(binary): 1782230977160 (1 张图片, 76KB)
+[00:09:58] [INFO] 衣物分析完成: 1782230977160 → 1 件
+[00:10:10] [INFO] 🔔 新单品徽标已消除: SHIRT-006
+[00:14:52] [INFO] 📸 衣橱添加(binary): 1782231292486 (1 张图片, 73KB)
+[00:15:08] [INFO] 衣物分析完成: 1782231292486 → 1 件

@@ -5457,3 +5457,26 @@ UnboundLocalError: local variable 'state' referenced before assignment
 [2026-06-23 23:47:01] 🚀 启动 Fashion 穿搭助手服务...
 [2026-06-23 23:51:19] 🚀 启动 Fashion 穿搭助手服务...
 [2026-06-23 23:56:53] 🚀 启动 Fashion 穿搭助手服务...
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 56169)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5621, in do_POST
+    self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(image_b64_list)} 张图片..."})
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5995, in _json_resp
+    self._send_body(code, body, 'application/json; charset=utf-8')
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5991, in _send_body
+    self.wfile.write(compressed)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 826, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------

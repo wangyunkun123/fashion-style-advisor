@@ -37,46 +37,126 @@ JUNK_PATTERNS = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r
 # CDN — 从 common 统一导入
 from tools.common import get_git_commit, cdn_url
 
-def simplify_name(iid, name):
-    """Simplify item name: brand + description, remove filler terms only"""
-    brands = ['Lululemon','Nike','Adidas','Uniqlo','FUR SPEED','Champion','Decathlon',
-              'Artengo','Decathlon Artengo','Decathlon Kiprun','Kiprun','Wilson','Converse',
-              'Puma','FILA','HLA','COMME des GARCONS','COMME des GARÇONS PLAY','CDG',
-              'Merrell','Timberland','Jordan','Cotton On','H FOREST','DAN JOHN',
-              'LIBERTY SHINE','SHINO','YASCIQ','NBA','Apple']
-    # Apple Watch: keep band info
-    if iid == 'ACC-003' or 'Apple Watch' in name:
-        band = ''
-        for b in ['尼龙回环','回环尼龙','米兰尼斯','运动表带','黑色运动','回环']:
-            if b in name: band = b; break
-        if not band:
-            # Try extracting from "表带套组（xxx）"
-            m = re.search(r'表带套组[（(](.+?)[）)]', name)
-            if m: band = m.group(1)
-        if not band and '表带套组' in name:
-            band = '表带套组'
-        return 'Apple Watch {}'.format(band).strip() if band else 'Apple Watch'
-    # Detect brand (longest match first)
-    found_brand = ''
-    for b in sorted(brands, key=len, reverse=True):
-        if b.lower() in name.lower():
-            found_brand = b
+# ═════════════════════════════════════════════════════════
+# 服装显示名称 — 从 tag JSON 结构化数据构造
+# 规则: 品牌 + 服装名城 + (空间允许时)颜色/风格词
+# ═════════════════════════════════════════════════════════
+
+CAT_SHORT = {
+    '短袖上衣': '短袖', '长袖上衣': '长袖', '衬衣': '衬衫',
+    '短裤': '短裤', '长裤': '长裤', '鞋子': '鞋', '帽子': '帽',
+    '袜子': '袜', '外套': '外套', '包': '包', '墨镜': '墨镜',
+    '背心': '背心', '手部配饰': '手链'
+}
+
+_GOOD_FABRICS = {'速干', '棉', '皮质', '帆布', '牛仔', '亚麻', '羊毛混纺', '针织', '金属', '尼龙', '木质', '棉混纺', '聚酯纤维'}
+
+# 风格词 → 命名缩写
+_STYLE_SHORT = {
+    '跑鞋': '跑鞋', '拖鞋': '拖鞋', '渔夫帽': '渔夫帽', '棒球帽': '棒球帽',
+    '机能风格': '机能', '复古运动感': '复古', '网球配件': '网球', '网球运动': '网球',
+    '休闲遮阳': '休闲', '复古训练': '复古', '澳洲休闲': '休闲', '日系宽松': '宽松',
+    '高端训练': '训练', '科技运动': '运动', '运动休闲': '运动', '入门网球': '网球',
+    '休闲运动': '运动', '夏日度假': '度假', '休闲偏精致': '精致', '帆布经典': '经典',
+    '篮球文化': '篮球', '足球文化': '足球', '美式校园': '校园', '复古街头': '街头',
+    '工装风': '工装', '户外机能': '户外', '意式运动': '运动', '嘻哈文化': '嘻哈',
+    '摇滚文化': '摇滚', '美式复古': '复古', '朋克': '朋克', '潮流': '潮流',
+    '夏威夷风情': '夏威夷', '度假休闲': '度假', '勇士队联名': '勇士',
+    'AJ基因': 'AJ', '高帮': '高帮', '防水': '防水', '速干运动': '运动',
+    '休闲居家': '居家', '运动潮流': '潮流', '内搭': '打底', '夏季必备': '夏',
+    '椰树印花': '印花', '休闲基础': '休闲', '网眼轻便': '轻便', '学院休闲': '学院',
+    '醒目': '亮色', '工装感': '工装', '通勤实用': '通勤',
+}
+
+# 不参与命名的填充词
+_STYLE_SKIP = {
+    '颜色显白', '增加肩宽', '增加上半身体量感', '增加下半身体量感',
+    '厚底增加视觉比例', '视觉清新', '视觉轻盈', '视觉利落', '无明显修饰',
+    'Silverescent抗菌', 'HIIT/跑步', '基础百搭', '休闲日常', '日常休闲',
+    '松紧抽绳腰', '百搭基础', '通勤百搭', '极简', '简约', '基本款', '基础',
+    '视觉吸睛', '视觉鲜艳吸睛', '视觉吸睛加分', '视觉亮点', '可爱图案点缀',
+    '花纹点缀视觉趣味', '小格纹增添细节感', '横向条纹略增宽视感', '视觉肌理增加层次',
+    '防滑设计实用', '罗纹细节增添质感', '视觉个性表达', '经典百搭', '时尚个性',
+    '束脚收紧脚踝显比例', '束脚显比例', '遮盖小肚子', '遮盖纤细小腿', '修身显腿型纤细',
+    '长款拉长比例', '视觉重心上移', '简约实用', '经典Logo', '质感', '亮面',
+    '舒适耐穿', '高性价比', '日常百搭', '通勤休闲', '简约百搭',
+    '拉链口袋分层置物', '多物包容性强', '拉杆箱固定带', '木质温润感',
+    '科技感', '功能性', '实用', '质感优雅', '多功能收纳', '分层置物',
+    '机能户外风', '运动机能感', '休闲实用', '节日点缀', '视觉点缀',
+    '密集印花', '大雪橇纹针织', '东南亚', '球迷潮流',
+}
+
+_TYPE_WORDS = {'跑鞋', '拖鞋', '渔夫帽', '棒球帽'}
+
+def _clean_brand(brand):
+    """清理品牌名：去系列后缀/品类噪音，未知→空"""
+    if not brand or brand == '未知':
+        return ''
+    # 去掉 …系列 / …健身衣 / …拖鞋 等后缀噪音
+    brand = re.sub(r'\S*(?:系列|健身衣|跑步|运动服|复古运动|潮流|拖鞋|帽子|袜子|包|鞋子|短袖|长袖|短裤|长裤|外套).*$', '', brand).strip()
+    brand = re.sub(r'\s+', ' ', brand).strip()
+    return brand
+
+def get_display_name(iid):
+    """从 wardrobe/tags/{iid}.json 构造显示名称：品牌 + 服装名城"""
+    tag_path = os.path.join(PROJ, 'wardrobe', 'tags', f'{iid}.json')
+    if not os.path.exists(tag_path):
+        return iid
+
+    try:
+        with open(tag_path) as f:
+            tag = json.load(f)
+    except Exception:
+        return iid
+
+    brand = _clean_brand(tag.get('brand', {}).get('name', ''))
+    category = tag.get('category', '')
+    cat = CAT_SHORT.get(category, category)
+    fabric = tag.get('fabric', {}).get('primary', '')
+    style_mods = tag.get('style_modifiers', [])
+
+    # ── 收集描述词（缩简 + 去重）──
+    descs = []
+    seen = set()
+    for sm in style_mods:
+        if sm in _STYLE_SKIP:
+            continue
+        short = _STYLE_SHORT.get(sm)
+        if short is None:
+            if len(sm) <= 3 and sm not in _STYLE_SKIP:
+                short = sm
+            else:
+                continue
+        if short and short not in seen:
+            # 子串去重
+            if not any(short in d for d in seen) and not any(d in short for d in seen):
+                descs.append(short)
+                seen.add(short)
+
+    # 面料描述
+    if fabric and fabric in _GOOD_FABRICS and fabric not in seen:
+        if not any(fabric in d for d in seen):
+            descs.append(fabric)
+            seen.add(fabric)
+
+    # ── 检测完整类型词 ──
+    item_core = cat
+    for d in descs[:]:
+        if d in _TYPE_WORDS:
+            item_core = d
+            descs.remove(d)
             break
-    # Remove filler/tech terms only — keep the descriptive parts
-    remove = ['Metal Vent Tech','Metal Vent','Court Lite','入门级','Artengo',
-              'Leisure Club','敞穿或卷袖','敞穿','卷袖','叠穿','基本款','常规','标准']
-    clean = name
-    for r in remove:
-        clean = clean.replace(r, '').replace('  ', ' ')
-    if found_brand:
-        desc = clean.replace(found_brand, '').strip()
-        desc = desc.replace('  ', ' ').strip()
-        if len(desc) <= 1:
-            for cat in ['短袖','长袖','短裤','长裤','衬衫','外套','鞋子','帽子','袜子','墨镜','包']:
-                if cat in clean: desc = cat; break
-        return '{} {}'.format(found_brand, desc)[:30]
-    clean = clean.strip()
-    return clean[:24]
+
+    # ── 构建：{品牌} {描述词…}{品类} ──
+    chosen = descs[:3]
+    core = ''.join(chosen) + item_core
+
+    if brand:
+        name = f'{brand} {core}'
+    else:
+        name = core
+
+    return name[:24].strip()
 
 def scan_outfits(date_filter=None, rating_filter=None, limit=20):
     """Scan outfits directory, return list of outfit dicts"""
@@ -122,7 +202,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if len(cells) < 4: continue
             if re.match(r'^[A-Z]+-\d+', cells[2]):
                 full_name = cells[3]
-                items.append({'id': cells[2], 'name': simplify_name(cells[2], full_name),
+                items.append({'id': cells[2], 'name': get_display_name(cells[2]),
                               'full_name': full_name, 'cat': cells[1] if len(cells)>1 else ''})
         style = ''
         weather = ''
@@ -1813,11 +1893,7 @@ if USER_ID:
                     tag = json.load(f)
                 cid = tag.get('clothing_id', '')
                 cat = tag.get('category', '')
-                color = tag.get('color', {}).get('hue_name', '')
-                brand = tag.get('brand', {}).get('name', '')
-                name = f'{color}{cat}' if color and color != '灰' else cat
-                if brand and brand != '未知':
-                    name = f'{brand} {name}'
+                name = get_display_name(cid)
                 user_items.append({'id': cid, 'name': name, 'cat': cat, 'code': tag.get('category_code', '')})
             except:
                 pass

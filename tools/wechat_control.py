@@ -5547,16 +5547,16 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # ─── 衣橱添加入库 ───
         elif parsed.path == '/api/wardrobe/add':
             length = int(self.headers.get('Content-Length', 0))
-            # 设置 socket 超时，防止手机慢速网络导致 rfile.read() 无限阻塞
+            # 设置 socket 超时（手机通过 Funnel 上传可能很慢，特别是夜间网络）
             try:
-                self.connection.settimeout(30)
+                self.connection.settimeout(60)
             except Exception as e:
                 log(f'⚠️ 设置超时失败: {e}')
             try:
                 body = self.rfile.read(length)
             except Exception as e:
                 log(f'⚠️ 上传读取超时/失败: {e}')
-                self._json_resp(400, {"error": "上传数据接收超时，请重试"}); return
+                self._json_resp(400, {"error": "上传数据接收超时，请检查网络后重试"}); return
             content_type = self.headers.get('Content-Type', '')
             log(f'📨 衣橱上传: {len(body)}B, CT={content_type[:60]}')
 

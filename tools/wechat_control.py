@@ -5547,17 +5547,27 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # ─── 衣橱添加入库 ───
         elif parsed.path == '/api/wardrobe/add':
             length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(length)
+            # 设置 socket 超时，防止手机慢速网络导致 rfile.read() 无限阻塞
+            try:
+                self.rfile._sock.settimeout(30)
+            except Exception:
+                pass
+            try:
+                body = self.rfile.read(length)
+            except Exception as e:
+                log(f'⚠️ 上传读取超时/失败: {e}')
+                self._json_resp(400, {"error": "上传数据接收超时，请重试"}); return
             content_type = self.headers.get('Content-Type', '')
+            log(f'📨 衣橱上传: {len(body)}B, CT={content_type[:60]}')
 
             # 🆕 支持 FormData 二进制上传（避免 base64 膨胀，通过 Tailscale Funnel 更可靠）
             if 'multipart/form-data' in content_type:
                 import re as _re
                 bm = _re.search(r'boundary=([^\s;]+)', content_type)
                 if not bm:
-                    log(f'⚠️ 上传解析失败: boundary 未匹配, Content-Type={content_type[:120]}')
+                    log(f'⚠️ 上传解析失败: boundary 未匹配, CT={content_type[:120]}')
                     self._json_resp(400, {"error": "missing boundary"}); return
-                boundary = bm.group(1)
+                boundary = bm.group(1).strip('"')  # 部分客户端会加引号
                 image_b64_list = []
                 # 解析 multipart parts
                 delimiter = ('--' + boundary).encode()

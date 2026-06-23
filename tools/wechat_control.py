@@ -6098,6 +6098,7 @@ def main():
             port = int(arg)
 
     server = ThreadingHTTPServer(('0.0.0.0', port), WebhookHandler)
+    server.daemon_threads = True  # 收到 SIGTERM 后主线程退出时自动清理请求线程
 
     # ── Tailscale Funnel 自动启动 ──
     _funnel_ok = False

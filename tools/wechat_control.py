@@ -1452,6 +1452,18 @@ def _finalize_add_item(item_data):
     with open(tag_path, 'w', encoding='utf-8') as f:
         json.dump(tag_data, f, ensure_ascii=False, indent=2)
     log(f"标签已写入: {tag_path}")
+    # 🆕 Phase 3: 自动推荐匹配风格
+    try:
+        from wardrobe_cluster import recommend_styles_for_item as _auto_styles
+        auto_styles = _auto_styles(tag_data)
+        if auto_styles:
+            tag_data['recommended_styles'] = auto_styles
+            with open(tag_path, 'w', encoding='utf-8') as f:
+                json.dump(tag_data, f, ensure_ascii=False, indent=2)
+            log(f"自动推荐风格: {cid} → {auto_styles}")
+    except Exception as _se:
+        log(f"风格推荐跳过: {_se}", "WARN")
+
 
     # 5. 追加到服装档案
     _append_to_wardrobe_md(cid, category_name, dest_filename, tag_data, uid)
@@ -4471,6 +4483,31 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 return
             except Exception as e:
                 log(f"月度统计API异常: {e}", "ERROR")
+                self._json_resp(500, {"error": str(e)})
+                return
+
+        # 🆕 Phase 3: 风格聚类 API
+        if parsed.path == '/api/wardrobe/clusters':
+            try:
+                from wardrobe_cluster import load_tags_dir, compute_style_clusters, compute_wardrobe_health
+                _wuid = self.user_id if self.user_id != 'default' else None
+                _tags_dir = resolve_tags_dir(_wuid)
+                wardrobe = load_tags_dir(_tags_dir)
+                clusters = compute_style_clusters(wardrobe)
+                health = compute_wardrobe_health(wardrobe)
+                self._json_resp(200, {
+                    'clusters': clusters,
+                    'total_items': len(wardrobe),
+                    'total_clusters': len(clusters),
+                    'health': {
+                        'orphans': health['orphan_count'],
+                        'overlap_pairs': health['overlap_count'],
+                        'category_count': health['total_categories'],
+                    }
+                })
+                return
+            except Exception as e:
+                log(f"聚类API异常: {e}", "ERROR")
                 self._json_resp(500, {"error": str(e)})
                 return
 

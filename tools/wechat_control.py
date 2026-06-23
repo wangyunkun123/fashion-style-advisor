@@ -2894,17 +2894,18 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         step_done()
 
         progress('📤 推送 + 刷新')
-        # 找生成的 AI 效果图（用于历史记录）
+        # 找生成的 AI 效果图（仅上身效果，豆包生图里是抠图素材非结果图）
         gen_img = None
-        for sub in ['上身效果', '豆包生图']:
-            sd = os.path.join(outfit_dir, sub)
-            if os.path.exists(sd):
-                for f in sorted(os.listdir(sd)):
-                    if f.endswith(('.jpg', '.png')) and not f.startswith('.'):
-                        gen_img = os.path.join(sd, f)
-                        break
-            if gen_img:
-                break
+        sd = os.path.join(outfit_dir, '上身效果')
+        if os.path.exists(sd):
+            # 优先：上身效果_1（Pass1最佳图）> 方案图 > 任意图
+            priority = [f for f in sorted(os.listdir(sd))
+                       if f.endswith(('.jpg', '.png')) and not f.startswith('.')]
+            preferred = [f for f in priority if '上身效果_1' in f and '方案' not in f]
+            fallback = [f for f in priority if '上身效果_1' in f]
+            pick = (preferred or fallback or priority)[:1]
+            if pick:
+                gen_img = os.path.join(sd, pick[0])
 
         # ── 统计摘要 ──
         elapsed = time.time() - t_start
@@ -2919,11 +2920,17 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             local_img_url = f'/api/image?f={quote(rel_path)}&w=900'
 
         if task_id:
-            tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
+            if gen_img:
+                status_msg = f'✅ 全部完成 · {stats_line}'
+                disk_status = 'done'
+            else:
+                status_msg = f'⚠️ 生图完成，排版中 · {stats_line}'
+                disk_status = 'running'
+            tasks.update(task_id, status=disk_status, message=status_msg,
                          image_path=gen_img, image_url=local_img_url,
                          log='\n'.join(log_lines))
             # 同步磁盘状态（服务器重启后可回退）
-            _sync_task_disk(task_id, 'done', f'✅ 全部完成 · {stats_line}', local_img_url, '\n'.join(log_lines))
+            _sync_task_disk(task_id, disk_status, status_msg, local_img_url, '\n'.join(log_lines))
         # step_done 在 tasks.update 之前调用会覆盖 status
         # 这里手动补 done 标记
         if log_lines:

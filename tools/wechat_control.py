@@ -2004,10 +2004,10 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
                 'is_new': is_new,
             })
 
-        # 相对路径
+        # 相对路径 → /api/image 压缩传输（手机端 ?w=900，体积减 90%+）
+        from urllib.parse import quote as _quote
         rel_images = [os.path.relpath(dp, PROJECT_DIR) for dp in downloaded]
-        # 生成 CDN 预览 URL（直接通过本地 HTTP 服务）
-        image_urls = [f'/{p}' for p in rel_images]
+        image_urls = [f'/api/image?f={_quote(p)}&w=900' for p in rel_images]
 
         result_data = {
             'outfit_items': outfit_detail,
@@ -2916,7 +2916,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         if gen_img:
             rel_path = os.path.relpath(gen_img, PROJECT_DIR)
             from urllib.parse import quote
-            local_img_url = f'/api/image?f={quote(rel_path)}'
+            local_img_url = f'/api/image?f={quote(rel_path)}&w=900'
 
         if task_id:
             tasks.update(task_id, status='done', message=f'✅ 全部完成 · {stats_line}',
@@ -4056,8 +4056,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not os.path.isfile(file_abs):
                 self._json_resp(404, {"error": "file not found"})
                 return
-            # 按需缩图宽度（手机查看 600px 足够，视觉无损但体积减半）
-            req_w = int(qs.get('w', ['0'])[0]) if qs.get('w', [''])[0].isdigit() else 0
+            # 按需缩图宽度（默认900px，手机3x retina够用，体积减90%+；传 ?w=0 可取原图）
+            req_w = int(qs.get('w', ['900'])[0]) if qs.get('w', [''])[0].isdigit() else 900
 
             ct = mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
             # ETag: mtime + size + width，文件修改后自动变化，浏览器 revalidate

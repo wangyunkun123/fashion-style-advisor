@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-23T12:18:28Z",
+  "user_id": "default",
+  "items_used": [
+    "SHIRT-002",
+    "PT-007",
+    "SHOE-005"
+  ],
+  "style_matched": "韩系简约 (korean_minimal)",
+  "occasion": "日常",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 42229,
+  "api_calls": 2
+}

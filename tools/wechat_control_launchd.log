@@ -5520,3 +5520,25 @@ Traceback (most recent call last):
   File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/urllib/request.py", line 641, in http_error_default
     raise HTTPError(req.full_url, code, msg, hdrs, fp)
 urllib.error.HTTPError: HTTP Error 400: Bad Request
+[01:49:46] [INFO] =======================================================
+[01:49:46] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:49:46] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:49:46] [INFO] 💬 面板: http://localhost:8765/
+[01:49:46] [INFO] 🌐 Funnel: 已就绪
+[01:49:46] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:49:46] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:49:59] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:49:59] [INFO] 所有任务已结束（等待 0s）
+[01:49:59] [INFO] Watchdog 已停止
+[01:49:59] [INFO] 👋 服务已关闭
+[01:50:02] [INFO] =======================================================
+[01:50:02] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:50:02] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:50:02] [INFO] 💬 面板: http://localhost:8765/
+[01:50:02] [INFO] 🌐 Funnel: 已就绪
+[01:50:02] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:50:02] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:50:04] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:50:04] [INFO] 所有任务已结束（等待 0s）
+[01:50:04] [INFO] Watchdog 已停止
+[01:50:04] [INFO] 👋 服务已关闭

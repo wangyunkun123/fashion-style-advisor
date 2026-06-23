@@ -5540,6 +5540,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         # ─── 衣橱添加入库 ───
         elif parsed.path == '/api/wardrobe/add':
+            log(f'🔍 到达上传处理: Content-Length={self.headers.get("Content-Length","?")}', 'DEBUG')
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length)
             content_type = self.headers.get('Content-Type', '')

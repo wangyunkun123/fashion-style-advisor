@@ -134,12 +134,18 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
                 m = re.search(r'[：:]\s*(.+)', line)
                 if m: weather = m.group(1).strip()[:60]
         scene = d.split('_',1)[-1] if '_' in d else style
-        # Find character image: 上身效果_1.png (AI原图) > 人物*.jpg > 排版图 > any
+        # Find character image: 900w预压缩 > 上身效果_1.png (AI原图) > 人物*.jpg > 排版图 > any
         char_img = ''
         char_thumb = ''  # 缩略图（300px宽，用于历史卡片，10-25KB vs 原图500KB-1MB）
         for sub in ['上身效果','豆包生图']:
             sd = os.path.join(dp, sub)
             if not os.path.exists(sd): continue
+            # 🆕 最高优先：900w 预压缩 JPEG（100-250KB，比 PNG 原图小 70-92%）
+            for f in sorted(os.listdir(sd)):
+                if '_900w' in f and '上身效果_1' in f and '方案' not in f:
+                    char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
+                    break
+            if char_img: break
             # First: 上身效果_1.png (raw AI gen, first stored)
             for f in sorted(os.listdir(sd)):
                 if f == '上身效果_1.png':

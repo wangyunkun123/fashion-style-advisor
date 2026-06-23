@@ -2031,28 +2031,30 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         tasks.update(task_id, status='running', message=f'正在AI智能识别 {len(temp_paths)} 张图片...')
 
         # 🆕 Phase 2: 布料解析 — 从真人/复杂照片中检测并裁剪每件服装单品
-        all_crops = []  # [(crop_pil_image, source_img_index, category_hint, completeness)]
+        all_crops = []  # [(crop_pil_image, source_img_index, category_hint, completeness, mask)]
         _parse_success = False
         try:
-            from tools.cloth_parser import parse_clothing as _parse_clothing
+            from tools.cloth_parser import parse_clothing as _parse_clothing, create_clean_cutout as _create_cutout
             tasks.update(task_id, status='running', message=f'正在检测服装单品...')
             for i, tp in enumerate(temp_paths):
                 try:
                     items = _parse_clothing(tp)
                     if items:
                         for item in items:
-                            all_crops.append((item['crop_image'], i, item['category_code'], item['completeness']))
-                        log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装: '
+                            # 🆕 用 SegFormer mask 抠图去背景（比 rembg 更准，专为服装训练）
+                            cutout = _create_cutout(item['crop_image'], item['mask'])
+                            all_crops.append((cutout['cutout_jpg'], i, item['category_code'], item['completeness'], item.get('mask')))
+                        log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装 + 已抠图: '
                             f'{", ".join(it["category_code"]+"("+str(it["area_pct"])+"%)" for it in items)}')
                     else:
                         # 无检测结果 → 整张图作为 fallback（可能是干净背景单品图）
                         img = PILImage.open(tp).convert('RGB')
-                        all_crops.append((img, i, '??', 'full'))
+                        all_crops.append((img, i, '??', 'full', None))
                         log(f'{_rid} 📐 图片{i+1} 未检测到单品区域，使用整图分析')
                 except Exception as _pe:
                     log(f'{_rid} ⚠️ 图片{i+1} 布料解析失败: {_pe}，使用整图分析')
                     img = PILImage.open(tp).convert('RGB')
-                    all_crops.append((img, i, '??', 'full'))
+                    all_crops.append((img, i, '??', 'full', None))
             _parse_success = len(all_crops) > 0
             if _parse_success and any(c[2] != '??' for c in all_crops):
                 tasks.update(task_id, status='running', message=f'检测到 {len(all_crops)} 件服装，正在逐一分析...')

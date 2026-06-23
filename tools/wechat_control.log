@@ -1208,3 +1208,43 @@ Conte
 [07:42:08] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
 [07:42:20] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
 [07:42:20] [INFO] 🔔 新单品徽标已消除: TS-015
+[07:42:40] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[07:42:40] [INFO] 所有任务已结束（等待 0s）
+[07:42:40] [INFO] Watchdog 已停止
+[07:42:40] [INFO] 👋 服务已关闭
+[07:42:41] [INFO] =======================================================
+[07:42:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[07:42:41] [INFO] 📡 服务: http://0.0.0.0:8765
+[07:42:41] [INFO] 💬 面板: http://localhost:8765/
+[07:42:41] [INFO] 🌐 Funnel: 已就绪
+[07:42:41] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:42:41] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[07:42:54] [INFO] 📨 POST /api/wardrobe/item/TS-015 (Content-Length=26, CT=application/json)
+[07:42:54] [INFO] 标签更新: TS-015
+[07:42:58] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[07:42:58] [INFO] 🔔 新单品徽标已消除: TS-014
+[07:43:02] [INFO] 📨 POST /api/wardrobe/item/TS-014 (Content-Length=26, CT=application/json)
+[07:43:02] [INFO] 标签更新: TS-014
+[07:43:09] [INFO] 📨 POST /api/wardrobe/item/TS-014/delete (Content-Length=0, CT=?)
+[07:43:09] [INFO] 单品已删除: TS-014 (3 files)
+[07:43:15] [INFO] 📨 POST /api/wardrobe/item/TS-015/delete (Content-Length=0, CT=?)
+[07:43:15] [INFO] 单品已删除: TS-015 (2 files)
+[07:44:07] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[07:44:20] [INFO] 📨 POST /api/wardrobe/add (Content-Length=92976, CT=multipart/form-data; boundary=----WebKit)
+[07:44:22] [INFO] [60964] 衣橱上传: 92976B
+[07:44:22] [INFO] [60964] 📸 衣橱添加(binary): 1782258262473 (1 张图片, 91KB)
+[07:44:28] [INFO] [60964] 📐 图片1 检测到 2 件服装: TS(16.8%), PT(3.8%)
+[07:45:14] [INFO] 衣物分析完成: 1782258262473 → 2 件
+[07:45:22] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1912, CT=application/json)
+[07:45:22] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_074522_TS-014.jpg
+[07:45:23] [INFO] 图片处理完成: TS-014 (缩略图 71KB)
+[07:45:23] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-014.json
+[07:45:23] [INFO] 自动推荐风格: TS-014 → ['athleisure_sport', 'clean_fit']
+[07:45:23] [INFO] 已追加到服装档案: TS-014
+[07:45:23] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短裤/Image_20260624_074523_SH-009.jpg
+[07:45:23] [INFO] 图片处理完成: SH-009 (缩略图 19KB)
+[07:45:23] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SH-009.json
+[07:45:23] [INFO] 自动推荐风格: SH-009 → ['athleisure_sport']
+[07:45:23] [INFO] 已追加到服装档案: SH-009
+[07:49:15] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=626, CT=application/json)
+[07:49:15] [INFO] 标签更新: SHOE-001

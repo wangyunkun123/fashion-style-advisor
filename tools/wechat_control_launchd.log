@@ -5668,3 +5668,23 @@ ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_i
 [07:41:59] [INFO] 所有任务已结束（等待 0s）
 [07:41:59] [INFO] Watchdog 已停止
 [07:42:00] [INFO] 👋 服务已关闭
+[07:42:00] [INFO] =======================================================
+[07:42:00] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[07:42:00] [INFO] 📡 服务: http://0.0.0.0:8765
+[07:42:00] [INFO] 💬 面板: http://localhost:8765/
+[07:42:00] [INFO] 🌐 Funnel: 已就绪
+[07:42:00] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:42:00] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[07:42:08] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[07:42:20] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[07:42:20] [INFO] 🔔 新单品徽标已消除: TS-015
+[07:42:40] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[07:42:40] [INFO] 所有任务已结束（等待 0s）
+[07:42:40] [INFO] Watchdog 已停止
+[07:42:40] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/models/segformer/image_processing_segformer.py:102: FutureWarning: The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use `do_reduce_labels` instead.
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/modeling_utils.py:386: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  with safe_open(checkpoint_file, framework="pt") as f:

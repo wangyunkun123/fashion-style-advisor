@@ -239,6 +239,63 @@ def parse_and_save(image_path, output_dir):
     return results
 
 
+def create_clean_cutout(crop_image, mask, feather_radius=3, bg_color=(217, 217, 217)):
+    """使用 SegFormer 分割 mask 抠图去背景，输出透明 PNG + 中性灰底 JPG。
+
+    比 rembg 更精确——SegFormer 专为服装训练，边缘更锐利，且不依赖 CPU 密集型
+    alpha matting。直接使用语义分割 mask 作为 alpha 通道。
+
+    Args:
+        crop_image: PIL Image — 裁剪后的服装区域 (RGB)
+        mask: PIL Image — 二值掩码 (L mode, 255=服装, 0=背景)
+        feather_radius: 边缘羽化半径 (像素)，默认 3
+        bg_color: JPG 中性灰底色 RGB 元组
+
+    Returns:
+        dict: {
+            'cutout_png': PILImage (RGBA),   # 透明背景抠图
+            'cutout_jpg': PILImage (RGB),    # 中性灰底 JPG（给 VLM 看）
+            'cutout_bytes_png': bytes,        # PNG 字节（存 enhanced/）
+            'cutout_bytes_jpg': bytes,        # JPG 字节（给 VLM API）
+        }
+    """
+    import io as _io
+    from PIL import ImageFilter as _PILFilter
+
+    # 确保尺寸一致
+    if mask.size != crop_image.size:
+        mask = mask.resize(crop_image.size, PILImage.NEAREST)
+
+    # 羽化边缘（避免硬边）
+    if feather_radius > 0:
+        mask = mask.filter(_PILFilter.GaussianBlur(radius=feather_radius))
+
+    # 转为 RGBA：mask 作为 alpha 通道
+    crop_rgba = crop_image.copy().convert('RGBA')
+    mask_arr = np.array(mask, dtype=np.float32) / 255.0
+    alpha_arr = (mask_arr * 255).astype(np.uint8)
+    crop_rgba.putalpha(PILImage.fromarray(alpha_arr, mode='L'))
+
+    # 中性灰底 JPG（给 VLM 看——参考 Seedream 抠图管线做法）
+    bg = PILImage.new('RGB', crop_rgba.size, bg_color)
+    bg.paste(crop_rgba, mask=crop_rgba.split()[3])
+    jpg_buf = _io.BytesIO()
+    bg.save(jpg_buf, format='JPEG', quality=90)
+    jpg_buf.seek(0)
+
+    # 透明 PNG 字节
+    png_buf = _io.BytesIO()
+    crop_rgba.save(png_buf, format='PNG', optimize=True)
+    png_buf.seek(0)
+
+    return {
+        'cutout_png': crop_rgba,
+        'cutout_jpg': bg,
+        'cutout_bytes_png': png_buf.read(),
+        'cutout_bytes_jpg': jpg_buf.read(),
+    }
+
+
 def create_overlay_preview(image_path, items):
     """创建可视化预览：原图上叠加分割区域。
 

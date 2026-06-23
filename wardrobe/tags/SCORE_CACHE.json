@@ -17602,8 +17602,686 @@
       "_updated": "2026-06-23 23:55:46"
     }
   },
+  "SHIRT-006": {
+    "american_ivy_league": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "american_workwear": {
+      "score": 38,
+      "raw_score": 33,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "athleisure_sport": {
+      "score": 11,
+      "raw_score": 10,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "british_heritage": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "chinese_heritage": {
+      "score": 15,
+      "raw_score": 13,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "clean_fit": {
+      "score": 11,
+      "raw_score": 10,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "contemporary_gorpcore": {
+      "score": 19,
+      "raw_score": 17,
+      "breakdown": {
+        "soft_constraints": 12,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_amekaji": {
+      "score": 38,
+      "raw_score": 33,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 10,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_city_boy": {
+      "score": 16,
+      "raw_score": 14,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_yama": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_light_mature": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_minimal": {
+      "score": 22,
+      "raw_score": 19,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "resort_vacation": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "retro_90s_hiphop": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scandi_minimalism": {
+      "score": 15,
+      "raw_score": 13,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scene_blokecore": {
+      "score": 11,
+      "raw_score": 10,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "smart_casual": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "streetwear": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782230944.5284863,
+      "_updated": "2026-06-24 07:29:01"
+    }
+  },
+  "TS-013": {
+    "american_ivy_league": {
+      "score": 38,
+      "raw_score": 33,
+      "breakdown": {
+        "soft_constraints": 28,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "american_workwear": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "athleisure_sport": {
+      "score": 11,
+      "raw_score": 10,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "british_heritage": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "chinese_heritage": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "clean_fit": {
+      "score": 23,
+      "raw_score": 20,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "contemporary_gorpcore": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 12,
+        "color_compatibility": 5,
+        "key_item_bonus": 8,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_amekaji": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_city_boy": {
+      "score": 27,
+      "raw_score": 24,
+      "breakdown": {
+        "soft_constraints": 15,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_yama": {
+      "score": 34,
+      "raw_score": 30,
+      "breakdown": {
+        "soft_constraints": 25,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_light_mature": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_minimal": {
+      "score": 31,
+      "raw_score": 27,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 9,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "resort_vacation": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "retro_90s_hiphop": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scandi_minimalism": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scene_blokecore": {
+      "score": 11,
+      "raw_score": 10,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "smart_casual": {
+      "score": 26,
+      "raw_score": 23,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 5,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "streetwear": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782235914.267569,
+      "_updated": "2026-06-24 07:29:01"
+    }
+  },
+  "TS-014": {
+    "american_ivy_league": {
+      "score": 32,
+      "raw_score": 28,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "american_workwear": {
+      "score": 23,
+      "raw_score": 20,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 2,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "athleisure_sport": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "british_heritage": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "chinese_heritage": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "clean_fit": {
+      "score": 14,
+      "raw_score": 12,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "contemporary_gorpcore": {
+      "score": 34,
+      "raw_score": 30,
+      "breakdown": {
+        "soft_constraints": 12,
+        "color_compatibility": 10,
+        "key_item_bonus": 8,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_amekaji": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_city_boy": {
+      "score": 22,
+      "raw_score": 19,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 14,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "japanese_yama": {
+      "score": 28,
+      "raw_score": 25,
+      "breakdown": {
+        "soft_constraints": 18,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_light_mature": {
+      "score": 31,
+      "raw_score": 27,
+      "breakdown": {
+        "soft_constraints": 20,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "korean_minimal": {
+      "score": 24,
+      "raw_score": 21,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 11,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "resort_vacation": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "retro_90s_hiphop": {
+      "score": 23,
+      "raw_score": 20,
+      "breakdown": {
+        "soft_constraints": 10,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scandi_minimalism": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 8,
+        "color_compatibility": 7,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "scene_blokecore": {
+      "score": 17,
+      "raw_score": 15,
+      "breakdown": {
+        "soft_constraints": 5,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "smart_casual": {
+      "score": 35,
+      "raw_score": 31,
+      "breakdown": {
+        "soft_constraints": 21,
+        "color_compatibility": 10,
+        "key_item_bonus": 0,
+        "body_modifier": 0
+      },
+      "passed": true,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    },
+    "streetwear": {
+      "score": 0,
+      "raw_score": 0,
+      "breakdown": {},
+      "passed": false,
+      "_tag_mtime": 1782237205.8311594,
+      "_updated": "2026-06-24 07:29:01"
+    }
+  },
   "_meta": {
-    "last_rebuild": "2026-06-23 23:55:46",
-    "total_entries": 83
+    "last_rebuild": "2026-06-24 07:29:01",
+    "total_entries": 86
   }
 }

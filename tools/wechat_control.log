@@ -1145,3 +1145,34 @@ Conte
 [07:25:44] [INFO] 🌐 Funnel: 已就绪
 [07:25:44] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
 [07:25:44] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:27:26] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[07:27:26] [INFO] 所有任务已结束（等待 0s）
+[07:27:26] [INFO] Watchdog 已停止
+[07:27:27] [INFO] 👋 服务已关闭
+[07:27:27] [INFO] =======================================================
+[07:27:27] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[07:27:27] [INFO] 📡 服务: http://0.0.0.0:8765
+[07:27:27] [INFO] 💬 面板: http://localhost:8765/
+[07:27:27] [INFO] 🌐 Funnel: 已就绪
+[07:27:27] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:27:27] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[07:28:07] [INFO] 📨 POST /api/ratings (Content-Length=321, CT=application/json)
+[07:32:06] [INFO] 📨 POST /api/ratings (Content-Length=321, CT=application/json)
+[07:32:32] [INFO] 📨 POST /api/chat (Content-Length=38, CT=application/json)
+[07:32:32] [INFO] 💬 聊天: generate | 穿搭
+[07:32:32] [INFO] 🚀 管线启动: 穿搭
+[07:32:32] [INFO] 📍 探索度: 安全推荐
+[07:32:33] [INFO] 📍 天气: 33°C 晴
+[07:32:33] [INFO] 📍 场景提取: '穿搭' → occasion=日常
+[07:32:34] [INFO] 📍 📊 预计 ~60-100s · ~3844 tokens
+[07:32:34] [INFO] 📍 🤖 AI 智能选品
+[07:33:00] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[07:33:00] [INFO] 📊 R1 选品评分: 52分 — ⚠️ 评分偏低，建议重新选品
+[07:33:00] [INFO] 📍 ✍️ AI 创作叙事+生图
+[07:33:23] [INFO] ✅ R2 创作完成: seedream_prompt=791字符, tips=2条
+[07:33:23] [INFO] 👤 人物照: 1张（原图）
+[07:33:23] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-24_穿搭
+[07:33:23] [INFO] 📍 🎨 Seedream AI 生图
+[07:33:59] [INFO] 📍 🎨 预压缩生图
+[07:33:59] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
+[07:33:59] [INFO] 📍 📤 推送 + 刷新

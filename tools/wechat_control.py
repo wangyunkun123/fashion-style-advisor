@@ -5976,19 +5976,22 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         return ''
 
     def _send_body(self, code, body, content_type, extra_headers=None):
-        """发送响应（自动 gzip 压缩）"""
+        """发送响应（自动 gzip 压缩）。客户端断开时静默忽略。"""
         compressed, is_gzip = self._maybe_gzip(body)
-        self.send_response(code)
-        self.send_header('Content-Type', content_type)
-        self.send_header('Content-Length', str(len(compressed)))
-        if is_gzip:
-            self.send_header('Content-Encoding', 'gzip')
-            self.send_header('Vary', 'Accept-Encoding')
-        if extra_headers:
-            for k, v in extra_headers.items():
-                self.send_header(k, v)
-        self.end_headers()
-        self.wfile.write(compressed)
+        try:
+            self.send_response(code)
+            self.send_header('Content-Type', content_type)
+            self.send_header('Content-Length', str(len(compressed)))
+            if is_gzip:
+                self.send_header('Content-Encoding', 'gzip')
+                self.send_header('Vary', 'Accept-Encoding')
+            if extra_headers:
+                for k, v in extra_headers.items():
+                    self.send_header(k, v)
+            self.end_headers()
+            self.wfile.write(compressed)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass  # 客户端已断开（Funnel 超时/网络切换），静默忽略
 
     def _json_resp(self, code, data):
         body = json.dumps(data, ensure_ascii=False).encode('utf-8')

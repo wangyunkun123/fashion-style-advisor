@@ -5549,9 +5549,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             length = int(self.headers.get('Content-Length', 0))
             # 设置 socket 超时，防止手机慢速网络导致 rfile.read() 无限阻塞
             try:
-                self.rfile._sock.settimeout(30)
-            except Exception:
-                pass
+                self.connection.settimeout(30)
+            except Exception as e:
+                log(f'⚠️ 设置超时失败: {e}')
             try:
                 body = self.rfile.read(length)
             except Exception as e:

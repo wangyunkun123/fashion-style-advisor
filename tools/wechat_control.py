@@ -2085,8 +2085,9 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         except Exception as _pe:
             log(f'{_rid} ⚠️ 布料解析异常: {_pe}，回退到整图分析')
 
-        # 如果解析成功，用裁剪图替换原始图；否则用原始图
-        if _parse_success and all_crops:
+        # 如果解析成功且有有效品类检测，用裁剪图替换原始图；否则用原始图
+        _has_valid_detections = _parse_success and any(c[2] != '??' for c in all_crops)
+        if _has_valid_detections:
             # 用裁剪图构建新 temp_paths
             crop_temp_paths = []
             crop_source_map = {}  # crop_index → original temp_path index

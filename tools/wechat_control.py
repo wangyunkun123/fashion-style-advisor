@@ -5549,14 +5549,26 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             length = int(self.headers.get('Content-Length', 0))
             # 设置 socket 超时（手机通过 Funnel 上传可能很慢，特别是夜间网络）
             try:
-                self.connection.settimeout(60)
+                self.connection.settimeout(15)  # 每次 recv 15s 超时
             except Exception as e:
                 log(f'⚠️ 设置超时失败: {e}')
+            # 分块读取，记录传输进度
+            body = b''
+            deadline = time.time() + 90  # 总超时 90s
             try:
-                body = self.rfile.read(length)
+                while len(body) < length:
+                    remain = length - len(body)
+                    chunk = self.rfile.read(min(remain, 8192))
+                    if not chunk:
+                        break  # EOF
+                    body += chunk
+                    if time.time() > deadline:
+                        log(f'⚠️ 上传总超时: 已收 {len(body)}B / {length}B')
+                        break
             except Exception as e:
-                log(f'⚠️ 上传读取超时/失败: {e}')
-                self._json_resp(400, {"error": "上传数据接收超时，请检查网络后重试"}); return
+                log(f'⚠️ 上传读取中断: {e} (已收 {len(body)}B / {length}B)')
+            if len(body) < length:
+                self._json_resp(400, {"error": f"上传数据不完整 ({len(body)}/{length}B)，请重试"}); return
             content_type = self.headers.get('Content-Type', '')
             log(f'📨 衣橱上传: {len(body)}B, CT={content_type[:60]}')
 

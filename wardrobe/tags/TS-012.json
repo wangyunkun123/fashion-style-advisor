@@ -1,0 +1,50 @@
+{
+  "clothing_id": "TS-012",
+  "category": "短袖上衣",
+  "category_code": "TS",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "白色",
+    "saturation": "无彩色",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "聚酯纤维",
+    "texture": "平纹针织",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Roland Garros",
+    "collection": "",
+    "confidence": "推测"
+  },
+  "style_modifiers": [
+    "运动休闲",
+    "简约"
+  ],
+  "meta": {
+    "claude_fit_comment": "标准合身版型，适配日常休闲与轻运动场景"
+  },
+  "occasions": [
+    "运动",
+    "日常休闲"
+  ]
+}

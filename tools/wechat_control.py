@@ -15,6 +15,7 @@ import io
 import json
 import os
 import re
+import signal
 import sys
 import shutil
 import subprocess
@@ -42,6 +43,7 @@ LOG_FILE = os.path.join(PROJECT_DIR, 'tools', 'wechat_control.log')
 _pipeline_running = False
 _pipeline_lock = threading.Lock()
 _proto_rebuild_lock = threading.Lock()  # 防止并发的 build_prototype 进程写入同一文件
+_server_start_time = time.time()  # 进程启动时间（用于 /health 上报 uptime）
 _pipeline_status = {
     'last_run': None,      # ISO timestamp
     'last_error': None,    # 错误信息或 None
@@ -106,6 +108,43 @@ from tools.image_cache import image_cache_get, image_cache_put, resize_image_byt
 from tools.ai_api import call_doubao_chat, extract_json, resize_image_for_api
 from tools.photo_utils import get_person_photos, remove_person_background, select_person_photos_for_prompt
 from tools.history import load_history, save_history, HISTORY_FILE
+
+# ── 全局异常钩子：守护线程崩溃不静默消失 ──
+_original_excepthook = sys.excepthook
+
+def _global_excepthook(exc_type, exc_value, exc_tb):
+    """捕获守护线程中的未处理异常，写日志 + stderr"""
+    import traceback as _tb_module
+    err = ''.join(_tb_module.format_exception(exc_type, exc_value, exc_tb))
+    try:
+        log(f"未捕获异常: {err}", "CRITICAL")
+    except Exception:
+        pass
+    sys.stderr.write(f"[CRASH] {time.strftime('%Y-%m-%d %H:%M:%S')} {err}\n")
+    sys.stderr.flush()
+    _original_excepthook(exc_type, exc_value, exc_tb)
+
+sys.excepthook = _global_excepthook
+
+# ── 后台线程安全装饰器 ──
+def _safe_daemon(name):
+    """装饰器：包裹守护线程目标，自动捕获异常并标记任务为 error"""
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            try:
+                return fn(*args, **kwargs)
+            except Exception as e:
+                import traceback as _tb_module
+                err = _tb_module.format_exc()
+                log(f"后台线程 [{name}] 崩溃: {err}", "CRITICAL")
+                # 尝试标记关联任务为 error（首个参数通常是 task_id）
+                if args and isinstance(args[0], str) and args[0].isdigit():
+                    try:
+                        tasks.update(args[0], status='error', message=f'后台任务崩溃: {str(e)[:100]}')
+                    except Exception:
+                        pass
+        return wrapper
+    return decorator
 
 def _resolve_user_from_request(handler):
     """从请求中解析用户 ID。返回 (user_id, need_onboarding)。
@@ -324,11 +363,23 @@ def _find_report_style_image_for_period(style_id, ratings):
 
 # ── 任务管理器 ────────────────────────────────────────
 class TaskManager:
-    """线程安全的内存任务状态追踪"""
+    """线程安全的任务状态追踪（内存 + 磁盘写穿，重启不丢）"""
     def __init__(self):
         self._tasks = {}
         self._lock = threading.Lock()
         self._ttl = 3600  # 1小时后过期
+        self._disk_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
+        os.makedirs(self._disk_dir, exist_ok=True)
+
+    def _write_disk(self, tid):
+        """写穿磁盘：内存任务 → outfits/_tasks/{tid}.json"""
+        try:
+            t = self._tasks.get(tid)
+            if t:
+                with open(os.path.join(self._disk_dir, f'{tid}.json'), 'w') as tf:
+                    json.dump(t, tf, ensure_ascii=False, indent=2)
+        except Exception:
+            pass  # 磁盘写入失败不影响内存运行
 
     def create(self):
         tid = str(int(time.time() * 1000))
@@ -343,17 +394,30 @@ class TaskManager:
                 'log': '',
                 'created_at': time.time()
             }
+        self._write_disk(tid)
         return tid
 
     def update(self, tid, **kwargs):
         with self._lock:
             if tid in self._tasks:
                 self._tasks[tid].update(kwargs)
+        self._write_disk(tid)
 
-    def get(self, tid):
+    def get(self, tid, allow_disk_fallback=True):
         with self._lock:
             task = self._tasks.get(tid)
-            return dict(task) if task else None
+            if task:
+                return dict(task)
+        # 磁盘回退：服务重启后内存丢失，从 outfits/_tasks/ 恢复
+        if allow_disk_fallback:
+            disk_path = os.path.join(self._disk_dir, f'{tid}.json')
+            if os.path.exists(disk_path):
+                try:
+                    with open(disk_path, 'r') as tf:
+                        return json.load(tf)
+                except Exception:
+                    pass
+        return None
 
     def cleanup(self):
         now = time.time()
@@ -362,22 +426,22 @@ class TaskManager:
                        if now - t['created_at'] > self._ttl]
             for tid in expired:
                 del self._tasks[tid]
+        # 同步清理过期磁盘文件
+        try:
+            if os.path.isdir(self._disk_dir):
+                for fn in os.listdir(self._disk_dir):
+                    if not fn.endswith('.json'):
+                        continue
+                    fpath = os.path.join(self._disk_dir, fn)
+                    if now - os.path.getmtime(fpath) > self._ttl:
+                        try:
+                            os.remove(fpath)
+                        except OSError:
+                            pass
+        except Exception:
+            pass
 
 tasks = TaskManager()
-
-def _sync_task_disk(task_id, status, message='', image_url='', log_text=''):
-    """同步管线任务状态到磁盘，服务器重启后可回退"""
-    try:
-        _tasks_disk_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
-        os.makedirs(_tasks_disk_dir, exist_ok=True)
-        with open(os.path.join(_tasks_disk_dir, f'{task_id}.json'), 'w') as _tf:
-            json.dump({
-                'id': task_id, 'status': status, 'message': message,
-                'image_url': image_url or '', 'log': log_text or '',
-                'updated_at': time.strftime('%Y-%m-%dT%H:%M:%S')
-            }, _tf, ensure_ascii=False)
-    except Exception:
-        pass
 
 # ── 历史记录 ──────────────────────────────────────────
 # ── 命令执行 ──────────────────────────────────────────
@@ -1750,13 +1814,19 @@ def _color_name_to_hex(name):
     return '#999'
 
 
-def _run_preview_outfit(task_id, new_item, selected_ids):
+@_safe_daemon('preview_outfit')
+def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
     """后台线程：以新衣为核心，AI 选品 + Seedream 生图预览"""
     try:
+        # 设置线程本地用户上下文
+        if uid and uid != 'default':
+            from tools.common import set_thread_user as _set_thread_user
+            _set_thread_user(uid)
+
         tasks.update(task_id, status='running', message='正在AI选品搭配...')
 
         # ── 1. 加载衣橱标签 ──
-        tags_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+        tags_dir = resolve_tags_dir(uid)
         all_tags = {}
         for fn in sorted(os.listdir(tags_dir)):
             if fn == 'SCORE_CACHE.json' or not fn.endswith('.json'):
@@ -2027,6 +2097,7 @@ def _run_preview_outfit(task_id, new_item, selected_ids):
         tasks.update(task_id, status='error', message=f'预览失败: {str(e)[:80]}')
 
 
+@_safe_daemon('add_analysis')
 def _run_add_analysis(task_id, image_b64_list, uid=None):
     """后台线程：调用豆包视觉 API 分析衣物图片（多用户感知）"""
     try:
@@ -2406,6 +2477,7 @@ def extract_mandatory_items(style_hint, min_confidence=0.40):
     return deduped
 
 
+@_safe_daemon('pipeline')
 def run_pipeline(style_hint, task_id=None, user_id=None):
     """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
     global _pipeline_running, _pipeline_status
@@ -2435,7 +2507,6 @@ def run_pipeline(style_hint, task_id=None, user_id=None):
         _sys.stderr.flush()
         if task_id:
             tasks.update(task_id, status='failed', message=f'管线失败: {_e}', log=_err[:500])
-            _sync_task_disk(task_id, 'failed', f'管线失败: {_e}', '', _err[:500])
     finally:
         with _pipeline_lock:
             _pipeline_running = False
@@ -2618,20 +2689,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     t_start = time.time()
     log(f"🚀 管线启动: {style_hint}")
 
-    # ── 磁盘持久化任务状态（服务器重启后可回退）──
-    if task_id:
-        try:
-            _tasks_disk_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
-            os.makedirs(_tasks_disk_dir, exist_ok=True)
-            with open(os.path.join(_tasks_disk_dir, f'{task_id}.json'), 'w') as _tf:
-                json.dump({
-                    'id': task_id, 'status': 'running',
-                    'message': f'启动: {style_hint}',
-                    'image_url': '', 'log': '', 'started_at': time.strftime('%Y-%m-%dT%H:%M:%S')
-                }, _tf)
-        except Exception:
-            pass
-
+    # ── Style hint 预处理 ──
     # ── 探测探索度 ──
     from tools.unified_pipeline import (
         determine_explore_level, determine_daily_mode, _record_daily_mode,
@@ -2939,8 +2997,6 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             tasks.update(task_id, status=disk_status, message=status_msg,
                          image_path=gen_img, image_url=local_img_url,
                          log='\n'.join(log_lines))
-            # 同步磁盘状态（服务器重启后可回退）
-            _sync_task_disk(task_id, disk_status, status_msg, local_img_url, '\n'.join(log_lines))
         # step_done 在 tasks.update 之前调用会覆盖 status
         # 这里手动补 done 标记
         if log_lines:
@@ -4022,42 +4078,37 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # 任务轮询
         if parsed.path.startswith('/api/task/'):
             tid = parsed.path.split('/')[-1]
-            task = tasks.get(tid)
+            task = tasks.get(tid)  # 内置磁盘回退（outfits/_tasks/）
             if task is None:
-                # 🔧 磁盘回退 1：管线任务（服务器重启后内存丢失）
-                pipeline_task_path = os.path.join(PROJECT_DIR, 'outfits', '_tasks', f'{tid}.json')
-                if os.path.exists(pipeline_task_path):
-                    try:
-                        with open(pipeline_task_path, 'r') as _tf:
-                            _disk_task = json.load(_tf)
-                        self._json_resp(200, {
-                            'id': tid,
-                            'status': _disk_task.get('status', 'unknown'),
-                            'message': _disk_task.get('message', '任务已结束（服务器重启）'),
-                            'result': _disk_task.get('result', ''),
-                            'image_path': '',
-                            'image_url': _disk_task.get('image_url', ''),
-                            'log': _disk_task.get('log', ''),
-                        })
-                        return
-                    except Exception:
-                        pass
-                # 🔧 磁盘回退 2：分析任务
-                analysis_path = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming', f'analysis_{tid}.json')
-                if os.path.exists(analysis_path):
-                    with open(analysis_path, 'r') as f:
-                        analysis = json.load(f)
-                    self._json_resp(200, {
-                        'id': tid,
-                        'status': 'done',
-                        'message': f'识别完成，共 {len(analysis.get("items", []))} 件单品',
-                        'result': json.dumps(analysis, ensure_ascii=False),
-                        'image_path': '',
-                        'image_url': '',
-                        'log': '',
-                    })
-                    return
-                self._json_resp(404, {"error": "task not found"})
+                # 🔧 磁盘回退：分析任务 — 优先查用户目录，再 fallback 主项目
+                _uid = self.user_id if self.user_id != 'default' else None
+                found = False
+                for _candidate_dir in [
+                    os.path.join(resolve_user_dir(_uid), 'wardrobe', '_incoming') if _uid else None,
+                    os.path.join(PROJECT_DIR, 'wardrobe', '_incoming'),
+                ]:
+                    if not _candidate_dir:
+                        continue
+                    analysis_path = os.path.join(_candidate_dir, f'analysis_{tid}.json')
+                    if os.path.exists(analysis_path):
+                        try:
+                            with open(analysis_path, 'r') as f:
+                                analysis = json.load(f)
+                            self._json_resp(200, {
+                                'id': tid,
+                                'status': 'done',
+                                'message': f'识别完成，共 {len(analysis.get("items", []))} 件单品',
+                                'result': json.dumps(analysis, ensure_ascii=False),
+                                'image_path': '',
+                                'image_url': '',
+                                'log': '',
+                            })
+                            found = True
+                            break
+                        except Exception:
+                            pass
+                if not found:
+                    self._json_resp(404, {"error": "task not found"})
                 return
             tasks.cleanup()
             # 返回安全字段
@@ -4866,9 +4917,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         # 健康检查（含今日推荐状态）
         if parsed.path == '/health':
+            import resource as _resource
             today_str = time.strftime('%Y-%m-%d')
             today_ok = False
-            outfits_base = os.path.join(PROJECT_DIR, 'outfits')
+            # 用户感知的 outfits 路径
+            _uid = self.user_id if self.user_id != 'default' else None
+            outfits_base = resolve_outfits_dir(_uid)
             if os.path.isdir(outfits_base):
                 for d in sorted(os.listdir(outfits_base), reverse=True):
                     if d.startswith(today_str):
@@ -4876,10 +4930,21 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         if os.path.exists(md) and os.path.getsize(md) > 50:
                             today_ok = True
                         break
+            # 系统资源
+            mem_bytes = _resource.getrusage(_resource.RUSAGE_SELF).ru_maxrss
+            mem_mb = round(mem_bytes / (1024 * 1024), 1)
+            disk_stat = os.statvfs(PROJECT_DIR)
+            disk_free_gb = round((disk_stat.f_bavail * disk_stat.f_frsize) / (1024**3), 1)
+            active_tasks = sum(1 for t in tasks._tasks.values() if t.get('status') in ('queued', 'running'))
+            uptime_seconds = int(time.time() - _server_start_time)
             self._json_resp(200, {
                 "status": "ok",
                 "service": "Fashion 穿搭助手",
                 "time": time.strftime("%H:%M:%S"),
+                "uptime_seconds": uptime_seconds,
+                "memory_mb": mem_mb,
+                "disk_free_gb": disk_free_gb,
+                "active_tasks": active_tasks,
                 "today_ok": today_ok,
                 "running": _pipeline_running,
                 "latest_date": today_str if today_ok else (_pipeline_status.get('last_run','')[:10] if _pipeline_status.get('last_run') else None)
@@ -5738,10 +5803,14 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not new_items:
                 self._json_resp(400, {"error": "请提供新衣分析结果"}); return
 
-            # 加载临时分析结果（补充 _temp_image_path）
+            # 加载临时分析结果（补充 _temp_image_path）— 优先用户目录
             if task_id:
-                incoming_dir = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming')
-                analysis_path = os.path.join(incoming_dir, f'analysis_{task_id}.json')
+                _uid = self.user_id if self.user_id != 'default' else None
+                user_incoming = os.path.join(resolve_user_dir(_uid), 'wardrobe', '_incoming')
+                main_incoming = os.path.join(PROJECT_DIR, 'wardrobe', '_incoming')
+                analysis_path = os.path.join(user_incoming, f'analysis_{task_id}.json')
+                if not os.path.exists(analysis_path):
+                    analysis_path = os.path.join(main_incoming, f'analysis_{task_id}.json')
                 if os.path.exists(analysis_path):
                     with open(analysis_path, 'r') as f:
                         saved = json.load(f)
@@ -5778,7 +5847,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 self._json_resp(400, {"error": "请提供新衣信息"}); return
 
             tid = tasks.create()
-            threading.Thread(target=_run_preview_outfit, args=(tid, new_item, selected_ids), daemon=True).start()
+            _uid = self.user_id if self.user_id != 'default' else None
+            threading.Thread(target=_run_preview_outfit, args=(tid, new_item, selected_ids, _uid), daemon=True).start()
             log(f"🪄 预览穿搭: {tid} (新衣={new_item.get('suggested_id','?')}, 匹配={selected_ids})")
             self._json_resp(200, {"task_id": tid, "message": "正在生成穿搭预览..."})
 
@@ -6141,9 +6211,52 @@ def main():
     log(f"📡 服务: http://0.0.0.0:{port}")
     log(f"💬 面板: http://localhost:{port}/")
 
+    # ── 启动恢复：扫描磁盘上的中断任务（Phase 4）──
+    _tasks_dir = os.path.join(PROJECT_DIR, 'outfits', '_tasks')
+    if os.path.isdir(_tasks_dir):
+        recovered = 0
+        for fn in os.listdir(_tasks_dir):
+            if not fn.endswith('.json'):
+                continue
+            fpath = os.path.join(_tasks_dir, fn)
+            try:
+                with open(fpath, 'r') as tf:
+                    t = json.load(tf)
+                if t.get('status', '') in ('queued', 'running', ''):
+                    t['status'] = 'interrupted'
+                    t['message'] = '服务已重启，任务中断'
+                    with open(fpath, 'w') as tf:
+                        json.dump(t, tf, ensure_ascii=False, indent=2)
+                    recovered += 1
+            except Exception:
+                pass
+        if recovered:
+            log(f"♻️ 恢复 {recovered} 个中断任务（标记为 interrupted）")
+
+    # ── 信号处理：优雅关闭（Phase 3a）──
+    _shutdown_flag = threading.Event()
+
+    def _handle_signal(signum, frame):
+        sig_name = {signal.SIGTERM: 'SIGTERM', signal.SIGHUP: 'SIGHUP', signal.SIGINT: 'SIGINT'}.get(signum, str(signum))
+        log(f"收到信号 {sig_name}，优雅关闭中...")
+        # 将进行中的任务落盘标记为 interrupted
+        for tid, tsk in list(tasks._tasks.items()):
+            if tsk.get('status') in ('queued', 'running'):
+                tasks.update(tid, status='interrupted', message=f'服务重启中 (signal {sig_name})')
+        _shutdown_flag.set()
+        server.shutdown()
+
+    signal.signal(signal.SIGTERM, _handle_signal)
+    signal.signal(signal.SIGHUP, _handle_signal)
+    signal.signal(signal.SIGINT, _handle_signal)
+
+    log("🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)")
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:
+        pass  # SIGINT handler 已处理
+    finally:
         log("👋 服务已关闭")
         server.server_close()
 

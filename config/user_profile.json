@@ -1,25 +1,25 @@
 {
-  "use_my_image": true,
-  "gender": "男",
+  "use_my_image": false,
+  "gender": "女",
   "photos": {
     "full_body_front": "profile/photos/user_full_front.jpg",
     "face_closeup": "profile/photos/user_face.jpg",
     "full_body_side": "profile/photos/user_side.jpg"
   },
   "body": {
-    "height_cm": "179",
-    "weight_kg": "68",
+    "height_cm": "173",
+    "weight_kg": "55",
     "age": "31",
-    "body_type": "标准",
-    "skin_tone": "偏白",
+    "body_type": "沙漏型",
+    "skin_tone": "小麦",
     "shoulder_type": "标准",
-    "face_shape": "椭圆脸"
+    "face_shape": "瓜子脸"
   },
   "lifestyle": {
     "occupation": "",
-    "style_preference": "",
-    "pain_points": "不够时尚"
+    "style_preference": "WF-01, WF-05, WF-06, WF-08, WF-36",
+    "pain_points": ""
   },
-  "body_secrets": "有小肚子",
-  "updated_at": "2026-06-18 17:34:02"
+  "body_secrets": "",
+  "updated_at": "2026-06-23 22:36:51"
 }

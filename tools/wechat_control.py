@@ -3752,11 +3752,6 @@ class WebhookHandler(BaseHTTPRequestHandler):
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(self.path)
 
-        # 追踪手机端连接（仅记录关键路径，避免日志泛滥）
-        if parsed.path in ('/', '/api/task/', '/api/health') or parsed.path.startswith('/api/task/'):
-            ua = self.headers.get('User-Agent', '?')[:60]
-            log(f'📱 GET {parsed.path} (UA={ua})')
-
         # ── 多用户路由 ──
         user_id, need_onboarding = _resolve_user_from_request(self)
         self.user_id = user_id
@@ -5584,8 +5579,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 # 解析 multipart parts
                 delimiter = ('--' + boundary).encode()
                 parts = body.split(delimiter)[1:-1]  # 跳过 preamble 和 epilogue
-                log(f'🔍 multipart: boundary={boundary[:40]}..., body_size={len(body)}, parts={len(parts)}')
-                for idx, part in enumerate(parts):
+                for part in parts:
                     hdr_end = part.find(b'\r\n\r\n')
                     if hdr_end == -1:
                         continue
@@ -5595,15 +5589,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         file_data = file_data[:-2]
                     # 只处理有 filename 的 part（跳过普通表单字段）
                     if 'filename="' not in headers_raw and "filename='" not in headers_raw:
-                        log(f'🔍 part[{idx}]: 非文件字段, headers={headers_raw[:80]}')
                         continue
                     # 跳过空文件
                     if len(file_data) < 100:
-                        log(f'🔍 part[{idx}]: 文件过小 ({len(file_data)}B), headers={headers_raw[:80]}')
                         continue
                     import base64 as _b64
                     image_b64_list.append(_b64.b64encode(file_data).decode('utf-8'))
-                    log(f'🔍 part[{idx}]: ✓ 文件 {len(file_data)}B, headers={headers_raw[:80]}')
 
                 if not image_b64_list:
                     self._json_resp(400, {"error": "未接收到有效图片文件"}); return

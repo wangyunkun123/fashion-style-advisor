@@ -1104,3 +1104,14 @@ Conte
 [01:53:25] [INFO] 图片处理完成: TS-014 (缩略图 42KB)
 [01:53:25] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-014.json
 [01:53:25] [INFO] 已追加到服装档案: TS-014
+[01:59:48] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:59:48] [INFO] Watchdog 已停止
+[01:59:48] [INFO] 所有任务已结束（等待 0s）
+[01:59:49] [INFO] 👋 服务已关闭
+[01:59:49] [INFO] =======================================================
+[01:59:49] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:59:49] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:59:49] [INFO] 💬 面板: http://localhost:8765/
+[01:59:49] [INFO] 🌐 Funnel: 已就绪
+[01:59:49] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:59:49] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)

@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_urahara",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（品牌Lookbook/街拍/杂志 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：《TUNE》《FRUiTS》等日本街头时尚杂志",
+      "images": [
+        {
+          "url": "https://i-d.co/article/japanese-mens-street-style-mag-tune-online/",
+          "caption": "TUNE杂志全刊在线 — 日本男性街头时尚圣经",
+          "source": "i-D Magazine"
+        },
+        {
+          "url": "https://justalittlejapanese.com/post-315/",
+          "caption": "Ura-hara kei 裏原系 — 风格定义与穿搭要素详解",
+          "source": "Just a Little Japanese"
+        },
+        {
+          "url": "https://fuckingyoung.es/edwin-fall-winter-2025-lookbook/",
+          "caption": "EDWIN 2025秋冬 Lookbook — 「UraHara」90年代东京復刻",
+          "source": "Fucking Young!"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "Undercover/BAPE 等里原宿品牌秀场/展示会",
+      "images": [
+        {
+          "url": "https://www.operacity.jp/ag/exh181/e/exh.php",
+          "caption": "LABYRINTH OF UNDERCOVER — 东京歌剧城 Undercover 大展",
+          "source": "Tokyo Opera City Art Gallery"
+        },
+        {
+          "url": "https://en.jp.bape.com/blogs/news/mr-24fw-lookbook",
+          "caption": "Mr. BATHING APE 2024秋冬 Lookbook — 成熟Ape绅士线",
+          "source": "BAPE Official"
+        },
+        {
+          "url": "https://hypebeast.com/2026/6/new-arrivals-from-hbx-neighborhood-2",
+          "caption": "NEIGHBORHOOD 2026春夏新品 — 机车/军事里原宿基因",
+          "source": "Hypebeast"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "里原宿文化推动者与潮流ICON",
+      "images": [
+        {
+          "url": "https://www.discogs.com/digs/music/japan-urahara-streetwear",
+          "caption": "里原宿与黑胶文化 — 藤原浩/Nigo 等潮流教父的音乐时尚",
+          "source": "Discogs"
+        },
+        {
+          "url": "https://clarks-frca.onelink-translations.com/en-it/originals/harajuku-collection",
+          "caption": "Clarks Originals Harajuku Collection — 里原宿经典鞋款致敬",
+          "source": "Clarks"
+        },
+        {
+          "url": "https://www.dailymail.co.uk/wires/ap/article-14321637/Junya-Watanabe-puts-twist-classic-Americana-Paris-Fashion-Week-menswear-show.html",
+          "caption": "Junya Watanabe 巴黎男装周 — 里原宿出身设计师的国际秀场",
+          "source": "Daily Mail / AP"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "原宿 Cat Street / 里原宿区域真实街拍造型",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/tag/harajuku-guys/",
+          "caption": "Harajuku Guys — 原宿男生街拍（含里原宿风格）",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
+          "caption": "Tokyo Street Snaps — 东京街拍全档案",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://ar.japantravel.com/tokyo/urahara/29228",
+          "caption": "Urahara 街区指南 — 里原宿猫街实地探索 + 街拍",
+          "source": "Japan Travel"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram/Pinterest 里原宿穿搭灵感",
+      "images": [
+        {
+          "url": "https://hypebeast.com/2024/10/wasted-youth-fw24-collection-lookbook-info",
+          "caption": "Wasted Youth FW24 Lookbook — Verdy 里原宿新生代品牌",
+          "source": "Hypebeast"
+        },
+        {
+          "url": "https://edwin-europe.com/it-en/blog/post/autumn-winter-2025-lookbook",
+          "caption": "EDWIN 2025秋冬 Lookbook — UraHara 90s 復刻系列",
+          "source": "EDWIN Europe"
+        },
+        {
+          "url": "https://tokyotreat.com/blog/japanese-streetwear-an-awesome-fashion-trend",
+          "caption": "Japanese Streetwear 全解析 — 从里原宿到现代街头潮流",
+          "source": "TokyoTreat"
+        }
+      ]
+    }
+  }
+}

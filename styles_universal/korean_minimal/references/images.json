@@ -1,0 +1,108 @@
+{
+  "style_id": "korean_minimal",
+  "style_name": "韩系极简",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://kpoppie.com/star-in-sharp-focus-cha-eunwoo-for-esquire-korea-september-2025/",
+          "caption": "Cha Eunwoo Esquire Korea 2025年9月刊— 黑白高对比极简肖像，Saint Laurent 锋利剪裁，明暗对照法光影",
+          "source": "Esquire Korea / Kpoppie"
+        },
+        {
+          "url": "https://kpoppie.com/cortis-sets-a-sculptural-mood-in-elle-korea-super-elle-vol-6-november-2025-redefining-minimalist-power-through-modern-allure/",
+          "caption": "CORTIS Super ELLE Vol.6 2025年11月— Prada/Bottega Veneta/Loewe 建筑感剪裁，单色极简美学",
+          "source": "ELLE Korea / Kpoppie"
+        },
+        {
+          "url": "https://kpoppie.com/bae-jinyoungs-silent-thunder-inside-rolling-stone-koreas-issue-no-16-pictorial-dreamscape/",
+          "caption": "Bae Jinyoung Rolling Stone Korea No.16 — 五大极简主题：精准单色/质感叙事/未来浪漫/街头撞秀场/新古典",
+          "source": "Rolling Stone Korea / Kpoppie"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.hermes.cn/cn/en/content/339075-2025-hermes-boardwalk/",
+          "caption": "Hermès 2025夏季男装首尔大秀— 色块衬衫、丁香紫夹克、花卉牛仔轰炸机，极简奢华木板道主题",
+          "source": "Hermès Official"
+        },
+        {
+          "url": "https://www.gettyimages.hk/editorial-images/entertainment/event/runway-seoul-fashion-week-f-w-2025/776279215",
+          "caption": "Seoul Fashion Week F/W 2025 秀场— 119张高清 editorial 图，含 HANNAH SHIN 等品牌极简剪裁",
+          "source": "Getty Images"
+        },
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026",
+          "caption": "Vogue: Seoul Fashion Week Spring 2026 最佳街拍— 帽子/格子/丹宁，韩式极简街拍造型合集",
+          "source": "Vogue"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://vogue.sg/calvin-klein-cha-eun-woo/",
+          "caption": "Cha Eunwoo × Calvin Klein 2024秋冬— 白色衬衫、靛蓝牛仔、黑色风衣，90s极简主义回归",
+          "source": "Vogue Singapore"
+        },
+        {
+          "url": "https://www.mens-folio.com/style/cha-eun-woos-spring-date-with-calvin-klein/",
+          "caption": "Cha Eunwoo Calvin Klein 2025春季— nappa皮夹克、修身西装、90s直筒牛仔裤，简约之美",
+          "source": "Men's Folio"
+        },
+        {
+          "url": "https://wwd.com/pop-culture/new-fashion-releases/cha-eun-woo-calvin-klein-spring-2025-campaign-1237041531/",
+          "caption": "Cha Eunwoo Calvin Klein 2025春季广告大片— 由 Dai Yamashiro 掌镜，极简线条+肢体克制",
+          "source": "WWD"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/seouls-best-street-style-photos-from-the-spring-2025-shows",
+          "caption": "Vogue: Seoul Spring 2025 最佳街拍— 韩男极简街拍：中性色系大衣、宽腿裤、clean sneakers",
+          "source": "Vogue"
+        },
+        {
+          "url": "https://sokoglam.com/blogs/theklog/seoul-fashion-week-men-style",
+          "caption": "Seoul Fashion Week 男模街拍灵感— 丹宁外套+花卉衬衫、透明眼镜、极简层搭",
+          "source": "Soko Glam / The Klog"
+        },
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-from-seoul-fashion-week-spring-2026",
+          "caption": "Vogue: Seoul Spring 2026 街拍— 帽子+格纹+丹宁，极简中性色层搭是主线",
+          "source": "Vogue"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/",
+          "caption": "Modern Gentleman Magazine: 42套韩系休闲穿搭— 燕麦色落肩针织+奶油白罗纹宽腿裤+乐福鞋，极简公式",
+          "source": "Modern Gentleman Magazine"
+        },
+        {
+          "url": "https://gangnamusa.com/korean-street-style-outfit-combos-that-work/",
+          "caption": "Gangnam USA: 韩式街拍经典组合— 单色极简、柔软男孩层搭、结构化休闲，首尔各区风格地图",
+          "source": "Gangnam USA"
+        },
+        {
+          "url": "https://timesofindia.indiatimes.com/life-style/fashion/celeb-style/korean-star-han-ji-mins-understated-luxury-is-a-guide-to-timeless-minimalist-style/articleshowprint/123545910.cms",
+          "caption": "Times of India: 韩星 Han Ji-min 低调奢华极简穿搭指南— timeless neutral palette + 好质感面料",
+          "source": "Times of India"
+        }
+      ]
+    }
+  }
+}

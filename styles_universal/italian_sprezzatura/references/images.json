@@ -1,0 +1,53 @@
+{
+  "style_id": "italian_sprezzatura",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "Sprezzatura 意式非刻意优雅：看似漫不经心实则精心考究的意大利穿搭哲学，关键词 - 解构西装、柔软衣领、松系领带、乐福鞋",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/brioni",
+          "caption": "Brioni Fall 2026 Menswear — 罗马式 Sprezzatura 非刻意优雅，长毛羊皮 Vagabond 外套与手工缝制马毛西装",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://designandculturebyed.com/2025/01/19/sprezzatura-brioni-aw25/",
+          "caption": "Brioni AW25 型录：赭石色与酒红色调，羊绒大衣与睡袍式宽松西装",
+          "source": "Design & Culture by Ed",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/brioni",
+          "caption": "Brioni Fall 2026 — 「真正的优雅与罗马式的 Sprezzatura、不完美相关」",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2022-menswear/brunello-cucinelli",
+          "caption": "Brunello Cucinelli Spring 2022 — 回归古典主义与 Sprezzatura 传说",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.gq.com.au/style/trends/how-to-dress-like-a-stylish-italian-according-to-stylish-italians/image-gallery/5c22ae5aeb7785c5b410350fb1331b77",
+          "caption": "GQ Australia — 意大利风格男士穿搭指南，Gianni Agnelli 式非刻意优雅",
+          "source": "GQ Australia",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

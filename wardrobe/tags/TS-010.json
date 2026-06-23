@@ -1,0 +1,51 @@
+{
+  "clothing_id": "TS-010",
+  "category": "短袖上衣",
+  "category_code": "TS",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "米白",
+    "saturation": "低饱和",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "条纹",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "平纹针织",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "HLA",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "横向条纹略增宽视感"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "横条纹设计在视觉上略微增加身形宽度,米白底色显白,合身剪裁对小肚子无特殊遮盖",
+    "_statement_score": 0.2
+  }
+}

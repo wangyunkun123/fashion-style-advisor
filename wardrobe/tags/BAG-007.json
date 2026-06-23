@@ -1,0 +1,60 @@
+{
+  "clothing_id": "BAG-007",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "冷色",
+    "hue_name": "墨绿色",
+    "saturation": "中饱和",
+    "lightness": "低明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "中厚",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Wilson",
+    "collection": "复古运动系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "复古运动感",
+    "网球配件"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": true,
+    "wear_count": 5,
+    "last_worn": "2026-06-15T08:34:29.861485",
+    "claude_fit_comment": "Wilson复古网球桶包,墨绿色运动质感强,适合网球/轻熟休闲搭配,Wilson为网球第一品牌",
+    "_statement_score": 0.45
+  },
+  "recommended_styles": [
+    "Clean Fit",
+    "运动休闲"
+  ],
+  "occasions": [
+    "打网球"
+  ]
+}

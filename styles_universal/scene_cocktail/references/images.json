@@ -1,0 +1,47 @@
+{
+  "style_id": "scene_cocktail",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "鸡尾酒礼服 Cocktail：介于正装与休闲之间的晚间优雅，关键词 - 天鹅绒晚宴夹克、象牙白礼服、丝质领结、漆皮牛津鞋",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.moderngentlemanmagazine.com/39-mens-cocktail-attire-formal-ideas/",
+          "caption": "Modern Gentleman Magazine — 39套鸡尾酒礼服灵感：午夜蓝丝绒×象牙白衬衫的「午夜尊贵」",
+          "source": "Modern Gentleman Magazine",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://luxe.digital/lifestyle/style/men-cocktail-attire-dress-code-guide/",
+          "caption": "Luxe Digital — 鸡尾酒礼服完整指南：Zegna、Tom Ford、Lanvin 晚宴夹克搭配",
+          "source": "Luxe Digital",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.opumo.com/magazine/cocktail-attire-men/",
+          "caption": "OPUMO Magazine — 当代鸡尾酒礼服：祖母绿、酒红色图案丝绒作为主角单品的搭配法则",
+          "source": "OPUMO Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.moderngentlemanmagazine.com/39-mens-cocktail-attire-formal-ideas/",
+          "caption": "Modern Gentleman Magazine — 「象牙之谜」造型：骨白色礼服×乌木黑衬衫，高对比经典",
+          "source": "Modern Gentleman Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

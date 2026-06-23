@@ -1,0 +1,113 @@
+{
+  "style_id": "japanese_city_boy",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为包含图片的页面链接（Vogue/Brand/Pinterest 图库页），可直接访问查看",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "source_note": "主要来源：《POPEYE》杂志 City Boy 造型特辑",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows",
+          "caption": "Vogue 东京2024秋冬时装周街拍 — City Boy风格造型合集",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-spring-2024-shows-in-tokyo",
+          "caption": "Vogue 东京2024春夏时装周街拍 — 日系松弛感穿搭",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://ballyhoomagazine.com/2024/09/22/japans-coolest-mens-magazine-popeye-magazine/",
+          "caption": "POPEYE杂志深度解析 — City Boy风格定义与编辑造型",
+          "source": "Ballyhoo Magazine"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "source_note": "City Boy 风格较少走秀，主要参考 Sacai/White Mountaineering 等日系品牌秀场",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/sacai",
+          "caption": "Sacai 2026春夏男装秀 — 日系解构层次美学",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2026-menswear/yohji-yamamoto",
+          "caption": "Yohji Yamamoto 2026秋冬男装 — 日系宽松廓形",
+          "source": "Vogue Runway"
+        },
+        {
+          "url": "https://kendam.com/news/fashion-shows/yohji-yamamoto-spring-summer-2026-men-runway",
+          "caption": "Yohji Yamamoto 2026春夏男装秀场 — 69张高清图",
+          "source": "Kendam"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "source_note": "日系 City Boy 风格代表人物穿搭",
+      "images": [
+        {
+          "url": "https://markandlona.us/zh-hans/pages/ambassador-takuya-kimura-2026ss-wearing-vol-4",
+          "caption": "木村拓哉 2026春夏穿搭 — Mark & Lona 品牌大使造型",
+          "source": "Mark & Lona"
+        },
+        {
+          "url": "https://en.friday.news/article/2490",
+          "caption": "木村拓哉等40代男星私服穿搭 — 日系成熟男性范本",
+          "source": "FRIDAY DIGITAL"
+        },
+        {
+          "url": "https://www.goxip.com/sg/en/magazine/takuya-kimura-s-new-tv-drama-is-a-hit-sleek-and-chic-bodyguard-style-is-now-a-trend",
+          "caption": "木村拓哉日剧造型 — 《BG》保镖风格时尚解析",
+          "source": "Goxip"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "source_note": "东京街拍与小红书 City Boy 穿搭博主",
+      "images": [
+        {
+          "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
+          "caption": "TokyoFashion 东京街拍档案 — 原宿/涉谷男生街拍合集",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://tokyofashion.com/tag/harajuku-guys/",
+          "caption": "Harajuku Guys 标签 — 原宿男生街拍专门分类",
+          "source": "TokyoFashion.com"
+        },
+        {
+          "url": "https://post.smzdm.com/p/a6zgrx0n/",
+          "caption": "City Boy没有过时 — 2026正确打开方式 · 街拍穿搭解析",
+          "source": "什么值得买"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "source_note": "Instagram / Pinterest 平台 City Boy 穿搭灵感",
+      "images": [
+        {
+          "url": "https://www.yokogaomag.com/editorial/the-rise-of-the-city-boy",
+          "caption": "The Rise of the City Boy — 风格解析 + 穿搭图集",
+          "source": "Yokogao Magazine"
+        },
+        {
+          "url": "https://www.minecolabs.com/post/exploring-cityboy-style-japan-s-urban-street-fashion-phenomenon",
+          "caption": "Exploring CityBoy Style — 日本都市时尚现象深度解读",
+          "source": "Minecolabs"
+        },
+        {
+          "url": "https://dripdecoded.com/10-what-to-wear-ideas-in-japan-for-men/",
+          "caption": "10种日本男生穿搭方案 — City Boy + 多风格参考图",
+          "source": "DripDecoded"
+        }
+      ]
+    }
+  }
+}

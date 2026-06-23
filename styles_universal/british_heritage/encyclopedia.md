@@ -1,0 +1,129 @@
+# 英式传统 (British Heritage)
+
+> **状态**: `reviewed` | **最后更新**: 2026-06-13 | **趋势**: 经典风格
+> **分类**: 英式 > 1950s复古 > 半正式 > 户外场景 > 复古调性
+
+## 📖 概述
+- **发源年代**: 19世纪末-20世纪初
+- **发源地**: 英国（乡村庄园、猎场、苏格兰高地）
+- **风格关键词**: 粗花呢、猎装、蜡棉、羊毛、Barbour、乡村、贵族、功能性
+- **一句话定义**: 从英国贵族乡村生活和户外运动中诞生的功能性服饰传统——不是"复古"，而是穿越百年的活着的穿衣方式。
+
+## 📜 历史文化
+
+### 英国阶级体系的服装表达
+英国是世界上极少数衣服能直接标记社会阶层的国家。Heritage 风格植根于：
+- **贵族庄园**: Tweed（粗花呢）是庄园主的标志，不同的格纹（estate tweed）标记不同的家族领地
+- **皇家狩猎**: Balmoral 庄园的皇家猎场催生了射击夹克、猎裤等专业户外装备
+- **飞钓传统**: 苏格兰高地的鲑鱼飞钓传统塑造了防水蜡棉夹克的功能美学
+
+### 关键品牌与王室认证
+英国王室颁发的 Royal Warrant（皇家认证）是 Heritage 品牌的最高荣誉：
+
+| 品牌 | 创立 | 皇家认证 | 标志产品 |
+|------|------|---------|---------|
+| **Barbour** | 1894 | 女王/亲王/查尔斯 | 蜡棉夹克 (Beaufort/Bedale) |
+| **Burberry** | 1856 | 女王/查尔斯 | Trench Coat 风衣 |
+| **Mackintosh** | 1824 | — | 橡胶粘合防水外套 |
+| **Johnstons of Elgin** | 1797 | 查尔斯 | 羊绒围巾/针织品 |
+
+### 从乡村到城市
+二战后，英国 Heritage 风格经由《Brideshead Revisited》等影视作品和 Ralph Lauren 的美国式演绎，从乡村庄园进入全球城市中产阶级的衣橱。
+
+## 🎨 美学特征
+
+### 廓形
+- 外套: 直筒或微A型，有结构但不僵硬
+- 衬衫: 合身但有余量（能塞进猎装夹克的舒适度）
+- 裤子: 高腰、打褶、微锥形
+
+### 色板
+```
+核心: 橄榄绿、深棕、海军蓝、深灰
+格纹: 千鸟格、威尔士亲王格、窗格、Tartan
+点缀: 勃艮第红、芥末黄（见于领带/围巾/袜）
+逻辑: 大地色+深色系，格纹是核心视觉语言
+```
+
+### 面料
+- **Harris Tweed** — 苏格兰外赫布里底群岛手工编织粗花呢，受议会法案保护
+- **Waxed Cotton** — 蜡棉，Barbour 的核心面料，防水透气
+- **Ventile** — WWII 飞行员救生服面料，极端防水
+- **Shetland Wool** — 设得兰羊毛，经典渔夫毛衣
+- **Lambswool/Cashmere** — 羊羔毛/羊绒，苏格兰针织业基石
+
+### 标志单品
+| 单品 | 品牌 | 选择要点 |
+|------|------|---------|
+| 蜡棉夹克 | Barbour Beaufort/Bedale | 可加购帽兜和内衬 |
+| Trench Coat | Burberry, Mackintosh | 双排扣，腰带，肩章 |
+| Tweed 运动夹克 | Harris Tweed | 三扣或两扣，肘部皮补丁 |
+| 千鸟格/格纹衬衫 | 各品牌 | 宽松剪裁，可内搭可单穿 |
+| 设得兰渔夫毛衣 | Jamieson's, Inis Meáin | 圆领，自然色 |
+| 打褶斜纹裤 | Cordings, Drake's | 高腰，微锥形 |
+| 切尔西靴/布洛克鞋 | Tricker's, Crockett & Jones | Goodyear 贴边工艺 |
+| 羊绒围巾 | Johnstons of Elgin | 格纹或纯色 |
+
+## 🏷️ 代表品牌
+
+### 皇家认证品牌
+- **Barbour** (1894) — 蜡棉夹克的代名词
+- **Burberry** (1856) — Trench Coat 和格纹的全球符号
+- **Johnstons of Elgin** (1797) — 苏格兰最后的一体化羊绒工厂
+- **Mackintosh** (1824) — 橡胶粘合防水的发明者
+- **Lock & Co.** (1676) — 世界上最古老的帽子店
+
+### 鞋履品牌
+- **Tricker's** (1829) — 乡村布洛克鞋的标杆
+- **Crockett & Jones** (1879) — Goodyear 贴边皮鞋
+- **Church's** (1873) — Prada 集团旗下，经典英式鞋履
+- **Edward Green** (1890) — 英国最高端鞋履品牌之一
+
+### 当代传承
+- **Drake's** (1977) — 伦敦男装品牌，英式传统+现代休闲的桥梁
+- **Private White V.C.** — 曼彻斯特工厂品牌，英产功能性外套
+- **SEH Kelly** — 伦敦小批量英产品牌
+
+## 👤 风格偶像
+
+| 人物 | 身份 | 说明 |
+|------|------|------|
+| **查尔斯国王** | 英国君主 | 同一件 Barbour 穿40年的终极 Heritage 代言人 |
+| **Daniel Craig** | 演员 | 007 穿 Barbour 和 N.Peal 毛衣的乡村场景 |
+| **David Beckham** | 足球运动员 | 将 Barbour+牛仔裤穿成现代 Heritage |
+| **The Crown 剧组** | — | 剧中 Barbour/Burberry/Tweed 的持续曝光 |
+| **Steve McQueen** | 演员 (1930-1980) | Barbour International 摩托车夹克的原始穿着者 |
+
+## 🔗 关联风格
+- **子风格**: Preppy（美国对英式传统的学院化改造）、Ametora（日本对英式传统的极致研究）
+- **平行风格**: 美式工装（相似的功能性起源，不同的文化语境）
+- **对立风格**: 街头潮流、Techwear
+
+## 📈 流行趋势
+- **当前状态**: 🟡 稳定的经典风格，不受快时尚趋势波动
+- **Barbour 现象**: 2020s Barbour 在 Gen Z 中意外走红，二手蜡棉夹克价格翻倍
+- **英国制造**: "Made in England" 标签成为全球品质认可
+
+## 💡 穿搭建议
+### 适合体型
+- ✅ 几乎所有体型——Heritage 的剪裁传统就是包容
+- ✅ 蜡棉夹克+Tweed 的结构感对偏瘦体型友好
+
+### 入门三步
+1. 买一件 Barbour Bedale 或 Beaufort——如果预算有限，二手市场很多
+2. 搭配一条斜纹裤或深色牛仔裤+切尔西靴
+3. 秋冬加入设得兰毛衣和羊绒围巾
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/british_heritage_01.jpg)
+*风格穿搭参考*
+
+![Pin by Paolo Medica on English Style | Barbour style, Harris tweed ...](gallery/british_heritage_02.jpg)
+*Pin by Paolo Medica on English Style | Barbour style, Harris tweed ...*
+
+![Official Barbour Website | Barbour style, Mens outdoor fashion, Barbour ...](gallery/british_heritage_03.jpg)
+*Official Barbour Website | Barbour style, Mens outdoor fashion, Barbour ...*

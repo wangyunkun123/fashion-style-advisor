@@ -1,0 +1,53 @@
+{
+  "style_id": "retro_grunge",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "复古 Grunge：1990s 西雅图颓废摇滚风，关键词 - 法兰绒格纹衬衫、破洞牛仔裤、军靴、乐队T恤、阔型叠穿",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/fall-2025-menswear/msgm",
+          "caption": "MSGM Fall 2025 — Massimo Giorgetti 以 Donnie Darko 超现实主义重新演绎意式Grunge：暗黑蘑菇装置、做旧天鹅绒",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/our-legacy",
+          "caption": "Our Legacy Spring 2025 — 玻璃屏障后拍摄的概念性反时尚：皱缩丝金针织的「湿」质感",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.23-magazine.com/the-new-grunge-renaissance/",
+          "caption": "23 Magazine — 2025 Grunge复兴：Z世代拒绝过度策划的完美主义，拥抱粗粝真实",
+          "source": "23 Magazine",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://kendam.com/news/lookbooks/msgm-fall-winter-2025-26-men-outfits",
+          "caption": "MSGMFW25-26 型录 — Bruce LaBruce 现场拍摄的Gen Z能量",
+          "source": "Kendam",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.23-magazine.com/the-new-grunge-renaissance/",
+          "caption": "23 Magazine — Grunge在Depop地下街头品牌中的真实回归，DIY手工破坏单品",
+          "source": "23 Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

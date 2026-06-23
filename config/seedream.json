@@ -1,0 +1,7 @@
+{
+  "_comment": "公开配置，密钥在 seedream.local.json 中（不提交Git）",
+  "model": "doubao-seedream-5.0-lite",
+  "api_url": "https://ark.cn-beijing.volces.com/api/plan/v3/images/generations",
+  "size": "2048x2048",
+  "max_images": 4
+}

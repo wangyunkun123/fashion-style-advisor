@@ -1,0 +1,79 @@
+# 复古 Grunge (Grunge)
+> **状态**: `reviewed` | **最后更新**: 2026-06-13 | **趋势**: 小众领域
+
+## 📖 概述
+Grunge 风格诞生于 1980 年代中期西雅图地下摇滚场景，1990 年代初随 Nirvana、Pearl Jam、Soundgarden 等乐队爆炸式进入主流。它反叛 80 年代金属乐的浮夸华丽，拥抱「不刻意的邋遢」——旧法兰绒格子衬衫、破洞宽松牛仔、战术马丁靴，像是刚从二手店走出来的样子。*Details* 杂志编辑 James Truman 精准概括："朋克是反时尚，它在做声明；而 Grunge 关于不做声明。" 正是这种「我不在乎」的态度，成为 90 年代最具影响力的男装美学。
+
+## 📜 历史文化
+- **1980s 中期地下起源**：西雅图独立厂牌 Sub Pop 周围的音乐场景自发生成，音乐人因预算有限，衣服全部来自旧货店。
+- **1991–1992 主流爆发**：Nirvana《Nevermind》发行，"Smells Like Teen Spirit" 席卷 MTV，Grunge 从地下迅速成为全球时尚现象。
+- **1992 高级时装介入**：Marc Jacobs 为 Perry Ellis 设计 1993 春季系列，将法兰绒衬衫、Doc Martens、针织线帽搬上 T 台——当时虽遭批评，但被视为 Grunge 进入高级时装史的标志性时刻。
+- **1994 峰值与转折**：Kurt Cobain 的离世被视为 Grunge 文化巅峰的象征性终结。
+- **2010s–2020s 复兴**：作为 90 年代怀旧大潮的一部分，Grunge 美学在街头风格和社交媒体上多次回归。
+
+## 🎨 美学特征
+| 类别 | 核心单品 |
+|------|---------|
+| **上装** | 法兰绒格子衬衫（超大号、敞开穿）、破旧图案乐队 T 恤、宽松条纹针织衫、奶奶款开衫 |
+| **外套** | 做旧牛仔夹克、皮夹克、灯芯绒夹克（Chris Cornell 标志） |
+| **裤装** | 宽松破洞牛仔（褪色、磨边、膝盖撕裂）、工装裤 |
+| **鞋履** | **Dr. Martens** 8 孔马丁靴（磨损、从不擦亮）、Converse 帆布鞋 |
+| **配饰** | 针织线帽、Snapback 棒球帽、苏格兰裙（Eddie Vedder 穿在紧身裤外） |
+
+**核心技法——叠穿**：
+1. 图案乐队 T 恤（打底层）
+2. 超大号法兰绒衬衫（敞开，中间层）
+3. 牛仔/皮夹克（外层，可选）
+4. 宽松破洞牛仔 + 马丁靴
+
+**色调**：褪色黑、做旧牛仔蓝、锈红/酒红、森林绿、燕麦灰/灰白、炭黑。一切都必须是「穿旧了的」——全新反而出戏。
+
+## 🏷️ 代表品牌
+- **Dr. Martens** — Grunge 的鞋履旗帜，Pearl Jam 的推广使其与 Grunge 不可分割
+- **Levi's** — Vintage 旧货 Levi's 是 Grunge 牛仔的基本款
+- **Converse** — Kurt Cobain 常穿的帆布鞋品牌
+- **Sub Pop Records Merch** — 独立厂牌周边 T 恤的文化根源
+- **Marc Jacobs** — 虽非 Grunge 原生产品，但其 1993 年 Perry Ellis 系列是高级时装吸收 Grunge 的历史拐点
+- **R13** / **Raf Simons** / **Vetements** — 现代品牌中继承了 Grunge 「做旧奢华」基因
+
+## 👤 风格偶像
+| 偶像 | 标志性造型 |
+|------|-----------|
+| **Kurt Cobain (Nirvana)** | 超大号条纹毛衣/奶奶开衫、破洞牛仔、Converse、不羁的金色长发 |
+| **Eddie Vedder (Pearl Jam)** | 皮夹克 + 灯芯绒、马丁靴、苏格兰裙叠穿紧身裤、Snapback 帽 |
+| **Chris Cornell (Soundgarden)** | 灯芯绒夹克、长卷发、经典摇滚与 Grunge 的过渡造型 |
+| **Layne Staley (Alice in Chains)** | 皮夹克 + 深色墨镜、暗黑 Grunge 美学 |
+
+## 🔗 关联风格
+- **90s Alternative** — 同一时代的另类摇滚整体美学
+- **Normcore** — 共享「不刻意」的态度，但不具备 Grunge 的脏感层次
+- **Punk** — 反时尚的精神前辈，Grunge 减去朋克的尖刺攻击性，加上邋遢随意
+- **Workwear / Utility** — 旧货店工装的根源，在 Grunge 中被重新语境化
+
+## 📈 流行趋势
+Grunge 在 2023–2025 年间作为 90 年代怀旧浪潮的核心分支再次升温：
+- **高奢做旧**：Balenciaga、Raf Simons 等品牌将破洞、过度洗涤作为高价设计语言
+- **社交媒体复古热潮**：TikTok 和 Instagram 上 #grungeaesthetic 标签累计数十亿次浏览
+- **旧货店文化**：新一代消费者重新发现法兰绒衬衫和旧货牛仔的价值
+- **独立音乐复兴**：Shoegaze 和 Grunge 复兴乐队的涌现带动了对应风格的回归
+
+## 💡 穿搭建议
+1. **入门公式**：法兰绒格子衬衫（敞开） + 白/黑 T 恤 + 破洞宽松牛仔 + 马丁靴/Converse
+2. **关键是旧货感**：不要买崭新发亮的任何东西——旧货店和二手平台是首选
+3. **法兰绒系腰**：热了就把格子衬衫系在腰上，这是 Grunge 标志性细节
+4. **叠穿不追求完美**：图案和材质故意冲突，千万不要「搭配」
+5. **现代版精进**：在基本公式上外搭一件现代剪裁的黑色外套，避免完全沦为万圣节装扮
+
+
+## 📸 风格图库
+
+> 以下为风格代表性穿搭参考图，搜集自公开时尚媒体。
+
+![风格穿搭参考](gallery/retro_grunge_01.jpg)
+*风格穿搭参考*
+
+![Kurt Cobain at Raji's in Hollywood, CA, US. February 15th, 1990 ...](gallery/retro_grunge_02.jpg)
+*Kurt Cobain at Raji's in Hollywood, CA, US. February 15th, 1990 ...*
+
+![Image in grunge | alternative collection by tjaša | Kurt cobain style ...](gallery/retro_grunge_03.jpg)
+*Image in grunge | alternative collection by tjaša | Kurt cobain style ...*

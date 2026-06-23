@@ -1,0 +1,53 @@
+{
+  "style_id": "scene_blokecore",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "Blokecore 足球风：复古球衣日常化穿搭，关键词 - 复古足球衫、Adidas Samba、宽松牛仔裤、渔夫帽、英式看台文化",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.thecoolhour.com/10-undeniably-cool-looks-to-nail-the-blokecore-aesthetic/",
+          "caption": "The Cool Hour — 10个教科书级Blokecore造型：返校风、90s丹宁、Bella Hadid秋季演绎",
+          "source": "The Cool Hour",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://kvia.com/lifestyle/stacker-lifestyle/2024/08/30/beyond-blokecore-why-the-intersection-of-football-and-fashion-is-more-than-a-fad/",
+          "caption": "Stacker — 超越Blokecore：足球与时尚的交汇为何不只是昙花一现",
+          "source": "Stacker",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://hypebae.com/2025/3/acne-studios-kappa-football-collaboration-collection-release-date",
+          "caption": "Hypebae — Acne Studios × Kappa 粉色火焰足球衫：奢侈Blokecore教科书",
+          "source": "Hypebae",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://snkrdunk.com/en/magazine/2024/06/14/euro-2024-special-how-blokecore-is-kicking-up-a-fashion-storm/",
+          "caption": "SNKRDUNK — 欧洲杯2024特辑：Blokecore如何掀起时尚风暴，Off-White×Nike梦想球衣",
+          "source": "SNKRDUNK",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.ELLE.com.hk/fashion/what-is-blokecore-style-update",
+          "caption": "ELLE HK — Blackpink Jennie曼联球衣、Bella Hadid Balenciaga×Adidas、NewJeans多彩演绎",
+          "source": "ELLE HK",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

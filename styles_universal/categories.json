@@ -1,0 +1,816 @@
+{
+  "_description": "通用风格分类体系 — 六维分类，覆盖全球男性穿搭风格",
+  "_version": "1.1",
+  "_last_updated": "2026-06-13",
+  "dimensions": {
+    "culture_region": {
+      "label": "文化地域",
+      "values": {
+        "japanese": {
+          "label": "日系",
+          "styles": [
+            "japanese_city_boy",
+            "japanese_yama",
+            "japanese_amekaji",
+            "japanese_urahara",
+            "japanese_wabi_sabi",
+            "japanese_techwear"
+          ]
+        },
+        "korean": {
+          "label": "韩系",
+          "styles": [
+            "korean_clean_fit",
+            "korean_light_mature",
+            "korean_kpop_street",
+            "korean_minimal"
+          ]
+        },
+        "american": {
+          "label": "美式",
+          "styles": [
+            "american_ivy_league",
+            "american_preppy",
+            "american_workwear",
+            "american_western",
+            "american_streetwear"
+          ]
+        },
+        "british": {
+          "label": "英式",
+          "styles": [
+            "british_mod",
+            "british_punk",
+            "british_savile_row",
+            "british_heritage"
+          ]
+        },
+        "italian": {
+          "label": "意式",
+          "styles": [
+            "italian_sprezzatura",
+            "italian_pitti_uomo"
+          ]
+        },
+        "french": {
+          "label": "法式",
+          "styles": [
+            "french_parisian_chic"
+          ]
+        },
+        "chinese": {
+          "label": "中式",
+          "styles": [
+            "chinese_heritage_luxe",
+            "chinese_new_traditional"
+          ]
+        },
+        "scandinavian": {
+          "label": "北欧",
+          "styles": [
+            "scandi_minimalism"
+          ]
+        },
+        "australian": {
+          "label": "澳洲",
+          "styles": [
+            "australian_surf_casual"
+          ]
+        }
+      }
+    },
+    "era": {
+      "label": "时代",
+      "values": {
+        "retro_1950s": {
+          "label": "1950s 复古",
+          "styles": [
+            "retro_rockabilly"
+          ]
+        },
+        "retro_1960s": {
+          "label": "1960s 复古",
+          "styles": [
+            "retro_mod",
+            "retro_ivy"
+          ]
+        },
+        "retro_1970s": {
+          "label": "1970s 复古",
+          "styles": [
+            "retro_hippie",
+            "retro_disco"
+          ]
+        },
+        "retro_1980s": {
+          "label": "1980s 复古",
+          "styles": [
+            "retro_power_suit",
+            "retro_80s_casual"
+          ]
+        },
+        "retro_1990s": {
+          "label": "1990s 复古",
+          "styles": [
+            "retro_grunge",
+            "retro_90s_hiphop",
+            "retro_90s_minimal"
+          ]
+        },
+        "contemporary_2000s": {
+          "label": "2000s 当代",
+          "styles": [
+            "contemporary_minimalism",
+            "contemporary_streetwear",
+            "contemporary_athleisure"
+          ]
+        },
+        "contemporary_2020s": {
+          "label": "2020s 当代",
+          "styles": [
+            "contemporary_gorpcore",
+            "contemporary_genderless",
+            "contemporary_digital_fashion"
+          ]
+        }
+      }
+    },
+    "formality": {
+      "label": "正式度",
+      "values": {
+        "ultra_formal": {
+          "label": "极正式",
+          "styles": [
+            "formal_black_tie",
+            "formal_white_tie"
+          ]
+        },
+        "formal": {
+          "label": "正式",
+          "styles": [
+            "formal_business_formal"
+          ]
+        },
+        "semi_formal": {
+          "label": "半正式",
+          "styles": [
+            "semi_formal_smart_casual",
+            "semi_formal_business_casual"
+          ]
+        },
+        "casual": {
+          "label": "休闲",
+          "styles": [
+            "casual_clean_fit",
+            "casual_city_boy",
+            "casual_korean_minimal"
+          ]
+        },
+        "ultra_casual": {
+          "label": "极休闲",
+          "styles": [
+            "ultra_casual_streetwear",
+            "ultra_casual_athleisure",
+            "ultra_casual_loungewear"
+          ]
+        }
+      }
+    },
+    "scene": {
+      "label": "功能场景",
+      "values": {
+        "sports": {
+          "label": "运动",
+          "styles": [
+            "scene_athleisure",
+            "scene_gorpcore",
+            "scene_tenniscore",
+            "scene_blokecore"
+          ]
+        },
+        "outdoor": {
+          "label": "户外",
+          "styles": [
+            "scene_yama_style",
+            "scene_hikingcore",
+            "scene_gorpcore_outdoor"
+          ]
+        },
+        "workplace": {
+          "label": "职场",
+          "styles": [
+            "scene_business_formal",
+            "scene_business_casual",
+            "scene_smart_casual"
+          ]
+        },
+        "social": {
+          "label": "社交",
+          "styles": [
+            "scene_cocktail",
+            "scene_smart_casual_social",
+            "scene_sprezzatura"
+          ]
+        },
+        "home": {
+          "label": "居家",
+          "styles": [
+            "scene_loungewear",
+            "scene_athleisure_home"
+          ]
+        }
+      }
+    },
+    "aesthetic": {
+      "label": "美学调性",
+      "values": {
+        "minimal": {
+          "label": "极简",
+          "styles": [
+            "aesthetic_minimalism",
+            "aesthetic_clean_fit",
+            "aesthetic_scandi"
+          ]
+        },
+        "retro": {
+          "label": "复古",
+          "styles": [
+            "aesthetic_vintage",
+            "aesthetic_heritage",
+            "aesthetic_ivy_league"
+          ]
+        },
+        "street": {
+          "label": "街头",
+          "styles": [
+            "aesthetic_streetwear",
+            "aesthetic_hypebeast",
+            "aesthetic_skate"
+          ]
+        },
+        "technical": {
+          "label": "机能",
+          "styles": [
+            "aesthetic_techwear",
+            "aesthetic_gorpcore",
+            "aesthetic_yama"
+          ]
+        },
+        "romantic": {
+          "label": "浪漫",
+          "styles": [
+            "aesthetic_bohemian",
+            "aesthetic_resort",
+            "aesthetic_cottagecore"
+          ]
+        },
+        "avant_garde": {
+          "label": "前卫",
+          "styles": [
+            "aesthetic_avant_garde",
+            "aesthetic_deconstructed",
+            "aesthetic_genderless"
+          ]
+        }
+      }
+    },
+    "trend_category": {
+      "label": "趋势分类",
+      "description": "按风格的趋势生命周期分类：流行趋势（社交媒体驱动）、经典风格（历史根基）、小众领域（亚文化驱动）",
+      "values": {
+        "popular_trend": {
+          "label": "流行趋势",
+          "desc": "社交媒体驱动，近5-10年兴起或爆发，病毒式传播特征"
+        },
+        "classic": {
+          "label": "经典风格",
+          "desc": "深厚文化/历史根基，持续数十年，超越季节趋势"
+        },
+        "niche": {
+          "label": "小众领域",
+          "desc": "亚文化驱动，非主流审美，小众但忠实社群"
+        }
+      }
+    }
+  },
+  "style_registry": {
+    "japanese_city_boy": {
+      "name_zh": "日系 City Boy",
+      "name_en": "Japanese City Boy",
+      "parent": "japanese",
+      "era": "contemporary_2000s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "japanese_yama": {
+      "name_zh": "日系山系",
+      "name_en": "Japanese Yama Style",
+      "parent": "japanese",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "technical",
+      "trend_category": "niche"
+    },
+    "japanese_amekaji": {
+      "name_zh": "日系阿美咔叽",
+      "name_en": "Japanese Amekaji",
+      "parent": "japanese",
+      "era": "retro_1990s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "japanese_urahara": {
+      "name_zh": "日系里原宿",
+      "name_en": "Japanese Urahara",
+      "parent": "japanese",
+      "era": "retro_1990s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "niche"
+    },
+    "japanese_wabi_sabi": {
+      "name_zh": "日系侘寂极简",
+      "name_en": "Japanese Wabi-Sabi",
+      "parent": "japanese",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "japanese_techwear": {
+      "name_zh": "日系机能",
+      "name_en": "Japanese Techwear",
+      "parent": "japanese",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "technical",
+      "trend_category": "niche"
+    },
+    "korean_clean_fit": {
+      "name_zh": "韩系 Clean Fit",
+      "name_en": "Korean Clean Fit",
+      "parent": "korean",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "popular_trend"
+    },
+    "korean_light_mature": {
+      "name_zh": "韩系轻熟",
+      "name_en": "Korean Light Mature",
+      "parent": "korean",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "workplace",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "korean_kpop_street": {
+      "name_zh": "韩系 K-pop 街头",
+      "name_en": "Korean K-pop Street",
+      "parent": "korean",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "popular_trend"
+    },
+    "korean_minimal": {
+      "name_zh": "韩系极简",
+      "name_en": "Korean Minimal",
+      "parent": "korean",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "american_ivy_league": {
+      "name_zh": "美式常春藤",
+      "name_en": "American Ivy League",
+      "parent": "american",
+      "era": "retro_1960s",
+      "formality": "semi_formal",
+      "scene": "workplace",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "american_preppy": {
+      "name_zh": "美式预科风",
+      "name_en": "American Preppy",
+      "parent": "american",
+      "era": "retro_1980s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "american_workwear": {
+      "name_zh": "美式工装",
+      "name_en": "American Workwear",
+      "parent": "american",
+      "era": "retro_1990s",
+      "formality": "casual",
+      "scene": "outdoor",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "american_western": {
+      "name_zh": "美式西部",
+      "name_en": "American Western",
+      "parent": "american",
+      "era": "retro_1970s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "american_streetwear": {
+      "name_zh": "美式街头",
+      "name_en": "American Streetwear",
+      "parent": "american",
+      "era": "retro_1990s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "classic"
+    },
+    "british_mod": {
+      "name_zh": "英式摩登",
+      "name_en": "British Mod",
+      "parent": "british",
+      "era": "retro_1960s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "british_punk": {
+      "name_zh": "英式朋克",
+      "name_en": "British Punk",
+      "parent": "british",
+      "era": "retro_1970s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "niche"
+    },
+    "british_savile_row": {
+      "name_zh": "英式萨维尔街",
+      "name_en": "British Savile Row",
+      "parent": "british",
+      "era": "retro_1950s",
+      "formality": "ultra_formal",
+      "scene": "workplace",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "british_heritage": {
+      "name_zh": "英式传统",
+      "name_en": "British Heritage",
+      "parent": "british",
+      "era": "retro_1950s",
+      "formality": "semi_formal",
+      "scene": "outdoor",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "italian_sprezzatura": {
+      "name_zh": "意式 Sprezzatura",
+      "name_en": "Italian Sprezzatura",
+      "parent": "italian",
+      "era": "contemporary_2000s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "classic"
+    },
+    "italian_pitti_uomo": {
+      "name_zh": "意式 Pitti Uomo",
+      "name_en": "Italian Pitti Uomo",
+      "parent": "italian",
+      "era": "contemporary_2000s",
+      "formality": "formal",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "classic"
+    },
+    "french_parisian_chic": {
+      "name_zh": "法式巴黎 chic",
+      "name_en": "French Parisian Chic",
+      "parent": "french",
+      "era": "contemporary_2000s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "chinese_heritage_luxe": {
+      "name_zh": "中式国风质感",
+      "name_en": "Chinese Heritage Luxe",
+      "parent": "chinese",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "chinese_new_traditional": {
+      "name_zh": "新中式",
+      "name_en": "New Chinese Traditional",
+      "parent": "chinese",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "popular_trend"
+    },
+    "scandi_minimalism": {
+      "name_zh": "北欧极简",
+      "name_en": "Scandi Minimalism",
+      "parent": "scandinavian",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "australian_surf_casual": {
+      "name_zh": "澳洲冲浪休闲",
+      "name_en": "Australian Surf Casual",
+      "parent": "australian",
+      "era": "contemporary_2000s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "romantic",
+      "trend_category": "niche"
+    },
+    "retro_rockabilly": {
+      "name_zh": "复古摇滚",
+      "name_en": "Rockabilly",
+      "parent": "american",
+      "era": "retro_1950s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "classic"
+    },
+    "retro_grunge": {
+      "name_zh": "复古 Grunge",
+      "name_en": "Grunge",
+      "parent": "american",
+      "era": "retro_1990s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "niche"
+    },
+    "retro_90s_hiphop": {
+      "name_zh": "90s 嘻哈",
+      "name_en": "90s Hip-Hop",
+      "parent": "american",
+      "era": "retro_1990s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "classic"
+    },
+    "contemporary_gorpcore": {
+      "name_zh": "Gorpcore 户外风",
+      "name_en": "Gorpcore",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "technical",
+      "trend_category": "popular_trend"
+    },
+    "contemporary_genderless": {
+      "name_zh": "无性别穿搭",
+      "name_en": "Genderless Fashion",
+      "parent": "scandinavian",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "avant_garde",
+      "trend_category": "niche"
+    },
+    "scene_tenniscore": {
+      "name_zh": "Tenniscore 网球风",
+      "name_en": "Tenniscore",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "sports",
+      "aesthetic": "romantic",
+      "trend_category": "popular_trend"
+    },
+    "scene_blokecore": {
+      "name_zh": "Blokecore 足球风",
+      "name_en": "Blokecore",
+      "parent": "british",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "sports",
+      "aesthetic": "street",
+      "trend_category": "popular_trend"
+    },
+    "scene_cocktail": {
+      "name_zh": "鸡尾酒礼服",
+      "name_en": "Cocktail Attire",
+      "parent": "italian",
+      "era": "contemporary_2000s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "classic"
+    },
+    "aesthetic_avant_garde": {
+      "name_zh": "先锋前卫",
+      "name_en": "Avant-Garde",
+      "parent": "french",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "avant_garde",
+      "trend_category": "niche"
+    },
+    "aesthetic_deconstructed": {
+      "name_zh": "解构主义",
+      "name_en": "Deconstructed",
+      "parent": "japanese",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "avant_garde",
+      "trend_category": "niche"
+    },
+    "clean_fit": {
+      "name_zh": "Clean Fit",
+      "name_en": "Clean Fit",
+      "parent": "contemporary_2020s",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "popular_trend"
+    },
+    "smart_casual": {
+      "name_zh": "轻熟休闲",
+      "name_en": "Smart Casual",
+      "parent": "contemporary_2000s",
+      "era": "contemporary_2000s",
+      "formality": "semi_formal",
+      "scene": "workplace",
+      "aesthetic": "minimal",
+      "trend_category": "classic"
+    },
+    "athleisure_sport": {
+      "name_zh": "运动休闲",
+      "name_en": "Athleisure Sport",
+      "parent": "contemporary_2000s",
+      "era": "contemporary_2000s",
+      "formality": "ultra_casual",
+      "scene": "sports",
+      "aesthetic": "street",
+      "trend_category": "popular_trend"
+    },
+    "streetwear": {
+      "name_zh": "街头潮流",
+      "name_en": "Streetwear",
+      "parent": "american",
+      "era": "retro_1990s",
+      "formality": "ultra_casual",
+      "scene": "social",
+      "aesthetic": "street",
+      "trend_category": "classic"
+    },
+    "resort_vacation": {
+      "name_zh": "度假休闲",
+      "name_en": "Resort Vacation",
+      "parent": "australian",
+      "era": "contemporary_2000s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "romantic",
+      "trend_category": "classic"
+    },
+    "poetcore": {
+      "name_zh": "诗人美学",
+      "name_en": "Poetcore",
+      "parent": "french",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "popular_trend"
+    },
+    "whimsymaxxing": {
+      "name_zh": "趣乐极繁",
+      "name_en": "Whimsymaxxing",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "avant_garde",
+      "trend_category": "popular_trend"
+    },
+    "rugged_comfort": {
+      "name_zh": "粗砺舒适",
+      "name_en": "Rugged Comfort",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "ultra_casual",
+      "scene": "outdoor",
+      "aesthetic": "retro",
+      "trend_category": "popular_trend"
+    },
+    "detention_core": {
+      "name_zh": "叛逆学长风",
+      "name_en": "Detention-Core",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "retro",
+      "trend_category": "popular_trend"
+    },
+    "quarter_zip_revival": {
+      "name_zh": "1/4拉链复兴",
+      "name_en": "Quarter-Zip Revival",
+      "parent": "american",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "workplace",
+      "aesthetic": "retro",
+      "trend_category": "popular_trend"
+    },
+    "torpedo_sneakers": {
+      "name_zh": "薄底跑鞋风",
+      "name_en": "Torpedo Sneakers",
+      "parent": "italian",
+      "era": "contemporary_2020s",
+      "formality": "casual",
+      "scene": "social",
+      "aesthetic": "minimal",
+      "trend_category": "popular_trend"
+    },
+    "regency_romantic": {
+      "name_zh": "摄政浪漫风",
+      "name_en": "Regency Romantic",
+      "parent": "british",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "social",
+      "aesthetic": "romantic",
+      "trend_category": "popular_trend"
+    },
+    "rugged_luxury": {
+      "name_zh": "粗砺奢华",
+      "name_en": "Rugged Luxury",
+      "parent": "italian",
+      "era": "contemporary_2020s",
+      "formality": "semi_formal",
+      "scene": "outdoor",
+      "aesthetic": "retro",
+      "trend_category": "popular_trend"
+    },
+    "chinese_heritage": {
+      "trend_category": "classic",
+      "name_zh": "国风质感",
+      "era": "classic",
+      "parent": "east_asian_classic"
+    }
+  },
+  "_total_styles": 49,
+  "_discover_note": "2026-06-13 自动发现新增8个2025-2026新兴风格: Poetcore, Whimsymaxxing, Rugged Comfort, Detention-Core, Quarter-Zip Revival, Torpedo Sneakers, Regency Romantic, Rugged Luxury",
+  "trend_category": {
+    "label": "趋势分类",
+    "values": {
+      "popular_trend": {
+        "label": "流行趋势",
+        "desc": "社交媒体驱动，近5-10年兴起或爆发",
+        "color": "#E07B39"
+      },
+      "classic": {
+        "label": "经典风格",
+        "desc": "深厚文化/历史根基，持续数十年，超越季节趋势",
+        "color": "#2C3E50"
+      },
+      "niche": {
+        "label": "小众领域",
+        "desc": "亚文化驱动，非主流审美，小众但忠实社群",
+        "color": "#7B4FBF"
+      }
+    }
+  }
+}

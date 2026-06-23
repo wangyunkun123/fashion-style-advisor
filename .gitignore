@@ -1,0 +1,52 @@
+# OS files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*（用完删除）*
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Sensitive - 密钥文件不提交
+.env
+*.local.json
+config/seedream.local.json
+
+# 自动生成的增强图片（仅忽略大体积抠图，缩略图入库）
+wardrobe/enhanced/*_cutout.png
+!wardrobe/enhanced/*_cutout_thumb.png
+
+# Claude
+.claude/
+outfits/*/rating.json
+tools/wechat_history.json
+tools/wechat_control.log
+outfits/_bline_temp/
+# 内部缓存文件（自动生成，不需提交）
+**/.color_cache.json
+**/.push_cache.json
+# 自动生成的报告文件
+衣橱分析报告.txt
+穿搭月度报告.txt
+# _swatches.png — 需要上传，不能 gitignore
+node_modules/
+
+# 小红书采集（Cookie 含登录信息 + 采集数据）
+config/.xhs_cookies.json
+xiaohongshu_data/
+xiaohongshu_screenshots/
+wardrobe/_incoming/

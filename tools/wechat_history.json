@@ -1,0 +1,702 @@
+[
+  {
+    "time": "2026-06-22 22:12:13",
+    "style": "用新买的斯凯奇帽子做搭配",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-22_%E7%94%A8%E6%96%B0%E4%B9%B0%E7%9A%84%E6%96%AF%E5%87%AF%E5%A5%87%E5%B8%BD%E5%AD%90%E5%81%9A%E6%90%AD%E9%85%8D/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~165s · 📊 ~3833 tokens · 🔄 3次AI"
+  },
+  {
+    "time": "2026-06-22 22:06:19",
+    "style": "今天天气很好，推荐一套日常穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=users/alice/outfits/2026-06-22_%E4%BB%8A%E5%A4%A9%E5%A4%A9%E6%B0%94%E5%BE%88%E5%A5%BD%EF%BC%8C%E6%8E%A8%E8%8D%90%E4%B8%80%E5%A5%97%E6%97%A5%E5%B8%B8%E7%A9%BF%E6%90%AD/%E8%B1%86%E5%8C%85%E7%94%9F%E5%9B%BE/%E4%BA%BA%E7%89%A9_1.jpg",
+    "stats": "⏱️ ~76s · 📊 ~2085 tokens · 🔄 3次AI"
+  },
+  {
+    "time": "2026-06-22 22:01:27",
+    "style": "用新买的帽子穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-22_%E7%94%A8%E6%96%B0%E4%B9%B0%E7%9A%84%E5%B8%BD%E5%AD%90%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~151s · 📊 ~3712 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-22 19:28:10",
+    "style": "一套穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-22_%E4%B8%80%E5%A5%97%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~87s · 📊 ~3737 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-22 06:29:48",
+    "style": "今日穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-22_%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~92s · 📊 ~3625 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 12:47:22",
+    "style": "scandi_minimalism",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-21_scandi_minimalism/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~175s · 📊 ~3593 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 09:54:41",
+    "style": "chinese_heritage",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-21_chinese_heritage/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~287s · 📊 ~3639 tokens · 🔄 3次AI"
+  },
+  {
+    "time": "2026-06-21 03:07:49",
+    "style": "一套今日穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-21_%E4%B8%80%E5%A5%97%E4%BB%8A%E6%97%A5%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1.png",
+    "stats": "⏱️ ~158s · 📊 ~3638 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 02:52:48",
+    "style": "晚上约会穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-21_晚上约会穿搭/上身效果/上身效果_1.png",
+    "stats": "⏱️ ~160s · 📊 ~3604 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 02:48:43",
+    "style": "夏天周末逛街穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=outfits/2026-06-21_夏天周末逛街穿搭/上身效果/上身效果_1.png",
+    "stats": "⏱️ ~126s · 📊 ~3573 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 02:41:08",
+    "style": "今日出门穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-21_今日出门穿搭/上身效果/上身效果_1.png?t=1781980868",
+    "stats": "⏱️ ~201s · 📊 ~3575 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 02:31:57",
+    "style": "明天登山穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-21_明天登山穿搭/上身效果/上身效果_1.png?t=1781980317",
+    "stats": "⏱️ ~154s · 📊 ~3666 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 02:00:13",
+    "style": "今天想穿休闲点",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-21_今天想穿休闲点/上身效果/上身效果_1.png?t=1781978413",
+    "stats": "⏱️ ~89s · 📊 ~3578 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-21 01:42:52",
+    "style": "场景穿搭 blokecore",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-21_场景穿搭 blokecore/上身效果/上身效果_1.png?t=1781977372",
+    "stats": "⏱️ ~120s · 📊 ~4295 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-20 00:17:35",
+    "style": "明天要去长辈家做客",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-20_明天要去长辈家做客/上身效果/上身效果_1.png?t=1781885855",
+    "stats": "⏱️ ~127s · 📊 ~4972 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 15:14:59",
+    "style": "scene_blokecore",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_scene_blokecore/上身效果/上身效果_1.png?t=1781853299",
+    "stats": "⏱️ ~75s · 📊 ~5029 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 15:11:08",
+    "style": "korean_minimal",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_korean_minimal/豆包生图/上衣_SHIRT-003.png?t=1781853068",
+    "stats": "⏱️ ~208s · 📊 ~5099 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 15:03:48",
+    "style": "clean_fit",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_clean_fit/上身效果/上身效果_1.png?t=1781852628",
+    "stats": "⏱️ ~84s · 📊 ~5028 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 11:10:37",
+    "style": "天气闷热，需要一套衣服",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_天气闷热，需要一套衣服/上身效果/上身效果_1.png?t=1781838637",
+    "stats": "⏱️ ~78s · 📊 ~5025 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 10:58:02",
+    "style": "一会要出门遛狗",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_一会要出门遛狗/上身效果/上身效果_1.png?t=1781837882",
+    "stats": "⏱️ ~84s · 📊 ~5023 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 10:43:09",
+    "style": "今日想穿棕色棉麻短裤",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_今日想穿棕色棉麻短裤/上身效果/上身效果_1.png?t=1781836989",
+    "stats": "⏱️ ~84s · 📊 ~5202 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 02:51:23",
+    "style": "我想要一套英伦穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_我想要一套英伦穿搭/上身效果/上身效果_1.png?t=1781808683",
+    "stats": "⏱️ ~75s · 📊 ~5022 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 02:48:19",
+    "style": "刚才那套错了，我想要横向条纹短袖穿",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_刚才那套错了，我想要横向条纹短袖穿/上身效果/上身效果_1.png?t=1781808499",
+    "stats": "⏱️ ~117s · 📊 ~5278 tokens · 🔄 2次AI"
+  },
+  {
+    "time": "2026-06-19 02:45:06",
+    "style": "明天想穿条纹短袖",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_明天想穿条纹短袖/上身效果/上身效果_1.png?t=1781808306",
+    "stats": "⏱️ ~80s · 📊 ~5171 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 02:21:20",
+    "style": "一套周末 casual 穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_一套周末 casual 穿搭/上身效果/上身效果_1.png?t=1781806880",
+    "stats": "⏱️ ~118s · 📊 ~4998 tokens · 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 02:18:38",
+    "style": "一套周末 casual 穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_一套周末 casual 穿搭/上身效果/上身效果_1_方案1.jpg?t=1781806713",
+    "result": "👔 **一套周末 casual 穿搭**\n\n- 👕 **TS-008** FUR SPEED 夏威夷椰树印花系列 藏青色·麻\n- 👖 **PT-001** 未知 浅水洗蓝·牛仔\n- 👟 **SHOE-009** Nike 复古高帮系列 米白·皮质 | 📊 ~4911 tokens | ⏱️ ~100s | 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 01:22:53",
+    "style": "早上准备去跑步",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_早上准备去跑步/上身效果/上身效果_1_方案1.jpg?t=1781803367",
+    "result": "👔 **早上准备去跑步**\n\n- 👕 **TS-009** Decathlon 健身衣\n- 👖 **SH-005** Decathlon Artengo\n- 👟 **SHOE-003** Adidas Predator系列 | 📊 ~4886 tokens | ⏱️ ~81s | 🔄 1次AI"
+  },
+  {
+    "time": "2026-06-19 00:30:00",
+    "style": "明天上午出门逛街",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_明天上午出门逛街/上身效果/上身效果_1_方案1.jpg?t=1781800191",
+    "result": "👔 **明天上午出门逛街**\n\n- 👕 **TS-005** HLA 米白棉短袖\n- 👖 **PT-002** 未知 卡其色棉长裤\n- 👟 **SHOE-008** Jordan 复古帆布拼色系列红白拼色"
+  },
+  {
+    "time": "2026-06-19 00:19:01",
+    "style": "明天去朋友家做客",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-19_明天去朋友家做客/上身效果/上身效果_1_方案1.jpg?t=1781799536",
+    "result": "👔 **明天去朋友家做客**\n\n- 👕 **TS-011** UNIQLO 米白·棉\n- 👖 **PT-002** 未知 卡其色·棉\n- 👟 **SHOE-002** Adidas 复古训练鞋系列 米白拼黑·皮质"
+  },
+  {
+    "time": "2026-06-18 19:25:44",
+    "style": "穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_穿搭/上身效果/上身效果_1_方案1.jpg?t=1781781940",
+    "result": "👔 **穿搭**\n\n- 👕 **TS-001** HLA 焦糖色·其他(菠萝纹)\n- 👖 **PT-005** 未知 暗藏青格纹·羊毛混纺\n- 👟 **SHOE-005** Nike Court Lite系列 全白·皮质"
+  },
+  {
+    "time": "2026-06-18 18:56:51",
+    "style": "一套跑步穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781780194",
+    "result": "👔 **一套跑步穿搭**\n\n- 👕 **TS-005** HLA 米白·棉\n- 👖 **SH-003** Decathlon Kiprun 灰色·速干\n- 👟 **SHOE-001** Nike 米白灰·合成"
+  },
+  {
+    "time": "2026-06-18 18:54:17",
+    "style": "一套跑步穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781780040",
+    "result": "👔 **一套跑步穿搭**\n\n- 👕 **TS-003** HLA 麻灰·棉\n- 👖 **SH-003** Decathlon Kiprun 灰色·速干\n- 👟 **SHOE-003** Adidas Predator系列 荧光橙·合成"
+  },
+  {
+    "time": "2026-06-18 18:35:30",
+    "style": "一套穿搭。",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套穿搭。/上身效果/上身效果_1_方案1.jpg?t=1781778913",
+    "result": "👔 **一套穿搭。**\n\n- 👕 **TS-011** UNIQLO米白棉短袖\n- 👖 **PT-001** 浅水洗蓝牛仔长裤\n- 👟 **SHOE-005** Nike Court Lite全白皮质运动鞋"
+  },
+  {
+    "time": "2026-06-18 18:21:00",
+    "style": "一套今日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套今日穿搭/上身效果/上身效果_1_方案1.jpg?t=1781778045",
+    "result": "👔 **一套今日穿搭**\n\n- 👕 **TS-005** HLA 米白·棉\n- 👖 **PT-001** 未知 浅水洗蓝·牛仔\n- 👟 **SHOE-005** Nike Court Lite系列 全白·皮质"
+  },
+  {
+    "time": "2026-06-18 18:04:11",
+    "style": "日常穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_日常穿搭/上身效果/上身效果_1_方案1.jpg?t=1781777045",
+    "result": "👔 **日常穿搭**\n\n- 👕 **TS-010** HLA 米白·棉\n- 👖 **PT-004** Adidas Sports 黑色·棉\n- 👟 **SHOE-009** Nike 复古高帮系列 米白·皮质"
+  },
+  {
+    "time": "2026-06-18 17:43:20",
+    "style": "一套今日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套今日穿搭/豆包生图/人物_1_方案1.jpg?t=1781775758",
+    "result": "👔 **一套今日穿搭**\n\n- 👕 **TS-011** UNIQLO米白棉\n- 👖 **PT-004** Adidas黑色棉\n- 👟 **SHOE-009** Nike复古高帮系列米白皮质"
+  },
+  {
+    "time": "2026-06-18 12:37:46",
+    "style": "晚上打网球的穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_晚上打网球的穿搭/上身效果/上身效果_1_方案1.jpg?t=1781757455",
+    "result": "👔 **晚上打网球的穿搭**\n\n- 👕 **TS-009** Decathlon 健身衣\n- 👖 **SH-003** Decathlon Kiprun 短裤\n- 👟 **SHOE-010** Puma 运动鞋\n- 🧢 **HAT-003** 未知 运动帽"
+  },
+  {
+    "time": "2026-06-18 12:25:55",
+    "style": "一套今日穿搭。",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套今日穿搭。/上身效果/上身效果_1_方案1.jpg?t=1781756742",
+    "result": "👔 **一套今日穿搭。**\n\n- 👕 **TS-006** H FOREST 黑色·棉\n- 👖 **PT-005** 未知 暗藏青格纹·羊毛混纺\n- 👟 **SHOE-005** Nike Court Lite系列 全白·皮质"
+  },
+  {
+    "time": "2026-06-18 12:22:46",
+    "style": "一套一套美式穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套一套美式穿搭/上身效果/上身效果_1_方案1.jpg?t=1781756555",
+    "result": "👔 **一套一套美式穿搭**\n\n- 👕 **TS-006** H FOREST 黑色·棉\n- 👖 **PT-005** 未知 暗藏青格纹·羊毛混纺\n- 👟 **SHOE-009** Nike 复古高帮系列 米白·皮质"
+  },
+  {
+    "time": "2026-06-18 12:19:13",
+    "style": "用大黄鞋做一套穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_用大黄鞋做一套穿搭/上身效果/上身效果_1_方案1.jpg?t=1781756341",
+    "result": "👔 **用大黄鞋做一套穿搭**\n\n- 👕 **TS-003** HLA 麻灰·棉\n- 👖 **PT-001** 未知 浅水洗蓝·牛仔\n- 👟 **SHOE-007** Timberland 经典工装靴系列 小麦棕·皮质"
+  },
+  {
+    "time": "2026-06-18 12:15:44",
+    "style": "一套晚上打网球穿的服装",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套晚上打网球穿的服装/上身效果/上身效果_1_方案1.jpg?t=1781756132",
+    "result": "👔 **一套晚上打网球穿的服装**\n\n- 👕 **TS-004** Decathlon 网球系列·军绿灰·速干\n- 👖 **SH-005** Decathlon Artengo·卡其灰·速干短裤\n- 👟 **SHOE-009** Nike 复古高帮系列·米白·皮质\n- 🎒 **BAG-007** Wilson 复古运动系列·墨绿色·合成\n- 🧢 **HAT-005** 未知·军绿拼黑·合成\n- 🧥 **LS-002** Uniqlo·墨绿色·棉\n- 🧦 **SOCK-001** 未知·黑色·棉"
+  },
+  {
+    "time": "2026-06-18 11:54:54",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781754882",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TS-005** HLA米白棉\n- 👖 **PT-006** 未知灰蓝水洗牛仔\n- 👟 **SHOE-006** Converse Chuck Taylor高帮姜黄色"
+  },
+  {
+    "time": "2026-06-18 11:51:50",
+    "style": "用大黄靴做一套穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_用大黄靴做一套穿搭/上身效果/上身效果_1_方案1.jpg?t=1781754698",
+    "result": "👔 **用大黄靴做一套穿搭**\n\n- 👕 **TS-006** H FOREST 黑色·棉\n- 👖 **PT-006** 未知 灰蓝水洗·牛仔\n- 👟 **SHOE-007** Timberland 经典工装靴系列 小麦棕·皮质"
+  },
+  {
+    "time": "2026-06-18 11:49:31",
+    "style": "晚上要去打网球，推荐一套穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_晚上要去打网球，推荐一套穿搭/上身效果/上身效果_1_方案1.jpg?t=1781754559",
+    "result": "👔 **晚上要去打网球，推荐一套穿搭**\n\n- 👕 **TS-010** HLA 米白·棉短袖\n- 👖 **PT-006** 未知 灰蓝水洗·牛仔短裤\n- 👟 **SHOE-006** Converse Chuck Taylor高·姜黄色·帆布"
+  },
+  {
+    "time": "2026-06-18 11:08:44",
+    "style": "一套穿搭。",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_一套穿搭。/上身效果/上身效果_1_方案1.jpg?t=1781752111",
+    "result": "👔 **一套穿搭。**\n\n- 👕 **TS-005** HLA米白棉T恤\n- 👖 **PT-005** 未知暗藏青格纹羊毛混纺西裤\n- 👟 **SHOE-006** Converse Chuck Taylor高帮姜黄色帆布鞋"
+  },
+  {
+    "time": "2026-06-18 09:13:53",
+    "style": "今日穿搭。",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_今日穿搭。/上身效果/上身效果_1_方案1.jpg?t=1781745220",
+    "result": "👔 **今日穿搭。**\n\n- 👕 **TS-001** HLA 焦糖色·其他(菠萝纹)\n- 👖 **PT-006** 未知 灰蓝水洗·牛仔\n- 👟 **SHOE-006** Converse Chuck Taylor高 姜黄色·帆布"
+  },
+  {
+    "time": "2026-06-18 09:10:06",
+    "style": "今日穿搭 第1版 请与之前不同",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-18_今日穿搭 第1版 请与之前不同/上身效果/上身效果_1_方案1.jpg?t=1781744992",
+    "result": "👔 **今日穿搭 第1版 请与之前不同**\n\n- 👕 **TS-005** HLA米白棉短袖\n- 👖 **PT-006** 未知灰蓝水洗牛仔长裤\n- 👟 **SHOE-006** Converse Chuck Taylor高帮姜黄色帆布鞋"
+  },
+  {
+    "time": "2026-06-17 23:01:49",
+    "style": "scene_blokecore",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-17_scene_blokecore/上身效果/上身效果_1_方案1.jpg?t=1781708494",
+    "result": "👔 **scene_blokecore**\n\n- 👕 **TS-007** Adidas曼联主场速干球迷版球衣\n- 🧥 **JK-001** Adidas×曼联复古训练立领夹克\n- 👖 **PT-004** Adidas Sportswear三道杠束脚卫裤\n- 👟 **SHOE-008** Jordan复古帆布拼色鞋\n- 🧢 **HAT-002** 砖红色棒球帽"
+  },
+  {
+    "time": "2026-06-17 17:10:27",
+    "style": "用黑色手表搭配一套服装",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-17_用黑色手表搭配一套服装/上身效果/上身效果_1_方案1.jpg?t=1781687414",
+    "result": "👔 **用黑色手表搭配一套服装**\n\n- 👕 **TS-004** 落肩宽松运动T恤\n- 👖 **SH-007** 宽松机能短裤\n- 👟 **SHOE-009** Nike复古高帮系列\n- ⌚ **ACC-004** Apple黑色手表\n- 🧢 **HAT-001** 灰绿色渔夫帽\n- 🧦 **SOCK-002** 深灰蓝船袜"
+  },
+  {
+    "time": "2026-06-17 17:02:26",
+    "style": "需要一套晚上打羽毛球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-17_需要一套晚上打羽毛球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781686932",
+    "result": "👔 **需要一套晚上打羽毛球穿搭**\n\n- 👕 **TS-007** Adidas 曼联主场速干球衣\n- 👖 **SH-001** Cotton On 深灰色速干运动短裤\n- 👟 **SHOE-005** Nike Court Lite 全白入门网球鞋\n- 🧦 **SOCK-006** 米白色防滑底短袜\n- ⌚ **ACC-004** Apple 黑色表带简约手表\n- 🎒 **BAG-003** Puma 黑色网眼运动背包"
+  },
+  {
+    "time": "2026-06-17 10:56:38",
+    "style": "一套今日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-17_一套今日穿搭/上身效果/上身效果_1_方案1.jpg?t=1781664985",
+    "result": "👔 **一套今日穿搭**\n\n- 👕 **TS-011** 未知宽松落肩纯色T恤\n- 👖 **SH-008** 未知灰褐色亚麻西装短裤\n- 👟 **SHOE-005** Nike Court Lite系列入门网球鞋\n- 🧢 **HAT-001** 未知灰绿色渔夫帽\n- 🕶️ **SUN-001** 未知透明米灰异形墨镜\n- 🎒 **BAG-005** Nike深灰绿托特包"
+  },
+  {
+    "time": "2026-06-17 10:19:30",
+    "style": "今日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-17_今日穿搭/上身效果/上身效果_1_方案1.jpg?t=1781662756",
+    "result": "👔 **今日穿搭**\n\n- 👕 **TS-004** 未知落肩宽松运动T恤\n- 👖 **SH-001** Cotton On深灰色速干短裤\n- 👟 **SHOE-011** 未知复古拼接休闲鞋\n- 🧢 **HAT-001** 未知灰绿色渔夫帽\n- 🧦 **SOCK-002** 未知深灰蓝船袜"
+  },
+  {
+    "time": "2026-06-16 10:26:42",
+    "style": "通勤穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-16_通勤穿搭/上身效果/上身效果_1_方案1.jpg?t=1781576789",
+    "result": "👔 **通勤穿搭**\n\n- 👕 **SHIRT-001** Uniqlo米白条纹竖条纹衬衫\n- 👖 **PT-001** 浅水洗蓝宽松直筒牛仔裤\n- 👟 **SHOE-001** 米白灰厚底老爹鞋\n- 🎒 **BAG-002** YASCIQ灰色花呢简约通勤包\n- 🧦 **SOCK-002** 深灰蓝基础船袜"
+  },
+  {
+    "time": "2026-06-16 09:26:37",
+    "style": "推荐一下今日穿搭，需要出门",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-16_推荐一下今日穿搭，需要出门/上身效果/上身效果_1_方案1.jpg?t=1781573185",
+    "result": "👔 **推荐一下今日穿搭，需要出门**\n\n- 👕 **TS-002** FUR SPEED 夏威夷椰树印花系列短袖\n- 👖 **SH-002** 未知夏威夷椰树印花系列短裤\n- 👟 **SHOE-004** Converse Chuck Taylor低帮系列帆布鞋\n- 🧢 **HAT-004** 未知米白基础棒球帽\n- 🕶️ **SUN-002** 未知银灰经典方形墨镜\n- 🎒 **BAG-004** Champion Leisure Club系列米白托特包\n- ⌚ **ACC-003** Apple Watch表带套组\n- 🧦 **SOCK-005** 未知基础灰色船袜"
+  },
+  {
+    "time": "2026-06-16 02:02:29",
+    "style": "傍晚跑步穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-16_傍晚跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781546537",
+    "result": "👔 **傍晚跑步穿搭**\n\n- 👕 **TS-009** Lululemon Metal Vent Tech科技运动短袖\n- 👖 **SH-003** Decathlon Kiprun专业跑步双层短裤\n- 👟 **SHOE-009** Nike复古高帮篮球鞋\n- 🧢 **HAT-004** 米白色基础棒球帽\n- ⌚ **ACC-003** Apple Watch表带套组（运动款黑色）\n- 🧦 **SOCK-006** 米白色防滑底短袜"
+  },
+  {
+    "time": "2026-06-16 00:30:03",
+    "style": "推荐明天雨天穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-16_推荐明天雨天穿搭/上身效果/上身效果_1_方案1.jpg?t=1781540988",
+    "result": "👔 **推荐明天雨天穿搭**\n\n- 👕 **TS-006** H FOREST黑色拼接口袋T恤\n- 👖 **PT-002** 卡其色工装风束脚长裤\n- 👟 **SHOE-001** 米白灰厚底老爹鞋\n- 🧥 **JK-002** 深灰棕长款连帽风衣\n- 🧢 **HAT-001** 灰绿色渔夫帽\n- 🎒 **BAG-006** 军绿卡其机能双肩包\n- ⌚ **ACC-003** Apple Watch尼龙回环表带"
+  },
+  {
+    "time": "2026-06-16 00:11:34",
+    "style": "今日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-16_今日穿搭/上身效果/上身效果_1_方案1.jpg?t=1781539880",
+    "result": "👔 **今日穿搭**\n\n- 👕 **TS-002** FUR SPEED夏威夷椰树印花短袖\n- 👖 **SH-001** Cotton On基础速干短裤\n- 👟 **SHOE-004** Converse Chuck Taylor低帮帆布鞋\n- 🧢 **HAT-004** 米白色基础棒球帽\n- 🧦 **SOCK-005** 基础灰色船袜\n- 🕶️ **SUN-002** 银灰色经典方形墨镜\n- ⌚ **ACC-003** Apple Watch回环尼龙表带"
+  },
+  {
+    "time": "2026-06-15 16:34:13",
+    "style": "今日穿搭 第2版 请与之前不同",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-15_今日穿搭 第2版 请与之前不同/上身效果/上身效果_1_方案1.jpg?t=1781512440",
+    "result": "👔 **今日穿搭 第2版 请与之前不同**\n\n- 👕 **TS-008** FUR SPEED 夏威夷椰树印花短袖\n- 👖 **SH-008** 亚麻西装短裤\n- 👟 **SHOE-002** Adidas 复古训练鞋\n- 🧢 **HAT-004** 基础棒球帽\n- 🎒 **BAG-004** Champion Leisure Club 米白托特包\n- 🕶️ **SUN-002** 经典方形墨镜\n- ⌚ **ACC-003** Apple Watch 回环尼龙表带\n- 🧦 **SOCK-005** 基础船袜"
+  },
+  {
+    "time": "2026-06-15 08:51:09",
+    "style": "今天起雾了，我该穿些什么？",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-15_今天起雾了，我该穿些什么？/上身效果/上身效果_1_方案1.jpg?t=1781484656",
+    "result": "👔 **今天起雾了，我该穿些什么？**\n\n- 👕 **TS-011** 宽松落肩纯色T恤\n- 🧥 **SHIRT-002** Uniqlo基础衬衫，敞穿或卷袖\n- 👖 **SH-004** 宽松休闲短裤\n- 👟 **SHOE-005** Nike Court Lite入门网球鞋\n- 🧢 **HAT-004** 基础棒球帽\n- 🎒 **BAG-005** Nike简约实用托特包\n- 🧦 **SOCK-005** 基础船袜\n- ⌚ **ACC-003** Apple Watch回环尼龙表带"
+  },
+  {
+    "time": "2026-06-15 08:40:24",
+    "style": "起雾了，今天该穿什么？",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781484017",
+    "result": "👔 **起雾了，今天该穿什么？**\n\n- 👕 **TS-009** Lululemon Metal Vent Tech科技运动短袖\n- 👖 **SH-005** Decathlon Artengo网球线运动短裤\n- 👟 **SHOE-005** Nike Court Lite入门级网球鞋\n- 🧢 **HAT-004** 基础棒球帽\n- 🎒 **BAG-007** Wilson复古网球桶包\n- 🧦 **SOCK-006** 防滑底短袜\n- ⌚ **ACC-003** Apple Watch黑色运动表带"
+  },
+  {
+    "time": "2026-06-14 20:40:12",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781440796",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TS-009** Lululemon Metal Vent Tech科技运动短袖\n- 👖 **SH-005** Decathlon Artengo网球线运动短裤\n- 👟 **SHOE-005** Nike Court Lite入门级网球鞋\n- 🧢 **HAT-004** 基础棒球帽\n- 🎒 **BAG-007** Wilson复古网球桶包\n- 🧦 **SOCK-006** 防滑底短袜\n- ⌚ **ACC-003** Apple Watch黑色运动表带"
+  },
+  {
+    "time": "2026-06-14 20:26:51",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781439999",
+    "result": "👔 打网球穿搭\n\n📅 2026-06-14\n\n☀️ 晴 27°C (↓20°C ↑32°C)\n\n🌪 今日天气多变，建议准备备用穿搭方案\n\n![效果图](https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@1720167/outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1_%E6%96%B9%E6%A1%881.jpg)\n\n━━━ 📖 风格故事 ━━━\n\nCity Boy 是现代时尚史上极少数**完全从一本杂志中诞生**的风格。1976年7月，Magazine House 创办男性时尚杂志《POPEYE》，封面标语 **\"Magazine for City Boys\"** 定义了一个时代。创刊号派出编辑飞往洛杉矶报道加州青年文化，...\n\n💬 \"不论外表，而是绅士礼貌又有上进心的男生。他们所代表的是一种更丰富的精神和生活方式——对流行敏感，追求好品味的生活，同时又轻盈地保持着自己的价值观。不管年龄几何身处何处，只要拥有这样的精神，谁都是硬核的 City Boy。\"\n\n📚 [了解更多：日系 City Boy完整百科](https://htmlpreview.github.io/?https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@1720167/styles_universal/japanese_city_boy/encyclopedia.html)\n\n━━━ 👔 今日搭配 ━━━\n\n👕 **Lululemon Metal Vent Tech科技运动短袖**\n`TS-009` · 匹配度 0分\n\n🩳 **Decathlon Artengo网球线运动短裤**\n`SH-005` · 匹配度 0分\n\n👟 **Nike Court Lite入门级网球鞋**\n`SHOE-005` · 匹配度 27分\n\n🧢 **基础棒球帽**\n`HAT-004` · 匹配度 42分\n\n🎒 **Wilson复古网球桶包**\n`BAG-007` · 匹配度 0分\n\n🧦 **防滑底短袜**\n`SOCK-006` · 匹配度 48分\n\n💍 **Apple Watch运动表带**\n`ACC-003` · 匹配度 0分\n\n━━━ 📸 风格参考图 ━━━\n\n📸 [Vogue 东京2024秋冬时装周街拍 — City Boy风格造型合集](https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows) — Vogue Runway\n\n📸 [木村拓哉等40代男星私服穿搭 — 日系成熟男性范本](https://en.friday.news/article/2490) — FRIDAY DIGITAL\n\n📸 [Exploring CityBoy Style — 日本都市时尚现象深度解读](https://www.minecolabs.com/post/exploring-cityboy-style-japan-s-urban-street-fashion-phenomenon) — Minecolabs\n\n━━━ 🎨 配色 ━━━\n\n![配色](https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@1720167/outfits/2026-06-14_%E6%89%93%E7%BD%91%E7%90%83%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/_swatches.png)\n\n低饱和冷色主调 + 1个暖色点缀（如姜黄鞋/帽）\n\n━━━ 🔄 今天也适合 ━━━\n\n[度假休闲](https://climatic-erupt-mandatory.ngrok-free.dev/try/resort_vacation) — 今天也适合的百搭风格\n\n[Clean Fit](https://climatic-erupt-mandatory.ngrok-free.dev/try/clean_fit) — 今天也适合的百搭风格\n\n[轻熟休闲](https://climatic-erupt-mandatory.ngrok-free.dev/try/smart_casual) — 🧪 风格实验 · adjacent"
+  },
+  {
+    "time": "2026-06-14 20:20:54",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781439654",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心\n- 👖 **PT-003** 深灰色灯芯绒束脚裤，有NBA勇士元素"
+  },
+  {
+    "time": "2026-06-14 19:58:18",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781438298",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TS-001** 焦糖橙色Polo衫，小刺绣短袖\n- 👖 **SH-003** 速干运动短裤，假两件设计\n- 👟 **SHOE-007** Timberland大黄靴风格鞋款，仅作非重复往返/场边选择"
+  },
+  {
+    "time": "2026-06-14 19:10:04",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781435404",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心\n- 👖 **PT-003** 深灰色灯芯绒束脚裤，NBA勇士元素"
+  },
+  {
+    "time": "2026-06-14 18:56:24",
+    "style": "网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781434584",
+    "result": "👔 **网球穿搭**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心"
+  },
+  {
+    "time": "2026-06-14 18:50:43",
+    "style": "网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781434243",
+    "result": "👔 **网球穿搭**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心"
+  },
+  {
+    "time": "2026-06-14 18:41:42",
+    "style": "明天我有个运动计划，幫我推薦衣服",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_明天我有个运动计划，幫我推薦衣服/上身效果/上身效果_1_方案1.jpg?t=1781433702",
+    "result": "👔 **明天我有个运动计划，幫我推薦衣服**\n\n- 👕 **TANK-001** 螺纹/罗纹运动背心\n- 🧥 **TS-002** 开领短袖衬衫，白底绿色热带植物印花\n- 👖 **SH-002** 夏威夷短裤/沙滩裤，白底绿色热带植物印花"
+  },
+  {
+    "time": "2026-06-14 18:39:33",
+    "style": "japanese_city_boy",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_japanese_city_boy/上身效果/上身效果_1_方案1.jpg?t=1781433573",
+    "result": "👔 **japanese_city_boy**\n\n- 👕 **TS-011** 浅米色简约纯色短袖\n- 👔 **SHIRT-001** 米白细条纹长袖衬衫，敞开穿并卷袖\n- 👖 **SH-004** 浅灰色休闲抽绳短裤\n- 👟 **SHOE-002** 阿迪达斯复古德训鞋风格休闲鞋\n- 🧦 **SOCK-005** 简约浅灰色中筒袜\n- 🎒 **BAG-005** Nike深灰绿托特包/帆布包\n- ⌚ **ACC-003** Apple Watch，搭配军绿色回环表带"
+  },
+  {
+    "time": "2026-06-14 18:26:38",
+    "style": "晴日 Clean Fit",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781432798",
+    "result": "👔 **晴日 Clean Fit**\n\n- 👕 **TANK-001** 麻灰色螺纹基础背心\n- 👖 **SH-001** 黑色速干运动短裤"
+  },
+  {
+    "time": "2026-06-14 16:35:31",
+    "style": "跑步穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781426131",
+    "result": "👔 **跑步穿搭**\n\n- 👕 **TANK-001** 麻灰色螺纹基础背心\n- 👖 **SH-001** 黑色速干运动短裤"
+  },
+  {
+    "time": "2026-06-14 16:31:13",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781425873",
+    "result": "👔 **打网球穿搭**\n\n- 👕 **TS-001** 焦糖橙色Polo衫，小刺绣短袖\n- 👖 **SH-003** 灰色速干运动短裤，假两件设计\n- 👟 **SHOE-007** Timberland大黄靴风格鞋"
+  },
+  {
+    "time": "2026-06-14 16:07:44",
+    "style": "探索 街头新风格",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_探索 街头新风格/上身效果/上身效果_1_方案1.jpg?t=1781424464",
+    "result": "👔 **探索 街头新风格**\n\n- 👕 **TS-004** 深灰色运动速干短袖，宽松度适中\n- 👖 **SH-005** 灰色速干运动短裤，大口袋设计\n- 👟 **SHOE-003** 亮橙色阿迪达斯足球风运动鞋\n- 🧢 **HAT-003** 黑色户外渔夫帽/登山帽\n- 🎒 **BAG-003** 黑色户外马甲包/网眼背包\n- 🧦 **SOCK-003** 黑绿红民族风复古图案船袜"
+  },
+  {
+    "time": "2026-06-14 16:06:29",
+    "style": "晴日 Clean Fit 新",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_晴日 Clean Fit 新/上身效果/上身效果_1_方案1.jpg?t=1781424389",
+    "result": "👔 **晴日 Clean Fit 新**\n\n- 👕 **TS-009** 浅灰色肌理速干短袖T恤\n- 👖 **PT-002** 卡其色抽绳束脚休闲裤\n- 👟 **SHOE-006** 姜黄色高帮帆布鞋\n- 🧦 **SOCK-001** 黑色小熊图案短袜\n- 🕶️ **SUN-002** 银色金属框运动墨镜"
+  },
+  {
+    "time": "2026-06-14 15:18:07",
+    "style": "晴日 Clean Fit",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_晴日 Clean Fit/上身效果/上身效果_1_方案1.jpg?t=1781421487",
+    "result": "👔 **晴日 Clean Fit**\n\n- 👕 **TS-011** 浅米色/杏色简约纯色短袖\n- 🧥 **SHIRT-001** 米白细条纹长袖衬衫，敞穿卷袖\n- 👖 **SH-004** 浅灰色抽绳休闲短裤\n- 👟 **SHOE-002** 米白灰黑复古德训鞋\n- 🧦 **SOCK-005** 浅灰色简约中筒袜\n- 🎒 **BAG-005** 深灰绿Nike托特包/帆布包\n- ⌚ **ACC-003** Apple Watch黑色+军绿表带"
+  },
+  {
+    "time": "2026-06-14 13:39:29",
+    "style": "探索 晴日新风格",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_探索 晴日新风格/上身效果/上身效果_1_方案1.jpg?t=1781415569",
+    "result": "👔 **探索 晴日新风格**\n\n- 👕 **TS-005** 纯色T恤，左胸小图案\n- 🧥 **SHIRT-004** 格纹长袖衬衫，卷袖敞穿\n- 👖 **SH-007** 运动五分裤，抽绳腰\n- 👟 **SHOE-009** 高帮空军一号风格休闲鞋\n- 🧦 **SOCK-004** 竖条纹中筒袜\n- 🎒 **BAG-006** 功能双肩包/旅行包\n- **HAT-005** 运动发带/头带\n- ⌚ **ACC-001** 桃核/菩提手串"
+  },
+  {
+    "time": "2026-06-14 13:39:11",
+    "style": "大胆 突破尝试",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_大胆 突破尝试/上身效果/上身效果_1_方案1.jpg?t=1781415551",
+    "result": "👔 **大胆 突破尝试**\n\n- 👕 **TS-007** 曼联红色足球球衣/运动短袖\n- 👖 **SH-007** 运动五分裤、抽绳腰\n- 👟 **SHOE-009** Nike高帮空军一号风格休闲鞋\n- 🧦 **SOCK-004** 竖条纹中筒袜\n- 🧢 **HAT-005** 运动发带/头带\n- 🎒 **BAG-004** Champion复古抽绳双肩包\n- ⌚ **ACC-001** 桃核/菩提手串"
+  },
+  {
+    "time": "2026-06-14 13:39:05",
+    "style": "晴日韩系简约",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_晴日韩系简约/上身效果/上身效果_1_方案1.jpg?t=1781415545",
+    "result": "👔 **晴日韩系简约**\n\n- 👕 **TS-005** 纯色T恤，左胸小图案\n- 🧥 **SHIRT-002** 纯色长袖衬衫，卷袖敞开穿\n- 👖 **PT-001** 直筒/宽松水洗牛仔裤\n- 👟 **SHOE-001** 复古休闲运动鞋/老爹鞋\n- 🧦 **SOCK-004** 竖条纹中筒袜\n- 🎒 **BAG-002** 简约双肩包/背包\n- ⌚ **ACC-001** 桃核/菩提手串"
+  },
+  {
+    "time": "2026-06-14 12:35:36",
+    "style": "大胆 突破尝试",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_大胆 突破尝试/上身效果/上身效果_1_方案1.jpg?t=1781411736",
+    "result": "👔 **大胆 突破尝试**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心\n- 👕 **TS-002** 白色底绿色热带植物印花开领短袖衬衫\n- 👖 **SH-002** 白色底绿色热带植物印花夏威夷短裤\n- 👟 **SHOE-006** 姜黄色/土黄色匡威高帮帆布鞋\n- 🧦 **SOCK-003** 黑绿红民族风复古图案船袜\n- 🧢 **HAT-003** 黑色户外渔夫帽/登山帽\n- 🎒 **BAG-003** 黑色户外马甲包/网眼背包\n- 🕶️ **SUN-002** 银色金属框运动/骑行墨镜\n- ⌚ **ACC-003** Apple Watch手表黑色+军绿表带"
+  },
+  {
+    "time": "2026-06-14 12:35:28",
+    "style": "探索 晴日新风格",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_探索 晴日新风格/上身效果/上身效果_1_方案1.jpg?t=1781411728",
+    "result": "👔 **探索 晴日新风格**\n\n- 👕 **TS-002** 白色底绿色热带植物印花开领短袖衬衫\n- 👖 **SH-002** 白色底绿色热带植物印花夏威夷短裤\n- 👟 **SHOE-002** 阿迪达斯复古德训鞋风格休闲鞋\n- 🧦 **SOCK-005** 简约中筒袜\n- 🧢 **HAT-003** 户外渔夫帽/登山帽\n- 🎒 **BAG-005** Nike托特包/帆布包\n- 🕶️ **SUN-002** 银色金属框运动/骑行墨镜\n- ⌚ **ACC-003** Apple Watch表带 + 手表"
+  },
+  {
+    "time": "2026-06-14 12:35:23",
+    "style": "晴日韩系简约",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_晴日韩系简约/上身效果/上身效果_1_方案1.jpg?t=1781411723",
+    "result": "👔 **晴日韩系简约**\n\n- 👕 **TS-011** 浅米色/杏色简约纯色短袖\n- 👖 **SH-004** 浅灰色休闲抽绳短裤\n- 👟 **SHOE-002** 阿迪达斯复古德训鞋风格休闲鞋\n- 🧦 **SOCK-005** 简约浅灰色中筒袜\n- 🧢 **HAT-003** 黑色户外渔夫帽/登山帽\n- 🎒 **BAG-005** Nike托特包/帆布包\n- ⌚ **ACC-003** Apple Watch表带 + 手表"
+  },
+  {
+    "time": "2026-06-14 01:54:19",
+    "style": "推送给微信",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_推送给微信/上身效果/上身效果_1_方案1.jpg?t=1781373259",
+    "result": "👔 **推送给微信**\n\n- 👕 **TS-003** 假两件设计小V领短袖，带层次肌理感\n- 👖 **SH-008** 亚麻/棉麻质感休闲短裤\n- 👟 **SHOE-004** 匡威低帮帆布鞋\n- 🧢 **HAT-001** 休闲渔夫帽\n- 🎒 **BAG-001** 简约邮差包/单肩包\n- 🧦 **SOCK-002** 船袜/隐形袜\n- 🕶️ **SUN-001** 经典金属框墨镜"
+  },
+  {
+    "time": "2026-06-14 01:48:20",
+    "style": "大胆 混搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-14_大胆 混搭/上身效果/上身效果_1_方案1.jpg?t=1781372900",
+    "result": "👔 **大胆 混搭**\n\n- 👕 **TS-008** 藏青色底绿色热带植物印花夏威夷短袖衬衫\n- 👖 **SH-006** 棕色速干运动短裤\n- 👟 **SHOE-008** 红色+米白/灰 Jordan休闲板鞋\n- 🧢 **HAT-002** 紫红色棒球帽\n- 🎒 **BAG-007** 墨绿色Wilson复古桶包/运动包\n- 🕶️ **SUN-003** 亮绿色复古时尚墨镜\n- 🧦 **SOCK-006** 白色简约短筒运动袜"
+  },
+  {
+    "time": "2026-06-12 18:20:20",
+    "style": "明日穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_明日穿搭/上身效果/上身效果_1_方案1.jpg?t=1781259620",
+    "result": "👔 **明日穿搭**\n\n- 👕 **TANK-002** 白色螺纹/罗纹背心\n- 👕 **TS-008** 藏青色底绿色热带植物印花夏威夷短袖衬衫\n- 👖 **SH-002** 白色底绿色热带植物印花夏威夷短裤/沙滩裤\n- 🧦 **SOCK-003** 黑绿红民族风/复古图案船袜"
+  },
+  {
+    "time": "2026-06-12 17:42:04",
+    "style": "网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781257324",
+    "result": "👔 **网球穿搭**\n\n- **TANK-002 白色螺纹基础背心**\n- **SH-003 灰色速干运动短裤，假两件设计**\n- **SHOE-010 Puma黑白运动拖鞋**\n- **HAT-002 紫红色棒球帽**\n- **BAG-002 麻灰色简约双肩包**"
+  },
+  {
+    "time": "2026-06-12 17:31:02",
+    "style": "打网球穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_打网球穿搭/上身效果/上身效果_1_方案1.jpg?t=1781256662",
+    "result": "👔 **打网球穿搭**\n\n- **TANK-002 白色罗纹背心**\n- **SH-005 速干运动短裤、大口袋设计**\n- **SHOE-007 Timberland大黄靴风格鞋**"
+  },
+  {
+    "time": "2026-06-12 15:37:39",
+    "style": "雨日轻熟叠穿",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_雨日轻熟叠穿/上身效果/上身效果_1_方案1.jpg?t=1781249859",
+    "result": "👔 **雨日轻熟叠穿**\n\n- **TS-011 浅米色简约纯色短袖**\n- **JK-006 深靛蓝牛仔工装夹克**\n- **PT-002 卡其色束脚休闲裤**\n- **SHOE-005 Nike白色板鞋**"
+  },
+  {
+    "time": "2026-06-12 15:37:26",
+    "style": "遇见傍晚跑步穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_遇见傍晚跑步穿搭/上身效果/上身效果_1_方案1.jpg?t=1781249846",
+    "result": "👔 **遇见傍晚跑步穿搭**\n\n- **TS-004 深灰色运动速干T恤**\n- **SH-007 深灰/黑色运动五分裤**\n- **SHOE-008 红色+米白/灰 Jordan休闲板鞋**\n- **SOCK-001 黑色小熊图案短袜**\n- **HAT-003 黑色户外渔夫帽**\n- **BAG-004 米白+咖啡棕 Champion抽绳包**"
+  },
+  {
+    "time": "2026-06-12 15:37:25",
+    "style": "运动穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_运动穿搭/上身效果/上身效果_1_方案1.jpg?t=1781249845",
+    "result": "👔 **运动穿搭**\n\n- **TS-009 浅灰色速干运动T恤**\n- **SH-001 黑色速干运动短裤**\n- **SHOE-003 亮橙色阿迪达斯足球鞋**\n- **HAT-005 灰色+浅绿运动发带**\n- **BAG-003 黑色户外马甲包**\n- **SUN-002 银色运动骑行墨镜**\n- **ACC-003 Apple Watch**\n- **SOCK-006 白色简约运动袜**"
+  },
+  {
+    "time": "2026-06-12 15:26:22",
+    "style": "推荐穿搭",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_推荐穿搭/上身效果/上身效果_1_方案1.jpg?t=1781249182",
+    "result": "👔 **推荐穿搭**\n\n- **TS-002 白色底+绿色热带植物印花 开领衬衫**\n- **SH-006 棕色/咖啡色 速干运动短裤**\n- **SHOE-001 米白色+灰色 复古休闲老爹鞋**\n- **HAT-001 灰色 渔夫帽**\n- **SUN-003 亮绿色/草绿框 复古时尚墨镜**\n- **BAG-005 深灰绿/军绿 Nike托特包**\n- **SOCK-004 浅蓝色 竖条纹中筒袜**\n- **ACC-001 棕色/咖啡色 桃核手串**"
+  },
+  {
+    "time": "2026-06-12 12:49:28",
+    "style": "日系格纹叠穿",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_日系格纹叠穿/上身效果/上身效果_1_方案1.jpg?t=1781239768",
+    "result": "👔 **日系格纹叠穿**\n\n- **TS-006 黑色绿口袋短袖**\n- **SHIRT-004 灰色格纹衬衫**\n- **PT-005 藏青暗格纹西裤**\n- **SHOE-006 姜黄匡威高帮**"
+  },
+  {
+    "time": "2026-06-12 12:49:20",
+    "style": "夏日浅色CleanFit",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_夏日浅色CleanFit/上身效果/上身效果_1_方案1.jpg?t=1781239760",
+    "result": "👔 **夏日浅色CleanFit**\n\n- **TS-011 浅米色简约纯色短袖**\n- **SH-004 浅灰色休闲短裤**\n- **SHOE-002 米白复古德训鞋**"
+  },
+  {
+    "time": "2026-06-12 12:21:50",
+    "style": "日系清凉休闲",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_日系清凉休闲/generated/穿搭参考图_1_方案1.jpg?t=1781238110",
+    "result": "👔 **日系清凉休闲**\n\n- **TS-011 浅米色简约纯色短袖**\n- **SH-008 棕色亚麻休闲短裤**\n- **SHOE-005 Nike白色板鞋**\n- **BAG-001 卡其色邮差包**\n- **SOCK-002 深灰船袜**"
+  },
+  {
+    "time": "2026-06-12 10:53:37",
+    "style": "夏日短裤轻熟休闲",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_夏日短裤轻熟休闲/上身效果/上身效果_1_方案1.jpg?t=1781232817",
+    "result": "👔 **夏日短裤轻熟休闲**\n\n- **TS-001 橙色/焦糖色Polo**\n- **SH-008 棕色亚麻休闲短裤**\n- **SHOE-005 Nike白色板鞋**\n- **BAG-007 Wilson墨绿复古桶包**\n- **HAT-004 米白色棒球帽**\n- **ACC-002 沉香手串**"
+  },
+  {
+    "time": "2026-06-12 10:50:07",
+    "style": "日系条纹休闲风",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_日系条纹休闲风/上身效果/上身效果_1_方案1.jpg?t=1781232607",
+    "result": "👔 **日系条纹休闲风**\n\n- **TS-010 米白底深绿条纹T恤**\n- **PT-001 浅蓝水洗牛仔裤**\n- **SHOE-004 匡威米色低帮帆布鞋**\n- **BAG-006 卡其色功能双肩包**\n- **SUN-001 枪灰色金属框墨镜**\n- **SOCK-002 深灰船袜**"
+  },
+  {
+    "time": "2026-06-12 10:12:01",
+    "style": "薄荷绿轻熟衬衫",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_薄荷绿轻熟衬衫/上身效果/上身效果_1_方案1.jpg?t=1781230321",
+    "result": "👔 **薄荷绿轻熟衬衫**\n\n- **SHIRT-002 浅青色薄荷绿衬衫**\n- **PT-002 卡其色束脚休闲裤**\n- **SHOE-002 阿迪达斯复古德训鞋**\n- **BAG-001 卡其色简约邮差包**\n- **ACC-002 沉香手串**\n- **SOCK-005 浅灰色中筒袜**"
+  },
+  {
+    "time": "2026-06-12 10:03:28",
+    "style": "阴天灰调Clean Fit",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_阴天灰调Clean Fit/上身效果/上身效果_1_方案1.jpg?t=1781229808",
+    "result": "👔 **阴天灰调Clean Fit**\n\n- **TS-005 白色纯色短袖**\n- **JK-005 藏青色暗格纹西装外套**\n- **PT-006 灰色水洗直筒牛仔裤**\n- **SHOE-002 阿迪达斯复古德训鞋**"
+  },
+  {
+    "time": "2026-06-12 09:54:15",
+    "style": "雨天暗色轻熟",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-12_雨天暗色轻熟/上身效果/上身效果_1_方案1.jpg?t=1781229255",
+    "result": "👔 **雨天暗色轻熟**\n\n- **TS-003 麻灰色假两件短袖**\n- **JK-003 黑色仿皮飞行员夹克**\n- **PT-003 深灰灯芯绒束脚裤**\n- **SHOE-009 米白高帮AF1**"
+  },
+  {
+    "time": "2026-06-11 18:32:56",
+    "style": "曼联运动风",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-11_曼联运动风/generated/穿搭参考图_1_方案1.jpg?t=1781173976",
+    "result": "👔 **曼联运动风**\n\n- **JK-001 曼联/阿迪达斯运动外套**\n- **TS-005 白色纯色T恤**\n- **SH-007 深灰色运动五分裤**\n- **SHOE-008 红色+米白 Jordan 板鞋**\n- **HAT-004 米白色棒球帽**\n- **BAG-005 Nike 托特包**\n- **SOCK-006 白色运动袜**"
+  },
+  {
+    "time": "2026-06-11 18:02:17",
+    "style": "日系轻熟休闲",
+    "status": "done",
+    "image_url": "https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/outfits/2026-06-11_日系轻熟休闲/generated/穿搭参考图_方案1.jpg?t=1781172137",
+    "result": "👔 **日系轻熟休闲**\n\n- **TS-011 浅米色简约纯色短袖**\n- **SH-008 棕色亚麻休闲短裤**\n- **SHOE-005 Nike白色板鞋**\n- **SOCK-002 深灰船袜**\n- **SUN-003 亮绿色复古墨镜**\n- **BAG-001 卡其色邮差包**\n- **JK-006 深靛蓝工装夹克**"
+  }
+]

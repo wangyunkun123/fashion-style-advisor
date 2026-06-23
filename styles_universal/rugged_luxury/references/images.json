@@ -1,0 +1,22 @@
+{
+  "style_id": "rugged_luxury",
+  "_last_updated": "2026-06-13", "_status": "collected",
+  "categories": {
+    "editorial": {"label": "杂志大片", "images": [
+      {"url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/ferragamo", "caption": "Ferragamo SS26 — Maximilian Davis的Safari夹克×巧克力棕", "source": "Vogue Runway"},
+      {"url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/zegna", "caption": "Zegna SS26 — 高性能面料×意大利剪裁的户外奢华", "source": "Vogue Runway"}
+    ]},
+    "runway": {"label": "秀场T台", "images": [
+      {"url": "https://www.gq.com/story/rugged-luxury-menswear-trend-2025", "caption": "GQ — Rugged Luxury: 粗砺奢华的崛起", "source": "GQ"}
+    ]},
+    "celebrity": {"label": "明星名人", "images": [
+      {"url": "https://www.mrporter.com/en-jp/journal/fashion/safari-jacket-menswear-guide", "caption": "MR PORTER — Safari夹克穿搭指南：Daniel Craig的休闲场景", "source": "MR PORTER"}
+    ]},
+    "streetstyle": {"label": "街拍造型", "images": [
+      {"url": "https://www.vogue.com/slideshow/best-street-style-milan-menswear-spring-2026", "caption": "米兰男装周街拍 — Safari夹克×卡其裤×乐福鞋", "source": "Vogue"}
+    ]},
+    "social": {"label": "社交平台", "images": [
+      {"url": "https://www.permanentstyle.com/2025/01/safari-jacket-guide.html", "caption": "Permanent Style — Safari夹克的完整穿搭解析", "source": "Permanent Style"}
+    ]}
+  }
+}

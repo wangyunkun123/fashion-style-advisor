@@ -1,0 +1,17 @@
+{
+  "gender": "female",
+  "onboarding_step": 4,
+  "body": {
+    "height": "174",
+    "weight": "55",
+    "shape": "hourglass",
+    "skin_tone": "tan",
+    "concern": "",
+    "skipped": false
+  },
+  "style_prefs": [
+    "WF-01"
+  ],
+  "onboarding_complete": true,
+  "onboarding_done_at": "2026-06-23T09:54:27Z"
+}

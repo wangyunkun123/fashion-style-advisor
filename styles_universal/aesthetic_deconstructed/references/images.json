@@ -1,0 +1,53 @@
+{
+  "style_id": "aesthetic_deconstructed",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "解构主义 Deconstructed：先锋剪裁打破传统西装结构，关键词 - 半件西装、不对称剪裁、裸露缝线、Comme des Garçons、Sacai、Yohji Yamamoto",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://Rain-mag.com/comme-des-garcons-homme-plus-fallwinter-2026-subverted-tailoring",
+          "caption": "Comme des Garçons Homme Plus FW26 — Rei Kawakubo「黑洞」主题：西装切半重新叠加，碎天鹅绒×金属锦缎",
+          "source": "Rain Magazine",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-ready-to-wear/torisheju",
+          "caption": "Torishéju Spring 2026 — LVMH Savoir-Faire奖得主：变异剪裁，牛仔夹克肩膀前拉成露肩领",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://theimpression.com/sacai-fall-2026-mens-fashion-show-review/",
+          "caption": "Sacai Fall 2026 — Chitose Abe 模块化拼接：百慕大短裤无缝变身直筒长裤，Levi's Type1+Type2拼接粗花呢西装",
+          "source": "The Impression",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://wwd.com/runway/mens-fall-2026/florence/hed-mayner/review/",
+          "caption": "Hed Mayner Fall 2026 — Pitti Uomo客座设计师：圆润夸张的袖线、沙漏型收腰轮廓",
+          "source": "WWD",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://modernnotoriety.com/ziggy-chen-autumn-winter-2026-dissparation/",
+          "caption": "Ziggy Chen AW26 'DISSPARATION' — 上海先锋设计师：拉长软结构剪裁，暴露衬里与层叠构建过程",
+          "source": "Modern Notoriety",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "style_id": "australian_surf_casual",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "澳洲冲浪休闲：阳光、海岸、轻松自在，关键词 - 冲浪短裤、复古图案T恤、宽松帽衫、古铜色肌肤、金色漂染发",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/interviews/interview-with-billy-kennedy/",
+          "caption": "MMSCENE — Billy Kennedy 维多利亚州户外阳光下的男性气质探索：Solid Ochre、Neuw Denim 休闲混搭",
+          "source": "MMSCENE Magazine",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://styledbywu.com.au/timeless-mens-summer-fashion-trends/",
+          "caption": "Styled by Wu — 澳洲男士永恒夏日潮流：冲浪与滑板文化融合的轻松海岸风格",
+          "source": "Styled by Wu",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.mailonsunday.co.uk/femail/article-12166099/Australian-pro-surfer-Connor-OLeary-reveals-pull-surf-style-trend.html",
+          "caption": "Mail on Sunday — 职业冲浪手 Connor O'Leary 冲浪风格指南：Hurley 冲浪短裤、EPOKHE Byron Bay 太阳镜",
+          "source": "Mail on Sunday",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/interviews/interview-with-billy-kennedy/",
+          "caption": "MMSCENE — Adam Washington 镜头下的澳洲冲浪男孩质感：Merz B. Schwanen、G-Star、Bonds vintage混搭",
+          "source": "MMSCENE Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

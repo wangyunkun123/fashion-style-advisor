@@ -1,0 +1,53 @@
+{
+  "style_id": "poetcore",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "诗人美学 Poetcore：2026 年 Pinterest 搜索量增 175% 的浪漫文学风，关键词 - 诗人袖衬衫、粗花呢西装、lavallière蝴蝶结、皮挎包、贝雷帽",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://lifestylecollective.org/2026/03/13/why-poetcore-is-the-intellectuals-answer-to-minimalism/",
+          "caption": "The Lifestyle Collective — Poetcore 是知识分子对极简主义的回答：从暗黑学院到阳光诗意的演变",
+          "source": "The Lifestyle Collective",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://timesofindia.indiatimes.com/life-style/spotlight/embrace-the-poetcore-aesthetic-gentle-dressing-for-2026/articleshow/127762279.cms",
+          "caption": "Times of India — 2026拥抱Poetcore：「温柔穿搭」的崛起，Dries Van Noten AW25为男装定调",
+          "source": "Times of India",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.showstudio.com/cms/documents/3607/DVN_PRESS_RELEASE__MEN_AW_25-26.pdf",
+          "caption": "Dries Van Noten AW25 — Julian Klausner设计，Willy Vanderperre拍摄：lavallière蝴蝶结、硬衬构建大衣、蓟花图案",
+          "source": "SHOWstudio",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://lazynarcissist.com/style/2409/2026-poetcore",
+          "caption": "Lazy Narcissist — 2026 Poetcore风格解析：五大关键元素轻松驾驭",
+          "source": "Lazy Narcissist",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.aol.com/lifestyle/10-romantic-ways-wear-poet-193634893.html",
+          "caption": "10种浪漫Poetcore穿搭：Taylor Swift与Blair Waldorf风的文学浪漫主义",
+          "source": "AOL Lifestyle",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

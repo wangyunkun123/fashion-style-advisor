@@ -1,0 +1,53 @@
+{
+  "style_id": "retro_90s_hiphop",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "90s 嘻哈 Hip-Hop：黄金年代街头风格，关键词 - 超大篮球衫、工装牛仔裤、Timberland靴、金链、Tommy Hilfiger、FUBU",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.rollingstone.co.uk/style/mingyu-channels-90s-nostalgia-for-calvin-klein-denim-53201/",
+          "caption": "Rolling Stone UK — SEVENTEEN Mingyu 演绎90年代 Calvin Klein 丹宁怀旧：宽松牛仔裤与logo腰头",
+          "source": "Rolling Stone UK",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://system-magazine.com/issues/issue-9/a-letter-from-new-york",
+          "caption": "System Magazine — 纽约嘻哈时尚书信：从 Dapper Dan 到 Supreme x LV 的文化溯源",
+          "source": "System Magazine",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.lemon8-app.com/@_lesx97/7275851291350336006",
+          "caption": "90s Black Men's Fashion — 从Tupac到Will Smith的标志性风格：Gangsta与Bling的融合",
+          "source": "Lemon8",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://zmj.unibo.it/article/download/19563/18128",
+          "caption": "Vibe Magazine (1992-1997) — 嘻哈男性气质通过意大利电影与时尚的重新思考",
+          "source": "ZoneModa Journal",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.si.edu/object/roxanne-shante-nyc-1990:nmaahc_2015.132.66",
+          "caption": "Smithsonian NMAAHC — Janette Beckman 1990年拍摄 Roxanne Shanté NYC，Eyejammie嘻哈摄影收藏",
+          "source": "Smithsonian",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "style_id": "american_streetwear",
+  "style_name": "美式街头",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/style/street-style-day-nyfw/",
+          "caption": "NYFW Day 3 街拍定义者 - 纽约时装周街头风格精选",
+          "source": "Male Model Scene, 2024"
+        },
+        {
+          "url": "https://www.thefashionisto.com/story/mango-richard-james-2026/",
+          "caption": "Mango x Richard James 2026 - 萨维尔街遇见美式街头",
+          "source": "The Fashionisto, 2026"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear",
+          "caption": "Vogue Runway 2025春夏男装精选 - 美式街头潮流秀场合集",
+          "source": "Vogue Runway, 2024"
+        },
+        {
+          "url": "https://www.lifeminute.tv/fashion/video/boy-londons-gothic-guillotine-collection-fuses-punk-heritage-medieval-drama-nyfw-fallwinter-2026",
+          "caption": "Boy London FW26 NYFW - 朋克 + 街头 + 中世纪戏剧融合",
+          "source": "LifeMinute TV, 2026"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://www.thestar.com.my/lifestyle/style/2025/07/24/celebrity-style-g-dragon-blurs-the-lines-between-streetwear-and-high-fashion",
+          "caption": "G-Dragon 街头与高定界限模糊 - 香奈儿大使街头造型",
+          "source": "The Star, 2025"
+        },
+        {
+          "url": "https://vogue.ph/gallery/heartthrobs-of-mens-fashion-week/",
+          "caption": "男装周男神街头穿搭 - Paul Mescal, Lewis Hamilton 等",
+          "source": "Vogue Philippines, 2025"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://result.gq.com/story/the-9-most-potent-menswear-trends-of-2025",
+          "caption": "GQ 2025九大男装趋势 - 后Hypebeast时代的街头新方向",
+          "source": "GQ, 2025"
+        },
+        {
+          "url": "https://www.harpersbazaar.com.sg/bazaar-man/no-pants-no-problem",
+          "caption": "No Pants潮流 - Gucci, Prada 引领的短裤街头革命",
+          "source": "Harper's Bazaar Singapore, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.thefashionisto.com/story/mango-richard-james-2026/",
+          "caption": "街头潮流的社交媒体传播 - 从T台到Instagram",
+          "source": "The Fashionisto, 2026"
+        }
+      ]
+    }
+  }
+}

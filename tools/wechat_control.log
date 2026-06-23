@@ -1,0 +1,501 @@
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5453, in <module>
+    main()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5431, in main
+    server = ThreadingHTTPServer(('0.0.0.0', port), WebhookHandler)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 452, in __init__
+    self.server_bind()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 138, in server_bind
+    socketserver.TCPServer.server_bind(self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 466, in server_bind
+    self.socket.bind(self.server_address)
+OSError: [Errno 48] Address already in use
+[22:03:16] [INFO] 💬 聊天: today | 
+[22:03:16] [INFO] 🚀 管线启动: 今日穿搭 第1版 请与之前不同
+[22:03:17] [INFO] 📍 探索度: 安全推荐
+[22:03:18] [INFO] 📍 天气: 33°C 雨
+[22:03:18] [INFO] 📍 场景提取: '今日穿搭 第1版 请与之前不同' → occasion=日常
+[22:03:18] [INFO] 📍 📊 预计 ~60-100s · ~1985 tokens
+[22:03:18] [INFO] 📍 🤖 AI 智能选品
+[22:03:38] [WARN] ⚠️ 验证未通过: ['无任何单品']
+[22:03:59] [WARN] ⚠️ 修正后仍不通过: ['SH-002: 雨天禁止白色/浅色下装']
+[22:03:59] [ERROR] AI 修正后仍有1项致命违规，中止管线: SH-002: 雨天禁止白色/浅色下装
+[22:03:59] [INFO] ⏸️ 微信推送已暂停: ❌ 今日穿搭 第1版 请与之前不同 生成失败
+[22:05:03] [INFO] 💬 聊天: recommend | 今天天气很好，推荐一套日常穿搭
+[22:05:03] [INFO] 🚀 管线启动: 今天天气很好，推荐一套日常穿搭
+[22:05:03] [INFO] 📍 探索度: 安全推荐
+[22:05:05] [INFO] 📍 天气: 33°C 雨
+[22:05:05] [INFO] 📍 场景提取: '今天天气很好，推荐一套日常穿搭' → occasion=日常
+[22:05:05] [INFO] 📍 📊 预计 ~60-100s · ~1985 tokens
+[22:05:05] [INFO] 📍 🤖 AI 智能选品
+[22:05:21] [WARN] ⚠️ 验证未通过: ['SH-002: 雨天禁止白色/浅色下装']
+[22:05:37] [WARN] ⚠️ 修正后仍不通过: ['无任何单品']
+[22:05:37] [INFO] ⚠️ 验证有2项违规（继续执行，请人工检查）
+[22:05:37] [INFO] 📊 R1 选品评分: 0分 — 无效
+[22:05:37] [INFO] 📍 ✍️ AI 创作叙事+生图
+[22:05:44] [WARN] ⚠️ R2 创作 JSON 解析失败，使用降级内容
+[22:05:44] [INFO] 👤 人物照: 1张（原图）
+[22:05:44] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/alice/outfits/2026-06-22_今天天气很好，推荐一套日常穿搭
+[22:05:44] [INFO] 📍 🎨 Seedream AI 生图
+[22:06:19] [INFO] 📍 📤 推送 + 刷新
+[22:06:21] [INFO] 📤 后台推送完成: 今天天气很好，推荐一套日常穿搭
+[22:09:28] [INFO] 💬 聊天: recommend | 用新买的斯凯奇帽子做搭配
+[22:09:28] [INFO] 🚀 管线启动: 用新买的斯凯奇帽子做搭配
+[22:09:28] [INFO] 📍 探索度: 安全推荐
+[22:09:30] [INFO] 📍 天气: 33°C 雨
+[22:09:30] [INFO] 📍 场景提取: '用新买的斯凯奇帽子做搭配' → occasion=日常
+[22:09:31] [INFO] 📍 📊 预计 ~60-100s · ~3733 tokens
+[22:09:31] [INFO] 📍 🤖 AI 智能选品
+[22:09:54] [WARN] ⚠️ 验证未通过: ['SHOE-005: 雨天禁止皮质鞋']
+[22:10:25] [INFO] ✅ 修正后验证通过
+[22:10:25] [INFO] ✅ 验证通过
+[22:10:25] [INFO] 📊 R1 选品评分: 44分 — ⚠️ 评分偏低，建议重新选品
+[22:10:25] [INFO] 📍 ✍️ AI 创作叙事+生图
+[22:10:50] [INFO] ✅ R2 创作完成: seedream_prompt=1054字符, tips=2条
+[22:10:50] [INFO] 👤 人物照: 1张（原图）
+[22:10:50] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-22_用新买的斯凯奇帽子做搭配
+[22:10:50] [INFO] 📍 🎨 Seedream AI 生图
+[22:12:13] [INFO] 📍 📤 推送 + 刷新
+[22:12:19] [INFO] 📤 后台推送完成: 用新买的斯凯奇帽子做搭配
+[22:19:48] [INFO] =======================================================
+[22:19:48] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[22:19:48] [INFO] 📡 服务: http://0.0.0.0:8765
+[22:19:48] [INFO] 💬 面板: http://localhost:8765/
+[22:19:48] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[22:19:48] [INFO] 📤 已推送上线通知
+[22:28:19] [INFO] =======================================================
+[22:28:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[22:28:19] [INFO] 📡 服务: http://0.0.0.0:8765
+[22:28:19] [INFO] 💬 面板: http://localhost:8765/
+[22:28:19] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[22:28:19] [INFO] 📤 已推送上线通知
+[22:49:48] [INFO] =======================================================
+[22:49:48] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[22:49:48] [INFO] 📡 服务: http://0.0.0.0:8765
+[22:49:48] [INFO] 💬 面板: http://localhost:8765/
+[22:49:48] [INFO] ⏸️ 微信推送已暂停: 🟢 穿搭助手已上线
+[22:49:48] [INFO] 📤 已推送上线通知
+[23:16:03] [INFO] =======================================================
+[23:16:03] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:16:03] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:16:03] [INFO] 💬 面板: http://localhost:8765/
+[23:16:11] [INFO] =======================================================
+[23:16:11] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:16:11] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:16:11] [INFO] 💬 面板: http://localhost:8765/
+[23:33:34] [INFO] =======================================================
+[23:33:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:33:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:33:34] [INFO] 💬 面板: http://localhost:8765/
+[23:38:11] [INFO] =======================================================
+[23:38:11] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[23:38:11] [INFO] 📡 服务: http://0.0.0.0:8765
+[23:38:11] [INFO] 💬 面板: http://localhost:8765/
+[06:27:02] [INFO] 🚀 管线启动: 今日穿搭
+[06:27:02] [ERROR] 管线异常: name 'sys' is not defined
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 2103, in run_pipeline
+    items_dir = os.path.join(outfit_dir, 'items')
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 2293, in _run_pipeline_impl
+    _pipeline_status['last_run'] = time.strftime('%Y-%m-%dT%H:%M:%S')
+  File "/Users/rabbit/Claude code/Fashion/tools/unified_pipeline.py", line 29, in <module>
+    for _i, _arg in enumerate(sys.argv):
+NameError: name 'sys' is not defined
+
+[09:10:54] [INFO] ⏰ 默认原型过时 (滞后 24563s)，后台重建
+[09:11:50] [INFO] 💬 聊天: today | 
+[09:11:50] [INFO] 🚀 管线启动: 今日穿搭 第1版 请与之前不同
+[09:11:50] [ERROR] 管线异常: name 'sys' is not defined
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 2103, in run_pipeline
+    items_dir = os.path.join(outfit_dir, 'items')
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 2293, in _run_pipeline_impl
+    _pipeline_status['last_run'] = time.strftime('%Y-%m-%dT%H:%M:%S')
+  File "/Users/rabbit/Claude code/Fashion/tools/unified_pipeline.py", line 29, in <module>
+    for _i, _arg in enumerate(sys.argv):
+NameError: name 'sys' is not defined
+
+[09:15:15] [INFO] 🚀 管线启动: 今日穿搭
+[09:15:15] [INFO] 📍 探索度: 微调探索 🧪
+[09:15:17] [INFO] 📍 天气: 30°C 雨
+[09:15:17] [INFO] 📍 场景提取: '今日穿搭' → occasion=日常
+[09:15:17] [INFO] 📍 📊 预计 ~60-100s · ~3744 tokens
+[09:15:17] [INFO] 📍 🤖 AI 智能选品
+[09:15:57] [WARN] ⚠️ 验证未通过: ['SHOE-005: 雨天禁止皮质鞋']
+[09:16:19] [INFO] ⏰ 默认原型过时 (滞后 261s)，后台重建
+[09:16:29] [INFO] ✅ 修正后验证通过
+[09:16:29] [INFO] ✅ 验证通过
+[09:16:29] [INFO] 📊 R1 选品评分: 54分 — ⚠️ 评分偏低，建议重新选品
+[09:16:29] [INFO] 📍 ✍️ AI 创作叙事+生图
+[09:16:47] [INFO] ✅ R2 创作完成: seedream_prompt=820字符, tips=2条
+[09:17:23] [INFO] =======================================================
+[09:17:23] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:17:23] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:17:23] [INFO] 💬 面板: http://localhost:8765/
+[09:17:31] [INFO] ⭐ 评分: 2026-06-22_用新买的斯凯奇帽子做搭配 → 2星
+[09:18:10] [INFO] ⭐ 评分: 2026-06-22_用新买的斯凯奇帽子做搭配 → 1星
+[09:18:41] [INFO] 🚻 Onboarding Step0: becca → female
+[09:20:04] [INFO] 👤 Onboarding Step1: becca — pear 
+[09:20:42] [INFO] 💬 聊天: recommend | 推荐今日穿搭
+[09:20:42] [INFO] 🚀 管线启动: 推荐今日穿搭
+[09:20:43] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（工作日（周2）— 稳定可靠 | 晴 25°C | 总推荐:81 倾向:0.38）
+[09:20:44] [INFO] 📍 天气: 30°C 雨
+[09:20:44] [INFO] 📍 场景提取: '推荐今日穿搭' → occasion=日常
+[09:20:46] [INFO] 📍 📊 预计 ~60-100s · ~3655 tokens
+[09:20:46] [INFO] 📍 🤖 AI 智能选品
+[09:21:19] [WARN] ⚠️ 验证未通过: ['SHOE-002: 雨天禁止皮质鞋']
+[09:21:19] [INFO] ⏰ 默认原型过时 (滞后 263s)，后台重建
+[09:21:26] [INFO] ⚠️ 管线忙碌，拒绝新请求: 今日穿搭
+[09:21:57] [INFO] ✅ 修正后验证通过
+[09:21:57] [INFO] ✅ 验证通过
+[09:21:57] [INFO] 📊 R1 选品评分: 53分 — ⚠️ 评分偏低，建议重新选品
+[09:21:57] [INFO] 📍 ✍️ AI 创作叙事+生图
+[09:22:08] [INFO] ⚠️ 管线忙碌，拒绝新请求: 今日穿搭
+[09:22:21] [INFO] ✅ R2 创作完成: seedream_prompt=979字符, tips=2条
+[09:22:40] [INFO] 🚀 管线启动: 今日穿搭
+[09:22:41] [INFO] ⏰ 默认原型过时 (滞后 81s)，后台重建
+[09:22:41] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（工作日（周2）— 稳定可靠 | 晴 25°C | 总推荐:82 倾向:0.38）
+[09:22:42] [INFO] 📍 天气: 30°C 雨
+[09:22:42] [INFO] 📍 场景提取: '今日穿搭' → occasion=日常
+[09:22:43] [INFO] 📍 📊 预计 ~60-100s · ~3664 tokens
+[09:22:43] [INFO] 📍 🤖 AI 智能选品
+[09:23:09] [WARN] ⚠️ 验证未通过: ['SHOE-009: 雨天禁止皮质鞋']
+[09:23:54] [INFO] ✅ 修正后验证通过
+[09:23:54] [INFO] ✅ 验证通过
+[09:23:54] [INFO] 📊 R1 选品评分: 47分 — ⚠️ 评分偏低，建议重新选品
+[09:23:54] [INFO] 📍 ✍️ AI 创作叙事+生图
+[09:24:13] [INFO] ✅ R2 创作完成: seedream_prompt=847字符, tips=2条
+[09:27:03] [INFO] =======================================================
+[09:27:03] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:27:03] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:27:03] [INFO] 💬 面板: http://localhost:8765/
+[09:29:37] [INFO] ⏰ 默认原型过时 (滞后 92s)，后台重建
+[09:41:39] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[09:41:44] [INFO] ✅ Onboarding 完成: becca
+[09:41:48] [INFO] 🔨 构建用户原型: becca
+[09:46:30] [INFO] ⭐ 评分: 2026-06-23_今日穿搭 → 1星
+[09:50:20] [INFO] =======================================================
+[09:50:20] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:50:20] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:50:20] [INFO] 💬 面板: http://localhost:8765/
+[09:56:43] [INFO] =======================================================
+[09:56:43] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:56:43] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:56:43] [INFO] 💬 面板: http://localhost:8765/
+[09:57:52] [INFO] =======================================================
+[09:57:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:57:52] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:57:52] [INFO] 💬 面板: http://localhost:8765/
+[09:58:57] [INFO] =======================================================
+[09:58:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[09:58:57] [INFO] 📡 服务: http://0.0.0.0:8765
+[09:58:57] [INFO] 💬 面板: http://localhost:8765/
+[10:42:24] [INFO] =======================================================
+[10:42:24] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[10:42:24] [INFO] 📡 服务: http://0.0.0.0:8765
+[10:42:24] [INFO] 💬 面板: http://localhost:8765/
+[10:50:00] [INFO] =======================================================
+[10:50:00] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[10:50:00] [INFO] 📡 服务: http://0.0.0.0:8765
+[10:50:00] [INFO] 💬 面板: http://localhost:8765/
+[11:38:29] [INFO] =======================================================
+[11:38:29] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[11:38:29] [INFO] 📡 服务: http://0.0.0.0:8765
+[11:38:29] [INFO] 💬 面板: http://localhost:8765/
+[11:51:04] [INFO] =======================================================
+[11:51:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[11:51:04] [INFO] 📡 服务: http://0.0.0.0:8765
+[11:51:04] [INFO] 💬 面板: http://localhost:8765/
+[12:15:03] [INFO] =======================================================
+[12:15:03] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[12:15:03] [INFO] 📡 服务: http://0.0.0.0:8765
+[12:15:03] [INFO] 💬 面板: http://localhost:8765/
+[12:20:33] [INFO] =======================================================
+[12:20:33] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[12:20:33] [INFO] 📡 服务: http://0.0.0.0:8765
+[12:20:33] [INFO] 💬 面板: http://localhost:8765/
+[14:42:02] [INFO] =======================================================
+[14:42:02] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[14:42:02] [INFO] 📡 服务: http://0.0.0.0:8765
+[14:42:02] [INFO] 💬 面板: http://localhost:8765/
+[14:42:49] [INFO] =======================================================
+[14:42:49] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[14:42:49] [INFO] 📡 服务: http://0.0.0.0:8765
+[14:42:49] [INFO] 💬 面板: http://localhost:8765/
+[14:53:17] [INFO] =======================================================
+[14:53:17] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[14:53:17] [INFO] 📡 服务: http://0.0.0.0:8765
+[14:53:17] [INFO] 💬 面板: http://localhost:8765/
+[15:01:20] [INFO] =======================================================
+[15:01:20] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:01:20] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:01:20] [INFO] 💬 面板: http://localhost:8765/
+[15:11:38] [INFO] =======================================================
+[15:11:38] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:11:38] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:11:38] [INFO] 💬 面板: http://localhost:8765/
+[15:22:32] [INFO] =======================================================
+[15:22:32] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:22:32] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:22:32] [INFO] 💬 面板: http://localhost:8765/
+[15:28:47] [INFO] =======================================================
+[15:28:47] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:28:47] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:28:47] [INFO] 💬 面板: http://localhost:8765/
+[15:35:08] [INFO] =======================================================
+[15:35:08] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:35:08] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:35:08] [INFO] 💬 面板: http://localhost:8765/
+[15:46:58] [INFO] =======================================================
+[15:46:58] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:46:58] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:46:58] [INFO] 💬 面板: http://localhost:8765/
+[15:54:57] [INFO] =======================================================
+[15:54:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:54:57] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:54:57] [INFO] 💬 面板: http://localhost:8765/
+[15:55:03] [INFO] 🚻 Onboarding Step0: becca → female
+[15:55:48] [INFO] =======================================================
+[15:55:48] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:55:48] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:55:48] [INFO] 💬 面板: http://localhost:8765/
+[15:55:51] [INFO] 🚻 Onboarding Step0: becca2 → female
+[15:59:21] [INFO] 🚻 Onboarding Step0: becca → female
+[15:59:40] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:00:25] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:02:36] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[16:02:47] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[16:03:17] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[16:03:20] [INFO] ✅ Onboarding 完成: becca
+[16:05:34] [INFO] =======================================================
+[16:05:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:05:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:05:34] [INFO] 💬 面板: http://localhost:8765/
+[16:05:44] [INFO] 🚻 Onboarding Step0: becca → female
+[16:05:44] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:05:44] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:05:44] [INFO] ✅ Onboarding 完成: becca
+[16:06:15] [INFO] 🔨 构建用户原型: becca
+[16:13:59] [INFO] 🚻 Onboarding Step0: becca → female
+[16:14:10] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:14:26] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:14:54] [INFO] 🚻 Onboarding Step0: becca → female
+[16:15:06] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:15:34] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:15:34] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[16:15:38] [INFO] ✅ Onboarding 完成: becca
+[16:15:42] [INFO] 🔨 构建用户原型: becca
+[16:19:57] [INFO] =======================================================
+[16:19:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:19:57] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:19:57] [INFO] 💬 面板: http://localhost:8765/
+[16:20:08] [INFO] 🚻 Onboarding Step0: becca → female
+[16:20:08] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:20:08] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:20:08] [INFO] ✅ Onboarding 完成: becca
+[16:20:08] [INFO] 🔨 构建用户原型: becca
+[16:20:58] [INFO] 🔨 构建用户原型: becca
+[16:21:03] [INFO] 🔨 构建用户原型: becca
+[16:24:41] [INFO] =======================================================
+[16:24:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:24:41] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:24:41] [INFO] 💬 面板: http://localhost:8765/
+[16:24:48] [INFO] 🚻 Onboarding Step0: becca → female
+[16:24:48] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:24:48] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:24:48] [INFO] ✅ Onboarding 完成: becca
+[16:24:48] [INFO] 🔨 构建用户原型: becca
+[16:24:56] [INFO] 🔨 构建用户原型: becca
+[16:25:04] [INFO] 🔨 构建用户原型: becca
+[16:25:32] [INFO] =======================================================
+[16:25:32] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:25:32] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:25:32] [INFO] 💬 面板: http://localhost:8765/
+[16:25:39] [INFO] 🚻 Onboarding Step0: becca → female
+[16:25:39] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:25:39] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:25:39] [INFO] ✅ Onboarding 完成: becca
+[16:25:39] [INFO] 🔨 构建用户原型: becca
+[16:26:13] [INFO] =======================================================
+[16:26:13] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:26:13] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:26:13] [INFO] 💬 面板: http://localhost:8765/
+[16:26:15] [INFO] 🚻 Onboarding Step0: becca → female
+[16:26:15] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:26:15] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:26:15] [INFO] ✅ Onboarding 完成: becca
+[16:26:15] [INFO] 🔨 构建用户原型: becca
+[16:26:54] [INFO] =======================================================
+[16:26:54] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:26:54] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:26:54] [INFO] 💬 面板: http://localhost:8765/
+[16:26:56] [INFO] 🚻 Onboarding Step0: becca → female
+[16:26:56] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:26:56] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:26:56] [INFO] ✅ Onboarding 完成: becca
+[16:26:56] [INFO] 🔨 构建用户原型: becca
+[16:27:13] [INFO] 🔨 构建用户原型: becca
+[16:27:14] [INFO] 🔨 构建用户原型: becca
+[16:28:34] [INFO] =======================================================
+[16:28:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:28:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:28:34] [INFO] 💬 面板: http://localhost:8765/
+[16:28:37] [INFO] 🚻 Onboarding Step0: becca → female
+[16:28:37] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:28:37] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:28:37] [INFO] ✅ Onboarding 完成: becca
+[16:28:37] [INFO] 🔨 构建用户原型: becca
+[16:34:15] [INFO] =======================================================
+[16:34:15] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:34:15] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:34:15] [INFO] 💬 面板: http://localhost:8765/
+[16:34:18] [INFO] 🚻 Onboarding Step0: becca → female
+[16:34:18] [INFO] 👤 Onboarding Step1: becca — pear (跳过)
+[16:34:18] [INFO] 🎨 Onboarding Step2: becca — 0 风格 
+[16:34:18] [INFO] ✅ Onboarding 完成: becca
+[16:34:18] [INFO] 🔨 构建用户原型: becca
+[16:37:34] [INFO] 🚻 Onboarding Step0: becca → female
+[16:37:52] [INFO] 👤 Onboarding Step1: becca — pear 
+[16:38:08] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[16:38:22] [INFO] ✅ Onboarding 完成: becca
+[16:38:27] [INFO] 🔨 构建用户原型: becca
+[16:41:34] [INFO] =======================================================
+[16:41:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:41:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:41:34] [INFO] 💬 面板: http://localhost:8765/
+[16:41:53] [INFO] 🔨 构建用户原型: alice
+[16:45:19] [INFO] 🔨 构建用户原型: alice
+[16:46:06] [INFO] =======================================================
+[16:46:06] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:46:06] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:46:06] [INFO] 💬 面板: http://localhost:8765/
+[16:46:33] [INFO] =======================================================
+[16:46:33] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:46:33] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:46:33] [INFO] 💬 面板: http://localhost:8765/
+[16:47:49] [INFO] 🔨 构建用户原型: becca
+[16:51:35] [INFO] 🚻 Onboarding Step0: alice → female
+[16:52:32] [INFO] 👤 Onboarding Step1: alice — hourglass 
+[16:53:06] [INFO] 🎨 Onboarding Step2: alice — 5 风格 
+[16:53:16] [INFO] ✅ Onboarding 完成: alice
+[16:53:20] [INFO] 🔨 构建用户原型: alice
+[16:53:38] [INFO] 💬 聊天: today | 
+[16:53:38] [INFO] 🚀 管线启动: 今日穿搭 第1版 请与之前不同
+[16:53:38] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（新用户（<5条评分），建立舒适区基线）
+[16:53:39] [INFO] 📍 天气: 30°C 雨
+[16:53:39] [INFO] 📍 场景提取: '今日穿搭 第1版 请与之前不同' → occasion=日常
+[16:53:39] [INFO] 📍 📊 预计 ~60-100s · ~931 tokens
+[16:53:39] [INFO] 📍 🤖 AI 智能选品
+[16:53:58] [WARN] ⚠️ 验证未通过: ['无任何单品']
+[16:54:08] [INFO] ⚠️ 验证有1项违规（继续执行，请人工检查）
+[16:54:08] [INFO] 📊 R1 选品评分: 0分 — 无效
+[16:54:08] [INFO] 📍 ✍️ AI 创作叙事+生图
+[16:57:34] [INFO] =======================================================
+[16:57:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:57:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:57:34] [INFO] 💬 面板: http://localhost:8765/
+[17:00:39] [INFO] 🚻 Onboarding Step0: becca → male
+[17:01:21] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:02:55] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[17:02:58] [INFO] ✅ Onboarding 完成: becca
+[17:03:03] [INFO] 🔨 构建用户原型: becca
+[17:03:56] [INFO] 🚻 Onboarding Step0: testguy → male
+[17:04:42] [INFO] =======================================================
+[17:04:42] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:04:42] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:04:42] [INFO] 💬 面板: http://localhost:8765/
+[17:04:44] [INFO] 🚻 Onboarding Step0: testguy → male
+[17:04:52] [INFO] 🚻 Onboarding Step0: testguy2 → male
+[17:05:21] [INFO] =======================================================
+[17:05:21] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:05:21] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:05:21] [INFO] 💬 面板: http://localhost:8765/
+[17:05:24] [INFO] 🚻 Onboarding Step0: testguy → male
+[17:05:33] [INFO] 🚻 Onboarding Step0: testguy → male
+[17:05:33] [INFO] 👤 Onboarding Step1: testguy — rectangle (跳过)
+[17:05:33] [INFO] 🎨 Onboarding Step2: testguy — 0 风格 
+[17:05:33] [INFO] ✅ Onboarding 完成: testguy
+[17:05:33] [INFO] 🔨 构建用户原型: testguy
+[17:08:35] [INFO] 🚻 Onboarding Step0: alice → female
+[17:09:01] [INFO] 👤 Onboarding Step1: alice — hourglass 
+[17:10:20] [INFO] 🎨 Onboarding Step2: alice — 5 风格 
+[17:10:23] [INFO] ✅ Onboarding 完成: alice
+[17:10:28] [INFO] 🔨 构建用户原型: alice
+[17:16:51] [INFO] 🚻 Onboarding Step0: becca → male
+[17:17:10] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:18:50] [INFO] 🎨 Onboarding Step2: becca — 2 风格 
+[17:28:56] [INFO] 🚻 Onboarding Step0: becca → male
+[17:29:08] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:29:25] [INFO] 🎨 Onboarding Step2: becca — 2 风格 
+[17:29:28] [INFO] ✅ Onboarding 完成: becca
+[17:29:36] [INFO] 🔨 构建用户原型: becca
+[17:31:53] [INFO] =======================================================
+[17:31:53] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:31:53] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:31:53] [INFO] 💬 面板: http://localhost:8765/
+[17:31:55] [INFO] 🚻 Onboarding Step0: testm → male
+[17:33:27] [INFO] 🚻 Onboarding Step0: becca → male
+[17:33:39] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:34:15] [INFO] 🎨 Onboarding Step2: becca — 3 风格 (跳过)
+[17:34:17] [INFO] ✅ Onboarding 完成: becca
+[17:34:43] [INFO] 🔨 构建用户原型: becca
+[17:36:21] [INFO] 🚻 Onboarding Step0: testm → male
+[17:36:22] [INFO] 👤 Onboarding Step1: testm — rectangle (跳过)
+[17:36:22] [INFO] 🎨 Onboarding Step2: testm — 0 风格 
+[17:36:22] [INFO] ✅ Onboarding 完成: testm
+[17:37:07] [INFO] =======================================================
+[17:37:07] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:37:07] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:37:07] [INFO] 💬 面板: http://localhost:8765/
+[17:37:09] [INFO] 🚻 Onboarding Step0: tm2 → male
+[17:39:37] [INFO] 🚻 Onboarding Step0: testf → female
+[17:40:58] [INFO] =======================================================
+[17:40:58] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:40:58] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:40:58] [INFO] 💬 面板: http://localhost:8765/
+[17:41:00] [INFO] 🚻 Onboarding Step0: tf → female
+[17:41:00] [INFO] 🚻 Onboarding Step0: tm → male
+[17:41:30] [INFO] =======================================================
+[17:41:30] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:41:30] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:41:30] [INFO] 💬 面板: http://localhost:8765/
+[17:41:32] [INFO] 🚻 Onboarding Step0: tf → female
+[17:41:32] [INFO] 🚻 Onboarding Step0: tm → male
+[17:42:00] [INFO] =======================================================
+[17:42:00] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:42:00] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:42:00] [INFO] 💬 面板: http://localhost:8765/
+[17:42:03] [INFO] 🚻 Onboarding Step0: tm → male
+[17:44:02] [INFO] 🚻 Onboarding Step0: becca → male
+[17:45:43] [INFO] 🚻 Onboarding Step0: becca → male
+[17:45:59] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:46:29] [INFO] 🎨 Onboarding Step2: becca — 2 风格 
+[17:46:32] [INFO] ✅ Onboarding 完成: becca
+[17:46:37] [INFO] 🔨 构建用户原型: becca
+[17:46:52] [INFO] 🚻 Onboarding Step0: alice → female
+[17:47:03] [INFO] 👤 Onboarding Step1: alice — hourglass 
+[17:47:25] [INFO] 🎨 Onboarding Step2: alice — 1 风格 
+[17:47:28] [INFO] ✅ Onboarding 完成: alice
+[17:47:33] [INFO] 🔨 构建用户原型: alice
+[17:49:08] [INFO] =======================================================
+[17:49:08] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:49:08] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:49:08] [INFO] 💬 面板: http://localhost:8765/
+[17:49:10] [INFO] 🚻 Onboarding Step0: tf → female
+[17:49:10] [INFO] 🚻 Onboarding Step0: tm → male
+[17:49:33] [INFO] =======================================================
+[17:49:33] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:49:33] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:49:33] [INFO] 💬 面板: http://localhost:8765/
+[17:49:35] [INFO] 🚻 Onboarding Step0: tf → female
+[17:49:35] [INFO] 🚻 Onboarding Step0: tm → male
+[17:52:49] [INFO] 🚻 Onboarding Step0: becca → male
+[17:53:06] [INFO] 👤 Onboarding Step1: becca — rectangle 
+[17:53:43] [INFO] 🎨 Onboarding Step2: becca — 1 风格 
+[17:53:46] [INFO] ✅ Onboarding 完成: becca
+[17:53:50] [INFO] 🔨 构建用户原型: becca
+[17:54:04] [INFO] 🚻 Onboarding Step0: alice → female
+[17:54:14] [INFO] 👤 Onboarding Step1: alice — hourglass 
+[17:54:25] [INFO] 🎨 Onboarding Step2: alice — 1 风格 
+[17:54:27] [INFO] ✅ Onboarding 完成: alice
+[17:54:32] [INFO] 🔨 构建用户原型: alice

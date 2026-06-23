@@ -1,0 +1,53 @@
+{
+  "style_id": "contemporary_genderless",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "无性别穿搭 Genderless：2025男装周核心主题，关键词 - 流动剪裁、裙装/男装混穿、透视面料、不对称设计、Jean Paul Gaultier/Duran Lantink",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://fashionablymale.net/2025/10/05/duran-lantink-debuts-bold-genderless-vision-for-jean-paul-gaultier-ss26/",
+          "caption": "Duran Lantink x Jean Paul Gaultier SS26 — 突破性无性别系列：夸张锥形胸衣×体毛透视×全身纹身印花",
+          "source": "Fashionably Male",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.thecrimson.com/article/2025/2/18/a-potts-review-nyfw/",
+          "caption": "A. Potts NYFW AW25 — 纽约男装日：动物印花×几何星系迷彩融合，流苏连衣裙×不对称打结镂空",
+          "source": "The Harvard Crimson",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://en.xmag.live/ateezs-seonghwa-turns-heads-at-paris-fashion-week-with-a-flawless-genderless-look/",
+          "caption": "Songzio SS26 巴黎时装周 — ATEEZ Seonghwa 走秀：锋利单色无性别轮廓，K-fashion全球时刻",
+          "source": "Xmag",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.therakishgent.co.uk/pages/kent-curwen-aw25",
+          "caption": "Kent & Curwen AW25 伦敦时装周 — 英国传统以无性别视角重制：定制西装、板球毛衣、达夫尔大衣",
+          "source": "The Rakish Gent",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.stylerave.com/genderless-style-gender-neutral-menswear/",
+          "caption": "Style Rave — 2025男装打破规则：COS、Zara、ASOS推出无性别系列，Glenn Martens×H&M可调节垂坠",
+          "source": "Style Rave",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

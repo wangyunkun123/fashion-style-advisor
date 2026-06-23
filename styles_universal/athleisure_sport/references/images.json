@@ -1,0 +1,79 @@
+{
+  "style_id": "athleisure_sport",
+  "style_name": "运动休闲",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_note": "图片URL为含完整图片的画廊/社论页面。直接打开页面即可查看高质量穿搭参考图。",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.malemodelscene.net/editorial/sporty-style-bruno-staub-wsj-magazine/",
+          "caption": "WSJ. Magazine 2024春夏运动风大片 - Bruno Staub 拍摄, Dior, Hermès, Prada 出镜",
+          "source": "WSJ. Magazine/Male Model Scene, 2024"
+        },
+        {
+          "url": "https://www.sergiotacchini.com/blogs/fortherecord/lookbook-spring-summer-2024-collection",
+          "caption": "Sergio Tacchini SS24 'Buona Vacanza' - Malibu网球场运动休闲大片",
+          "source": "Sergio Tacchini, 2024"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场图",
+      "images": [
+        {
+          "url": "https://schonmagazine.com/a-parisian-melange-of-fashion-and-sport-summer-2024-nike-x-jacquemus/",
+          "caption": "Nike x Jacquemus 2024夏季 - 巴黎奥运运动时尚融合",
+          "source": "Schön! Magazine, 2024"
+        },
+        {
+          "url": "https://wwd.com/business-news/media/under-armour-advertising-sportswear-sports-1236470648/",
+          "caption": "Under Armour 2024秋冬 - 从运动场到时尚摄影棚的转型大片",
+          "source": "WWD, 2024"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "名人穿搭",
+      "images": [
+        {
+          "url": "https://wwd.com/pop-culture/new-fashion-releases/jude-bellingham-skims-campaign-1236430564/",
+          "caption": "Jude Bellingham SKIMS 男装 - 足球明星极简运动休闲大片",
+          "source": "WWD, 2024"
+        },
+        {
+          "url": "https://result.gq.com/story/jimmy-butler-met-gala-2026-alo-yoga-hoodie-suit",
+          "caption": "Jimmy Butler Met Gala - Alo Yoga 帽衫燕尾服大胆运动正装融合",
+          "source": "GQ, 2026"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍",
+      "images": [
+        {
+          "url": "https://www.vogue.com/article/harry-styles-gym-shorts-summer",
+          "caption": "Harry Styles 运动短裤夏日街拍 - 复古健身房潮流回归",
+          "source": "Vogue, 2025"
+        },
+        {
+          "url": "https://www.harpersbazaar.com.sg/bazaar-man/how-to-wear-new-athleisure",
+          "caption": "Harper's Bazaar 新运动休闲穿搭 - 健身到街头的无缝切换",
+          "source": "Harper's Bazaar Singapore, 2025"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.harpersbazaar.com/fashion/trends/a61221458/skims-olympics-2024-capsule-collection/",
+          "caption": "SKIMS 2024奥运胶囊 - 运动员代言的运动休闲社交爆款",
+          "source": "Harper's Bazaar, 2024"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "style_id": "contemporary_gorpcore",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
+  "_notes": "Gorpcore 户外机能风：从山野到城市的户外装备日常化，关键词 - Arc'teryx、Salomon XT-6、GORE-TEX冲锋衣、机能马甲、抓绒",
+  "categories": {
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/article/would-you-chop-wood-in-prada-how-luxury-is-reimaging-gorpcore",
+          "caption": "Vogue Business — 奢侈品牌重塑Gorpcore：Prada伐木工、LV樱花粉滑雪服、Kiko Kostadinov珠宝装备",
+          "source": "Vogue Business",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://www.gq-magazine.co.uk/article/joe-alwyn-new-york-2025",
+          "caption": "GQ UK — Joe Alwyn 的「成熟版Gorpcore」：短款抓绒外套×Diemme登山靴，纽约街头演绎",
+          "source": "GQ UK",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2026-menswear/etudes",
+          "caption": "Études Studio Spring 2026 — Vogue定义为「后Gorpcore」：大地艺术灵感、工装裤、工具腰带",
+          "source": "Vogue Runway",
+          "type": "gallery_page"
+        },
+        {
+          "url": "https://graziadaily.co.uk/fashion/shopping/gorpcore-trend-how-to-wear/",
+          "caption": "Grazia — 2025秋冬Gorpcore接管：机能夹克×中长裙×高跟鞋的对比搭配",
+          "source": "Grazia",
+          "type": "gallery_page"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://doors.nyc/blogs/news/gorpcore-fashion-2025-outdoor-gear-meets-city-style",
+          "caption": "DOORS NYC — Gorpcore进城：GORE-TEX®、Ripstop面料、越野跑鞋的城市化演绎",
+          "source": "DOORS NYC",
+          "type": "gallery_page"
+        }
+      ]
+    }
+  }
+}

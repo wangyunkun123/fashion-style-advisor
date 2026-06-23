@@ -1,0 +1,63 @@
+{
+  "clothing_id": "LS-001",
+  "category": "长袖上衣",
+  "category_code": "LS",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "正红色",
+    "saturation": "高饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": false
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "增加肩宽",
+    "torso_effect": "增加上半身体量感",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "印花",
+    "density": "",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "磨毛",
+    "weight": "中厚",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "FILA",
+    "collection": "Italia Collezione熊系列",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加肩宽",
+    "意式运动"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": true,
+    "wear_count": 0,
+    "last_worn": null,
+    "claude_fit_comment": "FILA Italia Collezione连帽卫衣,正红色鲜艳吸睛,宽松版型大幅增加体量感,意式运动×韩流复古风格,潮流学院风",
+    "_statement_score": 0.7
+  },
+  "occasions": [
+    "日常通勤",
+    "周末休闲",
+    "极限运动"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "街头潮流",
+    "轻熟商务",
+    "运动休闲",
+    "意式运动"
+  ]
+}

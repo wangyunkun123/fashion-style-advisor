@@ -1,5 +1,5 @@
 {
-  "use_my_image": false,
+  "use_my_image": true,
   "gender": "女",
   "photos": {
     "full_body_front": "profile/photos/user_full_front.jpg",

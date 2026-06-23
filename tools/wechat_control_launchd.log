@@ -5607,3 +5607,15 @@ urllib.error.HTTPError: HTTP Error 400: Bad Request
 [07:27:26] [INFO] 所有任务已结束（等待 0s）
 [07:27:26] [INFO] Watchdog 已停止
 [07:27:27] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/models/segformer/image_processing_segformer.py:102: FutureWarning: The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use `do_reduce_labels` instead.
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/modeling_utils.py:386: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  with safe_open(checkpoint_file, framework="pt") as f:
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5840, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782257797110_0.jpg

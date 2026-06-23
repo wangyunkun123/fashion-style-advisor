@@ -1471,16 +1471,14 @@ def _finalize_add_item(item_data):
     # 6. 注册新单品
     _register_new_item(cid, category_name, uid)
 
-    # 7. 清理临时图片
-    try:
-        os.remove(src_img)
-    except:
-        pass
+    # 7. 返回结果（⚠️ 不在此处删临时图片——多件单品共享同源图时会互相踩踏）
+    # 临时图片由调用方（confirm handler）统一清理
 
     return {
         'clothing_id': cid,
         'category': category_name,
         'name': f'{tag_data["brand"].get("name", "")} {tag_data["color"].get("hue_name", "")}{category_name}'.strip(),
+        '_source_image': src_img,  # 返回源图路径供调用方统一清理
     }
 
 
@@ -5834,11 +5832,15 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         item['_user_id'] = _uid
             added = []
             errors = []
+            _source_images = set()  # 🆕 收集所有源图路径，统一清理
             # 串行入库（避免并行线程 + 锁竞争 + rembg 内存爆炸导致超时）
             for i, item in enumerate(items):
                 try:
                     result = _finalize_add_item(item)
                     added.append((i, result))
+                    # 记录源图路径，等所有单品入库后统一清理
+                    if result.get('_source_image'):
+                        _source_images.add(result['_source_image'])
                 except Exception as e:
                     log(f"入库失败: {e}", "ERROR")
                     import traceback
@@ -5846,8 +5848,15 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     errors.append(str(e))
             # 恢复原始顺序
             added.sort(key=lambda x: x[0])
-            added = [r for _, r in added]
-            # 清理临时文件
+            added = [{k: v for k, v in r.items() if not k.startswith('_')} for _, r in added]
+            # 统一清理：所有单品入库后再删临时文件（避免同源图互相踩踏）
+            for _src in _source_images:
+                try:
+                    if os.path.exists(_src):
+                        os.remove(_src)
+                except Exception:
+                    pass
+            # 清理分析JSON
             try:
                 os.remove(analysis_path)
             except: pass

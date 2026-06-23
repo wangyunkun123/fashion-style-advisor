@@ -1176,3 +1176,21 @@ Conte
 [07:33:59] [INFO] 📍 🎨 预压缩生图
 [07:33:59] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [07:33:59] [INFO] 📍 📤 推送 + 刷新
+[07:34:06] [INFO] 📤 Git push 成功 (尝试 1/3)
+[07:34:06] [INFO] 📱 主原型: 重建
+[07:34:11] [INFO] 📤 后台推送完成: 穿搭
+[07:34:24] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[07:36:20] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[07:36:35] [INFO] 📨 POST /api/wardrobe/add (Content-Length=92976, CT=multipart/form-data; boundary=----WebKit)
+[07:36:37] [INFO] [95831] 衣橱上传: 92976B
+[07:36:37] [INFO] [95831] 📸 衣橱添加(binary): 1782257797110 (1 张图片, 91KB)
+[07:36:43] [INFO] [95831] 📐 图片1 检测到 2 件服装: TS(16.8%), PT(3.8%)
+[07:37:19] [INFO] 衣物分析完成: 1782257797110 → 2 件
+[07:37:38] [INFO] 📨 POST /api/wardrobe/add/match (Content-Length=1883, CT=application/json)
+[07:38:07] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1883, CT=application/json)
+[07:38:07] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_073807_TS-015.jpg
+[07:38:07] [INFO] 图片处理完成: TS-015 (缩略图 39KB)
+[07:38:07] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-015.json
+[07:38:07] [INFO] 自动推荐风格: TS-015 → ['athleisure_sport']
+[07:38:07] [INFO] 已追加到服装档案: TS-015
+[07:38:07] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782257797110_0.jpg

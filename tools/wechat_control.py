@@ -4870,8 +4870,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
     def do_POST(self):
         """API 端点"""
-        # 请求体大小上限 50MB，防止 OOM
+        # 🔍 DEBUG: 记录所有 POST 请求
         _cl_str = self.headers.get('Content-Length', '0')
+        log(f'📨 POST {self.path} (Content-Length={_cl_str}, Content-Type={self.headers.get("Content-Type","?")[:60]})', 'DEBUG')
+        # 请求体大小上限 50MB，防止 OOM
         try:
             _cl = int(_cl_str)
         except (ValueError, TypeError):

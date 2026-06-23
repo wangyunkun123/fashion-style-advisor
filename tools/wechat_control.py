@@ -5551,28 +5551,33 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 import re as _re
                 bm = _re.search(r'boundary=([^\s;]+)', content_type)
                 if not bm:
+                    log(f'⚠️ 上传解析失败: boundary 未匹配, Content-Type={content_type[:120]}')
                     self._json_resp(400, {"error": "missing boundary"}); return
                 boundary = bm.group(1)
                 image_b64_list = []
                 # 解析 multipart parts
                 delimiter = ('--' + boundary).encode()
                 parts = body.split(delimiter)[1:-1]  # 跳过 preamble 和 epilogue
-                for part in parts:
-                    header_end = part.find(b'\r\n\r\n')
-                    if header_end == -1:
+                log(f'🔍 multipart: boundary={boundary[:40]}..., body_size={len(body)}, parts={len(parts)}')
+                for idx, part in enumerate(parts):
+                    hdr_end = part.find(b'\r\n\r\n')
+                    if hdr_end == -1:
                         continue
-                    headers_raw = part[:header_end].decode('utf-8', errors='replace')
-                    file_data = part[header_end + 4:]
+                    headers_raw = part[:hdr_end].decode('utf-8', errors='replace')
+                    file_data = part[hdr_end + 4:]
                     if file_data.endswith(b'\r\n'):
                         file_data = file_data[:-2]
                     # 只处理有 filename 的 part（跳过普通表单字段）
-                    if 'filename="' not in headers_raw:
+                    if 'filename="' not in headers_raw and "filename='" not in headers_raw:
+                        log(f'🔍 part[{idx}]: 非文件字段, headers={headers_raw[:80]}')
                         continue
                     # 跳过空文件
                     if len(file_data) < 100:
+                        log(f'🔍 part[{idx}]: 文件过小 ({len(file_data)}B), headers={headers_raw[:80]}')
                         continue
                     import base64 as _b64
                     image_b64_list.append(_b64.b64encode(file_data).decode('utf-8'))
+                    log(f'🔍 part[{idx}]: ✓ 文件 {len(file_data)}B, headers={headers_raw[:80]}')
 
                 if not image_b64_list:
                     self._json_resp(400, {"error": "未接收到有效图片文件"}); return

@@ -1760,13 +1760,25 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
         person_photos = get_person_photos()
         has_person = len(person_photos) > 0
 
-        # ── 5. 创建临时目录 ──
-        preview_dir = os.path.join(PROJECT_DIR, 'outfits', '_preview')
+        # ── 5. 创建任务专属临时目录（避免多任务互相覆盖 + 浏览器缓存碰撞）──
+        preview_base = os.path.join(PROJECT_DIR, 'outfits', '_preview')
+        preview_dir = os.path.join(preview_base, task_id)
         shengtu_dir = os.path.join(preview_dir, '豆包生图')
         for d in [preview_dir, shengtu_dir]:
             if os.path.exists(d):
                 shutil.rmtree(d)
             os.makedirs(d, exist_ok=True)
+
+        # 清理超过 1 小时的旧预览目录，防止磁盘堆积
+        try:
+            now_ts = time.time()
+            for entry in os.listdir(preview_base):
+                entry_path = os.path.join(preview_base, entry)
+                if os.path.isdir(entry_path) and entry != task_id:
+                    if now_ts - os.path.getmtime(entry_path) > 3600:
+                        shutil.rmtree(entry_path)
+        except Exception:
+            pass
 
         # ── 6. 复制人物照（原图直出，不去背景）+ 单品参考图 ──
         reference_paths = []
@@ -1936,9 +1948,10 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
             })
 
         # 相对路径 → /api/image 压缩传输（手机端 ?w=900，体积减 90%+）
+        # t=task_id 打破浏览器缓存：同一 URL = 同一任务，不同任务永不碰撞
         from urllib.parse import quote as _quote
         rel_images = [os.path.relpath(dp, PROJECT_DIR) for dp in downloaded]
-        image_urls = [f'/api/image?f={_quote(p)}&w=900' for p in rel_images]
+        image_urls = [f'/api/image?f={_quote(p)}&w=900&t={task_id}' for p in rel_images]
 
         result_data = {
             'outfit_items': outfit_detail,
@@ -2068,7 +2081,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 
         tasks.update(task_id, status='running', message='AI正在识别品类/颜色/品牌/面料...')
 
-        # 3. 调用豆包视觉 API（带自动重试）
+        # 3. 调用豆包视觉 API（带智能重试：超时/5xx重试，4xx不重试）
         response_text = None
         import traceback as _tb
         for _retry in range(3):
@@ -2078,7 +2091,13 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                     break
                 log(f'{_rid} ⚠️ AI 返回空, 重试 {_retry+1}/3')
             except Exception as _api_err:
-                log(f'{_rid} ⚠️ API 调用失败 (重试 {_retry+1}/3): {_api_err}')
+                err_str = str(_api_err)
+                # HTTP 4xx = 客户端错误（图片太大/格式不对），重试无意义
+                if 'HTTP 4' in err_str or 'HTTP 413' in err_str or 'HTTP 429' in err_str:
+                    log(f'{_rid} ❌ API 客户端错误 (不重试): {err_str[:200]}')
+                    tasks.update(task_id, status='error', message=f'ERR_ANALYSIS: {err_str[:80]}')
+                    return
+                log(f'{_rid} ⚠️ API 调用失败 (重试 {_retry+1}/3): {err_str[:200]}')
                 if _retry < 2:
                     time.sleep(2 ** _retry)  # 1s, 2s 退避
         if not response_text:

@@ -792,3 +792,250 @@ NameError: name 'sys' is not defined
 [00:29:27] [INFO] 💬 面板: http://localhost:8765/
 [00:29:27] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
 [00:29:27] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[00:35:27] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[00:35:27] [INFO] 所有任务已结束（等待 0s）
+[00:35:27] [INFO] Watchdog 已停止
+[00:35:34] [INFO] =======================================================
+[00:35:34] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:35:34] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:35:34] [INFO] 💬 面板: http://localhost:8765/
+[00:35:34] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[00:35:34] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+test log entry Wed Jun 24 00:45:48 CST 2026
+[00:46:19] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[00:46:19] [INFO] 所有任务已结束（等待 0s）
+[00:46:19] [INFO] Watchdog 已停止
+[00:46:26] [INFO] =======================================================
+[00:46:26] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:46:26] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:46:26] [INFO] 💬 面板: http://localhost:8765/
+[00:46:26] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[00:46:26] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[00:46:51] [DEBUG] 📨 POST /api/ratings (Content-Length=295, Content-Type=application/json)
+[00:47:55] [DEBUG] 📨 POST /api/wardrobe/add (Content-Length=74438, Content-Type=multipart/form-data; boundary=----WebKitFormBoundaryidh0C4kz)
+[00:48:14] [DEBUG] 📨 POST /api/wardrobe/add (Content-Length=10478, Content-Type=multipart/form-data; boundary=------------------------VtjAZV)
+[00:48:14] [INFO] 📸 衣橱添加(binary): 1782233294257 (1 张图片, 10KB)
+[00:48:14] [DEBUG] 📨 POST /api/wardrobe/add (Content-Length=10478, Content-Type=multipart/form-data; boundary=------------------------0Mwyq4)
+[00:48:14] [INFO] 📸 衣橱添加(binary): 1782233294315 (1 张图片, 10KB)
+[00:48:21] [DEBUG] 📨 POST /api/wardrobe/add (Content-Length=77655, Content-Type=multipart/form-data; boundary=------------------------bxzOG0)
+[00:48:21] [INFO] 📸 衣橱添加(binary): 1782233301949 (1 张图片, 76KB)
+[00:48:22] [DEBUG] 📨 POST /api/wardrobe/add (Content-Length=397849, Content-Type=multipart/form-data; boundary=------------------------NQgGfQ)
+[00:48:22] [INFO] 📸 衣橱添加(binary): 1782233302388 (1 张图片, 389KB)
+[00:48:37] [INFO] 衣物分析完成: 1782233294315 → 1 件
+[00:48:37] [INFO] 衣物分析完成: 1782233294257 → 1 件
+[00:49:02] [INFO] 衣物分析完成: 1782233301949 → 5 件
+[00:49:40] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[00:49:40] [INFO] Watchdog 已停止
+[00:49:40] [INFO] 所有任务已结束（等待 0s）
+[00:49:48] [INFO] =======================================================
+[00:49:48] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:49:48] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:49:48] [INFO] 💬 面板: http://localhost:8765/
+[00:49:48] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[00:49:48] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[00:52:06] [INFO] ⏰ 默认原型过时 (滞后 780s)，后台重建
+[00:56:32] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[00:56:32] [INFO] 所有任务已结束（等待 0s）
+[00:56:32] [INFO] Watchdog 已停止
+[00:56:41] [INFO] =======================================================
+[00:56:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[00:56:41] [INFO] 📡 服务: http://0.0.0.0:8765
+[00:56:41] [INFO] 💬 面板: http://localhost:8765/
+[00:56:41] [INFO] 🌐 Funnel: 已就绪
+[00:56:41] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[00:56:41] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:00:39] [INFO] 📸 衣橱添加: 1782234039741 (1 张图片)
+[01:00:40] [ERROR] 衣物分析失败: HTTP Error 400: Bad Request
+[01:00:41] [INFO] 📸 衣橱添加: 1782234041222 (1 张图片)
+[01:00:41] [ERROR] 衣物分析失败: HTTP Error 400: Bad Request
+[01:02:53] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:02:53] [INFO] Watchdog 已停止
+[01:02:53] [INFO] 所有任务已结束（等待 0s）
+[01:03:01] [INFO] =======================================================
+[01:03:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:03:01] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:03:01] [INFO] 💬 面板: http://localhost:8765/
+[01:03:01] [INFO] 🌐 Funnel: 已就绪
+[01:03:01] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:03:01] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:03:07] [INFO] 📨 POST /api/wardrobe/add (Content-Length=30829, Content-Type=multipart/form-data; boundary=--------------------)
+[01:03:07] [INFO] 📸 衣橱添加(binary): 1782234187940 (1 张图片, 30KB)
+[01:04:47] [INFO] ⏰ 默认原型过时 (滞后 26s)，后台重建
+[01:05:50] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, Content-Type=multipart/form-data; boundary=----WebKitFormBounda)
+[01:07:10] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:07:10] [INFO] 所有任务已结束（等待 0s）
+[01:07:10] [INFO] Watchdog 已停止
+[01:07:19] [INFO] =======================================================
+[01:07:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:07:19] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:07:19] [INFO] 💬 面板: http://localhost:8765/
+[01:07:19] [INFO] 🌐 Funnel: 已就绪
+[01:07:19] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:07:19] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:08:02] [INFO] 📨 POST /api/wardrobe/add (Content-Length=208, Content-Type=multipart/form-data; boundary=--------------------)
+[01:08:02] [INFO] 🔍 multipart: boundary=------------------------eYYIlw9oduszja1U..., body_size=208, parts=1
+[01:08:02] [INFO] 🔍 part[0]: 文件过小 (8B), headers=
+Content-Disposition: form-data; name="images"; filename="test.jpg"
+Content-Ty
+[01:09:44] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, Content-Type=multipart/form-data; boundary=----WebKitFormBounda)
+[01:09:48] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:09:48] [INFO] 所有任务已结束（等待 0s）
+[01:09:48] [INFO] Watchdog 已停止
+[01:09:56] [INFO] =======================================================
+[01:09:56] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:09:56] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:09:56] [INFO] 💬 面板: http://localhost:8765/
+[01:09:56] [INFO] 🌐 Funnel: 已就绪
+[01:09:56] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:09:56] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:12:18] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:12:40] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:13:31] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:13:31] [INFO] 所有任务已结束（等待 0s）
+[01:13:31] [INFO] Watchdog 已停止
+[01:13:39] [INFO] =======================================================
+[01:13:39] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:13:39] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:13:39] [INFO] 💬 面板: http://localhost:8765/
+[01:13:39] [INFO] 🌐 Funnel: 已就绪
+[01:13:39] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:13:39] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:13:52] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, CT=multipart/form-data; boundary=----WebKit)
+[01:16:11] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:17:18] [INFO] 🔍 multipart: boundary=----WebKitFormBoundaryu2KKTUBw9A6PFQBw..., body_size=74438, parts=1
+[01:17:18] [INFO] 🔍 part[0]: ✓ 文件 74249B, headers=
+Content-Disposition: form-data; name="images"; filename="IMG_8810.jpeg"
+Conte
+[01:17:18] [INFO] 📸 衣橱添加(binary): 1782235038780 (1 张图片, 73KB)
+[01:17:45] [INFO] 衣物分析完成: 1782235038780 → 1 件
+[01:17:50] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:17:50] [INFO] ⏰ 默认原型过时 (滞后 750s)，后台重建
+[01:18:08] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:19:06] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, CT=multipart/form-data; boundary=----WebKit)
+[01:20:51] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:20:51] [INFO] 所有任务已结束（等待 0s）
+[01:20:51] [INFO] Watchdog 已停止
+[01:20:59] [INFO] =======================================================
+[01:20:59] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:20:59] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:20:59] [INFO] 💬 面板: http://localhost:8765/
+[01:20:59] [INFO] 🌐 Funnel: 已就绪
+[01:20:59] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:20:59] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:22:14] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:22:30] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:23:18] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, CT=multipart/form-data; boundary=----WebKit)
+[01:24:02] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:24:02] [INFO] 所有任务已结束（等待 0s）
+[01:24:02] [INFO] Watchdog 已停止
+[01:24:10] [INFO] =======================================================
+[01:24:10] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:24:10] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:24:10] [INFO] 💬 面板: http://localhost:8765/
+[01:24:10] [INFO] 🌐 Funnel: 已就绪
+[01:24:10] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:24:10] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:24:17] [INFO] 📨 POST /api/wardrobe/add (Content-Length=30828, CT=multipart/form-data; boundary=----------)
+[01:24:17] [INFO] 📨 衣橱上传: 30828B, CT=multipart/form-data; boundary=------------------------k2Fjpy
+[01:24:17] [INFO] 🔍 multipart: boundary=------------------------k2FjpynHEbDG9pjj..., body_size=30828, parts=1
+[01:24:17] [INFO] 🔍 part[0]: ✓ 文件 30628B, headers=
+Content-Disposition: form-data; name="images"; filename="test.jpg"
+Content-Ty
+[01:24:17] [INFO] 📸 衣橱添加(binary): 1782235457710 (1 张图片, 30KB)
+[01:26:17] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:26:17] [INFO] ⏰ 默认原型过时 (滞后 387s)，后台重建
+[01:26:32] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:27:38] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, CT=multipart/form-data; boundary=----WebKit)
+[01:28:08] [INFO] ⚠️ 上传读取超时/失败: timed out
+[01:29:04] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:29:04] [INFO] 所有任务已结束（等待 0s）
+[01:29:04] [INFO] Watchdog 已停止
+[01:29:12] [INFO] =======================================================
+[01:29:12] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:29:12] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:29:12] [INFO] 💬 面板: http://localhost:8765/
+[01:29:12] [INFO] 🌐 Funnel: 已就绪
+[01:29:12] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:29:12] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:29:49] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:29:49] [INFO] 所有任务已结束（等待 0s）
+[01:29:49] [INFO] Watchdog 已停止
+[01:29:57] [INFO] =======================================================
+[01:29:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:29:57] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:29:57] [INFO] 💬 面板: http://localhost:8765/
+[01:29:57] [INFO] 🌐 Funnel: 已就绪
+[01:29:57] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:29:57] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:30:25] [INFO] 📱 GET / (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:30:33] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:30:59] [INFO] 📨 POST /api/wardrobe/add (Content-Length=74438, CT=multipart/form-data; boundary=----WebKit)
+[01:31:04] [INFO] 📨 衣橱上传: 74438B, CT=multipart/form-data; boundary=----WebKitFormBoundary72LAHz5R
+[01:31:04] [INFO] 🔍 multipart: boundary=----WebKitFormBoundary72LAHz5RDBIbDVR1..., body_size=74438, parts=1
+[01:31:04] [INFO] 🔍 part[0]: ✓ 文件 74249B, headers=
+Content-Disposition: form-data; name="images"; filename="IMG_8810.jpeg"
+Conte
+[01:31:04] [INFO] 📸 衣橱添加(binary): 1782235864160 (1 张图片, 73KB)
+[01:31:04] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:07] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:09] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:11] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:13] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:14] [INFO] 衣物分析完成: 1782235864160 → 1 件
+[01:31:15] [INFO] 📱 GET /api/task/1782235864160 (UA=Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) Apple)
+[01:31:53] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=906, CT=application/json)
+[01:31:53] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_013153_TS-013.jpg
+[01:31:54] [INFO] 图片处理完成: TS-013 (缩略图 17KB)
+[01:31:54] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-013.json
+[01:31:54] [INFO] 已追加到服装档案: TS-013
+[01:32:11] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:32:11] [INFO] 所有任务已结束（等待 0s）
+[01:32:11] [INFO] Watchdog 已停止
+[01:32:19] [INFO] =======================================================
+[01:32:19] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:32:19] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:32:19] [INFO] 💬 面板: http://localhost:8765/
+[01:32:19] [INFO] 🌐 Funnel: 已就绪
+[01:32:19] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:32:19] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:37:10] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:37:10] [INFO] 所有任务已结束（等待 0s）
+[01:37:10] [INFO] Watchdog 已停止
+[01:37:18] [INFO] =======================================================
+[01:37:18] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:37:18] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:37:18] [INFO] 💬 面板: http://localhost:8765/
+[01:37:18] [INFO] 🌐 Funnel: 已就绪
+[01:37:18] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:37:18] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[01:37:25] [INFO] 📨 POST /api/wardrobe/add (Content-Length=13428, CT=multipart/form-data; boundary=----------)
+[01:37:25] [INFO] [45944] 衣橱上传: 13428B
+[01:37:25] [INFO] [45944] 📸 衣橱添加(binary): 1782236245958 (1 张图片, 13KB)
+[01:38:01] [INFO] ⏰ 默认原型过时 (滞后 40s)，后台重建
+[01:38:04] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:38:17] [INFO] 📨 POST /api/wardrobe/add (Content-Length=78048, CT=multipart/form-data; boundary=----WebKit)
+[01:38:24] [INFO] [97489] 衣橱上传: 78048B
+[01:38:24] [INFO] [97489] 📸 衣橱添加(binary): 1782236304534 (1 张图片, 76KB)
+[01:38:44] [INFO] 衣物分析完成: 1782236304534 → 1 件
+[01:38:48] [INFO] 📨 POST /api/wardrobe/add/match (Content-Length=945, CT=application/json)
+[01:38:56] [INFO] 📨 POST /api/wardrobe/add/generate-outfit (Content-Length=938, CT=application/json)
+[01:38:56] [INFO] 🪄 预览穿搭: 1782236336213 (新衣=TS-014, 匹配=[])
+[01:39:58] [INFO] ⏰ 默认原型过时 (滞后 54s)，后台重建
+[01:40:01] [INFO] 📨 POST /api/ratings (Content-Length=295, CT=application/json)
+[01:40:12] [INFO] 📨 POST /api/wardrobe/add (Content-Length=78048, CT=multipart/form-data; boundary=----WebKit)
+[01:40:15] [INFO] [12447] 衣橱上传: 78048B
+[01:40:15] [INFO] [12447] 📸 衣橱添加(binary): 1782236415608 (1 张图片, 76KB)
+[01:40:32] [INFO] 衣物分析完成: 1782236415608 → 1 件
+[01:40:38] [INFO] 📨 POST /api/wardrobe/add/match (Content-Length=940, CT=application/json)
+[01:40:42] [INFO] 📨 POST /api/wardrobe/add/generate-outfit (Content-Length=933, CT=application/json)
+[01:40:42] [INFO] 🪄 预览穿搭: 1782236442639 (新衣=TS-014, 匹配=[])
+[01:46:23] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[01:46:23] [INFO] Watchdog 已停止
+[01:46:23] [INFO] 所有任务已结束（等待 0s）
+[01:46:30] [INFO] =======================================================
+[01:46:30] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[01:46:30] [INFO] 📡 服务: http://0.0.0.0:8765
+[01:46:30] [INFO] 💬 面板: http://localhost:8765/
+[01:46:30] [INFO] 🌐 Funnel: 已就绪
+[01:46:30] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[01:46:30] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)

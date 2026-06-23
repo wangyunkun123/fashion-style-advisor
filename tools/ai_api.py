@@ -6,6 +6,7 @@ import json
 import os
 import re
 import urllib.request
+import urllib.error
 from PIL import Image as PILImage, ImageOps
 
 _PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -50,7 +51,15 @@ def call_doubao_chat(messages, max_tokens=16384, timeout=120):
                 _max_tokens = 16384
                 continue
             return content
-        except Exception as e:
+        except urllib.error.HTTPError as e:
+            # 捕获 HTTP 错误详情（如 400 Bad Request），方便诊断
+            err_body = ''
+            try:
+                err_body = e.read().decode('utf-8')[:500]
+            except Exception:
+                pass
+            raise RuntimeError(f'API HTTP {e.code}: {err_body}') from e
+        except Exception:
             raise
 
 

@@ -1,0 +1,50 @@
+{
+  "clothing_id": "TS-013",
+  "category": "短袖上衣",
+  "category_code": "TS",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "米白色",
+    "saturation": "低饱和",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "条纹",
+    "density": "适中",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "平纹针织",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "夏"
+    ]
+  },
+  "formality": 3,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲",
+    "运动"
+  ],
+  "meta": {
+    "claude_fit_comment": "标准版型，适合日常休闲与轻运动场景"
+  },
+  "occasions": [
+    "日常休闲",
+    "运动"
+  ]
+}

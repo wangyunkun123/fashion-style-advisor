@@ -1100,27 +1100,6 @@ def get_github_raw_url(file_path):
     cache_buster = int(time.time())
     return f"https://raw.githubusercontent.com/wangyunkun123/fashion-style-advisor/main/{rel}?t={cache_buster}"
 
-def find_latest_composite(date_str=None):
-    """找到最新生成的排版合成图（严格限定当日，不跨 outfit 兜底）"""
-    outfit_base = os.path.join(PROJECT_DIR, 'outfits')
-    today = date_str or time.strftime('%Y-%m-%d')
-    candidates = []
-    for d in os.listdir(outfit_base):
-        dp = os.path.join(outfit_base, d)
-        if not os.path.isdir(dp) or d.startswith('.'):
-            continue
-        if not d.startswith(today):
-            continue
-        for root, _, files in os.walk(dp):
-            for f in files:
-                if '_方案' in f and f.endswith('.jpg'):
-                    fp = os.path.join(root, f)
-                    candidates.append(fp)
-    if not candidates:
-        return None
-    candidates.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-    return candidates[0]
-
 # get_banned_items / get_recent_outfit_items
 # 已迁移至 tools/common.py，通过 _get_banned_items / _get_recent_outfits 使用
 
@@ -2917,15 +2896,10 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             local_img_url = f'/api/image?f={quote(rel_path)}&w=900'
 
         if task_id:
-            if gen_img:
                 status_msg = f'✅ 全部完成 · {stats_line}'
-                disk_status = 'done'
-            else:
-                status_msg = f'⚠️ 生图完成，排版中 · {stats_line}'
-                disk_status = 'running'
-            tasks.update(task_id, status=disk_status, message=status_msg,
-                         image_path=gen_img, image_url=local_img_url,
-                         log='\n'.join(log_lines))
+                tasks.update(task_id, status='done', message=status_msg,
+                             image_path=gen_img, image_url=local_img_url,
+                             log='\n'.join(log_lines))
         # step_done 在 tasks.update 之前调用会覆盖 status
         # 这里手动补 done 标记
         if log_lines:
@@ -2935,21 +2909,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         def _background_push():
             _step_errors = []
             try:
-                # ── Step 1: composite 排版 ──
-                _out = run_cli(['python3', 'tools/composite_v2.py', outfit_dir], timeout=60)
-                if _out.startswith('❌') or '失败' in _out:
-                    _step_errors.append(f'排版: {_out[:100]}')
-                    log(f'⚠️ 排版可能失败: {_out[:200]}')
-                else:
-                    log(f'📐 排版完成')
-                    # 预压缩排版图（900w JPEG，CDN/手机加载秒开）
-                    sdc = os.path.join(outfit_dir, '上身效果')
-                    if os.path.exists(sdc):
-                        nc = pre_compress_dir(sdc, widths=(900,), quality=85)
-                        if nc:
-                            log(f'📐 排版预压缩: {nc} 张 900w JPEG')
-
-                # ── Step 2: git add + commit + push（带重试）──
+                # ── Step 1: git add + commit + push（带重试）──
                 run_cli(['git', 'add', '-A'], timeout=30)
                 _commit_out = run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
                 if 'nothing to commit' not in _commit_out:
@@ -2969,7 +2929,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
                 else:
                     log(f'📝 无新文件需要提交')
 
-                # ── Step 3: 重建原型（git push 成功后）──
+                # ── Step 2: 重建原型（git push 成功后）──
                 _pu = user_id  # 闭包捕获
                 proto_updates = []
                 # 主用户原型

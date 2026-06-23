@@ -458,9 +458,16 @@ def setup_signal_handlers(http_server, task_manager, shutdown_event,
         else:
             log(f"⚠️ 等待超时（{graceful_timeout}s），仍有 {task_manager.get_active_count()} 个活跃任务，强制关闭")
 
-        # Step 4: 停止 HTTP 服务器
+        # Step 4: 停止 HTTP 服务器（在独立线程中调用，避免信号处理器死锁）
+        # ⚠️ 信号处理器运行在主线程，而 serve_forever() 也在主线程。
+        # 如果直接调用 http_server.shutdown()，其内部 __is_shut_down.wait()
+        # 会阻塞等待 serve_forever() 返回，但 serve_forever() 正被信号中断
+        # 等待处理器返回才能继续 —— 经典死锁。
+        # 解决：在独立 daemon 线程中调用 shutdown()
         shutdown_event.set()
-        http_server.shutdown()
+        _t = threading.Thread(target=http_server.shutdown, daemon=True)
+        _t.start()
+        time.sleep(0.1)  # 给 shutdown 线程一点时间设置 __shutdown_request
 
     signal.signal(signal.SIGTERM, _handle_signal)
     signal.signal(signal.SIGHUP, _handle_signal)

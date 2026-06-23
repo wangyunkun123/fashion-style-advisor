@@ -507,7 +507,7 @@ def collect_health_data(task_manager, outfits_base=None):
         import subprocess as _sp
         result = _sp.run(['tailscale', 'funnel', 'status'],
                         capture_output=True, text=True, timeout=5)
-        if 'Funnel on' in (result.stdout or '') and 'http://localhost:' in (result.stdout or ''):
+        if 'Funnel on' in (result.stdout or '') and ('http://localhost:' in (result.stdout or '') or 'http://127.0.0.1:' in (result.stdout or '')):
             funnel_active = True
     except Exception:
         pass

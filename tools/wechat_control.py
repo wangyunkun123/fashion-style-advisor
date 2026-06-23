@@ -1959,8 +1959,9 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
 
 
 @safe_daemon('add_analysis', task_manager=tasks)
-def _run_add_analysis(task_id, image_b64_list, uid=None):
-    """后台线程：调用豆包视觉 API 分析衣物图片（多用户感知）"""
+def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
+    """后台线程：调用豆包视觉 API 分析衣物图片（多用户感知 + 自动重试）"""
+    _rid = f'[{req_id}]' if req_id else ''
     try:
         tasks.update(task_id, status='running', message='正在保存图片...')
 
@@ -2067,11 +2068,21 @@ def _run_add_analysis(task_id, image_b64_list, uid=None):
 
         tasks.update(task_id, status='running', message='AI正在识别品类/颜色/品牌/面料...')
 
-        # 3. 调用豆包视觉 API
-        response_text = call_doubao_chat(messages, max_tokens=16384, timeout=120)
-
+        # 3. 调用豆包视觉 API（带自动重试）
+        response_text = None
+        import traceback as _tb
+        for _retry in range(3):
+            try:
+                response_text = call_doubao_chat(messages, max_tokens=16384, timeout=120)
+                if response_text:
+                    break
+                log(f'{_rid} ⚠️ AI 返回空, 重试 {_retry+1}/3')
+            except Exception as _api_err:
+                log(f'{_rid} ⚠️ API 调用失败 (重试 {_retry+1}/3): {_api_err}')
+                if _retry < 2:
+                    time.sleep(2 ** _retry)  # 1s, 2s 退避
         if not response_text:
-            tasks.update(task_id, status='error', message='AI 未返回结果，请重试')
+            tasks.update(task_id, status='error', message='ERR_ANALYSIS: AI 服务暂不可用，请稍后重试')
             return
 
         # 4. 解析 JSON
@@ -2135,10 +2146,8 @@ def _run_add_analysis(task_id, image_b64_list, uid=None):
         log(f"衣物分析完成: {task_id} → {len(items)} 件")
 
     except Exception as e:
-        log(f"衣物分析失败: {e}", "ERROR")
-        import traceback
-        traceback.print_exc()
-        tasks.update(task_id, status='error', message=f'分析失败: {str(e)[:80]}')
+        log(f'{_rid} 衣物分析失败: {e}', "ERROR")
+        tasks.update(task_id, status='error', message=f'ERR_ANALYSIS: {str(e)[:80]}')
         # 清理临时文件，避免磁盘泄漏
         for _i in range(len(image_b64_list)):
             _tp = os.path.join(incoming_dir, f'img_{task_id}_{_i}.jpg')
@@ -5033,66 +5042,41 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         if parsed.path == '/api/onboarding/wardrobe/add':
             ctype = self.headers.get('Content-Type', '')
             if 'multipart/form-data' not in ctype:
-                self._json_resp(400, {'error': '需要 multipart/form-data'})
+                self._json_resp(400, {'error': 'ERR_PARSE', 'message': '需要 multipart/form-data'})
                 return
-            # 解析 multipart
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length)
-            # 提取 boundary
-            import re as _re
-            bm = _re.search(r'boundary=([^;\s]+)', ctype)
-            if not bm:
-                self._json_resp(400, {'error': '缺少 boundary'})
-                return
-            boundary = bm.group(1).encode()
-            if boundary.startswith(b'"') and boundary.endswith(b'"'):
-                boundary = boundary[1:-1]
-            # 简单 multipart 解析
-            parts = body.split(b'--' + boundary)
+            # 使用标准库 BytesParser 解析 multipart
+            from email.parser import BytesParser
+            from email.policy import HTTP
+            import uuid as _uuid
             saved_files = []
-            for part in parts:
-                if b'Content-Disposition' not in part:
-                    continue
-                # 提取文件名
-                fn_match = _re.search(rb'filename="([^"]*)"', part)
-                if not fn_match:
-                    continue
-                filename = fn_match.group(1).decode('utf-8', errors='replace')
-                # 提取文件内容 — 用 boundary 标记定位，避免 JPEG 二进制中的 \r\n 误匹配
-                header_end = part.find(b'\r\n\r\n')
-                if header_end < 0:
-                    continue
-                file_start = header_end + 4
-                # 从尾部找 boundary 标记：\r\n--boundary
-                boundary_marker = b'\r\n--' + boundary
-                file_end = part.rfind(boundary_marker)
-                if file_end > file_start:
-                    file_data = part[file_start:file_end]
-                else:
-                    # 最后一个 part 可能以 \r\n--boundary-- 结尾
-                    boundary_end_marker = b'\r\n--' + boundary + b'--'
-                    file_end = part.rfind(boundary_end_marker)
-                    if file_end > file_start:
-                        file_data = part[file_start:file_end]
-                    else:
-                        file_data = part[file_start:]
-                # 去掉末尾可能残留的 \r\n
-                file_data = file_data.rstrip(b'\r\n')
-                if not file_data or len(file_data) < 100:
-                    continue
-                # 保存到用户 wardrobe 目录
-                import uuid as _uuid
-                ext = os.path.splitext(filename)[1].lower() or '.jpg'
-                if ext not in ('.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'):
-                    ext = '.jpg'
-                save_name = f"upload_{_uuid.uuid4().hex[:8]}{ext}"
-                wardrobe_dir = os.path.join(self.user_dir, 'wardrobe')
-                os.makedirs(wardrobe_dir, exist_ok=True)
-                save_path = os.path.join(wardrobe_dir, save_name)
-                with open(save_path, 'wb') as f:
-                    f.write(file_data)
-                saved_files.append(save_name)
-                log(f"📤 Onboarding 上传: {user_id} — {save_name} ({len(file_data)} bytes)")
+            try:
+                msg = BytesParser(policy=HTTP).parsebytes(
+                    b'Content-Type: ' + ctype.encode() + b'\r\n\r\n' + body
+                )
+                for part in msg.iter_parts():
+                    payload = part.get_payload(decode=True)
+                    if not payload or len(payload) < 100:
+                        continue
+                    # 获取文件名
+                    disp = part.get_content_disposition() or ''
+                    filename = part.get_filename() or f'upload_{_uuid.uuid4().hex[:8]}.jpg'
+                    ext = os.path.splitext(filename)[1].lower() or '.jpg'
+                    if ext not in ('.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'):
+                        ext = '.jpg'
+                    save_name = f"upload_{_uuid.uuid4().hex[:8]}{ext}"
+                    wardrobe_dir = os.path.join(self.user_dir, 'wardrobe')
+                    os.makedirs(wardrobe_dir, exist_ok=True)
+                    save_path = os.path.join(wardrobe_dir, save_name)
+                    with open(save_path, 'wb') as f:
+                        f.write(payload)
+                    saved_files.append(save_name)
+                    log(f"📤 Onboarding 上传: {user_id} — {save_name} ({len(payload)} bytes)")
+            except Exception as e:
+                log(f'⚠️ Onboarding multipart 解析失败: {e}')
+                self._json_resp(400, {'error': 'ERR_PARSE', 'message': '图片解析失败，请重试'})
+                return
 
             # 后台快速标签分析
             if saved_files:
@@ -5541,85 +5525,83 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         # ─── 衣橱添加入库 ───
         elif parsed.path == '/api/wardrobe/add':
+            # 生成请求 ID 贯穿全链路
+            req_id = str(int(time.time() * 1000) % 100000)
             length = int(self.headers.get('Content-Length', 0))
-            # 设置 socket 超时（手机通过 Funnel 上传可能很慢，特别是夜间网络）
+            # 设置 socket 超时（手机通过 Funnel 上传可能很慢）
             try:
-                self.connection.settimeout(15)  # 每次 recv 15s 超时
+                self.connection.settimeout(15)
             except Exception as e:
-                log(f'⚠️ 设置超时失败: {e}')
-            # 分块读取，记录传输进度
+                log(f'[{req_id}] ⚠️ 设置超时失败: {e}')
+            # 分块读取
             body = b''
-            deadline = time.time() + 90  # 总超时 90s
+            deadline = time.time() + 90
             try:
                 while len(body) < length:
                     remain = length - len(body)
                     chunk = self.rfile.read(min(remain, 8192))
                     if not chunk:
-                        break  # EOF
+                        break
                     body += chunk
                     if time.time() > deadline:
-                        log(f'⚠️ 上传总超时: 已收 {len(body)}B / {length}B')
+                        log(f'[{req_id}] ⚠️ 上传总超时: {len(body)}B/{length}B')
                         break
             except Exception as e:
-                log(f'⚠️ 上传读取中断: {e} (已收 {len(body)}B / {length}B)')
+                log(f'[{req_id}] ⚠️ 上传读取中断: {e} ({len(body)}B/{length}B)')
             if len(body) < length:
-                self._json_resp(400, {"error": f"上传数据不完整 ({len(body)}/{length}B)，请重试"}); return
+                self._json_resp(400, {"error": "ERR_TIMEOUT", "message": f"数据接收不完整 ({len(body)}/{length}B)，请重试"})
+                return
             content_type = self.headers.get('Content-Type', '')
-            log(f'📨 衣橱上传: {len(body)}B, CT={content_type[:60]}')
+            log(f'[{req_id}] 衣橱上传: {len(body)}B')
 
-            # 🆕 支持 FormData 二进制上传（避免 base64 膨胀，通过 Tailscale Funnel 更可靠）
+            # 使用标准库 BytesParser 解析 multipart（20年生产环境验证，覆盖所有边界情况）
             if 'multipart/form-data' in content_type:
-                import re as _re
-                bm = _re.search(r'boundary=([^\s;]+)', content_type)
-                if not bm:
-                    log(f'⚠️ 上传解析失败: boundary 未匹配, CT={content_type[:120]}')
-                    self._json_resp(400, {"error": "missing boundary"}); return
-                boundary = bm.group(1).strip('"')  # 部分客户端会加引号
+                from email.parser import BytesParser
+                from email.policy import HTTP
+                import base64 as _b64
                 image_b64_list = []
-                # 解析 multipart parts
-                delimiter = ('--' + boundary).encode()
-                parts = body.split(delimiter)[1:-1]  # 跳过 preamble 和 epilogue
-                for part in parts:
-                    hdr_end = part.find(b'\r\n\r\n')
-                    if hdr_end == -1:
-                        continue
-                    headers_raw = part[:hdr_end].decode('utf-8', errors='replace')
-                    file_data = part[hdr_end + 4:]
-                    if file_data.endswith(b'\r\n'):
-                        file_data = file_data[:-2]
-                    # 只处理有 filename 的 part（跳过普通表单字段）
-                    if 'filename="' not in headers_raw and "filename='" not in headers_raw:
-                        continue
-                    # 跳过空文件
-                    if len(file_data) < 100:
-                        continue
-                    import base64 as _b64
-                    image_b64_list.append(_b64.b64encode(file_data).decode('utf-8'))
+                try:
+                    msg = BytesParser(policy=HTTP).parsebytes(
+                        b'Content-Type: ' + content_type.encode() + b'\r\n\r\n' + body
+                    )
+                    for part in msg.iter_parts():
+                        payload = part.get_payload(decode=True)
+                        if payload and len(payload) >= 100:
+                            image_b64_list.append(_b64.b64encode(payload).decode('utf-8'))
+                except Exception as e:
+                    log(f'[{req_id}] ⚠️ multipart 解析失败: {e}')
+                    self._json_resp(400, {"error": "ERR_PARSE", "message": "图片数据解析失败，请重试"})
+                    return
 
                 if not image_b64_list:
-                    self._json_resp(400, {"error": "未接收到有效图片文件"}); return
+                    self._json_resp(400, {"error": "ERR_PARSE", "message": "未检测到有效图片，请重新选择"})
+                    return
                 if len(image_b64_list) > 10:
-                    self._json_resp(400, {"error": "最多10张图片"}); return
+                    self._json_resp(400, {"error": "ERR_SIZE", "message": "最多10张图片"})
+                    return
                 tid = tasks.create()
                 _uid = self.user_id if self.user_id != 'default' else None
-                threading.Thread(target=_run_add_analysis, args=(tid, image_b64_list, _uid), daemon=True).start()
-                log(f"📸 衣橱添加(binary): {tid} ({len(image_b64_list)} 张图片, {len(body)/1024:.0f}KB)")
+                threading.Thread(target=_run_add_analysis, args=(tid, image_b64_list, _uid, req_id), daemon=True).start()
+                log(f'[{req_id}] 📸 衣橱添加(binary): {tid} ({len(image_b64_list)} 张图片, {len(body)/1024:.0f}KB)')
                 self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(image_b64_list)} 张图片..."})
             else:
                 # 兼容旧版 JSON + base64 方式
                 try:
                     data = json.loads(body.decode('utf-8'))
                 except json.JSONDecodeError:
-                    self._json_resp(400, {"error": "invalid json"}); return
+                    self._json_resp(400, {"error": "ERR_PARSE", "message": "数据格式错误，请刷新页面后重试"})
+                    return
                 images = data.get('images', [])
                 if not images or not isinstance(images, list):
-                    self._json_resp(400, {"error": "请至少提供一张图片"}); return
+                    self._json_resp(400, {"error": "ERR_PARSE", "message": "请至少提供一张图片"})
+                    return
                 if len(images) > 10:
-                    self._json_resp(400, {"error": "最多10张图片"}); return
+                    self._json_resp(400, {"error": "ERR_SIZE", "message": "最多10张图片"})
+                    return
                 tid = tasks.create()
                 _uid = self.user_id if self.user_id != 'default' else None
-                threading.Thread(target=_run_add_analysis, args=(tid, images, _uid), daemon=True).start()
-                log(f"📸 衣橱添加: {tid} ({len(images)} 张图片)")
+                threading.Thread(target=_run_add_analysis, args=(tid, images, _uid, req_id), daemon=True).start()
+                log(f'[{req_id}] 📸 衣橱添加(JSON): {tid} ({len(images)} 张图片)')
                 self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(images)} 张图片..."})
 
         elif parsed.path == '/api/wardrobe/add/confirm':

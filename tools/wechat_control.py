@@ -2359,6 +2359,53 @@ def extract_mandatory_items(style_hint, min_confidence=0.40):
     return deduped
 
 
+# ── 重试队列处理（启动恢复时自动重新提交分析任务）──
+def _process_retry_queue(retry_queue):
+    """读磁盘上的中断分析图片 → base64编码 → 重新提交 _run_add_analysis
+
+    Args:
+        retry_queue: [(tid, uid, img_paths), ...] 来自 TaskManager.recover_on_startup()
+    """
+    import base64 as _b64
+
+    for tid, uid, img_paths in retry_queue:
+        log(f"🔄 重试队列: 任务 {tid} (用户={uid}, {len(img_paths)} 张图片)")
+        try:
+            # 读图片 → base64
+            b64_list = []
+            for ip in img_paths:
+                if not os.path.exists(ip):
+                    log(f"⚠️ 重试: 图片不存在 {ip}", "WARN")
+                    continue
+                with open(ip, 'rb') as f:
+                    img_bytes = f.read()
+                b64_list.append(_b64.b64encode(img_bytes).decode('utf-8'))
+
+            if not b64_list:
+                tasks.update(tid, status='error', message='重试失败：图片文件丢失')
+                continue
+
+            # 更新任务状态，让前端看到进度
+            tasks.update(tid, status='queued', message='服务恢复，正在重新分析...')
+
+            # 后台线程提交分析
+            t = threading.Thread(
+                target=_run_add_analysis,
+                args=(tid, b64_list, uid),
+                daemon=True,
+                name=f'retry-{tid}'
+            )
+            t.start()
+            log(f"✅ 重试任务 {tid} 已提交")
+
+        except Exception as e:
+            log(f"❌ 重试任务 {tid} 提交失败: {e}", "ERROR")
+            try:
+                tasks.update(tid, status='error', message=f'重试提交失败: {str(e)[:100]}')
+            except Exception:
+                pass
+
+
 @safe_daemon('pipeline', task_manager=tasks)
 def run_pipeline(style_hint, task_id=None, user_id=None):
     """完整生图管线: 统一推荐(AI主导+数据支撑+规则验证) → Seedream生图 → 排版 → 推送"""
@@ -6068,9 +6115,13 @@ def main():
     log(f"💬 面板: http://localhost:{port}/")
 
     # ── 启动恢复：扫描磁盘上的中断任务，分析类自动重试 ──
-    interrupted, retried = tasks.recover_on_startup()
+    interrupted, retried, retry_queue = tasks.recover_on_startup()
     if interrupted or retried:
         log(f"♻️ 启动恢复: {interrupted} 个中断, {retried} 个自动重试")
+
+    # ── 处理重试队列：读图片 → base64 → 重新提交分析 ──
+    if retry_queue:
+        _process_retry_queue(retry_queue)
 
     # ── Watchdog：自动检测超时任务（running > 5min → error）──
     tasks.start_watchdog(interval=30)

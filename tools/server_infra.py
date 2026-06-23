@@ -91,7 +91,8 @@ def safe_daemon(name, task_manager=None):
                 log(f"后台线程 [{name}] 崩溃: {err}", "CRITICAL")
                 # 尝试标记关联任务为 error（首个参数通常是 task_id）
                 tm = task_manager
-                if tm and args and isinstance(args[0], str) and args[0].isdigit():
+                if tm and args and isinstance(args[0], str) and len(args[0]) >= 13:
+                    # task_id 格式: 13位时间戳 或 13位时间戳_N
                     try:
                         tm.update(args[0], status='error',
                                   message=f'后台任务崩溃: {str(e)[:100]}')
@@ -199,9 +200,15 @@ class TaskManager:
 
     # ── CRUD ──
     def create(self):
-        """创建新任务，返回 task_id"""
-        tid = str(int(time.time() * 1000))
+        """创建新任务，返回 task_id（保证唯一，即使同毫秒内多次调用）"""
+        base = str(int(time.time() * 1000))
         with self._lock:
+            # 防止同毫秒内多次调用产生 ID 碰撞
+            tid = base
+            seq = 0
+            while tid in self._tasks:
+                seq += 1
+                tid = f'{base}_{seq}'
             self._tasks[tid] = {
                 'id': tid,
                 'status': 'queued',
@@ -325,13 +332,17 @@ class TaskManager:
         """启动时扫描磁盘任务，标记中断并尝试自动重试分析任务。
 
         Returns:
-            (interrupted_count, retried_count): 中断数和自动重试数
+            (interrupted_count, retried_count, retry_queue):
+            - interrupted_count: 无可恢复数据的中断任务数
+            - retried_count: 找到可恢复图片、已重新排队的任务数
+            - retry_queue: [(tid, uid, image_paths), ...] 可直接提交重试
         """
         interrupted = 0
         retried = 0
+        retry_queue = []  # [(tid, uid, image_paths), ...]
 
         if not os.path.isdir(self._disk_dir):
-            return 0, 0
+            return 0, 0, []
 
         for fn in os.listdir(self._disk_dir):
             if not fn.endswith('.json'):
@@ -369,9 +380,12 @@ class TaskManager:
                 matches = [f for f in os.listdir(inc_dir) if f.startswith(img_pattern)]
                 if matches:
                     can_retry = True
+                    img_paths = [os.path.join(inc_dir, m) for m in sorted(matches)]
+                    uid = t.get('_user_id', 'default')
                     # 将图片路径写入任务，供重试使用
                     t['_retry_image_dir'] = inc_dir
-                    t['_retry_images'] = [os.path.join(inc_dir, m) for m in sorted(matches)]
+                    t['_retry_images'] = img_paths
+                    retry_queue.append((tid, uid, img_paths))
                     break
 
             if can_retry:
@@ -393,7 +407,7 @@ class TaskManager:
         if interrupted or retried:
             log(f"♻️ 启动恢复: {interrupted} 个中断, {retried} 个自动重试")
 
-        return interrupted, retried
+        return interrupted, retried, retry_queue
 
 
 # ═══════════════════════════════════════════════════════════

@@ -2249,8 +2249,11 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             assigned_ids.add(sid)
             item['suggested_id'] = sid
             # 根据 AI 返回的 source_image 字段映射到正确的临时图片
+            # 🆕 cloth parsing 模式下，使用裁剪图（非原图）作为入库图片
             src_idx = item.get('source_image', 1) - 1  # AI 返回 1-based
-            if 0 <= src_idx < len(temp_paths):
+            if _used_parsing and 0 <= src_idx < len(_analysis_images):
+                item['_temp_image_path'] = _analysis_images[src_idx]
+            elif 0 <= src_idx < len(temp_paths):
                 item['_temp_image_path'] = temp_paths[src_idx]
             elif temp_paths:
                 item['_temp_image_path'] = temp_paths[0]  # fallback
@@ -2258,9 +2261,6 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                 item['_temp_image_path'] = ''
             # 🆕 如使用 cloth parsing，标记分割来源和完整性
             if _used_parsing and _analysis_source_map:
-                orig_idx = _analysis_source_map.get(src_idx, 0)
-                if 0 <= orig_idx < len(temp_paths):
-                    item['_temp_image_path'] = temp_paths[orig_idx]
                 item['meta'] = item.get('meta', {})
                 item['meta']['cloth_parsed'] = True
                 # 从 all_crops 获取完整性信息
@@ -2294,15 +2294,8 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                      result=json.dumps({'items': items, '_task_id': task_id}, ensure_ascii=False))
         log(f"衣物分析完成: {task_id} → {len(items)} 件")
 
-        # 🆕 清理 cloth parsing 临时裁剪图
-        if _used_parsing:
-            for _tp in _analysis_images:
-                if _tp not in temp_paths:  # 不删原始上传图
-                    try:
-                        if os.path.exists(_tp):
-                            os.remove(_tp)
-                    except Exception:
-                        pass
+        # ⚠️ 不在此清理裁剪图 — confirm 阶段需要用裁剪图作为单品入库图片
+        # 裁剪图由 confirm handler 统一清理（_cleanup_crops_for_task）
 
     except Exception as e:
         log(f'{_rid} 衣物分析失败: {e}', "ERROR")
@@ -5860,6 +5853,15 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             try:
                 os.remove(analysis_path)
             except: pass
+            # 🆕 清理 cloth parsing 裁剪图
+            _incoming_dir = os.path.dirname(analysis_path) if os.path.exists(os.path.dirname(analysis_path)) else ''
+            if _incoming_dir and task_id:
+                try:
+                    for _fn in os.listdir(_incoming_dir):
+                        if _fn.startswith(f'crop_{task_id}_'):
+                            os.remove(os.path.join(_incoming_dir, _fn))
+                except Exception:
+                    pass
             self._json_resp(200, {"ok": True, "added": added, "errors": errors,
                                   "message": f'已添加 {len(added)} 件单品' + (f'，{len(errors)} 件失败' if errors else '')})
 

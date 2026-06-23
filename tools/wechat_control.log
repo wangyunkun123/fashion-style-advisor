@@ -1194,3 +1194,17 @@ Conte
 [07:38:07] [INFO] 自动推荐风格: TS-015 → ['athleisure_sport']
 [07:38:07] [INFO] 已追加到服装档案: TS-015
 [07:38:07] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782257797110_0.jpg
+[07:41:59] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[07:41:59] [INFO] 所有任务已结束（等待 0s）
+[07:41:59] [INFO] Watchdog 已停止
+[07:42:00] [INFO] 👋 服务已关闭
+[07:42:00] [INFO] =======================================================
+[07:42:00] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[07:42:00] [INFO] 📡 服务: http://0.0.0.0:8765
+[07:42:00] [INFO] 💬 面板: http://localhost:8765/
+[07:42:00] [INFO] 🌐 Funnel: 已就绪
+[07:42:00] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[07:42:00] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[07:42:08] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[07:42:20] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[07:42:20] [INFO] 🔔 新单品徽标已消除: TS-015

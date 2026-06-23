@@ -2007,6 +2007,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         os.makedirs(incoming_dir, exist_ok=True)
         temp_paths = []
         import base64 as _b64
+        from PIL import Image as PILImage
         for i, b64_str in enumerate(image_b64_list):
             # 去掉可能的 data:image/...;base64, 前缀
             if ',' in b64_str and b64_str.startswith('data:'):
@@ -2019,9 +2020,58 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 
         tasks.update(task_id, status='running', message=f'正在AI智能识别 {len(temp_paths)} 张图片...')
 
-        # 2. 构建多模态 prompt
+        # 🆕 Phase 2: 布料解析 — 从真人/复杂照片中检测并裁剪每件服装单品
+        all_crops = []  # [(crop_pil_image, source_img_index, category_hint, completeness)]
+        _parse_success = False
+        try:
+            from tools.cloth_parser import parse_clothing as _parse_clothing
+            tasks.update(task_id, status='running', message=f'正在检测服装单品...')
+            for i, tp in enumerate(temp_paths):
+                try:
+                    items = _parse_clothing(tp)
+                    if items:
+                        for item in items:
+                            all_crops.append((item['crop_image'], i, item['category_code'], item['completeness']))
+                        log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装: '
+                            f'{", ".join(it["category_code"]+"("+str(it["area_pct"])+"%)" for it in items)}')
+                    else:
+                        # 无检测结果 → 整张图作为 fallback（可能是干净背景单品图）
+                        img = PILImage.open(tp).convert('RGB')
+                        all_crops.append((img, i, '??', 'full'))
+                        log(f'{_rid} 📐 图片{i+1} 未检测到单品区域，使用整图分析')
+                except Exception as _pe:
+                    log(f'{_rid} ⚠️ 图片{i+1} 布料解析失败: {_pe}，使用整图分析')
+                    img = PILImage.open(tp).convert('RGB')
+                    all_crops.append((img, i, '??', 'full'))
+            _parse_success = len(all_crops) > 0
+            if _parse_success and any(c[2] != '??' for c in all_crops):
+                tasks.update(task_id, status='running', message=f'检测到 {len(all_crops)} 件服装，正在逐一分析...')
+        except ImportError as _ie:
+            log(f'{_rid} ⚠️ cloth_parser 不可用 ({_ie})，使用整图分析')
+        except Exception as _pe:
+            log(f'{_rid} ⚠️ 布料解析异常: {_pe}，回退到整图分析')
+
+        # 如果解析成功，用裁剪图替换原始图；否则用原始图
+        if _parse_success and all_crops:
+            # 用裁剪图构建新 temp_paths
+            crop_temp_paths = []
+            crop_source_map = {}  # crop_index → original temp_path index
+            for ci, (crop_img, src_idx, cat_hint, completeness) in enumerate(all_crops):
+                crop_path = os.path.join(incoming_dir, f'crop_{task_id}_{ci}.jpg')
+                crop_img.save(crop_path, 'JPEG', quality=85)
+                crop_temp_paths.append(crop_path)
+                crop_source_map[ci] = src_idx  # 记录裁剪图对应的原始图
+            _analysis_images = crop_temp_paths
+            _analysis_source_map = crop_source_map
+            _used_parsing = True
+        else:
+            _analysis_images = temp_paths
+            _analysis_source_map = {i: i for i in range(len(temp_paths))}
+            _used_parsing = False
+
+        # 2. 构建多模态 prompt（使用裁剪后的图片）
         content_blocks = []
-        for i, tp in enumerate(temp_paths):
+        for i, tp in enumerate(_analysis_images):
             # 缩放并编码图片
             jpg_bytes = resize_image_for_api(tp)
             img_b64 = _b64.b64encode(jpg_bytes).decode('utf-8')
@@ -2196,6 +2246,20 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                 item['_temp_image_path'] = temp_paths[0]  # fallback
             else:
                 item['_temp_image_path'] = ''
+            # 🆕 如使用 cloth parsing，标记分割来源和完整性
+            if _used_parsing and _analysis_source_map:
+                orig_idx = _analysis_source_map.get(src_idx, 0)
+                if 0 <= orig_idx < len(temp_paths):
+                    item['_temp_image_path'] = temp_paths[orig_idx]
+                item['meta'] = item.get('meta', {})
+                item['meta']['cloth_parsed'] = True
+                # 从 all_crops 获取完整性信息
+                if all_crops and src_idx < len(all_crops):
+                    _cp = all_crops[src_idx]
+                    item['meta']['completeness'] = _cp[3]  # 'full' or 'partial'
+                    if _cp[3] == 'partial':
+                        item['meta']['claude_fit_comment'] = (
+                            item['meta'].get('claude_fit_comment', '') + ' [⚠️部分遮挡]').strip()
             # 补充默认值
             if 'color' not in item: item['color'] = {}
             if 'brand' not in item: item['brand'] = {'name': '未知', 'collection': None, 'confidence': '未知'}
@@ -2220,6 +2284,16 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                      result=json.dumps({'items': items, '_task_id': task_id}, ensure_ascii=False))
         log(f"衣物分析完成: {task_id} → {len(items)} 件")
 
+        # 🆕 清理 cloth parsing 临时裁剪图
+        if _used_parsing:
+            for _tp in _analysis_images:
+                if _tp not in temp_paths:  # 不删原始上传图
+                    try:
+                        if os.path.exists(_tp):
+                            os.remove(_tp)
+                    except Exception:
+                        pass
+
     except Exception as e:
         log(f'{_rid} 衣物分析失败: {e}', "ERROR")
         tasks.update(task_id, status='error', message=f'ERR_ANALYSIS: {str(e)[:80]}')
@@ -2231,6 +2305,13 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                     os.remove(_tp)
             except Exception:
                 pass
+        # 🆕 也清理裁剪图
+        try:
+            for _fn in os.listdir(incoming_dir):
+                if _fn.startswith(f'crop_{task_id}_'):
+                    os.remove(os.path.join(incoming_dir, _fn))
+        except Exception:
+            pass
 
 
 def _format_tips(tips):

@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-23T12:22:59Z",
+  "user_id": "default",
+  "items_used": [
+    "SHIRT-005",
+    "PT-008",
+    "SHOE-002"
+  ],
+  "style_matched": "日系City Boy偏休闲运动",
+  "occasion": "日常",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 50289,
+  "api_calls": 2
+}

@@ -1387,6 +1387,18 @@ def _finalize_add_item(item_data):
     os.makedirs(dest_dir, exist_ok=True)
     dest_filename = f'Image_{timestamp}_{cid}.jpg'
     dest_path = os.path.join(dest_dir, dest_filename)
+
+    # 🆕 清理同一 ID 的旧图片（重新入库/覆盖场景），避免衣橱出现重复图
+    try:
+        for _old_fn in os.listdir(dest_dir):
+            if _old_fn.endswith(f'_{cid}.jpg'):
+                _old_path = os.path.join(dest_dir, _old_fn)
+                if _old_path != dest_path:
+                    os.remove(_old_path)
+                    log(f"🗑️ 清理旧图: {_old_path}")
+    except Exception:
+        pass
+
     shutil.copy2(src_img, dest_path)
     log(f"图片已复制: {dest_path}")
 
@@ -1406,6 +1418,13 @@ def _finalize_add_item(item_data):
             img = img.resize((int(w*ratio), int(h*ratio)), _PILImage.LANCZOS)
         # 保存处理后的大图到 enhanced/
         os.makedirs(enhanced__dir, exist_ok=True)
+        # 🆕 清理旧 enhanced 图（同 ID 覆盖场景）
+        try:
+            for _old_fn in os.listdir(enhanced__dir):
+                if f'_{cid}' in _old_fn and (_old_fn.endswith('.jpg') or _old_fn.endswith('.png')):
+                    os.remove(os.path.join(enhanced__dir, _old_fn))
+        except Exception:
+            pass
         enhanced_jpg = os.path.join(enhanced__dir, dest_filename)
         img.save(enhanced_jpg, 'JPEG', quality=85, optimize=True)
         # 生成缩略图（200px 宽）
@@ -5878,6 +5897,23 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         os.remove(_src)
                 except Exception:
                     pass
+            # 🆕 清理原始上传图片（可能和裁剪图不同路径）
+            for _i in range(10):  # 最多 10 张原图
+                _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+                try:
+                    if os.path.exists(_orig):
+                        os.remove(_orig)
+                except Exception:
+                    pass
+            # 🆕 清理旧 _incoming 文件（>24h 的残留）
+            _now_ts = time.time()
+            try:
+                for _fn in os.listdir(_incoming_dir):
+                    _fp = os.path.join(_incoming_dir, _fn)
+                    if os.path.isfile(_fp) and _now_ts - os.path.getmtime(_fp) > 86400:
+                        os.remove(_fp)
+            except Exception:
+                pass
             # 清理分析JSON
             try:
                 os.remove(analysis_path)

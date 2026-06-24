@@ -45,8 +45,8 @@ def _load_model():
         import torch
 
         model_name = 'mattmdjaga/segformer_b2_clothes'
-        _PROCESSOR = SegformerImageProcessor.from_pretrained(model_name)
-        _MODEL = SegformerForSemanticSegmentation.from_pretrained(model_name)
+        _PROCESSOR = SegformerImageProcessor.from_pretrained(model_name, local_files_only=True)
+        _MODEL = SegformerForSemanticSegmentation.from_pretrained(model_name, local_files_only=True)
         _MODEL.eval()
 
         return _MODEL, _PROCESSOR

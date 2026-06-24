@@ -5787,3 +5787,839 @@ ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_i
 [08:02:35] [INFO] 所有任务已结束（等待 0s）
 [08:02:35] [INFO] Watchdog 已停止
 [08:02:36] [INFO] 👋 服务已关闭
+[08:02:36] [INFO] =======================================================
+[08:02:36] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:02:36] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:02:36] [INFO] 💬 面板: http://localhost:8765/
+[08:02:36] [INFO] 🌐 Funnel: 已就绪
+[08:02:36] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:02:36] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:03:58] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:04:17] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:04:17] [INFO] 🔔 新单品徽标已消除: SH-009
+[08:04:23] [INFO] 📨 POST /api/wardrobe/item/SH-009 (Content-Length=26, CT=application/json)
+[08:04:23] [INFO] 标签更新: SH-009
+[08:04:29] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:04:29] [INFO] 🔔 新单品徽标已消除: TS-014
+[08:04:33] [INFO] 📨 POST /api/wardrobe/item/TS-014 (Content-Length=26, CT=application/json)
+[08:04:33] [INFO] 标签更新: TS-014
+[08:04:41] [INFO] 📨 POST /api/wardrobe/item/TS-015 (Content-Length=26, CT=application/json)
+[08:04:41] [INFO] 标签更新: TS-015
+[08:06:42] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:06:42] [INFO] 所有任务已结束（等待 0s）
+[08:06:42] [INFO] Watchdog 已停止
+[08:06:42] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/models/segformer/image_processing_segformer.py:102: FutureWarning: The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use `do_reduce_labels` instead.
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/modeling_utils.py:386: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  with safe_open(checkpoint_file, framework="pt") as f:
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51109)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51110)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51116)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51128)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51133)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51140)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51141)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51142)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51143)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+Traceback (most recent call last):
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5891, in do_POST
+    result = _finalize_add_item(item)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 1383, in _finalize_add_item
+    raise ValueError(f"临时图片不存在: {src_img}")
+ValueError: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51152)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 5913, in do_POST
+    _orig = os.path.join(_incoming_dir, f'img_{task_id}_{_i}.jpg')
+UnboundLocalError: local variable '_incoming_dir' referenced before assignment
+----------------------------------------
+[08:06:43] [INFO] =======================================================
+[08:06:43] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:06:43] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:06:43] [INFO] 💬 面板: http://localhost:8765/
+[08:06:43] [INFO] 🌐 Funnel: 已就绪
+[08:06:43] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:06:43] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:07:38] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:07:38] [INFO] 🔔 新单品徽标已消除: TS-013
+[08:07:42] [INFO] 📨 POST /api/wardrobe/item/TS-013 (Content-Length=26, CT=application/json)
+[08:07:42] [INFO] 标签更新: TS-013
+[08:07:48] [INFO] 📨 POST /api/wardrobe/item/TS-013 (Content-Length=26, CT=application/json)
+[08:07:48] [INFO] 标签更新: TS-013
+[08:08:35] [INFO] 📨 POST /api/wardrobe/item/TS-013/delete (Content-Length=0, CT=?)
+[08:08:35] [INFO] 单品已删除: TS-013 (4 files)
+[08:08:46] [INFO] 📨 POST /api/wardrobe/item/SH-009/delete (Content-Length=0, CT=?)
+[08:08:46] [INFO] 单品已删除: SH-009 (2 files)
+[08:08:52] [INFO] 📨 POST /api/wardrobe/item/TS-014/delete (Content-Length=0, CT=?)
+[08:08:52] [INFO] 单品已删除: TS-014 (2 files)
+[08:08:57] [INFO] 📨 POST /api/wardrobe/item/TS-015/delete (Content-Length=0, CT=?)
+[08:08:57] [INFO] 单品已删除: TS-015 (2 files)
+[08:09:15] [INFO] 📨 POST /api/wardrobe/add (Content-Length=78048, CT=multipart/form-data; boundary=----WebKit)
+[08:09:17] [INFO] [55508] 衣橱上传: 78048B
+[08:09:17] [INFO] [55508] 📸 衣橱添加(binary): 1782259757391 (1 张图片, 76KB)
+[08:10:00] [INFO] [55508] ✨ PT AI补全成功
+[08:10:00] [INFO] [55508] 📐 图片1 检测到 6 件服装 + 已抠图: TS(30.0%), PT(1.4%), SKIRT(1.0%), BAG(0.7%), SKIRT(0.5%), PT(0.5%)
+[08:11:21] [INFO] 衣物分析完成: 1782259757391 → 2 件
+[08:11:30] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:30] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_013153_TS-013.jpg
+[08:11:30] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_081130_TS-013.jpg
+[08:11:30] [INFO] 图片处理完成: TS-013 (缩略图 49KB)
+[08:11:30] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-013.json
+[08:11:30] [INFO] 自动推荐风格: TS-013 → ['athleisure_sport']
+[08:11:30] [INFO] 已追加到服装档案: TS-013
+[08:11:30] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/长裤/Image_20260624_081130_PT-010.jpg
+[08:11:30] [INFO] 图片处理完成: PT-010 (缩略图 32KB)
+[08:11:30] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/PT-010.json
+[08:11:30] [INFO] 已追加到服装档案: PT-010
+[08:11:34] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:34] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:34] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:34] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:34] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:35] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:35] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:35] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:35] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:35] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:36] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:36] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:36] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:36] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:36] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:38] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:38] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:38] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:38] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:38] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:40] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:40] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:40] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:40] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:40] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:51] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:51] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:51] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:51] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:51] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:52] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:52] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:52] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:52] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:52] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:11:53] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:11:53] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:11:53] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:11:53] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:11:53] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:12:24] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1981, CT=application/json)
+[08:12:24] [INFO] ⚠️ ID 碰撞: TS-013 已被占用，自动分配 TS-014
+[08:12:24] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_0.jpg
+[08:12:24] [INFO] ⚠️ ID 碰撞: PT-010 已被占用，自动分配 PT-011
+[08:12:24] [ERROR] 入库失败: 临时图片不存在: /Users/rabbit/Claude code/Fashion/wardrobe/_incoming/crop_1782259757391_1.jpg
+[08:13:28] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:13:28] [INFO] 所有任务已结束（等待 0s）
+[08:13:28] [INFO] Watchdog 已停止
+[08:13:28] [INFO] 👋 服务已关闭
+[08:13:28] [INFO] =======================================================
+[08:13:28] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:13:28] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:13:28] [INFO] 💬 面板: http://localhost:8765/
+[08:13:28] [INFO] 🌐 Funnel: 已就绪
+[08:13:28] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:13:28] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:13:30] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:13:30] [INFO] 所有任务已结束（等待 0s）
+[08:13:30] [INFO] Watchdog 已停止
+[08:13:30] [INFO] 👋 服务已关闭
+[08:13:30] [INFO] =======================================================
+[08:13:30] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:13:30] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:13:30] [INFO] 💬 面板: http://localhost:8765/
+[08:13:30] [INFO] 🌐 Funnel: 已就绪
+[08:13:30] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:13:30] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:13:40] [INFO] ⏰ 默认原型过时 (滞后 162s)，后台重建
+[08:14:52] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:15:36] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:15:36] [INFO] 🔔 新单品徽标已消除: TS-013
+[08:16:15] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:16:15] [INFO] 🔔 新单品徽标已消除: PT-010
+[08:16:32] [INFO] 📨 POST /api/wardrobe/item/PT-010 (Content-Length=26, CT=application/json)
+[08:16:32] [INFO] 标签更新: PT-010
+[08:16:35] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:16:35] [INFO] 🔔 新单品徽标已消除: PT-009
+[08:16:42] [INFO] 📨 POST /api/wardrobe/item/PT-009 (Content-Length=26, CT=application/json)
+[08:16:42] [INFO] 标签更新: PT-009
+[08:23:00] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:23:00] [INFO] 所有任务已结束（等待 0s）
+[08:23:00] [INFO] Watchdog 已停止
+[08:23:01] [INFO] 👋 服务已关闭
+[08:23:01] [INFO] =======================================================
+[08:23:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:23:01] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:23:01] [INFO] 💬 面板: http://localhost:8765/
+[08:23:01] [INFO] 🌐 Funnel: 已就绪
+[08:23:01] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:23:01] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:23:02] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:23:02] [INFO] 所有任务已结束（等待 0s）
+[08:23:02] [INFO] Watchdog 已停止
+[08:23:02] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+[08:23:03] [INFO] =======================================================
+[08:23:03] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:23:03] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:23:03] [INFO] 💬 面板: http://localhost:8765/
+[08:23:03] [INFO] 🌐 Funnel: 已就绪
+[08:23:03] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:23:03] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:23:58] [INFO] 📨 POST /api/wardrobe/item/PT-010/delete (Content-Length=0, CT=?)
+[08:23:58] [INFO] 单品已删除: PT-010 (2 files)
+[08:24:02] [INFO] 📨 POST /api/wardrobe/item/PT-009/delete (Content-Length=0, CT=?)
+[08:24:02] [INFO] 单品已删除: PT-009 (2 files)
+[08:24:10] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:24:52] [INFO] 📨 POST /api/wardrobe/add (Content-Length=165102, CT=multipart/form-data; boundary=----WebKit)
+[08:24:55] [INFO] [92879] 衣橱上传: 165102B
+[08:24:55] [INFO] [92879] 📸 衣橱添加(binary): 1782260695888 (1 张图片, 161KB)
+[08:25:03] [INFO] [92879] ⚠️ 图片1 布料解析失败: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/resolve-cache/models/mattmdjaga/segformer_b2_clothes/584abc1e1d260e23c0fc627c5217a09b2b461046/preprocessor_config.json (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))，使用整图分析
+[08:26:07] [INFO] 衣物分析完成: 1782260695888 → 5 件
+[08:26:27] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=4424, CT=application/json)
+[08:26:27] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_015325_TS-014.jpg
+[08:26:27] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_074522_TS-014.jpg
+[08:26:27] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_082627_TS-014.jpg
+[08:26:27] [INFO] 图片处理完成: TS-014 (缩略图 72KB)
+[08:26:27] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-014.json
+[08:26:27] [INFO] 已追加到服装档案: TS-014
+[08:26:27] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/短裤/Image_20260624_074523_SH-009.jpg
+[08:26:27] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短裤/Image_20260624_082627_SH-009.jpg
+[08:26:28] [INFO] 图片处理完成: SH-009 (缩略图 72KB)
+[08:26:28] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SH-009.json
+[08:26:28] [INFO] 自动推荐风格: SH-009 → ['athleisure_sport']
+[08:26:28] [INFO] 已追加到服装档案: SH-009
+[08:26:28] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/袜子/Image_20260624_082628_SOCK-007.jpg
+[08:26:28] [INFO] 图片处理完成: SOCK-007 (缩略图 72KB)
+[08:26:28] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SOCK-007.json
+[08:26:28] [INFO] 自动推荐风格: SOCK-007 → ['athleisure_sport', 'minimalist_monochrome']
+[08:26:28] [INFO] 已追加到服装档案: SOCK-007
+[08:26:28] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/鞋子/Image_20260624_082628_SHOE-011.jpg
+[08:26:28] [INFO] 图片处理完成: SHOE-011 (缩略图 72KB)
+[08:26:28] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/SHOE-011.json
+[08:26:28] [INFO] 自动推荐风格: SHOE-011 → ['athleisure_sport']
+[08:26:28] [INFO] 已追加到服装档案: SHOE-011
+[08:26:28] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/包/Image_20260624_082628_BAG-008.jpg
+[08:26:28] [INFO] 图片处理完成: BAG-008 (缩略图 72KB)
+[08:26:28] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/BAG-008.json
+[08:26:28] [INFO] 已追加到服装档案: BAG-008
+[08:27:08] [INFO] 📨 POST /api/wardrobe/item/TS-013 (Content-Length=26, CT=application/json)
+[08:27:08] [INFO] 标签更新: TS-013
+[08:27:12] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:27:12] [INFO] 🔔 新单品徽标已消除: TS-014
+[08:27:22] [INFO] 📨 POST /api/wardrobe/item/TS-014 (Content-Length=26, CT=application/json)
+[08:27:22] [INFO] 标签更新: TS-014
+[08:27:35] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:27:35] [INFO] 🔔 新单品徽标已消除: SH-009
+[08:27:38] [INFO] 📨 POST /api/wardrobe/item/SH-009 (Content-Length=26, CT=application/json)
+[08:27:38] [INFO] 标签更新: SH-009
+[08:27:43] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=26, CT=application/json)
+[08:27:43] [INFO] 🔔 新单品徽标已消除: SHOE-011
+[08:27:49] [INFO] 📨 POST /api/wardrobe/item/SHOE-011 (Content-Length=26, CT=application/json)
+[08:27:49] [INFO] 标签更新: SHOE-011
+[08:27:55] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=25, CT=application/json)
+[08:27:55] [INFO] 🔔 新单品徽标已消除: BAG-008
+[08:27:58] [INFO] 📨 POST /api/wardrobe/item/BAG-008 (Content-Length=26, CT=application/json)
+[08:27:58] [INFO] 标签更新: BAG-008
+[08:29:39] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:29:39] [INFO] 所有任务已结束（等待 0s）
+[08:29:39] [INFO] Watchdog 已停止
+[08:29:39] [INFO] 👋 服务已关闭
+[08:29:40] [INFO] =======================================================
+[08:29:40] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:29:40] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:29:40] [INFO] 💬 面板: http://localhost:8765/
+[08:29:40] [INFO] 🌐 Funnel: 已就绪
+[08:29:40] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:29:40] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:29:41] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:29:41] [INFO] 所有任务已结束（等待 0s）
+[08:29:41] [INFO] Watchdog 已停止
+[08:29:41] [INFO] 👋 服务已关闭
+[08:29:41] [INFO] =======================================================
+[08:29:41] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:29:41] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:29:41] [INFO] 💬 面板: http://localhost:8765/
+[08:29:41] [INFO] 🌐 Funnel: 已就绪
+[08:29:41] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:29:41] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:29:49] [INFO] ⏰ 默认原型过时 (滞后 676s)，后台重建
+[08:31:12] [INFO] 📨 POST /api/wardrobe/item/BAG-008/delete (Content-Length=0, CT=?)
+[08:31:12] [INFO] 单品已删除: BAG-008 (2 files)
+[08:31:18] [INFO] 📨 POST /api/wardrobe/item/SH-009/delete (Content-Length=0, CT=?)
+[08:31:18] [INFO] 单品已删除: SH-009 (2 files)
+[08:31:24] [INFO] 📨 POST /api/wardrobe/item/SHOE-011/delete (Content-Length=0, CT=?)
+[08:31:24] [INFO] 单品已删除: SHOE-011 (2 files)
+[08:31:29] [INFO] 📨 POST /api/wardrobe/item/TS-013/delete (Content-Length=0, CT=?)
+[08:31:29] [INFO] 单品已删除: TS-013 (2 files)
+[08:31:34] [INFO] 📨 POST /api/wardrobe/item/TS-014/delete (Content-Length=0, CT=?)
+[08:31:34] [INFO] 单品已删除: TS-014 (2 files)
+[08:31:39] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=26, CT=application/json)
+[08:31:39] [INFO] 🔔 新单品徽标已消除: SOCK-007
+[08:31:43] [INFO] 📨 POST /api/wardrobe/item/SOCK-007 (Content-Length=26, CT=application/json)
+[08:31:43] [INFO] 标签更新: SOCK-007
+[08:31:49] [INFO] 📨 POST /api/wardrobe/item/SOCK-007/delete (Content-Length=0, CT=?)
+[08:31:49] [INFO] 单品已删除: SOCK-007 (2 files)
+[08:32:50] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:32:50] [INFO] 所有任务已结束（等待 0s）
+[08:32:50] [INFO] Watchdog 已停止
+[08:32:50] [INFO] 👋 服务已关闭
+[08:32:50] [INFO] =======================================================
+[08:32:50] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:32:50] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:32:50] [INFO] 💬 面板: http://localhost:8765/
+[08:32:50] [INFO] 🌐 Funnel: 已就绪
+[08:32:50] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:32:50] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:32:52] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:32:52] [INFO] 所有任务已结束（等待 0s）
+[08:32:52] [INFO] Watchdog 已停止
+[08:32:52] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/models/segformer/image_processing_segformer.py:102: FutureWarning: The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use `do_reduce_labels` instead.
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/modeling_utils.py:386: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  with safe_open(checkpoint_file, framework="pt") as f:
+[08:32:52] [INFO] =======================================================
+[08:32:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:32:52] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:32:52] [INFO] 💬 面板: http://localhost:8765/
+[08:32:52] [INFO] 🌐 Funnel: 已就绪
+[08:32:52] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:32:52] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:33:56] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:34:24] [INFO] 📨 POST /api/wardrobe/add (Content-Length=96864, CT=multipart/form-data; boundary=----WebKit)
+[08:34:25] [INFO] [64063] 衣橱上传: 96864B
+[08:34:25] [INFO] [64063] 📸 衣橱添加(binary): 1782261265768 (1 张图片, 95KB)
+[08:34:56] [INFO] [64063] ✨ TS 白底提取成功
+[08:35:32] [INFO] [64063] ✨ PT 白底提取成功
+[08:35:32] [INFO] [64063] 📐 图片1 检测到 2 件服装 + 已抠图: TS(25.0%), PT(2.3%)
+[08:35:54] [INFO] 衣物分析完成: 1782261265768 → 2 件
+[08:36:16] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1002, CT=application/json)
+[08:36:16] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/长裤/Image_20260624_075750_PT-009.jpg
+[08:36:16] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/长裤/Image_20260624_083616_PT-009.jpg
+[08:36:17] [INFO] 图片处理完成: PT-009 (缩略图 16KB)
+[08:36:17] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/PT-009.json
+[08:36:17] [INFO] 自动推荐风格: PT-009 → ['clean_fit', 'business_casual']
+[08:36:17] [INFO] 已追加到服装档案: PT-009
+[08:36:30] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:36:30] [INFO] 🔔 新单品徽标已消除: PT-009
+[08:36:54] [INFO] ⏰ 默认原型过时 (滞后 105s)，后台重建
+[08:36:55] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:40:03] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:40:03] [INFO] 所有任务已结束（等待 0s）
+[08:40:03] [INFO] Watchdog 已停止
+[08:40:03] [INFO] 👋 服务已关闭
+[08:40:04] [INFO] =======================================================
+[08:40:04] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:40:04] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:40:04] [INFO] 💬 面板: http://localhost:8765/
+[08:40:04] [INFO] 🌐 Funnel: 已就绪
+[08:40:04] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:40:04] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:40:05] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:40:05] [INFO] 所有任务已结束（等待 0s）
+[08:40:05] [INFO] Watchdog 已停止
+[08:40:05] [INFO] 👋 服务已关闭
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:34: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/models/segformer/image_processing_segformer.py:102: FutureWarning: The `reduce_labels` parameter is deprecated and will be removed in a future version. Please use `do_reduce_labels` instead.
+  warnings.warn(
+/Users/rabbit/Library/Python/3.9/lib/python/site-packages/transformers/modeling_utils.py:386: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  with safe_open(checkpoint_file, framework="pt") as f:
+[08:40:05] [INFO] =======================================================
+[08:40:05] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:40:05] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:40:05] [INFO] 💬 面板: http://localhost:8765/
+[08:40:05] [INFO] 🌐 Funnel: 已就绪
+[08:40:05] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:40:05] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:40:51] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:41:10] [INFO] 📨 POST /api/wardrobe/add (Content-Length=96864, CT=multipart/form-data; boundary=----WebKit)
+[08:41:12] [INFO] [70836] 衣橱上传: 96864B
+[08:41:12] [INFO] [70836] 📸 衣橱添加(binary): 1782261672246 (1 张图片, 95KB)
+[08:41:44] [INFO] [70836] ✨ TS 白底提取成功
+[08:41:44] [INFO] [70836] 📐 图片1 检测到 1 件服装 + 已抠图: TS(25.0%)
+[08:42:00] [INFO] 衣物分析完成: 1782261672246 → 1 件
+[08:42:09] [INFO] 📨 POST /api/wardrobe/add/confirm (Content-Length=1014, CT=application/json)
+[08:42:09] [INFO] 🗑️ 清理旧图: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_081130_TS-013.jpg
+[08:42:09] [INFO] 图片已复制: /Users/rabbit/Claude code/Fashion/wardrobe/短袖上衣/Image_20260624_084209_TS-013.jpg
+[08:42:09] [INFO] 图片处理完成: TS-013 (缩略图 28KB)
+[08:42:09] [INFO] 标签已写入: /Users/rabbit/Claude code/Fashion/wardrobe/tags/TS-013.json
+[08:42:09] [INFO] 自动推荐风格: TS-013 → ['clean_fit']
+[08:42:09] [INFO] 已追加到服装档案: TS-013
+[08:43:13] [INFO] ⏰ 默认原型过时 (滞后 258s)，后台重建
+[08:43:15] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:44:22] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:44:22] [INFO] 🔔 新单品徽标已消除: TS-013
+[08:47:12] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:47:12] [INFO] 所有任务已结束（等待 0s）
+[08:47:12] [INFO] Watchdog 已停止
+[08:47:12] [INFO] 👋 服务已关闭
+[08:47:13] [INFO] =======================================================
+[08:47:13] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:47:13] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:47:13] [INFO] 💬 面板: http://localhost:8765/
+[08:47:13] [INFO] 🌐 Funnel: 已就绪
+[08:47:13] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:47:13] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:47:14] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:47:14] [INFO] 所有任务已结束（等待 0s）
+[08:47:14] [INFO] Watchdog 已停止
+[08:47:14] [INFO] 👋 服务已关闭
+[08:47:14] [INFO] =======================================================
+[08:47:14] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:47:14] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:47:14] [INFO] 💬 面板: http://localhost:8765/
+[08:47:14] [INFO] 🌐 Funnel: 已就绪
+[08:47:14] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:47:14] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:47:56] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:48:07] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:48:13] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:48:35] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:51:48] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:51:48] [INFO] 所有任务已结束（等待 0s）
+[08:51:48] [INFO] Watchdog 已停止
+[08:51:48] [INFO] 👋 服务已关闭
+[08:51:48] [INFO] =======================================================
+[08:51:48] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:51:48] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:51:48] [INFO] 💬 面板: http://localhost:8765/
+[08:51:48] [INFO] 🌐 Funnel: 已就绪
+[08:51:48] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:51:48] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:51:50] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:51:50] [INFO] 所有任务已结束（等待 0s）
+[08:51:50] [INFO] Watchdog 已停止
+[08:51:50] [INFO] 👋 服务已关闭
+[08:51:50] [INFO] =======================================================
+[08:51:50] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:51:50] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:51:50] [INFO] 💬 面板: http://localhost:8765/
+[08:51:50] [INFO] 🌐 Funnel: 已就绪
+[08:51:50] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:51:50] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:51:53] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=45, CT=application/json)
+[08:51:53] [INFO] 标签更新: SHOE-001
+[08:52:14] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:14] [INFO] 所有任务已结束（等待 0s）
+[08:52:14] [INFO] Watchdog 已停止
+[08:52:14] [INFO] 👋 服务已关闭
+[08:52:14] [INFO] =======================================================
+[08:52:14] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:14] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:14] [INFO] 💬 面板: http://localhost:8765/
+[08:52:14] [INFO] 🌐 Funnel: 已就绪
+[08:52:14] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:14] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:16] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:16] [INFO] 所有任务已结束（等待 0s）
+[08:52:16] [INFO] Watchdog 已停止
+[08:52:16] [INFO] 👋 服务已关闭
+[08:52:16] [INFO] =======================================================
+[08:52:16] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:16] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:16] [INFO] 💬 面板: http://localhost:8765/
+[08:52:16] [INFO] 🌐 Funnel: 已就绪
+[08:52:16] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:16] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:19] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=45, CT=application/json)
+[08:52:19] [INFO] 标签更新: SHOE-001
+[08:52:21] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:52:35] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:35] [INFO] 所有任务已结束（等待 0s）
+[08:52:35] [INFO] Watchdog 已停止
+[08:52:35] [INFO] 👋 服务已关闭
+[08:52:35] [INFO] =======================================================
+[08:52:35] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:35] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:35] [INFO] 💬 面板: http://localhost:8765/
+[08:52:35] [INFO] 🌐 Funnel: 已就绪
+[08:52:35] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:35] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:37] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:37] [INFO] 所有任务已结束（等待 0s）
+[08:52:37] [INFO] Watchdog 已停止
+[08:52:37] [INFO] 👋 服务已关闭
+[08:52:37] [INFO] =======================================================
+[08:52:37] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:37] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:37] [INFO] 💬 面板: http://localhost:8765/
+[08:52:37] [INFO] 🌐 Funnel: 已就绪
+[08:52:37] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:37] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:40] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=45, CT=application/json)
+[08:52:40] [INFO] 标签更新: SHOE-001
+[08:52:52] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:52] [INFO] 所有任务已结束（等待 0s）
+[08:52:52] [INFO] Watchdog 已停止
+[08:52:52] [INFO] 👋 服务已关闭
+[08:52:52] [INFO] =======================================================
+[08:52:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:52] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:52] [INFO] 💬 面板: http://localhost:8765/
+[08:52:52] [INFO] 🌐 Funnel: 已就绪
+[08:52:52] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:52] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:54] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:52:54] [INFO] 所有任务已结束（等待 0s）
+[08:52:54] [INFO] Watchdog 已停止
+[08:52:54] [INFO] 👋 服务已关闭
+[08:52:54] [INFO] =======================================================
+[08:52:54] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:52:54] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:52:54] [INFO] 💬 面板: http://localhost:8765/
+[08:52:54] [INFO] 🌐 Funnel: 已就绪
+[08:52:54] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:52:54] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:52:57] [INFO] 📨 POST /api/wardrobe/item/SHOE-001 (Content-Length=45, CT=application/json)
+[08:52:57] [INFO] 标签更新: SHOE-001
+[08:55:52] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:55:52] [INFO] 所有任务已结束（等待 0s）
+[08:55:52] [INFO] Watchdog 已停止
+[08:55:52] [INFO] 👋 服务已关闭
+[08:55:52] [INFO] =======================================================
+[08:55:52] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:55:52] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:55:52] [INFO] 💬 面板: http://localhost:8765/
+[08:55:52] [INFO] 🌐 Funnel: 已就绪
+[08:55:52] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:55:52] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:55:54] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:55:54] [INFO] 所有任务已结束（等待 0s）
+[08:55:54] [INFO] Watchdog 已停止
+[08:55:54] [INFO] 👋 服务已关闭
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 54713)
+Exception occurred during processing of request from ('127.0.0.1', 54712)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 4026, in do_GET
+    user_id, need_onboarding = _resolve_user_from_request(self)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 150, in _resolve_user_from_request
+    _update_user_active(user_id)
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 138, in update_last_active
+    reg = load_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 52, in load_registry
+    return _ensure_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 47, in _ensure_registry
+    return json.load(f)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+Traceback (most recent call last):
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 4026, in do_GET
+    user_id, need_onboarding = _resolve_user_from_request(self)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 148, in _resolve_user_from_request
+    reg = _load_user_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 52, in load_registry
+    return _ensure_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 47, in _ensure_registry
+    return json.load(f)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+----------------------------------------
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+----------------------------------------

@@ -1,5 +1,121 @@
 # 开发日志
 
+## 2026-06-24: 上传可靠性全面重构 + 三阶段入库管线升级
+
+### 凌晨：上传稳定性攻坚战（17 项修复）
+
+手机端凌晨上传频繁失败，从客户端→网络→服务端逐层排查：
+
+**客户端**
+- 压缩质量阶梯：优先 JPEG 0.7→0.5→0.3 降级，禁止发送原始文件
+- 上传前大小检查：>400KB 自动压缩
+- Canvas blob 压缩 → FormData 发送（避免 Funnel POST 限制）
+
+**网络层**
+- 修复 socket 超时：`self.rfile._sock` → `self.connection`（正确的 socket 对象）
+- `rfile.read()` 加 30s 超时 + boundary 引号处理
+- 上传超时 30s→60s（凌晨手机网络更慢）
+- 上传分块读取 + 进度追踪：定位传输数据量
+
+**服务端**
+- 修复上传响应 BrokenPipe 导致前端报失败
+- 修复上传阻塞：multipart 解析完整度检查
+- 预览图缓存碰撞修复
+- API 400 智能处理
+- launchd 稳定性加固：直接管理 Python 进程 + Funnel 自动启动
+
+**进程管理**
+- 修复信号处理器死锁：`shutdown()` 在独立线程中调用
+- 修复 SIGTERM 后进程僵死：`daemon_threads=True` + plist 加固
+
+### 上午：入库管线三阶段升级
+
+**Phase 1: 品类系统解耦 + 女性品类扩展**
+- 品类代码与性别解耦（原硬编码男性品类 → 动态按性别加载）
+- 女性品类扩展：DRESS(连衣裙) / SKIRT(半身裙) / JMP(连体裤) / BLOUSE(女士衬衫) / KNIT(针织衫)
+- `CATEGORY_CONFIG` 统一品类配置，替代多处不一致映射
+- 预览任务目录隔离：`users/{uid}/wardrobe/_incoming/` 按用户分离
+
+**Phase 2: 多件检测 + Cloth Parsing 分割预处理**
+- 集成 SegFormer-B2 (`mattmdjaga/segformer_b2_clothes`) 18 类服装语义分割
+- `local_files_only=True` 修复国内 HuggingFace SSL 连接问题
+- 最小面积阈值 3.0%（过滤误检噪点）
+- 连通区域分析：同一品类多件独立检测
+
+**Phase 3: 自动衣橱分类 + 风格聚类 + 入库自动推荐**
+- 入库自动风格推荐（基于品类/颜色/品牌/面料匹配风格指纹）
+- 自动 `claude_fit_comment` 生成：品牌 + 颜色 + 风格 + 品类 → 短名
+- 品类冗余去重："跑鞋鞋子"→"跑鞋"、"短袖上衣T恤"→"短袖上衣"
+
+### 白底提取管线（替代旧灰底补全方案）
+
+**新增 `tools/extract_clothing.py`**
+- `extract_to_white_bg()`：SegFormer 裁剪 → Seedream 整件重构到纯白背景(#FFFFFF)
+- `remove_white_background()`：阈值去白底(>240) → 透明 PNG + 中性灰底 JPG
+- 优于旧方案：整件重构（非局部 inpainting）+ 白底阈值去底（非复杂背景抠图）
+
+**四类图片处理路径**
+| 图片类型 | SegFormer | Seedream白底 | VLM行为 |
+|:---|:---:|:---:|:---|
+| 真人模特照 | ✅ 检测+裁剪 | ✅ 白底重构 | 逐件分析 |
+| 干净单品图 | — 跳过 | — | 原图直送 |
+| 电商商品图 | ✅ 检测 | ✅ | 忽略水印/促销 |
+| 多图拼贴 | ✅ | ✅ | 只分析主体 |
+
+### 入库确认增强
+- 多件识别 checkbox 勾选：用户选择需入库的单品
+- 全选/取消全选 toggle bar
+- 只发送勾选项确认入库
+
+### 缓存与显示修复
+- `Cache-Control: no-cache, max-age=0` + ETag（修复 24h 缓存导致卡片显示旧图）
+- 透明 PNG 保存到 `enhanced/{id}_cutout.png` + 透明缩略图重新生成
+- 标签编辑自动更新 `claude_fit_comment`（品牌/颜色/风格/品类变更即时反映）
+
+### 入库残留清理
+- 原图清理：入库后删除 `_incoming/` 临时文件
+- `_incoming` 泄漏修复：超过 24h 的分析 JSON + 残留图片自动清理
+- ID 冲突旧图替换：同名 ID 重新入库时先删除旧文件
+
+### 改动文件
+| 文件 | 改动 |
+|------|------|
+| `tools/wechat_control.py` | 上传重构 + Phase 1/2/3 + 白底管线 + checkbox确认 + 缓存修复 + 残留清理 |
+| `tools/extract_clothing.py` | **新增** — 白底提取 + 去白底模块（296 行） |
+| `tools/cloth_parser.py` | SegFormer B2 集成 + `local_files_only=True` |
+| `prototype/mobile-v2.html` | checkbox UI + 选择逻辑 + 上传压缩 |
+| `config/new_items.json` | NEW 徽标注册 |
+| `users/_registry.json` | 多用户注册 |
+
+### 已知问题
+- `wechat_control.py` 仍为巨石文件（~6200 行），业务逻辑层待抽出
+- 调试日志（临时 POST/GET 追踪）待清理
+
+---
+
+## 2026-06-23: Phase 7 稳定性基础设施 ✅ + 管线文档
+
+### 稳定性基础设施重构
+- 基础设施层提取 `server_infra.py` (517行)：TaskManager + SharedState + 日志 + 信号处理 + Watchdog
+- 线程安全加固：`SharedState` 统一锁替代 3 个裸全局变量
+- 任务超时检测：Watchdog 后台线程每 30s 扫描，running > 5min 自动标记 error
+- 启动任务恢复 + 重试队列
+- 优雅关闭：SIGTERM 等待活跃任务完成（15s）
+- 18 个自动化测试（7 单元 + 4 smoke + 7 集成）
+
+### 上传入库管线完整文档化
+- 四类图片处理路径文档
+- 多用户验证（default 86件 / alice 3待确认 / becca 空）
+- 全链路追踪：前端压缩→上传→SegFormer检测→Seedream白底→VLM分析→确认入库
+
+### 杂项修复
+- 修复分析完成后竞态条件导致单品闪现消失
+- 全量 900w JPEG 预压缩（CDN 体积减 80%）
+- Hero 图优先用 `_900w.jpg` 预压缩版
+- 管线生图完成后自动预压缩 900w
+
+---
+
 ## 2026-06-22: 每日自动推荐 + 手机端健康检查 + 穿搭周报系统
 
 - **每日 cron**：Claude Cron 每天 5:57 触发完整穿搭管线（避开整点高峰），失败自动重试一次

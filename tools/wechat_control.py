@@ -1441,6 +1441,30 @@ def _finalize_add_item(item_data):
         log(f"图片处理失败（非致命，标签已标记）: {e}", "WARN")
         _image_ok = False
 
+    # 🆕 2.5 白底提取的透明 PNG → 保存到 enhanced/ 并重新生成透明缩略图
+    _clean_png = item_data.get('_clean_png_bytes', b'')
+    if _clean_png:
+        try:
+            cutout_path = os.path.join(enhanced__dir, f'{cid}_cutout.png')
+            with open(cutout_path, 'wb') as _f:
+                _f.write(_clean_png)
+            # 用透明 PNG 重新生成缩略图（保持透明底）
+            _png_img = _PILImage.open(_io.BytesIO(_clean_png))
+            if _png_img.mode == 'RGBA':
+                _png_w, _png_h = _png_img.size
+                _thumb_w = 200
+                if _png_w > _thumb_w:
+                    _ratio = _thumb_w / _png_w
+                    _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
+                else:
+                    _png_thumb = _png_img.copy()
+                # 覆盖之前的白底缩略图
+                _png_thumb.save(thumb_path, 'PNG', optimize=True)
+                log(f"透明抠图已保存: {cid} (cutout.png + 透明缩略图)")
+            _image_ok = True
+        except Exception as _ce:
+            log(f"透明抠图保存失败（非致命）: {_ce}", "WARN")
+
     # 3. 构建标签 JSON
     tag_data = {
         'clothing_id': cid,
@@ -2053,37 +2077,56 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         all_crops = []  # [(crop_pil_image, source_img_index, category_hint, completeness, mask)]
         _parse_success = False
         try:
-            from tools.cloth_parser import parse_clothing as _parse_clothing, create_clean_cutout as _create_cutout
-            from tools.complete_clothing import complete_clothing as _complete_clothing
+            from tools.cloth_parser import parse_clothing as _parse_clothing
+            from tools.extract_clothing import extract_to_white_bg as _extract_white_bg, remove_white_background as _remove_white_bg
             tasks.update(task_id, status='running', message=f'正在检测服装单品...')
             for i, tp in enumerate(temp_paths):
                 try:
                     items = _parse_clothing(tp)
+                    # 🆕 过滤面积过小的误检（< 3% 通常是背景噪点或皮肤碎片）
+                    items = [it for it in items if it.get('area_pct', 0) >= 3.0]
                     if items:
                         for item in items:
-                            # 🆕 用 SegFormer mask 抠图去背景（比 rembg 更准，专为服装训练）
-                            cutout = _create_cutout(item['crop_image'], item['mask'])
-                            clean_img = cutout['cutout_jpg']
+                            # 🆕 白底重构：SegFormer 检测到服装 → Seedream 整件重构到纯白背景 → 程序化去白底
+                            # 优于旧方案（灰底抠图+局部补全），产出专业电商商品图效果
                             was_completed = False
-                            # 🆕 不完整服装 → AI 补全
-                            if item['completeness'] == 'partial':
+                            clean_img = None
+                            try:
                                 tasks.update(task_id, status='running',
-                                           message=f'正在AI补全 {item["category_name"]}...')
+                                           message=f'正在提取 {item["category_name"]} 到白底...')
+                                white_result = _extract_white_bg(
+                                    item['crop_image'],
+                                    category_hint=item['category_code'],
+                                    max_retries=1, timeout=120
+                                )
+                                if white_result.get('white_bg_image'):
+                                    # 白底图直接作为入库图片（专业商品图效果）
+                                    # 同时去白底生成透明PNG备用于 enhanced/ 缩略图
+                                    clean_img = white_result['white_bg_image']
+                                    was_completed = True
+                                    # 后台去白底存透明PNG（给 enhanced/ 缩略图用）
+                                    try:
+                                        _cleaned = _remove_white_bg(white_result['white_bg_image'])
+                                        item['_clean_png_bytes'] = _cleaned.get('cutout_bytes_png', b'')
+                                    except Exception:
+                                        item['_clean_png_bytes'] = b''
+                                    log(f'{_rid} ✨ {item["category_code"]} 白底提取成功')
+                                else:
+                                    log(f'{_rid} ⚠️ {item["category_code"]} 白底提取未成功: {white_result.get("error","")[:80]}')
+                            except Exception as _ce:
+                                log(f'{_rid} ⚠️ {item["category_code"]} 白底提取异常: {_ce}')
+
+                            # Fallback：Seedream 失败时用 SegFormer 抠图兜底
+                            if clean_img is None:
                                 try:
-                                    comp_result = _complete_clothing(
-                                        clean_img, mask=item.get('mask'),
-                                        category_hint=item['category_code'],
-                                        completeness='partial',
-                                        max_retries=1, timeout=120
-                                    )
-                                    if comp_result.get('completed_image'):
-                                        clean_img = comp_result['completed_image']
-                                        was_completed = True
-                                        log(f'{_rid} ✨ {item["category_code"]} AI补全成功')
-                                    else:
-                                        log(f'{_rid} ⚠️ {item["category_code"]} 补全未成功: {comp_result.get("error","")[:80]}')
-                                except Exception as _ce:
-                                    log(f'{_rid} ⚠️ {item["category_code"]} 补全异常: {_ce}')
+                                    from tools.cloth_parser import create_clean_cutout as _create_cutout
+                                    cutout = _create_cutout(item['crop_image'], item['mask'])
+                                    clean_img = cutout['cutout_jpg']
+                                    log(f'{_rid} ↩️ {item["category_code"]} 回退到 SegFormer 抠图')
+                                except Exception as _fe:
+                                    clean_img = item['crop_image'].convert('RGB') if hasattr(item['crop_image'], 'convert') else item['crop_image']
+                                    log(f'{_rid} ↩️ {item["category_code"]} 回退到原始裁剪图')
+
                             all_crops.append((clean_img, i, item['category_code'], item['completeness'], item.get('mask'), was_completed))
                         log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装 + 已抠图: '
                             f'{", ".join(it["category_code"]+"("+str(it["area_pct"])+"%)" for it in items)}')
@@ -4264,7 +4307,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         etag_pre = None
                     if etag_pre and self.headers.get('If-None-Match') == etag_pre:
                         self._send_body(304, b'', ct, {
-                            'Cache-Control': 'public, max-age=86400',
+                            'Cache-Control': 'public, no-cache, max-age=0',
                             'ETag': etag_pre
                         })
                         return
@@ -4290,7 +4333,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             # 检查浏览器缓存是否有效（If-None-Match）
             if etag and self.headers.get('If-None-Match') == etag:
                 self._send_body(304, b'', ct, {
-                    'Cache-Control': 'public, max-age=86400',
+                    'Cache-Control': 'public, no-cache, max-age=0',
                     'ETag': etag
                 })
                 return
@@ -5680,6 +5723,45 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
                 _deep_merge(current, updates)
 
+                # 🆕 自动重新生成服装介绍 — 从结构化字段动态构建
+                _brand = (current.get('brand') or {}).get('name', '')
+                _color = (current.get('color') or {}).get('hue_name', '')
+                _cat = current.get('category', '')
+                _styles = current.get('style_modifiers', [])
+                # 过滤掉颜色/身形类描述性标签（不应出现在名称中）
+                _color_kw = {'颜色显白', '显白', '显瘦', '纯色', '深色', '浅色', '亮色', '暗色'}
+                _name_styles = [s for s in _styles if s not in _color_kw]
+                _parts = [p for p in [
+                    _brand if _brand not in ('未知', '') else '',
+                    _color,
+                    _name_styles[0] if _name_styles else '',
+                    _cat
+                ] if p]
+                # 去重：风格词已含品类时去掉品类词（如"跑鞋鞋子"→"跑鞋"）
+                _cat_redundant = {
+                    '鞋子': ['鞋'], '帽子': ['帽'], '袜子': ['袜'],
+                    '短袖上衣': ['短袖', 'T恤'], '长裤': ['裤'], '短裤': ['裤'],
+                }
+                for _cat_k, _cat_v in _cat_redundant.items():
+                    if _cat == _cat_k and _parts and any(v in _parts[-1] for v in _cat_v):
+                        _parts = _parts[:-1]
+                        break
+                _short_name = ''.join(_parts) if _parts else _cat
+                # 提取旧 comment 最后一个逗号后的身形适配描述
+                _old = (current.get('meta') or {}).get('claude_fit_comment', '')
+                _body_hint = ''
+                if '，' in _old:
+                    _body_hint = _old.rsplit('，', 1)[-1].strip()
+                elif ',' in _old:
+                    _body_hint = _old.rsplit(',', 1)[-1].strip()
+                # 只有身形相关才保留
+                _body_kw = ['显白', '修饰', '平衡', '拉长', '显瘦', '遮盖', '优化', '腿型', '比例']
+                if not any(kw in _body_hint for kw in _body_kw):
+                    _body_hint = ''
+                _new_comment = _short_name
+                if _body_hint: _new_comment += '，' + _body_hint
+                current.setdefault('meta', {})['claude_fit_comment'] = _new_comment
+
                 with open(tag_path, 'w', encoding='utf-8') as f:
                     json.dump(current, f, ensure_ascii=False, indent=2)
 
@@ -5865,6 +5947,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             analysis_path = os.path.join(user_incoming, f'analysis_{task_id}.json')
             if not os.path.exists(analysis_path):
                 analysis_path = os.path.join(main_incoming, f'analysis_{task_id}.json')
+            # 确保 _incoming_dir 在使用前已定义（修复 UnboundLocalError）
+            _incoming_dir = os.path.dirname(analysis_path) if os.path.exists(os.path.dirname(analysis_path)) else main_incoming
             if os.path.exists(analysis_path):
                 with open(analysis_path, 'r') as f:
                     saved = json.load(f)
@@ -5930,7 +6014,6 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 os.remove(analysis_path)
             except: pass
             # 🆕 清理 cloth parsing 裁剪图
-            _incoming_dir = os.path.dirname(analysis_path) if os.path.exists(os.path.dirname(analysis_path)) else ''
             if _incoming_dir and task_id:
                 try:
                     for _fn in os.listdir(_incoming_dir):

@@ -1301,3 +1301,25 @@ Conte
 [07:57:50] [INFO] 已追加到服装档案: PT-009
 [07:59:23] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
 [07:59:23] [INFO] 🔔 新单品徽标已消除: TS-015
+[08:02:35] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[08:02:35] [INFO] 所有任务已结束（等待 0s）
+[08:02:35] [INFO] Watchdog 已停止
+[08:02:36] [INFO] 👋 服务已关闭
+[08:02:36] [INFO] =======================================================
+[08:02:36] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[08:02:36] [INFO] 📡 服务: http://0.0.0.0:8765
+[08:02:36] [INFO] 💬 面板: http://localhost:8765/
+[08:02:36] [INFO] 🌐 Funnel: 已就绪
+[08:02:36] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[08:02:36] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[08:03:58] [INFO] 📨 POST /api/ratings (Content-Length=341, CT=application/json)
+[08:04:17] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:04:17] [INFO] 🔔 新单品徽标已消除: SH-009
+[08:04:23] [INFO] 📨 POST /api/wardrobe/item/SH-009 (Content-Length=26, CT=application/json)
+[08:04:23] [INFO] 标签更新: SH-009
+[08:04:29] [INFO] 📨 POST /api/wardrobe/new-items/dismiss (Content-Length=24, CT=application/json)
+[08:04:29] [INFO] 🔔 新单品徽标已消除: TS-014
+[08:04:33] [INFO] 📨 POST /api/wardrobe/item/TS-014 (Content-Length=26, CT=application/json)
+[08:04:33] [INFO] 标签更新: TS-014
+[08:04:41] [INFO] 📨 POST /api/wardrobe/item/TS-015 (Content-Length=26, CT=application/json)
+[08:04:41] [INFO] 标签更新: TS-015

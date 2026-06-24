@@ -2141,15 +2141,21 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                 "text": f"【图片 {i+1}】"
             })
 
-        # 构建分析指令 — 🆕 品类自由输出 + fuzzy dedup
+        # 构建分析指令 — 🆕 品类自由输出 + fuzzy dedup + 电商图抗噪
         analysis_prompt = """你是一位专业的服装鉴定师。请仔细分析以上每张图片中的服装单品，输出严格的JSON格式结果。
+
+🛒 图片类型识别（电商场景兼容）：
+- 图片可能是：真人模特穿搭照 / 干净背景单品图 / 电商商品图（含水印、促销文字、价格标签）/ 多图拼贴
+- 电商图中的水印文字、促销标签（如"满200减20"）、价格、尺码表、品牌Logo的叠印——这些都是干扰信息，不是服装的一部分
+- 学会"看穿"这些叠印：品牌水印→可作为品牌字段的线索；促销文字/价格→忽略；店铺Logo→忽略
+- 如果图片是多图拼贴（同一件衣服的正反面/细节），只分析主要展示的那件服装，不要重复计数
+- 如果图片的服装上有其他物品遮挡（手机、手袋、头发），请识别出来并忽略遮挡物，只关注服装本身
 
 对每件单品，按以下结构输出：
 {
   "items": [
     {
-      "category_code": "品类简称（建议填，但不确定可以填'??'），如 TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰), DRESS(连衣裙), SKIRT(半身裙), JMP(连体裤), BLOUSE(女士衬衫), KNIT(针织衫)。
-      如果不确定或品类不在以上列表中，填'??'，系统会自动归类。",
+      "category_code": "品类简称（建议填，但不确定可以填'??'），如 TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰), DRESS(连衣裙), SKIRT(半身裙), JMP(连体裤), BLOUSE(女士衬衫), KNIT(针织衫)。\n      如果不确定或品类不在以上列表中，填'??'，系统会自动归类。",
       "category": "中文品类名。这是最重要的字段，请尽量准确描述这是哪种服装，如：短袖上衣、连衣裙、百褶裙、针织开衫、阔腿裤、连体短裤、雪纺衬衫。系统会根据此字段自动分类。",
       "color": {
         "hue_family": "暖色/冷色/中性色",
@@ -2160,7 +2166,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         "friendly_for_pale_skin": false
       },
       "brand": {
-        "name": "品牌名，如识别到logo或标志性款式则填写，否则填'未知'",
+        "name": "品牌名。优先级：1)服装上的Logo 2)图片水印中的品牌名 3)标志性款式。没有则填'未知'。不要把电商店铺名当成品牌名",
         "collection": "系列名或空",
         "confidence": "确定/推测/未知"
       },
@@ -2185,7 +2191,8 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
       "occasions": ["运动", "日常休闲"],
       "formality": 3,
       "meta": {
-        "claude_fit_comment": "一句话总结版型与适配度"
+        "claude_fit_comment": "一句话总结版型与适配度",
+        "image_type": "model_wearing/product_shot/ecommerce/collage"
       },
       "source_image": 1
     }
@@ -2196,10 +2203,14 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 - 严格只输出JSON，不要包含markdown代码块标记或解释文字
 - 如果图片中没有服装单品，返回 {"items": []}
 - source_image 必须是该单品所在图片的编号（1-based，对应【图片 N】标注），一件单品只能属于一张图片
-- 🆕 category字段必须填准确的中文品类名，系统会用此字段自动分类到衣橱
-- 🆕 对于女性服装，请区分：连衣裙(一件式连身裙) vs 半身裙(只有下半身)；连体裤(上下连身) vs 背心+长裤(两件分开)
-- 🆕 针织衫/毛衣/开衫请归类为"针织衫"，雪纺/真丝/荷叶边女士衬衫归类为"女士衬衫"
-- 🆕 如果服装有遮挡或不完整，在 meta.claude_fit_comment 中注明"部分遮挡"或"不完整可见"""
+- category字段必须填准确的中文品类名，系统会用此字段自动分类到衣橱
+- 对于女性服装，请区分：连衣裙(一件式连身裙) vs 半身裙(只有下半身)；连体裤(上下连身) vs 背心+长裤(两件分开)
+- 针织衫/毛衣/开衫请归类为"针织衫"，雪纺/真丝/荷叶边女士衬衫归类为"女士衬衫"
+- 如果服装有遮挡或不完整，在 meta.claude_fit_comment 中注明"部分遮挡"或"不完整可见"
+- 🛒 电商图：促销文字、价格、尺码信息不是服装属性，不要填进颜色/图案/面料字段
+- 🛒 水印中的品牌名可作为 brand.name 的线索（confidence=推测），但水印本身不是服装图案
+- 🛒 多图拼贴：只分析主要展示的那件服装，不要重复计数同一件衣服的不同角度
+- 🛒 image_type 字段：model_wearing(模特穿着)/product_shot(单品平铺)/ecommerce(电商商品图)/collage(多图拼贴)"""
 
         content_blocks.append({"type": "text", "text": analysis_prompt})
 

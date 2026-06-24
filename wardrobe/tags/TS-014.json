@@ -43,7 +43,8 @@
   "meta": {
     "claude_fit_comment": "版型合身，浅灰底黑条纹设计，适合春夏运动或休闲场景",
     "cloth_parsed": true,
-    "completeness": "full"
+    "completeness": "full",
+    "archived": true
   },
   "occasions": [
     "运动",

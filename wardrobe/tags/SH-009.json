@@ -41,7 +41,8 @@
   "meta": {
     "claude_fit_comment": "部分可见，红色短裤带文字装饰，风格休闲 [⚠️部分遮挡]",
     "cloth_parsed": true,
-    "completeness": "partial"
+    "completeness": "partial",
+    "archived": true
   },
   "occasions": [
     "日常休闲",

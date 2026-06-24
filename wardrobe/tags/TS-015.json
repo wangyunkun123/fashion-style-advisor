@@ -44,7 +44,8 @@
     "claude_fit_comment": "条纹短袖T恤，版型休闲，适合日常穿搭",
     "cloth_parsed": true,
     "completeness": "full",
-    "ai_completed": false
+    "ai_completed": false,
+    "archived": true
   },
   "occasions": [
     "日常休闲",

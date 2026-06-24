@@ -1245,13 +1245,61 @@ def _get_next_id(category_code, uid=None):
 
 _wardrobe_lock = threading.Lock()  # 保护服装档案.md 和 new_items.json 的并发写入
 
+def _ensure_wardrobe_md(user_dir, uid=None):
+    """确保 服装档案.md 存在，不存在则自动生成（自愈）"""
+    md_path = os.path.join(user_dir, 'wardrobe', '服装档案.md')
+    if os.path.exists(md_path):
+        return md_path
+    # 自愈：从 CAT_CONFIG 动态生成品类列表
+    log(f"🩹 自愈: 重建服装档案.md ({uid or 'default'})")
+    try:
+        from tools.user_manager import create_user as _cu
+        _cu(uid) if uid else None
+        # create_user 内部已处理 服装档案.md 的创建
+        if os.path.exists(md_path):
+            return md_path
+    except Exception:
+        pass
+    # Fallback: 手动生成
+    user_gender = 'male'
+    profile_path = os.path.join(user_dir, 'profile.json')
+    if os.path.exists(profile_path):
+        try:
+            with open(profile_path) as pf:
+                user_gender = json.load(pf).get('gender', 'male') or 'male'
+        except Exception:
+            pass
+    try:
+        from tools.common import CAT_CONFIG
+    except ImportError:
+        CAT_CONFIG = {}
+    cats = []
+    for code, cfg in sorted(CAT_CONFIG.items(), key=lambda x: x[1].get('sort', 99)):
+        cat_gender = cfg.get('gender', 'both')
+        if cat_gender == 'both' or cat_gender == user_gender:
+            cats.append(cfg['cn'])
+    if not cats:
+        cats = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
+                '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
+    lines = ['# 服装档案', '', '> AI 自动入库，人工审核中', '']
+    for cat in cats:
+        lines.append(f'## {cat}')
+        lines.append('| ID | 文件名 | 颜色 | 品牌·面料 | 风格标签 | 搭配提示 | 适用场景 |')
+        lines.append('|---|---|---|---|---|---|---|')
+        lines.append('')
+    os.makedirs(os.path.dirname(md_path), exist_ok=True)
+    with open(md_path, 'w') as f:
+        f.write('\n'.join(lines))
+    log(f"🩹 服装档案.md 已自动生成 ({len(cats)} 个品类)")
+    return md_path
+
+
 def _append_to_wardrobe_md(cid, category_name, filename, tag_data, uid=None):
     """向用户 wardrobe/服装档案.md 对应品类表格追加一行"""
     user_dir = resolve_user_dir(uid)
     md_path = os.path.join(user_dir, 'wardrobe', '服装档案.md')
     if not os.path.exists(md_path):
-        log(f"服装档案.md 不存在", "WARN")
-        return
+        md_path = _ensure_wardrobe_md(user_dir, uid)
 
     with _wardrobe_lock:
         with open(md_path, 'r', encoding='utf-8') as f:
@@ -1351,6 +1399,18 @@ def _finalize_add_item(item_data):
     wardrobe_dir = os.path.join(user_dir, 'wardrobe')
     tags__dir = os.path.join(wardrobe_dir, 'tags')
     enhanced__dir = os.path.join(wardrobe_dir, 'enhanced')
+
+    # 🛡️ 防御：确保用户基础设施完备（自愈 onboarding 未完整创建的场景）
+    _ensure_wardrobe_md(user_dir, uid)
+    os.makedirs(tags__dir, exist_ok=True)
+    os.makedirs(enhanced__dir, exist_ok=True)
+    # 确保 config/ 目录和 new_items.json 存在
+    _config_dir = os.path.join(user_dir, 'config')
+    os.makedirs(_config_dir, exist_ok=True)
+    _new_items_path = os.path.join(_config_dir, 'new_items.json')
+    if not os.path.exists(_new_items_path):
+        with open(_new_items_path, 'w') as _nf:
+            json.dump({'items': {}}, _nf)
 
     # 防止多批次并发时的 ID 碰撞：入库前重新检查 ID 是否已被占用
     # 加锁确保 check → assign → write 在同一临界区内
@@ -1464,6 +1524,34 @@ def _finalize_add_item(item_data):
             _image_ok = True
         except Exception as _ce:
             log(f"透明抠图保存失败（非致命）: {_ce}", "WARN")
+    else:
+        # 🆕 产品图兜底：无 SegFormer 抠图 → 用 rembg 自动去背景
+        try:
+            from rembg import remove as _rembg_remove
+            import io as _bg_io
+            _bg_input = _bg_io.BytesIO()
+            img.save(_bg_input, format='PNG')
+            _bg_input.seek(0)
+            _bg_output = _rembg_remove(_bg_input.read())
+            _clean_png = _bg_output
+            # 保存透明 PNG 并生成透明缩略图
+            cutout_path = os.path.join(enhanced__dir, f'{cid}_cutout.png')
+            with open(cutout_path, 'wb') as _f:
+                _f.write(_bg_output)
+            _png_img = _PILImage.open(_bg_io.BytesIO(_bg_output))
+            if _png_img.mode == 'RGBA':
+                _png_w, _png_h = _png_img.size
+                _thumb_w = 200
+                if _png_w > _thumb_w:
+                    _ratio = _thumb_w / _png_w
+                    _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
+                else:
+                    _png_thumb = _png_img.copy()
+                _png_thumb.save(thumb_path, 'PNG', optimize=True)
+            log(f"🎯 rembg 产品图抠图完成: {cid}")
+            _image_ok = True
+        except Exception as _rbe:
+            log(f"rembg 抠图失败（非致命）: {_rbe}", "WARN")
 
     # 3. 构建标签 JSON
     tag_data = {
@@ -2047,6 +2135,9 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
     """后台线程：调用豆包视觉 API 分析衣物图片（多用户感知 + 自动重试）"""
     _rid = f'[{req_id}]' if req_id else ''
     try:
+        # 🛡️ 持久化 _user_id 到任务（崩溃恢复时重试队列依赖此字段）
+        if uid and uid != 'default':
+            tasks.update(task_id, _user_id=uid)
         tasks.update(task_id, status='running', message='正在保存图片...')
 
         # 设置线程本地用户上下文（子线程不继承父线程的 threading.local()）
@@ -2061,15 +2152,27 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         temp_paths = []
         import base64 as _b64
         from PIL import Image as PILImage
+        import hashlib as _hashlib
+        # 同批次 MD5 去重（同一 task 内重复的图只保留第一张）
+        _batch_md5s = set()
+        _dup_count = 0
         for i, b64_str in enumerate(image_b64_list):
             # 去掉可能的 data:image/...;base64, 前缀
             if ',' in b64_str and b64_str.startswith('data:'):
                 b64_str = b64_str.split(',', 1)[1]
             img_bytes = _b64.b64decode(b64_str)
+            _img_md5 = _hashlib.md5(img_bytes).hexdigest()
+            if _img_md5 in _batch_md5s:
+                _dup_count += 1
+                log(f'{_rid} 🔄 图片{i+1} 同批次重复，跳过')
+                continue
+            _batch_md5s.add(_img_md5)
             temp_path = os.path.join(incoming_dir, f'img_{task_id}_{i}.jpg')
             with open(temp_path, 'wb') as f:
                 f.write(img_bytes)
             temp_paths.append(temp_path)
+        if _dup_count:
+            log(f'{_rid} 🗑️ 去重过滤 {_dup_count} 张重复图片，实际处理 {len(temp_paths)} 张')
 
         tasks.update(task_id, status='running', message=f'正在AI智能识别 {len(temp_paths)} 张图片...')
 
@@ -2082,6 +2185,49 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             tasks.update(task_id, status='running', message=f'正在检测服装单品...')
             for i, tp in enumerate(temp_paths):
                 try:
+                    # 🆕 皮肤检测：有皮肤→人像穿搭→SegFormer裁剪；无皮肤→单品图→原图直接送AI
+                    # 2026-06-24 修复：草帽等暖色调材质（米色/卡其色）RGB接近肤色导致误判
+                    # 方案：收紧RGB条件 + 色相约束(H≤35°排除黄橙色的草帽/皮革/卡其布)
+                    # R须显著大于G和B（皮肤特有），排除R≈G≈B的暖色材质
+                    _pil_img = PILImage.open(tp).convert('RGB')
+                    # EXIF 方向校正：iPhone 竖拍照片可能存为横图+旋转标记
+                    try:
+                        from PIL import ImageOps as _ImageOps
+                        _pil_img = _ImageOps.exif_transpose(_pil_img)
+                    except Exception:
+                        pass
+                    import numpy as _np
+                    _arr = _np.array(_pil_img).astype(float)
+                    _r, _g, _b = _arr[:,:,0], _arr[:,:,1], _arr[:,:,2]
+                    # HSV 色相计算（区分红调皮肤 vs 黄调材质）
+                    _rn, _gn, _bn = _r/255, _g/255, _b/255
+                    _cmax = _np.maximum(_np.maximum(_rn, _gn), _bn)
+                    _cmin = _np.minimum(_np.minimum(_rn, _gn), _bn)
+                    _cdelta = _cmax - _cmin
+                    _h = _np.zeros_like(_rn)
+                    _hmask_r = (_cmax == _rn) & (_cdelta != 0)
+                    _hmask_g = (_cmax == _gn) & (_cdelta != 0)
+                    _hmask_b = (_cmax == _bn) & (_cdelta != 0)
+                    _h[_hmask_r] = 60 * ((_gn[_hmask_r] - _bn[_hmask_r]) / _cdelta[_hmask_r]) % 360
+                    _h[_hmask_g] = 60 * ((_bn[_hmask_g] - _rn[_hmask_g]) / _cdelta[_hmask_g] + 2)
+                    _h[_hmask_b] = 60 * ((_rn[_hmask_b] - _gn[_hmask_b]) / _cdelta[_hmask_b] + 4)
+                    # 收紧的皮肤检测：R主导(>G+10, >B+10)，R-G>20，max-min>20，色相≤35°
+                    # + 饱和度约束 0.1-0.55（排除高饱和红色布料/低饱和灰色材质）
+                    _s = _cdelta / _np.maximum(_cmax, 0.001)
+                    _skin = (_r > 95) & (_g > 40) & (_b > 20) & \
+                            (_r > _g + 10) & (_r > _b + 10) & \
+                            ((_r - _g) > 20) & \
+                            ((_np.maximum(_np.maximum(_r,_g),_b) - _np.minimum(_np.minimum(_r,_g),_b)) > 20) & \
+                            (_h <= 35) & \
+                            (_s >= 0.1) & (_s <= 0.55)
+                    _skin_pct = _skin.sum() / (_arr.shape[0] * _arr.shape[1]) * 100
+                    _is_product_shot = _skin_pct < 3  # 皮肤<3%→无人→单品图
+
+                    if _is_product_shot:
+                        log(f'{_rid} 🔍 图片{i+1} 皮肤检测{_skin_pct:.1f}%→判定为单品图，跳过SegFormer直接原图分析')
+                        all_crops.append((_pil_img, i, '??', 'full', None, False))
+                        continue  # 跳过 SegFormer 处理
+
                     items = _parse_clothing(tp)
                     # 🆕 过滤面积过小的误检（< 3% 通常是背景噪点或皮肤碎片）
                     items = [it for it in items if it.get('area_pct', 0) >= 3.0]
@@ -2147,6 +2293,11 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         except Exception as _pe:
             log(f'{_rid} ⚠️ 布料解析异常: {_pe}，回退到整图分析')
 
+        # ═══ 图片类型分流 ═══
+        # 1. 👤 人像穿搭: 皮肤检测≥3% → SegFormer裁剪 → Seedream白底重构 → AI逐件分析
+        # 2. 🛍️ 单品图: 皮肤检测<3%（鞋/包/衣服平铺/配饰）→ 跳过SegFormer → 原图直接送AI
+        # 3. 🛒 电商图: 水印/促销文字 → AI Prompt 层处理（忽略水印/提取品牌线索）
+        # 4. 🖼️ 拼贴图: 多图面板 → AI Prompt 层处理（去重/只分析主体）
         # 如果解析成功且有有效品类检测，用裁剪图替换原始图；否则用原始图
         _has_valid_detections = _parse_success and any(c[2] != '??' for c in all_crops)
         if _has_valid_detections:
@@ -4108,13 +4259,25 @@ class WebhookHandler(BaseHTTPRequestHandler):
         # 聊天面板（多用户传递 user_id 以加载对应用户的原型）
         if parsed.path in ('/', ''):
             uid = self.user_id if self.user_id != 'default' else None
-            extra_headers = {}
+            # 🛡️ 缓存破坏：无 v= 参数时 301 重定向到带版本号的 URL
+            qs = parse_qs(parsed.query)
+            if 'v' not in qs and not parsed.query.startswith('v='):
+                proto_path = os.path.join(resolve_user_dir(uid), 'cache', 'prototype.html') if uid else os.path.join(PROJECT_DIR, 'prototype', 'mobile-v2.html')
+                proto_ver = str(int(os.path.getmtime(proto_path))) if os.path.exists(proto_path) else '0'
+                sep = '&' if parsed.query else ''
+                new_query = f'{parsed.query}{sep}v={proto_ver}'
+                self.send_response(301)
+                self.send_header('Location', f'/?{new_query}')
+                self.send_header('Cache-Control', 'no-store')
+                self.end_headers()
+                return
+            extra_headers = {'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0'}
             if self.user_id != 'default':
                 extra_headers['Set-Cookie'] = f'fashion_user={self.user_id}; Path=/; Max-Age=86400; SameSite=Lax'
             else:
                 # 默认用户：清除可能残留的 fashion_user Cookie，防止 API 调用被路由到其他用户
                 extra_headers['Set-Cookie'] = 'fashion_user=; Path=/; Max-Age=0'
-            self._html_resp(200, _load_chat_html(user_id=uid), extra_headers if extra_headers else None)
+            self._html_resp(200, _load_chat_html(user_id=uid), extra_headers)
             return
 
         # ── 管理员面板 ──
@@ -4972,21 +5135,24 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         with open(up_path) as f:
                             up = json.load(f)
                         body = up.get('body', {})
+                        lifestyle = up.get('lifestyle', {})
+                        # 🛡️ 照片相对路径：确保能通过静态文件服务访问
+                        user_photos = up.get('photos', {})
                         profile = {
-                            'use_my_image': False,
+                            'use_my_image': up.get('use_my_image', False),
                             'gender': up.get('gender', '女'),
-                            'photos': {},
+                            'photos': user_photos,
                             'height': str(body.get('height', '')),
                             'weight': str(body.get('weight', '')),
-                            'age': '',
+                            'age': str(body.get('age', '')),
                             'body_type': body.get('shape', ''),
                             'skin_tone': body.get('skin_tone', ''),
-                            'shoulder_type': '',
-                            'face_shape': '',
-                            'occupation': '',
-                            'style_preference': ', '.join(up.get('style_prefs', [])),
+                            'shoulder_type': body.get('shoulder_type', ''),
+                            'face_shape': body.get('face_shape', ''),
+                            'occupation': lifestyle.get('occupation', ''),
+                            'style_preference': up.get('style_prefs') and ', '.join(up['style_prefs']) or '',
                             'pain_points': body.get('concern', ''),
-                            'body_secrets': '',
+                            'body_secrets': up.get('body_secrets', ''),
                         }
                         self._json_resp(200, {'profile': profile})
                         return
@@ -5959,6 +6125,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     return
                 tid = tasks.create()
                 _uid = self.user_id if self.user_id != 'default' else None
+                # 🛡️ 持久化 _user_id，确保崩溃恢复时重试队列保留用户上下文
+                if _uid:
+                    tasks.update(tid, _user_id=_uid)
                 threading.Thread(target=_run_add_analysis, args=(tid, image_b64_list, _uid, req_id), daemon=True).start()
                 log(f'[{req_id}] 📸 衣橱添加(binary): {tid} ({len(image_b64_list)} 张图片, {len(body)/1024:.0f}KB)')
                 self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(image_b64_list)} 张图片..."})
@@ -5978,6 +6147,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     return
                 tid = tasks.create()
                 _uid = self.user_id if self.user_id != 'default' else None
+                # 🛡️ 持久化 _user_id，确保崩溃恢复时重试队列保留用户上下文
+                if _uid:
+                    tasks.update(tid, _user_id=_uid)
                 threading.Thread(target=_run_add_analysis, args=(tid, images, _uid, req_id), daemon=True).start()
                 log(f'[{req_id}] 📸 衣橱添加(JSON): {tid} ({len(images)} 张图片)')
                 self._json_resp(200, {"task_id": tid, "message": f"正在分析 {len(images)} 张图片..."})
@@ -6171,6 +6343,41 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 self._json_resp(400, {"error": "invalid json"})
                 return
             try:
+                # ── 多用户：保存到用户目录，合并 onboarding 数据 ──
+                if self.user_id != 'default':
+                    profile_path = os.path.join(self.user_dir, 'profile.json')
+                    existing = {}
+                    if os.path.exists(profile_path):
+                        with open(profile_path) as f:
+                            existing = json.load(f)
+                    photos = data.get('photos', {})
+                    if not photos:
+                        # 从现有数据保留 photos
+                        photos = existing.get('photos', {})
+                    # 合并：保留 onboarding 字段，追加形象字段
+                    existing['photos'] = photos
+                    existing['use_my_image'] = data.get('use_my_image', existing.get('use_my_image', True))
+                    existing['body'] = {
+                        'height': str(data.get('height_cm', existing.get('body', {}).get('height', ''))),
+                        'weight': str(data.get('weight_kg', existing.get('body', {}).get('weight', ''))),
+                        'shape': data.get('body_type', existing.get('body', {}).get('shape', '')),
+                        'skin_tone': data.get('skin_tone', existing.get('body', {}).get('skin_tone', '')),
+                        'concern': data.get('pain_points', existing.get('body', {}).get('concern', '')),
+                    }
+                    existing['lifestyle'] = {
+                        'occupation': data.get('occupation', ''),
+                        'style_preference': data.get('style_preference', ''),
+                    }
+                    existing['body_secrets'] = data.get('body_secrets', '')
+                    existing['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
+                    os.makedirs(os.path.dirname(profile_path), exist_ok=True)
+                    with open(profile_path, 'w', encoding='utf-8') as f:
+                        json.dump(existing, f, ensure_ascii=False, indent=2)
+                    log(f"👤 形象档案已保存 ({self.user_id})")
+                    self._json_resp(200, {"ok": True, "profile": existing})
+                    return
+
+                # ── 单人模式：保存到 config/user_profile.json ──
                 profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
                 existing = {}
                 if os.path.exists(profile_path):
@@ -6228,7 +6435,13 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 if ',' in image_b64 and ';base64' in image_b64:
                     image_b64 = image_b64.split(',', 1)[1]
 
-                photo_dir = os.path.join(PROJECT_DIR, 'profile', 'photos')
+                # ── 多用户：保存到用户目录 ──
+                if self.user_id != 'default':
+                    photo_dir = os.path.join(self.user_dir, 'profile', 'photos')
+                    profile_path = os.path.join(self.user_dir, 'profile.json')
+                else:
+                    photo_dir = os.path.join(PROJECT_DIR, 'profile', 'photos')
+                    profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
                 os.makedirs(photo_dir, exist_ok=True)
                 slot_names = {
                     'full_body_front': 'user_full_front.jpg',
@@ -6241,18 +6454,22 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     f.write(_b64.b64decode(image_b64))
 
                 # update profile
-                profile_path = os.path.join(PROJECT_DIR, 'config', 'user_profile.json')
                 profile = {}
                 if os.path.exists(profile_path):
                     with open(profile_path) as f:
                         profile = json.load(f)
                 if 'photos' not in profile:
                     profile['photos'] = {}
-                profile['photos'][slot] = f'profile/photos/{filename}'
+                # 🛡️ 多用户：存储用户相对路径；单人：存储项目相对路径
+                if self.user_id != 'default':
+                    photo_rel_path = f'users/{self.user_id}/profile/photos/{filename}'
+                else:
+                    photo_rel_path = f'profile/photos/{filename}'
+                profile['photos'][slot] = photo_rel_path
                 profile['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
                 with open(profile_path, 'w', encoding='utf-8') as f:
                     json.dump(profile, f, ensure_ascii=False, indent=2)
-                log(f"📷 照片已上传: {slot} → {filename}")
+                log(f"📷 照片已上传 ({self.user_id}): {slot} → {filename}")
                 # 异步去背景（不阻塞上传响应）
                 def _bg_remove():
                     try:
@@ -6260,7 +6477,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     except Exception as e2:
                         log(f"⚠️ 上传后抠图失败: {e2}")
                 threading.Thread(target=_bg_remove, daemon=True).start()
-                self._json_resp(200, {"ok": True, "slot": slot, "path": f'profile/photos/{filename}'})
+                self._json_resp(200, {"ok": True, "slot": slot, "path": photo_rel_path})
                 return
             except Exception as e:
                 log(f"照片上传失败: {e}", "ERROR")

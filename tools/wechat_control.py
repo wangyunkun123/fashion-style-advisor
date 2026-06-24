@@ -2867,6 +2867,14 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     t_start = time.time()
     log(f"🚀 管线启动: {style_hint}")
 
+    # ── 🆕 统一意图解析（Phase 1 正则 + Phase 2 LLM）──
+    from tools.intent_parser import parse_user_intent, get_recent_new_item_ids
+    intent = parse_user_intent(style_hint)
+    log(f"🎯 意图解析: occasion={intent['occasion']} city={intent.get('city_cn') or '默认'} "
+        f"ids={intent['explicit_item_ids']} date_offset={intent['date_offset']} "
+        f"new_items={intent['want_new_items']} explore={intent['explore_mood']} "
+        f"({intent.get('_parse_time_ms', '?')}ms)")
+
     # ── Style hint 预处理 ──
     # ── 探测探索度 ──
     from tools.unified_pipeline import (
@@ -2884,10 +2892,19 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         explore_emoji = {'日常穿搭': '👔', '改变自己': '🧪', '大胆跨界': '🚀'}.get(explore_label, '')
         log(f"📅 每日自动推荐 → {explore_emoji} {explore_label}（{daily_reason}）")
     else:
-        explore_level = determine_explore_level(style_hint)
-        explore_emoji = '🚀' if explore_level >= 0.8 else ('🧪' if explore_level > 0 else '')
-        explore_label = ('大胆探索' if explore_level >= 0.8 else ('微调探索' if explore_level > 0 else '安全推荐'))
-        log(f"📍 探索度: {explore_label}{' '+explore_emoji if explore_emoji else ''}")
+        # 🆕 优先使用意图解析的 explore_mood
+        mood_map = {'bold': 1.0, 'fresh': 0.5, 'normal': 0.0, 'safe': 0.0}
+        intent_mood = intent.get('explore_mood', 'normal')
+        if intent_mood != 'normal':
+            explore_level = mood_map.get(intent_mood, 0.0)
+            explore_label = {'bold': '大胆探索', 'fresh': '微调探索', 'safe': '安全推荐'}.get(intent_mood, '')
+            explore_emoji = {'bold': '🚀', 'fresh': '🧪', 'safe': ''}.get(intent_mood, '')
+            log(f"🎯 意图探索度: {explore_emoji} {explore_label}（来自 LLM 解析）")
+        else:
+            explore_level = determine_explore_level(style_hint)
+            explore_emoji = '🚀' if explore_level >= 0.8 else ('🧪' if explore_level > 0 else '')
+            explore_label = ('大胆探索' if explore_level >= 0.8 else ('微调探索' if explore_level > 0 else '安全推荐'))
+            log(f"📍 探索度: {explore_label}{' '+explore_emoji if explore_emoji else ''}")
     log_lines = []
     # 统计
     _api_calls = 0
@@ -2907,10 +2924,12 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
 
     today = time.strftime('%Y-%m-%d')
 
-    # ── 天气（统一获取，全管线复用）──
-    wdata = fetch_weather('Beijing')
+    # ── 天气（使用意图解析的城市，而非硬编码 Beijing）──
+    city = intent.get('city_en') or 'Beijing'
+    city_display = intent.get('city_cn') or '北京'
+    wdata = fetch_weather(city)
     analysis = analyze_weather(wdata) if wdata else None
-    # 月份感知默认值：天气 API 失败时根据北京月份设定合理温度和天气
+    # 月份感知默认值：天气 API 失败时根据月份设定合理温度和天气
     _month = time.localtime().tm_mon
     _season_defaults = {
         1:(2,'多云'),2:(5,'多云'),3:(12,'晴'),4:(20,'晴'),5:(26,'晴'),6:(31,'晴'),
@@ -2919,18 +2938,48 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     _dt, _dw = _season_defaults.get(_month, (25, '晴'))
     temp_high = analysis['forecast']['max'] if analysis else _dt
     weather_cond = analysis['current']['desc'] if analysis else _dw
-    log(f"📍 天气: {temp_high}°C {weather_cond}{' (默认值)' if not analysis else ''}")
+    log(f"📍 天气({city_display}): {temp_high}°C {weather_cond}{' (默认值)' if not analysis else ''}")
 
     # ── 衣橱数据（加载一次，管线内传递复用）──
     all_clothes = _load_all_clothing()
 
-    # ── Step 0: 从用户输入提取场合 + 指定单品 ──
-    occasion = extract_occasion(style_hint)
-    log(f"📍 场景提取: {style_hint!r} → occasion={occasion}")
+    # ── Step 0: 从意图解析获取场合 + 指定单品 ──
+    occasion = intent['occasion']
+    log(f"📍 场景: {style_hint!r} → occasion={occasion}" +
+        (f" activity={intent['activity']}" if intent.get('activity') else '') +
+        (f" vibe={intent['vibe']}" if intent.get('vibe') else ''))
 
-    mandatory_items = extract_mandatory_items(style_hint)
+    # 🆕 强制单品: 优先使用意图解析的 explicit_item_ids（置信度 0.99）
+    mandatory_items = []
+    if intent['explicit_item_ids']:
+        for cid in intent['explicit_item_ids']:
+            if cid in all_clothes:
+                item = all_clothes[cid]
+                brand = (item.get('brand') or {}).get('name', '—')
+                cat = item.get('category', '—')
+                reason = f'ID:{cid} | {brand} | {cat}'
+                mandatory_items.append((cid, 0.99, reason))
+            else:
+                log(f"⚠️ 指定ID不存在于衣柜: {cid}", "WARN")
+    # 无显式 ID 时回退到模糊匹配
+    if not mandatory_items:
+        mandatory_items = extract_mandatory_items(style_hint)
     if mandatory_items:
         log(f"📍 指定单品: {[(m[0], f'{m[1]:.0%}') for m in mandatory_items]}")
+
+    # 🆕 新入库单品上下文
+    new_item_context = ''
+    if intent['want_new_items']:
+        recent_new = get_recent_new_item_ids(pipeline_user, days=14)
+        if recent_new:
+            new_ids = [cid for cid, cat in recent_new]
+            new_item_context = (
+                f'\n🆕 用户最近入库的单品（优先考虑）: {", ".join(new_ids[:8])}\n'
+                f'请优先从以上新单品中选择搭配。\n'
+            )
+            log(f"🆕 用户想要新品: {len(recent_new)}件最近入库单品 → {new_ids[:5]}")
+        else:
+            log(f"🆕 用户想要新品但最近14天无新入库单品")
 
     # ── 获取当前管线用户上下文 ──
     pipeline_user = user_id
@@ -2948,6 +2997,10 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         explore_level=explore_level,
         mandatory_items=mandatory_items if mandatory_items else None,
         user_id=pipeline_user,
+        parsed_city=city_display,                  # 🆕 动态城市（中文名）
+        new_item_context=new_item_context,      # 🆕 新入库单品提示
+        intent_activity=intent.get('activity'), # 🆕 具体活动
+        intent_vibe=intent.get('vibe'),         # 🆕 氛围/情绪
     )
 
     system_prompt = prompt_data['system_prompt']
@@ -3011,7 +3064,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
 
         # ── Step 3: 规则验证 ──
         items = plan.get('items', [])
-        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes)
+        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items)
 
         if not passed:
             log(f"⚠️ 验证未通过: {violations}", "WARN")
@@ -3028,7 +3081,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             warnings2 = warnings  # 初始化默认值，防止 plan is None 时 2744 行 NameError
             if plan:
                 items = plan.get('items', [])
-                passed2, violations2, warnings2 = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes)
+                passed2, violations2, warnings2 = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items)
                 if not passed2:
                     log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
                     # 检查是否有致命违规（场景/天气相关），有则中止管线

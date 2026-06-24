@@ -957,7 +957,11 @@ def pick_strategy(explore_level, comfort_zone=None):
 
 def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_cond='晴',
                           explore_level=0.0, target_styles=None, mandatory_items=None,
-                          user_id=None):
+                          user_id=None,
+                          parsed_city='北京',           # NEW: 用户指定的城市
+                          new_item_context='',          # NEW: 最近入库单品提示
+                          intent_activity=None,         # NEW: 具体活动描述
+                          intent_vibe=None):            # NEW: 氛围/情绪
     """构建 Round 1「选品」prompt — 只做单品选择，不含叙事/生图
 
     mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
@@ -1216,10 +1220,21 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
         emoji = '🚀' if explore_level >= 0.8 else '🧪'
         explore_header = f'\n{emoji} 探索模式 | 探索度: {explore_level}\n'
 
-    user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
-{explore_header}{mandatory_section}风格需求：「{style_hint}」
+    # ── 活动/氛围上下文 ──
+    activity_context = ''
+    if intent_activity or intent_vibe:
+        parts = []
+        if intent_activity:
+            parts.append(f'活动：{intent_activity}')
+        if intent_vibe:
+            parts.append(f'氛围：{intent_vibe}')
+        if parts:
+            activity_context = '🎭 ' + ' · '.join(parts) + '\n'
+
+    user_prompt = f"""今天是{today}，{parsed_city}天气：{temp_high}°C {weather_cond}。
+{explore_header}{mandatory_section}{new_item_context}风格需求：「{style_hint}」
 场合：{occasion}
-{ban_section}{recent_section}
+{activity_context}{ban_section}{recent_section}
 目标风格参考：
 {chr(10).join(style_descs)}
 {scene_text}
@@ -1355,8 +1370,12 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 # Step 3: 规则自动验证
 # ============================================================
 
-def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', all_clothes=None):
-    """验证 AI 选品是否通过所有规则门"""
+def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', all_clothes=None,
+                    mandatory_items=None):
+    """验证 AI 选品是否通过所有规则门
+
+    mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
+    """
     violations = []
     warnings = []
 
@@ -1547,6 +1566,15 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
     greens = [c for c in colors if '绿' in c]
     if reds and greens:
         warnings.append(f'颜色冲突: 红色系({"/".join(reds)})与绿色系({"/".join(greens)})')
+
+    # ── 9. 强制单品校验（用户显式指定的单品必须出现在输出中）──
+    if mandatory_items:
+        outfit_ids = {it.get('id', '') for it in items}
+        for mid, conf, reason in mandatory_items:
+            if mid not in outfit_ids:
+                violations.append(
+                    f'缺少用户指定单品: {mid} ({reason}，置信度{conf:.0%})'
+                )
 
     passed = len(violations) == 0
     return passed, violations, warnings
@@ -1750,6 +1778,27 @@ def find_items_by_description(description, all_clothes=None):
     desc = description.strip()
     if not desc:
         return []
+
+    # ── Phase 0: 精确 ID 匹配（用户显式指定单品 ID，最高优先级）──
+    # 使用中文兼容版正则（不用 \b，因 Python 3.x 中 CJK 字符属于 \w 导致 \b 失效）
+    _ID_PAT = re.compile(
+        r'(?<![A-Za-z0-9])(TS-\d+|SH-\d+|PT-\d+|JK-\d+|SHIRT-\d+|SHOE-\d+'
+        r'|BAG-\d+|HAT-\d+|SUN-\d+|SOCK-\d+|ACC-\d+|TANK-\d+|LS-\d+'
+        r'|DRESS-\d+|SKIRT-\d+|JMP-\d+|BLOUSE-\d+|KNIT-\d+)(?![A-Za-z0-9])'
+    )
+    exact_ids = list(dict.fromkeys(_ID_PAT.findall(desc)))  # 去重保序
+    if exact_ids:
+        exact_results = []
+        for cid in exact_ids:
+            if cid in all_clothes:
+                item = all_clothes[cid]
+                brand = (item.get('brand') or {}).get('name', '—')
+                cat = item.get('category', '—')
+                color = (item.get('color') or {}).get('hue_name', '')
+                reason = f'ID精确匹配: {cid} | {brand} {color}·{cat}'
+                exact_results.append((cid, 0.99, reason))
+        if exact_results:
+            return exact_results  # 精确匹配短路，不走模糊匹配
 
     # ── 品类关键词映射 ──
     CAT_KEYWORDS = {

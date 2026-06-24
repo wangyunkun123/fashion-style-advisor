@@ -17,5 +17,11 @@
     "WF-36"
   ],
   "onboarding_complete": true,
-  "onboarding_done_at": "2026-06-23T13:02:01Z"
+  "onboarding_done_at": "2026-06-23T13:02:01Z",
+  "photos": {
+    "full_body_front": "users/alice/profile/photos/user_full_front.jpg",
+    "full_body_side": "users/alice/profile/photos/user_side.jpg",
+    "face_closeup": "users/alice/profile/photos/user_face.jpg"
+  },
+  "use_my_image": true
 }

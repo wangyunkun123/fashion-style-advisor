@@ -1,0 +1,59 @@
+{
+  "clothing_id": "BAG-006",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "深棕配老花",
+    "saturation": "中饱和",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "标准",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "涂层帆布配皮",
+    "texture": "经典老花涂层",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Louis Vuitton",
+    "collection": "",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "复古",
+    "休闲"
+  ],
+  "meta": {
+    "claude_fit_comment": "Louis Vuitton深棕配老花复古包",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "日常休闲",
+    "约会",
+    "逛街"
+  ],
+  "recommended_styles": [
+    "街头潮流",
+    "复古工装",
+    "意式运动"
+  ]
+}

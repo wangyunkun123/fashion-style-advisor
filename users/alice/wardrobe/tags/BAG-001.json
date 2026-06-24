@@ -1,0 +1,58 @@
+{
+  "clothing_id": "BAG-001",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "浅灰色",
+    "saturation": "无彩色",
+    "lightness": "中明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "毛绒",
+    "texture": "蓬松毛绒",
+    "weight": "适中",
+    "seasonality": [
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "迪士尼",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "可爱",
+    "童趣"
+  ],
+  "meta": {
+    "claude_fit_comment": "迪士尼浅灰色可爱包",
+    "image_type": "product_shot",
+    "cloth_parsed": true,
+    "completeness": "full",
+    "ai_completed": false
+  },
+  "occasions": [
+    "日常休闲",
+    "旅行"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
+}

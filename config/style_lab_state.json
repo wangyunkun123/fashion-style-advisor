@@ -1,5 +1,5 @@
 {
-  "total_recommendations": 95,
+  "total_recommendations": 96,
   "bline_count": 3,
   "bold_count": 0,
   "last_recommendation_time": "2026-06-17T23:01:41.619992",
@@ -54,16 +54,16 @@
     "SHOE-008": 1,
     "HAT-002": 1
   },
-  "last_updated": "2026-06-24 10:38:40",
+  "last_updated": "2026-06-25 06:28:23",
   "item_wear_counts": {
     "TS-005": 9,
     "PT-006": 12,
     "SHOE-006": 11,
     "TS-001": 5,
     "PT-005": 7,
-    "TS-010": 5,
+    "TS-010": 6,
     "TS-006": 9,
-    "SHOE-007": 7,
+    "SHOE-007": 8,
     "TS-004": 4,
     "SH-005": 5,
     "SHOE-009": 9,
@@ -94,10 +94,10 @@
     "SHIRT-002": 2,
     "HAT-001": 1,
     "HAT-002": 1,
-    "SOCK-006": 2,
+    "SOCK-006": 3,
     "BAG-006": 1,
     "SHIRT-004": 2,
-    "SH-006": 1,
+    "SH-006": 2,
     "BAG-002": 1,
     "SOCK-004": 1,
     "SUN-001": 1,
@@ -113,7 +113,8 @@
     "TANK-001": 1,
     "SH-001": 2,
     "TS-002": 1,
-    "PT-009": 1
+    "PT-009": 1,
+    "SUN-004": 1
   },
   "daily_mode_history": [
     {
@@ -148,6 +149,12 @@
     },
     {
       "date": "2026-06-24",
+      "explore_level": 0.0,
+      "mode": "日常穿搭",
+      "reason": "连续2次1星，退回安全区冷却"
+    },
+    {
+      "date": "2026-06-25",
       "explore_level": 0.0,
       "mode": "日常穿搭",
       "reason": "连续2次1星，退回安全区冷却"

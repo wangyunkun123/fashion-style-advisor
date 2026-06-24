@@ -1,0 +1,54 @@
+{
+  "clothing_id": "PT-005",
+  "category": "长裤",
+  "category_code": "PT",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "浅灰色",
+    "saturation": "无彩色",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "阔腿",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "及踝"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "平纹",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲",
+    "居家"
+  ],
+  "meta": {
+    "claude_fit_comment": "宽松阔腿版型，穿着舒适",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "日常休闲",
+    "居家"
+  ],
+  "recommended_styles": [
+    "minimalist_monochrome"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "clothing_id": "BAG-004",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "红色",
+    "saturation": "高饱和",
+    "lightness": "高明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "印花",
+    "density": "适中",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "布艺",
+    "texture": "绒面/贴钻纹理",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Hello Kitty",
+    "collection": "",
+    "confidence": "推测"
+  },
+  "style_modifiers": [
+    "可爱",
+    "童趣"
+  ],
+  "meta": {
+    "claude_fit_comment": "Hello Kitty主题设计，可爱童趣，适合搭配可爱风格造型",
+    "image_type": "product_shot",
+    "cloth_parsed": true,
+    "completeness": "full",
+    "ai_completed": true
+  },
+  "occasions": [
+    "日常休闲",
+    "主题活动"
+  ]
+}

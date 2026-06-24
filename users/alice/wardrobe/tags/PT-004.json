@@ -1,0 +1,54 @@
+{
+  "clothing_id": "PT-004",
+  "category": "长裤",
+  "category_code": "PT",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "深棕色",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "修身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "长款"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "棉（推测）",
+    "texture": "平纹针织",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "秋",
+      "冬"
+    ]
+  },
+  "formality": 3,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲"
+  ],
+  "meta": {
+    "claude_fit_comment": "深棕色休闲",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "日常休闲"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
+  ]
+}

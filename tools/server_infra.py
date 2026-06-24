@@ -382,6 +382,14 @@ class TaskManager:
                     can_retry = True
                     img_paths = [os.path.join(inc_dir, m) for m in sorted(matches)]
                     uid = t.get('_user_id', 'default')
+                    # 🛡️ 如果任务未保存 _user_id，从图片目录路径推断用户
+                    if uid == 'default' and '/users/' in inc_dir:
+                        # 从路径如 .../users/alice/wardrobe/_incoming 中提取用户名
+                        parts = inc_dir.split('/users/')
+                        if len(parts) > 1:
+                            maybe_uid = parts[1].split('/')[0]
+                            if maybe_uid and maybe_uid not in ('wardrobe', 'cache', 'outfits'):
+                                uid = maybe_uid
                     # 将图片路径写入任务，供重试使用
                     t['_retry_image_dir'] = inc_dir
                     t['_retry_images'] = img_paths

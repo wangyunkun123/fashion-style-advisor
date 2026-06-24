@@ -1,0 +1,56 @@
+{
+  "clothing_id": "BLOUSE-003",
+  "category": "女士衬衫",
+  "category_code": "BLOUSE",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "黑色",
+    "saturation": "无彩色",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "修身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "显瘦",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "纯色",
+    "density": "无",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "聚酯纤维",
+    "texture": "光滑",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 4,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "优雅",
+    "通勤"
+  ],
+  "meta": {
+    "claude_fit_comment": "修身收腰设计，展现身形",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "通勤",
+    "约会"
+  ],
+  "recommended_styles": [
+    "business_casual",
+    "clean_fit"
+  ]
+}

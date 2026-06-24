@@ -90,11 +90,31 @@ def create_user(user_id, profile_data=None):
         with open(profile_path, 'w') as f:
             json.dump(default_profile, f, ensure_ascii=False, indent=2)
 
-    # 初始化 服装档案.md（空模板）
+    # 初始化 服装档案.md（空模板）— 🆕 从 CAT_CONFIG 动态生成，按性别筛选
     wardrobe_md = os.path.join(user_dir, 'wardrobe', '服装档案.md')
     if not os.path.exists(wardrobe_md):
-        cats = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
-                '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
+        # 读取用户性别以确定品类列表
+        user_gender = 'male'
+        if os.path.exists(profile_path):
+            try:
+                with open(profile_path) as pf:
+                    user_gender = json.load(pf).get('gender', 'male') or 'male'
+            except Exception:
+                pass
+        # 从 CAT_CONFIG 获取品类：中性 + 匹配用户性别的专属品类
+        try:
+            from tools.common import CAT_CONFIG
+        except ImportError:
+            CAT_CONFIG = {}
+        cats = []
+        for code, cfg in sorted(CAT_CONFIG.items(), key=lambda x: x[1].get('sort', 99)):
+            cat_gender = cfg.get('gender', 'both')
+            if cat_gender == 'both' or cat_gender == user_gender:
+                cats.append(cfg['cn'])
+        # 如果 CAT_CONFIG 不可用，使用基础列表
+        if not cats:
+            cats = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
+                    '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
         lines = ['# 服装档案', '', '> AI 自动入库，人工审核中', '']
         for cat in cats:
             lines.append(f'## {cat}')

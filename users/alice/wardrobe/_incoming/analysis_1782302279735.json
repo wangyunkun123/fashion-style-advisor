@@ -1,0 +1,113 @@
+{
+  "items": [
+    {
+      "category_code": "BLOUSE",
+      "category": "女士衬衫",
+      "color": {
+        "hue_family": "中性色",
+        "hue_name": "黑色",
+        "saturation": "无彩色",
+        "lightness": "低明度",
+        "is_neutral": true,
+        "friendly_for_pale_skin": true
+      },
+      "brand": {
+        "name": "未知",
+        "collection": "",
+        "confidence": "未知"
+      },
+      "fabric": {
+        "primary": "聚酯纤维",
+        "texture": "光滑",
+        "weight": "轻薄",
+        "seasonality": [
+          "春",
+          "秋"
+        ]
+      },
+      "silhouette": {
+        "fit": "收腰",
+        "shoulder_effect": "落肩",
+        "torso_effect": "显瘦",
+        "length_ratio": "标准"
+      },
+      "pattern": {
+        "type": "印花",
+        "density": "密集",
+        "logo_visible": false
+      },
+      "style_modifiers": [
+        "波点",
+        "系带"
+      ],
+      "occasions": [
+        "日常休闲",
+        "职场"
+      ],
+      "formality": 3,
+      "meta": {
+        "claude_fit_comment": "收腰系带设计，波点元素，适合日常或轻职场",
+        "image_type": "product_shot"
+      },
+      "source_image": 1,
+      "suggested_id": "BLOUSE-002",
+      "_temp_image_path": "/Users/rabbit/Claude code/Fashion/users/alice/wardrobe/_incoming/img_1782302279735_0.jpg"
+    },
+    {
+      "category_code": "DRESS",
+      "category": "连衣裙",
+      "color": {
+        "hue_family": "中性色",
+        "hue_name": "深灰色",
+        "saturation": "低饱和",
+        "lightness": "中明度",
+        "is_neutral": true,
+        "friendly_for_pale_skin": true
+      },
+      "brand": {
+        "name": "未知",
+        "collection": "",
+        "confidence": "未知"
+      },
+      "fabric": {
+        "primary": "聚酯纤维混纺",
+        "texture": "磨毛",
+        "weight": "适中",
+        "seasonality": [
+          "秋",
+          "冬"
+        ]
+      },
+      "silhouette": {
+        "fit": "收腰",
+        "shoulder_effect": "落肩",
+        "torso_effect": "拉长比例",
+        "length_ratio": "过膝"
+      },
+      "pattern": {
+        "type": "格纹",
+        "density": "适中",
+        "logo_visible": false
+      },
+      "style_modifiers": [
+        "格纹",
+        "松紧腰",
+        "系带"
+      ],
+      "occasions": [
+        "日常休闲",
+        "职场"
+      ],
+      "formality": 3,
+      "meta": {
+        "claude_fit_comment": "格纹连衣裙，松紧腰设计，过膝长度，适合秋冬",
+        "image_type": "product_shot"
+      },
+      "source_image": 2,
+      "suggested_id": "DRESS-003",
+      "_temp_image_path": "/Users/rabbit/Claude code/Fashion/users/alice/wardrobe/_incoming/img_1782302279735_1.jpg"
+    }
+  ],
+  "_task_id": "1782302279735",
+  "_user_id": "alice"
+}

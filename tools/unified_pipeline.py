@@ -1107,23 +1107,46 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
                 '⚠️ 如果指定的是鞋子/下装/上衣，该品类不得再选其他单品。\n\n'
             )
 
-    # ── 1. 获取推荐风格 ──
+    # ── 0.8. 提前检测性别（target_styles 和 auto_suggest 需要）──
+    _is_female_early = False
+    if user_id:
+        import os as _os
+        _up_early = _os.path.join(resolve_user_dir(user_id=user_id), 'profile.json')
+        if _os.path.exists(_up_early):
+            _up_check_early = load_json(_up_early)
+            _is_female_early = (_up_check_early.get('gender', 'female') == 'female')
+
+    # ── 1. 获取推荐风格（性别感知）──
+    # 确定 styles_dir 和默认风格（按性别）
+    _styles_dir = os.path.join(PROJ_DIR, 'styles/female') if _is_female_early else os.path.join(PROJ_DIR, 'styles/male')
+    _default_styles = ['WF-01', 'WF-05', 'WF-06'] if _is_female_early else ['clean_fit', 'japanese_city_boy']
+
     if target_styles is None:
         from tools.style_matcher import auto_suggest_style
-        suggestions = auto_suggest_style(temp_high, weather_cond, occasion)
+        suggestions = auto_suggest_style(temp_high, weather_cond, occasion, gender=('female' if _is_female_early else 'male'))
         target_styles = [s['style_id'] for s in suggestions[:3]]
     if not target_styles:
-        target_styles = ['clean_fit', 'japanese_city_boy']
+        target_styles = _default_styles
 
     # ── 1.5. 用户指定风格优先：如果 style_hint 匹配已知 style_id 或中文名，强制置顶 ──
     hint_lower = style_hint.lower().replace(' ', '_').replace('-', '_')
     matched_style = None
     _best_match_len = 0  # 最长中文匹配优先
-    if os.path.exists(STYLES_DIR):
-        for fn in sorted(os.listdir(STYLES_DIR)):
-            if not fn.endswith('.json'):
+    # 搜索男性+女性两个目录
+    for _search_dir in [_styles_dir, os.path.join(PROJ_DIR, 'styles/male'), os.path.join(PROJ_DIR, 'styles/female')]:
+        if not os.path.isdir(_search_dir):
+            continue
+        for fn in sorted(os.listdir(_search_dir)):
+            if fn.startswith('.') or fn.startswith('_'):
                 continue
-            sid = fn[:-5]  # 去掉 .json
+            # 支持 .json 文件和目录（女性风格是目录结构）
+            _full_path = os.path.join(_search_dir, fn)
+            if os.path.isdir(_full_path):
+                sid = fn.split('_', 1)[0] if '_' in fn else fn
+            elif fn.endswith('.json'):
+                sid = fn[:-5]
+            else:
+                continue
             # 英文ID匹配（精确匹配直接采用）
             if sid in hint_lower or hint_lower in sid:
                 matched_style = sid
@@ -1166,18 +1189,27 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
             filtered_styles.append(sid)
     # 大胆混搭模式：补充所有 bold 等级风格到候选池
     if explore_level >= 0.8:
-        for fn in sorted(os.listdir(STYLES_DIR)):
-            if not fn.endswith('.json'):
+        for _search_dir in [_styles_dir]:
+            if not os.path.isdir(_search_dir):
                 continue
-            sid = fn[:-5]
-            if sid in filtered_styles or sid == matched_style:
-                continue
-            try:
-                sf = load_style_fingerprint(sid)
-                if sf.get('tier') == 'bold':
-                    filtered_styles.append(sid)
-            except Exception:
-                pass
+            for fn in sorted(os.listdir(_search_dir)):
+                if fn.startswith('.') or fn.startswith('_'):
+                    continue
+                _full_path = os.path.join(_search_dir, fn)
+                if os.path.isdir(_full_path):
+                    sid = fn.split('_', 1)[0] if '_' in fn else fn
+                elif fn.endswith('.json'):
+                    sid = fn[:-5]
+                else:
+                    continue
+                if sid in filtered_styles or sid == matched_style:
+                    continue
+                try:
+                    sf = load_style_fingerprint(sid)
+                    if sf.get('tier') == 'bold':
+                        filtered_styles.append(sid)
+                except Exception:
+                    pass
     target_styles = filtered_styles if filtered_styles else target_styles[:1]
 
     # ── 2. 加载上下文数据 ──
@@ -1269,14 +1301,8 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     # ── 0.5. 用户形象描述（从 config/user_profile.json 动态读取）──
     persona_desc, persona_modifier, persona_context = _get_persona_description(user_id)
 
-    # 判断性别用于系统 prompt
-    is_female = False
-    if user_id:
-        import os as _os
-        up_path_check = _os.path.join(resolve_user_dir(user_id=user_id), 'profile.json')
-        if _os.path.exists(up_path_check):
-            up_check = load_json(up_path_check)
-            is_female = (up_check.get('gender', 'female') == 'female')
+    # 判断性别用于系统 prompt（复用早期检测结果）
+    is_female = _is_female_early
     gender_audience = '亚洲女性穿搭' if is_female else '亚洲男性穿搭'
 
     quality_checklist = f"""⚠️ 推荐质量检查（请在选品时逐项确认）：

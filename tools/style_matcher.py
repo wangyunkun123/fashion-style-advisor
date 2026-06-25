@@ -36,7 +36,50 @@ if _USER_ID:
     TAGS_DIR = os.path.join(resolve_wardrobe_dir(_USER_ID), 'tags')
 else:
     TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
-DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')
+DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')  # 旧兼容
+DEFAULTS_CONFIG_MALE = os.path.join(PROJ_DIR, 'config', 'style_defaults_male.json')
+DEFAULTS_CONFIG_FEMALE = os.path.join(PROJ_DIR, 'config', 'style_defaults_female.json')
+
+# 女性默认 fallback（当配置文件不存在时使用）
+FEMALE_DEFAULTS_FALLBACK = {
+    'weather_rules': [
+        {'temp_high_gte': 35, 'condition': '晴', 'suggest': ['WF-06', 'WF-19', 'WF-37'], 'reason': '酷热天气优先透气轻薄'},
+        {'temp_high_between': [28, 34], 'condition': '晴', 'suggest': ['WF-01', 'WF-05', 'WF-08', 'WF-06'], 'reason': '适宜温度适合层次穿搭'},
+        {'temp_high_between': [22, 27], 'suggest': ['WF-01', 'WF-05', 'WF-11', 'WF-36'], 'reason': '舒适温度适合多种风格'},
+        {'temp_high_lte': 21, 'suggest': ['WF-12', 'WF-17', 'WF-34', 'WF-43'], 'reason': '降温适合外套+叠穿'},
+        {'condition': '雨', 'suggest': ['WF-06', 'WF-11', 'WF-33'], 'reason': '雨天优先深色系、不易显脏'},
+        {'condition': '阴', 'suggest': ['WF-01', 'WF-36', 'WF-05'], 'reason': '阴天适合灰调/暗色穿搭'},
+    ],
+    'occasion_rules': [
+        {'occasion': '运动', 'suggest': ['WF-08', 'WF-38'], 'reason': '运动场景优先运动休闲'},
+        {'occasion': '约会', 'suggest': ['WF-01', 'WF-05', 'WF-15', 'WF-40'], 'reason': '约会需要精致但不刻意'},
+        {'occasion': '通勤', 'suggest': ['WF-06', 'WF-17', 'WF-34', 'WF-41'], 'reason': '通勤需要干净利落'},
+        {'occasion': '度假', 'suggest': ['WF-37', 'WF-09', 'WF-20'], 'reason': '度假优先放松感'},
+        {'occasion': '户外', 'suggest': ['WF-08', 'WF-33', 'WF-05'], 'reason': '户外优先功能性和耐脏'},
+        {'occasion': '聚会', 'suggest': ['WF-31', 'WF-10', 'WF-39', 'WF-27'], 'reason': '聚会可以稍微有态度'},
+        {'occasion': '居家', 'suggest': ['WF-08', 'WF-06', 'WF-16'], 'reason': '居家优先舒适'},
+    ],
+}
+
+MALE_DEFAULTS_FALLBACK = {
+    'weather_rules': [
+        {'temp_high_gte': 35, 'condition': '晴', 'suggest': ['resort_vacation', 'clean_fit'], 'reason': '酷热优先透气轻薄'},
+        {'temp_high_between': [28, 34], 'condition': '晴', 'suggest': ['japanese_city_boy', 'korean_minimal', 'clean_fit'], 'reason': '适宜温度适合层次穿搭'},
+        {'temp_high_between': [22, 27], 'suggest': ['clean_fit', 'smart_casual', 'japanese_city_boy', 'korean_minimal'], 'reason': '舒适温度适合多种风格'},
+        {'temp_high_lte': 21, 'suggest': ['smart_casual', 'streetwear', 'chinese_heritage'], 'reason': '降温适合外套+叠穿'},
+        {'condition': '雨', 'suggest': ['clean_fit', 'smart_casual', 'streetwear'], 'reason': '雨天优先深色、不易显脏'},
+        {'condition': '阴', 'suggest': ['japanese_city_boy', 'clean_fit', 'streetwear'], 'reason': '阴天适合灰调/暗色穿搭'},
+    ],
+    'occasion_rules': [
+        {'occasion': '运动', 'suggest': ['athleisure_sport'], 'reason': '运动场景优先运动休闲'},
+        {'occasion': '约会', 'suggest': ['smart_casual', 'korean_minimal', 'chinese_heritage'], 'reason': '约会需要精致但不刻意'},
+        {'occasion': '通勤', 'suggest': ['clean_fit', 'smart_casual', 'korean_minimal'], 'reason': '通勤需要干净利落'},
+        {'occasion': '度假', 'suggest': ['resort_vacation', 'japanese_city_boy'], 'reason': '度假优先放松感'},
+        {'occasion': '户外', 'suggest': ['athleisure_sport', 'streetwear'], 'reason': '户外优先功能性和耐脏'},
+        {'occasion': '聚会', 'suggest': ['smart_casual', 'streetwear', 'chinese_heritage'], 'reason': '聚会可以稍微有态度'},
+        {'occasion': '居家', 'suggest': ['athleisure_sport', 'clean_fit'], 'reason': '居家优先舒适'},
+    ],
+}
 CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
 
 SAT_ORDER = ['无彩色', '低饱和', '中饱和', '高饱和']
@@ -537,34 +580,40 @@ def get_candidates_by_category(style_id, category_code, min_score=30):
 # 3. 自动风格推荐
 # ============================================================
 
-def load_defaults():
-    """加载天气-场合-风格默认映射"""
-    if not os.path.exists(DEFAULTS_CONFIG):
-        # 内置默认规则
-        return {
-            'weather_rules': [
-                {'temp_high_gte': 35, 'condition': '晴', 'suggest': ['resort_vacation', 'clean_fit'], 'reason': '酷热优先透气轻薄'},
-                {'temp_high_between': [28, 34], 'condition': '晴', 'suggest': ['japanese_city_boy', 'korean_minimal', 'clean_fit'], 'reason': '适宜温度适合层次穿搭'},
-                {'temp_high_between': [22, 27], 'suggest': ['clean_fit', 'smart_casual', 'japanese_city_boy'], 'reason': '舒适温度适合多种风格'},
-                {'temp_high_lte': 21, 'suggest': ['smart_casual', 'streetwear', 'chinese_heritage'], 'reason': '降温适合外套+叠穿'},
-                {'condition': '雨', 'suggest': ['clean_fit', 'smart_casual'], 'reason': '雨天优先深色、不易显脏'},
-            ],
-            'occasion_rules': [
-                {'occasion': '运动', 'suggest': ['athleisure_sport'], 'reason': '运动场景优先运动休闲'},
-                {'occasion': '约会', 'suggest': ['smart_casual', 'korean_minimal', 'chinese_heritage'], 'reason': '约会需要精致但不刻意'},
-                {'occasion': '通勤', 'suggest': ['clean_fit', 'smart_casual', 'korean_minimal'], 'reason': '通勤需要干净利落'},
-                {'occasion': '度假', 'suggest': ['resort_vacation'], 'reason': '度假优先放松感'},
-                {'occasion': '户外', 'suggest': ['athleisure_sport', 'streetwear'], 'reason': '户外优先功能性和耐脏'},
-            ],
-        }
-    with open(DEFAULTS_CONFIG, 'r', encoding='utf-8') as f:
+def load_defaults(gender=None):
+    """加载天气-场合-风格默认映射。gender='male'/'female'/None → 自动从线程上下文获取"""
+    # 自动检测性别
+    if not gender:
+        try:
+            from tools.common import get_thread_user as _gtu
+            _g, _uid = _gtu()
+            if _g:
+                gender = _g
+        except Exception:
+            pass
+    # 选择配置文件
+    if gender == 'female':
+        cfg_path = DEFAULTS_CONFIG_FEMALE
+        fallback = FEMALE_DEFAULTS_FALLBACK
+    elif gender == 'male':
+        cfg_path = DEFAULTS_CONFIG_MALE
+        fallback = MALE_DEFAULTS_FALLBACK
+    else:
+        cfg_path = DEFAULTS_CONFIG
+        fallback = MALE_DEFAULTS_FALLBACK
+
+    if not os.path.exists(cfg_path):
+        return fallback
+    with open(cfg_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
-def auto_suggest_style(temp_high, condition='晴', occasion='日常'):
-    """天气+场合自动推荐风格，返回 [(style_id, style_name, reason), ...]"""
-    defaults = load_defaults()
-    styles = load_all_styles()
+def auto_suggest_style(temp_high, condition='晴', occasion='日常', gender=None):
+    """天气+场合自动推荐风格，返回 [(style_id, style_name, reason), ...]
+    gender: 'male'/'female'/None → 自动从线程上下文获取
+    """
+    defaults = load_defaults(gender=gender)
+    styles = load_all_styles(gender=gender)
     candidates = {}
 
     # 天气规则
@@ -592,9 +641,12 @@ def auto_suggest_style(temp_high, condition='晴', occasion='日常'):
                 if sid not in candidates:
                     candidates[sid] = rule['reason']
 
-    # 无匹配时默认
+    # 无匹配时默认（按性别）
     if not candidates:
-        candidates = {'clean_fit': '默认日常风格', 'japanese_city_boy': '默认日常风格'}
+        if gender == 'female':
+            candidates = {'WF-01': '默认日常风格', 'WF-05': '默认日常风格', 'WF-06': '默认日常风格'}
+        else:
+            candidates = {'clean_fit': '默认日常风格', 'japanese_city_boy': '默认日常风格'}
 
     # 格式化为结果
     results = []

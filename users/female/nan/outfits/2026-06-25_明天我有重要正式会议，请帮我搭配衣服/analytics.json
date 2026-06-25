@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-25T10:24:29Z",
+  "user_id": "nan",
+  "items_used": [
+    "KNIT-003",
+    "PT-001",
+    "SHOE-003"
+  ],
+  "style_matched": "商务休闲",
+  "occasion": "通勤",
+  "explore_level": 0.5,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 36579,
+  "api_calls": 2
+}

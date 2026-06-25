@@ -1,4 +1,4 @@
-[CRASH] 2026-06-25 11:59:12 Traceback (most recent call last):
+[CRASH] 2026-06-25 12:13:44 Traceback (most recent call last):
   File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 6832, in <module>
     main()
   File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 6772, in main
@@ -23,7 +23,7 @@ Traceback (most recent call last):
   File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 466, in server_bind
     self.socket.bind(self.server_address)
 OSError: [Errno 48] Address already in use
-[11:59:12] [CRITICAL] 未捕获异常: Traceback (most recent call last):
+[12:13:44] [CRITICAL] 未捕获异常: Traceback (most recent call last):
   File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 6832, in <module>
     main()
   File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 6772, in main
@@ -36,39 +36,24 @@ OSError: [Errno 48] Address already in use
     self.socket.bind(self.server_address)
 OSError: [Errno 48] Address already in use
 
-[12:03:31] [INFO] 📨 POST /api/wardrobe/new-items/dismiss?user=alice (Content-Length=24, CT=application/json)
-[12:03:58] [INFO] 📨 POST /api/wardrobe/item/PT-004?user=alice (Content-Length=679, CT=application/json)
-[12:03:58] [INFO] 标签更新: PT-004
-[12:04:06] [INFO] 📨 POST /api/wardrobe/item/PT-004/transform?user=alice (Content-Length=56, CT=application/json)
-[12:04:06] [INFO] 图片变换: PT-004 rotate=180 scale=1.0 pan=(0,0) -> 2 files
-[12:04:07] [INFO] 📨 POST /api/wardrobe/item/PT-004?user=alice (Content-Length=679, CT=application/json)
-[12:04:07] [INFO] 标签更新: PT-004
-[12:04:13] [INFO] 📨 POST /api/wardrobe/new-items/dismiss?user=alice (Content-Length=24, CT=application/json)
-[12:04:21] [INFO] 📨 POST /api/wardrobe/item/LS-002/transform?user=alice (Content-Length=56, CT=application/json)
-[12:04:22] [INFO] 图片变换: LS-002 rotate=180 scale=1.0 pan=(0,0) -> 2 files
-[12:04:22] [INFO] 📨 POST /api/wardrobe/item/LS-002?user=alice (Content-Length=758, CT=application/json)
-[12:04:22] [INFO] 标签更新: LS-002
-[12:04:33] [INFO] 📨 POST /api/wardrobe/new-items/dismiss?user=alice (Content-Length=26, CT=application/json)
-[12:04:43] [INFO] 📨 POST /api/wardrobe/item/KNIT-001/transform?user=alice (Content-Length=56, CT=application/json)
-[12:04:43] [INFO] 图片变换: KNIT-001 rotate=180 scale=1.0 pan=(0,0) -> 2 files
-[12:04:44] [INFO] 📨 POST /api/wardrobe/item/KNIT-001?user=alice (Content-Length=722, CT=application/json)
-[12:04:44] [INFO] 标签更新: KNIT-001
-[12:08:02] [INFO] 📨 POST /api/chat?user=alice (Content-Length=32, CT=application/json)
-[12:08:02] [INFO] 💬 聊天: generate | 今日穿搭
-[12:08:02] [INFO] 🚀 管线启动: 今日穿搭
-[12:08:05] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (3404ms)
-[12:08:05] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（连续2次1星，退回安全区冷却）
-[12:08:07] [INFO] 📍 天气(北京): 33°C 晴
-[12:08:07] [INFO] 📍 场景: '今日穿搭' → occasion=日常
-[12:08:07] [INFO] 📍 📊 预计 ~60-100s · ~2002 tokens
-[12:08:07] [INFO] 📍 🤖 AI 智能选品
-[12:08:20] [INFO] ✅ 验证通过
-[12:08:20] [INFO] 📊 R1 选品评分: 45分 — ⚠️ 评分偏低，建议重新选品
-[12:08:20] [INFO] 📍 ✍️ AI 创作叙事+生图
-[12:08:38] [INFO] ✅ R2 创作完成: seedream_prompt=1002字符, tips=2条
-[12:08:38] [INFO] 👤 人物照: 1张（原图）
-[12:08:38] [WARN] ⚠️ 找不到衣柜档案: TS-008
-[12:08:38] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/alice/outfits/2026-06-25_今日穿搭
-[12:08:38] [INFO] 📍 🎨 Seedream AI 生图
-[12:09:42] [INFO] 📍 🎨 预压缩生图
-[12:09:42] [INFO] 📍 📤 推送 + 刷新
+[12:14:30] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=35, CT=application/json)
+[12:15:39] [INFO] 📨 POST /api/chat?user=alice (Content-Length=32, CT=application/json)
+[12:15:39] [INFO] 💬 聊天: generate | 今日穿搭
+[12:15:39] [INFO] 🚀 管线启动: 今日穿搭
+[12:15:43] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (3336ms)
+[12:15:43] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（连续2次1星，退回安全区冷却）
+[12:15:44] [INFO] 📍 天气(北京): 33°C 晴
+[12:15:44] [INFO] 📍 场景: '今日穿搭' → occasion=日常
+[12:15:44] [INFO] 📍 📊 预计 ~60-100s · ~2002 tokens
+[12:15:44] [INFO] 📍 🤖 AI 智能选品
+[12:16:05] [WARN] ⚠️ 验证未通过: ['TS-012 不在衣柜中', '缺少上衣']
+[12:16:09] [WARN] ⚠️ 修正后仍不通过: ['无任何单品']
+[12:16:09] [INFO] ⚠️ 验证有3项违规（继续执行，请人工检查）
+[12:16:09] [INFO] 📊 R1 选品评分: 0分 — 无效
+[12:16:09] [INFO] 📍 ✍️ AI 创作叙事+生图
+[12:16:14] [WARN] ⚠️ R2 创作 JSON 解析失败，使用降级 prompt
+[12:16:14] [INFO] 👤 人物照: 1张（原图）
+[12:16:14] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/alice/outfits/2026-06-25_今日穿搭
+[12:16:14] [INFO] 📍 🎨 Seedream AI 生图
+[12:17:24] [INFO] 📍 🎨 预压缩生图
+[12:17:24] [INFO] 📍 📤 推送 + 刷新

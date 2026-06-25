@@ -1,17 +1,13 @@
 {
-  "generated_at": "2026-06-25T04:08:38Z",
+  "generated_at": "2026-06-25T04:16:14Z",
   "user_id": "alice",
-  "items_used": [
-    "TS-008",
-    "PT-003",
-    "SHOE-003"
-  ],
-  "style_matched": "日系 City Boy",
+  "items_used": [],
+  "style_matched": "",
   "occasion": "日常",
   "explore_level": 0.0,
   "user_tap": null,
   "user_rating": null,
   "user_wore": null,
-  "generation_time_ms": 36034,
-  "api_calls": 2
+  "generation_time_ms": 34461,
+  "api_calls": 3
 }

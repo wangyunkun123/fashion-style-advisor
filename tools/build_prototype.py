@@ -414,7 +414,7 @@ def item_row(icon_svg, cat, iid, name, thumb='', cutout=''):
             cutout_src = '/api/image?f=' + quote(cp)
         else:
             cutout_src = thumb
-        thumb_html = '<img class="item-thumb" src="{}" data-cutout="{}" onclick="event.stopPropagation();showImg(this.dataset.cutout)" loading="lazy">'.format(thumb, cutout_src)
+        thumb_html = '<img class="item-thumb" src="{}" data-cutout="{}" onclick="event.stopPropagation();showImg(this.dataset.cutout)" loading="lazy">'.format(cdn_url(thumb), cutout_src)
     return '<div class="item-row"><span class="item-emoji">{}</span><span class="item-cat">{}</span><span class="item-id">{}</span><span class="item-name">{}</span>{}</div>'.format(icon_svg, cat, iid, name, thumb_html)
 
 # ── Chinese color → hex mapping ──

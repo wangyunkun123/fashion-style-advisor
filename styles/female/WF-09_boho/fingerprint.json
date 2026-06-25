@@ -1,0 +1,215 @@
+{
+  "style_id": "WF-09",
+  "name_zh": "波西米亚",
+  "name_en": "Boho",
+  "description": "吉普赛流浪者的浪漫——印花长裙+流苏+刺绣+钩针，层层叠叠的纹理和故事。大地色基底+宝石色点缀，像是从摩洛哥市集和伍德斯托克同时归来。",
+  "category": "欧洲经典",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "A字"
+      ],
+      "acceptable": [
+        "合身"
+      ],
+      "rejected": [
+        "紧身",
+        "结构感"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "暖色",
+        "中性"
+      ],
+      "allowed_hues": [
+        "奶油白",
+        "焦糖棕",
+        "骆驼棕",
+        "陶土红",
+        "橄榄绿",
+        "矢车菊蓝",
+        "酒红",
+        "紫水晶"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 5,
+      "color_logic": "大地色基底+宝石色点缀。印花混搭允许同色系不同花型"
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "刺绣",
+        "钩针",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "印花",
+        "条纹"
+      ],
+      "rejected": [
+        "Logo",
+        "字母印花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "亚麻",
+        "真丝",
+        "钩针",
+        "麂皮",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "丝绒",
+        "皮质"
+      ],
+      "rejected": [
+        "速干",
+        "合成",
+        "尼龙"
+      ]
+    },
+    "layering": {
+      "level": "高",
+      "min_layers": 2,
+      "max_layers": 4
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 3
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "DRESS",
+      "pattern": [
+        "碎花",
+        "印花"
+      ],
+      "bonus": 20,
+      "reason": "印花Maxi长裙——及踝长度、民族印花或碎花、真丝或棉"
+    },
+    {
+      "category_code": "SHIRT",
+      "pattern": [
+        "刺绣"
+      ],
+      "fabric": [
+        "棉",
+        "真丝",
+        "亚麻"
+      ],
+      "bonus": 15,
+      "reason": "刺绣衬衫/上衣——灯笼袖或泡泡袖"
+    },
+    {
+      "category_code": "JK",
+      "fabric": [
+        "麂皮"
+      ],
+      "bonus": 15,
+      "reason": "流苏麂皮夹克——Boho的标志性外层"
+    },
+    {
+      "category_code": "SHOE",
+      "fabric": [
+        "皮质",
+        "麂皮"
+      ],
+      "hue": [
+        "棕",
+        "金"
+      ],
+      "bonus": 10,
+      "reason": "角斗士凉鞋/麂皮短靴——要有走过路的感觉"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "结构感"
+      ],
+      "reason": "Boho不束缚身体——嬉皮士基因"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "合成"
+      ],
+      "reason": "合成面料破坏Boho的手工感"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "Logo",
+        "字母印花"
+      ],
+      "reason": "Logo是Boho的反面"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "棉",
+        "亚麻",
+        "真丝",
+        "钩针",
+        "麂皮",
+        "蕾丝"
+      ],
+      "weight": 12
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "value": [
+        "碎花",
+        "刺绣",
+        "钩针",
+        "蕾丝"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "奶油白",
+        "焦糖棕",
+        "陶土红",
+        "橄榄绿",
+        "酒红"
+      ],
+      "weight": 8
+    }
+  ],
+  "body_modifier_bonus": {
+    "遮盖臀胯": 10,
+    "遮盖小肚子": 8,
+    "修饰手臂": 8,
+    "拉长腿部": 5
+  },
+  "related_styles": [
+    "WF-03"
+  ],
+  "conflicting_styles": [
+    "WF-06",
+    "WF-07"
+  ],
+  "tier": "core",
+  "trend_category": "popular_trend"
+}

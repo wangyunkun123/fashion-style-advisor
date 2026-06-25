@@ -1,0 +1,238 @@
+{
+  "style_id": "korean_light_mature",
+  "name_zh": "韩式轻熟风",
+  "name_en": "Korean Light Mature",
+  "description": "韩剧男主穿搭体系的核心风格，公式为「长款大衣+高领针织衫+九分裤」。定位于25-35岁亚洲都市男性——足够成熟以应对职场，又不失韩系特有的温柔浪漫。'轻'意味着不沉重不刻板，'熟'意味着有质感有分量。",
+  "category": "精致休闲",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "宽松"
+      ],
+      "acceptable": [
+        "修身"
+      ],
+      "rejected": [
+        "紧身",
+        "廓形"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "驼色",
+        "卡其",
+        "炭灰",
+        "黑",
+        "米白",
+        "奶白",
+        "咖啡色",
+        "藏青",
+        "深灰"
+      ],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "大地色暖男系为核——驼色大衣+咖啡色高领+米白裤；或禁欲冷调系——黑大衣+深灰高领+黑西裤"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色"
+      ],
+      "acceptable": [
+        "格纹",
+        "条纹"
+      ],
+      "rejected": [
+        "印花",
+        "拼接",
+        "大面积Logo"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "羊毛混纺",
+        "针织",
+        "棉",
+        "皮质"
+      ],
+      "acceptable": [
+        "灯芯绒",
+        "亚麻"
+      ],
+      "rejected": [
+        "速干",
+        "合成",
+        "牛仔",
+        "帆布"
+      ]
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "LS",
+      "fabric": [
+        "针织"
+      ],
+      "pattern": "纯色",
+      "bonus": 20,
+      "reason": "高领针织是韩系轻熟的定调核心——半高领/Mock Neck最佳"
+    },
+    {
+      "category_code": "PT",
+      "silhouette": [
+        "合身",
+        "修身"
+      ],
+      "hue": [
+        "黑",
+        "灰",
+        "米白"
+      ],
+      "bonus": 18,
+      "reason": "九分直筒西裤露踝是韩系独有心机比例"
+    },
+    {
+      "category_code": "SHOE",
+      "fabric": [
+        "皮质"
+      ],
+      "hue": [
+        "黑",
+        "棕",
+        "白"
+      ],
+      "bonus": 15,
+      "reason": "切尔西靴/乐福鞋/极简白球鞋——鞋口要浅不吞脚踝"
+    },
+    {
+      "category_code": "JK",
+      "fabric": [
+        "羊毛混纺"
+      ],
+      "silhouette": [
+        "合身"
+      ],
+      "bonus": 15,
+      "reason": "长款大衣是韩系轻熟灵魂单品——H型直筒、长度到膝盖上下"
+    },
+    {
+      "category_code": "SHIRT",
+      "hue": [
+        "白",
+        "米白",
+        "浅蓝"
+      ],
+      "bonus": 8,
+      "reason": "衬衫作为内搭打底，领口从针织衫中露出增加精致度"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "印花",
+        "拼接"
+      ],
+      "reason": "印花/拼接破坏韩系轻熟克制精致感"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "合成"
+      ],
+      "reason": "运动科技面料与轻熟质感冲突"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "高饱和色违背韩系轻熟柔和色板"
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "廓形"
+      ],
+      "reason": "紧身=老气，廓形=过于随意"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "羊毛混纺",
+        "针织",
+        "棉",
+        "皮质"
+      ],
+      "weight": 12
+    },
+    {
+      "field": "color.hue",
+      "operator": "in",
+      "value": [
+        "驼色",
+        "卡其",
+        "炭灰",
+        "黑",
+        "米白",
+        "咖啡色",
+        "藏青"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "合身",
+        "宽松"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "pattern.type",
+      "operator": "eq",
+      "value": "纯色",
+      "weight": 7
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加上半身体量感": 7,
+    "遮盖小肚子": 8
+  },
+  "related_styles": [
+    "smart_casual",
+    "clean_fit",
+    "korean_minimal",
+    "american_ivy_league"
+  ],
+  "conflicting_styles": [
+    "athleisure_sport",
+    "streetwear",
+    "retro_90s_hiphop",
+    "scene_blokecore"
+  ],
+  "tier": "core"
+}

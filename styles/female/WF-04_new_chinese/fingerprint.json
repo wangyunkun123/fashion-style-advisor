@@ -1,0 +1,223 @@
+{
+  "style_id": "WF-04",
+  "name_zh": "新中式",
+  "name_en": "New Chinese",
+  "description": "中国传统元素现代化——盘扣/立领/马面裙改良，用现代剪裁传承东方美学。一件中式单品即焦点，其余保持现代简约。真丝/宋锦/香云纱是核心面料。",
+  "category": "东亚风格",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "宽松"
+      ],
+      "acceptable": [
+        "A字"
+      ],
+      "rejected": [
+        "紧身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ],
+      "allowed_hues": [
+        "月白",
+        "墨黑",
+        "朱砂红",
+        "靛蓝",
+        "玉绿",
+        "檀木棕",
+        "香槟金",
+        "水墨灰"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "中国古典色体系——月白/墨黑/朱砂/靛蓝/玉绿/檀木棕，金银丝点缀"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "水墨",
+        "刺绣"
+      ],
+      "acceptable": [
+        "暗纹提花"
+      ],
+      "rejected": [
+        "Logo",
+        "字母印花",
+        "条纹",
+        "格纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "宋锦",
+        "香云纱",
+        "提花缎"
+      ],
+      "acceptable": [
+        "天丝麻",
+        "重磅棉",
+        "丝绒"
+      ],
+      "rejected": [
+        "速干",
+        "合成",
+        "尼龙",
+        "牛仔"
+      ]
+    },
+    "layering": {
+      "level": "低",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 5
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "SHIRT",
+      "fit": [
+        "合身",
+        "略宽松"
+      ],
+      "fabric": [
+        "真丝",
+        "提花缎"
+      ],
+      "bonus": 20,
+      "reason": "盘扣/立领衬衫——保留立领+盘扣+斜襟，新中式入门单品"
+    },
+    {
+      "category_code": "PT",
+      "fit": [
+        "宽松",
+        "合身"
+      ],
+      "hue": [
+        "墨黑",
+        "酒红",
+        "墨绿"
+      ],
+      "bonus": 15,
+      "reason": "阔腿丝绒裤/天丝麻阔腿裤——高腰+垂坠感"
+    },
+    {
+      "category_code": "JK",
+      "fabric": [
+        "真丝",
+        "宋锦"
+      ],
+      "hue": [
+        "墨黑",
+        "靛蓝",
+        "檀木棕"
+      ],
+      "bonus": 15,
+      "reason": "宋锦/真丝外套——中式立领×西式廓形"
+    },
+    {
+      "category_code": "TS",
+      "fit": [
+        "合身",
+        "宽松"
+      ],
+      "fabric": [
+        "真丝",
+        "天丝麻"
+      ],
+      "bonus": 10,
+      "reason": "中式改良上衣——一件中式单品即焦点"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "Logo",
+        "字母印花"
+      ],
+      "reason": "Logo/字母印花与新中式的东方克制冲突"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "合成",
+        "尼龙"
+      ],
+      "reason": "合成面料配不上东方质感"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "荧光色不属于中国传统色体系"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "真丝",
+        "宋锦",
+        "香云纱",
+        "提花缎",
+        "天丝麻"
+      ],
+      "weight": 15
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "月白",
+        "墨黑",
+        "朱砂红",
+        "靛蓝",
+        "玉绿",
+        "檀木棕"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "value": [
+        "纯色",
+        "水墨",
+        "刺绣"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 10,
+    "遮盖臀胯": 8,
+    "颜色显白": 8,
+    "拉长腿部": 5
+  },
+  "related_styles": [
+    "WF-06"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-08"
+  ],
+  "tier": "explore",
+  "trend_category": "popular_trend"
+}

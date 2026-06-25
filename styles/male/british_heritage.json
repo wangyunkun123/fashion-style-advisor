@@ -1,0 +1,234 @@
+{
+  "style_id": "british_heritage",
+  "name_zh": "英伦遗产",
+  "name_en": "British Heritage",
+  "description": "从英国贵族乡村生活和户外运动中诞生的功能性服饰传统。以蜡棉夹克(Barbour)、粗花呢运动夹克、切尔西靴为核心，融合皇家狩猎、飞钓传统与苏格兰针织工艺——不是复古，而是穿越百年的活着的穿衣方式。",
+  "category": "复古经典",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "修身",
+        "廓形"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色",
+        "暖色"
+      ],
+      "allowed_hues": [
+        "橄榄绿",
+        "深棕",
+        "海军蓝",
+        "深灰",
+        "灰",
+        "勃艮第红",
+        "芥末黄",
+        "卡其"
+      ],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "大地色+深色系为主，格纹是核心视觉语言——千鸟格/威尔士亲王格/Tartan"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "格纹"
+      ],
+      "acceptable": [
+        "人字纹",
+        "条纹"
+      ],
+      "rejected": [
+        "印花",
+        "拼接",
+        "大面积Logo"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "蜡棉",
+        "粗花呢",
+        "羊毛混纺",
+        "皮质"
+      ],
+      "acceptable": [
+        "棉",
+        "牛津纺",
+        "针织"
+      ],
+      "rejected": [
+        "速干",
+        "合成",
+        "丝质",
+        "牛仔"
+      ]
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "JK",
+      "fabric": [
+        "皮质",
+        "羊毛混纺",
+        "蜡棉"
+      ],
+      "bonus": 20,
+      "reason": "蜡棉夹克/皮夹克/粗花呢运动夹克是英伦遗产外层灵魂"
+    },
+    {
+      "category_code": "PT",
+      "fabric": [
+        "羊毛混纺"
+      ],
+      "pattern": [
+        "格纹",
+        "纯色"
+      ],
+      "bonus": 18,
+      "reason": "羊毛格纹裤/打褶斜纹裤是英伦下装标志"
+    },
+    {
+      "category_code": "SHOE",
+      "fabric": [
+        "皮质"
+      ],
+      "hue": [
+        "棕",
+        "黑"
+      ],
+      "bonus": 15,
+      "reason": "切尔西靴/布洛克鞋——Goodyear贴边工艺是品质底线"
+    },
+    {
+      "category_code": "SHIRT",
+      "fabric": [
+        "棉",
+        "牛津纺"
+      ],
+      "pattern": [
+        "格纹",
+        "纯色",
+        "条纹"
+      ],
+      "bonus": 12,
+      "reason": "千鸟格/格纹衬衫宽松剪裁，内搭单穿皆可"
+    },
+    {
+      "category_code": "LS",
+      "fabric": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "bonus": 10,
+      "reason": "设得兰渔夫毛衣是英伦秋冬层次核心"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "合成",
+        "丝质"
+      ],
+      "reason": "现代科技面料与传统英伦质感冲突"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "印花",
+        "拼接"
+      ],
+      "reason": "印花/拼接破坏英伦传统克制美学"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "高饱和色违背英伦大地色系传统"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "皮质",
+        "羊毛混纺",
+        "粗花呢",
+        "棉",
+        "针织"
+      ],
+      "weight": 12
+    },
+    {
+      "field": "color.hue",
+      "operator": "in",
+      "value": [
+        "橄榄绿",
+        "深棕",
+        "海军蓝",
+        "深灰",
+        "勃艮第红",
+        "卡其"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "value": [
+        "纯色",
+        "格纹",
+        "人字纹"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "合身"
+      ],
+      "weight": 6
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加上半身体量感": 8,
+    "遮盖小肚子": 6
+  },
+  "related_styles": [
+    "american_ivy_league",
+    "smart_casual",
+    "american_workwear",
+    "japanese_amekaji"
+  ],
+  "conflicting_styles": [
+    "athleisure_sport",
+    "streetwear",
+    "scene_blokecore",
+    "retro_90s_hiphop"
+  ],
+  "tier": "core"
+}

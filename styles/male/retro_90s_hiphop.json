@@ -1,0 +1,233 @@
+{
+  "style_id": "retro_90s_hiphop",
+  "name_zh": "90s嘻哈风",
+  "name_en": "90s Hip-Hop",
+  "description": "1990年代说唱黄金时代的街头穿搭体系。核心语言就一个字：大——超大号T恤、宽松牛仔、Timberland工装靴。东西海岸在色调上分化，但共同塑造了现代街头服饰的DNA。不是追求精致，而是宣告「我在这里，我不在乎你的规则」。",
+  "category": "街头复古",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "廓形"
+      ],
+      "acceptable": [
+        "合身"
+      ],
+      "rejected": [
+        "紧身",
+        "修身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "黑",
+        "炭灰",
+        "海军蓝",
+        "森林绿",
+        "卡其",
+        "棕",
+        "白",
+        "红",
+        "蓝",
+        "黄"
+      ],
+      "max_saturation": "中饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "东海岸暗色硬朗(黑/炭灰/海军蓝/森林绿)，西海岸大地轻松(卡其/棕/白)。球衣/棒球夹克作为色彩焦点"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "Logo"
+      ],
+      "acceptable": [
+        "拼接",
+        "印花"
+      ],
+      "rejected": [
+        "格纹",
+        "条纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "牛仔",
+        "棉",
+        "合成",
+        "皮质"
+      ],
+      "acceptable": [
+        "帆布",
+        "抓绒"
+      ],
+      "rejected": [
+        "羊毛混纺",
+        "丝质",
+        "亚麻",
+        "灯芯绒"
+      ]
+    },
+    "layering": {
+      "level": "中低",
+      "min_layers": 1,
+      "max_layers": 3
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 2
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "SHOE",
+      "fabric": [
+        "皮质"
+      ],
+      "hue": [
+        "棕",
+        "黑",
+        "白"
+      ],
+      "bonus": 20,
+      "reason": "Timberland小麦色6寸靴是东海岸王道，Air Jordan是街头标志"
+    },
+    {
+      "category_code": "PT",
+      "fabric": [
+        "牛仔"
+      ],
+      "silhouette": [
+        "宽松",
+        "廓形"
+      ],
+      "bonus": 18,
+      "reason": "宽松/超宽牛仔裤是90s嘻哈下装灵魂"
+    },
+    {
+      "category_code": "TS",
+      "silhouette": [
+        "宽松",
+        "廓形"
+      ],
+      "pattern": [
+        "Logo",
+        "印花",
+        "纯色"
+      ],
+      "bonus": 15,
+      "reason": "Oversized图案T恤/复古球衣是上装核心"
+    },
+    {
+      "category_code": "JK",
+      "brand": [
+        "Adidas",
+        "Nike"
+      ],
+      "silhouette": [
+        "宽松"
+      ],
+      "bonus": 12,
+      "reason": "棒球夹克/面包羽绒服是东海岸嘻哈标志外层"
+    },
+    {
+      "category_code": "HAT",
+      "bonus": 8,
+      "reason": "Snapback棒球帽/Kangol桶帽是嘻哈配饰灵魂"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "修身"
+      ],
+      "reason": "90s嘻哈廓形必须是宽松的——合身就不是真90s嘻哈"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "羊毛混纺",
+        "丝质",
+        "亚麻"
+      ],
+      "reason": "精致面料与嘻哈街头文化冲突"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "格纹"
+      ],
+      "reason": "格纹过于学院/正式，不符嘻哈街头调性"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "宽松",
+        "廓形"
+      ],
+      "weight": 15
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "牛仔",
+        "棉",
+        "合成",
+        "皮质"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "color.hue_family",
+      "operator": "in",
+      "value": [
+        "中性",
+        "暖色"
+      ],
+      "weight": 6
+    },
+    {
+      "field": "brand.name",
+      "operator": "in",
+      "value": [
+        "Jordan",
+        "Nike",
+        "Adidas",
+        "Timberland"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加上半身体量感": 10,
+    "遮盖小肚子": 10
+  },
+  "related_styles": [
+    "streetwear",
+    "american_workwear",
+    "scene_blokecore",
+    "athleisure_sport"
+  ],
+  "conflicting_styles": [
+    "smart_casual",
+    "clean_fit",
+    "korean_light_mature",
+    "scandi_minimalism",
+    "chinese_heritage"
+  ],
+  "tier": "core"
+}

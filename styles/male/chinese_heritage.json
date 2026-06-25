@@ -1,0 +1,202 @@
+{
+  "style_id": "chinese_heritage",
+  "name_zh": "国风质感",
+  "name_en": "Chinese Heritage Luxe",
+  "description": "基于手串、文玩配件的自然延伸。不是传统汉服，而是以质感配件 + 暗色调 + 自然面料构建低调东方感。适合文化场合、品茶、见长辈。沉香手串、檀木配饰是标志。",
+  "category": "质感休闲",
+  "intensity": 4,
+  "tier": "core",
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "廓形"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "黑",
+        "檀棕",
+        "米白",
+        "藏青",
+        "深灰",
+        "墨绿",
+        "咖啡",
+        "灰"
+      ],
+      "max_saturation": "低饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "中国传统色系——玄黑、檀棕、月白、鸦青，低饱和沉稳"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "格纹"
+      ],
+      "acceptable": [
+        "条纹"
+      ],
+      "rejected": [
+        "印花",
+        "Logo",
+        "拼接"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "亚麻",
+        "棉",
+        "灯芯绒",
+        "针织",
+        "羊毛混纺"
+      ],
+      "acceptable": [
+        "皮质"
+      ],
+      "rejected": [
+        "速干",
+        "合成"
+      ]
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "SHIRT",
+      "hue": [
+        "黑",
+        "藏青",
+        "米白"
+      ],
+      "bonus": 20,
+      "reason": "暗色/中性色衬衫是国风质感核心"
+    },
+    {
+      "category_code": "ACC",
+      "bonus": 20,
+      "reason": "手串/文玩配饰是国风质感灵魂"
+    },
+    {
+      "category_code": "PT",
+      "fabric": [
+        "亚麻",
+        "灯芯绒",
+        "羊毛混纺"
+      ],
+      "bonus": 15,
+      "reason": "质感长裤（亚麻/灯芯绒/西裤）"
+    },
+    {
+      "category_code": "JK",
+      "fit": "合身",
+      "bonus": 10,
+      "reason": "质感外套（非运动款）"
+    },
+    {
+      "category_code": "SHOE",
+      "hue": [
+        "黑",
+        "棕",
+        "米白"
+      ],
+      "bonus": 10,
+      "reason": "帆布鞋/德训鞋/皮鞋"
+    },
+    {
+      "category_code": "BAG",
+      "hue": [
+        "棕",
+        "黑",
+        "卡其"
+      ],
+      "bonus": 5,
+      "reason": "皮质/帆布邮差包"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "印花",
+        "拼接"
+      ],
+      "reason": "印花和拼接破坏东方质感"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "合成"
+      ],
+      "reason": "合成面料缺乏自然质感"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "高饱和色不符合国风沉稳调性"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "eq",
+      "value": "低饱和",
+      "weight": 10
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "亚麻",
+        "棉",
+        "灯芯绒",
+        "羊毛混纺"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "color.lightness",
+      "operator": "eq",
+      "value": "低明度",
+      "weight": 5
+    },
+    {
+      "field": "pattern.type",
+      "operator": "eq",
+      "value": "纯色",
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "颜色显白": 8,
+    "增加肩宽": 5
+  },
+  "related_styles": [
+    "smart_casual"
+  ],
+  "conflicting_styles": [
+    "athleisure_sport",
+    "resort_vacation",
+    "streetwear"
+  ]
+}

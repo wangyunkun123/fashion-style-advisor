@@ -1,0 +1,200 @@
+{
+  "style_id": "WF-08",
+  "name_zh": "运动休闲",
+  "name_en": "Athleisure",
+  "description": "瑜伽裤走出瑜伽房——高腰Leggings+运动内衣+oversize帽衫。高性能科技面料，从健身房到咖啡店无缝切换。舒适不妥协。",
+  "category": "现代都市",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "紧身",
+        "宽松"
+      ],
+      "acceptable": [
+        "合身"
+      ],
+      "rejected": [
+        "廓形",
+        "A字"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色",
+        "暖色"
+      ],
+      "allowed_hues": [
+        "黑",
+        "灰",
+        "奶油白",
+        "鼠尾草绿",
+        "勃艮第红",
+        "电光蓝",
+        "尘粉"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "黑灰基底 + 1个时尚色点缀（鼠尾草绿/尘粉/电光蓝），同色系套装最省心"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色"
+      ],
+      "acceptable": [
+        "Logo",
+        "拼接"
+      ],
+      "rejected": [
+        "碎花",
+        "格纹",
+        "条纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "速干",
+        "氨纶",
+        "聚酯纤维",
+        "尼龙"
+      ],
+      "acceptable": [
+        "棉混纺"
+      ],
+      "rejected": [
+        "羊毛",
+        "丝绒",
+        "皮质",
+        "粗花呢"
+      ]
+    },
+    "layering": {
+      "level": "低",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 2
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "PT",
+      "fit": [
+        "紧身"
+      ],
+      "bonus": 20,
+      "reason": "高腰瑜伽Leggings——蹲下不透、25''或28''长度"
+    },
+    {
+      "category_code": "TS",
+      "fit": [
+        "紧身",
+        "合身"
+      ],
+      "bonus": 15,
+      "reason": "运动内衣/合身T恤——可单穿可内搭"
+    },
+    {
+      "category_code": "JK",
+      "fit": [
+        "宽松"
+      ],
+      "fabric": [
+        "棉混纺"
+      ],
+      "bonus": 15,
+      "reason": "Oversize帽衫/Bomber夹克——运动休闲外层公式"
+    },
+    {
+      "category_code": "SHOE",
+      "hue": [
+        "白",
+        "黑"
+      ],
+      "bonus": 10,
+      "reason": "老爹鞋/跑步鞋——Hoka/Nike/New Balance"
+    },
+    {
+      "category_code": "BAG",
+      "bonus": 5,
+      "reason": "运动包/腰包——功能性优先"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "羊毛",
+        "丝绒",
+        "粗花呢"
+      ],
+      "reason": "正装面料不属于运动休闲"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "碎花",
+        "格纹"
+      ],
+      "reason": "碎花/格纹与运动科技感冲突"
+    },
+    {
+      "field": "formality",
+      "operator": "lte",
+      "value": 2,
+      "reason": "不超过日常休闲正式度"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "速干",
+        "氨纶",
+        "聚酯纤维",
+        "尼龙"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "pattern.type",
+      "operator": "eq",
+      "value": "纯色",
+      "weight": 5
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "黑",
+        "灰",
+        "奶油白",
+        "鼠尾草绿",
+        "尘粉"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 10,
+    "显腰线": 8,
+    "遮盖小肚子": 5
+  },
+  "related_styles": [
+    "WF-05"
+  ],
+  "conflicting_styles": [
+    "WF-11",
+    "WF-04"
+  ],
+  "tier": "explore",
+  "trend_category": "popular_trend"
+}

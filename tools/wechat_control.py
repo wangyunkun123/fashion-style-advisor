@@ -6725,8 +6725,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     }
                     # 同时更新 style_prefs 数组（兼容旧格式）
                     sp = data.get('style_preference', '')
-                    if sp:
-                        existing['style_prefs'] = [s.strip() for s in sp.split(',') if s.strip()]
+                    existing['style_prefs'] = [s.strip() for s in sp.split(',') if s.strip()] if sp else []
                     existing['body_secrets'] = data.get('body_secrets', existing.get('body_secrets', ''))
                     existing['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
                     os.makedirs(os.path.dirname(profile_path), exist_ok=True)

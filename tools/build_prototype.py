@@ -1088,7 +1088,7 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <span id="daily-loading-text">正在生成今日穿搭...</span>
 </div>
 <div class="hero-card">
-<div class="hero-img"><img src="{hero_img}" alt="" onerror="this.onerror=null;this.src=__CDN__+'wardrobe/enhanced/_placeholder.png'"></div>
+<div class="hero-img"><img src="{hero_img}" alt="" onerror="this.onerror=null;this.src=__CDN__+'{wardrobe_rel}/enhanced/_placeholder.png'"></div>
 <div class="hero-body">
 <div class="style-tags">{hero_tags_html}</div>
 <div class="hero-style">{hero_style}</div>
@@ -1962,6 +1962,7 @@ html = html.format(
     card1=card1, card2=card2, card3=card3, alts_js=alts_js,
     camera_lg_icon=add_icons['camera_lg_icon'], image_icon=add_icons['image_icon'],
     lock_icon=add_icons['lock_icon'],
+    wardrobe_rel=WARDROBE_REL,
 )
 
 # Replace JS relative path prefix '../' with CDN variable

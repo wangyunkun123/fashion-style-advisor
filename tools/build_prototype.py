@@ -972,8 +972,22 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 /* ═══ 我的形象页 ═══ */
 .profile-section{{padding:16px 20px}}
 .profile-section-title{{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}}
-.profile-privacy{{font-size:11px;color:var(--muted);background:#f8fafb;border-radius:10px;padding:10px 14px;margin:12px 20px 0;line-height:1.5;display:flex;align-items:flex-start;gap:6px}}
+.profile-privacy{{font-size:11px;color:var(--muted);background:#f8fafb;border-radius:10px;padding:10px 14px;margin:12px 0 0;line-height:1.5;display:flex;align-items:flex-start;gap:6px}}
 .profile-privacy svg{{width:14px;height:14px;color:var(--navy);flex-shrink:0;margin-top:1px}}
+/* ═══ 折叠卡片 ═══ */
+.collapse-card{{margin:14px 14px 0;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(30,58,95,.05)}}
+.collapse-header{{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background .2s}}
+.collapse-header:active{{background:#f8fafc}}
+.collapse-header-left{{display:flex;align-items:center;gap:10px}}
+.collapse-header-icon{{font-size:20px}}
+.collapse-header-title{{font-size:15px;font-weight:700;color:var(--text)}}
+.collapse-header-arrow{{font-size:12px;color:var(--muted);transition:transform .25s}}
+.collapse-card.open .collapse-header-arrow{{transform:rotate(180deg)}}
+.collapse-body{{display:none;padding:0 18px 18px}}
+.collapse-card.open .collapse-body{{display:block}}
+.future-section{{padding:20px 14px;text-align:center}}
+.future-section-title{{font-size:12px;color:var(--muted);letter-spacing:1px;font-weight:600;margin-bottom:8px}}
+.future-section-hint{{font-size:11px;color:#bcc4cd;line-height:1.6}}
 /* 照片上传区 */
 .photo-slots{{display:flex;gap:10px;padding:0 20px;margin-bottom:4px}}
 .photo-slot{{flex:1;text-align:center;background:#f8fafb;border-radius:14px;padding:10px 6px 12px;border:2px dashed #dde3ea;transition:border-color .25s;position:relative;min-width:0}}
@@ -1223,6 +1237,18 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="page" id="page-profile">
 <div class="header"><h1>穿搭助手</h1><div class="avatar">K</div></div>
 <div class="scroll-area">
+
+<!-- ═══ 形象管理（折叠卡）═══ -->
+<div class="collapse-card open" id="profile-card">
+<div class="collapse-header" onclick="document.getElementById('profile-card').classList.toggle('open')">
+<div class="collapse-header-left">
+<span class="collapse-header-icon">👤</span>
+<span class="collapse-header-title">形象管理</span>
+</div>
+<span class="collapse-header-arrow">▲</span>
+</div>
+<div class="collapse-body">
+
 <div class="profile-privacy"><span>{lock_icon}</span><span>照片仅存本地，生图时通过 API 传给 Seedream，不会公开</span></div>
 
 <div class="toggle-row">
@@ -1277,14 +1303,6 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 <div class="profile-section-title">📏 基本信息</div>
 
 <div class="profile-form">
-
-<div class="profile-form-group">
-<label class="profile-form-label">性别</label>
-<div class="seg-choice-row" id="seg-gender">
-<div class="seg-choice selected" data-val="男" onclick="selectSeg(this,'seg-gender','__genderVal')">男</div>
-<div class="seg-choice" data-val="女" onclick="selectSeg(this,'seg-gender','__genderVal')">女</div>
-</div>
-</div>
 
 <div class="profile-form-group">
 <label class="profile-form-label">身高 · cm（自由填写）</label>
@@ -1387,6 +1405,15 @@ body{{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;disp
 
 <div class="profile-save-row">
 <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">保存形象信息</button>
+</div>
+
+</div><!-- .collapse-body -->
+</div><!-- .collapse-card -->
+
+<!-- 未来功能预留区 -->
+<div class="future-section">
+<div class="future-section-title">更多功能即将上线</div>
+<div class="future-section-hint">穿搭日历 · 风格分析 · 胶囊衣橱 · 更多…</div>
 </div>
 
 </div><!-- .scroll-area -->
@@ -1582,8 +1609,8 @@ function tryStyle(styleId,btn){{btn.classList.add('loading');btn.textContent='�
 var __profilePhotos={{}};/* {{slot:b64data}} compressed thumbnails */
 var __profilePhotoSlot=null;/* current uploading slot */
 var __genderVal='男',__bodyVal='',__skinVal='',__shoulderVal='',__faceVal='';
-function selectSeg(el,groupId,varName){{el.parentElement.querySelectorAll('.seg-choice').forEach(function(c){{c.classList.remove('selected')}});el.classList.add('selected');window[varName]=el.dataset.val;if(groupId==='seg-gender'){{var g=el.dataset.val;var maleEl=document.getElementById('seg-body-male');var femaleEl=document.getElementById('seg-body-female');if(g==='女'){{if(maleEl)maleEl.style.display='none';if(femaleEl)femaleEl.style.display=''}}else{{if(maleEl)maleEl.style.display='';if(femaleEl)femaleEl.style.display='none'}}__bodyVal='';document.querySelectorAll('#seg-body-male .seg-choice, #seg-body-female .seg-choice').forEach(function(c){{c.classList.remove('selected')}})}}updateProfilePreview();updateProfileGuide()}}
-function switchBodyShapes(){{var el=document.querySelector('#seg-gender .seg-choice.selected');if(!el)el=document.querySelector('#seg-gender .seg-choice');if(el)selectSeg(el,'seg-gender','__genderVal')}}
+function selectSeg(el,groupId,varName){{el.parentElement.querySelectorAll('.seg-choice').forEach(function(c){{c.classList.remove('selected')}});el.classList.add('selected');window[varName]=el.dataset.val;updateProfilePreview();updateProfileGuide()}}
+function switchBodyShapes(g){{var maleEl=document.getElementById('seg-body-male');var femaleEl=document.getElementById('seg-body-female');if(g==='female'||g==='女'){{if(maleEl)maleEl.style.display='none';if(femaleEl)femaleEl.style.display=''}}else{{if(maleEl)maleEl.style.display='';if(femaleEl)femaleEl.style.display='none'}}__genderVal=g}}
 function capturePhoto(slot){{__profilePhotoSlot=slot;document.getElementById('profile-camera-input').click()}}
 function pickPhoto(slot){{__profilePhotoSlot=slot;document.getElementById('profile-album-input').click()}}
 /* 前端图片压缩 - 性能关键：将10MB+照片压缩到~100KB */
@@ -1592,13 +1619,13 @@ function handleProfilePhoto(input,source){{var f=input.files[0];if(!f)return;var
 function toggleUseImage(){{var t=document.getElementById('toggle-use-image');t.classList.toggle('on');var detail=document.getElementById('profile-detail');var isOn=t.classList.contains('on');detail.style.display=isOn?'block':'none'}}
 function updateProfileGuide(){{var emptyFields=[];var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();if(!occ)emptyFields.push('职业');if(!pref)emptyFields.push('偏好');if(!pain)emptyFields.push('困扰');var guide=document.getElementById('profile-guide');if(emptyFields.length===3){{guide.style.display='block';guide.innerHTML='<span>✨ 职业、偏好、困扰均留空 — AI 将完全自由探索，可能发现你意想不到的风格</span>'}}else if(emptyFields.length===2){{guide.style.display='block';guide.innerHTML='<span>✨ '+emptyFields.join('、')+'留空 — AI 将在这两个方面自由探索</span>'}}else if(emptyFields.length===1){{guide.style.display='block';guide.innerHTML='<span>✨ '+emptyFields[0]+'留空 — AI 将不受限制自由发挥</span>'}}else{{guide.style.display='none'}};updateProfilePreview()}}
 function updateProfilePreview(){{var p=document.getElementById('profile-preview');var t=document.getElementById('profile-preview-text');var gender=__genderVal||'男';var h=document.getElementById('pf-height').value.trim();var w=document.getElementById('pf-weight').value.trim();var age=document.getElementById('pf-age').value.trim();var bt=__bodyVal;var st=__skinVal;var should=__shoulderVal;var face=__faceVal;var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();var secrets=document.getElementById('pf-body-secrets').value.trim();var parts=[];if(age)parts.push(age+'岁');parts.push(gender==='女'?'女性':'男性');if(h)parts.push(h+'cm');if(w)parts.push(w+'kg');if(bt)parts.push(bt);if(st)parts.push(st+'肤色');if(should)parts.push(should);if(face)parts.push(face);var extra=[];if(occ)extra.push('职业: '+occ);if(pref)extra.push('偏好: '+pref);if(pain)extra.push('困扰: '+pain);if(parts.length>3||extra.length||secrets){{p.style.display='block';var previewText='\"'+parts.join('，')+'\"';if(extra.length)previewText+='\\n'+extra.join(' · ');if(secrets)previewText+='\\n🔒 身材秘密: '+secrets;t.textContent=previewText;t.style.whiteSpace='pre-line'}}else{{p.style.display='none'}}}}
-function analyzeProfilePhotos(){{var b64s=[];Object.keys(__profilePhotos).forEach(function(s){{b64s.push({{slot:s,b64:__profilePhotos[s]}})}});if(!b64s.length){{alert('请先上传至少一张照片');return}}var btn=document.getElementById('analyze-btn');btn.disabled=true;btn.textContent='📤 上传照片...';fetch('/api/profile/analyze',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{images:b64s}})}}).then(r=>r.json()).then(function(d){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';if(d.ok&&d.analysis){{var a=d.analysis;if(a.gender){{__genderVal=a.gender;setSegVal('seg-gender',a.gender);window.__genderVal=a.gender;switchBodyShapes()}}if(a.estimated_height_cm&&parseInt(a.estimated_height_cm)>0)document.getElementById('pf-height').value=a.estimated_height_cm;if(a.body_type){{__bodyVal=a.body_type;setSegVal('seg-body',a.body_type)}}if(a.skin_tone){{__skinVal=a.skin_tone;setSegVal('seg-skin',a.skin_tone)}}if(a.shoulder_type){{__shoulderVal=a.shoulder_type;setSegVal('seg-shoulder',a.shoulder_type)}}if(a.face_shape){{__faceVal=a.face_shape;setSegVal('seg-face',a.face_shape)}}updateProfilePreview();updateProfileGuide();alert('✅ AI 分析完成，请核对并修正')}}else{{alert('AI 分析失败，请手动填写')}}}}).catch(function(e){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';alert('网络错误: '+e.message)}})}}
+function analyzeProfilePhotos(){{var b64s=[];Object.keys(__profilePhotos).forEach(function(s){{b64s.push({{slot:s,b64:__profilePhotos[s]}})}});if(!b64s.length){{alert('请先上传至少一张照片');return}}var btn=document.getElementById('analyze-btn');btn.disabled=true;btn.textContent='📤 上传照片...';fetch('/api/profile/analyze',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{images:b64s}})}}).then(r=>r.json()).then(function(d){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';if(d.ok&&d.analysis){{var a=d.analysis;if(a.gender){{__genderVal=a.gender;switchBodyShapes(a.gender)}}if(a.estimated_height_cm&&parseInt(a.estimated_height_cm)>0)document.getElementById('pf-height').value=a.estimated_height_cm;if(a.body_type){{__bodyVal=a.body_type;setSegVal('seg-body',a.body_type)}}if(a.skin_tone){{__skinVal=a.skin_tone;setSegVal('seg-skin',a.skin_tone)}}if(a.shoulder_type){{__shoulderVal=a.shoulder_type;setSegVal('seg-shoulder',a.shoulder_type)}}if(a.face_shape){{__faceVal=a.face_shape;setSegVal('seg-face',a.face_shape)}}updateProfilePreview();updateProfileGuide();alert('✅ AI 分析完成，请核对并修正')}}else{{alert('AI 分析失败，请手动填写')}}}}).catch(function(e){{btn.disabled=false;btn.textContent='🔍 AI 分析照片中的身形';alert('网络错误: '+e.message)}})}}
 function setSegVal(groupId,val){{var grp=document.getElementById(groupId);if(!grp)return;var found=false;grp.querySelectorAll('.seg-choice').forEach(function(c){{c.classList.remove('selected');if(c.dataset.val===val){{c.classList.add('selected');found=true}}}});if(!found){{var first=grp.querySelector('.seg-choice');if(first)first.classList.add('selected')}}}}
-function saveProfile(){{var btn=document.getElementById('profile-save-btn');btn.disabled=true;btn.textContent='保存中...';var h=document.getElementById('pf-height').value.trim();var w=document.getElementById('pf-weight').value.trim();var age=document.getElementById('pf-age').value.trim();var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();var bodySecrets=document.getElementById('pf-body-secrets').value.trim();var useImg=document.getElementById('toggle-use-image').classList.contains('on');var data={{use_my_image:useImg,gender:__genderVal,height_cm:h,weight_kg:w,age:age,body_type:__bodyVal,skin_tone:__skinVal,shoulder_type:__shoulderVal,face_shape:__faceVal,occupation:occ,style_preference:pref,pain_points:pain,body_secrets:bodySecrets}};fetch('/api/profile/save',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(data)}}).then(r=>r.json()).then(function(d){{if(d.ok){{btn.textContent='✅ 已保存';btn.classList.add('saved');setTimeout(function(){{btn.textContent='保存形象信息';btn.classList.remove('saved');btn.disabled=false}},2000)}}else{{btn.disabled=false;btn.textContent='保存失败，重试'}}}}).catch(function(e){{btn.disabled=false;btn.textContent='网络错误，重试'}})}}
+function saveProfile(){{var btn=document.getElementById('profile-save-btn');btn.disabled=true;btn.textContent='保存中...';var h=document.getElementById('pf-height').value.trim();var w=document.getElementById('pf-weight').value.trim();var age=document.getElementById('pf-age').value.trim();var occ=document.getElementById('pf-occupation').value.trim();var pref=document.getElementById('pf-style-pref').value.trim();var pain=document.getElementById('pf-pain-points').value.trim();var bodySecrets=document.getElementById('pf-body-secrets').value.trim();var useImg=document.getElementById('toggle-use-image').classList.contains('on');var data={{use_my_image:useImg,height_cm:h,weight_kg:w,age:age,body_type:__bodyVal,skin_tone:__skinVal,shoulder_type:__shoulderVal,face_shape:__faceVal,occupation:occ,style_preference:pref,pain_points:pain,body_secrets:bodySecrets}};fetch('/api/profile/save',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify(data)}}).then(r=>r.json()).then(function(d){{if(d.ok){{btn.textContent='✅ 已保存';btn.classList.add('saved');setTimeout(function(){{btn.textContent='保存形象信息';btn.classList.remove('saved');btn.disabled=false}},2000)}}else{{btn.disabled=false;btn.textContent='保存失败，重试'}}}}).catch(function(e){{btn.disabled=false;btn.textContent='网络错误，重试'}})}}
 function resetProfile(){{if(!confirm('确定恢复默认吗？所有形象数据将被清除。'))return;fetch('/api/profile/reset').then(function(){{location.reload()}}).catch(function(){{location.reload()}})}}
 /* ═══ 加载我的形象 ═══ */
 var __profileLoaded=false;
-function loadProfile(){{if(__profileLoaded)return;__profileLoaded=true;fetch('/api/profile').then(r=>r.json()).then(function(d){{var p=d.profile;if(!p)return;if(p.gender){{__genderVal=p.gender;setSegVal('seg-gender',p.gender);switchBodyShapes()}}if(p.height)document.getElementById('pf-height').value=p.height;if(p.weight)document.getElementById('pf-weight').value=p.weight;if(p.age)document.getElementById('pf-age').value=p.age;if(p.body_type){{__bodyVal=p.body_type;setSegVal('seg-body',p.body_type)}}if(p.skin_tone){{__skinVal=p.skin_tone;setSegVal('seg-skin',p.skin_tone)}}if(p.shoulder_type){{__shoulderVal=p.shoulder_type;setSegVal('seg-shoulder',p.shoulder_type)}}if(p.face_shape){{__faceVal=p.face_shape;setSegVal('seg-face',p.face_shape)}}if(p.occupation)document.getElementById('pf-occupation').value=p.occupation;if(p.style_preference)document.getElementById('pf-style-pref').value=p.style_preference;if(p.pain_points)document.getElementById('pf-pain-points').value=p.pain_points;if(p.body_secrets)document.getElementById('pf-body-secrets').value=p.body_secrets;var toggle=document.getElementById('toggle-use-image');var detail=document.getElementById('profile-detail');if(p.use_my_image===false){{toggle.classList.remove('on');detail.style.display='none'}}else{{toggle.classList.add('on');detail.style.display='block'}}/* load photos */if(p.photos){{Object.keys(p.photos).forEach(function(slot){{var slotId='slot-'+slot.replace(/_/g,'-').replace('full-body-front','full').replace('face-closeup','face').replace('full-body-side','side');var el=document.getElementById(slotId);if(el&&p.photos[slot]){{el.classList.add('has-photo');var img=el.querySelector('.photo-slot-preview');if(img)img.src=(__USER__?'/api/image?f=':'../')+p.photos[slot]+'?t='+Date.now()}}}})}}updateProfilePreview();updateProfileGuide()}}).catch(function(){{}})}}
+function loadProfile(){{if(__profileLoaded)return;__profileLoaded=true;fetch('/api/profile').then(r=>r.json()).then(function(d){{var p=d.profile;if(!p)return;if(p.gender){{__genderVal=p.gender;switchBodyShapes(p.gender)}}if(p.height)document.getElementById('pf-height').value=p.height;if(p.weight)document.getElementById('pf-weight').value=p.weight;if(p.age)document.getElementById('pf-age').value=p.age;if(p.body_type){{__bodyVal=p.body_type;setSegVal('seg-body',p.body_type)}}if(p.skin_tone){{__skinVal=p.skin_tone;setSegVal('seg-skin',p.skin_tone)}}if(p.shoulder_type){{__shoulderVal=p.shoulder_type;setSegVal('seg-shoulder',p.shoulder_type)}}if(p.face_shape){{__faceVal=p.face_shape;setSegVal('seg-face',p.face_shape)}}if(p.occupation)document.getElementById('pf-occupation').value=p.occupation;if(p.style_preference)document.getElementById('pf-style-pref').value=p.style_preference;if(p.pain_points)document.getElementById('pf-pain-points').value=p.pain_points;if(p.body_secrets)document.getElementById('pf-body-secrets').value=p.body_secrets;var toggle=document.getElementById('toggle-use-image');var detail=document.getElementById('profile-detail');if(p.use_my_image===false){{toggle.classList.remove('on');detail.style.display='none'}}else{{toggle.classList.add('on');detail.style.display='block'}}/* load photos */if(p.photos){{Object.keys(p.photos).forEach(function(slot){{var slotId='slot-'+slot.replace(/_/g,'-').replace('full-body-front','full').replace('face-closeup','face').replace('full-body-side','side');var el=document.getElementById(slotId);if(el&&p.photos[slot]){{el.classList.add('has-photo');var img=el.querySelector('.photo-slot-preview');if(img)img.src=(__USER__?'/api/image?f=':'../')+p.photos[slot]+'?t='+Date.now()}}}})}}updateProfilePreview();updateProfileGuide()}}).catch(function(){{}})}}
 function setPreference(mode){{fetch('/setpref?mode='+mode).catch(function(){{}})}}
 /* ═══ 添加页 ═══ */
 var __addImages=[];

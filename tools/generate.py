@@ -8,6 +8,11 @@ Pass 2: Pass1最佳图 + 帽子 + 包 + 墨镜 + 袜子 + 配饰 → 精确配�
 import os, sys, json, base64, urllib.request, time, io
 from PIL import Image
 
+# ── 确保项目根目录在 sys.path（子进程需要）──
+_PROJ_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _PROJ_ROOT not in sys.path:
+    sys.path.insert(0, _PROJ_ROOT)
+
 # ── 多用户支持 ──
 import sys as _sys
 _USER_ID = None

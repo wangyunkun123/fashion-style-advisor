@@ -561,8 +561,9 @@ def _get_item_last_worn(all_outfits_with_dates):
 def _get_three_star_counts():
     """统计每件单品在3星outfit中出现的次数"""
     counts = {}
-    for d in sorted(os.listdir(OUTFITS_DIR)):
-        rp = os.path.join(OUTFITS_DIR, d, 'rating.json')
+    outfits_dir = _resolve_outfits_dir()
+    for d in sorted(os.listdir(outfits_dir)):
+        rp = os.path.join(outfits_dir, d, 'rating.json')
         if not os.path.exists(rp):
             continue
         try:
@@ -570,7 +571,7 @@ def _get_three_star_counts():
                 r = json.load(f)
             if r.get('rating') != 3:
                 continue
-            md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
+            md = os.path.join(outfits_dir, d, 'outfit.md')
             if os.path.exists(md):
                 with open(md) as f:
                     content = f.read()
@@ -685,9 +686,10 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     # ── 评分历史 ──
     rating_history = []
     all_outfits_dates = []  # [(date_str, [item_ids]), ...]
-    for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
-        rp = os.path.join(OUTFITS_DIR, d, 'rating.json')
-        md = os.path.join(OUTFITS_DIR, d, 'outfit.md')
+    outfits_dir = _resolve_outfits_dir()
+    for d in sorted(os.listdir(outfits_dir), reverse=True):
+        rp = os.path.join(outfits_dir, d, 'rating.json')
+        md = os.path.join(outfits_dir, d, 'outfit.md')
         if not os.path.exists(md):
             continue
         try:
@@ -832,13 +834,16 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     HOT_THRESHOLD = 25   # >25°C 跳过非夏季品类
     COLD_THRESHOLD = 15  # <15°C 确保保暖品类
     skipped_cats = []
+    hot_alert_cats = []  # 高温标注但不删除（女性轻薄长袖/针织夏季可穿）
     for cat in list(cats.keys()):
         items_in_cat = cats[cat]
         if temp_high >= HOT_THRESHOLD:
-            # 炎热：跳过外套、长袖上衣
-            if cat in ('外套', '长袖上衣'):
+            # 炎热：跳过厚外套（保留长袖上衣/针织衫—女性夏季有轻薄款）
+            if cat in ('外套',):
                 skipped_cats.append(f'{cat}({len(items_in_cat)}件，天热跳过)')
                 del cats[cat]
+            elif cat in ('长袖上衣', '针织衫'):
+                hot_alert_cats.append(f'{cat}({len(items_in_cat)}件，优选轻薄面料)')
         elif temp_high <= COLD_THRESHOLD:
             # 寒冷：跳过背心、短裤
             if cat in ('背心', '短裤'):
@@ -847,6 +852,9 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     if skipped_cats:
         skipped_str = '、'.join(skipped_cats)
         cooldown_summary_lines.insert(0, f'🌡️ 温度{temp_high}°C — 自动跳过: {skipped_str}')
+    if hot_alert_cats:
+        alert_str = '、'.join(hot_alert_cats)
+        cooldown_summary_lines.insert(0, f'🌡️ 温度{temp_high}°C — {alert_str}')
 
     # ── 温度过低保险：确保外套和长袖存在 ──
     if temp_high <= COLD_THRESHOLD:
@@ -856,7 +864,8 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
             cooldown_summary_lines.insert(0, '🧥 低温保险: 请务必选择长袖上衣 + 外套')
 
     # ── 表格输出 ──
-    cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '长裤', '短裤',
+    cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '针织衫', '连衣裙', '套装',
+                 '长裤', '短裤', '短裙', '半身裙',
                  '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
     lines = []
     for cat in cat_order:
@@ -1163,7 +1172,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     gender_audience = '亚洲女性穿搭' if is_female else '亚洲男性穿搭'
 
     quality_checklist = f"""⚠️ 推荐质量检查（请在选品时逐项确认）：
-□ 三件套齐全：上衣 + 下装 + 鞋子，缺一不可
+□ 核心单品齐全：上衣+下装+鞋子（或连衣裙+鞋子），缺一不可
 □ 配色协调：无红绿/橙蓝等冲突撞色，整体色调统一
 □ 风格连贯：每件单品对目标风格的匹配分 ≥ 30
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
@@ -1207,7 +1216,8 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 }}
 
 注意：
-- 每套必须包含上衣、下装、鞋子（硬性要求，缺一不可）
+- 每套必须包含上衣、下装、鞋子（硬性要求，缺一不可）。⚠️ 例外：选连衣裙时只需连衣裙+鞋子（连衣裙=上衣+下装一体）
+- 针织衫/毛衣可作为上衣使用
 - 配件按场景需要选择，有理由才加，不铺满全身（例：运动→帽+包/晴天户外→墨镜/商务→手表/寒冷→保暖配件/日常休闲→0-1件，非穷举，根据实际场景灵活判断）
 - ⚠️ 严禁添加第二件上衣（如长袖/衬衫/外套叠穿），除非场景明确需要（如寒冷天气）
 - 运动场景（网球/跑步/健身）只选1件上衣+1件下装+1双运动鞋，可叠加功能性配件（帽子/运动包/运动墨镜/运动袜）
@@ -1263,13 +1273,25 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 # ============================================================
 
 def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
-                          occasion, explore_level, temp_high, weather_cond):
+                          occasion, explore_level, temp_high, weather_cond, user_id=None):
     """构建 Round 2「创作」prompt — 基于已选单品，生成 seedream_prompt/穿搭技巧/推荐理由/关键词
 
     selection: Round 1 的 AI 输出 dict，含 items/color_story/silhouette/anchor/style
+    user_id: 多用户上下文，用于确定性别
     """
     all_clothes = load_all_clothing()
     today = time.strftime('%Y-%m-%d')
+
+    # ── 性别感知 ──
+    is_female = False
+    if user_id:
+        import os as _os
+        up_path_check = _os.path.join(_os.path.dirname(CONFIG_DIR), 'users', user_id, 'profile.json')
+        if _os.path.exists(up_path_check):
+            up_check = load_json(up_path_check)
+            is_female = (up_check.get('gender', 'female') == 'female')
+    gender_label = '女性' if is_female else '男性'
+    gender_en = 'woman' if is_female else 'man'
 
     # ── 构建单品详情文本 ──
     item_lines = []
@@ -1311,7 +1333,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
         emoji = '🚀' if explore_level >= 0.8 else '🧪'
         explore_note = f'\n{emoji} 探索度: {explore_level} — 鼓励创意发挥\n'
 
-    system_prompt = f"""你是专攻亚洲男性穿搭的 AI 时尚顾问（创作模式）。
+    system_prompt = f"""你是专攻亚洲{gender_label}穿搭的 AI 时尚顾问（创作模式）。
 
 你的任务是基于已选定的穿搭单品，生成面向消费者的穿搭叙事内容。单品已经确定，你不需要再选品。
 
@@ -1397,14 +1419,21 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
     cat_codes = [d['detail'].get('category_code', '') for d in outfit_details]
 
     # ── 1. 三件套齐全 ──
-    has_top = any(c in CORE_CATS.intersection({'TS', 'LS', 'TANK', 'SHIRT', 'JK'}) for c in cat_codes)
-    has_bottom = any(c in {'SH', 'PT'} for c in cat_codes)
+    # 连衣裙/套装可替代上衣+下装
+    has_dress = any(c == 'DRESS' for c in cat_codes)
+    has_suit = any(c == 'SUIT' for c in cat_codes)
+    has_top = any(c in {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'KNIT', 'BLOUSE'} for c in cat_codes)
+    has_bottom = any(c in {'SH', 'PT', 'SKIRT'} for c in cat_codes)
     has_shoe = any(c == 'SHOE' for c in cat_codes)
 
-    if not has_top:
-        violations.append('缺少上衣')
-    if not has_bottom:
-        violations.append('缺少下装')
+    if has_dress or has_suit:
+        # 连衣裙/套装 = 上衣 + 下装一体，只需再配鞋子
+        pass  # 不要求单独的上衣/下装
+    else:
+        if not has_top:
+            violations.append('缺少上衣')
+        if not has_bottom:
+            violations.append('缺少下装')
     if not has_shoe:
         violations.append('缺少鞋子')
 

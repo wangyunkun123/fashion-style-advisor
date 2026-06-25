@@ -294,6 +294,14 @@ def parse_outfit_md(md_path):
 # 禁用 / 最近 / 穿着统计（消除 3 处重复）
 # ═══════════════════════════════════════════════════════════════
 
+def _get_active_outfits_dir():
+    """多用户感知：返回当前活跃用户的 outfits 目录"""
+    uid = get_thread_user()
+    if uid and uid != 'default':
+        return resolve_outfits_dir(uid)
+    return OUTFITS_DIR
+
+
 def get_banned_items():
     """获取一星差评禁用的单品清单（统一版，消除 3 处重复定义）
 
@@ -301,10 +309,11 @@ def get_banned_items():
     旧数据兼容：fallback 到 outfit 中所有单品。
     """
     banned = []
-    if not os.path.exists(OUTFITS_DIR):
+    outfits_dir = _get_active_outfits_dir()
+    if not os.path.exists(outfits_dir):
         return banned
-    for d in os.listdir(OUTFITS_DIR):
-        dp = os.path.join(OUTFITS_DIR, d)
+    for d in os.listdir(outfits_dir):
+        dp = os.path.join(outfits_dir, d)
         if not os.path.isdir(dp):
             continue
         rating_file = os.path.join(dp, 'rating.json')
@@ -342,10 +351,11 @@ def get_recent_outfits(limit=7, include_today=True):
     """
     today = time.strftime('%Y-%m-%d')
     recent = []
-    if not os.path.exists(OUTFITS_DIR):
+    outfits_dir = _get_active_outfits_dir()
+    if not os.path.exists(outfits_dir):
         return recent
-    for d in sorted(os.listdir(OUTFITS_DIR), reverse=True):
-        dp = os.path.join(OUTFITS_DIR, d)
+    for d in sorted(os.listdir(outfits_dir), reverse=True):
+        dp = os.path.join(outfits_dir, d)
         if not os.path.isdir(dp) or d.startswith('.'):
             continue
         if not include_today and d.startswith(today):
@@ -371,10 +381,11 @@ def get_recent_outfits(limit=7, include_today=True):
 def get_wear_counts():
     """统计每件单品的穿着次数（从所有 outfit.md 中统计）"""
     counts = {}
-    if not os.path.exists(OUTFITS_DIR):
+    outfits_dir = _get_active_outfits_dir()
+    if not os.path.exists(outfits_dir):
         return counts
-    for d in os.listdir(OUTFITS_DIR):
-        dp = os.path.join(OUTFITS_DIR, d)
+    for d in os.listdir(outfits_dir):
+        dp = os.path.join(outfits_dir, d)
         md = os.path.join(dp, 'outfit.md')
         if not os.path.exists(md):
             continue

@@ -1,13 +1,17 @@
 {
-  "generated_at": "2026-06-25T04:16:14Z",
+  "generated_at": "2026-06-25T04:50:27Z",
   "user_id": "alice",
-  "items_used": [],
-  "style_matched": "",
+  "items_used": [
+    "PT-004",
+    "SHOE-005",
+    "HAT-002"
+  ],
+  "style_matched": "日系休闲",
   "occasion": "日常",
   "explore_level": 0.0,
   "user_tap": null,
   "user_rating": null,
   "user_wore": null,
-  "generation_time_ms": 34461,
-  "api_calls": 3
+  "generation_time_ms": 43647,
+  "api_calls": 2
 }

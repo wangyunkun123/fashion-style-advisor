@@ -3058,6 +3058,12 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     t_start = time.time()
     log(f"🚀 管线启动: {style_hint}")
 
+    # ── 多用户上下文（必须在所有数据加载之前设置！后台线程不继承父线程的 threading.local()）──
+    pipeline_user = user_id
+    if pipeline_user and pipeline_user != 'default':
+        from tools.common import set_thread_user as _set_thread_user
+        _set_thread_user(pipeline_user)
+
     # ── 🆕 统一意图解析（Phase 1 正则 + Phase 2 LLM）──
     from tools.intent_parser import parse_user_intent, get_recent_new_item_ids
     intent = parse_user_intent(style_hint)
@@ -3171,13 +3177,6 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             log(f"🆕 用户想要新品: {len(recent_new)}件最近入库单品 → {new_ids[:5]}")
         else:
             log(f"🆕 用户想要新品但最近14天无新入库单品")
-
-    # ── 获取当前管线用户上下文 ──
-    pipeline_user = user_id
-    # 设置线程本地用户上下文（后台线程不继承父线程的 threading.local()）
-    if pipeline_user and pipeline_user != 'default':
-        from tools.common import set_thread_user as _set_thread_user
-        _set_thread_user(pipeline_user)
 
     # ── 构建数据增强 prompt（统一管线）──
     prompt_data = build_enhanced_prompt(
@@ -3304,7 +3303,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         photo_direction = prompt_data.get('photo_direction', '')
         r2_prompt = build_creation_prompt(
             plan, photo_direction, target_styles, style_hint,
-            occasion, explore_level, temp_high, weather_cond
+            occasion, explore_level, temp_high, weather_cond, user_id=pipeline_user
         )
         r2_content = call_doubao_chat([
             {'role': 'system', 'content': r2_prompt['system_prompt']},
@@ -3367,7 +3366,10 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         step_done()
 
         progress('🎨 Seedream AI 生图')
-        out2 = run_cli(['python3', 'tools/generate.py', style_hint], timeout=300)
+        _gen_cmd = ['python3', 'tools/generate.py', style_hint]
+        if pipeline_user and pipeline_user != 'default':
+            _gen_cmd += ['--user', pipeline_user]
+        out2 = run_cli(_gen_cmd, timeout=300)
         # 检测生图失败：空输出/超时/错误标记
         if not out2 or '⏰' in out2 or '❌' in out2[:200] or '失败' in out2[:200]:
             raise RuntimeError(f'Seedream 生图失败: {out2[:300] if out2 else "无输出（可能超时）"}')
@@ -4332,7 +4334,9 @@ class WebhookHandler(BaseHTTPRequestHandler):
             if msg:
                 action, extra = match_command(msg)
                 if action in ('generate', 'recommend', 'today'):
-                    tid = _start_async_pipeline('recommend', extra or '今日穿搭')
+                    _uid = getattr(self, 'user_id', None)
+                    _uid = _uid if _uid and _uid != 'default' else None
+                    tid = _start_async_pipeline('recommend', extra or '今日穿搭', _uid)
                     self._html_resp(200, REDIRECT_HTML)
                 else:
                     result = execute_action(action, extra)
@@ -4445,7 +4449,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not style_id:
                 self._json_resp(400, {"error": "缺少风格 ID"}); return
             try:
-                tid = _start_async_pipeline('generate', style_id)
+                _uid = getattr(self, 'user_id', None)
+                _uid = _uid if _uid and _uid != 'default' else None
+                tid = _start_async_pipeline('generate', style_id, _uid)
                 log(f"🔥 远程试穿: {style_id} → task {tid}")
                 self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_id} 穿搭"})
             except Exception as e:
@@ -5157,7 +5163,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 if not style_id:
                     self._json_resp(400, {"error": "缺少风格 ID"})
                     return
-                tid = _start_async_pipeline('generate', style_id)
+                _uid = getattr(self, 'user_id', None)
+                _uid = _uid if _uid and _uid != 'default' else None
+                tid = _start_async_pipeline('generate', style_id, _uid)
                 self._json_resp(200, {"ok": True, "task_id": tid, "message": f"开始生成 {style_id} 穿搭"})
                 return
             except Exception as e:

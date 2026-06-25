@@ -3943,47 +3943,135 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
     return styles
 
 
-def _get_dynamic_mode_styles(mode, user_id=None):
-    """
-    根据用户评分数据动态计算三种模式应展示的风格列表。
-    替代旧的硬编码 comfort_ids / transform_ids / cross_ids。
+# ═══════════════════════════════════════════════════════════════
+# Explore 个性化匹配 — 辅助函数
+# ═══════════════════════════════════════════════════════════════
 
-    mode: 'tweak' (日常穿搭) | 'transform' (改变自己) | 'cross' (大胆跨界)
-
-    策略:
-      - tweak:  舒适区风格（3星满意）+ 无评分时 fallback 到 trend_category==classic
-      - transform: 舒适区的 related_styles + trend_category==popular_trend
-      - cross:  未探索风格 + 舒适区 conflicting_styles + trend_category==niche
-    """
-    styles = _load_style_cards(with_top_items=True, user_id=user_id)
-
-    # 尝试加载用户舒适区
-    comfort_styles = set()
-    explored_styles = set()
-    unexplored_styles = set()
-    disliked_styles = set()
-    comfort_related = set()
+def _load_user_style_context(user_id):
+    """加载用户个性化数据源，返回统一 context dict。
+    包含: style_prefs (引导选择), gender, has_clothing, has_ratings"""
+    ctx = {
+        'style_prefs': [],
+        'gender': 'male',
+        'has_clothing': False,
+        'has_ratings': False,
+    }
+    if not user_id or user_id == 'default':
+        return ctx
 
     try:
-        sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
-        from style_lab import get_user_comfort_zone, load_all_styles as _lab_load_all
-        zone = get_user_comfort_zone()
-        comfort_styles = set(zone.get('comfort_styles', []))
-        explored_styles = set(zone.get('explored_styles', []))
-        unexplored_styles = set(zone.get('unexplored_styles', []))
-        disliked_styles = set(zone.get('disliked_styles', []))
+        # 读取 profile.json
+        profile_path = os.path.join(resolve_user_dir(user_id), 'profile.json')
+        if os.path.exists(profile_path):
+            with open(profile_path) as f:
+                p = json.load(f)
+            ctx['style_prefs'] = p.get('style_prefs', []) or []
+            ctx['gender'] = p.get('gender', 'male')
 
-        # 计算舒适区的 related_styles (step 距离)
-        all_s = _lab_load_all()
-        for cs in comfort_styles:
-            style_data = all_s.get(cs, {})
-            for rs in style_data.get('related_styles', []):
-                if rs not in disliked_styles and rs not in comfort_styles:
-                    comfort_related.add(rs)
+        # 检查衣橱数据
+        tags_dir = os.path.join(resolve_user_dir(user_id), 'wardrobe', 'tags')
+        if os.path.isdir(tags_dir):
+            jsons = [f for f in os.listdir(tags_dir) if f.endswith('.json') and f != 'SCORE_CACHE.json']
+            ctx['has_clothing'] = len(jsons) > 0
+
+        # 检查评分历史
+        outfits_dir = os.path.join(resolve_user_dir(user_id), 'outfits')
+        if os.path.isdir(outfits_dir):
+            for d in os.listdir(outfits_dir):
+                rp = os.path.join(outfits_dir, d, 'rating.json')
+                if os.path.exists(rp):
+                    ctx['has_ratings'] = True
+                    break
     except Exception:
         pass
 
-    # ── 加载 trend_category 映射（从 categories.json）──
+    return ctx
+
+
+def _load_all_style_fingerprints(gender):
+    """按性别加载全部风格指纹，返回 {style_id: fingerprint_dict}
+    每个 fingerprint 包含 related_styles, conflicting_styles 等字段。
+    替代 style_lab.load_all_styles()（旧路径已失效）。"""
+    fps = {}
+    if gender == 'female':
+        women_dir = os.path.join(PROJECT_DIR, 'styles/female')
+        if os.path.isdir(women_dir):
+            for d in sorted(os.listdir(women_dir)):
+                if d.startswith('.') or d.startswith('_'): continue
+                dp = os.path.join(women_dir, d)
+                if not os.path.isdir(dp): continue
+                fp_path = os.path.join(dp, 'fingerprint.json')
+                if os.path.exists(fp_path):
+                    try:
+                        with open(fp_path) as f:
+                            fd = json.load(f)
+                        sid = fd.get('style_id', d)
+                        fps[sid] = fd
+                    except Exception:
+                        pass
+    else:
+        male_dir = os.path.join(PROJECT_DIR, 'styles/male')
+        if os.path.isdir(male_dir):
+            for fn in sorted(os.listdir(male_dir)):
+                if not fn.endswith('.json'): continue
+                fp_path = os.path.join(male_dir, fn)
+                try:
+                    with open(fp_path) as f:
+                        fd = json.load(f)
+                    sid = fd.get('style_id', fn.replace('.json', ''))
+                    fps[sid] = fd
+                except Exception:
+                    pass
+    return fps
+
+
+def _compute_wardrobe_style_affinity(user_id, gender, style_ids):
+    """计算用户衣橱与候选风格的匹配度。
+    返回 {style_id: {'avg_score': float, 'item_count': int, 'top_items': list}}"""
+    affinity = {}
+    if not user_id or not style_ids:
+        return affinity
+
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
+        from style_matcher import rank_items_for_style
+        for sid in style_ids:
+            try:
+                ranked = rank_items_for_style(sid, top_n=10, min_score=15)
+                if ranked:
+                    scores = [it['score'] for it in ranked]
+                    affinity[sid] = {
+                        'avg_score': round(sum(scores) / len(scores), 1),
+                        'item_count': len(ranked),
+                        'top_items': [it['clothing_id'] for it in ranked[:3]],
+                    }
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    return affinity
+
+
+def _get_dynamic_mode_styles(mode, user_id=None):
+    """根据用户个性化数据计算三种探索模式应展示的风格列表。
+
+    mode: 'tweak' (日常穿搭) | 'transform' (改变自己) | 'cross' (大胆跨界)
+
+    信号优先级: style_prefs (引导选择) > 评分舒适区 > 衣橱匹配 > 趋势fallback
+    无任何数据时返回 {'styles': [], 'hint': '...'} 提示用户完成引导或上传衣服。
+    """
+    styles = _load_style_cards(with_top_items=True, user_id=user_id)
+
+    # ── 1. 加载用户上下文 ──
+    ctx = _load_user_style_context(user_id)
+    gender = ctx.get('gender', 'male')
+    style_prefs = set(ctx.get('style_prefs', []))
+
+    # ── 2. 加载全部风格指纹（related/conflicting 关系）──
+    all_fps = _load_all_style_fingerprints(gender)
+
+    # ── 3. 加载 trend_category 映射 ──
     trend_map = {}
     for cat_path in [
         os.path.join(PROJECT_DIR, 'styles_universal', 'categories.json'),
@@ -3997,76 +4085,161 @@ def _get_dynamic_mode_styles(mode, user_id=None):
                     tc = info.get('trend_category')
                     if tc:
                         trend_map[sid] = tc
-                        # 也按 dir 名映射（女性风格用 dir 作 id）
                         d = info.get('dir', '')
                         if d and d != sid:
                             trend_map[d] = tc
             except Exception:
                 pass
 
-    # ── 按模式过滤 ──
+    # ── 4. 加载评分舒适区 ──
+    comfort_styles = set()
+    explored_styles = set()
+    unexplored_styles = set()
+    disliked_styles = set()
+    try:
+        sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
+        from style_lab import get_user_comfort_zone
+        zone = get_user_comfort_zone()
+        comfort_styles = set(zone.get('comfort_styles', []))
+        explored_styles = set(zone.get('explored_styles', []))
+        unexplored_styles = set(zone.get('unexplored_styles', []))
+        disliked_styles = set(zone.get('disliked_styles', []))
+    except Exception:
+        pass
+
+    # ── 5. 构建核心风格集 (core = style_prefs + comfort_styles) ──
+    core = style_prefs | comfort_styles
+
+    # 从指纹中解析 related_styles 和 conflicting_styles
+    def _related_of(sid_set):
+        rel = set()
+        for sid in sid_set:
+            fp = all_fps.get(sid, {})
+            for rs in fp.get('related_styles', []):
+                if rs not in sid_set and rs not in disliked_styles:
+                    rel.add(rs)
+        return rel
+
+    def _conflicting_of(sid_set):
+        conf = set()
+        for sid in sid_set:
+            fp = all_fps.get(sid, {})
+            for cs in fp.get('conflicting_styles', []):
+                if cs not in sid_set and cs not in disliked_styles:
+                    conf.add(cs)
+        return conf
+
+    # ── 6. 判断数据可用性 ──
+    has_any_data = bool(style_prefs) or ctx.get('has_clothing') or ctx.get('has_ratings')
+
+    # ── 7. 按模式过滤 ──
+    filtered = []
+
     if mode == 'tweak':
+        candidate_ids = set()
+
+        # Tier 1: style_prefs (引导阶段选择的风格)
+        if style_prefs:
+            candidate_ids |= style_prefs
+
+        # Tier 2: comfort_styles (评分舒适区)
         if comfort_styles:
-            # 有评分数据：展示舒适区风格
-            filtered = [s for s in styles if s['id'] in comfort_styles]
+            candidate_ids |= comfort_styles
+
+        # Tier 3: 衣橱高匹配
+        if ctx.get('has_clothing') and not candidate_ids:
+            all_ids = [s['id'] for s in styles]
+            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
+            top = sorted(aff.items(), key=lambda x: -x[1]['avg_score'])[:5]
+            candidate_ids |= {sid for sid, _ in top}
+
+        # 过滤
+        if candidate_ids:
+            filtered = [s for s in styles if s['id'] in candidate_ids]
         else:
-            # 无评分数据：fallback 经典风格
             filtered = [s for s in styles if trend_map.get(s['id']) == 'classic']
-            if len(filtered) < 3:
-                filtered = styles[:6]  # 终极兜底
-        # 标记舒适距离
+
         for s in filtered:
             s['comfort_distance'] = 'adjacent'
 
     elif mode == 'transform':
-        if comfort_styles and comfort_related:
-            # 有评分数据：舒适区相关 + 流行趋势
-            candidate_ids = comfort_related | {
-                s['id'] for s in styles
-                if trend_map.get(s['id']) == 'popular_trend' and s['id'] not in comfort_styles
-            }
-            filtered = [s for s in styles if s['id'] in candidate_ids and s['id'] not in disliked_styles]
+        candidate_ids = set()
+
+        # Tier 1: core 的 related_styles
+        if core:
+            candidate_ids |= _related_of(core)
+
+        # Tier 2: popular_trend（排除已在 core 的）
+        candidate_ids |= {s['id'] for s in styles
+                          if trend_map.get(s['id']) == 'popular_trend'
+                          and s['id'] not in core}
+
+        # Tier 3: 衣橱中分匹配
+        if ctx.get('has_clothing') and not candidate_ids:
+            all_ids = [s['id'] for s in styles]
+            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
+            sorted_aff = sorted(aff.items(), key=lambda x: -x[1]['avg_score'])
+            mid = sorted_aff[3:10] if len(sorted_aff) > 3 else sorted_aff
+            candidate_ids |= {sid for sid, _ in mid}
+
+        if candidate_ids:
+            filtered = [s for s in styles if s['id'] in candidate_ids
+                        and s['id'] not in disliked_styles]
         else:
-            # 无评分数据：流行趋势为主
             filtered = [s for s in styles if trend_map.get(s['id']) == 'popular_trend']
-            if len(filtered) < 2:
-                filtered = styles[3:9] if len(styles) >= 9 else styles  # 兜底
+
         for s in filtered:
-            s['comfort_distance'] = 'step' if s['id'] in comfort_related else 'adjacent'
+            is_related = core and s['id'] in _related_of(core)
+            s['comfort_distance'] = 'step' if is_related else 'adjacent'
 
     elif mode == 'cross':
-        if comfort_styles and (unexplored_styles or disliked_styles):
-            # 有评分数据：未探索 + 冲突风格
-            candidate_ids = set(unexplored_styles)
-            # 加入舒适区的 conflicting_styles
-            try:
-                all_s = _lab_load_all()
-                for cs in comfort_styles:
-                    style_data = all_s.get(cs, {})
-                    for cfs in style_data.get('conflicting_styles', []):
-                        if cfs not in disliked_styles:
-                            candidate_ids.add(cfs)
-            except Exception:
-                pass
-            # 也加入 小众领域
-            candidate_ids |= {
-                s['id'] for s in styles
-                if trend_map.get(s['id']) == 'niche' and s['id'] not in comfort_styles
-            }
-            candidate_ids -= disliked_styles
+        candidate_ids = set()
+
+        # Tier 1: core 的 conflicting_styles
+        if core:
+            candidate_ids |= _conflicting_of(core)
+
+        # Tier 2: unexplored + niche
+        candidate_ids |= set(unexplored_styles)
+        candidate_ids |= {s['id'] for s in styles
+                          if trend_map.get(s['id']) == 'niche'
+                          and s['id'] not in core}
+
+        # Tier 3: 衣橱低分匹配（远距离风格）
+        if ctx.get('has_clothing') and not candidate_ids:
+            all_ids = [s['id'] for s in styles]
+            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
+            sorted_aff = sorted(aff.items(), key=lambda x: x[1]['avg_score'])  # 升序
+            candidate_ids |= {sid for sid, _ in sorted_aff[:5]}
+
+        # 排除不喜欢的
+        candidate_ids -= disliked_styles
+
+        if candidate_ids:
             filtered = [s for s in styles if s['id'] in candidate_ids]
         else:
-            # 无评分数据：小众领域为主
             filtered = [s for s in styles if trend_map.get(s['id']) == 'niche']
-            if len(filtered) < 2:
-                filtered = styles[6:] if len(styles) > 6 else styles  # 兜底
+
         for s in filtered:
             s['comfort_distance'] = 'leap' if s['id'] in unexplored_styles else 'step'
 
     else:
         filtered = styles
 
-    return filtered if filtered else styles[:6]
+    # ── 8. 最终兜底 ──
+    if not filtered:
+        filtered = styles[:6]
+
+    # ── 9. 空状态提示 ──
+    if not has_any_data:
+        hints = {
+            'tweak': '请先完成风格引导或上传衣服，系统才能了解您的风格偏好',
+            'transform': '上传更多衣服后，系统会为您推荐相邻风格',
+            'cross': '探索更多风格后，系统会推荐大胆跨界的组合',
+        }
+        return {'styles': filtered, 'hint': hints.get(mode, '')}
+
+    return filtered
 
 
 # ── 聊天界面 HTML（从 prototype/mobile-v2.html 加载）───
@@ -5129,7 +5302,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 # 日常穿搭：动态舒适区（从用户评分数据推导）
                 uid = self.user_id if self.user_id != 'default' else None
                 tweak_styles = _get_dynamic_mode_styles('tweak', user_id=uid)
-                self._json_resp(200, {'styles': tweak_styles})
+                if isinstance(tweak_styles, dict):
+                    self._json_resp(200, tweak_styles)
+                else:
+                    self._json_resp(200, {'styles': tweak_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
@@ -5140,7 +5316,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 # 改变自己：舒适区邻接 + 流行趋势
                 uid = self.user_id if self.user_id != 'default' else None
                 transform_styles = _get_dynamic_mode_styles('transform', user_id=uid)
-                self._json_resp(200, {'styles': transform_styles})
+                if isinstance(transform_styles, dict):
+                    self._json_resp(200, transform_styles)
+                else:
+                    self._json_resp(200, {'styles': transform_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})
@@ -5151,7 +5330,10 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 # 大胆跨界：未探索 + 冲突风格 + 小众领域
                 uid = self.user_id if self.user_id != 'default' else None
                 cross_styles = _get_dynamic_mode_styles('cross', user_id=uid)
-                self._json_resp(200, {'styles': cross_styles})
+                if isinstance(cross_styles, dict):
+                    self._json_resp(200, cross_styles)
+                else:
+                    self._json_resp(200, {'styles': cross_styles})
                 return
             except Exception as e:
                 self._json_resp(500, {"error": str(e)})

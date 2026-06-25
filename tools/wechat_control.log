@@ -222,3 +222,102 @@ OSError: [Errno 48] Address already in use
 [12:57:58] [INFO] 📍 🎨 预压缩生图
 [12:57:58] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [12:57:58] [INFO] 📍 📤 推送 + 刷新
+[12:58:04] [INFO] 📤 Git push 成功 (尝试 1/3)
+[12:58:04] [INFO] 📱 主原型: 重建
+[12:58:04] [INFO] 📱 用户原型(alice): 已重建
+[12:58:08] [INFO] 📤 后台推送完成: 一套约会的穿搭
+[12:58:18] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:02:57] [INFO] =======================================================
+[13:02:57] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[13:02:57] [INFO] 📡 服务: http://0.0.0.0:8765
+[13:02:57] [INFO] 💬 面板: http://localhost:8765/
+[13:02:57] [INFO] 🌐 Funnel: 已就绪
+[13:02:57] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[13:02:57] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[13:06:10] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:08:36] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=295, CT=application/json)
+[13:08:36] [INFO] 👤 形象档案已保存 (alice)
+[13:08:47] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:10:09] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:10:40] [INFO] 📨 POST /api/profile/save (Content-Length=268, CT=application/json)
+[13:10:40] [INFO] 👤 形象档案已保存
+[13:10:45] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:11:10] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=292, CT=application/json)
+[13:11:10] [INFO] 👤 形象档案已保存 (alice)
+[13:11:26] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=295, CT=application/json)
+[13:11:26] [INFO] 👤 形象档案已保存 (alice)
+[13:11:34] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:12:21] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=240, CT=application/json)
+[13:12:21] [INFO] 👤 形象档案已保存 (alice)
+[13:12:35] [INFO] 📨 POST /api/profile/save (Content-Length=236, CT=application/json)
+[13:12:35] [INFO] 👤 形象档案已保存
+[13:13:03] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=131, CT=application/json)
+[13:13:03] [INFO] 👤 形象档案已保存 (alice)
+[13:15:18] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:16:02] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:16:14] [INFO] 📨 POST /api/profile/save (Content-Length=268, CT=application/json)
+[13:16:14] [INFO] 👤 形象档案已保存
+[13:16:22] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:17:19] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:17:27] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:18:24] [INFO] 📨 POST /api/profile/save (Content-Length=139, CT=application/json)
+[13:18:24] [INFO] 👤 形象档案已保存
+[13:18:24] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=128, CT=application/json)
+[13:18:24] [INFO] 👤 形象档案已保存 (alice)
+[13:19:43] [INFO] =======================================================
+[13:19:43] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[13:19:43] [INFO] 📡 服务: http://0.0.0.0:8765
+[13:19:43] [INFO] 💬 面板: http://localhost:8765/
+[13:19:43] [INFO] 🌐 Funnel: 已就绪
+[13:19:43] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[13:19:43] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[13:21:39] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:22:03] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=250, CT=application/json)
+[13:22:03] [INFO] 👤 形象档案已保存 (alice)
+[13:22:15] [INFO] 📨 POST /api/profile/save (Content-Length=268, CT=application/json)
+[13:22:15] [INFO] 👤 形象档案已保存 (alice)
+[13:22:20] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:22:27] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:22:51] [INFO] 📨 POST /api/ratings (Content-Length=342, CT=application/json)
+[13:23:02] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:23:24] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:26:24] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=163, CT=application/json)
+[13:26:24] [INFO] 👤 形象档案已保存 (alice)
+[13:27:20] [INFO] =======================================================
+[13:27:20] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[13:27:20] [INFO] 📡 服务: http://0.0.0.0:8765
+[13:27:20] [INFO] 💬 面板: http://localhost:8765/
+[13:27:20] [INFO] 🌐 Funnel: 已就绪
+[13:27:20] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[13:27:20] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[13:27:35] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=140, CT=application/json)
+[13:27:35] [INFO] 👤 形象档案已保存 (alice)
+[13:27:35] [INFO] 📨 POST /api/profile/save?user=default (Content-Length=96, CT=application/json)
+[13:27:35] [INFO] 👤 形象档案已保存
+[13:27:41] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=146, CT=application/json)
+[13:27:41] [INFO] 👤 形象档案已保存 (alice)
+[13:27:41] [INFO] 📨 POST /api/profile/save?user=default (Content-Length=213, CT=application/json)
+[13:27:41] [INFO] 👤 形象档案已保存
+[13:32:18] [INFO] 📨 POST /api/ratings?user=default (Content-Length=342, CT=application/json)
+[13:32:30] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:32:51] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=293, CT=application/json)
+[13:32:51] [INFO] 👤 形象档案已保存 (alice)
+[13:32:58] [INFO] 📨 POST /api/profile/save?user=default (Content-Length=271, CT=application/json)
+[13:32:58] [INFO] 👤 形象档案已保存
+[13:33:07] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:33:20] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=295, CT=application/json)
+[13:33:20] [INFO] 👤 形象档案已保存 (alice)
+[13:33:38] [INFO] 📨 POST /api/profile/save?user=alice (Content-Length=295, CT=application/json)
+[13:33:39] [INFO] 👤 形象档案已保存 (alice)
+[13:33:45] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=70, CT=application/json)
+[13:34:22] [INFO] 📨 POST /api/ratings?user=default (Content-Length=342, CT=application/json)
+[13:34:41] [INFO] 📨 POST /api/ratings?user=default (Content-Length=342, CT=application/json)
+[13:38:39] [INFO] 📨 POST /api/chat?user=default (Content-Length=41, CT=application/json)
+[13:38:39] [INFO] 💬 聊天: recommend | 想换一套美式的穿搭
+[13:38:39] [INFO] 🚀 管线启动: 想换一套美式的穿搭
+[13:38:50] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (10701ms)
+[13:38:50] [INFO] 📍 探索度: 安全推荐
+[13:38:51] [INFO] 📍 天气(北京): 33°C 晴
+[13:38:51] [INFO] 📍 场景: '想换一套美式的穿搭' → occasion=日常
+[13:38:52] [INFO] 📍 📊 预计 ~60-100s · ~4027 tokens
+[13:38:52] [INFO] 📍 🤖 AI 智能选品

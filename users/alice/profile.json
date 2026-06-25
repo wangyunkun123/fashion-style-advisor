@@ -1,13 +1,15 @@
 {
-  "gender": "female",
+  "gender": "女",
   "onboarding_step": 4,
   "body": {
     "height": "173",
     "weight": "55",
-    "shape": "hourglass",
-    "skin_tone": "tan",
-    "concern": "",
-    "skipped": false
+    "age": "31",
+    "shape": "沙漏型",
+    "skin_tone": "小麦",
+    "shoulder_type": "标准",
+    "face_shape": "瓜子脸",
+    "concern": ""
   },
   "style_prefs": [
     "WF-01",
@@ -23,5 +25,11 @@
     "full_body_side": "users/alice/profile/photos/user_side.jpg",
     "face_closeup": "users/alice/profile/photos/user_face.jpg"
   },
-  "use_my_image": true
+  "use_my_image": true,
+  "lifestyle": {
+    "occupation": "招标代理",
+    "style_preference": "WF-01, WF-05, WF-06, WF-08, WF-36"
+  },
+  "body_secrets": "",
+  "updated_at": "2026-06-25 13:33:39"
 }

@@ -1,6 +1,53 @@
 # 开发日志
 
-## 2026-06-24: 上传可靠性全面重构 + 三阶段入库管线升级
+## 2026-06-25: 多用户管线全链路修复 — Alice 女性测试用户完整打通
+
+### 问题背景
+Alice (女性测试用户) 穿搭生成使用主用户形象、推送显示主用户内容、Profile 数据交叉污染。经诊断发现 9 个 Bug 分布在 5 个文件中。
+
+### Bug 1-2: 用户上下文丢失（致命）
+- **generate.py 缺少 --user**: 子进程搜索主用户 outfits/ 目录，用男性人物照生图
+- **set_thread_user 时序错误**: 在 `_load_all_clothing()` 之后才调用，AI 看到的还是主用户 83 件衣橱
+
+### Bug 3-5: 多用户路由盲区（高危）
+- 3 个端点 (`/cmd`, `/api/try/`, `/api/explore/try-on`) 未传 `user_id`，后台线程丢失上下文
+- `common.py` 三个函数 (`get_banned_items/get_recent_outfits/get_wear_counts`) 硬编码主用户目录
+- `unified_pipeline.py` 评分历史/星级统计读主用户目录
+
+### Bug 6-7: 静默崩溃与性别硬编码（致命）
+- `generate.py --user alice` 触发 `from tools.common import` 但项目根目录不在 `sys.path` → 子进程静默崩溃
+- `build_creation_prompt` 硬编码 "亚洲男性穿搭" → Seedream prompt 写死 "Asian man"
+
+### Bug 8: 品类盲区 → AI 无上衣可选
+- Alice 衣橱 8 个品类（连衣裙/针织衫/套装等）中有 3 个不在 `cat_order` 列表
+- 33°C 又跳过长袖上衣 → AI 表格里零上衣 → 返回空 items
+- 修复：补全 5 个女性品类 + 连衣裙/套装验证 + 温度过滤改为标注
+
+### Bug 9: 原型 CDN 路径全部指向主用户
+- `build_prototype.py` 8 处硬编码 `../outfits/` → Alice 手机 Hero 图和单品缩略图都是主用户的
+- 修复：引入 `OUTFITS_REL` / `WARDROBE_REL` 动态路径
+
+### 追加修复: Profile 数据交叉污染
+- **中英文不匹配**: Alice profile 存 English 值 (`female/tan/hourglass`)，前端 HTML 选项全用中文 → 默认选第一个 → 看起来像没保存
+- **Cookie 跨用户污染**: `fashion_user=alice` cookie 导致主用户页面 API 路由到 Alice → 互相覆盖数据
+- 修复：API 返回值翻译 + `__USER__='default'` 显式路由 + `user=default` 服务端识别
+
+### 代码变化
+- `wechat_control.py`: set_thread_user 提前 + 3 端点 user_id + generate.py --user + build_creation_prompt user_id + 中英文翻译 + user=default 路由
+- `unified_pipeline.py`: 品类列表补全 + 温度过滤标注 + 连衣裙/套装验证 + OUTFITS_DIR 动态化 + 性别感知
+- `build_prototype.py`: OUTFITS_REL/WARDROBE_REL 动态路径 + __USER__='default' + get_display_name 多用户
+- `common.py`: _get_active_outfits_dir() 辅助函数 + 三个函数动态路由
+- `generate.py`: sys.path.insert 项目根目录
+
+### 验证结果
+- Alice 穿搭生成完整跑通：选品(连衣裙+鞋) → R2创作(Asian woman) → Seedream 生图 → CDN 推送
+- 两个 Profile 完全隔离：主用户(男/179/68/标准) vs Alice(女/173/55/沙漏型)
+- 保存→刷新→数据不丢失，不互相覆盖
+
+### 备份标签
+```bash
+git tag female-user-pipeline-fixed  # 女性用户管线全链路修复
+```
 
 ### 凌晨：上传稳定性攻坚战（17 项修复）
 

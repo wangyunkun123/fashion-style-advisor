@@ -137,7 +137,7 @@ def _resolve_user_from_request(handler):
                 if cm:
                     user_id = cm.group(1)
 
-    if not user_id:
+    if not user_id or user_id == 'default':
         return ('default', False)
 
     # 安全校验：只允许字母数字下划线连字符
@@ -4544,6 +4544,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not file_rel:
                 self._json_resp(400, {"error": "missing f"})
                 return
+            # 防御：URL 中可能有 ?t= 缓存破坏参数被错误拼接到 f 参数尾部
+            if '?' in file_rel:
+                file_rel = file_rel.split('?')[0]
             file_abs = os.path.normpath(os.path.join(PROJECT_DIR, file_rel))
             if not file_abs.startswith(PROJECT_DIR):
                 self._json_resp(403, {"error": "forbidden"})
@@ -5174,6 +5177,18 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         # ─── 我的页 API ───
 
+        # 中英文值映射（前端 HTML 选项全部用中文，需将 API 返回值也转为中文）
+        _GENDER_CN = {'female': '女', '女': '女', 'male': '男', '男': '男'}
+        _SKIN_CN = {'tan': '小麦', 'fair': '偏白', 'warm': '偏黄', 'dark': '偏黑',
+                    '白皙': '白皙', '偏白': '偏白', '自然': '自然', '小麦': '小麦', '偏黄': '偏黄', '偏黑': '偏黑'}
+        _BODY_CN = {'hourglass': '沙漏型', 'pear': '梨型', 'apple': '苹果型', 'rectangle': '矩形',
+                    'inverted_triangle': '倒三角', 'petite': '小个子',
+                    '沙漏型': '沙漏型', '梨型': '梨型', '苹果型': '苹果型', '矩形': '矩形',
+                    '倒三角': '倒三角', '小个子': '小个子',
+                    '偏瘦': '偏瘦', '标准': '标准', '偏胖': '偏胖', '肌肉型': '肌肉型'}
+        def _cn(val, map_dict):
+            return map_dict.get(val, val)
+
         if parsed.path == '/api/profile':
             try:
                 # ── 多用户：优先读取用户 profile.json ──
@@ -5188,17 +5203,17 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         user_photos = up.get('photos', {})
                         profile = {
                             'use_my_image': up.get('use_my_image', False),
-                            'gender': up.get('gender', '女'),
+                            'gender': _cn(up.get('gender', '女'), _GENDER_CN),
                             'photos': user_photos,
                             'height': str(body.get('height', '')),
                             'weight': str(body.get('weight', '')),
                             'age': str(body.get('age', '')),
-                            'body_type': body.get('shape', ''),
-                            'skin_tone': body.get('skin_tone', ''),
+                            'body_type': _cn(body.get('shape', ''), _BODY_CN),
+                            'skin_tone': _cn(body.get('skin_tone', ''), _SKIN_CN),
                             'shoulder_type': body.get('shoulder_type', ''),
                             'face_shape': body.get('face_shape', ''),
                             'occupation': lifestyle.get('occupation', ''),
-                            'style_preference': up.get('style_prefs') and ', '.join(up['style_prefs']) or '',
+                            'style_preference': up.get('style_prefs') and ', '.join(up['style_prefs']) or lifestyle.get('style_preference', ''),
                             'pain_points': body.get('concern', ''),
                             'body_secrets': up.get('body_secrets', ''),
                         }
@@ -6422,18 +6437,26 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     # 合并：保留 onboarding 字段，追加形象字段
                     existing['photos'] = photos
                     existing['use_my_image'] = data.get('use_my_image', existing.get('use_my_image', True))
+                    existing['gender'] = data.get('gender', existing.get('gender', 'female'))
                     existing['body'] = {
                         'height': str(data.get('height_cm', existing.get('body', {}).get('height', ''))),
                         'weight': str(data.get('weight_kg', existing.get('body', {}).get('weight', ''))),
+                        'age': str(data.get('age', existing.get('body', {}).get('age', ''))),
                         'shape': data.get('body_type', existing.get('body', {}).get('shape', '')),
                         'skin_tone': data.get('skin_tone', existing.get('body', {}).get('skin_tone', '')),
+                        'shoulder_type': data.get('shoulder_type', existing.get('body', {}).get('shoulder_type', '')),
+                        'face_shape': data.get('face_shape', existing.get('body', {}).get('face_shape', '')),
                         'concern': data.get('pain_points', existing.get('body', {}).get('concern', '')),
                     }
                     existing['lifestyle'] = {
-                        'occupation': data.get('occupation', ''),
-                        'style_preference': data.get('style_preference', ''),
+                        'occupation': data.get('occupation', existing.get('lifestyle', {}).get('occupation', '')),
+                        'style_preference': data.get('style_preference', existing.get('lifestyle', {}).get('style_preference', '')),
                     }
-                    existing['body_secrets'] = data.get('body_secrets', '')
+                    # 同时更新 style_prefs 数组（兼容旧格式）
+                    sp = data.get('style_preference', '')
+                    if sp:
+                        existing['style_prefs'] = [s.strip() for s in sp.split(',') if s.strip()]
+                    existing['body_secrets'] = data.get('body_secrets', existing.get('body_secrets', ''))
                     existing['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
                     os.makedirs(os.path.dirname(profile_path), exist_ok=True)
                     with open(profile_path, 'w', encoding='utf-8') as f:

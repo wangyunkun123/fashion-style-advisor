@@ -1963,7 +1963,7 @@ html = html.format(
 html = html.replace("'../'+", "__CDN__+")
 # Set CDN value + 注入用户标识 + fetch 拦截器（告别 Cookie 依赖）
 cdn_base = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{}/'.format(get_git_commit())
-_user_js = "var __USER__='{}';".format(USER_ID or '')
+_user_js = "var __USER__='{}';".format(USER_ID or 'default')
 _fetch_wrapper = """var _origFetch=window.fetch;window.fetch=function(u,o){if(__USER__&&u.startsWith('/api/')&&!u.includes('?user=')){u=u+(u.includes('?')?'&':'?')+'user='+__USER__};return _origFetch.call(window,u,o)};"""
 html = html.replace("var __CDN__='';", "var __CDN__='{}';{}{}".format(cdn_base, _user_js, _fetch_wrapper))
 

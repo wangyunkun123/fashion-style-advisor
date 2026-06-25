@@ -189,3 +189,9 @@ OSError: [Errno 48] Address already in use
 [12:51:00] [INFO] 📍 🎨 预压缩生图
 [12:51:00] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [12:51:00] [INFO] 📍 📤 推送 + 刷新
+[12:51:05] [INFO] ⏰ 原型过时 (滞后 102s)，后台重建: alice
+[12:51:06] [INFO] 📤 Git push 成功 (尝试 1/3)
+[12:51:06] [INFO] 📱 主原型: 重建
+[12:51:06] [INFO] 📱 用户原型(alice): 已重建
+[12:51:11] [INFO] 📤 后台推送完成: 今日穿搭
+[12:51:11] [INFO] 📨 POST /api/ratings?user=alice (Content-Length=35, CT=application/json)

@@ -29,6 +29,11 @@ for i, arg in enumerate(args):
 if USER_ID:
     OUTFITS_DIR = resolve_outfits_dir(USER_ID)
     WARDROBE_DIR = resolve_wardrobe_dir(USER_ID)
+    OUTFITS_REL = 'users/{}/outfits'.format(USER_ID)  # CDN 相对路径（不含 ../ 前缀）
+    WARDROBE_REL = 'users/{}/wardrobe'.format(USER_ID)
+else:
+    OUTFITS_REL = 'outfits'
+    WARDROBE_REL = 'wardrobe'
 
 # 标签质量过滤器 — 去除日期/指令类噪音
 JUNK_PATTERNS = [r'^\d{4}-\d{2}-\d{2}', r'^\d+月\d+', r'^今日', r'^推荐', r'^穿搭',
@@ -99,7 +104,7 @@ def _clean_brand(brand):
 
 def get_display_name(iid):
     """从 wardrobe/tags/{iid}.json 构造显示名称：品牌 + 服装名城"""
-    tag_path = os.path.join(PROJ, 'wardrobe', 'tags', f'{iid}.json')
+    tag_path = os.path.join(WARDROBE_DIR, 'tags', f'{iid}.json')
     if not os.path.exists(tag_path):
         return iid
 
@@ -223,37 +228,37 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             # 🆕 最高优先：900w 预压缩 JPEG（100-250KB，比 PNG 原图小 70-92%）
             for f in sorted(os.listdir(sd)):
                 if '_900w' in f and '上身效果_1' in f and '方案' not in f:
-                    char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
+                    char_img = cdn_url('../{}/{}/{}/{}'.format(OUTFITS_REL, d, sub, f))
                     break
             if char_img: break
             # First: 上身效果_1.png (raw AI gen, first stored)
             for f in sorted(os.listdir(sd)):
                 if f == '上身效果_1.png':
-                    char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
+                    char_img = cdn_url('../{}/{}/{}/{}'.format(OUTFITS_REL, d, sub, f))
                     break
             if char_img: break
             # Second: 人物_*.jpg
             for f in sorted(os.listdir(sd)):
                 if '人物' in f and f.endswith(('.jpg','.png')) and not f.startswith('.'):
-                    char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
+                    char_img = cdn_url('../{}/{}/{}/{}'.format(OUTFITS_REL, d, sub, f))
                     break
             if char_img: break
             # Last: any image
             for f in sorted(os.listdir(sd)):
                 if f.endswith(('.jpg','.png')) and not f.startswith('.') and not f.startswith('_'):
-                    char_img = cdn_url('../outfits/{}/{}/{}'.format(d, sub, f))
+                    char_img = cdn_url('../{}/{}/{}/{}'.format(OUTFITS_REL, d, sub, f))
                     break
             if char_img: break
         # 缩略图：优先 300px 宽 JPEG（10-25KB），fallback 到原图
         if char_img:
             thumb_file = os.path.join(dp, '上身效果', 'thumb_300w.jpg')
             if os.path.exists(thumb_file):
-                char_thumb = cdn_url('../outfits/{}/上身效果/thumb_300w.jpg'.format(d))
+                char_thumb = cdn_url('../{}/{}/上身效果/thumb_300w.jpg'.format(OUTFITS_REL, d))
             else:
                 char_thumb = char_img
         # Build item thumbnails — 衣橱增强版优先（用户调整版为准）
         items_dir = os.path.join(dp, 'items')
-        enhanced_dir = os.path.join(PROJ, 'wardrobe', 'enhanced')
+        enhanced_dir = os.path.join(WARDROBE_DIR, 'enhanced')
         for it in items:
             thumb_found = False
             # 🆕 同时确定 thumb（卡片缩略图）和 cutout（弹窗大图）
@@ -261,12 +266,12 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             cutout_thumb_png = os.path.join(enhanced_dir, f"{it['id']}_cutout_thumb.png")
             # cutout 大图优先：用于弹窗查看细节
             if os.path.exists(cutout_png):
-                it['cutout'] = os.path.join('..', 'wardrobe', 'enhanced', f"{it['id']}_cutout.png")
+                it['cutout'] = os.path.join('..', WARDROBE_REL, 'enhanced', f"{it['id']}_cutout.png")
             # thumb 缩略图：用于卡片网格展示
             for pat in [f"{it['id']}_cutout_thumb.png", f"{it['id']}_cutout.png"]:
                 ep = os.path.join(enhanced_dir, pat)
                 if os.path.exists(ep):
-                    it['thumb'] = os.path.join('..', 'wardrobe', 'enhanced', pat)
+                    it['thumb'] = os.path.join('..', WARDROBE_REL, 'enhanced', pat)
                     thumb_found = True
                     break
             if thumb_found:
@@ -275,7 +280,7 @@ def scan_outfits(date_filter=None, rating_filter=None, limit=20):
             if os.path.exists(items_dir):
                 for f in os.listdir(items_dir):
                     if f.startswith(it['id']+'_') and f.endswith('.png'):
-                        it['thumb'] = os.path.join('..', 'outfits', d, 'items', f)
+                        it['thumb'] = os.path.join('..', OUTFITS_REL, d, 'items', f)
                         break
         # Parse weather: temp range + UV
         temp_str = ''
@@ -451,7 +456,7 @@ def extract_palette(outfit):
                     if len(cells) >= 5:
                         color_text = cells[4].split('，')[0].split(',')[0].strip()
                         # 尝试从 tag JSON 获取更精确的颜色名
-                        tag_path = os.path.join(PROJ, 'wardrobe', 'tags', f'{it["id"]}.json')
+                        tag_path = os.path.join(WARDROBE_DIR, 'tags', f'{it["id"]}.json')
                         if os.path.exists(tag_path):
                             try:
                                 with open(tag_path) as tf:

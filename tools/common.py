@@ -648,6 +648,13 @@ def resolve_user_dir(gender=None, user_id=None):
                 return os.path.join(PROJ_DIR, 'users', g, uid)
         return PROJ_DIR
 
+    # 仅 user_id 传参（如 resolve_user_dir(user_id='nan')）→ 自动查 gender
+    if (gender is None or gender == '') and user_id and user_id != 'default':
+        g = get_user_gender(user_id)
+        if g:
+            return os.path.join(PROJ_DIR, 'users', g, user_id)
+        return PROJ_DIR
+
     if gender and user_id and user_id != 'default':
         return os.path.join(PROJ_DIR, 'users', gender, user_id)
     # 过渡期回退

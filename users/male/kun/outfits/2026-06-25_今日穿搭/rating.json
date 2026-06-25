@@ -1,0 +1,12 @@
+{
+  "outfit_id": "2026-06-25_今日穿搭",
+  "rating": 1,
+  "rated_at": "2026-06-25T00:57:59.126Z",
+  "feedback": {
+    "reason": "item_issue",
+    "banned_items": [
+      "SUN-004",
+      "SHOE-007"
+    ]
+  }
+}

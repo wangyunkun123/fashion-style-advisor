@@ -1,0 +1,11 @@
+{
+  "style_id": "WF-40",
+  "name_zh": "浪漫歌剧",
+  "name_en": "Romantic Opera",
+  "description": "荷叶边、蕾丝、薄纱、丝绒，维多利亚时代的戏剧感与现代裁剪的融合",
+  "era": "classic",
+  "parent": "romantic_feminine",
+  "category": "浪漫少女",
+  "trend_category": "niche",
+  "gender": "female"
+}

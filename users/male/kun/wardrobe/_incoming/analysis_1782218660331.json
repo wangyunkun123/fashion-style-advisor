@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "category_code": "TS",
+      "category": "短袖上衣",
+      "color": {
+        "hue_family": "中性色",
+        "hue_name": "白色",
+        "saturation": "无彩色",
+        "lightness": "高明度",
+        "is_neutral": true,
+        "friendly_for_pale_skin": true
+      },
+      "brand": {
+        "name": "未知",
+        "collection": "",
+        "confidence": "未知"
+      },
+      "fabric": {
+        "primary": "聚酯纤维",
+        "texture": "平纹针织",
+        "weight": "轻薄",
+        "seasonality": [
+          "春",
+          "夏"
+        ]
+      },
+      "silhouette": {
+        "fit": "合身",
+        "shoulder_effect": "无特殊效果",
+        "torso_effect": "无特殊效果",
+        "length_ratio": "标准"
+      },
+      "pattern": {
+        "type": "Logo",
+        "density": "稀疏",
+        "logo_visible": true
+      },
+      "style_modifiers": [
+        "运动休闲",
+        "简约"
+      ],
+      "occasions": [
+        "运动",
+        "日常休闲"
+      ],
+      "formality": 2,
+      "meta": {
+        "claude_fit_comment": "标准合身版型，白色简约易搭配，适合日常休闲与轻运动场景"
+      },
+      "source_image": 1,
+      "suggested_id": "TS-012",
+      "_temp_image_path": "/Users/rabbit/Claude code/Fashion/wardrobe/_incoming/img_1782218660331_0.jpg"
+    }
+  ],
+  "_task_id": "1782218660331",
+  "_user_id": "default"
+}

@@ -1,0 +1,223 @@
+{
+  "style_id": "WF-01",
+  "name_zh": "法式慵懒",
+  "name_en": "French Effortless",
+  "description": "看似不经意的精致感——条纹衫+直筒牛仔裤+芭蕾平底鞋，中性色基底+一点红唇破局。核心是「未完成感」：衬衫袖子随意卷起、合身但不紧身。",
+  "category": "欧洲经典",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "海军蓝",
+        "白",
+        "红",
+        "卡其",
+        "灰",
+        "米白",
+        "黑",
+        "驼色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "中性色基底 + 一个红色点缀（唇/鞋/丝巾三选一）"
+    },
+    "pattern": {
+      "preferred": [
+        "条纹",
+        "纯色"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹",
+        "拼接"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "真丝",
+        "羊绒",
+        "粗花呢"
+      ],
+      "acceptable": [
+        "针织",
+        "皮质",
+        "羊毛混纺"
+      ],
+      "rejected": [
+        "速干",
+        "合成",
+        "尼龙"
+      ]
+    },
+    "layering": {
+      "level": "低",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "SHIRT",
+      "pattern": [
+        "条纹",
+        "纯色"
+      ],
+      "fit": [
+        "合身",
+        "略宽松"
+      ],
+      "bonus": 20,
+      "reason": "条纹衫/白衬衫是法式灵魂"
+    },
+    {
+      "category_code": "PT",
+      "fit": [
+        "合身"
+      ],
+      "hue": [
+        "蓝色",
+        "白",
+        "黑"
+      ],
+      "bonus": 15,
+      "reason": "直筒/微喇高腰牛仔裤——法式下半身制服"
+    },
+    {
+      "category_code": "SHOE",
+      "hue": [
+        "红",
+        "裸色",
+        "黑"
+      ],
+      "bonus": 15,
+      "reason": "芭蕾平底鞋或粗跟短靴——平底优先"
+    },
+    {
+      "category_code": "JK",
+      "hue": [
+        "卡其",
+        "米白",
+        "黑"
+      ],
+      "bonus": 10,
+      "reason": "风衣或粗花呢夹克"
+    },
+    {
+      "category_code": "BAG",
+      "bonus": 5,
+      "reason": "皮质简约包——无Logo"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "Logo",
+        "动物纹",
+        "拼接"
+      ],
+      "reason": "Logo和动物纹破坏法式克制"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "高饱和不符合法式中性美学"
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "法式绝不紧绷身体"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "海军蓝",
+        "白",
+        "卡其",
+        "米白",
+        "红"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "棉",
+        "真丝",
+        "羊绒",
+        "粗花呢"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "value": [
+        "条纹",
+        "纯色"
+      ],
+      "weight": 5
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "合身",
+        "略宽松"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 8,
+    "拉长腿部": 10,
+    "颜色显白": 5,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [
+    "WF-06",
+    "WF-07"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-09"
+  ],
+  "tier": "core",
+  "trend_category": "popular_trend"
+}

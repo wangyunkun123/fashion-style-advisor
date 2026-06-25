@@ -8,11 +8,17 @@ import os, json, glob, re, subprocess, time
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
-TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
-STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
 STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
-OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
-CACHE_FILE = os.path.join(TAGS_DIR, 'SCORE_CACHE.json')
+
+# ── 遗留常量（过渡期使用，Phase 9 删除）──
+# ⚠️ 新代码严禁使用！请使用 resolve_*_dir(gender, user_id) 系列函数
+_LEGACY_TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
+_LEGACY_OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
+_LEGACY_STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
+# 向后兼容别名（逐步废弃）
+TAGS_DIR = _LEGACY_TAGS_DIR
+OUTFITS_DIR = _LEGACY_OUTFITS_DIR
+STYLES_DIR = _LEGACY_STYLES_DIR
 
 # ── 所有品类 ID 正则（消除 7+ 处重复定义）────────────────────
 ITEM_ID_PATTERN = re.compile(
@@ -296,10 +302,10 @@ def parse_outfit_md(md_path):
 
 def _get_active_outfits_dir():
     """多用户感知：返回当前活跃用户的 outfits 目录"""
-    uid = get_thread_user()
+    gender, uid = get_thread_user()
     if uid and uid != 'default':
-        return resolve_outfits_dir(uid)
-    return OUTFITS_DIR
+        return resolve_outfits_dir(gender, uid)
+    return _LEGACY_OUTFITS_DIR
 
 
 def get_banned_items():
@@ -410,11 +416,12 @@ def load_all_clothing(include_archived=False):
     Args:
         include_archived: 是否包含已归档（旧衣库）单品，默认 False
     """
-    # 多用户支持：从线程本地获取用户上下文
-    uid = get_thread_user()
-    tags_dir = resolve_tags_dir(uid) if uid else TAGS_DIR
+    gender, uid = get_thread_user()
+    tags_dir = resolve_tags_dir(gender, uid) if uid else _LEGACY_TAGS_DIR
 
     items = {}
+    if not os.path.exists(tags_dir):
+        return items
     for fpath in sorted(glob.glob(os.path.join(tags_dir, '*.json'))):
         fname = os.path.basename(fpath)
         if fname.startswith('SCORE_CACHE') or fname == 'README.json' or fname.startswith('.id_to_cutout'):
@@ -434,22 +441,68 @@ def load_all_clothing(include_archived=False):
 
 
 def load_score_cache():
-    """加载评分缓存，返回 dict（已剥离 _meta）"""
-    if not os.path.exists(CACHE_FILE):
+    """加载评分缓存，返回 dict（已剥离 _meta）。自动路由到当前用户目录。"""
+    gender, uid = get_thread_user()
+    if uid and uid != 'default':
+        cache_file = os.path.join(resolve_tags_dir(gender, uid), 'SCORE_CACHE.json')
+    else:
+        cache_file = os.path.join(_LEGACY_TAGS_DIR, 'SCORE_CACHE.json')
+    if not os.path.exists(cache_file):
         return {}
-    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+    with open(cache_file, 'r', encoding='utf-8') as f:
         cache = json.load(f)
     cache.pop('_meta', None)
     return cache
 
 
-def load_style_fingerprint(style_id):
-    """加载风格指纹 JSON"""
-    path = os.path.join(STYLES_DIR, f'{style_id}.json')
-    if not os.path.exists(path):
+def load_style_fingerprint(style_id, gender=None):
+    """加载风格指纹 JSON，按 gender 自动路由到 styles/male/ 或 styles/female/。
+
+    - 女装风格 (WF- 前缀 或 gender='female') → styles/female/（目录 + fingerprint.json）
+    - 男装风格 → styles/male/（平面 JSON 文件）
+    - gender 为 None 时自动从线程上下文获取
+
+    Returns:
+        dict: 风格指纹数据，找不到返回 {}
+    """
+    if not gender:
+        gender = get_thread_gender()
+
+    # 判断是否为女装风格
+    is_female = (style_id.startswith('WF-') or gender == 'female')
+
+    if is_female:
+        styles_dir = resolve_styles_dir('female')
+        # 女装风格：目录结构 — WF-01_french_effortless/fingerprint.json
+        for d in os.listdir(styles_dir):
+            if d.startswith(f'{style_id}_'):
+                fp = os.path.join(styles_dir, d, 'fingerprint.json')
+                if os.path.exists(fp):
+                    with open(fp, 'r', encoding='utf-8') as f:
+                        return json.load(f)
+        # Fallback: 遍历所有目录查找 fingerprint.json 中 style_id 匹配的
+        for d in os.listdir(styles_dir):
+            dp = os.path.join(styles_dir, d)
+            if not os.path.isdir(dp):
+                continue
+            fp = os.path.join(dp, 'fingerprint.json')
+            if os.path.exists(fp):
+                try:
+                    with open(fp, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                    if data.get('style_id') == style_id:
+                        return data
+                except Exception:
+                    pass
         return {}
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    else:
+        # 男装风格：平面 JSON 文件 — styles/male/american_ivy_league.json
+        styles_dir = resolve_styles_dir('male')
+        path = os.path.join(styles_dir, f'{style_id}.json')
+        if not os.path.exists(path):
+            return {}
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
 
 
 CDN_BASE_FALLBACK = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@main'
@@ -533,44 +586,128 @@ def load_encyclopedia(style_id):
 
 
 # ═══════════════════════════════════════════════════════════════
-# 多用户支持（2026-06-22）
+# 多用户支持 v2（2026-06-25）— users/<gender>/<user_id>/ 结构
 # ═══════════════════════════════════════════════════════════════
 
-def resolve_user_dir(user_id=None):
-    """解析用户数据根目录。
-    user_id=None 或 'default' → 项目根（现有单用户模式，完全不变）
-    user_id='alice'        → users/alice/（多用户模式）
-    """
-    if not user_id or user_id == 'default':
-        return PROJ_DIR
-    return os.path.join(PROJ_DIR, 'users', user_id)
-
-
-def resolve_wardrobe_dir(user_id=None):
-    """解析 wardrobe 目录"""
-    return os.path.join(resolve_user_dir(user_id), 'wardrobe')
-
-
-def resolve_outfits_dir(user_id=None):
-    """解析 outfits 目录"""
-    return os.path.join(resolve_user_dir(user_id), 'outfits')
-
-
-def resolve_tags_dir(user_id=None):
-    """解析 wardrobe/tags 目录"""
-    return os.path.join(resolve_user_dir(user_id), 'wardrobe', 'tags')
-
-
-# ── 线程本地用户上下文（2026-06-22）──
-# 允许 deep 调用链中的函数无需显式传 user_id 即可路由到正确用户目录
 import threading as _threading
 _thread_user = _threading.local()
 
-def set_thread_user(user_id):
-    """设置当前线程的用户 ID（无返回值）。API 入口调用一次，后续所有
-    load_all_clothing / load_state 等函数自动路由到用户数据目录。"""
-    _thread_user.value = user_id
+
+def set_thread_user(gender, user_id):
+    """设置当前线程的用户上下文。
+
+    Args:
+        gender: 'male' 或 'female'
+        user_id: 用户 ID，如 'kun'、'nan'、'becca'
+
+    所有 resolve_*_dir() / load_all_clothing() 等函数自动路由到
+    users/<gender>/<user_id>/ 目录。
+    """
+    _thread_user.context = (gender, user_id)
+
 
 def get_thread_user():
-    """获取当前线程的用户 ID，未设置返回 None"""
-    return getattr(_thread_user, 'value', None)
+    """获取当前线程的用户上下文。
+
+    Returns:
+        (gender, user_id) 元组。未设置时返回 (None, None)。
+    """
+    ctx = getattr(_thread_user, 'context', None)
+    if ctx is None:
+        return (None, None)
+    return ctx
+
+
+def get_thread_gender():
+    """获取当前线程的用户性别。未设置返回 None。"""
+    ctx = getattr(_thread_user, 'context', None)
+    return ctx[0] if ctx else None
+
+
+def get_thread_user_id():
+    """获取当前线程的用户 ID（兼容旧接口）。未设置返回 None。"""
+    ctx = getattr(_thread_user, 'context', None)
+    return ctx[1] if ctx else None
+
+
+def resolve_user_dir(gender=None, user_id=None):
+    """解析用户数据根目录 → users/<gender>/<user_id>/
+
+    支持三种调用方式:
+      resolve_user_dir('male', 'kun')  → users/male/kun/       (新 API)
+      resolve_user_dir(user_id='kun')   → users/<gender>/kun/   (自动查 gender)
+      resolve_user_dir()                → PROJ_DIR              (过渡期回退)
+    """
+    # 向后兼容：单参数调用 → 从注册表自动查 gender
+    if gender is not None and user_id is None:
+        # 旧 API: resolve_user_dir(user_id) → 自动查 gender
+        uid = gender
+        if uid and uid != 'default':
+            g = get_user_gender(uid)
+            if g:
+                return os.path.join(PROJ_DIR, 'users', g, uid)
+        return PROJ_DIR
+
+    if gender and user_id and user_id != 'default':
+        return os.path.join(PROJ_DIR, 'users', gender, user_id)
+    # 过渡期回退
+    return PROJ_DIR
+
+
+def resolve_wardrobe_dir(gender=None, user_id=None):
+    """解析 wardrobe 目录 → users/<gender>/<user_id>/wardrobe"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'wardrobe')
+
+
+def resolve_outfits_dir(gender=None, user_id=None):
+    """解析 outfits 目录 → users/<gender>/<user_id>/outfits"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'outfits')
+
+
+def resolve_tags_dir(gender=None, user_id=None):
+    """解析 wardrobe/tags 目录 → users/<gender>/<user_id>/wardrobe/tags"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'wardrobe', 'tags')
+
+
+def resolve_styles_dir(gender=None):
+    """解析风格指纹目录 → styles/<gender>/
+
+    Args:
+        gender: 'male' 或 'female'。None 时回退到旧 styles/ 目录。
+    """
+    if gender in ('male', 'female'):
+        return os.path.join(PROJ_DIR, 'styles', gender)
+    return os.path.join(PROJ_DIR, 'styles')
+
+
+def resolve_enhanced_dir(gender=None, user_id=None):
+    """解析 wardrobe/enhanced 目录 → users/<gender>/<user_id>/wardrobe/enhanced"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'wardrobe', 'enhanced')
+
+
+def resolve_cache_dir(gender=None, user_id=None):
+    """解析用户 cache 目录 → users/<gender>/<user_id>/cache"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'cache')
+
+
+def resolve_user_profile_path(gender=None, user_id=None):
+    """解析用户 profile.json 路径"""
+    return os.path.join(resolve_user_dir(gender, user_id), 'profile.json')
+
+
+def load_user_registry():
+    """加载用户注册表 {gender: {user_id: {...}}}"""
+    reg_path = os.path.join(PROJ_DIR, 'users', '_registry.json')
+    if not os.path.exists(reg_path):
+        return {}
+    with open(reg_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def get_user_gender(user_id):
+    """从注册表查找用户属于哪个 gender。找不到返回 None。"""
+    reg = load_user_registry()
+    for gender, users in reg.items():
+        if user_id in users:
+            return gender
+    return None

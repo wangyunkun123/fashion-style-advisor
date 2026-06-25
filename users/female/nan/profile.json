@@ -1,0 +1,36 @@
+{
+  "gender": "female",
+  "onboarding_step": 4,
+  "body": {
+    "height": "173",
+    "weight": "55",
+    "age": "31",
+    "shape": "沙漏型",
+    "skin_tone": "小麦",
+    "shoulder_type": "标准",
+    "face_shape": "瓜子脸",
+    "concern": ""
+  },
+  "style_prefs": [
+    "WF-01",
+    "WF-05",
+    "WF-06",
+    "WF-08",
+    "WF-36"
+  ],
+  "onboarding_complete": true,
+  "onboarding_done_at": "2026-06-23T13:02:01Z",
+  "photos": {
+    "full_body_front": "users/female/nan/profile/photos/user_full_front.jpg",
+    "full_body_side": "users/female/nan/profile/photos/user_side.jpg",
+    "face_closeup": "users/female/nan/profile/photos/user_face.jpg"
+  },
+  "use_my_image": true,
+  "lifestyle": {
+    "occupation": "招标代理",
+    "style_preference": "WF-01, WF-05, WF-06, WF-08, WF-36"
+  },
+  "body_secrets": "",
+  "updated_at": "2026-06-25 14:19:34",
+  "user_id": "nan"
+}

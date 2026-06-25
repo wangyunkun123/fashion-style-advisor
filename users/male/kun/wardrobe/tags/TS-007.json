@@ -1,0 +1,60 @@
+{
+  "clothing_id": "TS-007",
+  "category": "短袖上衣",
+  "category_code": "TS",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "红色",
+    "saturation": "高饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": false
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "",
+    "density": "密集",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "速干",
+    "texture": "光滑",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "Adidas",
+    "collection": "曼联主场球衣",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "视觉鲜艳吸睛",
+    "足球文化",
+    "速干球衣",
+    "Blokecore",
+    "球迷潮流"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": true,
+    "wear_count": 2,
+    "last_worn": "2026-06-17T23:01:41.619103",
+    "claude_fit_comment": "Adidas曼联主场球迷版速干球衣,红色鲜艳吸睛,合身剪裁,适合运动休闲/Blokecore足球潮流穿搭",
+    "_statement_score": 0.5
+  },
+  "recommended_styles": [
+    "韩系潮流",
+    "Clean Fit",
+    "街头潮流",
+    "运动休闲"
+  ]
+}

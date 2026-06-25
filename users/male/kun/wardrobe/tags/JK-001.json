@@ -1,0 +1,65 @@
+{
+  "clothing_id": "JK-001",
+  "category": "外套",
+  "category_code": "JK",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "黑色",
+    "saturation": "高饱和",
+    "lightness": "低明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "增加肩宽",
+    "torso_effect": "增加上半身体量感",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "拼接",
+    "density": "密集",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "合成",
+    "texture": "光滑",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Adidas",
+    "collection": "曼联复古训练夹克",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "增加肩宽",
+    "增加上半身体量感",
+    "足球文化",
+    "复古潮流",
+    "Blokecore看台风",
+    "红色点缀"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": true,
+    "wear_count": 1,
+    "last_worn": "2026-06-17T23:01:41.619845",
+    "claude_fit_comment": "Adidas×曼联复古训练夹克,立领冲锋衣式剪裁,定位Lifestyle非实战,肩部拼色增加体量感,适合足球潮流/复古街头穿搭",
+    "_statement_score": 0.5
+  },
+  "occasions": [
+    "运动"
+  ],
+  "recommended_styles": [
+    "韩系潮流",
+    "Clean Fit",
+    "街头潮流",
+    "运动休闲",
+    "复古工装"
+  ]
+}

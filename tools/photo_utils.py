@@ -13,12 +13,12 @@ def get_person_photos():
     - 单人模式：config/user_profile.json
     返回: [photo_path, ...] 或空列表（无照片/关闭形象）
     """
-    # 🆕 多用户感知
+    # 🆕 多用户感知 — users/<gender>/<user_id>/profile.json
     try:
         from tools.common import get_thread_user, resolve_user_dir
-        uid = get_thread_user()
+        gender, uid = get_thread_user()
         if uid and uid != 'default':
-            user_dir = resolve_user_dir(uid)
+            user_dir = resolve_user_dir(gender, uid)
             up_path = os.path.join(user_dir, 'profile.json')
             if os.path.exists(up_path):
                 with open(up_path) as f:
@@ -38,38 +38,29 @@ def get_person_photos():
     except Exception:
         pass
 
-    # ── 回退：单人模式 config/user_profile.json ──
-    up_path = os.path.join(_PROJ_DIR, 'config', 'user_profile.json')
-    if not os.path.exists(up_path):
-        old = os.path.join(_PROJ_DIR, 'profile', 'photos', 'IMG_8493.jpg')
-        return [old] if os.path.exists(old) else []
+    # ── 回退：kun 的照片（默认男性用户）──
+    up_path = os.path.join(_PROJ_DIR, 'users', 'male', 'kun', 'profile.json')
+    if os.path.exists(up_path):
+        try:
+            with open(up_path) as f:
+                up = json.load(f)
+            if up.get('use_my_image') is not False:
+                photos = up.get('photos', {})
+                result = []
+                for slot in ['full_body_front', 'face_closeup', 'full_body_side']:
+                    rel_path = photos.get(slot, '')
+                    if rel_path:
+                        abs_path = os.path.join(_PROJ_DIR, rel_path)
+                        if os.path.exists(abs_path):
+                            result.append(abs_path)
+                if result:
+                    return result
+        except Exception:
+            pass
 
-    try:
-        with open(up_path) as f:
-            up = json.load(f)
-    except Exception:
-        return []
-
-    if up.get('use_my_image') is False:
-        return []
-
-    photos = up.get('photos', {})
-    result = []
-
-    slot_order = ['full_body_front', 'face_closeup', 'full_body_side']
-    for slot in slot_order:
-        rel_path = photos.get(slot, '')
-        if rel_path:
-            abs_path = os.path.join(_PROJ_DIR, rel_path)
-            if os.path.exists(abs_path):
-                result.append(abs_path)
-
-    if not result:
-        old = os.path.join(_PROJ_DIR, 'profile', 'photos', 'IMG_8493.jpg')
-        if os.path.exists(old):
-            result.append(old)
-
-    return result
+    # ── 最后回退：旧文件路径 ──
+    old = os.path.join(_PROJ_DIR, 'profile', 'photos', 'IMG_8493.jpg')
+    return [old] if os.path.exists(old) else []
 
 
 def remove_person_background(src_path):

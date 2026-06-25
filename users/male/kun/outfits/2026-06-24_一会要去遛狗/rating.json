@@ -1,0 +1,12 @@
+{
+  "outfit_id": "2026-06-24_一会要去遛狗",
+  "rating": 1,
+  "rated_at": "2026-06-24T02:40:19.321Z",
+  "feedback": {
+    "reason": "item_issue",
+    "banned_items": [
+      "TS-002",
+      "PT-009"
+    ]
+  }
+}

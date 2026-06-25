@@ -1,0 +1,228 @@
+{
+  "style_id": "contemporary_gorpcore",
+  "name_zh": "户外机能风",
+  "name_en": "Gorpcore",
+  "description": "将功能性户外装备当作都市日常穿着的美学风格。以Gore-Tex冲锋衣、摇粒绒抓绒衫、越野跑鞋为核心，强调「一件户外外套+一套日常内搭」的混搭法则。不是全身登山，而是让机能单品自然融入城市生活。",
+  "category": "功能休闲",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "廓形"
+      ],
+      "acceptable": [
+        "合身"
+      ],
+      "rejected": [
+        "紧身",
+        "修身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色",
+        "暖色"
+      ],
+      "allowed_hues": [
+        "橄榄绿",
+        "卡其",
+        "藏青",
+        "炭灰",
+        "黑",
+        "沙色",
+        "亮橙",
+        "明黄",
+        "电光蓝"
+      ],
+      "max_saturation": "中饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "大地色为主调，一件亮色单品(冲锋衣/摇粒绒)作为视觉焦点，其余保持中性色"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色"
+      ],
+      "acceptable": [
+        "拼接",
+        "Logo"
+      ],
+      "rejected": [
+        "印花",
+        "格纹",
+        "条纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "合成",
+        "速干",
+        "抓绒"
+      ],
+      "acceptable": [
+        "棉",
+        "牛仔",
+        "帆布"
+      ],
+      "rejected": [
+        "羊毛混纺",
+        "丝质",
+        "灯芯绒",
+        "亚麻"
+      ]
+    },
+    "layering": {
+      "level": "中高",
+      "min_layers": 2,
+      "max_layers": 4
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 2
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "JK",
+      "fabric": [
+        "合成",
+        "抓绒"
+      ],
+      "bonus": 20,
+      "reason": "冲锋衣/摇粒绒外套是Gorpcore灵魂——功能性即风格"
+    },
+    {
+      "category_code": "SHOE",
+      "brand": [
+        "Nike",
+        "Adidas",
+        "Salomon",
+        "Hoka"
+      ],
+      "bonus": 18,
+      "reason": "越野跑鞋/户外徒步鞋是Gorpcore鞋履标志"
+    },
+    {
+      "category_code": "PT",
+      "fabric": [
+        "合成",
+        "速干",
+        "棉"
+      ],
+      "silhouette": [
+        "宽松"
+      ],
+      "bonus": 12,
+      "reason": "机能工装裤/尼龙速干裤配合户外廓形"
+    },
+    {
+      "category_code": "BAG",
+      "fabric": [
+        "合成",
+        "帆布"
+      ],
+      "bonus": 10,
+      "reason": "机能背包/胸包是Gorpcore功能美学的延伸"
+    },
+    {
+      "category_code": "TS",
+      "fabric": [
+        "速干",
+        "棉"
+      ],
+      "bonus": 8,
+      "reason": "速干T恤作为内搭底层，保持功能性一致"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "修身"
+      ],
+      "reason": "Gorpcore廓形必须宽松舒适——功能优先"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "羊毛混纺",
+        "丝质"
+      ],
+      "reason": "精致面料与户外功能性冲突"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "格纹",
+        "印花"
+      ],
+      "reason": "传统图案破坏户外功能美学"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "合成",
+        "速干",
+        "抓绒",
+        "棉"
+      ],
+      "weight": 12
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "宽松",
+        "廓形"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "color.hue",
+      "operator": "in",
+      "value": [
+        "橄榄绿",
+        "卡其",
+        "藏青",
+        "炭灰",
+        "黑",
+        "沙色"
+      ],
+      "weight": 7
+    },
+    {
+      "field": "brand.name",
+      "operator": "in",
+      "value": [
+        "Nike",
+        "Adidas",
+        "Merrell",
+        "The North Face"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加上半身体量感": 8,
+    "遮盖小肚子": 7
+  },
+  "related_styles": [
+    "japanese_yama",
+    "athleisure_sport",
+    "streetwear"
+  ],
+  "conflicting_styles": [
+    "smart_casual",
+    "chinese_heritage",
+    "korean_light_mature"
+  ],
+  "tier": "explore"
+}

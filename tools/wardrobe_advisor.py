@@ -29,9 +29,11 @@ if _USER_ID:
     if PROJ_DIR not in sys.path:
         sys.path.insert(0, PROJ_DIR)
     from tools.common import resolve_outfits_dir, resolve_tags_dir, set_thread_user
-    set_thread_user(_USER_ID)
-    OUTFITS_DIR = resolve_outfits_dir(_USER_ID)
-    TAGS_DIR = resolve_tags_dir(_USER_ID)
+    from tools.user_manager import get_user_gender
+    _gender = get_user_gender(_USER_ID) or 'male'
+    set_thread_user(_gender, _USER_ID)
+    OUTFITS_DIR = resolve_outfits_dir(_gender, _USER_ID)
+    TAGS_DIR = resolve_tags_dir(_gender, _USER_ID)
 else:
     TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
     OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')

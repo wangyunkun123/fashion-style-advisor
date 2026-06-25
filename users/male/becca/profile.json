@@ -1,0 +1,17 @@
+{
+  "gender": "male",
+  "onboarding_step": 4,
+  "body": {
+    "height": "179",
+    "weight": "65",
+    "shape": "rectangle",
+    "skin_tone": "light",
+    "concern": "",
+    "skipped": false
+  },
+  "style_prefs": [
+    "korean_clean_fit"
+  ],
+  "onboarding_complete": true,
+  "onboarding_done_at": "2026-06-23T09:53:46Z"
+}

@@ -1,12 +1,24 @@
 {
-  "becca": {
-    "created": "2026-06-23T09:53:46Z",
-    "last_active": "2026-06-25T00:51:17Z",
-    "status": "active"
+  "male": {
+    "kun": {
+      "created": "2026-06-25T06:19:34Z",
+      "last_active": "2026-06-25T06:46:05Z",
+      "status": "active",
+      "_migrated_from": "root wardrobe/outfits/"
+    },
+    "becca": {
+      "created": "2026-06-23T09:53:46Z",
+      "last_active": "2026-06-25T00:51:17Z",
+      "status": "active",
+      "_migrated_from": "users/becca/"
+    }
   },
-  "alice": {
-    "created": "2026-06-23T09:54:27Z",
-    "last_active": "2026-06-25T05:33:49Z",
-    "status": "active"
+  "female": {
+    "nan": {
+      "created": "2026-06-23T09:54:27Z",
+      "last_active": "2026-06-25T06:48:04Z",
+      "status": "active",
+      "_migrated_from": "users/alice/"
+    }
   }
 }

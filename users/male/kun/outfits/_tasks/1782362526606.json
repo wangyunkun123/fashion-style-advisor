@@ -1,0 +1,10 @@
+{
+  "id": "1782362526606",
+  "status": "error",
+  "message": "Seedream 生图失败: ❌ 执行失败 (code=1)\nTraceback (most recent call last):\n  File \"/Users/rabbit/Claude code/Fashion/tools/generate.py\", line 23, in <module>\n    from tools.common import resolve_user_dir, reso",
+  "result": "",
+  "image_path": "",
+  "image_url": "",
+  "log": "📊 预计 ~60-100s · ~2079 tokens\n🤖 AI 智能选品\n✅ ✅ ✍️ AI 创作叙事+生图\n🎨 Seedream AI 生图",
+  "created_at": 1782362526.606553
+}

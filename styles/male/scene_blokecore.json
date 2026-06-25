@@ -1,0 +1,228 @@
+{
+  "style_id": "scene_blokecore",
+  "name_zh": "足球看台风",
+  "name_en": "Blokecore",
+  "description": "把足球看台文化和复古球衣美学融入日常穿搭。以复古足球球衣+直筒水洗牛仔裤+德训鞋(Adidas Samba/Gazelle)为核心公式，拥抱球迷文化的随性和怀旧——不是去踢球，而是把足球精神穿成街头风格。",
+  "category": "运动休闲",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身"
+      ],
+      "acceptable": [
+        "廓形"
+      ],
+      "rejected": [
+        "紧身",
+        "修身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "暖色",
+        "中性",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "红",
+        "黑",
+        "白",
+        "蓝",
+        "水洗蓝",
+        "灰",
+        "绿"
+      ],
+      "max_saturation": "中饱和",
+      "max_colors_per_outfit": 3,
+      "color_logic": "球衣作为色彩焦点(红/蓝/条纹)，其余单品中性色衬托，牛仔裤水洗蓝是万能搭"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "Logo",
+        "拼接"
+      ],
+      "rejected": [
+        "印花",
+        "格纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "合成",
+        "棉",
+        "帆布",
+        "牛仔"
+      ],
+      "acceptable": [
+        "皮质",
+        "速干"
+      ],
+      "rejected": [
+        "羊毛混纺",
+        "丝质",
+        "亚麻",
+        "灯芯绒"
+      ]
+    },
+    "layering": {
+      "level": "低中",
+      "min_layers": 2,
+      "max_layers": 3
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 2
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "JK",
+      "brand": [
+        "Adidas",
+        "Nike",
+        "FILA"
+      ],
+      "fabric": [
+        "合成"
+      ],
+      "bonus": 20,
+      "reason": "训练外套/球迷夹克是Blokecore外层标志——Adidas复古款为佳"
+    },
+    {
+      "category_code": "SHOE",
+      "brand": [
+        "Adidas"
+      ],
+      "hue": [
+        "白",
+        "黑",
+        "棕"
+      ],
+      "bonus": 18,
+      "reason": "Adidas Samba/Gazelle是Blokecore灵魂鞋款"
+    },
+    {
+      "category_code": "PT",
+      "fabric": [
+        "牛仔"
+      ],
+      "silhouette": [
+        "宽松",
+        "合身"
+      ],
+      "bonus": 15,
+      "reason": "直筒水洗牛仔裤是球衣的最佳搭配基底"
+    },
+    {
+      "category_code": "TS",
+      "pattern": [
+        "纯色",
+        "Logo"
+      ],
+      "bonus": 10,
+      "reason": "复古球衣/图案T恤是Blokecore视觉焦点"
+    },
+    {
+      "category_code": "SH",
+      "fabric": [
+        "合成",
+        "速干"
+      ],
+      "bonus": 8,
+      "reason": "足球训练短裤强化运动感"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "修身"
+      ],
+      "reason": "球衣和牛仔裤廓形必须宽松舒适"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "羊毛混纺",
+        "丝质",
+        "亚麻",
+        "针织"
+      ],
+      "reason": "正式面料与足球看台休闲文化冲突"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "格纹"
+      ],
+      "reason": "格纹过于学院/正式，不符足球街头调性"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "brand.name",
+      "operator": "in",
+      "value": [
+        "Adidas",
+        "Nike",
+        "FILA",
+        "Puma"
+      ],
+      "weight": 12
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "in",
+      "value": [
+        "宽松"
+      ],
+      "weight": 8
+    },
+    {
+      "field": "color.hue_family",
+      "operator": "in",
+      "value": [
+        "中性",
+        "暖色"
+      ],
+      "weight": 5
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "合成",
+        "棉",
+        "帆布",
+        "牛仔"
+      ],
+      "weight": 5
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加上半身体量感": 6,
+    "遮盖小肚子": 6
+  },
+  "related_styles": [
+    "athleisure_sport",
+    "streetwear",
+    "retro_90s_hiphop"
+  ],
+  "conflicting_styles": [
+    "smart_casual",
+    "chinese_heritage",
+    "korean_light_mature",
+    "scandi_minimalism"
+  ],
+  "tier": "explore"
+}

@@ -32,8 +32,10 @@ if _USER_ID:
     if PROJ_DIR not in sys.path:
         sys.path.insert(0, PROJ_DIR)
     from tools.common import resolve_tags_dir, set_thread_user
-    set_thread_user(_USER_ID)
-    TAGS_DIR = resolve_tags_dir(_USER_ID)
+    from tools.user_manager import get_user_gender
+    _gender = get_user_gender(_USER_ID) or 'male'
+    set_thread_user(_gender, _USER_ID)
+    TAGS_DIR = resolve_tags_dir(_gender, _USER_ID)
 else:
     TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
 
@@ -49,13 +51,13 @@ LAB_STATE_FILE = os.path.join(CONFIG_DIR, 'style_lab_state.json')
 # ── 多用户目录解析（线程感知）──
 def _resolve_outfits_dir():
     from tools.common import get_thread_user, resolve_outfits_dir
-    uid = get_thread_user()
-    return resolve_outfits_dir(uid) if uid else OUTFITS_DIR
+    gender, uid = get_thread_user()
+    return resolve_outfits_dir(gender, uid) if uid else OUTFITS_DIR
 
 def _resolve_tags_dir():
     from tools.common import get_thread_user, resolve_tags_dir
-    uid = get_thread_user()
-    return resolve_tags_dir(uid) if uid else TAGS_DIR
+    gender, uid = get_thread_user()
+    return resolve_tags_dir(gender, uid) if uid else TAGS_DIR
 
 # ── 品类映射（从 common 统一导入，消除重复定义）──
 from tools.common import (

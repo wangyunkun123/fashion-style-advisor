@@ -1,0 +1,60 @@
+{
+  "clothing_id": "SHIRT-001",
+  "category": "衬衣",
+  "category_code": "SHIRT",
+  "color": {
+    "hue_family": "中性",
+    "hue_name": "米白条纹",
+    "saturation": "低饱和",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "合身",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "竖向条纹",
+    "density": "密集",
+    "logo_visible": false
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "平纹针织",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 3,
+  "brand": {
+    "name": "Uniqlo",
+    "collection": null,
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "颜色显白",
+    "竖条纹拉长比例",
+    "日系简约",
+    "通勤休闲"
+  ],
+  "meta": {
+    "is_key_piece": false,
+    "is_statement_piece": false,
+    "wear_count": 2,
+    "last_worn": "2026-06-16T10:26:35.637954",
+    "claude_fit_comment": "Uniqlo竖条纹衬衫,日系简约设计,竖条纹视觉拉长身形,颜色显白,适合通勤/休闲场景",
+    "_statement_score": 0.2
+  },
+  "recommended_styles": [
+    "日系简约",
+    "City Boy",
+    "Clean Fit",
+    "轻熟商务"
+  ]
+}

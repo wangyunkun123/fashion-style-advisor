@@ -1,0 +1,240 @@
+{
+  "style_id": "WF-12",
+  "name_zh": "暗黑学院",
+  "name_en": "Dark Academia",
+  "description": "像是从狄更斯小说里走出来——黑棕灰调、高领毛衣+白衬衫叠穿、呢料西装+牛津鞋。哥特浪漫主义与古典学术崇拜的暗黑交融，忧郁学者气质。",
+  "category": "欧洲经典",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "A字"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "冷色",
+        "中性",
+        "暖色"
+      ],
+      "allowed_hues": [
+        "黑",
+        "炭灰",
+        "深棕",
+        "深绿",
+        "酒红",
+        "奶油白",
+        "燕麦色"
+      ],
+      "max_saturation": "低饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "中明度",
+      "max_colors_per_outfit": 2,
+      "color_logic": "暗色调（黑/炭灰/深棕/深绿/酒红）+ 奶油白衬衫领提亮。全暗全灰完全OK——这是风格特征不是错误"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "格纹",
+        "菱格"
+      ],
+      "acceptable": [
+        "条纹"
+      ],
+      "rejected": [
+        "碎花",
+        "印花",
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "羊毛",
+        "粗花呢",
+        "重磅棉",
+        "羊绒",
+        "灯芯绒",
+        "皮质"
+      ],
+      "acceptable": [
+        "牛津纺"
+      ],
+      "rejected": [
+        "速干",
+        "尼龙",
+        "丝绒",
+        "钩针"
+      ]
+    },
+    "layering": {
+      "level": "中高",
+      "min_layers": 2,
+      "max_layers": 4
+    },
+    "formality_range": {
+      "min": 2,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "TS",
+      "fit": [
+        "合身",
+        "略宽松"
+      ],
+      "fabric": [
+        "羊绒",
+        "羊毛"
+      ],
+      "hue": [
+        "黑",
+        "炭灰",
+        "深绿"
+      ],
+      "bonus": 20,
+      "reason": "黑色高领毛衣——DA的灵魂内搭"
+    },
+    {
+      "category_code": "SHIRT",
+      "fabric": [
+        "棉"
+      ],
+      "hue": [
+        "白",
+        "奶油白"
+      ],
+      "bonus": 15,
+      "reason": "白衬衫——领子必须露在高领毛衣外"
+    },
+    {
+      "category_code": "JK",
+      "fabric": [
+        "羊毛",
+        "粗花呢"
+      ],
+      "hue": [
+        "深棕",
+        "炭灰",
+        "墨绿"
+      ],
+      "bonus": 15,
+      "reason": "呢料西装/Blazer——不收腰、粗花呢或羊毛"
+    },
+    {
+      "category_code": "SHOE",
+      "hue": [
+        "黑",
+        "深棕"
+      ],
+      "fabric": [
+        "皮质"
+      ],
+      "bonus": 10,
+      "reason": "牛津鞋/德比鞋/马丁靴——任何时候都要穿皮质"
+    },
+    {
+      "category_code": "PT",
+      "fit": [
+        "合身",
+        "略宽松"
+      ],
+      "fabric": [
+        "羊毛",
+        "灯芯绒"
+      ],
+      "hue": [
+        "炭灰",
+        "深棕",
+        "黑"
+      ],
+      "bonus": 10,
+      "reason": "直筒羊毛裤——高腰、暗色"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.lightness",
+      "operator": "not_in",
+      "value": [
+        "高明度",
+        "中明度"
+      ],
+      "reason": "高明度/亮色不属于暗黑学院——暗色调是核心"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "neq",
+      "value": "高饱和",
+      "reason": "高饱和色破坏忧郁感"
+    },
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "尼龙",
+        "钩针"
+      ],
+      "reason": "现代/手工面料不属于DA的旧世界质感"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "羊毛",
+        "粗花呢",
+        "羊绒",
+        "灯芯绒",
+        "皮质"
+      ],
+      "weight": 15
+    },
+    {
+      "field": "color.lightness",
+      "operator": "in",
+      "value": [
+        "低明度"
+      ],
+      "weight": 10
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "黑",
+        "炭灰",
+        "深棕",
+        "深绿",
+        "酒红"
+      ],
+      "weight": 8
+    }
+  ],
+  "body_modifier_bonus": {
+    "增加肩线": 8,
+    "遮盖臀胯": 8,
+    "遮盖小肚子": 8,
+    "颜色显白": 3
+  },
+  "related_styles": [
+    "WF-07"
+  ],
+  "conflicting_styles": [
+    "WF-02",
+    "WF-09"
+  ],
+  "tier": "bold",
+  "trend_category": "popular_trend"
+}

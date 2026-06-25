@@ -1,0 +1,227 @@
+{
+  "style_id": "WF-11",
+  "name_zh": "都市通勤",
+  "name_en": "City Girl",
+  "description": "为工作穿的，不是为公司穿的——西装外套为锚点，阔腿西装裤+真丝衬衫。面料即专业度，从办公室到酒吧无缝切换。",
+  "category": "现代都市",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "结构感"
+      ],
+      "acceptable": [
+        "略宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "廓形",
+        "A字"
+      ]
+    },
+    "color_rules": {
+      "allowed_hue_families": [
+        "中性",
+        "冷色"
+      ],
+      "allowed_hues": [
+        "黑",
+        "海军蓝",
+        "灰",
+        "驼色",
+        "白",
+        "藕粉",
+        "酒红",
+        "浅蓝"
+      ],
+      "max_saturation": "低饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "职场核心色（黑/海军蓝/灰/驼/白）+ 一个柔和彩色（藕粉/浅蓝/酒红选一）"
+    },
+    "pattern": {
+      "preferred": [
+        "纯色"
+      ],
+      "acceptable": [
+        "条纹",
+        "格纹"
+      ],
+      "rejected": [
+        "碎花",
+        "印花",
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "羊毛",
+        "真丝",
+        "羊绒",
+        "重磅棉"
+      ],
+      "acceptable": [
+        "三重醋酸",
+        "皮质"
+      ],
+      "rejected": [
+        "速干",
+        "尼龙",
+        "丝绒",
+        "牛仔"
+      ]
+    },
+    "layering": {
+      "level": "低",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 3,
+      "max": 5
+    }
+  },
+  "key_items": [
+    {
+      "category_code": "JK",
+      "fit": [
+        "合身",
+        "结构感"
+      ],
+      "fabric": [
+        "羊毛"
+      ],
+      "hue": [
+        "黑",
+        "海军蓝",
+        "驼色"
+      ],
+      "bonus": 20,
+      "reason": "结构感西装——通勤的锚点单品。一件好西装=一周的搭配"
+    },
+    {
+      "category_code": "PT",
+      "fit": [
+        "合身"
+      ],
+      "fabric": [
+        "羊毛"
+      ],
+      "bonus": 15,
+      "reason": "阔腿西装裤——高腰+垂坠感+长度拖地或及踝"
+    },
+    {
+      "category_code": "SHIRT",
+      "fabric": [
+        "真丝"
+      ],
+      "hue": [
+        "白",
+        "藕粉",
+        "黑"
+      ],
+      "bonus": 15,
+      "reason": "真丝衬衫——垂坠感+光泽=专业+女人味"
+    },
+    {
+      "category_code": "SHOE",
+      "hue": [
+        "黑",
+        "裸色"
+      ],
+      "bonus": 10,
+      "reason": "尖头平底鞋/猫跟鞋——1-5cm跟高"
+    },
+    {
+      "category_code": "BAG",
+      "fabric": [
+        "皮质"
+      ],
+      "bonus": 10,
+      "reason": "托特包/邮差包——最好能装笔记本"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "not_in",
+      "value": [
+        "速干",
+        "尼龙",
+        "牛仔"
+      ],
+      "reason": "休闲/运动面料不属于通勤语境"
+    },
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身",
+        "廓形"
+      ],
+      "reason": "过紧或过松都不专业"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "not_in",
+      "value": [
+        "碎花",
+        "印花",
+        "Logo",
+        "动物纹"
+      ],
+      "reason": "装饰性图案不属于职场"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "value": [
+        "羊毛",
+        "真丝",
+        "羊绒",
+        "重磅棉"
+      ],
+      "weight": 15
+    },
+    {
+      "field": "pattern.type",
+      "operator": "eq",
+      "value": "纯色",
+      "weight": 10
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "in",
+      "value": [
+        "黑",
+        "海军蓝",
+        "灰",
+        "驼色",
+        "白",
+        "藕粉"
+      ],
+      "weight": 8
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 10,
+    "拉长腿部": 10,
+    "增加肩线": 5,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [
+    "WF-06",
+    "WF-01"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-08"
+  ],
+  "tier": "core",
+  "trend_category": "popular_trend"
+}

@@ -12,25 +12,31 @@ WARDROBE_DIR = os.path.join(PROJ, 'wardrobe')
 if PROJ not in sys.path:
     sys.path.insert(0, PROJ)
 
-# ── 多用户支持 ──
+# ── 多用户支持 v2 ──
 from tools.common import resolve_outfits_dir, resolve_wardrobe_dir, resolve_user_dir
 
 USER_ID = None
+USER_GENDER = None
 args = sys.argv[1:]
 for i, arg in enumerate(args):
     if arg == '--user' and i + 1 < len(args):
         USER_ID = args[i + 1]
-        break
     elif arg.startswith('--user='):
         USER_ID = arg.split('=', 1)[1]
-        break
+    elif arg == '--gender' and i + 1 < len(args):
+        USER_GENDER = args[i + 1]
+    elif arg.startswith('--gender='):
+        USER_GENDER = arg.split('=', 1)[1]
 
 # 如果是多用户模式，切换 OUTFITS_DIR
 if USER_ID:
-    OUTFITS_DIR = resolve_outfits_dir(USER_ID)
-    WARDROBE_DIR = resolve_wardrobe_dir(USER_ID)
-    OUTFITS_REL = 'users/{}/outfits'.format(USER_ID)  # CDN 相对路径（不含 ../ 前缀）
-    WARDROBE_REL = 'users/{}/wardrobe'.format(USER_ID)
+    if not USER_GENDER:
+        from tools.user_manager import get_user_gender
+        USER_GENDER = get_user_gender(USER_ID) or 'male'
+    OUTFITS_DIR = resolve_outfits_dir(USER_GENDER, USER_ID)
+    WARDROBE_DIR = resolve_wardrobe_dir(USER_GENDER, USER_ID)
+    OUTFITS_REL = 'users/{}/{}/outfits'.format(USER_GENDER, USER_ID)
+    WARDROBE_REL = 'users/{}/{}/wardrobe'.format(USER_GENDER, USER_ID)
 else:
     OUTFITS_REL = 'outfits'
     WARDROBE_REL = 'wardrobe'

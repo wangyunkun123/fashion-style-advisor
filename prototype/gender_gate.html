@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<title>穿搭助手 · 欢迎</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#e2e6ec;display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
+#app{max-width:500px;width:100%;background:#f8fafc;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
+
+h1{font-size:28px;font-weight:800;color:#1a2838;letter-spacing:-.5px;margin-bottom:8px}
+.subtitle{font-size:15px;color:#6b7d94;margin-bottom:40px;text-align:center}
+
+/* Gender cards */
+.gender-cards{display:flex;gap:16px;width:100%;max-width:360px;margin-bottom:32px}
+.gender-card{flex:1;background:#fff;border:2px solid #e6ecf3;border-radius:16px;padding:32px 16px;text-align:center;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}
+.gender-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,58,95,.1)}
+.gender-card.selected{border-color:#1e3a5f;background:#f0f4fa;box-shadow:0 4px 16px rgba(30,58,95,.12)}
+.gender-card .emoji{font-size:48px;margin-bottom:12px;display:block}
+.gender-card .label{font-size:18px;font-weight:700;color:#1a2838;margin-bottom:4px}
+.gender-card .desc{font-size:12px;color:#94a3b5}
+
+/* User section */
+.user-section{width:100%;max-width:360px;display:none}
+.user-section.show{display:block}
+
+.user-list{margin-bottom:20px}
+.user-list .title{font-size:13px;color:#6b7d94;margin-bottom:10px;font-weight:600}
+.user-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e6ecf3;border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.user-item:hover{background:#f0f4fa;border-color:#1e3a5f}
+.user-item .avatar{width:36px;height:36px;background:#1e3a5f;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.user-item .info{flex:1}
+.user-item .info .name{font-size:15px;font-weight:600;color:#1a2838}
+.user-item .info .status{font-size:11px;color:#94a3b5}
+.user-item .arrow{font-size:18px;color:#94a3b5}
+
+/* New user input */
+.new-user{margin-top:16px}
+.new-user label{font-size:13px;color:#6b7d94;font-weight:600;display:block;margin-bottom:8px}
+.new-user .input-row{display:flex;gap:8px}
+.new-user input{flex:1;padding:12px 16px;border:1px solid #e6ecf3;border-radius:10px;font-size:14px;color:#1a2838;outline:none;background:#fff;-webkit-appearance:none}
+.new-user input:focus{border-color:#1e3a5f}
+.new-user button{padding:12px 20px;background:#1e3a5f;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.new-user button:active{background:#2a5080}
+.new-user .hint{font-size:11px;color:#94a3b5;margin-top:6px}
+
+/* Gender step indicator */
+.step-indicator{display:flex;gap:8px;margin-bottom:40px}
+.step-dot{width:10px;height:10px;border-radius:50%;background:#e6ecf3}
+.step-dot.active{background:#1e3a5f}
+.step-dot.done{background:#4caf50}
+</style>
+</head>
+<body>
+<div id="app">
+    <h1>穿搭助手</h1>
+    <p class="subtitle">AI 时尚顾问，专攻亚洲穿搭</p>
+
+    <div class="step-indicator">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+    </div>
+
+    <!-- Step 1: Gender selection -->
+    <div class="gender-cards" id="genderCards">
+        <div class="gender-card" onclick="selectGender('male')" id="cardMale">
+            <span class="emoji">👔</span>
+            <div class="label">Male</div>
+            <div class="desc">男士穿搭</div>
+        </div>
+        <div class="gender-card" onclick="selectGender('female')" id="cardFemale">
+            <span class="emoji">👗</span>
+            <div class="label">Female</div>
+            <div class="desc">女士穿搭</div>
+        </div>
+    </div>
+
+    <!-- Step 2: User selection -->
+    <div class="user-section" id="userSection">
+        <div class="user-list">
+            <div class="title" id="userListTitle">已有用户</div>
+            <div id="userList"></div>
+        </div>
+
+        <div class="new-user">
+            <label for="newUserId">或创建新用户</label>
+            <div class="input-row">
+                <input type="text" id="newUserId" placeholder="输入用户名…" maxlength="32" autocomplete="off">
+                <button onclick="createUser()">创建</button>
+            </div>
+            <div class="hint">仅支持字母、数字、下划线和连字符</div>
+        </div>
+    </div>
+</div>
+
+<script>
+var selectedGender = '';
+var usersData = {male:[], female:[]};
+
+// Load users from server
+async function loadUsers() {
+    try {
+        var resp = await fetch('/api/users/list');
+        var data = await resp.json();
+        usersData = data.users || {male:[], female:[]};
+    } catch(e) {
+        console.log('User list not available yet');
+    }
+}
+
+function selectGender(gender) {
+    selectedGender = gender;
+    document.getElementById('cardMale').classList.toggle('selected', gender === 'male');
+    document.getElementById('cardFemale').classList.toggle('selected', gender === 'female');
+    document.getElementById('dot1').classList.remove('active');
+    document.getElementById('dot1').classList.add('done');
+    document.getElementById('dot2').classList.add('active');
+    document.getElementById('userSection').classList.add('show');
+    document.getElementById('userListTitle').textContent = (gender === 'male' ? '👔 男士' : '👗 女士') + ' · 已有用户';
+    renderUserList();
+    // Save gender to cookie
+    document.cookie = 'fashion_gender=' + gender + ';path=/;max-age=31536000;SameSite=Lax';
+}
+
+function renderUserList() {
+    var list = document.getElementById('userList');
+    var users = usersData[selectedGender] || [];
+    if (users.length === 0) {
+        list.innerHTML = '<div style="color:#94a3b5;font-size:13px;padding:12px 0">暂无用户，请创建新用户</div>';
+    } else {
+        list.innerHTML = users.map(function(u) {
+            return '<div class="user-item" onclick="enterApp(\'' + u + '\')">' +
+                '<div class="avatar">' + u[0].toUpperCase() + '</div>' +
+                '<div class="info"><div class="name">' + u + '</div><div class="status">点击进入</div></div>' +
+                '<div class="arrow">→</div></div>';
+        }).join('');
+    }
+}
+
+function createUser() {
+    var input = document.getElementById('newUserId');
+    var name = input.value.trim();
+    if (!name) return;
+    if (!/^[a-zA-Z0-9_-]{1,32}$/.test(name)) {
+        alert('用户名仅支持字母、数字、下划线和连字符，最多32个字符');
+        return;
+    }
+    enterApp(name);
+}
+
+function enterApp(userId) {
+    document.cookie = 'fashion_user=' + userId + ';path=/;max-age=31536000;SameSite=Lax';
+    // Redirect to main app with gender and user params
+    var url = '/?gender=' + selectedGender + '&user=' + userId;
+    window.location.href = url;
+}
+
+// Handle Enter key
+document.getElementById('newUserId').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') createUser();
+});
+
+// Init
+loadUsers();
+</script>
+</body>
+</html>

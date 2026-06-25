@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-24T02:38:40Z",
+  "user_id": "default",
+  "items_used": [
+    "TS-002",
+    "PT-009",
+    "SHOE-010"
+  ],
+  "style_matched": "日常松弛",
+  "occasion": "日常",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 34261,
+  "api_calls": 2
+}

@@ -1,0 +1,35 @@
+{
+  "user_id": "kun",
+  "gender": "male",
+  "created": "2026-06-25T06:19:34Z",
+  "onboarding_step": 4,
+  "onboarding_complete": true,
+  "onboarding_done_at": "2026-06-25 13:32:58",
+  "body": {
+    "height": "179",
+    "weight": "68",
+    "shape": "rectangle",
+    "skin_tone": "light",
+    "age": "31",
+    "shoulder_type": "标准",
+    "face_shape": "椭圆脸",
+    "concern": ""
+  },
+  "style_prefs": [
+    "american_ivy_league",
+    "clean_fit",
+    "athleisure_sport"
+  ],
+  "body_secrets": "有小肚子",
+  "lifestyle": {
+    "occupation": "",
+    "style_preference": "",
+    "pain_points": "不够时尚"
+  },
+  "photos": {
+    "full_body_front": "users/male/kun/profile/photos/user_full_front.jpg",
+    "full_body_side": "users/male/kun/profile/photos/user_side.jpg",
+    "face_closeup": "users/male/kun/profile/photos/user_face.jpg"
+  },
+  "use_my_image": true
+}

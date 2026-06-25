@@ -103,7 +103,7 @@ from tools.user_manager import (
     create_user as _create_user,
     update_last_active as _update_user_active,
 )
-from tools.common import resolve_user_dir, resolve_wardrobe_dir, resolve_outfits_dir, resolve_tags_dir
+from tools.common import resolve_user_dir, resolve_wardrobe_dir, resolve_outfits_dir, resolve_tags_dir, resolve_enhanced_dir
 from tools.image_cache import image_cache_get, image_cache_put, resize_image_bytes, pre_compress_dir
 from tools.ai_api import call_doubao_chat, extract_json, resize_image_for_api
 from tools.photo_utils import get_person_photos, remove_person_background, select_person_photos_for_prompt
@@ -114,19 +114,20 @@ from tools.history import load_history, save_history, HISTORY_FILE
 # install_excepthook() 已在模块导入时调用
 
 def _resolve_user_from_request(handler):
-    """从请求中解析用户 ID。返回 (user_id, need_onboarding)。
-    优先级：1) URL ?user= 参数  2) Cookie fashion_user  3) default
-    - 无 ?user= 参数 → ('default', False)，完全向下兼容
-    - ?user=alice 存在 → ('alice', False)
-    - ?user=alice 不在注册表 → (user_id, True)，触发 onboarding
+    """从请求中解析用户上下文。返回 (gender, user_id, need_onboarding)。
+    优先级：1) URL ?user= + ?gender= 参数  2) Cookie fashion_user  3) 无上下文 → (None, None, False) 触发性别门
+
+    - ?user=kun → 从注册表查 gender，返回 ('male', 'kun', False)
+    - ?user=new_user&gender=female → ('female', 'new_user', True) 触发 onboarding
+    - 无参数 → (None, None, False)，前端显示性别门
     """
     from urllib.parse import urlparse, parse_qs
     parsed = urlparse(handler.path)
     qs = parse_qs(parsed.query)
     user_id = qs.get('user', [None])[0]
+    gender_from_url = qs.get('gender', [None])[0]
 
     # Cookie 回退：仅 API 调用不带 ?user= 时从 Cookie 读
-    # 主页（/）不用 Cookie，否则访问过 ?user=alice 后单人首页也会变成 alice
     if not user_id:
         is_api = parsed.path.startswith('/api/')
         if is_api:
@@ -137,21 +138,28 @@ def _resolve_user_from_request(handler):
                 if cm:
                     user_id = cm.group(1)
 
+    # 无用户上下文 → 性别门
     if not user_id or user_id == 'default':
-        return ('default', False)
+        return (None, None, False)
 
-    # 安全校验：只允许字母数字下划线连字符
+    # 安全校验
     import re
     if not re.match(r'^[a-zA-Z0-9_-]{1,32}$', user_id):
-        return ('default', False)
+        return (None, None, False)
 
+    # 从注册表查 gender
     reg = _load_user_registry()
-    if user_id in reg:
-        _update_user_active(user_id)
-        return (user_id, False)
+    for g, users in reg.items():
+        if user_id in users:
+            _update_user_active(user_id)
+            return (g, user_id, False)
 
-    # 用户不在注册表中 → 需要 onboarding
-    return (user_id, True)
+    # 用户不在注册表 → onboarding。如有 ?gender= 参数则使用
+    if gender_from_url in ('male', 'female'):
+        return (gender_from_url, user_id, True)
+
+    # 用户不存在且无 gender → 性别门
+    return (None, user_id, True)
 
 CATEGORY_CODE_TO_NAME = {k: v['cn'] for k, v in CAT_CONFIG.items()}
 CAT_EMOJI = {v['cn']: v['emoji'] for k, v in CAT_CONFIG.items()}
@@ -188,8 +196,8 @@ def _outfit_items_dirs():
     """遍历 outfits/*/items/ 目录，最新优先（多用户感知）"""
     import os as _os
     from tools.common import get_thread_user
-    uid = get_thread_user()
-    outfits_dir = resolve_outfits_dir(uid) if uid else _os.path.join(PROJECT_DIR, 'outfits')
+    gender, uid = get_thread_user()
+    outfits_dir = resolve_outfits_dir(gender, uid) if uid else _os.path.join(PROJECT_DIR, 'outfits')
     if not _os.path.exists(outfits_dir): return
     for d in sorted(_os.listdir(outfits_dir), reverse=True):
         dp = _os.path.join(outfits_dir, d)
@@ -203,9 +211,9 @@ def _find_item_thumb(clothing_id):
     """查找单品缩略图（enhanced 优先: cutout_thumb > thumb > cutout → 兜底 outfit items/"""
     import os as _os
     from tools.common import get_thread_user
-    uid = get_thread_user()
+    gender, uid = get_thread_user()
     if uid:
-        enhanced_dir = os.path.join(resolve_wardrobe_dir(uid), 'enhanced')
+        enhanced_dir = resolve_enhanced_dir(gender, uid)
     else:
         enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
     gl = [(enhanced_dir, '{cid}_*cutout_thumb*'),
@@ -219,9 +227,9 @@ def _find_item_cutout(clothing_id):
     """查找单品抠图大图（enhanced/ 优先 — 用户调整版为准 → 兜底 outfit items/）"""
     import os as _os
     from tools.common import get_thread_user
-    uid = get_thread_user()
+    gender, uid = get_thread_user()
     if uid:
-        enhanced_dir = os.path.join(resolve_wardrobe_dir(uid), 'enhanced')
+        enhanced_dir = resolve_enhanced_dir(gender, uid)
     else:
         enhanced_dir = _os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
     gl = [(enhanced_dir, '{cid}_cutout.png'),        # 精确匹配完整抠图，排除缩略图
@@ -230,15 +238,23 @@ def _find_item_cutout(clothing_id):
 
 
 def _find_report_item_thumbnail(item_id):
-    """查找报告用的单品缩略图 URL，优先 CDN"""
-    thumb_path = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{item_id}_cutout_thumb.png')
+    """查找报告用的单品缩略图 URL，优先 CDN（多用户感知）"""
+    from tools.common import get_thread_user
+    gender, uid = get_thread_user()
+    if uid:
+        enhanced_dir = resolve_enhanced_dir(gender, uid)
+        cdn_rel = f'users/{gender}/{uid}/wardrobe/enhanced'
+    else:
+        enhanced_dir = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced')
+        cdn_rel = 'wardrobe/enhanced'
+    thumb_path = os.path.join(enhanced_dir, f'{item_id}_cutout_thumb.png')
     if os.path.exists(thumb_path):
         try:
             h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
                              capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
-            return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/wardrobe/enhanced/{item_id}_cutout_thumb.png'
+            return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{cdn_rel}/{item_id}_cutout_thumb.png'
         except Exception:
-            return f'/wardrobe/enhanced/{item_id}_cutout_thumb.png'
+            return f'/{cdn_rel}/{item_id}_cutout_thumb.png'
     return ''
 
 
@@ -856,8 +872,8 @@ def _load_onboarding_html(user_id, step=1, gender=None):
         styles_dir = os.path.join(PROJECT_DIR, 'styles_universal')
         cat_path = os.path.join(PROJECT_DIR, 'styles_universal', 'categories.json')
     else:
-        styles_dir = os.path.join(PROJECT_DIR, 'styles_women')
-        cat_path = os.path.join(PROJECT_DIR, 'styles_women', 'categories.json')
+        styles_dir = os.path.join(PROJECT_DIR, 'styles/female')
+        cat_path = os.path.join(PROJECT_DIR, 'styles/female', 'categories.json')
 
     # 读取 trend_category 映射
     tc_map = {}
@@ -1394,8 +1410,9 @@ def _finalize_add_item(item_data):
         raise ValueError("缺少 clothing ID")
 
     # 多用户：从 item_data 或线程上下文获取 user_id
-    uid = item_data.get('_user_id') or get_thread_user()
-    user_dir = resolve_user_dir(uid)
+    _gender, uid = get_thread_user()
+    uid = item_data.get('_user_id') or uid
+    user_dir = resolve_user_dir(_gender, uid)
     wardrobe_dir = os.path.join(user_dir, 'wardrobe')
     tags__dir = os.path.join(wardrobe_dir, 'tags')
     enhanced__dir = os.path.join(wardrobe_dir, 'enhanced')
@@ -1664,8 +1681,8 @@ def match_for_new_item(new_item_tags):
     """
     # 多用户隔离：从当前线程上下文获取用户ID
     from tools.common import get_thread_user as _gtu
-    _muid = _gtu()
-    tags_dir = resolve_tags_dir(_muid) if _muid else os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+    _mgender, _muid = _gtu()
+    tags_dir = resolve_tags_dir(_mgender, _muid) if _muid else os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
 
     # 加载所有衣橱单品标签
     wardrobe_items = {}
@@ -1881,12 +1898,14 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
         # 设置线程本地用户上下文
         if uid and uid != 'default':
             from tools.common import set_thread_user as _set_thread_user
-            _set_thread_user(uid)
+            from tools.user_manager import get_user_gender as _gug
+            _g = _gug(uid) or 'male'
+            _set_thread_user(_g, uid)
 
         tasks.update(task_id, status='running', message='正在AI选品搭配...')
 
         # ── 1. 加载衣橱标签 ──
-        tags_dir = resolve_tags_dir(uid)
+        tags_dir = resolve_tags_dir(_g, uid) if uid else os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
         all_tags = {}
         for fn in sorted(os.listdir(tags_dir)):
             if fn == 'SCORE_CACHE.json' or not fn.endswith('.json'):
@@ -2183,10 +2202,12 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
         # 设置线程本地用户上下文（子线程不继承父线程的 threading.local()）
         if uid and uid != 'default':
             from tools.common import set_thread_user as _set_thread_user
-            _set_thread_user(uid)
+            from tools.user_manager import get_user_gender as _gug
+            _g = _gug(uid) or 'male'
+            _set_thread_user(_g, uid)
 
         # 1. 保存临时图片到用户目录
-        user_dir = resolve_user_dir(uid)
+        user_dir = resolve_user_dir(_g, uid) if uid else PROJECT_DIR
         incoming_dir = os.path.join(user_dir, 'wardrobe', '_incoming')
         os.makedirs(incoming_dir, exist_ok=True)
         temp_paths = []
@@ -2886,8 +2907,9 @@ def _build_admin_html():
     users_data = []
     reg = _load_user_registry()
 
-    for uid in reg:
-        u_dir = os.path.join(PROJECT_DIR, 'users', uid)
+    for gender, g_users in reg.items():
+        for uid in g_users:
+            u_dir = os.path.join(PROJECT_DIR, 'users', gender, uid)
         profile_path = os.path.join(u_dir, 'profile.json')
         outfits_dir = os.path.join(u_dir, 'outfits')
 
@@ -3062,7 +3084,9 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     pipeline_user = user_id
     if pipeline_user and pipeline_user != 'default':
         from tools.common import set_thread_user as _set_thread_user
-        _set_thread_user(pipeline_user)
+        from tools.user_manager import get_user_gender as _gug
+        _pipeline_gender = pipeline_gender if 'pipeline_gender' in dir() else (_gug(pipeline_user) or 'male')
+        _set_thread_user(_pipeline_gender, pipeline_user)
 
     # ── 🆕 统一意图解析（Phase 1 正则 + Phase 2 LLM）──
     from tools.intent_parser import parse_user_intent, get_recent_new_item_ids
@@ -3693,7 +3717,7 @@ def _render_encyclopedia_html(md_path, style_id, dir_name):
     if os.path.exists(rep_path):
         commit = get_git_commit()
         base = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}'
-        cover_url = f'{base}/styles_women/{dir_name}/representative.jpg'
+        cover_url = f'{base}/styles/female/{dir_name}/representative.jpg'
         cover_html = f'<img src="{cover_url}" alt="{name_zh}" style="width:100%;max-width:400px;border-radius:12px;margin:16px auto;display:block">'
 
     css = '''
@@ -3748,7 +3772,7 @@ def _style_has_image(style_id):
 
 def _load_style_cards(include_universal=False, with_top_items=False, user_id=None):
     """加载风格卡片数据，返回 [{id, name_zh, name_en, description, category, has_encyclopedia, image, top_items?}]
-    女性用户自动加载 styles_women/ 下的风格，男性用户加载 styles/ + styles_universal/"""
+    女性用户自动加载 styles/female/ 下的风格，男性用户加载 styles/ + styles_universal/"""
     styles = []
 
     # ── 判断用户性别 ──
@@ -3764,9 +3788,9 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
         except:
             pass
 
-    # ── 女性用户：加载 styles_women/ ──
+    # ── 女性用户：加载 styles/female/ ──
     if is_female:
-        women_dir = os.path.join(PROJECT_DIR, 'styles_women')
+        women_dir = os.path.join(PROJECT_DIR, 'styles/female')
         if os.path.isdir(women_dir):
             for d in sorted(os.listdir(women_dir)):
                 if d.startswith('.') or d.startswith('_') or d == 'README.md':
@@ -3802,8 +3826,8 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
                     # 使用 CDN（与男士一致）
                     commit = get_git_commit()
                     base = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}'
-                    image_url = f'{base}/styles_women/{d}/representative_thumb.jpg' if os.path.exists(rep_thumb_path) else f'{base}/styles_women/{d}/representative.jpg'
-                    image_full = f'{base}/styles_women/{d}/representative.jpg'
+                    image_url = f'{base}/styles/female/{d}/representative_thumb.jpg' if os.path.exists(rep_thumb_path) else f'{base}/styles/female/{d}/representative.jpg'
+                    image_full = f'{base}/styles/female/{d}/representative.jpg'
                 else:
                     img_dir = os.path.join(dp, 'images')
                     if os.path.isdir(img_dir):
@@ -3814,10 +3838,10 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
                             thumb_name = f'{name_noext}_thumb.jpg'
                             thumb_path = os.path.join(img_dir, thumb_name)
                             if os.path.exists(thumb_path):
-                                image_url = f'/styles_women/{d}/images/{thumb_name}'
+                                image_url = f'/styles/female/{d}/images/{thumb_name}'
                             else:
-                                image_url = f'/styles_women/{d}/images/{first_img}'
-                            image_full = f'/styles_women/{d}/images/{first_img}'
+                                image_url = f'/styles/female/{d}/images/{first_img}'
+                            image_full = f'/styles/female/{d}/images/{first_img}'
                 styles.append({
                     'id': sid,
                     'name_zh': name_zh,
@@ -3963,7 +3987,7 @@ def _get_dynamic_mode_styles(mode, user_id=None):
     trend_map = {}
     for cat_path in [
         os.path.join(PROJECT_DIR, 'styles_universal', 'categories.json'),
-        os.path.join(PROJECT_DIR, 'styles_women', 'categories.json'),
+        os.path.join(PROJECT_DIR, 'styles/female', 'categories.json'),
     ]:
         if os.path.exists(cat_path):
             try:
@@ -4069,13 +4093,22 @@ def _inject_empty_state(html, user_id):
             html = html.replace("</body>", "<script>" + empty_js + "</script></body>")
     return html
 
-def _load_chat_html(user_id=None):
-    """Load prototype HTML from file, with caching. Multi-user loads from users/<id>/cache/."""
-    if user_id and user_id != 'default':
-        proto_path = os.path.join(PROJECT_DIR, 'users', user_id, 'cache', 'prototype.html')
+def _load_gender_gate_html():
+    """加载性别选择首页 HTML"""
+    gate_path = os.path.join(PROJECT_DIR, 'prototype', 'gender_gate.html')
+    if os.path.exists(gate_path):
+        with open(gate_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    # 最小回退
+    return '<html><body><h1>Fashion Advisor</h1><p>Loading...</p></body></html>'
+
+def _load_chat_html(user_id=None, gender=None):
+    """Load prototype HTML from file, with caching. Multi-user loads from users/<gender>/<id>/cache/."""
+    if user_id and user_id != 'default' and gender:
+        proto_path = os.path.join(PROJECT_DIR, 'users', gender, user_id, 'cache', 'prototype.html')
         if os.path.exists(proto_path):
             # 检查原型是否过时：如果最新 outfit 比原型文件新，后台异步重建
-            _outfits_dir = resolve_outfits_dir(user_id)
+            _outfits_dir = resolve_outfits_dir(gender, user_id)
             _proto_mtime = os.path.getmtime(proto_path)
             _latest_data_mtime = _proto_mtime
             if os.path.isdir(_outfits_dir):
@@ -4085,7 +4118,7 @@ def _load_chat_html(user_id=None):
                         _dp_mtime = os.path.getmtime(_dp)
                         if _dp_mtime > _latest_data_mtime:
                             _latest_data_mtime = _dp_mtime
-            # 检查 .proto_ready 标记：如果存在且比最新数据新，原型就是最新的
+            # 检查 .proto_ready 标记
             _ready_marker = os.path.join(_outfits_dir, '.proto_ready')
             _proto_is_fresh = False
             if os.path.exists(_ready_marker):
@@ -4094,23 +4127,22 @@ def _load_chat_html(user_id=None):
                     _proto_is_fresh = True
             if not _proto_is_fresh and _latest_data_mtime > _proto_mtime + 10:
                 log(f"⏰ 原型过时 (滞后 {_latest_data_mtime - _proto_mtime:.0f}s)，后台重建: {user_id}")
-                def _bg_rebuild_proto(_uid=user_id, _pp=proto_path):
+                def _bg_rebuild_proto(_uid=user_id, _g=gender, _pp=proto_path):
                     try:
                         with _proto_rebuild_lock:
                             subprocess.run(
-                                [sys.executable, os.path.join(PROJECT_DIR, 'tools', 'build_prototype.py'), '--user', _uid],
+                                [sys.executable, os.path.join(PROJECT_DIR, 'tools', 'build_prototype.py'), '--gender', _g, '--user', _uid],
                                 capture_output=True, text=True, timeout=60, cwd=PROJECT_DIR)
                     except Exception: pass
                 threading.Thread(target=_bg_rebuild_proto, daemon=True).start()
             with open(proto_path, "r", encoding="utf-8") as f:
                 return _inject_empty_state(f.read(), user_id)
         # Fallback: build prototype on the fly for this user
-        log(f"🔨 构建用户原型: {user_id}")
-        # 确保必要目录存在
-        os.makedirs(resolve_outfits_dir(user_id), exist_ok=True)
+        log(f"🔨 构建用户原型: {gender}/{user_id}")
+        os.makedirs(resolve_outfits_dir(gender, user_id), exist_ok=True)
         try:
             result = subprocess.run(
-                [sys.executable, os.path.join(PROJECT_DIR, 'tools', 'build_prototype.py'), '--user', user_id],
+                [sys.executable, os.path.join(PROJECT_DIR, 'tools', 'build_prototype.py'), '--gender', gender, '--user', user_id],
                 capture_output=True, text=True, timeout=60,
                 cwd=PROJECT_DIR
             )
@@ -4268,18 +4300,24 @@ class WebhookHandler(BaseHTTPRequestHandler):
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(self.path)
 
-        # ── 多用户路由 ──
-        user_id, need_onboarding = _resolve_user_from_request(self)
+        # ── 多用户路由 v2 ──
+        gender, user_id, need_onboarding = _resolve_user_from_request(self)
         self.user_id = user_id
-        self.user_dir = resolve_user_dir(None if user_id == 'default' else user_id)
-        # 设置线程本地用户上下文，让 common.py / wardrobe_advisor 自动路由
+        self.user_gender = gender
+        self.user_dir = resolve_user_dir(gender, None if user_id == 'default' else user_id)
+        # 设置线程本地用户上下文
         from tools.common import set_thread_user
-        set_thread_user(None if user_id == 'default' else user_id)
+        set_thread_user(gender, None if user_id == 'default' else user_id)
+
+        # 性别门：无 gender 且非 API 请求 → 显示性别选择页
+        if gender is None and not parsed.path.startswith('/api/') and not parsed.path.startswith('/static/'):
+            self._html_resp(200, _load_gender_gate_html())
+            return
 
         # 需要 onboarding（新用户或注册但未完成 onboarding）→ 展示向导
         need_onboarding_page = need_onboarding
         onboarding_step = 0
-        onboarding_gender = ''
+        onboarding_gender = gender or ''
         if not need_onboarding and user_id != 'default':
             # 已注册但可能未完成 onboarding
             try:
@@ -4319,7 +4357,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             else:
                 # 默认用户：清除可能残留的 fashion_user Cookie，防止 API 调用被路由到其他用户
                 extra_headers['Set-Cookie'] = 'fashion_user=; Path=/; Max-Age=0'
-            self._html_resp(200, _load_chat_html(user_id=uid), extra_headers)
+            self._html_resp(200, _load_chat_html(user_id=uid, gender=gender), extra_headers)
             return
 
         # ── 管理员面板 ──
@@ -4426,9 +4464,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 html = html.replace('</body>', back_btn + '</body>')
                 self._html_resp(200, html)
                 return
-            # ── 女性风格：从 styles_women/ 目录查找并渲染 encyclopedia.md ──
+            # ── 女性风格：从 styles/female/ 目录查找并渲染 encyclopedia.md ──
             if style_id.startswith('WF-'):
-                women_dir = os.path.join(PROJECT_DIR, 'styles_women')
+                women_dir = os.path.join(PROJECT_DIR, 'styles/female')
                 # 查找匹配的目录
                 for d in sorted(os.listdir(women_dir)):
                     if d.startswith(style_id + '_') and os.path.isdir(os.path.join(women_dir, d)):
@@ -4630,6 +4668,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # 日志查看（实时刷新 HTML）
         if parsed.path == '/log/live':
             self._html_resp(200, LOG_LIVE_HTML)
+            return
+
+        # 用户列表 API（供性别门页面使用）
+        if parsed.path == '/api/users/list':
+            from tools.user_manager import list_users_by_gender
+            self._json_resp(200, {'users': list_users_by_gender()})
             return
 
         # 历史记录 API
@@ -5119,7 +5163,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 tc_map = {}
                 for cat_path in [
                     os.path.join(PROJECT_DIR, 'styles_universal', 'categories.json'),
-                    os.path.join(PROJECT_DIR, 'styles_women', 'categories.json'),
+                    os.path.join(PROJECT_DIR, 'styles/female', 'categories.json'),
                 ]:
                     if os.path.exists(cat_path):
                         try:
@@ -5410,7 +5454,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
         if parsed.path == '/api/styles/women':
             cards = []
-            women_dir = os.path.join(PROJECT_DIR, 'styles_women')
+            women_dir = os.path.join(PROJECT_DIR, 'styles/female')
             if os.path.isdir(women_dir):
                 for d in sorted(os.listdir(women_dir)):
                     fp = os.path.join(women_dir, d, 'fingerprint.json')
@@ -5423,7 +5467,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     if os.path.isdir(img_dir):
                         imgs = [x for x in os.listdir(img_dir) if x.lower().endswith(('.jpg','.png','.jpeg','.webp'))]
                         if imgs:
-                            img = f'/styles_women/{d}/images/{imgs[0]}'
+                            img = f'/styles/female/{d}/images/{imgs[0]}'
                     cards.append({
                         'id': sd.get('style_id', d),
                         'name_zh': sd.get('name_zh', d),
@@ -5463,20 +5507,22 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         from urllib.parse import urlparse, parse_qs
         parsed = urlparse(self.path)
 
-        # ── 多用户路由 ──
-        user_id, need_onboarding = _resolve_user_from_request(self)
+        # ── 多用户路由 v2 ──
+        gender, user_id, need_onboarding = _resolve_user_from_request(self)
         self.user_id = user_id
-        self.user_dir = resolve_user_dir(None if user_id == 'default' else user_id)
-        # 设置线程本地用户上下文，让 common.py / wardrobe_advisor 自动路由
+        self.user_gender = gender
+        self.user_dir = resolve_user_dir(gender, None if user_id == 'default' else user_id)
+        # 设置线程本地用户上下文
         from tools.common import set_thread_user
-        set_thread_user(None if user_id == 'default' else user_id)
+        set_thread_user(gender, None if user_id == 'default' else user_id)
 
         # Onboarding 启动
         if parsed.path == '/api/onboarding/start':
             qs = parse_qs(parsed.query)
             uid = qs.get('user', [None])[0]
-            if uid and uid not in _load_user_registry():
-                _create_user(uid)
+            onboard_gender = qs.get('gender', [gender])[0] or 'male'
+            if uid and not any(uid in users for users in _load_user_registry().values()):
+                _create_user(onboard_gender, uid)
             self._json_resp(200, {'ok': True})
             return
 
@@ -5504,7 +5550,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
             # 加载 trend_category 映射
             tc_map = {}
-            cat_path = os.path.join(PROJECT_DIR, 'styles_women' if gender == 'female' else 'styles_universal', 'categories.json')
+            cat_path = os.path.join(PROJECT_DIR, 'styles/female' if gender == 'female' else 'styles_universal', 'categories.json')
             if os.path.exists(cat_path):
                 try:
                     with open(cat_path) as f:
@@ -5515,7 +5561,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 except: pass
 
             cards = []
-            styles_dir = os.path.join(PROJECT_DIR, 'styles_universal' if gender == 'male' else 'styles_women')
+            styles_dir = os.path.join(PROJECT_DIR, 'styles_universal' if gender == 'male' else 'styles/female')
             if os.path.isdir(styles_dir):
                 for d in sorted(os.listdir(styles_dir)):
                     if d.startswith('_') or d.startswith('.') or not os.path.isdir(os.path.join(styles_dir, d)):
@@ -5777,11 +5823,13 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 json.dump(p, f, ensure_ascii=False, indent=2)
             # 更新注册表状态（不存在则创建）
             reg = _load_user_registry()
-            reg[user_id] = {
-                'created': reg[user_id]['created'] if user_id in reg else time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                'last_active': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                'status': 'active',
-            }
+            g = gender or 'male'
+            if g not in reg:
+                reg[g] = {}
+            if user_id not in reg[g]:
+                reg[g][user_id] = {'created': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}
+            reg[g][user_id]['last_active'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+            reg[g][user_id]['status'] = 'active'
             try:
                 from tools.user_manager import save_registry
                 save_registry(reg)

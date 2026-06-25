@@ -1967,7 +1967,9 @@ html = html.format(
 
 # Replace JS relative path prefix '../' with CDN variable
 # Pattern: '.../...'+func() → __CDN__+func()
+# Handle both single-quote and double-quote variants
 html = html.replace("'../'+", "__CDN__+")
+html = html.replace('"../\'+', '"__CDN__+')
 # Set CDN value + 注入用户标识 + fetch 拦截器（告别 Cookie 依赖）
 cdn_base = 'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{}/'.format(get_git_commit())
 _user_js = "var __USER__='{}';".format(USER_ID or 'default')

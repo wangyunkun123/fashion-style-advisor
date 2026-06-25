@@ -3772,7 +3772,7 @@ def _style_has_image(style_id):
 
 def _load_style_cards(include_universal=False, with_top_items=False, user_id=None):
     """加载风格卡片数据，返回 [{id, name_zh, name_en, description, category, has_encyclopedia, image, top_items?}]
-    女性用户自动加载 styles/female/ 下的风格，男性用户加载 styles/ + styles_universal/"""
+    女性用户自动加载 styles/female/ 下的风格，男性用户加载 styles/male/ + styles_universal/"""
     styles = []
 
     # ── 判断用户性别 ──
@@ -3855,8 +3855,8 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
                 })
         return styles
 
-    # ── 男性/默认：加载 styles/ (B-line fingerprints) ──
-    styles_dir = os.path.join(PROJECT_DIR, 'styles')
+    # ── 男性/默认：加载 styles/male/ (风格指纹) ──
+    styles_dir = os.path.join(PROJECT_DIR, 'styles/male')
     if os.path.isdir(styles_dir):
         for fn in sorted(os.listdir(styles_dir)):
             if not fn.endswith('.json'): continue
@@ -4397,13 +4397,16 @@ class WebhookHandler(BaseHTTPRequestHandler):
                         if '一句话定义' in line:
                             m = re.search(r'[：:]\s*(.+)', line)
                             if m: style_desc = m.group(1).strip()[:60]; break
-            # 风格名映射
-            try:
-                with open(os.path.join(PROJECT_DIR, 'styles', f'{style_id}.json')) as f:
-                    sj = json.load(f)
-                    style_name = sj.get('name_zh', style_id)
-            except:
-                style_name = style_id
+            # 风格名映射（尝试 male/female 路径）
+            style_name = style_id
+            for sp in [f'styles/male/{style_id}.json', f'styles/female/{style_id}/fingerprint.json']:
+                try:
+                    with open(os.path.join(PROJECT_DIR, sp)) as f:
+                        sj = json.load(f)
+                        style_name = sj.get('name_zh', style_id)
+                        break
+                except:
+                    pass
             TRY_HTML = f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>

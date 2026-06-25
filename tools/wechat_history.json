@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-06-25 12:57:58",
+    "style": "一套约会的穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=users/alice/outfits/2026-06-25_%E4%B8%80%E5%A5%97%E7%BA%A6%E4%BC%9A%E7%9A%84%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1_900w.jpg&w=900",
+    "stats": "⏱️ ~76s · 📊 ~2235 tokens · 🔄 2次AI"
+  },
+  {
     "time": "2026-06-25 12:51:00",
     "style": "今日穿搭",
     "status": "done",

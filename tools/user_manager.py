@@ -31,6 +31,7 @@ GENDER_DEFAULTS = {
     'female': {
         'body': {'height': '160', 'weight': '55', 'shape': 'pear', 'skin_tone': 'medium'},
         'default_styles': ['WF-01', 'WF-05', 'WF-06'],
+        'hair': {'length': 'long', 'color': 'black', 'texture': 'straight'},
         'body_shapes': [
             {'id': 'hourglass', 'emoji': '⌛', 'name': '沙漏型', 'desc': '肩臀同宽·腰细'},
             {'id': 'pear', 'emoji': '🍐', 'name': '梨型', 'desc': '肩窄臀宽'},

@@ -66,6 +66,7 @@ from tools.common import (
     get_git_commit, get_cdn_base, cdn_url,
     parse_outfit_md, get_banned_items, get_recent_outfits, get_wear_counts,
     load_all_clothing, load_score_cache, load_style_fingerprint,
+    resolve_user_dir,
 )
 
 # 兼容旧代码的本地别名
@@ -211,7 +212,7 @@ def _get_persona_description(user_id=None):
     import os as _os
     profile_path = _os.path.join(CONFIG_DIR, 'user_profile.json')
     if user_id:
-        up_dir = _os.path.join(_os.path.dirname(CONFIG_DIR), 'users', user_id)
+        up_dir = resolve_user_dir(user_id=user_id)
         up_path = _os.path.join(up_dir, 'profile.json')
         if _os.path.exists(up_path):
             profile_path = up_path
@@ -329,6 +330,111 @@ def get_photo_direction(style_ids):
         f"  ⚠️ 这些参数要融入 seedream_prompt，但不要逐字复制，要自然改写。\n"
         f"  ⚠️ 姿势必须动态（禁止 standing），场景必须具体有辨识度。"
     )
+
+
+# ── 女性美妆方向映射（按集群）──
+_BEAUTY_DIRECTION_CACHE = None
+
+
+def _load_beauty_directions():
+    """延迟加载美妆映射"""
+    global _BEAUTY_DIRECTION_CACHE
+    if _BEAUTY_DIRECTION_CACHE is None:
+        bp = os.path.join(PROJ_DIR, 'config', 'beauty_direction_female.json')
+        if os.path.exists(bp):
+            _BEAUTY_DIRECTION_CACHE = load_json(bp).get('clusters', {})
+        else:
+            _BEAUTY_DIRECTION_CACHE = {}
+    return _BEAUTY_DIRECTION_CACHE
+
+
+def _resolve_beauty_cluster(style_id):
+    """根据 style_id 解析所属美学集群。从 categories.json 查找。"""
+    cp = os.path.join(PROJ_DIR, 'styles/female', 'categories.json')
+    if not os.path.exists(cp):
+        return None
+    try:
+        cats = load_json(cp)
+        for cname, cinfo in cats.get('clusters', {}).items():
+            if style_id in cinfo.get('styles', []):
+                return cname
+    except Exception:
+        pass
+    return None
+
+
+def get_beauty_direction(style_ids, user_hair=None):
+    """根据目标风格 + 用户发型档案，返回美妆指引（用于 seedream_prompt 增强）。
+    user_hair: {'length': 'long', 'color': 'black', 'texture': 'straight'} 或 None
+
+    Returns:
+        beauty_context (str): 注入到 system prompt 的美妆指导文本
+        beauty_en (str): 简短英文美妆描述，直接融入 seedream prompt
+    """
+    clusters = _load_beauty_directions()
+    if not clusters:
+        return '', ''
+
+    # 找到主风格对应的集群
+    matched_cluster = None
+    for sid in style_ids:
+        cname = _resolve_beauty_cluster(sid)
+        if cname and cname in clusters:
+            matched_cluster = clusters[cname]
+            break
+
+    if not matched_cluster:
+        return '', ''
+
+    hair_en = matched_cluster['hair']['en']
+    hair_cn = matched_cluster['hair']['cn']
+    makeup_en = matched_cluster['makeup']['en']
+    makeup_cn = matched_cluster['makeup']['cn']
+    vibe = matched_cluster.get('vibe', '')
+
+    # ── 用户发型档案覆盖默认值 ──
+    hair_overrides = []
+    if user_hair:
+        length_map = {'short': 'short hair', 'medium': 'medium-length hair', 'long': 'long hair'}
+        color_map = {'black': 'black hair', 'brown': 'brown hair', 'blonde': 'blonde hair',
+                     'red': 'red hair', 'gray': 'gray/silver hair'}
+        texture_map = {'straight': 'straight texture', 'wavy': 'wavy/curly texture', 'curly': 'curly voluminous texture'}
+
+        hl = length_map.get(user_hair.get('length', ''), '')
+        hc = color_map.get(user_hair.get('color', ''), '')
+        ht = texture_map.get(user_hair.get('texture', ''), '')
+
+        if hl:
+            hair_overrides.append(f'  用户发长: {hl} → 保持真实长度，在此基础上做造型')
+        if hc:
+            hair_overrides.append(f'  用户发色: {hc} → 不改变发色，保持自然')
+        if ht:
+            hair_overrides.append(f'  用户发质: {ht} → 保持真实发质纹理')
+
+    override_text = '\n'.join(hair_overrides) if hair_overrides else ''
+
+    # ── 构建中文指引（给 AI 看的）──
+    beauty_context = f"""💇‍♀️💄 发型与妆容指导（女性专属 — 用于 seedream_prompt 创作）：
+
+📌 风格美妆方向（{matched_cluster.get('label_zh', '')}集群）:
+  发型: {hair_cn}
+  妆容: {makeup_cn}
+  氛围: {vibe}
+
+⚠️ 用户真实特征（必须尊重，不可随意改变发色/发长/发质）:
+{override_text if override_text else '  使用风格默认发型（用户未填写发质档案）'}
+
+📌 要求:
+  1. seedream_prompt 中必须包含 2-3 句发型和妆容的英文描述
+  2. 发型描述要融入整体造型感（如 'soft waves cascading over shoulders' 或 'sleek low bun'）
+  3. 妆容描述聚焦在整体效果，不要逐条列举（如 'dewy natural makeup with a soft pink lip'）
+  4. 发型妆容必须与穿搭风格和场景协调
+  5. ⚠️ 必须尊重用户的真实发长/发色/发质，不可用 Seedream 生成与用户完全不同的发色"""
+
+    # ── 构建简短英文描述（用于 seedream prompt 融合）──
+    beauty_en = f"hair: {hair_en}, makeup: {makeup_en}"
+
+    return beauty_context, beauty_en
 
 
 # ============================================================
@@ -1167,7 +1273,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     is_female = False
     if user_id:
         import os as _os
-        up_path_check = _os.path.join(_os.path.dirname(CONFIG_DIR), 'users', user_id, 'profile.json')
+        up_path_check = _os.path.join(resolve_user_dir(user_id=user_id), 'profile.json')
         if _os.path.exists(up_path_check):
             up_check = load_json(up_path_check)
             is_female = (up_check.get('gender', 'female') == 'female')
@@ -1275,11 +1381,13 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 # ============================================================
 
 def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
-                          occasion, explore_level, temp_high, weather_cond, user_id=None):
+                          occasion, explore_level, temp_high, weather_cond, user_id=None,
+                          user_hair=None):
     """构建 Round 2「创作」prompt — 基于已选单品，生成 seedream_prompt/穿搭技巧/推荐理由/关键词
 
     selection: Round 1 的 AI 输出 dict，含 items/color_story/silhouette/anchor/style
     user_id: 多用户上下文，用于确定性别
+    user_hair: {'length': 'long', 'color': 'black', 'texture': 'straight'} 女性发型档案
     """
     all_clothes = load_all_clothing()
     today = time.strftime('%Y-%m-%d')
@@ -1288,12 +1396,33 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
     is_female = False
     if user_id:
         import os as _os
-        up_path_check = _os.path.join(_os.path.dirname(CONFIG_DIR), 'users', user_id, 'profile.json')
+        up_path_check = _os.path.join(resolve_user_dir(user_id=user_id), 'profile.json')
         if _os.path.exists(up_path_check):
             up_check = load_json(up_path_check)
             is_female = (up_check.get('gender', 'female') == 'female')
     gender_label = '女性' if is_female else '男性'
     gender_en = 'woman' if is_female else 'man'
+
+    # ── 女性美妆指引 ──
+    beauty_context = ''
+    beauty_en = ''
+    if is_female:
+        # 读取用户发型档案
+        if not user_hair and user_id:
+            try:
+                up_path = os.path.join(resolve_user_dir(user_id=user_id), 'profile.json')
+                if os.path.exists(up_path):
+                    up = load_json(up_path)
+                    user_hair = up.get('hair')
+            except Exception:
+                pass
+        beauty_context, beauty_en = get_beauty_direction(target_styles, user_hair)
+        if beauty_context:
+            log_text = f"💇‍♀️ 美妆方向: {len(beauty_context)}字符"
+        else:
+            log_text = "💇‍♀️ 美妆方向: 无匹配集群"
+        # log via print since we don't have the log function here
+        print(log_text)
 
     # ── 构建单品详情文本 ──
     item_lines = []
@@ -1335,6 +1464,12 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
         emoji = '🚀' if explore_level >= 0.8 else '🧪'
         explore_note = f'\n{emoji} 探索度: {explore_level} — 鼓励创意发挥\n'
 
+    beauty_schema = ''
+    beauty_note = ''
+    if is_female and beauty_context:
+        beauty_schema = ',\n  "beauty_direction": {{"hair": "2-3句英文发型描述（融入seedream_prompt）", "makeup": "2-3句英文妆容描述（融入seedream_prompt）"}}'
+        beauty_note = '\n- ⚠️ seedream_prompt 必须自然融入发型和妆容描述（从 beauty_direction 的 hair/makeup 字段改写），不可省略。发型妆容是女性穿搭整体造型的关键组成部分'
+
     system_prompt = f"""你是专攻亚洲{gender_label}穿搭的 AI 时尚顾问（创作模式）。
 
 你的任务是基于已选定的穿搭单品，生成面向消费者的穿搭叙事内容。单品已经确定，你不需要再选品。
@@ -1345,7 +1480,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
   "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
   "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
   "dressing_tips": ["穿搭技巧1：基于所选单品的独特特征（特定颜色/面料/廓形/品牌设计细节/鞋型/领型），而非通用建议", "穿搭技巧2：必须与技巧1来自不同类别，数组长度1-2"],
-  "seedream_prompt": "英文 Seedream 生图提示词(200-350字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。详细描述服装细节和场景氛围，营造时尚大片的摄影感"
+  "seedream_prompt": "英文 Seedream 生图提示词(250-400字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。{'💇‍♀️💄必须自然融入下方发型与妆容指导中的发型和妆容描述。' if is_female else ''}详细描述服装细节和场景氛围，营造时尚大片的摄影感"{beauty_schema}
 }}
 
 注意：
@@ -1354,7 +1489,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
   1. 两条技巧必须来自不同类别（见下方技巧类型池），严禁同类重复
   2. 严禁使用「下摆塞前腰1/3」或任何形式的塞衣摆——这是最偷懒的通用技巧，除非该上衣的设计本身就是为塞入穿着（如正式衬衫配西裤）。绝大多数休闲T恤/衬衫应该自然垂坠或仅在特定姿势下微塞
   3. 每条技巧必须引用所选单品的具体特征：颜色名、面料、廓形、品牌设计细节、鞋型、领型等。不能说「上衣塞进去」，要说「因为TS-009是落肩宽松版型，自然垂坠的下摆刚好在臀围线上方，配合直筒牛仔裤能拉长腿部比例」
-  4. 优先选择最能体现这套穿搭独特性的技巧，而非百搭通用技巧
+  4. 优先选择最能体现这套穿搭独特性的技巧，而非百搭通用技巧{beauty_note}
 
 技巧类型池（两条技巧必须从不同类别选取）：
 🎨 颜色呼应：上下装配色逻辑、同色系跳色、补色碰撞、鞋与上衣/帽子的颜色链
@@ -1381,12 +1516,14 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 {items_text}
 
 {photo_direction}
+{beauty_context}
 
-─── 请基于以上已确定的单品，输出 JSON 格式的创作内容（keywords/reasoning/rationale/dressing_tips/seedream_prompt）。───"""
+─── 请基于以上已确定的单品，输出 JSON 格式的创作内容（keywords/reasoning/rationale/dressing_tips/seedream_prompt{'/beauty_direction' if is_female else ''}）。───"""
 
     return {
         'system_prompt': system_prompt,
         'user_prompt': user_prompt,
+        'beauty_en': beauty_en,
     }
 
 

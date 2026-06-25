@@ -32,5 +32,10 @@
   },
   "body_secrets": "",
   "updated_at": "2026-06-25 18:14:40",
-  "user_id": "nan"
+  "user_id": "nan",
+  "hair": {
+    "length": "long",
+    "color": "black",
+    "texture": "straight"
+  }
 }

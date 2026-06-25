@@ -1,0 +1,138 @@
+{
+  "_comment": "女性风格集群 → 发型+妆容指引。用于 Seedream 生图 prompt 增强。",
+  "_usage": "get_beauty_direction() 根据当前穿搭的主风格匹配对应集群，AI 在 Round 2 创作时融合到 seedream_prompt。",
+  "clusters": {
+    "east_asian": {
+      "label_zh": "东亚温柔",
+      "hair": {
+        "en": "long straight black hair with soft curtain bangs, subtle inward curl at ends, healthy glass-like shine, natural middle part",
+        "cn": "黑长直+空气刘海或八字刘海，发尾微内扣，健康光泽感，中分或侧分"
+      },
+      "makeup": {
+        "en": "glass skin base, straight soft brows, thin brown eyeliner with slight wing, peachy-pink blush on apples of cheeks, gradient pink lip tint, subtle aegyo sal highlight",
+        "cn": "水光肌底妆，平直柔眉，细棕眼线微挑，眼下卧蚕提亮，腮红打在苹果肌，渐变粉唇"
+      },
+      "vibe": "pure, fresh, youthful radiance, K-drama heroine glow"
+    },
+    "european_classic": {
+      "label_zh": "欧洲经典",
+      "hair": {
+        "en": "effortlessly tousled mid-length waves, natural loose texture, slightly undone French-girl bedhead, subtle balayage highlights, side part with volume at crown",
+        "cn": "中长发慵懒波浪，自然的凌乱纹理，法式睡不醒头，微挑染，侧分蓬松发根"
+      },
+      "makeup": {
+        "en": "minimal dewy base, naturally defined brows, thin black winged liner, individual lashes, bold classic red lip OR bare nude lip (never both), subtle bronzer on cheekbones",
+        "cn": "轻薄光泽底妆，自然眉形，细黑眼线小翅膀，单簇睫毛，要么红唇要么裸唇（二选一不共存），颧骨轻古铜修容"
+      },
+      "vibe": "effortless sophistication, je ne sais quoi, timeless beauty, less is more"
+    },
+    "modern_urban": {
+      "label_zh": "现代都市",
+      "hair": {
+        "en": "sleek polished mid-length hair, clean blunt cut or soft layered ends, healthy natural shine, can be worn down or in a low sleek ponytail, minimal flyaways",
+        "cn": "顺滑中长发，整齐的一刀切或柔和层次发尾，健康自然光泽，可披散或低马尾，零碎发控制干净"
+      },
+      "makeup": {
+        "en": "semi-matte natural base, groomed straight brows, defined brown eyeliner, neutral beige-pink eyeshadow, MLBB lip color, light contouring for facial structure, clean girl aesthetic",
+        "cn": "半哑光自然底妆，精致平眉，清晰棕眼线，裸粉杏色眼影，MLBB唇色，轻修容强调轮廓，干净女孩感"
+      },
+      "vibe": "polished urban professional, clean and put-together, modern minimal elegance"
+    },
+    "romantic_feminine": {
+      "label_zh": "浪漫女性",
+      "hair": {
+        "en": "soft romantic curls cascading past shoulders, voluminous bouncy blowout, ribbon or pearl hair accessories optional, side-swept or half-up style, glossy caramel or rose-gold highlights",
+        "cn": "柔软浪漫大卷过肩，蓬松弹力吹风造型，可选丝带/珍珠发饰，侧分或半扎发，焦糖或玫瑰金挑染光泽"
+      },
+      "makeup": {
+        "en": "luminous dewy base, softly arched brows, pink-champagne shimmer on lids, doll-like curled lashes, rosy blush swept across cheeks and nose bridge, glossy pink or coral lip, subtle highlighter on cheekbones and cupid's bow",
+        "cn": "水光透亮底妆，柔弧眉，粉香槟色珠光眼影，洋娃娃卷翘睫毛，大面积腮红横扫脸颊+鼻梁，镜面粉或珊瑚唇，颧骨+唇峰轻高光"
+      },
+      "vibe": "soft, dreamy, ultra-feminine, flower-in-bloom radiance, fairy-tale softness"
+    },
+    "luxe_minimalist": {
+      "label_zh": "奢华极简",
+      "hair": {
+        "en": "sleek ultra-polished hair, glass-like shine, precise clean lines, either pin-straight long or a tight low bun/chignon, not a single hair out of place, expensive blonde or rich brunette tones",
+        "cn": "极致顺滑头发，玻璃光泽，精准干净线条，要么垂坠直长要么紧致低丸子头，一丝不乱，高级金发调或浓郁棕色调"
+      },
+      "makeup": {
+        "en": "flawless satin-matte base, naturally full brows, minimal eye makeup with tight-lined upper lash line, nude-beige lips, cream bronzer for natural dimension, 'no-makeup makeup' at its most expensive, skin looking expensive and well-rested",
+        "cn": "无瑕哑光底妆，自然丰眉，内眼线+极简眼妆，裸米色唇，膏状古铜打造自然维度，最高级的伪素颜，皮肤看起来贵且睡饱了"
+      },
+      "vibe": "quiet luxury, old money, effortless wealth, 'I woke up like this' at its finest"
+    },
+    "nature_escape": {
+      "label_zh": "自然逃逸",
+      "hair": {
+        "en": "natural sun-kissed beach waves, air-dried texture, slightly salt-sprayed tousled look, loose braids or messy low bun optional, sun-bleached lighter ends, carefree and windswept",
+        "cn": "自然阳光海滩波浪，晾干质感，微盐喷雾凌乱感，可选松散麻花辫或随性低丸子，日晒漂浅发尾，无拘无束被风吹过的样子"
+      },
+      "makeup": {
+        "en": "bare sun-kissed skin with freckles peeking through, just sunscreen glow, groomed brows only, maybe a tinted lip balm, zero visible foundation, fresh-from-the-beach radiance",
+        "cn": "裸肤日晒感，雀斑若隐若现，防晒光泽即可，只修眉不加眼妆，可能只涂润色唇膏，零粉底感，刚度假回来的气色"
+      },
+      "vibe": "sun-kissed, free-spirited, barefoot luxury, Mediterranean ease, salt-water fresh"
+    },
+    "edgy_alternative": {
+      "label_zh": "前卫另类",
+      "hair": {
+        "en": "textured shag cut or wolf cut with choppy layers, deliberately messy bedhead, possible micro-bangs or curtain bangs, grungy undone texture, matte dry finish, dark tones or unexpected color accents",
+        "cn": "高层次狼尾剪或鲻鱼头，刻意凌乱的碎层次，可选眉上短刘海或八字刘海，垃圾摇滚未完成质感，哑光干燥发感，深色系或意外色彩点缀"
+      },
+      "makeup": {
+        "en": "smudged lived-in eyeliner, slightly smeared grungy look, cool-toned taupe shadow, brushed-up messy brows, matte skin with minimal blush, dark berry or worn-in wine lip, 'I slept in my makeup' aesthetic",
+        "cn": "晕染开的生活化眼线，轻微花掉的垃圾摇滚感，冷灰棕色眼影，刷乱眉毛，哑光皮少腮红，深浆果或酒渍唇色，宿醉妆感"
+      },
+      "vibe": "raw, undone, rebellious, anti-perfection, cool without trying, downtown edge"
+    },
+    "urban_street": {
+      "label_zh": "都市街头",
+      "hair": {
+        "en": "bold statement hair — sleek high ponytail with wrapped base, or box braids, or slicked-back wet look, or voluminous blowout with attitude, confident and attention-grabbing, can incorporate bandanas or caps",
+        "cn": "大胆表达感发型 — 紧致高马尾根部缠绕，或拳击辫，或湿发后梳，或有态度的蓬松吹风，自信吸睛，可搭配头巾或棒球帽"
+      },
+      "makeup": {
+        "en": "flawless full-coverage base, sharply defined brows, winged liner sharp enough to cut, nude-ombre lips with liner, warm bronzed glow, optional bold graphic eyeliner or colored accent, camera-ready at all times",
+        "cn": "无瑕全遮瑕底妆，锋利眉形，眼线翅膀锋利到可以切割，裸色渐变唇+唇线，暖调古铜光泽，可选大胆图形眼线或色彩点缀，随时上镜"
+      },
+      "vibe": "confident, bold, street-style star, camera-ready, unapologetic presence"
+    },
+    "dramatic_statement": {
+      "label_zh": "戏剧张力",
+      "hair": {
+        "en": "dramatic Old Hollywood waves or extreme sleekness, deep side part with volume, Veronica Lake peek-a-boo waves, or architectural sculptural updo, high-impact gloss, power-energy hair that enters the room before you do",
+        "cn": "戏剧化老好莱坞波浪或极致顺滑，深侧分蓬松，Veronica Lake 半遮面波浪，或建筑感雕塑盘发，高冲击力光泽，气场比人先到"
+      },
+      "makeup": {
+        "en": "high-drama eyes: intense smokey eye or sharp graphic liner, OR power lip: deep burgundy/wine/true red matte lip, strong cheekbones via contour, never both eyes and lips at full drama, sculpted brows, skin can be matte or luminous depending on eye/lip choice",
+        "cn": "高戏剧眼妆：浓烟熏或锋锐图形眼线，或权力唇：深酒红/正红哑光唇，强修容颧骨，眼唇从不同时拉到最满，雕刻感眉毛，底妆哑光或光泽取决于眼唇重心"
+      },
+      "vibe": "power, drama, entrance-making, femme fatale energy, unapologetic glamour"
+    },
+    "cultural_elegance": {
+      "label_zh": "文化优雅",
+      "hair": {
+        "en": "elegant low chignon or classic French twist, smooth and refined with subtle volume at crown, or a neatly pinned updo with delicate hair accessories, timeless polished silhouette, rich dark tones with natural luster",
+        "cn": "优雅低发髻或经典法式盘发，顺滑精致发根微蓬，或用细发夹固定的整齐盘发，配精致发饰，经典利落轮廓，浓郁深色调自然光泽"
+      },
+      "makeup": {
+        "en": "flawless satin base with natural radiance, softly defined arch brows, refined thin eyeliner tracing natural lash line, subtle rose-beige shadow, natural-looking lashes, classic rose or coral lip with satin finish, overall balanced and harmonious, nothing exaggerated",
+        "cn": "无瑕锻光底妆自然光泽，柔和弧度眉，精致细眼线沿睫毛根部，淡玫瑰米色眼影，自然感睫毛，经典玫瑰或珊瑚色锻光唇，整体平衡和谐不夸张"
+      },
+      "vibe": "refined grace, cultured elegance, timeless poise, diplomatic beauty, quiet confidence"
+    },
+    "avant_garde": {
+      "label_zh": "先锋未来",
+      "hair": {
+        "en": "futuristic sculptural shapes — extreme geometric cuts, chrome/metallic hair finishes, space-bun structures, asymmetrical architectural lines, experimental color gradients, alien-chic aesthetic, could incorporate LED or metallic hair accessories",
+        "cn": "未来感雕塑造型 — 极端几何切割，铬/金属感发色，太空双丸子头，不对称建筑线条，实验性色彩渐变，外星时尚美学，可融入LED或金属发饰"
+      },
+      "makeup": {
+        "en": "experimental editorial makeup — graphic negative-space eyeliner, chrome/metallic foil textures on eyes or cheekbones, bleached or laminated brows, unconventional lip colors (black, metallic, ombre), skin can be ultra-matte or hyper-gloss, face gems or metallic decals optional",
+        "cn": "实验性编辑妆 — 图形负空间眼线，铬/金属箔质感眼妆或颧骨，漂眉或染眉胶，非传统唇色（黑/金属/渐变），底妆可极致哑光或超光泽，可选面部贴钻或金属贴花"
+      },
+      "vibe": "futuristic, experimental, boundary-pushing, alien elegance, fashion week ready"
+    }
+  }
+}

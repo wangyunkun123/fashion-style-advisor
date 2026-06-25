@@ -855,14 +855,15 @@ def _load_onboarding_html(user_id, step=1, gender=None):
     step=4: 等待分析
     """
     import json as _json
-    # 尝试从已有 profile 读取 gender
+    # 尝试从已有 profile 读取 gender（搜索 male 和 female 两个目录）
     if not gender:
-        user_dir = os.path.join(PROJECT_DIR, 'users', user_id)
-        up = os.path.join(user_dir, 'profile.json')
-        if os.path.exists(up):
-            with open(up) as f:
-                p = _json.load(f)
-            gender = p.get('gender', '')
+        for _g in ('male', 'female'):
+            _up = os.path.join(PROJECT_DIR, 'users', _g, user_id, 'profile.json')
+            if os.path.exists(_up):
+                with open(_up) as f:
+                    p = _json.load(f)
+                gender = p.get('gender', _g)
+                break
     if not gender:
         gender = ''  # 未选择，显示 Step 0
 
@@ -3325,10 +3326,25 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         progress('✍️ AI 创作叙事+生图')
         from tools.unified_pipeline import build_creation_prompt
         photo_direction = prompt_data.get('photo_direction', '')
+        # 加载用户发型档案（女性专属）
+        _user_hair = None
+        if pipeline_user and pipeline_user != 'default':
+            try:
+                _up_path = os.path.join(resolve_user_dir(pipeline_user), 'profile.json')
+                if os.path.exists(_up_path):
+                    with open(_up_path) as _f:
+                        _up = json.load(_f)
+                    if _up.get('gender') == 'female':
+                        _user_hair = _up.get('hair')
+            except Exception:
+                pass
+
         r2_prompt = build_creation_prompt(
             plan, photo_direction, target_styles, style_hint,
-            occasion, explore_level, temp_high, weather_cond, user_id=pipeline_user
+            occasion, explore_level, temp_high, weather_cond, user_id=pipeline_user,
+            user_hair=_user_hair
         )
+        _beauty_en = r2_prompt.get('beauty_en', '')
         r2_content = call_doubao_chat([
             {'role': 'system', 'content': r2_prompt['system_prompt']},
             {'role': 'user', 'content': r2_prompt['user_prompt']},
@@ -3344,7 +3360,11 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             plan['dressing_tips'] = r2_output.get('dressing_tips', [])
             plan['seedream_prompt'] = r2_output['seedream_prompt']
             plan['color_logic'] = plan.get('color_story', '')
-            log(f"✅ R2 创作完成: seedream_prompt={len(plan['seedream_prompt'])}字符, tips={len(plan.get('dressing_tips',[]))}条")
+            # 美妆方向（女性专属）
+            if r2_output.get('beauty_direction'):
+                plan['beauty_direction'] = r2_output['beauty_direction']
+            log(f"✅ R2 创作完成: seedream_prompt={len(plan['seedream_prompt'])}字符, tips={len(plan.get('dressing_tips',[]))}条" +
+                (f", beauty={len(str(plan.get('beauty_direction', '')))}字符" if plan.get('beauty_direction') else ""))
         else:
             log(f"⚠️ R2 创作 JSON 解析失败，使用降级 prompt", "WARN")
             # 降级：基于 R1 输出构造可用的 seedream prompt
@@ -3353,7 +3373,10 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             plan['reasoning'] = f'{plan.get("color_story", "")} · {plan.get("silhouette", "")}'
             plan['rationale'] = f'这套{_fallback_style}搭配适合{occasion}场景。'
             plan['dressing_tips'] = []
-            plan['seedream_prompt'] = f'A Chinese male, {_fallback_style} style, {plan.get("color_story", "")}, full body shot, fashion photography, natural lighting'
+            # 女性用 beauty_en 增强 fallback，男性保持原样
+            _gender_subject = 'A Chinese woman' if _user_hair else 'A Chinese male'
+            _beauty_suffix = f', {_beauty_en}' if _beauty_en else ''
+            plan['seedream_prompt'] = f'{_gender_subject}, {_fallback_style} style, {plan.get("color_story", "")}, full body shot, fashion photography, natural lighting{_beauty_suffix}'
             plan['color_logic'] = plan.get('color_story', '')
         step_done()
 
@@ -6820,7 +6843,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     profile['photos'] = {}
                 # 🛡️ 多用户：存储用户相对路径；单人：存储项目相对路径
                 if self.user_id != 'default':
-                    photo_rel_path = f'users/{self.user_id}/profile/photos/{filename}'
+                    photo_rel_path = f'users/{self.user_gender}/{self.user_id}/profile/photos/{filename}'
                 else:
                     photo_rel_path = f'profile/photos/{filename}'
                 profile['photos'][slot] = photo_rel_path

@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-06-25 19:31:33",
+    "style": "明天有正式会议",
+    "status": "done",
+    "image_url": "/api/image?f=users/female/nan/outfits/2026-06-25_%E6%98%8E%E5%A4%A9%E6%9C%89%E6%AD%A3%E5%BC%8F%E4%BC%9A%E8%AE%AE/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1_900w.jpg&w=900",
+    "stats": "⏱️ ~88s · 📊 ~2159 tokens · 🔄 2次AI"
+  },
+  {
     "time": "2026-06-25 18:25:02",
     "style": "明天我有重要正式会议，请帮我搭配衣服",
     "status": "done",

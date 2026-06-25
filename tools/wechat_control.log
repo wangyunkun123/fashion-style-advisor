@@ -321,3 +321,13 @@ OSError: [Errno 48] Address already in use
 [13:38:51] [INFO] 📍 场景: '想换一套美式的穿搭' → occasion=日常
 [13:38:52] [INFO] 📍 📊 预计 ~60-100s · ~4027 tokens
 [13:38:52] [INFO] 📍 🤖 AI 智能选品
+[13:39:17] [INFO] ✅ 验证通过
+[13:39:17] [INFO] 📊 R1 选品评分: 55分 — ⚠️ 评分偏低，建议重新选品
+[13:39:17] [INFO] 📍 ✍️ AI 创作叙事+生图
+[13:39:36] [INFO] ✅ R2 创作完成: seedream_prompt=599字符, tips=2条
+[13:39:37] [INFO] 👤 人物照: 1张（原图）
+[13:39:37] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/outfits/2026-06-25_想换一套美式的穿搭
+[13:39:37] [INFO] 📍 🎨 Seedream AI 生图
+[13:40:17] [INFO] 📍 🎨 预压缩生图
+[13:40:17] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
+[13:40:17] [INFO] 📍 📤 推送 + 刷新

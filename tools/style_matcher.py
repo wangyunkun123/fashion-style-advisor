@@ -31,7 +31,7 @@ else:
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.join(BASE_DIR, '..')
-STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
+STYLES_DIR = os.path.join(PROJ_DIR, 'styles/male')
 if _USER_ID:
     TAGS_DIR = os.path.join(resolve_wardrobe_dir(_USER_ID), 'tags')
 else:
@@ -51,27 +51,85 @@ def _safe_index(order_list, value, default=1):
 # 1. 数据加载
 # ============================================================
 
-def load_style(style_id):
-    """加载风格指纹 JSON"""
+def load_style(style_id, gender=None):
+    """加载风格指纹 JSON（自动检测性别路径）"""
+    # 优先使用 common.load_style_fingerprint（支持 male/female 路径）
+    try:
+        from tools.common import load_style_fingerprint
+        fp = load_style_fingerprint(style_id, gender)
+        if fp:
+            return fp
+    except Exception:
+        pass
+    # 兜底: 旧路径
     path = os.path.join(STYLES_DIR, f'{style_id}.json')
     if not os.path.exists(path):
         return None
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def load_all_styles():
-    """加载所有风格"""
+def load_all_styles(gender=None):
+    """加载所有风格（自动检测性别路径）"""
+    # 优先使用 common.load_style_fingerprint 的方式扫描
+    try:
+        from tools.common import get_thread_user, load_style_fingerprint
+        g, uid = get_thread_user()
+        if not gender:
+            gender = g
+    except Exception:
+        pass
     styles = {}
-    for fpath in sorted(glob.glob(os.path.join(STYLES_DIR, '*.json'))):
-        if fpath.endswith('README.json'):
-            continue
-        with open(fpath, 'r', encoding='utf-8') as f:
-            s = json.load(f)
-            styles[s['style_id']] = s
+    if gender == 'female':
+        import os as _os
+        women_dir = _os.path.join(PROJ_DIR, 'styles/female')
+        if _os.path.isdir(women_dir):
+            for d in sorted(_os.listdir(women_dir)):
+                if d.startswith('.') or d.startswith('_'): continue
+                fp_path = _os.path.join(women_dir, d, 'fingerprint.json')
+                if _os.path.exists(fp_path):
+                    try:
+                        with open(fp_path) as f:
+                            s = json.load(f)
+                        styles[s.get('style_id', d)] = s
+                    except Exception:
+                        pass
+    else:
+        male_dir = os.path.join(PROJ_DIR, 'styles/male')
+        if os.path.isdir(male_dir):
+            for fpath in sorted(glob.glob(os.path.join(male_dir, '*.json'))):
+                if fpath.endswith('README.json'):
+                    continue
+                try:
+                    with open(fpath, 'r', encoding='utf-8') as f:
+                        s = json.load(f)
+                    styles[s.get('style_id', '')] = s
+                except Exception:
+                    pass
+    if not styles:
+        # 最终兜底: 旧路径
+        for fpath in sorted(glob.glob(os.path.join(STYLES_DIR, '*.json'))):
+            if fpath.endswith('README.json'):
+                continue
+            with open(fpath, 'r', encoding='utf-8') as f:
+                s = json.load(f)
+                styles[s['style_id']] = s
     return styles
 
 def load_clothing(clothing_id):
-    """加载单件衣服标签"""
+    """加载单件衣服标签（自动路由到当前用户目录）"""
+    # 优先使用线程上下文路径
+    try:
+        from tools.common import get_thread_user, resolve_tags_dir
+        gender, uid = get_thread_user()
+        if uid and uid != 'default':
+            tags_dir = resolve_tags_dir(gender, uid)
+            path = os.path.join(tags_dir, f'{clothing_id}.json')
+            if os.path.exists(path):
+                with open(path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+    except Exception:
+        pass
+    # 兜底: 模块级常量
     path = os.path.join(TAGS_DIR, f'{clothing_id}.json')
     if not os.path.exists(path):
         return None
@@ -82,7 +140,19 @@ from tools.common import load_all_clothing
 
 
 def get_tag_mtime(clothing_id):
-    """获取标签文件的最后修改时间"""
+    """获取标签文件的最后修改时间（自动路由到当前用户目录）"""
+    # 优先使用线程上下文路径
+    try:
+        from tools.common import get_thread_user, resolve_tags_dir
+        gender, uid = get_thread_user()
+        if uid and uid != 'default':
+            tags_dir = resolve_tags_dir(gender, uid)
+            path = os.path.join(tags_dir, f'{clothing_id}.json')
+            if os.path.exists(path):
+                return os.path.getmtime(path)
+    except Exception:
+        pass
+    # 兜底
     path = os.path.join(TAGS_DIR, f'{clothing_id}.json')
     if os.path.exists(path):
         return os.path.getmtime(path)
@@ -93,11 +163,22 @@ from tools.common import load_score_cache
 
 
 def save_score_cache(cache):
-    """保存评分缓存"""
+    """保存评分缓存（自动路由到当前用户目录）"""
     cache['_meta'] = cache.get('_meta', {})
     cache['_meta']['last_rebuild'] = time.strftime('%Y-%m-%d %H:%M:%S')
     cache['_meta']['total_entries'] = sum(1 for k in cache if not k.startswith('_'))
-    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+    # 使用线程上下文确定用户目录，兜底到模块级常量
+    cache_file = CACHE_FILE
+    try:
+        from tools.common import get_thread_user, resolve_tags_dir
+        gender, uid = get_thread_user()
+        if uid and uid != 'default':
+            tags_dir = resolve_tags_dir(gender, uid)
+            cache_file = os.path.join(tags_dir, 'SCORE_CACHE.json')
+    except Exception:
+        pass
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+    with open(cache_file, 'w', encoding='utf-8') as f:
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
 

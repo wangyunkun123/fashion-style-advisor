@@ -103,7 +103,7 @@ from tools.user_manager import (
     create_user as _create_user,
     update_last_active as _update_user_active,
 )
-from tools.common import resolve_user_dir, resolve_wardrobe_dir, resolve_outfits_dir, resolve_tags_dir, resolve_enhanced_dir
+from tools.common import resolve_user_dir, resolve_wardrobe_dir, resolve_outfits_dir, resolve_tags_dir, resolve_enhanced_dir, set_thread_user
 from tools.image_cache import image_cache_get, image_cache_put, resize_image_bytes, pre_compress_dir
 from tools.ai_api import call_doubao_chat, extract_json, resize_image_for_api
 from tools.photo_utils import get_person_photos, remove_person_background, select_person_photos_for_prompt
@@ -3788,6 +3788,14 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
         except:
             pass
 
+    # ── 设置线程上下文（让 rank_items_for_style / load_all_clothing 找到用户衣橱）──
+    if user_id and user_id != 'default':
+        try:
+            gender = 'female' if is_female else 'male'
+            set_thread_user(gender, user_id)
+        except Exception:
+            pass
+
     # ── 女性用户：加载 styles/female/ ──
     if is_female:
         women_dir = os.path.join(PROJECT_DIR, 'styles/female')
@@ -3842,6 +3850,36 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
                             else:
                                 image_url = f'/styles/female/{d}/images/{first_img}'
                             image_full = f'/styles/female/{d}/images/{first_img}'
+                # ── 计算 top 关联单品（与男性路径一致）──
+                top_items = []
+                if with_top_items:
+                    try:
+                        sys.path.insert(0, os.path.join(PROJECT_DIR, 'tools'))
+                        from style_matcher import rank_items_for_style
+                        top = rank_items_for_style(sid, top_n=8, min_score=10)
+                        def _thumb_url(cid):
+                            rel = _find_item_thumb(cid)
+                            if rel:
+                                path = rel.split('?')[0]
+                                commit = get_git_commit()
+                                return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{commit}/{path}'
+                            return ''
+                        def _cutout_url(cid):
+                            from urllib.parse import quote
+                            cutout = _find_item_cutout(cid)
+                            if cutout:
+                                path = cutout.split('?')[0]
+                                return f'/api/image?f={quote(path)}'
+                            return ''
+                        top_items = [
+                            {'clothing_id': t['clothing_id'], 'category_code': t.get('category', '')[:4],
+                             'score': t['score'],
+                             'thumb': _thumb_url(t['clothing_id']),
+                             'cutout': _cutout_url(t['clothing_id'])}
+                            for t in (top or [])[:3]
+                        ]
+                    except Exception:
+                        pass
                 styles.append({
                     'id': sid,
                     'name_zh': name_zh,
@@ -3851,7 +3889,7 @@ def _load_style_cards(include_universal=False, with_top_items=False, user_id=Non
                     'has_encyclopedia': has_encyclopedia,
                     'image': image_url,
                     'image_full': image_full or image_url,
-                    'top_items': [],
+                    'top_items': top_items,
                 })
         return styles
 

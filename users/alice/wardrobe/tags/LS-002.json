@@ -1,7 +1,7 @@
 {
   "clothing_id": "LS-002",
-  "category": "长袖上衣",
-  "category_code": "LS",
+  "category": "套装",
+  "category_code": "SUIT",
   "color": {
     "hue_family": "中性色+暖色",
     "hue_name": "米白底红色花卉印花",
@@ -41,7 +41,7 @@
     "复古"
   ],
   "meta": {
-    "claude_fit_comment": "米白底红色花卉印花休闲长袖上衣",
+    "claude_fit_comment": "米白底红色花卉印花休闲套装",
     "image_type": "product_shot"
   },
   "occasions": [

@@ -43,6 +43,7 @@ CAT_CONFIG = {
     'DRESS': {'emoji': '👗', 'icon_key': 'tshirt',  'cn': '连衣裙',   'sort': 14, 'gender': 'female'},
     'SKIRT': {'emoji': '🩰', 'icon_key': 'pants',   'cn': '半身裙',   'sort': 15, 'gender': 'female'},
     'JMP':   {'emoji': '🪭', 'icon_key': 'tshirt',  'cn': '连体裤',   'sort': 16, 'gender': 'female'},
+    'SUIT':  {'emoji': '👗', 'icon_key': 'tshirt',  'cn': '套装',     'sort': 17, 'gender': 'female'},
     'BLOUSE':{'emoji': '👚', 'icon_key': 'tshirt',  'cn': '女士衬衫', 'sort':  3, 'gender': 'female'},
     'KNIT':  {'emoji': '🧶', 'icon_key': 'tshirt',  'cn': '针织衫',   'sort':  4, 'gender': 'both'},
 }

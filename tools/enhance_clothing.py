@@ -14,30 +14,18 @@ WARDROBE = os.path.join(BASE_DIR, '..', 'wardrobe')
 ENHANCED_DIR = os.path.join(BASE_DIR, '..', 'wardrobe', 'enhanced')
 
 
-def auto_white_balance(img):
-    if img.mode != 'RGB': img = img.convert('RGB')
-    r, g, b = img.split()
-    ra = sum(r.getdata()) / max(img.width * img.height, 1)
-    ga = sum(g.getdata()) / max(img.width * img.height, 1)
-    ba = sum(b.getdata()) / max(img.width * img.height, 1)
-    avg = (ra + ga + ba) / 3.0
-    if avg > 0:
-        r = r.point(lambda x: min(255, int(x * avg / max(ra, 1))))
-        g = g.point(lambda x: min(255, int(x * avg / max(ga, 1))))
-        b = b.point(lambda x: min(255, int(x * avg / max(ba, 1))))
-        return Image.merge('RGB', (r, g, b))
-    return img
-
-
 def refine_image(img):
-    """精修管线"""
+    """精修管线 — 仅亮度校正，不动色相/白平衡"""
     if img.mode != 'RGB': img = img.convert('RGB')
-    img = auto_white_balance(img)
-    img = ImageOps.autocontrast(img, cutoff=2)
-    img = ImageEnhance.Contrast(img).enhance(1.12)
-    img = ImageEnhance.Brightness(img).enhance(1.04)
-    img = ImageEnhance.Sharpness(img).enhance(1.25)
-    img = ImageEnhance.Color(img).enhance(1.06)
+    import numpy as np
+    arr = np.array(img).astype(float)
+    lum = 0.299 * arr[:,:,0] + 0.587 * arr[:,:,1] + 0.114 * arr[:,:,2]
+    avg_lum = lum.mean()
+    if avg_lum < 100:
+        factor = min(1.25, 110 / max(avg_lum, 1))
+        arr = np.clip(arr * factor, 0, 255)
+        img = Image.fromarray(arr.astype(np.uint8))
+    img = ImageEnhance.Sharpness(img).enhance(1.2)
     return img
 
 
@@ -52,10 +40,7 @@ def enhance_image(src_path, cutout_path, enhanced_jpg_path):
     img = ImageOps.exif_transpose(img)
 
     # 抠图（rembg AI + alpha matting 精细边缘）
-    cutout = remove(img, alpha_matting=True,
-                    alpha_matting_foreground_threshold=240,
-                    alpha_matting_background_threshold=10,
-                    alpha_matting_erode_size=4)
+    cutout = remove(img)  # 默认参数，不加 alpha_matting（避免侵蚀边缘）
     if cutout.mode != 'RGBA': cutout = cutout.convert('RGBA')
     # 缩放到合理尺寸（最长边 1200px，节省空间）
     w, h = cutout.size

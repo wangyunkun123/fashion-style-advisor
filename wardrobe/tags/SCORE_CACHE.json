@@ -10141,7 +10141,7 @@
       "_updated": "2026-06-17 21:48:31"
     },
     "korean_minimal": {
-      "score": 29,
+      "score": 14,
       "raw_score": 21,
       "breakdown": {
         "soft_constraints": 15,
@@ -16115,7 +16115,7 @@
       "_updated": "2026-06-21 23:37:49"
     },
     "korean_minimal": {
-      "score": 11,
+      "score": 0,
       "raw_score": 10,
       "breakdown": {
         "soft_constraints": 5,
@@ -17594,6 +17594,8 @@
   },
   "_meta": {
     "last_rebuild": "2026-06-24 07:29:01",
-    "total_entries": 86
+    "total_entries": 86,
+    "last_feedback": "2026-06-25T08:57:59.348507",
+    "last_action": "单品问题 -15: ['SUN-004', 'SHOE-007']"
   }
 }

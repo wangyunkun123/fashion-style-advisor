@@ -1,7 +1,7 @@
 {
   "clothing_id": "PT-004",
-  "category": "长裤",
-  "category_code": "PT",
+  "category": "连衣裙",
+  "category_code": "DRESS",
   "color": {
     "hue_family": "中性色",
     "hue_name": "深棕色",
@@ -41,7 +41,7 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "深棕色休闲",
+    "claude_fit_comment": "深棕色休闲连衣裙",
     "image_type": "product_shot"
   },
   "occasions": [

@@ -1471,8 +1471,43 @@ def _finalize_add_item(item_data):
         img = _ImageOps.exif_transpose(img)
         if img.mode != 'RGB':
             img = img.convert('RGB')
-        # 缩放到最长边 1200px
+        # 🆕 AI 方向检测：用视觉模型判断领口朝向，精确旋转
         w, h = img.size
+        _rotated = False
+        try:
+            from tools.auto_orient import ask_orientation
+            _tmp_path = os.path.join(enhanced__dir, f'_orient_tmp_{cid}.jpg')
+            img.save(_tmp_path, 'JPEG', quality=85)
+            _orient = ask_orientation(_tmp_path)
+            os.remove(_tmp_path) if os.path.exists(_tmp_path) else None
+            if _orient in ('左', '右', '下'):
+                _rotate_map = {'左': _PILImage.ROTATE_270, '右': _PILImage.ROTATE_90, '下': _PILImage.ROTATE_180}
+                img = img.transpose(_rotate_map[_orient])
+                if _orient in ('左', '右'):
+                    w, h = h, w
+                _rotated = True
+                log(f"🧭 {cid} AI方向检测: 上端在{_orient} → 已旋转")
+        except Exception:
+            pass
+        # 回退：AI 检测失败时用简单横竖判断
+        if not _rotated and w > h:
+            img = img.transpose(_PILImage.ROTATE_90)
+            w, h = h, w
+            log(f"🔄 {cid} 横图→竖图旋转 (回退)")
+        # 🆕 亮度校正：仅调亮度，不动色相/白平衡
+        try:
+            import numpy as _np_bri
+            _bri_arr = _np_bri.array(img).astype(float)
+            _lum = 0.299 * _bri_arr[:,:,0] + 0.587 * _bri_arr[:,:,1] + 0.114 * _bri_arr[:,:,2]
+            _avg_lum = _lum.mean()
+            if _avg_lum < 100:
+                _factor = min(1.25, 110 / max(_avg_lum, 1))
+                _bri_arr = _np_bri.clip(_bri_arr * _factor, 0, 255)
+                img = _PILImage.fromarray(_bri_arr.astype(np.uint8))
+                log(f"🔆 {cid} 亮度校正: {_avg_lum:.0f} → {_avg_lum*_factor:.0f}")
+        except Exception:
+            pass
+        # 缩放到最长边 1200px
         if max(w, h) > 1200:
             ratio = 1200 / max(w, h)
             img = img.resize((int(w*ratio), int(h*ratio)), _PILImage.LANCZOS)
@@ -1508,19 +1543,21 @@ def _finalize_add_item(item_data):
             cutout_path = os.path.join(enhanced__dir, f'{cid}_cutout.png')
             with open(cutout_path, 'wb') as _f:
                 _f.write(_clean_png)
-            # 用透明 PNG 重新生成缩略图（保持透明底）
+            # 用透明 PNG 重新生成缩略图（白底合成）
             _png_img = _PILImage.open(_io.BytesIO(_clean_png))
+            _png_w, _png_h = _png_img.size
+            _thumb_w = 200
             if _png_img.mode == 'RGBA':
-                _png_w, _png_h = _png_img.size
-                _thumb_w = 200
-                if _png_w > _thumb_w:
-                    _ratio = _thumb_w / _png_w
-                    _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
-                else:
-                    _png_thumb = _png_img.copy()
-                # 覆盖之前的白底缩略图
-                _png_thumb.save(thumb_path, 'PNG', optimize=True)
-                log(f"透明抠图已保存: {cid} (cutout.png + 透明缩略图)")
+                _white_bg = _PILImage.new('RGB', _png_img.size, (255, 255, 255))
+                _white_bg.paste(_png_img, mask=_png_img.split()[3])
+                _png_img = _white_bg
+            if _png_w > _thumb_w:
+                _ratio = _thumb_w / _png_w
+                _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
+            else:
+                _png_thumb = _png_img.copy()
+            _png_thumb.save(thumb_path, 'PNG', optimize=True)
+            log(f"透明抠图已保存: {cid} (cutout.png + 白底缩略图)")
             _image_ok = True
         except Exception as _ce:
             log(f"透明抠图保存失败（非致命）: {_ce}", "WARN")
@@ -1539,15 +1576,18 @@ def _finalize_add_item(item_data):
             with open(cutout_path, 'wb') as _f:
                 _f.write(_bg_output)
             _png_img = _PILImage.open(_bg_io.BytesIO(_bg_output))
+            _png_w, _png_h = _png_img.size
+            _thumb_w = 200
             if _png_img.mode == 'RGBA':
-                _png_w, _png_h = _png_img.size
-                _thumb_w = 200
-                if _png_w > _thumb_w:
-                    _ratio = _thumb_w / _png_w
-                    _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
-                else:
-                    _png_thumb = _png_img.copy()
-                _png_thumb.save(thumb_path, 'PNG', optimize=True)
+                _white_bg = _PILImage.new('RGB', _png_img.size, (255, 255, 255))
+                _white_bg.paste(_png_img, mask=_png_img.split()[3])
+                _png_img = _white_bg
+            if _png_w > _thumb_w:
+                _ratio = _thumb_w / _png_w
+                _png_thumb = _png_img.resize((_thumb_w, int(_png_h * _ratio)), _PILImage.LANCZOS)
+            else:
+                _png_thumb = _png_img.copy()
+            _png_thumb.save(thumb_path, 'PNG', optimize=True)
             log(f"🎯 rembg 产品图抠图完成: {cid}")
             _image_ok = True
         except Exception as _rbe:
@@ -4533,7 +4573,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         with open(file_abs, 'rb') as f:
                             data_pre = f.read()
                         image_cache_put(file_abs, 0, data_pre)
-                    headers_pre = {'Cache-Control': 'public, max-age=86400'}
+                    headers_pre = {'Cache-Control': 'public, max-age=60, must-revalidate'}
                     if etag_pre:
                         headers_pre['ETag'] = etag_pre
                     self._send_body(200, data_pre, ct, headers_pre)
@@ -4560,7 +4600,7 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                 if req_w > 0 and ct.startswith('image/'):
                     data = resize_image_bytes(data, req_w, ct)
                 image_cache_put(file_abs, req_w, data)
-            headers = {'Cache-Control': 'public, max-age=86400'}
+            headers = {'Cache-Control': 'public, max-age=60, must-revalidate'}
             if etag:
                 headers['ETag'] = etag
             self._send_body(200, data, ct, headers)
@@ -5942,6 +5982,19 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
                 _deep_merge(current, updates)
 
+                # 🆕 品类修改：验证并同步 category_code ↔ category
+                _cat_code = current.get('category_code', '')
+                _cat_name = current.get('category', '')
+                if _cat_code in CATEGORY_CODE_TO_NAME:
+                    # category_code 有效 → 同步 category 中文名
+                    current['category'] = CATEGORY_CODE_TO_NAME[_cat_code]
+                elif _cat_name:
+                    # 只有中文名 → 反向查 category_code
+                    _rev = {v: k for k, v in CATEGORY_CODE_TO_NAME.items()}
+                    if _cat_name in _rev:
+                        current['category_code'] = _rev[_cat_name]
+                    # 否则保留原样（可能是自由文本品类名）
+
                 # 🆕 自动重新生成服装介绍 — 从结构化字段动态构建
                 _brand = (current.get('brand') or {}).get('name', '')
                 _color = (current.get('color') or {}).get('hue_name', '')
@@ -6051,12 +6104,16 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         w, h = img.size
                         img.close()
                         _transform_img(fpath, w, h)
-            # 从变换后的 _cutout.png 重新生成 _cutout_thumb.png
+            # 从变换后的 _cutout.png 重新生成 _cutout_thumb.png（白底合成）
             cutout_path = os.path.join(enhanced_dir, f'{cid}_cutout.png')
             if os.path.exists(cutout_path):
                 try:
                     img = _PILImage.open(cutout_path)
                     w, h = img.size
+                    if img.mode == 'RGBA':
+                        white_bg = _PILImage.new('RGB', img.size, (255, 255, 255))
+                        white_bg.paste(img, mask=img.split()[3])
+                        img = white_bg
                     if w > 200:
                         ratio = 200 / w
                         img = img.resize((200, int(h * ratio)), _PILImage.LANCZOS)
@@ -6596,7 +6653,8 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
     def _json_resp(self, code, data):
         body = json.dumps(data, ensure_ascii=False).encode('utf-8')
-        self._send_body(code, body, 'application/json; charset=utf-8')
+        self._send_body(code, body, 'application/json; charset=utf-8',
+                        {'Cache-Control': 'no-store, max-age=0'})
 
     def _html_resp(self, code, html, extra_headers=None):
         body = html.encode('utf-8')

@@ -191,6 +191,61 @@ STYLE_PHOTO_MAP = {
         'scene': 'mountain trail with city skyline visible in far distance, morning fog rolling in, technical outdoor gear visible',
         'vibe': 'urban-to-wilderness, functional tech meets nature, adventure-ready confidence',
     },
+    # ═══ 女性风格摄影指导 (2026-06-26, 基于 nan 身形筛选的 core 风格) ═══
+    'WF-01_french_effortless': {
+        'camera': 'Leica M6 50mm, Kodak Portra 400 film look, soft warm tones, slight grain',
+        'pose': 'walking along Seine-side cobblestone path, one hand holding a vintage leather bag, the other tucking hair behind ear, caught mid-laugh looking back over shoulder',
+        'scene': 'Parisian café terrace at golden hour, wicker chairs, marble tabletop with espresso cup, plane tree shadows, soft breeze lifting hair',
+        'vibe': 'effortlessly chic, undone perfection, the woman who never tries but always looks right',
+    },
+    'WF-04_new_chinese': {
+        'camera': 'Sony A7IV 85mm f/1.4 GM, crisp modern rendering with subtle warm grade',
+        'pose': 'standing in elegant contrapposto, one hand lightly touching a carved wooden screen, head turned slightly to reveal mandarin collar detail, serene knowing smile',
+        'scene': 'contemporary tea house interior, warm wood and soft cream tones, ink calligraphy scroll on wall, afternoon light filtered through rice paper screens',
+        'vibe': 'cultural pride meets modern femininity, quiet elegance, rooted confidence',
+    },
+    'WF-06_minimalist': {
+        'camera': 'Sony A7IV 50mm f/1.4, clinically sharp, minimal color grade, clean rendering',
+        'pose': 'leaning against a white gallery wall, hands relaxed at sides, weight shifted to one leg creating subtle S-curve, direct calm gaze',
+        'scene': 'minimalist loft with floor-to-ceiling windows, polished concrete floors, single sculptural piece, morning crisp light casting clean shadows',
+        'vibe': 'architectural precision, less-is-more confidence, the power of restraint',
+    },
+    'WF-07_preppy': {
+        'camera': 'Fujifilm X-T5 35mm f/1.4, warm natural rendering, slight film simulation',
+        'pose': 'walking across university quad with books tucked under one arm, adjusting headband with free hand, genuine smile caught mid-conversation with unseen friend',
+        'scene': 'Ivy League campus courtyard, brick buildings with climbing ivy, oak trees, students on blankets in distance, crisp autumn morning',
+        'vibe': 'polished academia, wholesome confidence, classic charm never goes out of style',
+    },
+    'WF-08_athleisure': {
+        'camera': 'Sony A7IV 24-70mm f/2.8, fast action capable, vibrant natural colors',
+        'pose': 'stretching quadriceps post-run, one hand on hip, slight sweat glow on skin, athletic grace in motion, looking towards running path ahead',
+        'scene': 'urban park running track at sunrise, golden morning light through trees, modern skyline in soft focus background',
+        'vibe': 'athletic energy meets feminine grace, strong but soft, peak wellness aesthetic',
+    },
+    'WF-10_y2k': {
+        'camera': 'Fujifilm X-T5 23mm f/1.4, digicam flash aesthetic, slight overexposure, early 2000s point-and-shoot vibe',
+        'pose': 'sitting on mall bench, knees together feet apart, one hand touching oversized hoop earring, looking up at camera with playful smirk, low-rise jeans visible',
+        'scene': 'vintage shopping mall atrium, neon accents, glass elevator in background, late afternoon mall lighting',
+        'vibe': 'nostalgic rebellion, playful self-awareness, the fun of dressing up without taking it seriously',
+    },
+    'WF-11_city_girl': {
+        'camera': 'Sony A7IV 35mm f/1.4, clean urban rendering, natural light capture',
+        'pose': 'crossing modern plaza mid-stride, laptop bag across body, coffee in one hand, checking phone with slight smile, purposeful urban energy',
+        'scene': 'downtown business district plaza, glass and steel architecture, morning rush hour, blurred professionals passing by, clean urban lines',
+        'vibe': 'modern professional woman, capable and stylish, owns her city',
+    },
+    'WF-18_old_money': {
+        'camera': 'Leica M6 50mm, Kodak Ektar 100 film look, rich but restrained colors, timeless rendering',
+        'pose': 'descending stone staircase of a manor house, one hand lightly touching the banister, the other holding a vintage clutch, regal posture, subtle knowing smile',
+        'scene': 'English country estate garden, manicured hedges, stone terrace, late afternoon golden light, tea service visible on terrace table',
+        'vibe': 'generational elegance, quiet wealth, nothing to prove — the clothes speak for themselves',
+    },
+    'WF-29_vintage_90s': {
+        'camera': 'Fujifilm X-T5 35mm f/1.4, 90s film stock emulation, subtle warm grain',
+        'pose': 'leaning against vintage car door, one hand in high-waist jeans pocket, the other adjusting sunglasses, looking off-frame with relaxed cool, wind catching loose hair',
+        'scene': 'retro diner parking lot at sunset, neon sign glow reflecting on car chrome, palm trees silhouetted against orange sky',
+        'vibe': 'effortless cool, borrowed-from-the-boys attitude, nostalgia that feels fresh',
+    },
 }
 
 # 默认摄影参数（当风格无映射时使用）
@@ -1714,6 +1769,38 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
             # 约会禁止只穿背心（无外套叠穿时）
             if cat == 'TANK' and not any(c == 'JK' or c == 'SHIRT' for c in cat_codes):
                 violations.append(f'{cid}: 约会禁止只穿背心（需要外套或衬衫叠穿）')
+
+    # ── 5.5. 女性特有规则 (2026-06-26) ──
+    _is_female_outfit = any(c in {'DRESS', 'SKIRT', 'BLOUSE'} for c in cat_codes)
+    if _is_female_outfit:
+        for d in outfit_details:
+            cid = d['id']
+            cat = d['detail'].get('category_code', '')
+            fabric = (d['detail'].get('fabric') or {}).get('primary', '')
+            color_hue = (d['detail'].get('color') or {}).get('hue_name', '')
+
+            # 正式场合 + 连衣裙/半身裙：裙长应及膝或更长
+            if occasion in ('晚宴', '商务', '下午茶', '婚礼') and cat in ('DRESS', 'SKIRT'):
+                # 如果标签中有裙长信息，检查是否过短
+                skirt_len = d['detail'].get('length', '')
+                if skirt_len in ('超短', '短款', 'mini'):
+                    violations.append(f'{cid}: {occasion}场合裙长不宜过短(当前:{skirt_len})')
+
+            # 商务/通勤 + 露肤度：禁止吊带/露背/露脐
+            if occasion in ('商务', '通勤') and cat in ('TANK',):
+                violations.append(f'{cid}: 商务/通勤场合禁止吊带背心单穿（需配外套）')
+
+            # 晚宴/正式场合：高跟鞋推荐
+            if occasion in ('晚宴', '下午茶') and cat == 'SHOE':
+                heel_type = d['detail'].get('heel_type', '')
+                if heel_type in ('平底', 'flat', '运动'):
+                    warnings.append(f'{cid}: {occasion}场合建议高跟鞋或精致平底鞋(当前:{heel_type})')
+
+            # 晚宴禁止运动鞋
+            if occasion in ('晚宴') and cat == 'SHOE':
+                shoe_style = d['detail'].get('style', '')
+                if any(kw in str(shoe_style).lower() for kw in ['运动', '跑鞋', 'sneaker', '篮球']):
+                    violations.append(f'{cid}: 晚宴场合禁止运动鞋')
 
     # ── 6. 场景合规 ──
     scene_profiles = load_scene_profiles().get('profiles', {})

@@ -2,7 +2,7 @@
   "male": {
     "kun": {
       "created": "2026-06-25T06:19:34Z",
-      "last_active": "2026-06-26T02:31:32Z",
+      "last_active": "2026-06-26T04:59:09Z",
       "status": "active",
       "_migrated_from": "root wardrobe/outfits/"
     },
@@ -16,7 +16,7 @@
   "female": {
     "nan": {
       "created": "2026-06-23T09:54:27Z",
-      "last_active": "2026-06-26T02:32:47Z",
+      "last_active": "2026-06-26T04:58:29Z",
       "status": "active",
       "_migrated_from": "users/alice/"
     }

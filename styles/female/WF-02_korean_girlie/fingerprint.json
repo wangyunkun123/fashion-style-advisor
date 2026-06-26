@@ -193,6 +193,8 @@
     "WF-03",
     "WF-12"
   ],
-  "tier": "core",
-  "trend_category": "popular_trend"
+  "tier": "explore",
+  "trend_category": "popular_trend",
+  "_tier_reason": "身形部分匹配: 拉长身形匹配, 缺TS/SHIRT关键单品",
+  "_tier_updated": "2026-06-26"
 }

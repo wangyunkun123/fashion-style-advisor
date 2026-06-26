@@ -701,12 +701,25 @@ def match_scene_profile(outfit_items, occasion='日常'):
 from tools.common import load_all_clothing, load_encyclopedia
 
 
-def load_all_styles():
-    """加载所有风格指纹 — 扫描 styles/male/ 和 styles/female/ 两个目录"""
+def load_all_styles(gender=None):
+    """加载所有风格指纹 — 扫描 styles/male/ 和 styles/female/ 两个目录
+
+    Args:
+        gender: 'male'/'female'/None. None 时自动从线程上下文获取，fallback 加载全部。
+    """
+    # 自动检测用户性别
+    if gender is None:
+        try:
+            from tools.common import get_thread_user
+            g, uid = get_thread_user()
+            gender = g
+        except Exception:
+            pass
+
     styles = {}
 
     # 男性风格：styles/male/*.json
-    if os.path.isdir(STYLES_MALE_DIR):
+    if gender != 'female' and os.path.isdir(STYLES_MALE_DIR):
         for fpath in sorted(glob.glob(os.path.join(STYLES_MALE_DIR, '*.json'))):
             if fpath.endswith('README.json'):
                 continue
@@ -718,7 +731,7 @@ def load_all_styles():
                 pass
 
     # 女性风格：styles/female/<dir>/fingerprint.json
-    if os.path.isdir(STYLES_FEMALE_DIR):
+    if gender != 'male' and os.path.isdir(STYLES_FEMALE_DIR):
         for d in sorted(os.listdir(STYLES_FEMALE_DIR)):
             if d.startswith('.') or d.startswith('_'):
                 continue
@@ -876,8 +889,15 @@ def load_all_ratings():
     return ratings
 
 
-def load_defaults_config():
-    """加载天气-场合默认映射"""
+def load_defaults_config(gender=None):
+    """加载天气-场合默认映射，自动选择性别匹配的配置文件"""
+    # 根据性别选择配置文件
+    if gender == 'female':
+        female_config = os.path.join(PROJ_DIR, 'config', 'style_defaults_female.json')
+        if os.path.exists(female_config):
+            with open(female_config, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    # fallback 到男性/通用配置
     if not os.path.exists(DEFAULTS_CONFIG):
         return {
             'weather_rules': [
@@ -1165,9 +1185,18 @@ def analyze_item_appeal(item):
 # ============================================================
 
 def get_user_comfort_zone():
-    """从评分历史推导用户舒适区"""
+    """从评分历史推导用户舒适区（自动检测用户性别，只返回匹配性别的风格）"""
+    # 检测用户性别
+    gender = None
+    try:
+        from tools.common import get_thread_user
+        g, uid = get_thread_user()
+        gender = g
+    except Exception:
+        pass
+
     ratings = load_all_ratings()
-    all_styles = load_all_styles()
+    all_styles = load_all_styles(gender=gender)
     all_style_ids = set(all_styles.keys())
 
     comfort = set()    # 3星满意的风格
@@ -1185,9 +1214,9 @@ def get_user_comfort_zone():
         elif rating <= 1:
             disliked.add(sid)
 
-    # 如果没有任何评分数据，用天气-场合默认推荐作为舒适区
+    # 如果没有任何评分数据，用性别匹配的天气-场合默认推荐作为舒适区
     if not comfort and not explored:
-        defaults = load_defaults_config()
+        defaults = load_defaults_config(gender=gender)
         for rule in defaults.get('weather_rules', []):
             for sid in rule.get('suggest', []):
                 if sid in all_style_ids:
@@ -1198,12 +1227,17 @@ def get_user_comfort_zone():
                     comfort.add(sid)
 
     unexplored = all_style_ids - explored - {'athleisure_sport'}  # 排除运动风（非日常）
+    # 排除 knowledge-only 风格（不应被推荐，也不算"未探索"）
+    knowledge_only = {sid for sid, fp in all_styles.items() if fp.get('tier') == 'knowledge-only'}
+    unexplored -= knowledge_only
+    comfort -= knowledge_only  # 安全兜底：knowledge-only 不应在舒适区
 
     return {
         'comfort_styles': list(comfort),
         'explored_styles': list(explored),
         'unexplored_styles': list(unexplored),
         'disliked_styles': list(disliked),
+        '_gender': gender,
     }
 
 

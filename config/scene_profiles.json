@@ -1,6 +1,6 @@
 {
-  "_comment": "场景画像：定义每个场景的必备品类+偏好特征。用于推荐时加权匹配。",
-  "last_updated": "2026-06-14",
+  "_comment": "场景画像：定义每个场景的必备品类+偏好特征。用于推荐时加权匹配。2026-06-26 新增女性场景。",
+  "last_updated": "2026-06-26",
   "profiles": {
     "跑步": {
       "required": [
@@ -206,12 +206,15 @@
         "PT",
         "SHOE"
       ],
+      "_female_alt": ["DRESS", "SKIRT", "BLOUSE"],
       "traits": {
         "fabric": [
           "棉",
           "亚麻",
           "皮质",
-          "羊毛混纺"
+          "羊毛混纺",
+          "真丝",
+          "雪纺"
         ],
         "fit": [
           "合身",
@@ -226,7 +229,10 @@
       "category_boost": {
         "SHIRT": 20,
         "JK": 15,
-        "PT": 10
+        "PT": 10,
+        "DRESS": 25,
+        "SKIRT": 20,
+        "BLOUSE": 15
       },
       "avoid": [
         "SH",
@@ -236,7 +242,9 @@
         "约会",
         "轻熟",
         "质感",
-        "干净"
+        "干净",
+        "精致",
+        "浪漫"
       ],
       "keyword_boost": 30
     },
@@ -383,6 +391,192 @@
         "居家",
         "休闲",
         "舒适"
+      ],
+      "keyword_boost": 30
+    },
+    "闺蜜聚会": {
+      "_comment": "女性专属场景 — 闺蜜下午茶/brunch/逛街聊天",
+      "required": [
+        "DRESS",
+        "SKIRT",
+        "PT",
+        "SHOE"
+      ],
+      "traits": {
+        "fabric": [
+          "棉",
+          "真丝",
+          "雪纺",
+          "针织"
+        ],
+        "fit": [
+          "合身",
+          "修身"
+        ],
+        "formality": [
+          2,
+          3,
+          4
+        ]
+      },
+      "category_boost": {
+        "DRESS": 25,
+        "SKIRT": 20,
+        "BLOUSE": 15,
+        "BAG": 15,
+        "KNIT": 10
+      },
+      "avoid": [
+        "SH",
+        "TANK"
+      ],
+      "keywords": [
+        "闺蜜",
+        "下午茶",
+        "brunch",
+        "姐妹",
+        "拍照",
+        "精致"
+      ],
+      "keyword_boost": 30
+    },
+    "下午茶": {
+      "_comment": "女性专属场景 — 精致下午茶/酒店大堂/花园茶歇",
+      "required": [
+        "DRESS",
+        "SKIRT",
+        "SHOE"
+      ],
+      "traits": {
+        "fabric": [
+          "真丝",
+          "雪纺",
+          "粗花呢",
+          "羊绒",
+          "蕾丝"
+        ],
+        "fit": [
+          "合身",
+          "修身"
+        ],
+        "formality": [
+          3,
+          4
+        ]
+      },
+      "category_boost": {
+        "DRESS": 30,
+        "SKIRT": 20,
+        "JK": 15,
+        "BLOUSE": 20,
+        "BAG": 15,
+        "HAT": 10
+      },
+      "avoid": [
+        "SH",
+        "TS",
+        "TANK"
+      ],
+      "keywords": [
+        "下午茶",
+        "精致",
+        "名媛",
+        "酒店",
+        "英式",
+        "优雅"
+      ],
+      "keyword_boost": 30
+    },
+    "逛街购物": {
+      "_comment": "女性专属场景 — 商场逛街/探店/city walk",
+      "required": [
+        "TS",
+        "PT",
+        "SHOE"
+      ],
+      "_female_alt": ["DRESS", "SKIRT"],
+      "traits": {
+        "fabric": [
+          "棉",
+          "针织",
+          "牛仔"
+        ],
+        "fit": [
+          "合身",
+          "宽松"
+        ],
+        "formality": [
+          1,
+          2,
+          3
+        ]
+      },
+      "category_boost": {
+        "DRESS": 15,
+        "PT": 15,
+        "BAG": 20,
+        "TS": 10,
+        "SHOE": 15
+      },
+      "avoid": [
+        "JK",
+        "TANK"
+      ],
+      "keywords": [
+        "逛街",
+        "购物",
+        "探店",
+        "city walk",
+        "休闲",
+        "时髦"
+      ],
+      "keyword_boost": 30
+    },
+    "晚宴": {
+      "_comment": "女性专属场景 — 正式晚宴/年会/婚礼宾客/颁奖礼",
+      "required": [
+        "DRESS",
+        "SKIRT",
+        "SHOE"
+      ],
+      "traits": {
+        "fabric": [
+          "真丝",
+          "缎面",
+          "天鹅绒",
+          "蕾丝",
+          "雪纺"
+        ],
+        "fit": [
+          "合身",
+          "修身"
+        ],
+        "formality": [
+          4,
+          5
+        ]
+      },
+      "category_boost": {
+        "DRESS": 35,
+        "SKIRT": 20,
+        "BLOUSE": 15,
+        "BAG": 20,
+        "SHOE": 20
+      },
+      "avoid": [
+        "TS",
+        "SH",
+        "TANK",
+        "LS"
+      ],
+      "keywords": [
+        "晚宴",
+        "年会",
+        "婚礼",
+        "正式",
+        "礼服",
+        "优雅",
+        "华丽"
       ],
       "keyword_boost": 30
     },

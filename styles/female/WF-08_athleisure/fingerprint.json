@@ -195,6 +195,8 @@
     "WF-11",
     "WF-04"
   ],
-  "tier": "explore",
-  "trend_category": "popular_trend"
+  "tier": "core",
+  "trend_category": "popular_trend",
+  "_tier_reason": "用户偏好+身形匹配: 运动休闲有衣橱基础, 强调腰线",
+  "_tier_updated": "2026-06-26"
 }

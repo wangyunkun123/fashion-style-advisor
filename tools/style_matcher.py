@@ -111,8 +111,13 @@ def load_style(style_id, gender=None):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def load_all_styles(gender=None):
-    """加载所有风格（自动检测性别路径）"""
+def load_all_styles(gender=None, recommend_only=False):
+    """加载所有风格（自动检测性别路径）
+
+    Args:
+        gender: 'male' / 'female' / None(自动检测)
+        recommend_only: True 时过滤掉 knowledge-only 和 bold 风格（仅返回 core + explore）
+    """
     # 优先使用 common.load_style_fingerprint 的方式扫描
     try:
         from tools.common import get_thread_user, load_style_fingerprint
@@ -133,6 +138,9 @@ def load_all_styles(gender=None):
                     try:
                         with open(fp_path) as f:
                             s = json.load(f)
+                        # 推荐模式：跳过 knowledge-only
+                        if recommend_only and s.get('tier') == 'knowledge-only':
+                            continue
                         styles[s.get('style_id', d)] = s
                     except Exception:
                         pass
@@ -145,6 +153,8 @@ def load_all_styles(gender=None):
                 try:
                     with open(fpath, 'r', encoding='utf-8') as f:
                         s = json.load(f)
+                    if recommend_only and s.get('tier') == 'knowledge-only':
+                        continue
                     styles[s.get('style_id', '')] = s
                 except Exception:
                     pass
@@ -613,7 +623,7 @@ def auto_suggest_style(temp_high, condition='晴', occasion='日常', gender=Non
     gender: 'male'/'female'/None → 自动从线程上下文获取
     """
     defaults = load_defaults(gender=gender)
-    styles = load_all_styles(gender=gender)
+    styles = load_all_styles(gender=gender, recommend_only=True)
     candidates = {}
 
     # 天气规则

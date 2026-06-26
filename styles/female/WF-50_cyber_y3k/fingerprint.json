@@ -7,5 +7,8 @@
   "parent": "avant_garde_future",
   "category": "未来先锋",
   "trend_category": "niche",
-  "gender": "female"
+  "gender": "female",
+  "tier": "knowledge-only",
+  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
+  "_tier_updated": "2026-06-26"
 }

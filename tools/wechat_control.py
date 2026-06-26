@@ -4287,9 +4287,27 @@ def _get_dynamic_mode_styles(mode, user_id=None):
     else:
         filtered = styles
 
-    # ── 8. 最终兜底 ──
+    # ── 7.5. 过滤 knowledge-only 风格（不参与任何推荐模式）──
+    filtered = [s for s in filtered if all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
+
+    # ── 7.6. 交叉模式排重：大胆跨界不应包含已在 tweak 中展示的风格 ──
+    if mode == 'cross' and core:
+        # 只排除用户显式偏好 (style_prefs)，保留舒适区风格作为跨界候选
+        filtered = [s for s in filtered if s['id'] not in style_prefs]
+
+    # ── 8. 最终兜底：使用小众/未探索风格而非裸奔前N个 ──
     if not filtered:
-        filtered = styles[:6]
+        fallback = [s for s in styles
+                    if trend_map.get(s['id']) == 'niche'
+                    and all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
+        if not fallback:
+            fallback = [s for s in styles
+                        if s['id'] in unexplored_styles
+                        and all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
+        if not fallback:
+            fallback = [s for s in styles
+                        if all_fps.get(s['id'], {}).get('tier') != 'knowledge-only'][:6]
+        filtered = fallback
 
     # ── 9. 空状态提示 ──
     if not has_any_data:
@@ -6599,15 +6617,33 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                         os.remove(_orig)
                 except Exception:
                     pass
-            # 🆕 清理旧 _incoming 文件（>24h 的残留）
+            # 🆕 清理旧 _incoming 文件（>24h 的残留），同时清理所有用户的 _incoming
             _now_ts = time.time()
-            try:
-                for _fn in os.listdir(_incoming_dir):
-                    _fp = os.path.join(_incoming_dir, _fn)
-                    if os.path.isfile(_fp) and _now_ts - os.path.getmtime(_fp) > 86400:
-                        os.remove(_fp)
-            except Exception:
-                pass
+            for _incoming_root in [_incoming_dir]:
+                try:
+                    for _fn in os.listdir(_incoming_root):
+                        _fp = os.path.join(_incoming_root, _fn)
+                        if os.path.isfile(_fp) and _now_ts - os.path.getmtime(_fp) > 86400:
+                            os.remove(_fp)
+                except Exception:
+                    pass
+            # 同时清理其他用户目录下的旧 _incoming 文件
+            _users_base = os.path.join(PROJECT_DIR, 'users')
+            if os.path.isdir(_users_base):
+                for _gender_dir in os.listdir(_users_base):
+                    _gp = os.path.join(_users_base, _gender_dir)
+                    if not os.path.isdir(_gp):
+                        continue
+                    for _uid_dir in os.listdir(_gp):
+                        _up = os.path.join(_gp, _uid_dir, 'wardrobe', '_incoming')
+                        if os.path.isdir(_up) and _up != _incoming_dir:
+                            try:
+                                for _fn in os.listdir(_up):
+                                    _fp = os.path.join(_up, _fn)
+                                    if os.path.isfile(_fp) and _now_ts - os.path.getmtime(_fp) > 86400:
+                                        os.remove(_fp)
+                            except Exception:
+                                pass
             # 清理分析JSON
             try:
                 os.remove(analysis_path)
@@ -7119,6 +7155,24 @@ def main():
             _funnel_ok = True
     except Exception as e:
         log(f"⚠️ Funnel 启动失败: {e}")
+
+    # 🆕 启动时清理所有用户超过 24h 的 _incoming/ 残留文件
+    _startup_cleaned = 0
+    _users_base = os.path.join(PROJECT_DIR, 'users')
+    if os.path.isdir(_users_base):
+        for _gd in os.listdir(_users_base):
+            _gp = os.path.join(_users_base, _gd)
+            if not os.path.isdir(_gp): continue
+            for _ud in os.listdir(_gp):
+                _inc = os.path.join(_gp, _ud, 'wardrobe', '_incoming')
+                if os.path.isdir(_inc):
+                    for _fn in os.listdir(_inc):
+                        _fp = os.path.join(_inc, _fn)
+                        if os.path.isfile(_fp):
+                            os.remove(_fp)
+                            _startup_cleaned += 1
+    if _startup_cleaned:
+        log(f"🧹 启动清理: {_startup_cleaned} 个残留临时文件")
 
     log("=" * 55)
     log("👔 Fashion 穿搭助手 — 交互式聊天")

@@ -213,6 +213,8 @@
     "WF-09",
     "WF-04"
   ],
-  "tier": "core",
-  "trend_category": "popular_trend"
+  "tier": "explore",
+  "trend_category": "popular_trend",
+  "_tier_reason": "身形部分匹配: 美式休闲部分覆盖",
+  "_tier_updated": "2026-06-26"
 }

@@ -1,46 +1,33 @@
-[10:16:39] [INFO] =======================================================
-[10:16:39] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[10:16:39] [INFO] 📡 服务: http://0.0.0.0:8765
-[10:16:39] [INFO] 💬 面板: http://localhost:8765/
-[10:16:39] [INFO] 🌐 Funnel: 已就绪
-[10:16:39] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
-[10:16:39] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
-[10:22:59] [INFO] 🚀 管线启动: 今日穿搭
-[10:23:05] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (6191ms)
-[10:23:05] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（新用户（<5条评分），建立舒适区基线）
-[10:23:06] [INFO] 📍 天气(北京): 34°C 晴
-[10:23:06] [INFO] 📍 场景: '今日穿搭' → occasion=日常
-[10:23:06] [INFO] 📍 📊 预计 ~60-100s · ~3940 tokens
-[10:23:06] [INFO] 📍 🤖 AI 智能选品
-[10:23:30] [INFO] ✅ 验证通过
-[10:23:30] [INFO] 📊 R1 选品评分: 53分 — ⚠️ 评分偏低，建议重新选品
-[10:23:30] [INFO] 📍 ✍️ AI 创作叙事+生图
-[10:23:41] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
-[10:23:47] [INFO] ✅ R2 创作完成: seedream_prompt=860字符, tips=2条
-[10:23:47] [INFO] 👤 人物照: 1张（原图）
-[10:23:47] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/male/kun/outfits/2026-06-26_今日穿搭
-[10:23:47] [INFO] 📍 🎨 Seedream AI 生图
-[10:24:26] [INFO] 📍 🎨 预压缩生图
-[10:24:26] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
-[10:24:26] [INFO] 📍 📤 推送 + 刷新
-[10:24:31] [INFO] 📤 Git push 成功 (尝试 1/3)
-[10:24:32] [INFO] 📱 主原型: 重建
-[10:24:36] [INFO] 📤 后台推送完成: 今日穿搭
-[10:29:36] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=342, CT=application/json)
-[10:32:47] [INFO] 🚀 管线启动: 今日穿搭
-[10:32:50] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (2711ms)
-[10:32:50] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（新用户（<5条评分），建立舒适区基线）
-[10:32:51] [INFO] 📍 天气(北京): 34°C 晴
-[10:32:51] [INFO] 📍 场景: '今日穿搭' → occasion=日常
-[10:32:51] [INFO] 📍 📊 预计 ~60-100s · ~2346 tokens
-[10:32:51] [INFO] 📍 🤖 AI 智能选品
-[10:33:06] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
-[10:33:06] [INFO] 📊 R1 选品评分: 46分 — ⚠️ 评分偏低，建议重新选品
-[10:33:06] [INFO] 📍 ✍️ AI 创作叙事+生图
-[10:33:30] [INFO] ✅ R2 创作完成: seedream_prompt=753字符, tips=2条, beauty=406字符
-[10:33:30] [INFO] 👤 人物照: 1张（原图）
-[10:33:30] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-26_今日穿搭
-[10:33:30] [INFO] 📍 🎨 Seedream AI 生图
-[10:34:10] [INFO] 📍 🎨 预压缩生图
-[10:34:10] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
-[10:34:10] [INFO] 📍 📤 推送 + 刷新
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51146)
+Traceback (most recent call last):
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 747, in __init__
+    self.handle()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 434, in handle
+    self.handle_one_request()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 422, in handle_one_request
+    method()
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 4556, in do_GET
+    gender, user_id, need_onboarding = _resolve_user_from_request(self)
+  File "/Users/rabbit/Claude code/Fashion/tools/wechat_control.py", line 154, in _resolve_user_from_request
+    _update_user_active(user_id)
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 215, in update_last_active
+    reg = load_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 58, in load_registry
+    return _ensure_registry()
+  File "/Users/rabbit/Claude code/Fashion/tools/user_manager.py", line 53, in _ensure_registry
+    return json.load(f)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+----------------------------------------

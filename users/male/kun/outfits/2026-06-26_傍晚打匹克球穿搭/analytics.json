@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-26T05:31:38Z",
+  "user_id": "kun",
+  "items_used": [
+    "TS-009",
+    "SH-003",
+    "SHOE-005"
+  ],
+  "style_matched": "athleisure_sport + japanese_city_boy",
+  "occasion": "运动",
+  "explore_level": 0.5,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 46490,
+  "api_calls": 2
+}

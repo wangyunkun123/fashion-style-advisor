@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-06-26T08:12:28Z",
+  "user_id": "nan",
+  "items_used": [
+    "DRESS-004",
+    "SHOE-002",
+    "HAT-008"
+  ],
+  "style_matched": "运动休闲",
+  "occasion": "运动",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 87326,
+  "api_calls": 3
+}

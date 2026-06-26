@@ -31,6 +31,15 @@ Traceback (most recent call last):
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 ----------------------------------------
+[12:52:56] [INFO] =======================================================
+[12:52:56] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[12:52:56] [INFO] 📡 服务: http://0.0.0.0:8765
+[12:52:56] [INFO] 💬 面板: http://localhost:8765/
+[12:52:56] [INFO] 🌐 Funnel: 已就绪
+[12:52:56] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[12:52:56] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[12:54:35] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=342, CT=application/json)
+[12:54:35] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
 [13:27:34] [INFO] 📨 POST /api/chat?user=nan (Content-Length=32, CT=application/json)
 [13:27:34] [INFO] 💬 聊天: generate | 今日穿搭
 [13:27:34] [INFO] 🚀 管线启动: 今日穿搭
@@ -52,6 +61,8 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 [13:28:36] [INFO] ✅ 验证通过 (⚠️ 2条提醒)
 [13:28:36] [INFO] 📊 R1 选品评分: 45分 — ⚠️ 评分偏低，建议重新选品
 [13:28:36] [INFO] 📍 ✍️ AI 创作叙事+生图
+💇‍♀️ 美妆方向: 647字符
+👗 服装构造参考: 1572字符
 [13:29:05] [INFO] ✅ R2 创作完成: seedream_prompt=1078字符, tips=2条, beauty=435字符
 [13:29:05] [INFO] 👤 人物照: 1张（原图）
 [13:29:05] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-26_今日穿搭
@@ -82,3 +93,48 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 [13:32:17] [INFO] 📍 🎨 预压缩生图
 [13:32:17] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [13:32:17] [INFO] 📍 📤 推送 + 刷新
+[13:32:23] [INFO] 📤 Git push 成功 (尝试 1/3)
+[13:32:23] [INFO] 📱 主原型: 重建
+[13:32:29] [INFO] 📤 后台推送完成: 傍晚打匹克球穿搭
+[13:33:40] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=380, CT=application/json)
+[15:27:45] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[15:28:17] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[15:28:40] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[15:30:55] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[15:30:55] [INFO] 所有任务已结束（等待 0s）
+[15:30:55] [INFO] Watchdog 已停止
+[15:30:55] [INFO] 👋 服务已关闭
+[15:31:01] [INFO] =======================================================
+[15:31:01] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[15:31:01] [INFO] 📡 服务: http://0.0.0.0:8765
+[15:31:01] [INFO] 💬 面板: http://localhost:8765/
+[15:31:01] [INFO] 🌐 Funnel: 已就绪
+[15:31:01] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[15:31:01] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[16:07:59] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[16:09:42] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[16:09:49] [INFO] 📨 POST /rate (Content-Length=88, CT=application/json)
+[16:09:49] [INFO] ⭐ 评分: 2026-06-26_今日穿搭 → 3星
+[16:10:14] [INFO] ⏰ 原型过时 (滞后 9149s)，后台重建: nan
+[16:10:15] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=35, CT=application/json)
+[16:11:01] [INFO] 📨 POST /api/chat?user=nan (Content-Length=38, CT=application/json)
+[16:11:01] [INFO] 💬 聊天: recommend | 晚上要去打匹克球
+[16:11:01] [INFO] 🚀 管线启动: 晚上要去打匹克球
+[16:11:08] [INFO] 🎯 意图解析: occasion=运动 city=默认 ids=[] date_offset=0 new_items=False explore=normal (6810ms)
+[16:11:08] [INFO] 📍 探索度: 安全推荐
+[16:11:10] [INFO] 📍 天气(北京): 34°C 晴
+[16:11:10] [INFO] 📍 场景: '晚上要去打匹克球' → occasion=运动 activity=去打匹克球 vibe=活力、舒适、轻便
+[16:11:10] [INFO] 📍 📊 预计 ~60-100s · ~2405 tokens
+[16:11:10] [INFO] 📍 🤖 AI 智能选品
+[16:11:28] [WARN] ⚠️ 验证未通过: ['SHOE-004: 运动场景必须有功能运动鞋，不可选拖鞋/凉鞋/皮鞋/靴子/帆布鞋/工装靴']
+[16:11:57] [INFO] ✅ 修正后验证通过
+[16:11:57] [INFO] ✅ 验证通过 (⚠️ 2条提醒)
+[16:11:57] [INFO] 📊 R1 选品评分: 43分 — ⚠️ 评分偏低，建议重新选品
+[16:11:57] [INFO] 📍 ✍️ AI 创作叙事+生图
+[16:12:28] [INFO] ✅ R2 创作完成: seedream_prompt=1157字符, tips=2条, beauty=534字符
+[16:12:28] [INFO] 👤 人物照: 1张（原图）
+[16:12:28] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-26_晚上要去打匹克球
+[16:12:28] [INFO] 📍 🎨 Seedream AI 生图
+[16:13:05] [INFO] 📍 🎨 预压缩生图
+[16:13:05] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
+[16:13:05] [INFO] 📍 📤 推送 + 刷新

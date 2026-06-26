@@ -127,16 +127,14 @@ def _resolve_user_from_request(handler):
     user_id = qs.get('user', [None])[0]
     gender_from_url = qs.get('gender', [None])[0]
 
-    # Cookie 回退：仅 API 调用不带 ?user= 时从 Cookie 读
+    # Cookie 回退：不带 ?user= 时从 Cookie 读（页面加载和 API 均适用）
     if not user_id:
-        is_api = parsed.path.startswith('/api/')
-        if is_api:
-            cookie_header = handler.headers.get('Cookie', '')
-            if cookie_header:
-                import re as _re_c
-                cm = _re_c.search(r'fashion_user=([^;\s]+)', cookie_header)
-                if cm:
-                    user_id = cm.group(1)
+        cookie_header = handler.headers.get('Cookie', '')
+        if cookie_header:
+            import re as _re_c
+            cm = _re_c.search(r'fashion_user=([^;\s]+)', cookie_header)
+            if cm:
+                user_id = cm.group(1)
 
     # 无用户上下文 → 性别门
     if not user_id or user_id == 'default':

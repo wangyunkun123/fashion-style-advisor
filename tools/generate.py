@@ -260,6 +260,16 @@ def main():
     print(f"🔄 Pass 1/2: 基础穿搭（{len(core_images)} 张参考图）")
     print(f"{'─' * 60}")
 
+    # ── 人物身份保持：如果参考图包含人物照，在 prompt 前注入身份保持指令 ──
+    has_person_ref = any('人物_' in os.path.basename(img) for img in core_images)
+    if has_person_ref:
+        identity_clause = (
+            f"Image 1 is a reference photo of the person to portray. "
+            f"Preserve their facial identity, skin tone, and body shape — "
+            f"they are the model wearing this outfit. "
+        )
+        prompt = identity_clause + prompt
+
     start = time.time()
     result1 = call_seedream(prompt, core_images)
 

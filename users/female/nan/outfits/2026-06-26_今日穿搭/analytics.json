@@ -1,16 +1,17 @@
 {
-  "generated_at": "2026-06-26T02:12:51Z",
+  "generated_at": "2026-06-26T02:33:30Z",
   "user_id": "nan",
   "items_used": [
-    "DRESS-004",
+    "LS-001",
+    "PT-005",
     "SHOE-004"
   ],
-  "style_matched": "法式慵懒+运动感日常",
+  "style_matched": "美式休闲（WF-05）+ 日常慵懒",
   "occasion": "日常",
   "explore_level": 0.0,
   "user_tap": null,
   "user_rating": null,
   "user_wore": null,
-  "generation_time_ms": 51050,
+  "generation_time_ms": 43327,
   "api_calls": 2
 }

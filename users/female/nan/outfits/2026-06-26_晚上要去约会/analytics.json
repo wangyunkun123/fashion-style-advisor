@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-06-26T08:14:44Z",
+  "user_id": "nan",
+  "items_used": [
+    "LS-002",
+    "PT-005",
+    "SHOE-002",
+    "HAT-007"
+  ],
+  "style_matched": "法式慵懒+轻熟浪漫",
+  "occasion": "约会",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 68071,
+  "api_calls": 2
+}

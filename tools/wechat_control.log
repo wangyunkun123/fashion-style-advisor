@@ -6241,3 +6241,25 @@ OSError: [Errno 48] Address already in use
 [19:50:34] [INFO] 📍 🎨 预压缩生图
 [19:50:34] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [19:50:34] [INFO] 📍 📤 推送 + 刷新
+[19:50:39] [INFO] 📤 Git push 成功 (尝试 1/3)
+[19:50:39] [INFO] 📱 主原型: 重建
+[19:50:44] [INFO] 📤 后台推送完成: 明天要去开会
+[19:52:02] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=205, CT=application/json)
+[10:09:25] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=383, CT=application/json)
+[10:12:00] [INFO] 🚀 管线启动: 今日穿搭
+[10:12:05] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (5167ms)
+[10:12:05] [INFO] 📅 每日自动推荐 → 👔 日常穿搭（新用户（<5条评分），建立舒适区基线）
+[10:12:06] [INFO] 📍 天气(北京): 34°C 晴
+[10:12:06] [INFO] 📍 场景: '今日穿搭' → occasion=日常
+[10:12:07] [INFO] 📍 📊 预计 ~60-100s · ~2301 tokens
+[10:12:07] [INFO] 📍 🤖 AI 智能选品
+[10:12:35] [INFO] ✅ 验证通过 (⚠️ 2条提醒)
+[10:12:35] [INFO] 📊 R1 选品评分: 44分 — ⚠️ 评分偏低，建议重新选品
+[10:12:35] [INFO] 📍 ✍️ AI 创作叙事+生图
+[10:12:51] [INFO] ✅ R2 创作完成: seedream_prompt=956字符, tips=2条, beauty=447字符
+[10:12:51] [INFO] 👤 人物照: 1张（原图）
+[10:12:51] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-26_今日穿搭
+[10:12:51] [INFO] 📍 🎨 Seedream AI 生图
+[10:13:31] [INFO] 📍 🎨 预压缩生图
+[10:13:31] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
+[10:13:31] [INFO] 📍 📤 推送 + 刷新

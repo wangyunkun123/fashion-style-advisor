@@ -138,6 +138,141 @@ git tag female-user-pipeline-fixed  # 女性用户管线全链路修复
 - `wechat_control.py` 仍为巨石文件（~6200 行），业务逻辑层待抽出
 - 调试日志（临时 POST/GET 追踪）待清理
 
+### 下午～晚间：男女分线架构 — 项目最大规模重构
+
+#### 背景
+多用户测试引入女用户 (nan) 后，男女性数据频繁交叉污染（衣橱/风格/Profile/生图），且推荐系统对女性几乎不可用。决定将项目从「单用户男性为主」重构为「男女双线独立运行 + 共享公共逻辑」。
+
+#### 性别分离架构 (`c785a0a`)
+```
+项目根目录
+├── users/
+│   ├── male/
+│   │   ├── kun/     # 主用户（原 wardrobe/outfits/ 迁移至此）
+│   │   └── becca/   # 男性测试用户
+│   └── female/
+│       └── nan/     # 女性测试用户（原 users/alice/ 迁移）
+├── styles/
+│   ├── male/        # 18 个男性风格指纹 (*.json)
+│   └── female/      # 50 个女性风格指纹 (WF-* 子目录)
+├── config/
+│   ├── style_defaults_male.json
+│   ├── style_defaults_female.json
+│   └── beauty_direction_female.json  # 新增：女性美妆指引
+└── tools/           # 公共逻辑（男女共享）
+```
+
+核心原则：
+- 男女内容独立运行，数据互不污染
+- `tools/` 公共逻辑适用于男女，可按 gender 参数做针对性优化
+- 修改公共逻辑时同步影响男女，改 gender-specific 部分互不干扰
+
+#### 目录迁移 (`2ca7334`)
+- `wardrobe/` → `users/male/kun/wardrobe/` (76件服装)
+- `outfits/` → `users/male/kun/outfits/` (历史穿搭)
+- `users/alice/` → `users/female/nan/`
+- `users/becca/` → `users/male/becca/`
+- `styles/` 平面 JSON → `styles/male/` (旧格式删除)
+- `styles_women/` → `styles/female/` (目录结构保留)
+- `config/user_profile.json` → 各用户 `profile.json`
+- 清理统计：1655 文件，~520MB
+
+#### 关键 Bug：`resolve_user_dir()` 根因修复
+这是导致 4 轮 "还是男性形象" 反馈的底层根因。
+
+**Bug**：`resolve_user_dir(user_id='nan')` — 关键字参数调用时 `gender=None, user_id='nan'`，但原代码只有两个分支：
+1. `gender is not None and user_id is None` → 位置参数兼容（把 gender 当 uid 用）
+2. `gender and user_id` → 两参数都有的情况
+
+关键字参数 `gender=None` 两条都不命中，返回 `PROJ_DIR`。**所有** 基于 `resolve_user_dir` 的性别检测静默 fallback 到男性默认值。
+
+**修复**：新增第三分支——仅 user_id 传参时自动查 gender：
+```python
+if (gender is None or gender == '') and user_id and user_id != 'default':
+    g = get_user_gender(user_id)
+    if g:
+        return os.path.join(PROJ_DIR, 'users', g, user_id)
+```
+
+#### 风格推荐性别感知 (`032e971`, `c684525`)
+- `style_matcher.py`：`DEFAULTS_CONFIG` 拆为 `DEFAULTS_CONFIG_MALE` / `DEFAULTS_CONFIG_FEMALE`，`auto_suggest_style()` 和 `load_defaults()` 接受 `gender` 参数
+- `style_lab.py`：`STYLES_DIR` 更新为扫描 `styles/male/` + `styles/female/` 两个目录（`load_all_styles()` 68风格 = 18男 + 50女）
+- `_load_style_cards()`：按性别路由到正确风格目录
+- `/api/try/`：兼容两种风格文件结构（男性平面 JSON / 女性子目录 fingerprint.json）
+
+#### Explore 个性化匹配重写 (`7b7a53e`)
+新增 3 个辅助函数，替代失效的 `style_lab.load_all_styles()`：
+- `_load_user_style_context(user_id)`：统一加载 style_prefs/gender/has_clothing/has_ratings
+- `_load_all_style_fingerprints(gender)`：按性别加载全部风格指纹
+- `_compute_wardrobe_style_affinity(user_id, gender, style_ids)`：衣橱-风格匹配评分
+
+`_get_dynamic_mode_styles` 信号优先级：**引导偏好 > 评分舒适区 > 衣橱匹配 > 趋势 fallback**。无数据用户返回空状态 + hint 提示。
+
+#### 女性美妆系统 (`config/beauty_direction_female.json`)
+- 11 个美学集群（东亚/欧式经典/现代都市/浪漫女性/极简奢华/自然逃离/前卫另类/都市街头/戏剧表达/文化优雅/先锋艺术）
+- 每集群含 `hair.en/hair.cn`（发型）、`makeup.en/makeup.cn`（妆容）、`vibe` 字段
+- `build_creation_prompt()` 注入 `beauty_direction`：按风格匹配集群 → 发型+妆容描述融入 seedream prompt
+- nan profile 新增 `hair` 字段（length/color/texture），`user_manager.py` GENDER_DEFAULTS['female'] 同步
+
+#### 人物身份保持修复 (`generate.py`)
+Pass 1 生图未告知 Seedream 用参考人物照片作为身份基准，导致 AI 生成泛型 "Asian woman" 而非 nan 本人。修复：检测到 `人物_` 参考图时自动注入 identity clause：
+```
+Image 1 is a reference photo of the person to portray.
+Preserve their facial identity, skin tone, and body shape —
+they are the model wearing this outfit.
+```
+
+#### 设置页重构 (`260e3ed`)
+- 移除性别选择器（已在性别门入口确定）
+- 形象管理折叠卡整合全部形象内容
+- 风格偏好改为风格库弹窗选择器（最多5个）+ 芯片预览 + 清空联动
+- 体型选择兼容 `seg-body-male` / `seg-body-female` 双容器
+
+#### 路径/CDN 修复（多次迭代）
+- Hero 区服装缩略图：相对路径 → CDN URL (`eaef12c`, `eaf2879`)
+- 衣橱缩略图 + `renderItemCardH` / `loadColdItems` / `renderMatchSection` 路径修复 (`2ce3f54`)
+- JS 字符串拼接结构破坏修复：`"../'+` → `'+__CDN__+` (`6f26afb`)
+- `generate.py` 子进程 `sys.path` 项目根目录修复
+- `onerror` 回退路径适配新目录结构 (`2a60a9f`)
+
+#### 紧急恢复：styles/ 误删 (`58a793b`)
+`git rm -r styles/` 误匹配了 `styles/male/` 和 `styles/female/` 子目录。旧平面 JSON (`styles/*.json`) 正确删除，新子目录从 `c785a0a` 恢复。
+
+#### 代码变化
+| 文件 | 改动 |
+|------|------|
+| `tools/common.py` | `resolve_user_dir()` 第三分支：关键字参数自动查 gender |
+| `tools/style_matcher.py` | 性别感知：双配置文件 + 双 fallback + auto_suggest_style(gender) |
+| `tools/style_lab.py` | `load_all_styles()` / `load_style()` 扫描 male+female 双目录 |
+| `tools/unified_pipeline.py` | `_is_female_early` 早检测 + gender-aware 风格路由 + beauty 注入 |
+| `tools/wechat_control.py` | 3 个 Explore 辅助函数 + `_get_dynamic_mode_styles` 重写 + 设置页 API + 风格选择器 API + 多用户路由完善 |
+| `tools/generate.py` | Pass 1 人物身份保持 clause + `--user` 参数 |
+| `tools/build_prototype.py` | Explore hint 支持 + CDN 路径 + gender 感知 |
+| `tools/user_manager.py` | GENDER_DEFAULTS['female'] 加 hair 字段 |
+| `config/beauty_direction_female.json` | **新增** — 11 集群女性美妆指引 |
+| `users/female/nan/profile.json` | 加 hair 字段 |
+| `prototype/mobile-v2.html` | 设置页重构 + 风格选择器弹窗 |
+
+#### 验证结果
+- nan 今日穿搭完整跑通：DRESS-004 + SHOE-004 → Seedream prompt 明确 "Asian woman" + 长发妆容描述
+- kun 今日穿搭正常：TS-003 + PT-002 + SHOE-002 → 男性形象无 beauty 注入
+- Explore 三种模式正确个性化：nan 返回 5 个引导风格，kun 返回 10 个舒适区风格
+- 两用户 Profile/衣橱/风格/生图 完全隔离，互不污染
+
+#### 备份标签
+```bash
+git tag gender-split-architecture  # 男女分线架构
+```
+
+#### 待完成
+- `STYLE_PHOTO_MAP` 无女性条目（50 个女性风格 fallback 到 DEFAULT_PHOTO_DIRECTION）
+- `validate_outfit()` 硬编码男性单品 ID 未泛化
+- `scene_profiles.json` 无女性场景（闺蜜聚会/下午茶/逛街等）
+- `_get_persona_description()` `shape_cn` 缺少 `petite` 体型映射
+- CLI 工具（`style_lab.py`/`sync_items.py`/`fix_orientation.py`/`generate_thumbnails.py`）仍硬编码旧路径
+- `wardrobe/enhanced/` 146 个 `Image_` 命名抠图冗余待清理
+- launchd 服务待重新启用
+
 ---
 
 ## 2026-06-23: Phase 7 稳定性基础设施 ✅ + 管线文档

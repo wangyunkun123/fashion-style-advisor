@@ -1,0 +1,106 @@
+{
+  "_description": "面料→视觉属性映射表，用于女性生图 prompt 精确描述面料外观。key 为中文面料名，visual 为英文视觉描述。",
+  "_usage": "unified_pipeline.py → build_garment_script() 加载此表，为每件单品注入面料物理属性到 seedream prompt 构造上下文。",
+
+  "亚麻": {
+    "en": "linen",
+    "visual": "matte natural texture with visible slubs and creases, breathable slightly crisp drape, relaxed unstructured look, soft wrinkles at stress points"
+  },
+  "真丝": {
+    "en": "silk",
+    "visual": "subtle luminous sheen, fluid liquid-like drape, ultra-smooth soft surface, graceful movement catching light, luxurious weightless flow"
+  },
+  "桑蚕丝": {
+    "en": "mulberry silk",
+    "visual": "refined pearl-like luster, exceptionally fluid drape, buttery soft surface, gentle shimmer when moving, premium delicate sheen"
+  },
+  "雪纺": {
+    "en": "chiffon",
+    "visual": "semi-transparent lightweight float, delicate ethereal drape, soft billowy movement, layered airy volume, romantic feminine texture"
+  },
+  "棉": {
+    "en": "cotton",
+    "visual": "clean matte surface, natural soft structure, breathable medium-weight drape, casual comfortable look, subtle natural fiber texture"
+  },
+  "棉混纺": {
+    "en": "cotton blend",
+    "visual": "soft matte finish with slight mechanical stretch, natural fiber texture, comfortable structured drape, casual polished look"
+  },
+  "针织": {
+    "en": "knit",
+    "visual": "visible knit stitch texture, body-skimming stretchy drape, soft yarn appearance, ribbed cuffs and hem details, cozy tactile look"
+  },
+  "精纺羊毛": {
+    "en": "fine wool",
+    "visual": "smooth refined surface, crisp structured drape, subtle natural luster, clean tailored lines, premium suiting texture"
+  },
+  "粗纺羊毛": {
+    "en": "wool tweed",
+    "visual": "textured nubby surface, substantial structured drape, heathered color depth, traditional heritage texture, warm winter weight"
+  },
+  "羊绒": {
+    "en": "cashmere",
+    "visual": "ultra-soft fuzzy surface halo, fluid luxurious drape, subtle gentle sheen, lightweight warmth, refined cozy texture"
+  },
+  "牛仔布": {
+    "en": "denim",
+    "visual": "structured rigid drape, matte indigo wash with subtle fade lines, visible diagonal twill weave texture, substantial cotton weight, casual rugged look"
+  },
+  "牛仔": {
+    "en": "denim",
+    "visual": "structured rigid drape, matte indigo wash with subtle fade lines, visible diagonal twill weave texture, substantial cotton weight, casual rugged look"
+  },
+  "蕾丝": {
+    "en": "lace",
+    "visual": "delicate openwork floral pattern, semi-sheer revealing skin beneath, scalloped edge details, romantic feminine texture, intricate dimensional surface"
+  },
+  "缎面": {
+    "en": "satin",
+    "visual": "high glossy reflective sheen, ultra-smooth flat surface, fluid slippery drape, luxurious polished finish, formal evening luster"
+  },
+  "聚酯纤维": {
+    "en": "polyester",
+    "visual": "smooth even surface, crisp structured drape with slight stiffness, wrinkle-resistant clean finish, athletic or polished look depending on weight"
+  },
+  "聚酯纤维混纺": {
+    "en": "polyester blend",
+    "visual": "smooth surface with subtle texture, moderate drape with good structure retention, clean polished look, versatile year-round weight"
+  },
+  "氨纶混纺": {
+    "en": "spandex blend",
+    "visual": "smooth matte surface with high elasticity, body-hugging stretch drape, athletic performance look, compressive sleek fit"
+  },
+  "尼龙": {
+    "en": "nylon",
+    "visual": "smooth technical surface with slight sheen, lightweight wind-resistant drape, athletic outdoor performance look, crisp swishy movement"
+  },
+  "皮革": {
+    "en": "leather",
+    "visual": "smooth glossy or matte surface with natural grain, structured rigid drape that molds with wear, rich depth, luxe edge"
+  },
+  "麂皮": {
+    "en": "suede",
+    "visual": "soft napped velvety surface, matte plush texture, flexible drape, subtle color depth variation when touched, refined tactile look"
+  },
+  "灯芯绒": {
+    "en": "corduroy",
+    "visual": "distinctive vertical ribbed wales, soft plush texture, structured drape, vintage academic or 70s retro look, warm substantial weight"
+  },
+  "针织棉": {
+    "en": "cotton knit",
+    "visual": "soft matte cotton yarn texture, comfortable stretchy drape, casual cozy look, visible knit structure, breathable everyday weight"
+  },
+  "莫代尔": {
+    "en": "modal",
+    "visual": "ultra-smooth silky surface, fluid drape with subtle weight, slight sheen, buttery soft against skin, elegant casual drape"
+  },
+  "天丝": {
+    "en": "tencel/lyocell",
+    "visual": "smooth surface with subtle natural luster, fluid drape similar to silk but more casual, soft cool hand, sustainable refined look"
+  },
+
+  "_default": {
+    "en": "fabric",
+    "visual": "natural texture, moderate drape, clean finish"
+  }
+}

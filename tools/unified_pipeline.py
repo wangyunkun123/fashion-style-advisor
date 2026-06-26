@@ -492,6 +492,136 @@ def get_beauty_direction(style_ids, user_hair=None):
     return beauty_context, beauty_en
 
 
+# ── 服装构造描述生成（女性生图优化）──
+_FABRIC_VISUAL_CACHE = None
+_GARMENT_TEMPLATES_CACHE = None
+
+
+def _load_fabric_visual_map():
+    """延迟加载面料→视觉属性映射"""
+    global _FABRIC_VISUAL_CACHE
+    if _FABRIC_VISUAL_CACHE is None:
+        fp = os.path.join(PROJ_DIR, 'config', 'fabric_visual.json')
+        if os.path.exists(fp):
+            _FABRIC_VISUAL_CACHE = load_json(fp)
+        else:
+            _FABRIC_VISUAL_CACHE = {}
+    return _FABRIC_VISUAL_CACHE
+
+
+def _load_garment_templates():
+    """延迟加载女性品类 Prompt 模板"""
+    global _GARMENT_TEMPLATES_CACHE
+    if _GARMENT_TEMPLATES_CACHE is None:
+        gp = os.path.join(PROJ_DIR, 'config', 'garment_templates_female.json')
+        if os.path.exists(gp):
+            _GARMENT_TEMPLATES_CACHE = load_json(gp)
+        else:
+            _GARMENT_TEMPLATES_CACHE = {}
+    return _GARMENT_TEMPLATES_CACHE
+
+
+def build_garment_script(selection, all_clothes, is_female=False):
+    """从单品标签提取服装构造细节，生成英文 garment reference 注入 seedream prompt 上下文。
+
+    女装版型/面料/细节比男装复杂得多 —— 领型、袖型、腰线、裙型、面料垂感
+    一旦出错整套穿搭就毁了。此函数从 JSON 标签自动提取结构化服装描述，
+    供 Round 2 AI 在生成 seedream_prompt 时精确还原。
+
+    Args:
+        selection: Round 1 的 AI 输出 dict，含 items 列表
+        all_clothes: {cid: tag_dict} 全衣柜标签
+        is_female: 是否启用女性品类模板
+
+    Returns:
+        str: 英文服装构造参考块，注入到 user_prompt
+    """
+    if not is_female:
+        return ''
+
+    items = selection.get('items', [])
+    if not items:
+        return ''
+
+    fabric_map = _load_fabric_visual_map()
+    garment_templates = _load_garment_templates()
+
+    if not garment_templates:
+        return ''
+
+    lines = ['👗 Garment Construction Reference — describe these EXACTLY in seedream_prompt:',
+             '⚠️ Neckline, sleeve, waistline, skirt silhouette, and fabric texture errors will ruin the outfit.',
+             '']
+
+    for it in items:
+        cid = it.get('id', '')
+        detail = all_clothes.get(cid, {})
+        if not detail:
+            continue
+
+        cat_code = detail.get('category_code', '')
+        template = garment_templates.get(cat_code)
+        if not template:
+            continue
+
+        cat = detail.get('category', cat_code)
+        color = (detail.get('color') or {}).get('hue_name', '')
+        pattern = (detail.get('pattern') or {}).get('type', '')
+        fabric_cn = (detail.get('fabric') or {}).get('primary', '')
+        fabric_weight = (detail.get('fabric') or {}).get('weight', '')
+
+        # 配饰类不取版型/长度（鞋/包/帽/墨镜/袜/配饰无服装版型概念）
+        _accessory_cats = {'SHOE', 'BAG', 'HAT', 'ACC', 'SOCK', 'SUN'}
+        if cat_code in _accessory_cats:
+            fit = ''
+            length = ''
+        else:
+            fit = (detail.get('silhouette') or {}).get('fit', '')
+            length = (detail.get('silhouette') or {}).get('length_ratio', '')
+        fit_comment = (detail.get('meta') or {}).get('claude_fit_comment', '')
+
+        # 颜色+图案
+        color_str = color
+        if pattern and pattern not in ('纯色', '无'):
+            color_str = f'{color} {pattern}'
+
+        # 面料视觉属性
+        fabric_info = fabric_map.get(fabric_cn, fabric_map.get('_default', {}))
+        fabric_en = fabric_info.get('en', fabric_cn)
+        fabric_visual = fabric_info.get('visual', '')
+
+        # 构建描述行
+        desc_parts = [color_str, fabric_en]
+        if fit:
+            desc_parts.append(f'{fit} fit')
+        desc_base = f'  {cid} ({cat}): {", ".join(desc_parts)}'
+        if length:
+            desc_base += f', {length} length'
+        if fit_comment:
+            desc_base += f' [{fit_comment}]'
+
+        lines.append(desc_base)
+
+        if fabric_visual:
+            lines.append(f'    Fabric: {fabric_visual}')
+        if fabric_weight and fabric_weight not in desc_base:
+            lines.append(f'    Weight: {fabric_weight}')
+
+        # 品类关键维度
+        critical = template.get('critical_details', [])
+        if critical:
+            # 只取前 4 个最关键维度，避免信息过载
+            key_dims = critical[:4]
+            lines.append(f'    Describe: {"; ".join(key_dims)}')
+
+        lines.append('')
+
+    if len(lines) <= 3:
+        return ''  # 无有效服装数据
+
+    return '\n'.join(lines)
+
+
 # ============================================================
 # 数据加载
 # ============================================================
@@ -1527,6 +1657,12 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
         )
 
     items_text = '\n'.join(item_lines)
+
+    # ── 女性服装构造描述（从标签自动提取，注入 seedream prompt 上下文）──
+    garment_script = build_garment_script(selection, all_clothes, is_female=is_female)
+    if garment_script:
+        print(f"👗 服装构造参考: {len(garment_script)}字符")
+
     color_story = selection.get('color_story', '')
     silhouette = selection.get('silhouette', '')
     anchor = selection.get('anchor', {})
@@ -1561,7 +1697,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
   "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
   "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
   "dressing_tips": ["穿搭技巧1：基于所选单品的独特特征（特定颜色/面料/廓形/品牌设计细节/鞋型/领型），而非通用建议", "穿搭技巧2：必须与技巧1来自不同类别，数组长度1-2"],
-  "seedream_prompt": "英文 Seedream 生图提示词(250-400字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。{'💇‍♀️💄必须自然融入下方发型与妆容指导中的发型和妆容描述。' if is_female else ''}详细描述服装细节和场景氛围，营造时尚大片的摄影感"{beauty_schema}
+  "seedream_prompt": "英文 Seedream 生图提示词(250-400字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。{'💇‍♀️💄必须自然融入下方发型与妆容指导中的发型和妆容描述。' if is_female else ''}{'👗必须精确还原下方 Garment Construction Reference 中每件单品的服装构造：领型、袖型、腰线、裙型/裤型、面料质感必须与描述一致，不可随意改变。' if is_female else ''}详细描述服装细节和场景氛围，营造时尚大片的摄影感"{beauty_schema}
 }}
 
 注意：
@@ -1596,6 +1732,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 单品清单：
 {items_text}
 
+{garment_script}
 {photo_direction}
 {beauty_context}
 

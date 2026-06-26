@@ -1,0 +1,181 @@
+{
+  "_description": "女性品类 Seedream Prompt 服装构造模板。定义每个品类必须在 prompt 中精确描述的细节维度。",
+  "_usage": "unified_pipeline.py → build_garment_script() 按 category_code 匹配模板，从标签 JSON 提取对应字段生成英文服装描述。",
+
+  "DRESS": {
+    "name_cn": "连衣裙",
+    "name_en": "dress",
+    "critical_details": [
+      "neckline shape (V-neck / round / square / boat / halter / sweetheart / collared)",
+      "sleeve type and length (sleeveless / cap / short / 3/4 / long / puff / bishop / flutter)",
+      "waistline position and type (empire / natural / dropped / wrap / elastic / belted)",
+      "skirt silhouette (A-line / pencil / fit-and-flare / shift / slip / tiered / wrap)",
+      "skirt length relative to knee (mini above-knee / knee-length / midi below-knee / maxi ankle / full-length)",
+      "closure method (back zipper / side zipper / button front / wrap tie / pullover / back keyhole)"
+    ],
+    "prompt_instruction": "Describe the dress as a single flowing garment — neckline → sleeve → waist → skirt shape → hem length. The waistline placement and skirt silhouette are the most critical details for accurate rendering."
+  },
+
+  "SKIRT": {
+    "name_cn": "半身裙",
+    "name_en": "skirt",
+    "critical_details": [
+      "waistband type and height (high-waist / mid-rise / low-rise / elastic / structured / paperbag)",
+      "skirt silhouette (A-line / pencil / pleated / flared / wrap / straight / circle / tiered / bias-cut)",
+      "skirt length (mini / above-knee / knee-length / midi below-knee / maxi ankle / floor-length)",
+      "closure (side zipper / back zipper / button front / elastic pull-on / wrap tie)",
+      "pleat type if applicable (knife pleats / box pleats / accordion pleats / sunburst pleats)",
+      "slit detail if applicable (side slit / front slit / back slit / no slit)"
+    ],
+    "prompt_instruction": "Describe the skirt waistband first, then silhouette, length, and any pleats/slits. The silhouette shape (A-line vs pencil vs pleated) dramatically changes the overall look."
+  },
+
+  "BLOUSE": {
+    "name_cn": "女士衬衫",
+    "name_en": "blouse",
+    "critical_details": [
+      "neckline and collar type (classic point collar / Peter Pan collar / bow tie neck / ruffled collar / band collar / V-neck / open collar)",
+      "sleeve type and length (short / 3/4 / long / puff sleeve / bishop sleeve / flutter sleeve / balloon sleeve / cape sleeve)",
+      "cuff style (button barrel cuff / French cuff / elastic smocked cuff / flared bell cuff / simple hem)",
+      "front closure (button placket / hidden placket / tie front / pullover / back zip)",
+      "hem and tucking intention (curved hem for untucked / straight hem for tucking / peplum flared hem)",
+      "special details (ruffle trim / lace inset / embroidery / puff shoulder / smocked bodice / sheer panel)"
+    ],
+    "prompt_instruction": "The sleeve type and collar are the most defining features of a blouse. Describe them precisely. Mention whether the blouse is intended to be tucked or worn loose."
+  },
+
+  "KNIT": {
+    "name_cn": "针织衫",
+    "name_en": "knit top / sweater",
+    "critical_details": [
+      "neckline (crew neck / V-neck / turtleneck / mock neck / boat neck / cowl neck / cardigan open front)",
+      "sleeve type (long sleeve / 3/4 sleeve / short sleeve / sleeveless knit)",
+      "knit stitch pattern (fine gauge smooth / cable knit / ribbed / fisherman / pointelle / popcorn texture)",
+      "fit and silhouette (slim body-skimming / relaxed boxy / oversized slouchy / cropped / tunic length)",
+      "ribbing detail (ribbed crew neckline / ribbed cuffs / ribbed hem band / side slits)"
+    ],
+    "prompt_instruction": "The knit texture and fit are critical. Specify the stitch gauge (fine vs chunky) and how it drapes on the body. Ribbed edges at neck/cuff/hem are characteristic knit details."
+  },
+
+  "TS": {
+    "name_cn": "短袖T恤",
+    "name_en": "t-shirt",
+    "critical_details": [
+      "neckline (crew neck / V-neck / scoop neck / boat neck)",
+      "sleeve length and style (cap sleeve / short sleeve / rolled cuff / drop shoulder sleeve)",
+      "fit (slim fitted / regular / relaxed boxy / oversized)",
+      "hem (straight hem / curved hem / raw cut hem / side slits)"
+    ],
+    "prompt_instruction": "Keep it simple but precise. Neckline shape and sleeve length are the key differentiators for a t-shirt."
+  },
+
+  "LS": {
+    "name_cn": "长袖上衣",
+    "name_en": "long sleeve top",
+    "critical_details": [
+      "neckline (crew neck / V-neck / scoop neck / mock neck / turtleneck / boat neck)",
+      "sleeve style (fitted sleeve / balloon sleeve / bishop sleeve / raglan sleeve / drop shoulder)",
+      "fit (slim / regular / relaxed / oversized)",
+      "cuff (ribbed knit cuff / elastic smocked cuff / simple hem cuff / button cuff)"
+    ],
+    "prompt_instruction": "The sleeve silhouette is the defining feature of a long sleeve top. Describe sleeve volume and cuff treatment precisely."
+  },
+
+  "TANK": {
+    "name_cn": "背心/吊带",
+    "name_en": "tank top / camisole",
+    "critical_details": [
+      "strap type (thin spaghetti strap / wide tank strap / racerback / halter neck tie)",
+      "neckline (scoop neck / V-neck / square neck / sweetheart / high neck)",
+      "fit (body-hugging ribbed / relaxed drape / boxy cropped)",
+      "special details (lace trim / smocked back / built-in shelf bra / ribbed texture)"
+    ],
+    "prompt_instruction": "Strap width and neckline shape define a tank top's character. Thin spaghetti straps read as delicate/feminine, wide straps read as athletic/casual."
+  },
+
+  "SHIRT": {
+    "name_cn": "衬衫",
+    "name_en": "shirt",
+    "critical_details": [
+      "collar type (classic point / button-down / spread / band / camp collar open)",
+      "sleeve (long sleeve with button cuff / short sleeve / rolled sleeve styling)",
+      "fit (slim tailored / regular / oversized boyfriend fit)",
+      "fabric (crisp poplin / soft oxford / flowy viscose / structured linen)"
+    ],
+    "prompt_instruction": "Collar type and fabric weight define a shirt's formality. Crisp cotton = structured, flowy fabric = relaxed drape."
+  },
+
+  "PT": {
+    "name_cn": "长裤",
+    "name_en": "pants",
+    "critical_details": [
+      "waist rise (high-waist / mid-rise / low-rise)",
+      "leg silhouette (straight leg / wide leg / tapered / slim / skinny / flared / bootcut)",
+      "length (full length / ankle cropped / floor-grazing)",
+      "pleat detail (front pleats / flat front / no pleats)",
+      "closure (zip fly with button / elastic waist / side zip / tie waist)"
+    ],
+    "prompt_instruction": "The leg silhouette is the most critical detail — wide-leg vs straight vs skinny changes the entire proportion. The rise (high/mid/low) defines where the visual waistline sits."
+  },
+
+  "SH": {
+    "name_cn": "短裤",
+    "name_en": "shorts",
+    "critical_details": [
+      "waist rise (high-waist / mid-rise / low-rise)",
+      "leg silhouette (straight / A-line relaxed / slim fitted / wide leg culotte)",
+      "length (mini short / mid-thigh / knee-length bermuda)",
+      "hem (raw cut frayed / rolled cuff / clean hem / pleated)"
+    ],
+    "prompt_instruction": "Length and leg width are the key details. Specify inseam roughly (mini vs mid-thigh vs bermuda). The waist rise affects proportion with the top."
+  },
+
+  "JK": {
+    "name_cn": "外套/夹克",
+    "name_en": "jacket / outerwear",
+    "critical_details": [
+      "jacket type (blazer / bomber / denim jacket / trench / leather moto / chore coat / cardigan jacket)",
+      "length (cropped at waist / hip-length / mid-thigh / knee-length)",
+      "collar/lapel (notch lapel / shawl collar / stand collar / hooded / collarless)",
+      "closure (single button / double breasted / zip front / snap front / open front no closure)",
+      "shoulder structure (structured padded shoulder / natural soft shoulder / dropped shoulder / raglan sleeve)"
+    ],
+    "prompt_instruction": "The jacket type and length set the overall silhouette. Shoulder structure determines formality — structured = polished, soft = relaxed."
+  },
+
+  "SHOE": {
+    "name_cn": "鞋子",
+    "name_en": "shoes",
+    "critical_details": [
+      "shoe type (sneakers / ballet flats / loafers / heels / sandals / boots / ankle boots / mules / slingbacks)",
+      "toe shape (round / pointed / almond / square)",
+      "heel height and type (flat / low block heel / kitten heel / stiletto / platform / wedge)",
+      "color and material (leather / suede / patent / canvas / mesh)",
+      "notable details (strap / buckle / logo / contrasting sole / metallic accent)"
+    ],
+    "prompt_instruction": "Shoes ground the entire outfit. The toe shape and heel height define femininity level and formality. Describe them clearly."
+  },
+
+  "BAG": {
+    "name_cn": "包",
+    "name_en": "bag",
+    "critical_details": [
+      "bag type (tote / crossbody / shoulder bag / clutch / mini bag / backpack / bucket bag / hobo)",
+      "size (mini / medium / oversized large)",
+      "material (leather / canvas / nylon / woven straw / suede)",
+      "carry style for the scene (hand-held / shoulder strap / crossbody worn / backpack both straps)"
+    ],
+    "prompt_instruction": "How the bag is carried (hand-held vs crossbody vs shoulder) affects the pose and overall styling. Specify the carry method."
+  },
+
+  "HAT": {
+    "name_cn": "帽子",
+    "name_en": "hat",
+    "critical_details": [
+      "hat type (baseball cap / bucket hat / straw hat / beret / beanie / wide brim sun hat / newsboy cap)",
+      "material (cotton twill / straw / wool felt / nylon / denim)",
+      "wear style (forward / tilted back / slightly angled)"
+    ],
+    "prompt_instruction": "Hat type defines the vibe. How it's worn (forward casual, tilted playful, back relaxed) affects the overall attitude."
+  }
+}

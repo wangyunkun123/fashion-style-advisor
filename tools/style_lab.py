@@ -25,7 +25,9 @@ from collections import defaultdict
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJ_DIR = os.path.join(BASE_DIR, '..')
-STYLES_DIR = os.path.join(PROJ_DIR, 'styles')
+STYLES_DIR = os.path.join(PROJ_DIR, 'styles')  # 旧路径，已废弃；保留向后兼容
+STYLES_MALE_DIR = os.path.join(PROJ_DIR, 'styles', 'male')
+STYLES_FEMALE_DIR = os.path.join(PROJ_DIR, 'styles', 'female')
 STYLES_UNI_DIR = os.path.join(PROJ_DIR, 'styles_universal')
 TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
 OUTFITS_DIR = os.path.join(PROJ_DIR, 'outfits')
@@ -700,24 +702,71 @@ from tools.common import load_all_clothing, load_encyclopedia
 
 
 def load_all_styles():
-    """加载所有风格指纹"""
+    """加载所有风格指纹 — 扫描 styles/male/ 和 styles/female/ 两个目录"""
     styles = {}
-    for fpath in sorted(glob.glob(os.path.join(STYLES_DIR, '*.json'))):
-        if fpath.endswith('README.json'):
-            continue
-        with open(fpath, 'r', encoding='utf-8') as f:
-            s = json.load(f)
-            styles[s['style_id']] = s
+
+    # 男性风格：styles/male/*.json
+    if os.path.isdir(STYLES_MALE_DIR):
+        for fpath in sorted(glob.glob(os.path.join(STYLES_MALE_DIR, '*.json'))):
+            if fpath.endswith('README.json'):
+                continue
+            try:
+                with open(fpath, 'r', encoding='utf-8') as f:
+                    s = json.load(f)
+                styles[s['style_id']] = s
+            except Exception:
+                pass
+
+    # 女性风格：styles/female/<dir>/fingerprint.json
+    if os.path.isdir(STYLES_FEMALE_DIR):
+        for d in sorted(os.listdir(STYLES_FEMALE_DIR)):
+            if d.startswith('.') or d.startswith('_'):
+                continue
+            dp = os.path.join(STYLES_FEMALE_DIR, d)
+            if not os.path.isdir(dp):
+                continue
+            fp_path = os.path.join(dp, 'fingerprint.json')
+            if os.path.exists(fp_path):
+                try:
+                    with open(fp_path, 'r', encoding='utf-8') as f:
+                        s = json.load(f)
+                    styles[s.get('style_id', d)] = s
+                except Exception:
+                    pass
+
     return styles
 
 
 def load_style(style_id):
-    """加载单个风格指纹"""
-    path = os.path.join(STYLES_DIR, f'{style_id}.json')
-    if not os.path.exists(path):
-        return None
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    """加载单个风格指纹 — 搜索 styles/male/ 和 styles/female/ 两个目录"""
+    # 男性风格：styles/male/{style_id}.json
+    path = os.path.join(STYLES_MALE_DIR, f'{style_id}.json')
+    if os.path.exists(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            pass
+
+    # 女性风格：styles/female/{style_id}/fingerprint.json 或扫描子目录匹配 style_id
+    if os.path.isdir(STYLES_FEMALE_DIR):
+        for d in sorted(os.listdir(STYLES_FEMALE_DIR)):
+            if d.startswith('.') or d.startswith('_'):
+                continue
+            dp = os.path.join(STYLES_FEMALE_DIR, d)
+            if not os.path.isdir(dp):
+                continue
+            fp_path = os.path.join(dp, 'fingerprint.json')
+            if os.path.exists(fp_path):
+                try:
+                    with open(fp_path, 'r', encoding='utf-8') as f:
+                        s = json.load(f)
+                    if s.get('style_id') == style_id or d == style_id:
+                        return s
+                except Exception:
+                    pass
+
+    return None
 
 
 def load_score_cache():

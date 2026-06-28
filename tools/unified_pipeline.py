@@ -1491,7 +1491,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     gender_audience = '亚洲女性穿搭' if is_female else '亚洲男性穿搭'
 
     quality_checklist = f"""⚠️ 推荐质量检查（请在选品时逐项确认）：
-□ 核心单品齐全：上衣+下装+鞋子（或连衣裙+鞋子），缺一不可
+□ 核心单品齐全：{'女士：连衣裙/套装/连体裤+鞋子（一体式） 或 上衣+下装/半身裙+鞋子（分体式）' if is_female else '上衣+下装+鞋子（或连衣裙+鞋子），缺一不可'}
 □ 配色协调：无红绿/橙蓝等冲突撞色，整体色调统一
 □ 风格连贯：每件单品对目标风格的匹配分 ≥ 30
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
@@ -1499,6 +1499,7 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 {persona_modifier}
 □ 面料匹配场景：夏季上衣→透气(棉/麻/速干)，运动→速干，下装/鞋/配件不受面料限制
 □ 衬肤色：根据用户肤色选择合适颜色
+{'''□ ⚠️ 一体式单品规则：选了连衣裙(DRESS)/套装(SUIT)/连体裤(JMP)后，禁止再选裤子/裙子/上衣，只需鞋子+配件''' if is_female else ''}
 """
 
     # ── 10. 组装 system prompt ──
@@ -1535,7 +1536,12 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
 }}
 
 注意：
-- 每套必须包含上衣、下装、鞋子（硬性要求，缺一不可）。⚠️ 例外：选连衣裙时只需连衣裙+鞋子（连衣裙=上衣+下装一体）
+- {'⚠️ 女士穿搭选品规则（重要）：' if is_female else ''}
+- {'  1. 连衣裙(DRESS)/套装(SUIT)/连体裤(JMP) = 上衣+下装一体，选了它们就不要再选裤子/裙子/上衣，只需再配鞋子+配件' if is_female else ''}
+- {'  2. 半身裙(SKIRT) = 下装，需要搭配上衣+鞋子' if is_female else ''}
+- {'  3. 女士单品category字段请使用衣柜表格中显示的品类名（如"连衣裙""套装""半身裙"），不要统称"上衣""下装"' if is_female else ''}
+- {'  4. 选了连衣裙/套装后，items数组只需包含该一体式单品+鞋子+配件，不要强行凑上衣+下装' if is_female else ''}
+- {'每套必须包含上衣、下装、鞋子（硬性要求，缺一不可）。⚠️ 例外：选连衣裙/套装/连体裤时只需连衣裙+鞋子（连衣裙/套装/连体裤=上衣+下装一体）' if not is_female else ''}
 - 针织衫/毛衣可作为上衣使用
 - 配件按场景需要选择，有理由才加，不铺满全身（例：运动→帽+包/晴天户外→墨镜/商务→手表/寒冷→保暖配件/日常休闲→0-1件，非穷举，根据实际场景灵活判断）
 - ⚠️ 严禁添加第二件上衣（如长袖/衬衫/外套叠穿），除非场景明确需要（如寒冷天气）
@@ -1776,15 +1782,16 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
     cat_codes = [d['detail'].get('category_code', '') for d in outfit_details]
 
     # ── 1. 三件套齐全 ──
-    # 连衣裙/套装可替代上衣+下装
+    # 连衣裙/套装/连体裤可替代上衣+下装
     has_dress = any(c == 'DRESS' for c in cat_codes)
     has_suit = any(c == 'SUIT' for c in cat_codes)
+    has_jmp = any(c == 'JMP' for c in cat_codes)
     has_top = any(c in {'TS', 'LS', 'TANK', 'SHIRT', 'JK', 'KNIT', 'BLOUSE'} for c in cat_codes)
     has_bottom = any(c in {'SH', 'PT', 'SKIRT'} for c in cat_codes)
     has_shoe = any(c == 'SHOE' for c in cat_codes)
 
-    if has_dress or has_suit:
-        # 连衣裙/套装 = 上衣 + 下装一体，只需再配鞋子
+    if has_dress or has_suit or has_jmp:
+        # 连衣裙/套装/连体裤 = 上衣 + 下装一体，只需再配鞋子
         pass  # 不要求单独的上衣/下装
     else:
         if not has_top:

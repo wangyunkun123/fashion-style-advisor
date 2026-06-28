@@ -4,7 +4,7 @@
   "category_code": "BAG",
   "color": {
     "hue_family": "中性色",
-    "hue_name": "浅灰色",
+    "hue_name": "紫色",
     "saturation": "无彩色",
     "lightness": "中明度",
     "is_neutral": true,
@@ -41,7 +41,7 @@
     "童趣"
   ],
   "meta": {
-    "claude_fit_comment": "迪士尼浅灰色可爱包",
+    "claude_fit_comment": "迪士尼紫色可爱包",
     "image_type": "product_shot",
     "cloth_parsed": true,
     "completeness": "full",

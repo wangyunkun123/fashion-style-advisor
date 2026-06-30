@@ -1,14 +1,196 @@
 {
   "style_id": "WF-32",
   "name_zh": "皇室浪漫",
-  "name_en": "Royalcore",
+  "name_en": "",
   "description": "像是从《布里奇顿》或凡尔赛宫里借了一套衣服——束身胸衣+丝绒+珍珠，去参加一个不存在于现代的皇室舞会。",
-  "era": "classic",
-  "parent": "contemporary",
-  "category": "戏剧张力",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "戏剧张力 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "层叠"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "皇家蓝",
+        "勃艮第红",
+        "象牙白",
+        "金色",
+        "粉色",
+        "淡紫",
+        "薰衣草色",
+        "银色"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "纯黑色（极少用——皇室晚上穿深色",
+        "但不是「all black」）"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "白金汉宫和凡尔赛宫的颜色——蓝色血统、金色王座、象牙白婚纱、皇家花园的粉色玫瑰",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "丝绒",
+        "薄纱",
+        "真丝",
+        "蕾丝",
+        "缎面"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "束身胸衣/腰封",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "缎面或丝绒、系带或钩眼扣、可外穿"
+    },
+    {
+      "name": "帝国腰连衣裙",
+      "category_code": "DRESS",
+      "bonus": 15,
+      "description": "高腰线（胸下位置）、及地长度、缎面或薄纱"
+    },
+    {
+      "name": "珍珠珠宝",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "多层珍珠项链是 Royalcore 的「身份证明」"
+    },
+    {
+      "name": "歌剧长手套",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "及肘或过肘、真丝或缎面、白色或黑色"
+    },
+    {
+      "name": "皇冠/头饰/发箍",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "不必是真的钻石——但必须有水晶/珍珠/金属装饰"
+    },
+    {
+      "name": "丝绒斗篷/披肩",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "及地长度、丝绒、深色或皇家蓝"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "纯黑色（极少用——皇室晚上穿深色"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 纯黑色（极少用——皇室晚上穿深色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 12,
+    "拉长腿部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

@@ -1,14 +1,203 @@
 {
   "style_id": "WF-21",
   "name_zh": "地中海番茄",
-  "name_en": "Tomato Girl",
+  "name_en": "",
   "description": "地中海夏日的视觉化——白色亚麻衬衫+红色半裙+草编鞋，像是刚从阿马尔菲海岸的市场买了一袋番茄回家。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "自然田园",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "自然田园 | **趋势**: 🔥 流行趋势",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "番茄红",
+        "白色",
+        "橄榄绿",
+        "柠檬黄",
+        "陶土橙",
+        "海蓝色",
+        "焦糖棕"
+      ],
+      "forbidden_hues": [
+        "黑色",
+        "灰色",
+        "霓虹色",
+        "金属色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "南意大利菜市场的一篮食材——番茄+橄榄+柠檬+罗勒",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "编织",
+        "亚麻",
+        "麻",
+        "钩针",
+        "棉"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "白色亚麻衬衫/上衣",
+      "category_code": "SHIRT",
+      "bonus": 20,
+      "description": "略宽松、敞领、短袖或长袖卷起"
+    },
+    {
+      "name": "红色/印花中长半裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "A字或伞摆、番茄红或柠檬印花、长度过膝"
+    },
+    {
+      "name": "草编鞋/渔夫凉鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "平底或楔形跟、草编底、可绑带"
+    },
+    {
+      "name": "印花丝巾",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "可系头发（包头）、系颈部、或系包柄"
+    },
+    {
+      "name": "草编包/竹篮包",
+      "category_code": "BAG",
+      "bonus": 10,
+      "description": "大容量、可装市场买的柠檬和番茄"
+    },
+    {
+      "name": "贝壳/珊瑚首饰",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "不是高级珠宝——就是海边随手捡的那种感觉"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "黑色",
+        "灰色",
+        "霓虹色"
+      ],
+      "reason": "风格禁忌色: 黑色, 灰色, 霓虹色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "遮盖臀胯": 6
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-31",
+    "WF-24"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

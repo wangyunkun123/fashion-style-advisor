@@ -12,30 +12,46 @@
 
 import os, sys, json, glob, time
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJ_DIR = os.path.join(BASE_DIR, '..')
+# 🆕 确保项目根目录在 sys.path
+if PROJ_DIR not in sys.path:
+    sys.path.insert(0, PROJ_DIR)
+
 # ── 多用户支持 ──
-import sys as _sys
 _USER_ID = None
-for _i, _arg in enumerate(_sys.argv[1:]):
-    if _arg == '--user' and _i + 1 < len(_sys.argv) - 1:
-        _USER_ID = _sys.argv[_i + 2]
+_USER_ARG_IDX = None  # 记录 --user 在 sys.argv 中的位置，用于后续移除
+for _i, _arg in enumerate(sys.argv[1:], start=1):
+    if _arg == '--user' and _i + 1 < len(sys.argv):
+        _USER_ID = sys.argv[_i + 1]
+        _USER_ARG_IDX = _i
         break
     elif _arg.startswith('--user='):
         _USER_ID = _arg.split('=', 1)[1]
+        _USER_ARG_IDX = _i
         break
 
-if _USER_ID:
-    from tools.common import resolve_user_dir, resolve_outfits_dir, resolve_wardrobe_dir
-    _USER_DIR = resolve_user_dir(_USER_ID)
-else:
-    _USER_DIR = None
+# 🆕 从 sys.argv 移除 --user 相关参数，避免干扰 main() 的参数解析
+if _USER_ARG_IDX is not None:
+    if sys.argv[_USER_ARG_IDX].startswith('--user='):
+        del sys.argv[_USER_ARG_IDX]
+    else:
+        del sys.argv[_USER_ARG_IDX:_USER_ARG_IDX+2]
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJ_DIR = os.path.join(BASE_DIR, '..')
-STYLES_DIR = os.path.join(PROJ_DIR, 'styles/male')
 if _USER_ID:
+    from tools.common import resolve_user_dir, resolve_outfits_dir, resolve_wardrobe_dir, set_thread_user
+    _USER_DIR = resolve_user_dir(_USER_ID)
+    # 🆕 从 registry 获取 gender 并设置线程上下文（使 load_all_clothing 等函数能自动路由）
+    from tools.common import get_user_gender
+    _USER_GENDER = get_user_gender(_USER_ID)
+    set_thread_user(_USER_GENDER, _USER_ID)
+    # 🆕 更新模块级 TAGS_DIR 指向用户目录
     TAGS_DIR = os.path.join(resolve_wardrobe_dir(_USER_ID), 'tags')
 else:
+    _USER_DIR = None
     TAGS_DIR = os.path.join(PROJ_DIR, 'wardrobe', 'tags')
+
+STYLES_DIR = os.path.join(PROJ_DIR, 'styles/male')
 DEFAULTS_CONFIG = os.path.join(PROJ_DIR, 'config', 'style_defaults.json')  # 旧兼容
 DEFAULTS_CONFIG_MALE = os.path.join(PROJ_DIR, 'config', 'style_defaults_male.json')
 DEFAULTS_CONFIG_FEMALE = os.path.join(PROJ_DIR, 'config', 'style_defaults_female.json')
@@ -478,20 +494,241 @@ def score_key_items(clothing, style):
     return max_bonus
 
 
+# ═══ 身形修饰桥接映射 ═══
+# 衣橱标签使用风格感受词（休闲/优雅/运动…），但 body_modifier_bonus 用身形效果词（显腰线/拉长腿部…）
+# 这个映射将风格感受翻译为身形效果，让两套词汇体系能互通
+_STYLE_TO_BODY_EFFECT = {
+    '修身': ['显腰线'],
+    '收腰': ['显腰线'],
+    '高腰': ['显腰线', '拉长腿部'],
+    '法式': ['显腰线', '颜色显白'],
+    '优雅': ['显腰线', '颜色显白', '遮盖臀胯'],
+    '通勤': ['拉长腿部', '遮盖臀胯'],
+    '直筒': ['拉长腿部'],
+    '阔腿': ['拉长腿部', '遮盖臀胯'],
+    'A字': ['遮盖臀胯', '显腰线'],
+    '宽松': ['遮盖臀胯'],
+    '慵懒': ['遮盖臀胯'],
+    '复古': ['颜色显白'],
+    '简约': ['颜色显白'],
+    '经典': ['颜色显白', '显腰线'],
+    '学院风': ['修饰肩部', '颜色显白'],
+    '街头': ['修饰肩部'],
+    '街头风': ['修饰肩部'],
+    '运动': ['拉长腿部'],
+    '运动风': ['拉长腿部'],
+    '运动休闲': ['拉长腿部'],
+    '度假风': ['颜色显白', '遮盖臀胯'],
+    '户外': ['遮盖臀胯'],
+    '户外风': ['遮盖臀胯'],
+    '可爱': ['颜色显白'],
+    '甜酷': ['修饰肩部', '拉长腿部'],
+    '清新': ['颜色显白'],
+    '商务通勤': ['拉长腿部', '遮盖臀胯', '显腰线'],
+    '居家': ['遮盖臀胯'],
+    '居家休闲': ['遮盖臀胯'],
+    '潮流': ['修饰肩部'],
+    '休闲': ['遮盖臀胯'],
+    '休闲风': ['遮盖臀胯'],
+    '基础款': ['颜色显白'],
+    '时尚': ['拉长腿部', '显腰线'],
+    '网球鞋': ['拉长腿部'],
+    '童趣': ['颜色显白'],
+    '紧身': ['显腰线'],
+    '复古运动': ['拉长腿部', '颜色显白'],
+    '复古风': ['颜色显白'],
+    '随性': ['遮盖臀胯'],
+}
+
+
 def score_body_modifier(clothing, style):
-    """身形修饰加分"""
+    """身形修饰加分 — 🆕 桥接风格感受 → 身形效果"""
     total = 0
     bonuses = style.get('body_modifier_bonus', {})
-    for modifier in clothing.get('style_modifiers', []):
+    modifiers = clothing.get('style_modifiers', [])
+
+    # 🆕 直接匹配（适用于已用身形效果词标注的衣橱）
+    for modifier in modifiers:
         total += bonuses.get(modifier, 0)
+
+    # 🆕 桥接匹配：将风格感受词翻译为身形效果
+    body_effects_matched = set()
+    for modifier in modifiers:
+        effects = _STYLE_TO_BODY_EFFECT.get(modifier, [])
+        for effect in effects:
+            if effect not in body_effects_matched:
+                bonus = bonuses.get(effect, 0)
+                if bonus:
+                    body_effects_matched.add(effect)
+                    total += bonus
+
     return total
+
+
+# ═══ 🆕 场景匹配 ═══
+# 风格 → 典型场景映射（从 encyclopedia 推断）
+_STYLE_TYPICAL_OCCASIONS = {
+    'WF-01': ['约会', '日常休闲', '职场'],  # 法式慵懒
+    'WF-02': ['约会', '日常休闲', '聚会'],  # 韩系少女
+    'WF-03': ['日常休闲', '居家', '户外'],  # 日系森系
+    'WF-04': ['聚会', '约会', '度假'],    # 新中式
+    'WF-05': ['日常休闲', '户外', '运动'],  # 美式休闲
+    'WF-06': ['职场', '日常休闲', '居家'],  # 极简
+    'WF-07': ['职场', '日常休闲'],         # 学院风
+    'WF-08': ['运动', '户外', '日常休闲'],  # 运动休闲
+    'WF-09': ['度假', '户外', '聚会'],     # 波西米亚
+    'WF-10': ['聚会', '约会', '日常休闲'],  # Y2K
+    'WF-11': ['职场', '日常休闲', '约会'],  # 都市通勤
+    'WF-12': ['日常休闲', '职场'],         # 暗黑学院
+}
+
+# 通用推断：从风格描述关键词推断典型场景
+_OCCASION_KEYWORDS = {
+    '运动': ['运动', '健身', '网球', '跑步', '户外运动', '机能'],
+    '约会': ['约会', '浪漫', '少女', '甜美', '性感', '精致', '晚宴'],
+    '职场': ['通勤', '职场', '办公', '商务', '正式', '极简', '干净'],
+    '日常休闲': ['休闲', '日常', '随性', '慵懒', '舒适', '基础'],
+    '度假': ['度假', '旅行', '海滩', '逃离', '田园', '海岸'],
+    '聚会': ['聚会', '派对', '夜店', '街头', '态度', '华丽', '大胆'],
+    '户外': ['户外', '自然', '森林', '花园', '草地', '野餐'],
+    '居家': ['居家', '慢生活', '烘焙', '手工', '柔软'],
+}
+
+
+def _infer_style_occasions(style):
+    """从风格指纹推断典型场景"""
+    sid = style.get('style_id', '')
+    if sid in _STYLE_TYPICAL_OCCASIONS:
+        return _STYLE_TYPICAL_OCCASIONS[sid]
+
+    # 从描述和名称推断
+    desc = style.get('description', '')
+    name = style.get('name_zh', '')
+    text = desc + ' ' + name
+
+    occasions = []
+    for occ, keywords in _OCCASION_KEYWORDS.items():
+        if any(kw in text for kw in keywords):
+            occasions.append(occ)
+
+    return occasions[:3] if occasions else ['日常休闲']
+
+
+def score_occasion_match(clothing, style):
+    """🆕 场景匹配：衣橱单品适用场景 vs 风格典型场景"""
+    clothing_occasions = clothing.get('occasions', [])
+    if not clothing_occasions:
+        return 0
+
+    style_occasions = _infer_style_occasions(style)
+    if not style_occasions:
+        return 0
+
+    # 计算交集
+    matches = set(clothing_occasions) & set(style_occasions)
+    if not matches:
+        return 0
+
+    # 每个匹配场景 +3 分，最多 9 分
+    return min(len(matches) * 3, 9)
+
+
+# ═══ 🆕 身形档案匹配 ═══
+# body_modifier_bonus 对 nan 的启发式匹配
+_BODY_PROFILE = None  # 懒加载
+
+def _load_body_profile():
+    """加载当前用户身形档案"""
+    global _BODY_PROFILE
+    if _BODY_PROFILE is not None:
+        return _BODY_PROFILE
+    try:
+        from tools.common import get_thread_user, resolve_user_dir
+        import os, json
+        _, uid = get_thread_user()
+        if uid and uid != 'default':
+            profile_path = os.path.join(resolve_user_dir(uid), 'profile.json')
+            if os.path.exists(profile_path):
+                with open(profile_path) as f:
+                    p = json.load(f)
+                _BODY_PROFILE = {
+                    'height': int(p.get('body', {}).get('height', 0) or 0),
+                    'shape': p.get('body', {}).get('shape', ''),
+                    'skin_tone': p.get('body', {}).get('skin_tone', ''),
+                }
+                return _BODY_PROFILE
+    except Exception:
+        pass
+    _BODY_PROFILE = {}
+    return _BODY_PROFILE
+
+
+def score_profile_match(style):
+    """🆕 身形档案与风格的身形修饰匹配度 — 体型×风格适配"""
+    profile = _load_body_profile()
+    if not profile:
+        return 0
+
+    bonuses = style.get('body_modifier_bonus', {})
+    if not bonuses:
+        return 0
+
+    total = 0
+    shape = profile.get('shape', '')
+    skin = profile.get('skin_tone', '')
+    height = profile.get('height', 0)
+
+    # 沙漏型 → 需要显腰线的风格加分
+    if '沙漏' in shape and '显腰线' in bonuses:
+        total += 3
+    # 偏瘦高 → 拉长腿部的风格不用（已经够高了），但遮盖臀胯有用
+    if height >= 170 and '拉长腿部' in bonuses:
+        total += 0  # 已经高挑，拉长腿部不是刚需
+    elif height < 165 and '拉长腿部' in bonuses:
+        total += 3
+    # 小麦肤色 → 颜色显白的风格加分
+    if skin in ('小麦', '偏黄', '暖调') and '颜色显白' in bonuses:
+        total += 3
+
+    return min(total, 6)
+
+
+# ═══ 🆕 面料季节匹配 ═══
+_SEASON_WEIGHT = {'春': 3, '夏': 3, '秋': 3, '冬': 3}
+
+def score_seasonality_match(clothing, style):
+    """🆕 面料季节性与风格季节性的匹配"""
+    clothing_seasons = set(clothing.get('fabric', {}).get('seasonality', []))
+    if not clothing_seasons:
+        return 0
+
+    # 从面料偏好推断风格季节
+    fabric_prefs = style.get('fingerprint', {}).get('fabric', {}).get('preferred', [])
+    style_seasons = set()
+    season_fabric_map = {
+        '春': ['棉', '亚麻', '薄纱', '蕾丝', '真丝', '雪纺'],
+        '夏': ['亚麻', '棉', '薄纱', '蕾丝', '真丝', '雪纺', '钩针'],
+        '秋': ['羊毛', '羊绒', '针织', '灯芯绒', '皮质', '粗花呢', '毛呢'],
+        '冬': ['羊绒', '羊毛', '毛呢', '天鹅绒', '丝绒', '粗花呢', '皮质'],
+    }
+
+    for season, fabrics in season_fabric_map.items():
+        if any(f in fabric_prefs for f in fabrics):
+            style_seasons.add(season)
+
+    if not style_seasons:
+        return 0
+
+    match = clothing_seasons & style_seasons
+    return min(len(match) * 2, 6)
 
 
 def compute_compatibility(clothing_id, style_id):
     """
-    主匹配函数
-    流程：硬约束 → 颜色(25) + 软约束(~30) + 关键单品(0~20) + 身形(0~13)
-    原始分 max ≈ 88，归一化到 0~100
+    主匹配函数 🆕 七维评分引擎
+    硬约束 → 颜色(22) + 软约束(20) + 关键单品(15) + 身形(13)
+           + 场景(9) + 身形档案(6) + 面料季节(6)
+    原始分 max ≈ 91，归一化到 0~100
     """
     clothing = load_clothing(clothing_id)
     style = load_style(style_id)
@@ -510,14 +747,23 @@ def compute_compatibility(clothing_id, style_id):
     # 3. 颜色
     color_score = score_color_compatibility(clothing, style)
 
-    # 4. 关键单品
+    # 4. 关键单品 (🆕 收紧：品类不对直接0分)
     key_bonus = score_key_items(clothing, style)
 
-    # 5. 身形修饰
+    # 5. 身形修饰 (🆕 桥接：风格感受→身形效果)
     body_bonus = score_body_modifier(clothing, style)
 
-    raw = soft + color_score + key_bonus + body_bonus
-    max_possible = 88
+    # 6. 🆕 场景匹配
+    occasion_score = score_occasion_match(clothing, style)
+
+    # 7. 🆕 身形档案 × 风格适配
+    profile_score = score_profile_match(style)
+
+    # 8. 🆕 面料季节匹配
+    season_score = score_seasonality_match(clothing, style)
+
+    raw = soft + color_score + key_bonus + body_bonus + occasion_score + profile_score + season_score
+    max_possible = 91
     normalized = min(round(raw / max_possible * 100), 100)
 
     return (normalized, {
@@ -527,6 +773,9 @@ def compute_compatibility(clothing_id, style_id):
             'color_compatibility': color_score,
             'key_item_bonus': key_bonus,
             'body_modifier': body_bonus,
+            'occasion_match': occasion_score,
+            'profile_match': profile_score,
+            'season_match': season_score,
         },
         'passed': True,
     })

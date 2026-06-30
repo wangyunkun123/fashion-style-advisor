@@ -1,14 +1,172 @@
 {
   "style_id": "WF-44",
   "name_zh": "日系阿美咔叽",
-  "name_en": "J-Amekaji",
-  "description": "日本对美式复古的女性化诠释：工装夹克配长裙、丹宁配蕾丝，粗犷与柔美并置",
-  "era": "1980s-1990s",
-  "parent": "east_west_fusion",
-  "category": "东亚风格",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "日本人把美式复古工作服穿得比美国人还美国——原牛牛仔裤+工装夹克+Red Wing 皮靴+做旧皮包。不是「cosplay 美国人」，是对美式功能服装的「日本式深度研究+精益化」。",
+  "category": "东亚风格 | **趋势**: 🎭 小众领域",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "略宽松",
+        "层叠"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "靛蓝",
+        "橄榄绿",
+        "棕褐色",
+        "卡其色",
+        "白色（打底T恤）",
+        "灰色（运动衫）",
+        "橘色（安全色",
+        "工装衬里）"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "粉彩",
+        "黑色（过于城市/当代）"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "美国工装和军装的颜色——蓝色牛仔、绿色军装、棕色皮靴、卡其布裤",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "编织"
+      ],
+      "acceptable": [
+        "皮革",
+        "牛仔",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "原牛牛仔裤",
+      "category_code": "PT",
+      "bonus": 20,
+      "description": "日本制造、赤耳布边、磅数14oz+、未经洗涤"
+    },
+    {
+      "name": "工装夹克",
+      "category_code": "JK",
+      "bonus": 15,
+      "description": "帆布或牛仔布、多口袋、蓝色或橄榄绿"
+    },
+    {
+      "name": "M-65 军装外套 / MA-1 飞行员夹克",
+      "category_code": "JK",
+      "bonus": 15,
+      "description": "复刻原版军装规格、橄榄绿/黑色/卡其色"
+    },
+    {
+      "name": "Red Wing 工装靴",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "美国原版或日本复刻、固特异贴边、Crude 或 Oro 皮革"
+    },
+    {
+      "name": "重磅棉T恤",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "管状编织、无侧缝、白色或灰色"
+    },
+    {
+      "name": "做旧皮包/帆布包",
+      "category_code": "BAG",
+      "bonus": 5,
+      "description": "天然皮革会随时间变色、帆布会随时间做旧"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "粉彩",
+        "黑色（过于城市/当代）"
+      ],
+      "reason": "风格禁忌色: 荧光色, 粉彩, 黑色（过于城市/当代）"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [
+    "WF-02",
+    "WF-03"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

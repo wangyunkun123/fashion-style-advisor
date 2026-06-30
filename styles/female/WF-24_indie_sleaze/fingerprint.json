@@ -1,14 +1,157 @@
 {
   "style_id": "WF-24",
   "name_zh": "独立颓废",
-  "name_en": "Indie Sleaze",
+  "name_en": "",
   "description": "2010年代的派对后清晨——复古乐队T恤+紧身牛仔裤+花掉的烟熏妆+闪光摄影。像是在一个被 Cobrasnake 拍过照的地下派对上待到凌晨5点，然后直接去吃早餐。",
-  "era": "2008-2014",
-  "parent": "contemporary",
-  "category": "另类酷感",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "另类酷感 | **趋势**: 🎭 小众领域",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "银色/金属",
+        "褪色黑",
+        "芥末黄",
+        "深蓝",
+        "血红色",
+        "白色（做旧）"
+      ],
+      "forbidden_hues": [
+        "粉彩",
+        "马卡龙色",
+        "驼色——这些颜色在凌晨4点的地下派对格格不入"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "闪光摄影下的颜色——高对比、有颗粒感、所有颜色都偏蓝/偏冷",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉"
+      ],
+      "acceptable": [
+        "针织",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "复古乐队T恤",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "真的 vintage、做旧感、合身偏紧"
+    },
+    {
+      "name": "紧身牛仔裤/热裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "紧身、高腰或低腰、黑色或水洗蓝"
+    },
+    {
+      "name": "金属色/亮片紧身衣",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "银色/金色/全息色、可当上衣也可打底"
+    },
+    {
+      "name": "人造皮夹克",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "黑色、做旧感、略oversize"
+    },
+    {
+      "name": "厚底踝靴",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "黑色、厚底或粗跟、穿旧的"
+    },
+    {
+      "name": "闪粉眼影/烟熏妆",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "不需要完美——花掉比精致更 Indie Sleaze"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "粉彩",
+        "马卡龙色",
+        "驼色——这些颜色在凌晨4点的地下派对格格不入"
+      ],
+      "reason": "风格禁忌色: 粉彩, 马卡龙色, 驼色——这些颜色在凌晨4点的地下派对格格不入"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

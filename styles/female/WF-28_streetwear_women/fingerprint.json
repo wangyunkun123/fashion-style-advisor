@@ -1,14 +1,161 @@
 {
   "style_id": "WF-28",
   "name_zh": "女性街头",
-  "name_en": "Streetwear Women",
+  "name_en": "",
   "description": "嘻哈和滑板文化的女性版——大号帽衫+限量球鞋+运动裤+街头Logo。不追求「显瘦」或「优雅」，追求的是「酷」。",
-  "era": "2010s",
-  "parent": "contemporary",
-  "category": "都市街头",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "都市街头 | **趋势**: 🎭 小众领域",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "层叠"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "白色",
+        "灰色",
+        "军绿",
+        "品牌色（Supreme 红/Nike 橙/Off-White 黄等）",
+        "迷彩"
+      ],
+      "forbidden_hues": [
+        "粉彩",
+        "马卡龙色（太「甜」不符合街头态度）"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "城市环境的颜色——混凝土灰、沥青黑、涂鸦彩、军装绿",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉"
+      ],
+      "acceptable": [
+        "皮革",
+        "尼龙",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "大号帽衫/卫衣",
+      "category_code": "LS",
+      "bonus": 20,
+      "description": "oversize、重磅棉、有态度"
+    },
+    {
+      "name": "限量球鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "AJ1/AJ4/Dunk/Samba/Yeezy 350——球鞋是身份符号"
+    },
+    {
+      "name": "工装裤/宽松运动裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "宽松、多口袋、黑色/军绿/灰色"
+    },
+    {
+      "name": "棒球帽/渔夫帽",
+      "category_code": "HAT",
+      "bonus": 10,
+      "description": "棒球帽平檐或弯檐均可，颜色要干净"
+    },
+    {
+      "name": "腰包/胸包",
+      "category_code": "BAG",
+      "bonus": 10,
+      "description": "可斜挎可胸前可腰间"
+    },
+    {
+      "name": "Logo T恤",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "街头品牌的核心——Logo 就是一切"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "粉彩",
+        "马卡龙色（太「甜」不符合街头态度）"
+      ],
+      "reason": "风格禁忌色: 粉彩, 马卡龙色（太「甜」不符合街头态度）"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "遮盖臀胯": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

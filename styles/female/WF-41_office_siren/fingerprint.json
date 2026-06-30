@@ -1,14 +1,184 @@
 {
   "style_id": "WF-41",
   "name_zh": "办公室海妖",
-  "name_en": "Office Siren",
-  "description": "紧身铅笔裙、尖头细高跟、无框眼镜、修身西装，职场版femme fatale",
-  "era": "2020s",
-  "parent": "dramatic_statement",
-  "category": "戏剧张力",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "办公室里的蛇蝎美人——收腰西装+铅笔裙+尖头高跟鞋+无框眼镜。不是「女秘书」，是「即将接手你职位的女人」。她知道每一份文件在哪里，也知道自己的魅力在哪里。",
+  "category": "戏剧张力 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "深灰",
+        "黑色",
+        "白色",
+        "驼色",
+        "酒红",
+        "深蓝",
+        "橄榄绿"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "粉彩",
+        "印花——办公室不需要「可爱」"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "办公大楼的颜色——钢灰色、白纸白、黑色墨水、驼色皮质笔记本",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "丝绒",
+        "羊绒",
+        "棉"
+      ],
+      "acceptable": [
+        "羊毛混纺",
+        "针织",
+        "皮质",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "收腰西装外套",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "合身/收腰、黑色或灰色、单排扣或双排扣"
+    },
+    {
+      "name": "铅笔裙/包臀裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "及膝或略上、包裹但不紧、黑色或驼色"
+    },
+    {
+      "name": "尖头高跟鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "黑色或裸色、8-10cm、尖头——尖头比圆头更有「Siren」感"
+    },
+    {
+      "name": "无框/金属框眼镜",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "金属细框或无框、可戴可不戴——但戴上就是「我不仅好看我还聪明」"
+    },
+    {
+      "name": "真丝衬衫/高领针织衫",
+      "category_code": "SHIRT",
+      "bonus": 10,
+      "description": "白色或奶油白、领口可以敞开但不能太低"
+    },
+    {
+      "name": "结构化皮质托特包",
+      "category_code": "BAG",
+      "bonus": 5,
+      "description": "可装笔记本电脑、黑色或棕色、无Logo"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "粉彩",
+        "印花——办公室不需要「可爱」"
+      ],
+      "reason": "风格禁忌色: 荧光色, 粉彩, 印花——办公室不需要「可爱」"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "拉长腿部": 3,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

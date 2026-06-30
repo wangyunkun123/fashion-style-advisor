@@ -1,14 +1,161 @@
 {
   "style_id": "WF-27",
   "name_zh": "运动少女混搭",
-  "name_en": "Blokette",
+  "name_en": "",
   "description": "「Blokette」=「Bloke」（英国俚语「哥们」）+「Coquette」（甜媚风）——足球球衣+百褶裙+运动袜+运动鞋。把足球看台文化和少女美学焊在一起。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "都市街头",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "都市街头 | **趋势**: 🔥 流行趋势",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "球队颜色（红/蓝/条纹等）",
+        "白色",
+        "粉色",
+        "黑色",
+        "银色（首饰/鞋扣）",
+        "灰色（运动袜）"
+      ],
+      "forbidden_hues": [
+        "没有绝对禁忌——Blokette 就是为了打破规则"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "你喜欢的球队的颜色 + Coquette 的粉色系",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "条纹",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉"
+      ],
+      "acceptable": [
+        "针织",
+        "尼龙",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "足球/橄榄球球衣",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "真的 vintage 球衣更好，或任何你支持的球队的球衣"
+    },
+    {
+      "name": "百褶迷你裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "高腰、网球裙或校服裙款式、白色/灰色/粉色"
+    },
+    {
+      "name": "运动袜",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "白色为主、及膝、带条纹"
+    },
+    {
+      "name": "复古运动鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "复古足球鞋款——Samba 是 Blokette 的灵魂鞋"
+    },
+    {
+      "name": "运动夹克/tracksuit",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "三叶草是标配、可搭在肩上"
+    },
+    {
+      "name": "蝴蝶结发饰",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "运动+精致的混搭——蝴蝶结是「Coquette」的基因标记"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "没有绝对禁忌——Blokette 就是为了打破规则"
+      ],
+      "reason": "风格禁忌色: 没有绝对禁忌——Blokette 就是为了打破规则"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

@@ -1,14 +1,154 @@
 {
   "style_id": "WF-50",
   "name_zh": "Y3K 未来感",
-  "name_en": "Cyber Y3K",
-  "description": "金属光泽面料、异形剪裁、银色配饰、未来感墨镜，电子音乐与赛博朋克的时尚投射",
-  "era": "2020s",
-  "parent": "avant_garde_future",
-  "category": "未来先锋",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "像 3000 年的人给 2020s 的我们发来的时尚传真——金属/全息面料+外星墨镜+解构廓形。不是「复古未来」（那是 Y2K 的想象），是「现在的我们想象 3000 年的人类穿什么」。",
+  "category": "未来先锋 | **趋势**: 🎭 小众领域",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "紧身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "银色/全息",
+        "黑色",
+        "白色",
+        "电光蓝",
+        "霓虹绿",
+        "紫色",
+        "透明"
+      ],
+      "forbidden_hues": [
+        "驼色",
+        "大地色",
+        "印花——任何太「自然」或太「过去」的颜色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "LCD屏幕、金属铬、激光光束、全息投影的颜色",
+      "allowed_hue_families": [
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "真丝"
+      ],
+      "acceptable": [
+        "尼龙"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "外星墨镜/全脸面罩",
+      "category_code": "SUN",
+      "bonus": 20,
+      "description": "不规则形状、全息镜片、或完全遮住眼睛"
+    },
+    {
+      "name": "金属/全息面料上衣",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "银色/全息色/镜面、不对称廓形、紧身或结构性强"
+    },
+    {
+      "name": "解构阔腿裤/降落伞裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "超宽腿、多搭带/多口袋、黑色或银色"
+    },
+    {
+      "name": "厚底/异形靴子",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "厚底、尖头或方头、黑色/银色/透明"
+    },
+    {
+      "name": "3D打印首饰/面饰",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "像从外星来的——人脸饰件/指环延伸到手指之外"
+    },
+    {
+      "name": "赛博朋克风格外套",
+      "category_code": "JK",
+      "bonus": 5,
+      "description": "多搭带/多口袋/功能性+未来感的融合——Techwear 是 Y3K 的「实用版」"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "驼色",
+        "大地色",
+        "印花——任何太「自然」或太「过去」的颜色"
+      ],
+      "reason": "风格禁忌色: 驼色, 大地色, 印花——任何太「自然」或太「过去」的颜色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

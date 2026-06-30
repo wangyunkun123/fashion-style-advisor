@@ -1,38 +1,30 @@
-[16:19:17] [INFO] =======================================================
-[16:19:17] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[16:19:17] [INFO] 📡 服务: http://0.0.0.0:8765
-[16:19:17] [INFO] 💬 面板: http://localhost:8765/
-[16:19:17] [INFO] 🌐 Funnel: 已就绪
-[16:19:17] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
-[16:19:17] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
-[16:20:43] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=67, CT=application/json)
-[16:20:58] [INFO] 📨 POST /api/chat?user=nan (Content-Length=32, CT=application/json)
-[16:20:58] [INFO] 💬 聊天: generate | 一套穿搭
-[16:20:58] [INFO] 🚀 管线启动: 一套穿搭
-[16:20:58] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (0ms)
-[16:20:58] [INFO] 📍 探索度: 微调探索 🧪
-[16:20:59] [INFO] 📍 天气(北京): 27°C 雨
-[16:21:00] [INFO] 📍 场景: '一套穿搭' → occasion=日常
-[16:21:00] [INFO] 📍 📊 预计 ~60-100s · ~3874 tokens
-[16:21:00] [INFO] 📍 🤖 AI 智能选品
-[16:21:24] [ERROR] API 返回无法解析为 JSON (attempt 1/2):
-{
-  "anchor": {"id": "PT-007", "role": "今日主角 — 棕色棉长裤作为同色系基底，棉材质透气适配雨天温度，与上衣、鞋子形成同色异材质层次"},
-  "style": "韩系极简/法式慵懒 (WF-01)",
-  "items": [
-    {"category": "短袖上衣", "id": "TS-002", "name": "未知 白色·棉", "color": "白色", "reason": "棉材质透气，白色作为浅暖底色适配小麦肤色，风格匹配日常休闲≥30，新鲜度高未冷却"},
-    {"category": "长裤", "id": "PT-007", "name": "未知 棕色·棉", "color": "棕色", "reason": "锚点单品，棉材质透气，浅暖棕衬小麦肤色，风格匹配日常≥30，未在避穿列表，新鲜度高"},
-    {"category": "鞋子", "id": "SHOE-003", "name": "Nike 米白色·皮革", "color": "米白色", "reason": "沉睡唤醒单品，皮革材质与上衣
-[16:21:24] [INFO] 🔄 JSON解析失败，重试中...
-[16:21:46] [WARN] ⚠️ 验证未通过: ['SHOE-003: 雨天禁止皮质鞋']
-[16:22:06] [INFO] ✅ 修正后验证通过
-[16:22:06] [INFO] ✅ 验证通过
-[16:22:06] [INFO] 📊 R1 选品评分: 43分 — ⚠️ 评分偏低，建议重新选品
-[16:22:06] [INFO] 📍 ✍️ AI 创作叙事+生图
-[16:22:29] [INFO] ✅ R2 创作完成: seedream_prompt=1227字符, tips=2条, beauty=302字符
-[16:22:29] [INFO] 👤 人物照: 1张（原图）
-[16:22:30] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-30_一套穿搭
-[16:22:30] [INFO] 📍 🎨 Seedream AI 生图
-[16:23:15] [INFO] 📍 🎨 预压缩生图
-[16:23:16] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
-[16:23:16] [INFO] 📍 📤 推送 + 刷新
+[17:07:36] [INFO] =======================================================
+[17:07:36] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[17:07:36] [INFO] 📡 服务: http://0.0.0.0:8765
+[17:07:36] [INFO] 💬 面板: http://localhost:8765/
+[17:07:36] [INFO] 🌐 Funnel: 已就绪
+[17:07:36] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[17:07:36] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[17:09:11] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=61, CT=application/json)
+[17:09:19] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=61, CT=application/json)
+[17:26:21] [INFO] 📨 POST /api/chat?user=nan (Content-Length=47, CT=application/json)
+[17:26:21] [INFO] 💬 聊天: generate | 一套法式慵懒的穿搭
+[17:26:21] [INFO] 🚀 管线启动: 一套法式慵懒的穿搭
+[17:26:25] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (3908ms)
+[17:26:25] [INFO] 📍 探索度: 安全推荐
+[17:26:26] [INFO] 📍 天气(北京): 28°C 雨
+[17:26:26] [INFO] 📍 场景: '一套法式慵懒的穿搭' → occasion=日常 vibe=慵懒随性
+[17:26:26] [INFO] 📍 📊 预计 ~60-100s · ~3800 tokens
+[17:26:26] [INFO] 📍 🤖 AI 智能选品
+[17:26:42] [WARN] ⚠️ 验证未通过: ['SHOE-003: 雨天禁止皮质鞋']
+[17:27:11] [INFO] ✅ 修正后验证通过
+[17:27:11] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[17:27:11] [INFO] 📊 R1 选品评分: 56分 — ⚠️ 评分偏低，建议重新选品
+[17:27:11] [INFO] 📍 ✍️ AI 创作叙事+生图
+[17:27:31] [INFO] ✅ R2 创作完成: seedream_prompt=1218字符, tips=2条, beauty=445字符
+[17:27:31] [INFO] 👤 人物照: 1张（原图）
+[17:27:31] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-06-30_一套法式慵懒的穿搭
+[17:27:31] [INFO] 📍 🎨 Seedream AI 生图
+[17:28:46] [INFO] 📍 🎨 预压缩生图
+[17:28:46] [INFO] 📐 预压缩: 3 张 900w JPEG（上身效果）
+[17:28:46] [INFO] 📍 📤 推送 + 刷新

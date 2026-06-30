@@ -1,14 +1,208 @@
 {
   "style_id": "WF-40",
   "name_zh": "浪漫歌剧",
-  "name_en": "Romantic Opera",
-  "description": "荷叶边、蕾丝、薄纱、丝绒，维多利亚时代的戏剧感与现代裁剪的融合",
-  "era": "classic",
-  "parent": "romantic_feminine",
-  "category": "浪漫少女",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "像是 19 世纪的歌剧女主角来到现代——及地丝绒斗篷+歌剧手套+珍珠+金色细节。不是去歌剧院看剧，是刚从舞台上下来。",
+  "category": "浪漫少女 | **趋势**: 🎭 小众领域",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "层叠"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "剧院红",
+        "黑色",
+        "金色",
+        "象牙白",
+        "深紫",
+        "墨绿",
+        "香槟色"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "粉彩——这些颜色在歌剧院里格格不入"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "歌剧院内部的颜色——红丝绒座椅、金箔装饰、暗木舞台、水晶吊灯的光",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "纯色",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "丝绒",
+        "缎面",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "及地丝绒斗篷/长外套",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "及踝长度、丝绒、深色（红/黑/墨绿）"
+    },
+    {
+      "name": "歌剧手套",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "过肘、真丝或缎面、黑色或白色或红色"
+    },
+    {
+      "name": "丝绒/缎面连衣裙",
+      "category_code": "DRESS",
+      "bonus": 15,
+      "description": "及膝或中长、收腰、纯色"
+    },
+    {
+      "name": "珍珠多层项链/耳环",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "多层、真珠或仿珠、锁骨及以下长度"
+    },
+    {
+      "name": "手拿扇",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "丝质扇面、金色或黑色扇骨、可真的用来扇"
+    },
+    {
+      "name": "金色细节手拿包",
+      "category_code": "BAG",
+      "bonus": 5,
+      "description": "金链或金色五金、可装歌剧票和一支口红"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "粉彩——这些颜色在歌剧院里格格不入"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 粉彩——这些颜色在歌剧院里格格不入"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 3
+  },
+  "related_styles": [
+    "WF-13",
+    "WF-14",
+    "WF-15"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

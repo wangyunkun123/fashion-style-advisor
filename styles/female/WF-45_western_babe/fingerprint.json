@@ -1,14 +1,173 @@
 {
   "style_id": "WF-45",
   "name_zh": "西部女郎",
-  "name_en": "Western Babe",
-  "description": "牛仔靴、流苏夹克、雕花皮带、牛仔帽，美国西部风的女装浪漫化演绎",
-  "era": "classic",
-  "parent": "americana",
-  "category": "都市街头",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "把美国西部穿成时髦——牛仔靴+牛仔帽+流苏夹克+银色大腰带扣。不是在牧场里，是在音乐节上。是乡村音乐的酷女孩版。",
+  "category": "都市街头 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "牛仔蓝",
+        "棕褐色",
+        "黑色",
+        "白",
+        "红色（西部衬衫/头巾）",
+        "绿松石色(#40E0D0 首饰）",
+        "银色（腰带扣）"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "粉彩——西部不「甜」"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "美国西部的颜色——蓝牛仔、棕皮靴、白沙、绿松石、红头巾",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉"
+      ],
+      "acceptable": [
+        "皮革",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "牛仔靴",
+      "category_code": "PT",
+      "bonus": 20,
+      "description": "真皮、尖头、及膝或中筒、棕色/黑色/白色"
+    },
+    {
+      "name": "牛仔夹克/衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "蓝色牛仔、有口袋和缝线细节"
+    },
+    {
+      "name": "流苏夹克/背心",
+      "category_code": "JK",
+      "bonus": 15,
+      "description": "麂皮、棕色/黑色、流苏要能动"
+    },
+    {
+      "name": "银色大腰带扣+皮带",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "银色、大而明显的西部图案（鹰/马/星）"
+    },
+    {
+      "name": "Bolo Tie",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "银色绳扣+皮革绳——男孩和女孩都能戴"
+    },
+    {
+      "name": "碎花连衣裙",
+      "category_code": "DRESS",
+      "bonus": 5,
+      "description": "碎花+牛仔靴=Western Babe 的「硬×软」经典公式"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "粉彩——西部不「甜」"
+      ],
+      "reason": "风格禁忌色: 荧光色, 粉彩——西部不「甜」"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 9,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

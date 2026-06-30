@@ -1,14 +1,201 @@
 {
   "style_id": "WF-15",
   "name_zh": "甜媚少女",
-  "name_en": "Coquette",
+  "name_en": "",
   "description": "像18世纪法国宫廷的调情少女穿越到现代——蝴蝶结+蕾丝+珍珠，甜美到极致但又带着知道自己在做什么的狡黠。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "浪漫少女",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "浪漫少女 | **趋势**: 🔥 流行趋势",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "芭蕾粉",
+        "象牙白",
+        "红色",
+        "淡紫",
+        "奶油黄",
+        "婴儿蓝",
+        "香槟色"
+      ],
+      "forbidden_hues": [
+        "黑色（大面积）",
+        "灰色",
+        "橄榄绿——任何「严肃」的颜色都不 Coquette"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "甜点店的颜色——马卡龙、棉花糖、草莓奶昔",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "刺绣",
+        "纯色",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "薄纱",
+        "真丝",
+        "棉",
+        "蕾丝",
+        "缎面"
+      ],
+      "acceptable": [
+        "针织"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "蕾丝领口 blouse",
+      "category_code": "BLOUSE",
+      "bonus": 20,
+      "description": "彼得潘领或维多利亚高领、蕾丝或刺绣、白色或奶油色"
+    },
+    {
+      "name": "缎面蝴蝶结发饰",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "可夹在头发上也可系在颈部"
+    },
+    {
+      "name": "珍珠项链/耳环",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "单链或多层、可混搭爱心吊坠"
+    },
+    {
+      "name": "A字迷你裙",
+      "category_code": "SKIRT",
+      "bonus": 10,
+      "description": "高腰、纯色（粉/白/红）或小碎花"
+    },
+    {
+      "name": "玛丽珍高跟鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "粗跟或细跟、搭扣设计、红色或裸色"
+    },
+    {
+      "name": "白色丝袜/及膝袜",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "透明或半透明、可带小花边"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "黑色（大面积）",
+        "灰色",
+        "橄榄绿——任何「严肃」的颜色都不 Coquette"
+      ],
+      "reason": "风格禁忌色: 黑色（大面积）, 灰色, 橄榄绿——任何「严肃」的颜色都不 Coquette"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 9,
+    "拉长腿部": 6,
+    "颜色显白": 3,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [
+    "WF-13",
+    "WF-14",
+    "WF-16"
+  ],
+  "conflicting_styles": [
+    "WF-31",
+    "WF-24"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

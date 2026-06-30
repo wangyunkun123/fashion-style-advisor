@@ -1,14 +1,174 @@
 {
   "style_id": "WF-30",
   "name_zh": "黑帮大嫂",
-  "name_en": "Mob Wife",
+  "name_en": "",
   "description": "黑帮电影里大哥的女人——人造皮草大衣+豹纹连衣裙+大号金耳环+超大墨镜。看起来像是刚参加完一个你不该问的会议。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "戏剧张力",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "戏剧张力 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "豹纹(#C49A2A+#000000)",
+        "酒红",
+        "金色",
+        "深棕",
+        "白色（极少使用",
+        "作为反差）",
+        "墨黑色（墨镜）"
+      ],
+      "forbidden_hues": [
+        "粉彩",
+        "荧光",
+        "柔和色——任何看起来「温柔」的颜色都不在 Mob Wife 的词典里"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "黑暗俱乐部 + 黄金珠宝 + 红酒 + 雪茄灰",
+      "allowed_hue_families": [
+        "暖色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "动物纹",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "毛呢",
+        "真丝",
+        "丝绒",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "皮革",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "人造皮草大衣",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "黑色/棕色/豹纹，必须看起来像真的（但最好是假的）"
+    },
+    {
+      "name": "豹纹连衣裙/上衣",
+      "category_code": "DRESS",
+      "bonus": 15,
+      "description": "豹纹是 Mob Wife 的灵魂图案——越大胆越好"
+    },
+    {
+      "name": "大号金耳环",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "圈形或吊坠、必须大到能被墨镜挡住"
+    },
+    {
+      "name": "超大墨镜",
+      "category_code": "SUN",
+      "bonus": 10,
+      "description": "黑色、挡住半张脸、怀疑一切的态度"
+    },
+    {
+      "name": "皮革长裤/紧身皮裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "紧身、黑色、有光泽"
+    },
+    {
+      "name": "法国美甲+红唇",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "法国美甲（白色指尖）+ 暗红色或鲜红色唇膏"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "粉彩",
+        "荧光",
+        "柔和色——任何看起来「温柔」的颜色都不在 Mob Wife 的词典里"
+      ],
+      "reason": "风格禁忌色: 粉彩, 荧光, 柔和色——任何看起来「温柔」的颜色都不在 Mob Wife 的词典里"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

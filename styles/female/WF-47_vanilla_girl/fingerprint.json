@@ -1,14 +1,176 @@
 {
   "style_id": "WF-47",
   "name_zh": "香草女孩",
-  "name_en": "Vanilla Girl",
-  "description": "米白、奶油、驼色系的柔和穿搭，针织与羊绒质感，温暖治愈的邻家美学",
-  "era": "2020s",
-  "parent": "cozy_minimalist",
-  "category": "奢华极简",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "被加了香草和奶泡的生活——奶油白针织衫+象牙色羊毛开衫+暖金色首饰。Clean Girl 去了疗养院做了一次温暖的治疗，回来变成了 Vanilla Girl。",
+  "category": "奢华极简 | **趋势**: 🔥 流行趋势",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身",
+        "略宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "奶油白",
+        "象牙白",
+        "燕麦色",
+        "浅驼",
+        "浅灰",
+        "淡粉",
+        "淡棕"
+      ],
+      "forbidden_hues": [
+        "黑色",
+        "深色",
+        "荧光色——任何太「硬」或太「亮」的颜色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "拿铁、香草冰淇淋、燕麦粥、热可可上的奶泡——所有「可食用的温暖颜色」",
+      "allowed_hue_families": [
+        "暖色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "格纹",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "灯芯绒",
+        "羊绒",
+        "棉",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "奶油白羊毛开衫",
+      "category_code": "KNIT",
+      "bonus": 20,
+      "description": "圆领或V领、oversize、奶油白或象牙白"
+    },
+    {
+      "name": "象牙色修身针织衫",
+      "category_code": "KNIT",
+      "bonus": 15,
+      "description": "贴肤但不紧、奶油白/燕麦色、半高领"
+    },
+    {
+      "name": "直筒针织裤/灯芯绒裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "高腰、直筒、燕麦色/浅驼"
+    },
+    {
+      "name": "暖金色首饰",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "金色或玫瑰金、小吊坠、戒指可叠戴"
+    },
+    {
+      "name": "奶油白球鞋/羊皮拖鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "白色或奶油白、可搭配白袜也可不穿袜"
+    },
+    {
+      "name": "围巾/斗篷",
+      "category_code": "ACC",
+      "bonus": 5,
+      "description": "羊毛或羊绒、奶油白/浅驼/格子"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "黑色",
+        "深色",
+        "荧光色——任何太「硬」或太「亮」的颜色"
+      ],
+      "reason": "风格禁忌色: 黑色, 深色, 荧光色——任何太「硬」或太「亮」的颜色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 6,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

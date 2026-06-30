@@ -1,14 +1,185 @@
 {
   "style_id": "WF-31",
   "name_zh": "暗黑女性力",
-  "name_en": "Dark Feminine",
+  "name_en": "",
   "description": "Femme Fatale（蛇蝎美人）的现代版——收腰西装+束身胸衣+勃艮第红/墨绿色调+丝绒。不是「等待拯救」的公主，是「别挡我的路」的女王。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "戏剧张力",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "戏剧张力 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "勃艮第红",
+        "墨绿",
+        "黑色",
+        "深紫",
+        "金色（首饰）",
+        "深灰",
+        "暗蓝色"
+      ],
+      "forbidden_hues": [
+        "粉彩",
+        "马卡龙色",
+        "白色（大面积）",
+        "亮色——任何「轻浮」的颜色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "宝石的颜色——红宝石、翡翠、紫水晶、黑钻石",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "丝绒",
+        "缎面",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "皮革",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "收腰西装外套",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "黑色或暗色、腰带设计或收腰剪裁、有垫肩但不夸张"
+    },
+    {
+      "name": "束身胸衣/腰封",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "可当内搭也可外穿、丝绒或缎面、收紧腰线"
+    },
+    {
+      "name": "丝绒/真丝连衣裙",
+      "category_code": "DRESS",
+      "bonus": 15,
+      "description": "及膝或中长、勃艮第红/墨绿/黑色、暗光泽"
+    },
+    {
+      "name": "高腰阔腿裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "黑色或暗色、垂坠、及地长度"
+    },
+    {
+      "name": "金色/珠宝首饰",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "厚重、有明显的存在感——不是 delicate，是 bold"
+    },
+    {
+      "name": "暗色口红",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "勃艮第红/深紫/暗莓色——唇就是武器"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "粉彩",
+        "马卡龙色",
+        "白色（大面积）"
+      ],
+      "reason": "风格禁忌色: 粉彩, 马卡龙色, 白色（大面积）"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 13,
+    "拉长腿部": 6,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

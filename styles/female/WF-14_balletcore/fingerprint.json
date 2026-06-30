@@ -1,14 +1,192 @@
 {
   "style_id": "WF-14",
   "name_zh": "芭蕾风",
-  "name_en": "Balletcore",
+  "name_en": "",
   "description": "把芭蕾排练厅的穿搭搬到街头——裹身针织衫+纱裙+芭蕾平底鞋，是舞者的优雅与少女的柔软的结合。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "浪漫少女",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "浪漫少女 | **趋势**: 🔥 流行趋势",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "紧身",
+        "略宽松",
+        "层叠"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "芭蕾粉",
+        "奶油白",
+        "黑色",
+        "裸色",
+        "浅灰",
+        "淡蓝",
+        "勃艮第红"
+      ],
+      "forbidden_hues": [
+        "霓虹色",
+        "橙色",
+        "荧光色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "芭蕾排练厅的颜色——粉色缎面、黑色练功服、裸色芭蕾鞋",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "薄纱",
+        "真丝",
+        "丝绸",
+        "羊绒",
+        "缎面"
+      ],
+      "acceptable": [
+        "针织",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "芭蕾平底鞋",
+      "category_code": "SHOE",
+      "bonus": 20,
+      "description": "圆头、极浅口、可加蝴蝶结或搭扣。Repetto 是原版"
+    },
+    {
+      "name": "裹身针织衫",
+      "category_code": "KNIT",
+      "bonus": 15,
+      "description": "V领或船领、合身但不紧、可系带"
+    },
+    {
+      "name": "纱裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "中长款、多层面纱、黑色或粉色"
+    },
+    {
+      "name": "袜套",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "针织、及膝或过膝、白色/奶油/粉色"
+    },
+    {
+      "name": "缎面蝴蝶结发饰",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "可系在发髻或马尾上"
+    },
+    {
+      "name": "连体衣/紧身衣",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "作为打底层、包裹身体线条"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "霓虹色",
+        "橙色",
+        "荧光色"
+      ],
+      "reason": "风格禁忌色: 霓虹色, 橙色, 荧光色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3,
+    "颜色显白": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [
+    "WF-13",
+    "WF-15",
+    "WF-16"
+  ],
+  "conflicting_styles": [
+    "WF-31",
+    "WF-24"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

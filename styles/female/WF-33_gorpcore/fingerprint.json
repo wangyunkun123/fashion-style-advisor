@@ -1,14 +1,164 @@
 {
   "style_id": "WF-33",
   "name_zh": "户外机能",
-  "name_en": "Gorpcore",
-  "description": "功能性户外装备融入日常穿搭，冲锋衣、工装裤、登山鞋与都市便装混搭，实用主义与街头感并重",
-  "era": "2017-2020s",
-  "parent": "urban_utility",
-  "category": "现代都市",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "把功能性户外装备穿进城市日常——Arc'teryx 冲锋衣+Patagonia 抓绒+Salomon 登山鞋+多口袋工装裤。不是要去登山，这就是你的城市制服。",
+  "category": "现代都市 | **趋势**: 🔥 流行趋势",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "层叠"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "军绿",
+        "灰色",
+        "大地色",
+        "荧光黄（安全色）",
+        "橙色（户外信号色）",
+        "深蓝"
+      ],
+      "forbidden_hues": [
+        "粉色",
+        "粉彩——功能性户外装备很少是粉色的"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "户外品牌的经典配色——Arc'teryx 的黑灰、Patagonia 的大地色、The North Face 的荧光黄",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉"
+      ],
+      "acceptable": [
+        "尼龙"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "冲锋衣",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "Gore-Tex、防水、有腋下拉链、越大越好"
+    },
+    {
+      "name": "抓绒中层",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "摇粒绒、可当内搭也可外穿"
+    },
+    {
+      "name": "登山鞋/越野跑鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "专业户外鞋底+潮流配色、Salomon 是 Gorpcore 的灵魂鞋"
+    },
+    {
+      "name": "工装裤/户外裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "多口袋、防水或速干、可调节裤脚"
+    },
+    {
+      "name": "功能性背包",
+      "category_code": "BAG",
+      "bonus": 10,
+      "description": "技术背负系统+城市适用外观"
+    },
+    {
+      "name": "渔夫帽/鸭舌帽",
+      "category_code": "HAT",
+      "bonus": 5,
+      "description": "防晒/防水功能+复古户外Logo"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "粉色",
+        "粉彩——功能性户外装备很少是粉色的"
+      ],
+      "reason": "风格禁忌色: 粉色, 粉彩——功能性户外装备很少是粉色的"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "遮盖臀胯": 3
+  },
+  "related_styles": [
+    "WF-05",
+    "WF-08",
+    "WF-11"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

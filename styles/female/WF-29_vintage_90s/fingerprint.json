@@ -1,14 +1,186 @@
 {
   "style_id": "WF-29",
   "name_zh": "90年代复古",
-  "name_en": "Vintage 90s",
+  "name_en": "",
   "description": "90年代的极简主义回潮——真丝吊带裙+直筒牛仔裤+细带凉鞋。Carolyn Bessette-Kennedy 的衣橱穿越到了现在，依然不过时。",
-  "era": "1990s",
-  "parent": "contemporary",
-  "category": "都市街头",
-  "trend_category": "classic",
-  "gender": "female",
+  "category": "都市街头 | **趋势**: 🏛️ 经典风格",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身",
+        "略宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "白色",
+        "灰色",
+        "驼色",
+        "海军蓝",
+        "巧克力棕",
+        "深酒红"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "大面积印花",
+        "Logo"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "1990年代 Calvin Klein 广告的调色盘——黑白灰+驼色",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "刺绣",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "羊绒",
+        "棉"
+      ],
+      "acceptable": [
+        "牛仔",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "真丝吊带裙",
+      "category_code": "SKIRT",
+      "bonus": 20,
+      "description": "及膝或中长、真丝或仿丝、可单穿也可叠T恤"
+    },
+    {
+      "name": "高腰直筒牛仔裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "高腰、直筒、轻微做旧、不破洞"
+    },
+    {
+      "name": "白衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "合身略宽松、纯棉、无刺绣/Logo"
+    },
+    {
+      "name": "细带凉鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "极细搭带、中跟或平底、黑色或裸色"
+    },
+    {
+      "name": "极简西装外套",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "合身、单排扣、黑色或灰色"
+    },
+    {
+      "name": "黑色小墨镜",
+      "category_code": "SUN",
+      "bonus": 5,
+      "description": "窄框/椭圆/猫眼——不要巨大的那种"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "大面积印花"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 大面积印花"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 9,
+    "遮盖臀胯": 6,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
   "tier": "core",
-  "_tier_reason": "用户偏好: 90s复古休闲聚会可用",
-  "_tier_updated": "2026-06-26"
+  "trend_category": "classic"
 }

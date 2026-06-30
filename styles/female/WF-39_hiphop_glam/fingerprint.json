@@ -1,14 +1,164 @@
 {
   "style_id": "WF-39",
   "name_zh": "嘻哈华丽",
-  "name_en": "Hip Hop Glam",
-  "description": "宽松运动套装配奢华配饰，logo腰链、大金耳环、logo腰带，90s街头升级版",
-  "era": "1990s-2000s",
-  "parent": "street_culture",
-  "category": "都市街头",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "嘻哈文化的「赚到钱了」的豪华表达——大号金链+名牌 tracksuit+限量球鞋+设计师 Logo。不是「安静的财富」，是「我成功了，让全世界看到」。",
+  "category": "都市街头 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "金色",
+        "黑色",
+        "红色",
+        "白色",
+        "迷彩",
+        "紫色（皇室的颜色）",
+        "银色"
+      ],
+      "forbidden_hues": [
+        "没有禁忌——Hip Hop Glam 不相信「太多」"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "金链的颜色+红底鞋的颜色+黑豪车的颜色",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "条纹",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "真丝"
+      ],
+      "acceptable": [
+        "皮革",
+        "丹宁",
+        "尼龙",
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "大号金链/项链",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "黄金色、粗链、可以有吊坠（十字架/钱币/名牌）"
+    },
+    {
+      "name": "运动服套装",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "三叶草或三条纹、成套穿、黑/红/白"
+    },
+    {
+      "name": "限量球鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "Jordan 1/Dunk SB/Yeezy 350——球鞋是身份符号"
+    },
+    {
+      "name": "皮草大衣",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "人造皮草、大尺寸、可搭在运动服外面"
+    },
+    {
+      "name": "设计师包/腰带",
+      "category_code": "BAG",
+      "bonus": 10,
+      "description": "大 Logo、老花或 GG 印花——Logo 就是一切"
+    },
+    {
+      "name": "钻石/闪亮首饰",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "耳钉/戒指/手链——钻石不一定要真的，但要闪"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "没有禁忌——Hip Hop Glam 不相信「太多」"
+      ],
+      "reason": "风格禁忌色: 没有禁忌——Hip Hop Glam 不相信「太多」"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

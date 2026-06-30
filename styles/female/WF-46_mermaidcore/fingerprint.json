@@ -1,14 +1,174 @@
 {
   "style_id": "WF-46",
   "name_zh": "人鱼梦境",
-  "name_en": "Mermaidcore",
-  "description": "珠光面料、贝母色、鱼鳞纹理、湿发造型，海洋生物灵感的美人鱼幻想",
-  "era": "2020s",
-  "parent": "romantic_feminine",
-  "category": "浪漫少女",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "像是刚从海浪里走出来的人鱼公主——珠光面料的鱼尾裙+贝壳首饰+珍珠+湿漉漉的长发。不是「去海边度假」，是「从海里回到陆地，但还没完全变回人类」。",
+  "category": "浪漫少女 | **趋势**: 🎭 小众领域",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "紧身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "人鱼绿",
+        "海蓝色",
+        "薰衣草紫",
+        "珠光白",
+        "珊瑚粉",
+        "海沫绿",
+        "银色"
+      ],
+      "forbidden_hues": [
+        "橙色",
+        "棕色",
+        "大地色——「陆地」的颜色"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "海洋的颜色——海水的蓝绿、贝壳的珠光白、海星的珊瑚粉、珍珠的银光",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "编织",
+        "薄纱",
+        "丝绸",
+        "钩针",
+        "缎面"
+      ],
+      "acceptable": [
+        "雪纺",
+        "针织"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "鱼尾裙",
+      "category_code": "SKIRT",
+      "bonus": 20,
+      "description": "紧身至膝盖然后展开、中长或及踝、珠光或缎面"
+    },
+    {
+      "name": "珠光/鳞片纹理上衣",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "紧身、珠光色/人鱼绿/海蓝、鳞片图案"
+    },
+    {
+      "name": "贝壳/海星首饰",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "真的贝壳或仿贝壳——项链/耳环/手链"
+    },
+    {
+      "name": "珍珠",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "多层珍珠项链——像人鱼从深海带来的宝藏"
+    },
+    {
+      "name": "薄纱/雪纺披肩",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "透明/半透明、海蓝色或白——像海浪的泡沫"
+    },
+    {
+      "name": "湿发感造型",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "这是 Mermaidcore 的免费配饰——头发看起来像刚从海里出来"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "橙色",
+        "棕色",
+        "大地色——「陆地」的颜色"
+      ],
+      "reason": "风格禁忌色: 橙色, 棕色, 大地色——「陆地」的颜色"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3
+  },
+  "related_styles": [
+    "WF-13",
+    "WF-14",
+    "WF-15"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

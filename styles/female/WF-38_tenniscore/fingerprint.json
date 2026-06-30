@@ -1,14 +1,186 @@
 {
   "style_id": "WF-38",
   "name_zh": "网球名媛",
-  "name_en": "Tenniscore",
-  "description": "百褶短裙、Polo衫、针织开衫搭肩、白色中筒袜，球场外的预科生精致",
-  "era": "2020s",
-  "parent": "smart_casual",
-  "category": "现代都市",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "像是刚从温布尔登球场下来直接去吃早午餐——白色百褶网球裙+Polo衫+V领针织衫搭在肩上+白色运动鞋。运动与优雅的完美交集。",
+  "category": "现代都市 | **趋势**: 🔥 流行趋势",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "白色",
+        "奶油白",
+        "海军蓝",
+        "草地绿",
+        "酒红",
+        "柠檬黄",
+        "灰色"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "黑色（大面积在阳光下）"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "温布尔登的颜色——严格的全白着装规定 + 草地绿色 + 海军蓝外衣",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "蕾丝",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "羊绒",
+        "棉",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "针织"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "百褶网球裙",
+      "category_code": "SKIRT",
+      "bonus": 20,
+      "description": "A字、高腰、白色首选、可带内置短裤"
+    },
+    {
+      "name": "Polo 衫",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "修身、棉质 Pike 针织、两扣或三扣"
+    },
+    {
+      "name": "V领针织衫",
+      "category_code": "KNIT",
+      "bonus": 15,
+      "description": "羊绒或棉、奶油白/海军蓝、不是穿是搭"
+    },
+    {
+      "name": "白色运动袜+白球鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "白色、干净、看起来像随时能上场"
+    },
+    {
+      "name": "遮阳帽/棒球帽",
+      "category_code": "HAT",
+      "bonus": 10,
+      "description": "白色、有帽檐、可防晒"
+    },
+    {
+      "name": "运动款腕表",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "功能性+优雅——在网球场上也能戴"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "黑色（大面积在阳光下）"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 黑色（大面积在阳光下）"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "拉长腿部": 3,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [
+    "WF-05",
+    "WF-08",
+    "WF-11"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

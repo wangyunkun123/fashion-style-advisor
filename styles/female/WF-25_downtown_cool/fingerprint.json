@@ -1,14 +1,164 @@
 {
   "style_id": "WF-25",
   "name_zh": "都市酷感",
-  "name_en": "Downtown Cool",
+  "name_en": "",
   "description": "都市创意工作者的日常气场——皮夹克+单色基础款+大墨镜。不是要去时装周，这就是她每天去工作室的样子。",
-  "era": "2010s",
-  "parent": "contemporary",
-  "category": "另类酷感",
-  "trend_category": "niche",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "另类酷感 | **趋势**: 🎭 小众领域",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身",
+        "略宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "白色",
+        "深灰",
+        "驼色",
+        "深蓝",
+        "炭灰",
+        "酒红色（极少使用",
+        "用作破局）"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "粉彩",
+        "印花",
+        "多色组合"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "黑白摄影的颜色——去掉颜色，只看形态和廓形",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "纯色",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "丝绸",
+        "棉"
+      ],
+      "acceptable": [
+        "牛仔",
+        "皮质",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "皮夹克/皮大衣",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "黑色、无铆钉/流苏等多余装饰、摩托车款或西装款"
+    },
+    {
+      "name": "白T恤/白衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "厚棉、挺括、不透"
+    },
+    {
+      "name": "高腰直筒/阔腿裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "高腰、垂坠、黑色或驼色"
+    },
+    {
+      "name": "大墨镜",
+      "category_code": "SUN",
+      "bonus": 10,
+      "description": "黑色边框、大尺寸、遮半张脸"
+    },
+    {
+      "name": "建筑感西装外套",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "略oversize、黑色或炭灰、无Logo"
+    },
+    {
+      "name": "极简踝靴/乐福鞋",
+      "category_code": "SHOE",
+      "bonus": 5,
+      "description": "黑色、尖头或方头、低跟"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "粉彩",
+        "印花"
+      ],
+      "reason": "风格禁忌色: 荧光色, 粉彩, 印花"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 9,
+    "遮盖臀胯": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-13",
+    "WF-16"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

@@ -1,14 +1,195 @@
 {
   "style_id": "WF-49",
   "name_zh": "端庄优雅",
-  "name_en": "Modest Chic",
-  "description": "长袖高领、及踝长裙、宽松廓形、叠穿层次，不露肤的高级优雅",
-  "era": "2010s",
-  "parent": "cultural_elegance",
-  "category": "文化优雅",
-  "trend_category": "classic",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "端庄不是隐藏自己，是选择不暴露——及踝长裙+高领上衣+宽松廓形+精妙的颜色和面料搭配。不是「被要求遮掩」，是「自主选择遮掩并因此感到有力量」。",
+  "category": "文化优雅 | **趋势**: 🏛️ 经典风格",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "略宽松",
+        "层叠"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "驼色",
+        "奶油白",
+        "暗绿",
+        "暗蓝",
+        "黑",
+        "白",
+        "灰",
+        "酒红",
+        "深紫"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色——端庄风格的颜色是「安静的/有深度的」"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "大地色+宝石色——自然的/有质感的所有颜色",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "纯色"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "亚麻",
+        "真丝",
+        "麻",
+        "羊绒",
+        "棉"
+      ],
+      "acceptable": [
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "及踝长裙/长连衣裙",
+      "category_code": "DRESS",
+      "bonus": 20,
+      "description": "A字或直筒、及踝长度、纯色或低调印花"
+    },
+    {
+      "name": "高领/半高领上衣",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "合身但不紧、长袖、可当内搭也可单穿"
+    },
+    {
+      "name": "宽松长袖衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "oversize、领口可系可不系、白色/奶油色/蓝"
+    },
+    {
+      "name": "阔腿长裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "高腰、及地、垂坠"
+    },
+    {
+      "name": "围巾/头巾",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "真丝或棉、纯色或低调印花、可包头也可当围巾"
+    },
+    {
+      "name": "结构感长外套",
+      "category_code": "JK",
+      "bonus": 5,
+      "description": "及踝或过膝、羊毛或羊绒、收腰或无腰均可"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色——端庄风格的颜色是「安静的/有深度的」"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色——端庄风格的颜色是「安静的/有深度的」"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 9,
+    "拉长腿部": 13,
+    "颜色显白": 3,
+    "遮盖臀胯": 9
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

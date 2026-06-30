@@ -1,14 +1,168 @@
 {
   "style_id": "WF-16",
   "name_zh": "软妹风",
-  "name_en": "Soft Girl",
+  "name_en": "",
   "description": "被加了粉色滤镜的世界——粉彩百褶裙+紧身针织衫+厚底玛丽珍，像动漫少女走进了现实。",
-  "era": "2010s",
-  "parent": "contemporary",
-  "category": "浪漫少女",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "浪漫少女 | **趋势**: 🔥 流行趋势",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "薰衣草紫",
+        "婴儿蓝",
+        "草莓粉",
+        "奶油黄",
+        "白色",
+        "浅紫",
+        "薄荷绿"
+      ],
+      "forbidden_hues": [
+        "黑色",
+        "深蓝",
+        "暗红",
+        "大地色——任何重色都不 Soft"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "马卡龙盒子里的所有颜色 + 加了柔光滤镜",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "灯芯绒",
+        "蕾丝",
+        "棉",
+        "薄纱"
+      ],
+      "acceptable": [
+        "针织",
+        "牛仔",
+        "皮质"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "紧身针织衫/Crop Top",
+      "category_code": "KNIT",
+      "bonus": 20,
+      "description": "短款或可塞进高腰裙、粉彩色系"
+    },
+    {
+      "name": "百褶短裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "高腰、长度在膝盖以上、网球裙款式"
+    },
+    {
+      "name": "厚底玛丽珍鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "厚底（platform）、搭扣、可配白色短袜"
+    },
+    {
+      "name": "及膝白袜/蕾丝袜",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "半透明或不透明、白色或奶油色"
+    },
+    {
+      "name": "小巧金色首饰",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "细链、小吊坠、戒指叠戴"
+    },
+    {
+      "name": "刘海+高马尾",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "发型是 Soft Girl 的灵魂——齐刘海或空气刘海+高马尾/丸子头"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "黑色",
+        "深蓝",
+        "暗红"
+      ],
+      "reason": "风格禁忌色: 黑色, 深蓝, 暗红"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "拉长腿部": 3,
+    "颜色显白": 3,
+    "遮盖臀胯": 6
+  },
+  "related_styles": [
+    "WF-13",
+    "WF-14",
+    "WF-15"
+  ],
+  "conflicting_styles": [
+    "WF-31",
+    "WF-24"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

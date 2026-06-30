@@ -1,14 +1,184 @@
 {
   "style_id": "WF-20",
   "name_zh": "海岸祖母",
-  "name_en": "Coastal Grandmother",
+  "name_en": "",
   "description": "Nancy Meyers 电影女主角的衣橱——亚麻衬衫+宽腿白裤+草编托特包。像是住在海边大房子里、早上沿着沙滩散步然后回去写小说的女人。",
-  "era": "2020s",
-  "parent": "contemporary",
-  "category": "自然田园",
-  "trend_category": "popular_trend",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "category": "自然田园 | **趋势**: 🔥 流行趋势",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "奶油白",
+        "沙色",
+        "海沫绿",
+        "石灰色",
+        "海军蓝",
+        "白色",
+        "亚麻本色"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "金属感",
+        "大面积印花"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "沙、石、雾、贝壳——海滩上能捡到的所有颜色",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "编织",
+        "亚麻",
+        "麻",
+        "羊绒",
+        "棉"
+      ],
+      "acceptable": [
+        "针织",
+        "皮质"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "亚麻纽扣衬衫",
+      "category_code": "SHIRT",
+      "bonus": 20,
+      "description": "略oversize、白色或奶油色、长袖可卷起"
+    },
+    {
+      "name": "宽腿白裤/亚麻裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "高腰、垂坠、亚麻或棉、及地长度"
+    },
+    {
+      "name": "羊绒开衫/针织衫",
+      "category_code": "KNIT",
+      "bonus": 15,
+      "description": "圆领或V领、纯色、可搭在肩上"
+    },
+    {
+      "name": "草编托特包",
+      "category_code": "BAG",
+      "bonus": 10,
+      "description": "大容量、手工编织、可装海滩读物和一条毛巾"
+    },
+    {
+      "name": "渔夫凉鞋/平底鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "平底、皮质或草编、可赤脚穿也可配白色短袜"
+    },
+    {
+      "name": "丝巾/亚麻围巾",
+      "category_code": "ACC",
+      "bonus": 5,
+      "description": "浅色、可系在颈部或包上"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "金属感"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 金属感"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 3,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [
+    "WF-31",
+    "WF-24"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

@@ -1,14 +1,176 @@
 {
   "style_id": "WF-48",
   "name_zh": "马术优雅",
-  "name_en": "Equestrian",
-  "description": "骑马裤、高筒马靴、粗花呢外套、丝巾，英式马术传统的日常化演绎",
-  "era": "classic",
-  "parent": "european_classic",
-  "category": "欧洲经典",
-  "trend_category": "classic",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "从马厩到秀场的优雅——骑马裤+高筒马术靴+粗花呢骑兵夹克+马衔扣细节。不是在马背上，是刚从马背上下来，但依然优雅得体。",
+  "category": "欧洲经典 | **趋势**: 🏛️ 经典风格",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "猎人绿",
+        "海军蓝",
+        "驼色",
+        "黑色",
+        "酒红（骑马夹克的衬里）",
+        "白色（骑马衬衫）",
+        "棕色（皮靴）"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "粉彩",
+        "印花——马术不「甜」不「乱」"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "英国乡村马厩和骑术比赛的颜色——草地绿、泥土棕、皮革黑、天际蓝",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "粗花呢",
+        "棉"
+      ],
+      "acceptable": [
+        "皮革",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "骑兵夹克",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "粗花呢或羊毛、收腰、双排扣或单排、有骑马补丁"
+    },
+    {
+      "name": "骑马裤/紧身马裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "高腰、膝盖以上紧贴、膝盖以下略展开、大地色或白色"
+    },
+    {
+      "name": "高筒马术靴",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "及膝、黑色或棕色、皮革、简约无装饰"
+    },
+    {
+      "name": "马衔扣乐福鞋/腰带",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "马衔扣细节——最经典的「马术信号」"
+    },
+    {
+      "name": "真丝马术围巾",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "小方巾系在颈部——马术传统中的「点睛之笔」"
+    },
+    {
+      "name": "马术帽/头盔",
+      "category_code": "HAT",
+      "bonus": 5,
+      "description": "不需要真的戴头盔上街，但遮阳帽或硬挺的羊毛帽是马术审美的「态度配件」"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "粉彩",
+        "印花——马术不「甜」不「乱」"
+      ],
+      "reason": "风格禁忌色: 荧光色, 粉彩, 印花——马术不「甜」不「乱」"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 9,
+    "拉长腿部": 3
+  },
+  "related_styles": [
+    "WF-01",
+    "WF-06",
+    "WF-07"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

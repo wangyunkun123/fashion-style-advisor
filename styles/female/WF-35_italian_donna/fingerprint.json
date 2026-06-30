@@ -1,14 +1,188 @@
 {
   "style_id": "WF-35",
   "name_zh": "意式风情",
-  "name_en": "Italian Donna",
-  "description": "大胆印花、金色配饰、修身剪裁，Dolce & Gabbana式的西西里性感与米兰精致并存",
-  "era": "classic",
-  "parent": "european_classic",
-  "category": "欧洲经典",
-  "trend_category": "classic",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_en": "",
+  "description": "意大利女人的自信与华丽——色彩鲜艳的印花裙+大号金耳环+超大墨镜+高跟鞋。不是「低调的优雅」，是「我存在，我知道，我很美」。",
+  "category": "欧洲经典 | **趋势**: 🏛️ 经典风格",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "紧身"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "番茄红",
+        "地中海蓝",
+        "金色",
+        "黑色",
+        "柠檬黄",
+        "奶油白",
+        "印花（任何颜色都可以）"
+      ],
+      "forbidden_hues": [
+        "灰色（大面积）",
+        "极简黑白灰（太北欧了）"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "意大利国旗+地中海——红、蓝、金、白",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花",
+        "蕾丝",
+        "纯色",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "真丝",
+        "棉",
+        "缎面",
+        "蕾丝"
+      ],
+      "acceptable": [
+        "皮革"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "印花裹身裙/连衣裙",
+      "category_code": "DRESS",
+      "bonus": 20,
+      "description": "鲜艳花卉/几何印花、裹身设计、及膝或中长"
+    },
+    {
+      "name": "大号金耳环",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "圈形或吊坠、大到能被墨镜挡住"
+    },
+    {
+      "name": "翻领真丝衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "印花或纯色、V领敞开、塞进高腰裤"
+    },
+    {
+      "name": "超大墨镜",
+      "category_code": "SUN",
+      "bonus": 10,
+      "description": "黑色或玳瑁色、尺寸要大——意大利太阳强"
+    },
+    {
+      "name": "高跟鞋/细带凉鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "细高跟或粗跟、露出脚踝、拉长腿部"
+    },
+    {
+      "name": "金色搭扣腰带",
+      "category_code": "ACC",
+      "bonus": 5,
+      "description": "搭大Logo或马衔扣——腰线就是一切"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "灰色（大面积）",
+        "极简黑白灰（太北欧了）"
+      ],
+      "reason": "风格禁忌色: 灰色（大面积）, 极简黑白灰（太北欧了）"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 9,
+    "拉长腿部": 6,
+    "颜色显白": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [
+    "WF-01",
+    "WF-06",
+    "WF-07"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

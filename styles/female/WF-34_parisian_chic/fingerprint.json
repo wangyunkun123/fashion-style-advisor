@@ -1,14 +1,189 @@
 {
   "style_id": "WF-34",
-  "name_zh": "巴黎 chic",
-  "name_en": "Parisian Chic",
-  "description": "比法式慵懒更精致一层，剪裁利落的西装外套配真丝内搭，贝雷帽与红唇点睛，优雅不费力",
-  "era": "classic",
-  "parent": "european_classic",
-  "category": "欧洲经典",
-  "trend_category": "classic",
-  "gender": "female",
-  "tier": "knowledge-only",
-  "_tier_reason": "nan身形/衣橱分析: knowledge-only",
-  "_tier_updated": "2026-06-26"
+  "name_zh": "巴黎 Chic",
+  "name_en": "",
+  "description": "巴黎女人衣橱的「精华版」——粗花呢夹克+黑色小礼服+珍珠项链+红唇。Parisian Chic 是有意图的优雅，French Effortless 是随意的优雅——前者去歌剧院，后者去咖啡馆。",
+  "category": "欧洲经典 | **趋势**: 🏛️ 经典风格",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "黑色",
+        "奶油白",
+        "海军蓝",
+        "驼色",
+        "红色（唇/鞋/包）",
+        "香槟色",
+        "深灰"
+      ],
+      "forbidden_hues": [
+        "荧光色",
+        "霓虹色",
+        "大面积印花",
+        "运动面料"
+      ],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "巴黎高级公寓的颜色——黑色铁艺楼梯、奶油白墙面、金色画框、深蓝色丝绒沙发",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "碎花"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "丝绒",
+        "真丝",
+        "羊绒",
+        "粗花呢",
+        "缎面"
+      ],
+      "acceptable": [
+        "羊毛混纺",
+        "针织",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "preferred": [
+        "基础叠穿"
+      ],
+      "acceptable": [
+        "多层次叠穿"
+      ],
+      "rejected": []
+    },
+    "formality_range": [
+      1,
+      4
+    ]
+  },
+  "key_items": [
+    {
+      "name": "粗花呢夹克",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "合身、圆领或无领、金色纽扣、粗花呢或羊毛混纺"
+    },
+    {
+      "name": "小黑裙",
+      "category_code": "SKIRT",
+      "bonus": 15,
+      "description": "及膝或略上、收腰、可日可夜——Coco Chanel 1926年的发明至今有效"
+    },
+    {
+      "name": "珍珠项链",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "单链或多层、真珍珠或仿珠、锁骨长度"
+    },
+    {
+      "name": "红唇",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "正红色或酒红色——一只红唇可以替代所有首饰"
+    },
+    {
+      "name": "芭蕾平底鞋/细高跟鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "白天芭蕾平底鞋、晚上细高跟"
+    },
+    {
+      "name": "绗缝链条包",
+      "category_code": "BAG",
+      "bonus": 5,
+      "description": "有链条、可斜挎也可手拎、黑色或酒红"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    },
+    {
+      "field": "color.hue_name",
+      "operator": "not_in",
+      "value": [
+        "荧光色",
+        "霓虹色",
+        "大面积印花"
+      ],
+      "reason": "风格禁忌色: 荧光色, 霓虹色, 大面积印花"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [
+    "WF-01",
+    "WF-06",
+    "WF-07"
+  ],
+  "conflicting_styles": [
+    "WF-10",
+    "WF-23"
+  ],
+  "tier": "core",
+  "trend_category": "classic"
 }

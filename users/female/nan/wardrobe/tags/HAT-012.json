@@ -1,0 +1,50 @@
+{
+  "clothing_id": "HAT-012",
+  "category": "帽子",
+  "category_code": "HAT",
+  "color": {
+    "hue_family": "暖色",
+    "hue_name": "玫红色",
+    "saturation": "中饱和",
+    "lightness": "中明度",
+    "is_neutral": false,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "标准",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "Logo",
+    "density": "稀疏",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "平纹织物",
+    "weight": "轻薄",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 1,
+  "brand": {
+    "name": "未知",
+    "collection": "",
+    "confidence": "未知"
+  },
+  "style_modifiers": [
+    "休闲"
+  ],
+  "meta": {
+    "claude_fit_comment": "基础款棒球帽，版型经典，日常休闲适配度高",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "日常休闲"
+  ]
+}

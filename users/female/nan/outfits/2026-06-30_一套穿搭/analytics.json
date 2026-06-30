@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-06-30T08:22:30Z",
+  "user_id": "nan",
+  "items_used": [
+    "TS-005",
+    "PT-001",
+    "SHOE-001",
+    "BAG-011"
+  ],
+  "style_matched": "韩系极简",
+  "occasion": "日常",
+  "explore_level": 0.5,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 91342,
+  "api_calls": 4
+}

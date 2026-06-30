@@ -1,0 +1,55 @@
+{
+  "clothing_id": "JK-002",
+  "category": "外套",
+  "category_code": "JK",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "黑色（配红色/白色拼接）",
+    "saturation": "无彩色（主色）",
+    "lightness": "低明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "插肩",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "拼接",
+    "density": "适中",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "聚酯纤维",
+    "texture": "光滑面料",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "阿迪达斯",
+    "collection": "",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "复古运动",
+    "街头"
+  ],
+  "meta": {
+    "claude_fit_comment": "宽松复古运动外套，经典色彩拼接，适合春秋休闲或运动穿搭",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "运动",
+    "日常休闲"
+  ],
+  "recommended_styles": [
+    "streetwear",
+    "athleisure_sport"
+  ]
+}

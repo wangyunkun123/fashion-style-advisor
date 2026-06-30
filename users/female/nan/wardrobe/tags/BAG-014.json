@@ -1,0 +1,55 @@
+{
+  "clothing_id": "BAG-014",
+  "category": "包",
+  "category_code": "BAG",
+  "color": {
+    "hue_family": "中性色",
+    "hue_name": "米白色",
+    "saturation": "低饱和",
+    "lightness": "高明度",
+    "is_neutral": true,
+    "friendly_for_pale_skin": true
+  },
+  "silhouette": {
+    "fit": "宽松",
+    "shoulder_effect": "无特殊效果",
+    "torso_effect": "无特殊效果",
+    "length_ratio": "标准"
+  },
+  "pattern": {
+    "type": "文字",
+    "density": "适中",
+    "logo_visible": true
+  },
+  "fabric": {
+    "primary": "棉",
+    "texture": "帆布质感",
+    "weight": "适中",
+    "seasonality": [
+      "春",
+      "夏",
+      "秋"
+    ]
+  },
+  "formality": 2,
+  "brand": {
+    "name": "Champion",
+    "collection": "",
+    "confidence": "确定"
+  },
+  "style_modifiers": [
+    "休闲",
+    "运动"
+  ],
+  "meta": {
+    "claude_fit_comment": "休闲抽绳包，米白配色清新，适合日常休闲使用",
+    "image_type": "product_shot"
+  },
+  "occasions": [
+    "日常休闲",
+    "运动"
+  ],
+  "recommended_styles": [
+    "athleisure_sport"
+  ]
+}

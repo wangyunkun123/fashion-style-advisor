@@ -59,8 +59,16 @@ def load_registry():
 
 
 def save_registry(reg):
-    with open(REGISTRY_FILE, 'w') as f:
-        json.dump(reg, f, ensure_ascii=False, indent=2)
+    """原子写入：先写临时文件再 rename，防止并发读取截断空文件"""
+    import tempfile
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(REGISTRY_FILE), suffix='.tmp')
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            json.dump(reg, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, REGISTRY_FILE)
+    except Exception:
+        os.unlink(tmp)
+        raise
 
 
 def user_exists(user_id, gender=None):

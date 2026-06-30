@@ -15,7 +15,21 @@ parser.add_argument('--user', required=True, help='用户 ID')
 parser.add_argument('--override-id', default=None, help='指定 ID')
 args = parser.parse_args()
 
-user_dir = os.path.join(PROJ_DIR, 'users', args.user)
+# 🆕 从 registry 解析 gender，构建正确路径 users/<gender>/<user_id>/
+_registry_path = os.path.join(PROJ_DIR, 'users', '_registry.json')
+_gender = None
+if os.path.exists(_registry_path):
+    with open(_registry_path) as _f:
+        _reg = json.load(_f)
+    for _g, _users in _reg.items():
+        if _g.startswith('_'): continue
+        if args.user in _users:
+            _gender = _g
+            break
+if not _gender:
+    print(f"❌ 用户 {args.user} 未在 registry 中找到，无法确定 gender")
+    sys.exit(1)
+user_dir = os.path.join(PROJ_DIR, 'users', _gender, args.user)
 tags_dir = os.path.join(user_dir, 'wardrobe', 'tags')
 os.makedirs(tags_dir, exist_ok=True)
 

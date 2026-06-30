@@ -260,7 +260,11 @@ def _find_report_item_thumbnail(item_id):
 def _resolve_outfit_style(outfit_dir):
     """从 outfit.md 解析 style_id（与 rating_analyzer.load_all_ratings 逻辑一致）"""
     import re as _re
-    md_path = os.path.join(PROJECT_DIR, 'outfits', outfit_dir, 'outfit.md')
+    # 🆕 使用用户专属 outfits 目录
+    from common import get_thread_user_id
+    _tuid = get_thread_user_id()
+    _outfits_base = resolve_outfits_dir(_tuid) if _tuid else os.path.join(PROJECT_DIR, 'outfits')
+    md_path = os.path.join(_outfits_base, outfit_dir, 'outfit.md')
     if not os.path.exists(md_path):
         return None
     try:
@@ -293,10 +297,13 @@ def _resolve_outfit_style(outfit_dir):
 
 
 def _find_report_style_image(style_id):
-    """查找某风格评分最高的 outfit 效果图 CDN URL（全局扫描）"""
+    """查找某风格评分最高的 outfit 效果图 CDN URL（用户隔离扫描）"""
     best_img = ''
     best_rating = -1
-    outfits_base = os.path.join(PROJECT_DIR, 'outfits')
+    # 🆕 使用当前线程用户专属 outfits 目录
+    from common import get_thread_user_id
+    _tuid = get_thread_user_id()
+    outfits_base = resolve_outfits_dir(_tuid) if _tuid else os.path.join(PROJECT_DIR, 'outfits')
     if not os.path.isdir(outfits_base):
         return ''
     for d in sorted(os.listdir(outfits_base), reverse=True):
@@ -314,9 +321,10 @@ def _find_report_style_image(style_id):
                 try:
                     h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
                                      capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
-                    best_img = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/outfits/{d}/上身效果/上身效果_1.png'
+                    rel = os.path.relpath(img_path, PROJECT_DIR)  # 🆕 用相对路径适配用户目录
+                    best_img = f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{rel}'
                 except Exception:
-                    best_img = f'/outfits/{d}/上身效果/上身效果_1.png'
+                    best_img = f'/{os.path.relpath(img_path, PROJECT_DIR)}'
         except Exception:
             pass
     return best_img
@@ -332,15 +340,20 @@ def _find_report_style_image_for_period(style_id, ratings):
             best_oid = r.get('outfit_id')
     if not best_oid:
         return ''
-    img_path = os.path.join(PROJECT_DIR, 'outfits', best_oid, '上身效果', '上身效果_1.png')
+    # 🆕 使用用户专属 outfits 目录
+    from common import get_thread_user_id
+    _tuid = get_thread_user_id()
+    _outfits_base = resolve_outfits_dir(_tuid) if _tuid else os.path.join(PROJECT_DIR, 'outfits')
+    img_path = os.path.join(_outfits_base, best_oid, '上身效果', '上身效果_1.png')
     if not os.path.exists(img_path):
         return ''
     try:
         h = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
                          capture_output=True, text=True, cwd=PROJECT_DIR).stdout.strip()
-        return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/outfits/{best_oid}/上身效果/上身效果_1.png'
+        rel = os.path.relpath(img_path, PROJECT_DIR)
+        return f'https://cdn.jsdelivr.net/gh/wangyunkun123/fashion-style-advisor@{h}/{rel}'
     except Exception:
-        return f'/outfits/{best_oid}/上身效果/上身效果_1.png'
+        return f'/{os.path.relpath(img_path, PROJECT_DIR)}'
 
 
 # ── 任务管理器 ────────────────────────────────────────
@@ -1405,6 +1418,8 @@ def _register_new_item(cid, category_name, uid=None):
 
 def _finalize_add_item(item_data):
     """执行完整的衣橱入库流程：复制图片 → 增强 → 写标签 → 更新档案 → 注册新单品"""
+    from tools.common import get_thread_user
+
     cid = item_data.get('override_id') or item_data.get('suggested_id')
     if not cid:
         raise ValueError("缺少 clothing ID")
@@ -1478,6 +1493,42 @@ def _finalize_add_item(item_data):
 
     shutil.copy2(src_img, dest_path)
     log(f"图片已复制: {dest_path}")
+
+    # 🆕 AI 提取：用户在上传确认时选择了「AI智能提取」
+    # 对检测到肤色的图片运行 SegFormer + Seedream 白底重构
+    if item_data.get('needs_extraction_choice') and item_data.get('extraction_choice') == 'ai_extract':
+        log(f"🤖 {cid} 用户选择AI提取，运行 SegFormer + Seedream...")
+        try:
+            from tools.cloth_parser import parse_clothing as _pc
+            from tools.extract_clothing import extract_to_white_bg as _ewb, remove_white_background as _rwb
+            _seg_items = _pc(dest_path)
+            _seg_items = [it for it in _seg_items
+                         if it.get('area_pct', 0) >= 3.0 and it.get('confidence', 0) >= 0.15]
+            if _seg_items:
+                # 选面积最大 + 置信度最高的单品
+                _seg_items.sort(key=lambda x: (x.get('area_pct', 0), x.get('confidence', 0)), reverse=True)
+                _best = _seg_items[0]
+                log(f"🧵 {cid} SegFormer 检测 {len(_seg_items)} 件，最佳: "
+                    f"{_best.get('category_code')} area={_best.get('area_pct')}% conf={_best.get('confidence',0):.0%}")
+                _wb_result = _ewb(_best['crop_image'], category_hint='', max_retries=1, timeout=120)
+                if _wb_result.get('white_bg_image'):
+                    _wb_img = _wb_result['white_bg_image']
+                    if _wb_img.mode != 'RGB':
+                        _wb_img = _wb_img.convert('RGB')
+                    _wb_img.save(dest_path, 'JPEG', quality=95)
+                    log(f"✅ {cid} Seedream 白底提取成功，已替换主图")
+                    # 同时生成透明 PNG 字节供 enhanced/ 使用
+                    try:
+                        _cleaned = _rwb(_wb_img)
+                        item_data['_clean_png_bytes'] = _cleaned.get('cutout_bytes_png', b'')
+                    except Exception:
+                        item_data['_clean_png_bytes'] = b''
+                else:
+                    log(f"⚠️ {cid} Seedream 白底提取未成功: {_wb_result.get('error','')[:80]}")
+            else:
+                log(f"⚠️ {cid} SegFormer 未检测到有效单品区域")
+        except Exception as _aie:
+            log(f"⚠️ {cid} AI 提取异常（回退原图）: {_aie}")
 
     # 2. 基础图片处理（不跑 rembg 抠图——太耗内存/CPU，后台异步补做）
     _image_ok = True
@@ -2032,8 +2083,9 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
                     shutil.copy2(src, dst)
                     reference_paths.append(dst)
             else:
-                # 衣橱单品使用抠图
-                cutout = os.path.join(PROJECT_DIR, 'wardrobe', 'enhanced', f'{oid}_cutout.png')
+                # 🆕 衣橱单品使用用户专属抠图
+                _wdir = resolve_wardrobe_dir(user_id) if user_id else os.path.join(PROJECT_DIR, 'wardrobe')
+                cutout = os.path.join(_wdir, 'enhanced', f'{oid}_cutout.png')
                 if os.path.exists(cutout):
                     dst = os.path.join(shengtu_dir, f'{prefix}_{oid}.png')
                     shutil.copy2(cutout, dst)
@@ -2286,12 +2338,33 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 
                     if _is_product_shot:
                         log(f'{_rid} 🔍 图片{i+1} 皮肤检测{_skin_pct:.1f}%→判定为单品图，跳过SegFormer直接原图分析')
-                        all_crops.append((_pil_img, i, '??', 'full', None, False))
+                        all_crops.append((_pil_img, i, '??', 'full', None, False, {}))
                         continue  # 跳过 SegFormer 处理
+
+                    # 🆕 皮肤检测≥3%：可能是真人模特，也可能是肉色/裸色/米色衣服误判
+                    # 不自动运行 AI 提取（SegFormer+Seedream），标记后让用户在手机端选择
+                    log(f'{_rid} 🤔 图片{i+1} 皮肤检测{_skin_pct:.1f}%→疑似人像，跳过AI提取待用户选择')
+                    all_crops.append((_pil_img, i, '??', 'full', None, False, {
+                        'needs_extraction_choice': True,
+                        'skin_detected_pct': round(_skin_pct, 1)
+                    }))
+                    continue  # 跳过 SegFormer + Seedream，原图直接送 VLM 分析
 
                     items = _parse_clothing(tp)
                     # 🆕 过滤面积过小的误检（< 3% 通常是背景噪点或皮肤碎片）
                     items = [it for it in items if it.get('area_pct', 0) >= 3.0]
+                    # 🆕 方案A：过滤极低置信度（< 0.15）误检 — 如鞋子被识别成上衣(10%)
+                    _before_conf = len(items)
+                    items = [it for it in items if it.get('confidence', 0) >= 0.15]
+                    if len(items) < _before_conf:
+                        log(f'{_rid} 🧹 低置信度过滤: 丢弃 {_before_conf - len(items)} 件 conf<0.15')
+                    # 🆕 方案B：剩余检测最高置信度仍 < 0.4 → 模型不确定，整图送 VLM 分析
+                    _max_conf = max((it.get('confidence', 0) for it in items), default=0)
+                    if items and _max_conf < 0.4:
+                        log(f'{_rid} 🤔 最高置信度 {_max_conf:.1%} < 40% → 模型不确定，整图送 VLM')
+                        _img_fallback = _PILImage.open(tp).convert('RGB')
+                        all_crops.append((_img_fallback, i, '??', 'full', None, False, {}))
+                        continue
                     if items:
                         for item in items:
                             # 🆕 白底重构：SegFormer 检测到服装 → Seedream 整件重构到纯白背景 → 程序化去白底
@@ -2299,11 +2372,13 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                             was_completed = False
                             clean_img = None
                             try:
+                                # 🔒 不传递 SegFormer 品类提示 — 该模型对鞋子/配饰等近照经常给出高置信错误分类
+                                #    让 Seedream 凭参考图自行判断，VLM 后续独立分类，避免提示词毒化整条管线
                                 tasks.update(task_id, status='running',
-                                           message=f'正在提取 {item["category_name"]} 到白底...')
+                                           message=f'正在提取 {item["category_name"]}(conf={item.get("confidence",0):.0%}) → 通用模式')
                                 white_result = _extract_white_bg(
                                     item['crop_image'],
-                                    category_hint=item['category_code'],
+                                    category_hint='',  # 通用 'clothing item'，不传具体品类
                                     max_retries=1, timeout=120
                                 )
                                 if white_result.get('white_bg_image'):
@@ -2317,7 +2392,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                                         item['_clean_png_bytes'] = _cleaned.get('cutout_bytes_png', b'')
                                     except Exception:
                                         item['_clean_png_bytes'] = b''
-                                    log(f'{_rid} ✨ {item["category_code"]} 白底提取成功')
+                                    log(f'{_rid} ✨ {item["category_code"]} 白底提取成功 (通用模式)')
                                 else:
                                     log(f'{_rid} ⚠️ {item["category_code"]} 白底提取未成功: {white_result.get("error","")[:80]}')
                             except Exception as _ce:
@@ -2334,18 +2409,18 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                                     clean_img = item['crop_image'].convert('RGB') if hasattr(item['crop_image'], 'convert') else item['crop_image']
                                     log(f'{_rid} ↩️ {item["category_code"]} 回退到原始裁剪图')
 
-                            all_crops.append((clean_img, i, item['category_code'], item['completeness'], item.get('mask'), was_completed))
+                            all_crops.append((clean_img, i, item['category_code'], item['completeness'], item.get('mask'), was_completed, {}))
                         log(f'{_rid} 📐 图片{i+1} 检测到 {len(items)} 件服装 + 已抠图: '
                             f'{", ".join(it["category_code"]+"("+str(it["area_pct"])+"%)" for it in items)}')
                     else:
                         # 无检测结果 → 整张图作为 fallback（可能是干净背景单品图）
                         img = PILImage.open(tp).convert('RGB')
-                        all_crops.append((img, i, '??', 'full', None, False))
+                        all_crops.append((img, i, '??', 'full', None, False, {}))
                         log(f'{_rid} 📐 图片{i+1} 未检测到单品区域，使用整图分析')
                 except Exception as _pe:
                     log(f'{_rid} ⚠️ 图片{i+1} 布料解析失败: {_pe}，使用整图分析')
                     img = PILImage.open(tp).convert('RGB')
-                    all_crops.append((img, i, '??', 'full', None, False))
+                    all_crops.append((img, i, '??', 'full', None, False, {}))
             _parse_success = len(all_crops) > 0
             if _parse_success and any(c[2] != '??' for c in all_crops):
                 tasks.update(task_id, status='running', message=f'检测到 {len(all_crops)} 件服装，正在逐一分析...')
@@ -2355,8 +2430,8 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             log(f'{_rid} ⚠️ 布料解析异常: {_pe}，回退到整图分析')
 
         # ═══ 图片类型分流 ═══
-        # 1. 👤 人像穿搭: 皮肤检测≥3% → SegFormer裁剪 → Seedream白底重构 → AI逐件分析
-        # 2. 🛍️ 单品图: 皮肤检测<3%（鞋/包/衣服平铺/配饰）→ 跳过SegFormer → 原图直接送AI
+        # 1. 🛍️ 单品图: 皮肤检测<3%（鞋/包/衣服平铺/配饰）→ 跳过SegFormer → 原图直接送AI
+        # 2. 🤔 疑似人像: 皮肤检测≥3% → 跳过AI提取 → 标记 needs_extraction_choice → 用户选择
         # 3. 🛒 电商图: 水印/促销文字 → AI Prompt 层处理（忽略水印/提取品牌线索）
         # 4. 🖼️ 拼贴图: 多图面板 → AI Prompt 层处理（去重/只分析主体）
         # 如果解析成功且有有效品类检测，用裁剪图替换原始图；否则用原始图
@@ -2584,6 +2659,13 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
                     if _cp[3] == 'partial':
                         item['meta']['claude_fit_comment'] = (
                             item['meta'].get('claude_fit_comment', '') + ' [⚠️部分遮挡]').strip()
+                    # 🆕 传递 AI 提取选择标记（皮肤检测≥3% → 等用户选择 AI提取/直接抠图）
+                    if len(_cp) > 6 and isinstance(_cp[6], dict):
+                        _crop_meta = _cp[6]
+                        if _crop_meta.get('needs_extraction_choice'):
+                            item['needs_extraction_choice'] = True
+                            item['skin_detected_pct'] = _crop_meta.get('skin_detected_pct', 0)
+                            item['extraction_choice'] = None  # 待用户选择: 'ai_extract' | 'direct_cutout'
             # 补充默认值
             if 'color' not in item: item['color'] = {}
             if 'brand' not in item: item['brand'] = {'name': '未知', 'collection': None, 'confidence': '未知'}
@@ -2910,49 +2992,49 @@ def _build_admin_html():
     for gender, g_users in reg.items():
         for uid in g_users:
             u_dir = os.path.join(PROJECT_DIR, 'users', gender, uid)
-        profile_path = os.path.join(u_dir, 'profile.json')
-        outfits_dir = os.path.join(u_dir, 'outfits')
-
-        profile = {}
-        if os.path.exists(profile_path):
-            with open(profile_path) as f:
-                profile = json.load(f)
-
-        total_outfits = 0
-        ratings = []
-        wore_count = 0
-        for d in os.listdir(outfits_dir) if os.path.isdir(outfits_dir) else []:
-            dp = os.path.join(outfits_dir, d)
-            if not os.path.isdir(dp) or d.startswith('.'):
-                continue
-            rp = os.path.join(dp, 'rating.json')
-            ap = os.path.join(dp, 'analytics.json')
-            total_outfits += 1
-            if os.path.exists(rp):
-                with open(rp) as f:
-                    r = json.load(f)
-                ratings.append(r.get('rating', 0))
-            if os.path.exists(ap):
-                with open(ap) as f:
-                    a = json.load(f)
-                if a.get('user_wore'):
-                    wore_count += 1
-
-        onboard_step = profile.get('onboarding_step', 0)
-        onboard_done = profile.get('onboarding_complete', False)
-        status = 'active' if onboard_done else ('onboarding' if onboard_step > 0 else 'new')
-
-        users_data.append({
-            'id': uid,
-            'status': status,
-            'total_outfits': total_outfits,
-            'avg_rating': round(sum(ratings)/len(ratings), 1) if ratings else 0,
-            'rating_count': len(ratings),
-            'wore_count': wore_count,
-            'adoption_rate': f"{round(wore_count/total_outfits*100)}%" if total_outfits > 0 else 'N/A',
-            'created': reg[uid].get('created', ''),
-            'last_active': reg[uid].get('last_active', ''),
-        })
+            profile_path = os.path.join(u_dir, 'profile.json')
+            outfits_dir = os.path.join(u_dir, 'outfits')
+    
+            profile = {}
+            if os.path.exists(profile_path):
+                with open(profile_path) as f:
+                    profile = json.load(f)
+    
+            total_outfits = 0
+            ratings = []
+            wore_count = 0
+            for d in os.listdir(outfits_dir) if os.path.isdir(outfits_dir) else []:
+                dp = os.path.join(outfits_dir, d)
+                if not os.path.isdir(dp) or d.startswith('.'):
+                    continue
+                rp = os.path.join(dp, 'rating.json')
+                ap = os.path.join(dp, 'analytics.json')
+                total_outfits += 1
+                if os.path.exists(rp):
+                    with open(rp) as f:
+                        r = json.load(f)
+                    ratings.append(r.get('rating', 0))
+                if os.path.exists(ap):
+                    with open(ap) as f:
+                        a = json.load(f)
+                    if a.get('user_wore'):
+                        wore_count += 1
+    
+            onboard_step = profile.get('onboarding_step', 0)
+            onboard_done = profile.get('onboarding_complete', False)
+            status = 'active' if onboard_done else ('onboarding' if onboard_step > 0 else 'new')
+    
+            users_data.append({
+                'id': uid,
+                'status': status,
+                'total_outfits': total_outfits,
+                'avg_rating': round(sum(ratings)/len(ratings), 1) if ratings else 0,
+                'rating_count': len(ratings),
+                'wore_count': wore_count,
+                'adoption_rate': f"{round(wore_count/total_outfits*100)}%" if total_outfits > 0 else 'N/A',
+                'created': g_users[uid].get('created', ''),
+                'last_active': g_users[uid].get('last_active', ''),
+            })
 
     # 汇总核心指标
     active_users = [u for u in users_data if u['status'] == 'active']
@@ -4440,16 +4522,18 @@ def _load_chat_html(user_id=None, gender=None):
 
 
 # ── 今日穿搭计数器 ───────────────────────────────────────
-_TODAY_CLICKS = {}  # {date_str: count}
+_TODAY_CLICKS = {}  # {(user_id, date_str): count}  🆕 按用户隔离
 
 def _handle_today(handler):
     """智能今日穿搭：首次返回已有，后续生成新品"""
     today = time.strftime('%Y-%m-%d')
-    click_count = _TODAY_CLICKS.get(today, 0) + 1
-    _TODAY_CLICKS[today] = click_count
+    uid = getattr(handler, 'user_id', 'default')
+    # 🆕 按 (user_id, date) 隔离计数，防止跨用户污染
+    _click_key = (uid, today)
+    click_count = _TODAY_CLICKS.get(_click_key, 0) + 1
+    _TODAY_CLICKS[_click_key] = click_count
 
     # 多用户：使用用户的 outfits 目录
-    uid = getattr(handler, 'user_id', 'default')
     user_outfits = resolve_outfits_dir(None if uid == 'default' else uid)
 
     # 检查今日是否已有 outfit
@@ -5052,29 +5136,39 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # 单品列表
         if parsed.path == '/api/wardrobe/items':
             try:
-                from wardrobe_advisor import load_all_clothing
-                wardrobe = load_all_clothing(include_archived=True)
+                # 🆕 直接从用户专属 tags 目录读取，不依赖 legacy wardrobe_advisor 模块
+                _uid = getattr(self, 'user_id', 'default')
+                _tags_dir = resolve_tags_dir(None if _uid == 'default' else _uid)
                 items = []
-                for cid, item in sorted(wardrobe.items()):
-                    meta = item.get('meta', {})
-                    brand = item.get('brand', {})
-                    color = item.get('color', {})
-                    cat_code = item.get('category_code', '?')
-                    items.append({
-                        'id': cid,
-                        'name': meta.get('claude_fit_comment', item.get('category', ''))[:40],
-                        'category': CATEGORY_CODE_TO_NAME.get(cat_code, cat_code),
-                        'category_code': cat_code,
-                        'brand': brand.get('name', ''),
-                        'color': color.get('hue_name', ''),
-                        'color_family': color.get('hue_family', ''),
-                        'usage_count': meta.get('wear_count', 0),
-                        'last_used': meta.get('last_worn') or '',
-                        'is_key': meta.get('is_key_piece', False),
-                        'is_statement': meta.get('is_statement_piece', False),
-                        'thumb': _find_item_thumb(cid),
-                        '_archived': meta.get('archived', False),
-                    })
+                if os.path.isdir(_tags_dir):
+                    for _tf in sorted(os.listdir(_tags_dir)):
+                        if not _tf.endswith('.json') or _tf.startswith('SCORE_CACHE'):
+                            continue
+                        cid = _tf.replace('.json', '')
+                        try:
+                            with open(os.path.join(_tags_dir, _tf), encoding='utf-8') as _f:
+                                item = json.load(_f)
+                        except Exception:
+                            continue
+                        meta = item.get('meta', {})
+                        brand = item.get('brand', {})
+                        color = item.get('color', {})
+                        cat_code = item.get('category_code', '?')
+                        items.append({
+                            'id': cid,
+                            'name': meta.get('claude_fit_comment', item.get('category', ''))[:40],
+                            'category': CATEGORY_CODE_TO_NAME.get(cat_code, cat_code),
+                            'category_code': cat_code,
+                            'brand': brand.get('name', ''),
+                            'color': color.get('hue_name', ''),
+                            'color_family': color.get('hue_family', ''),
+                            'usage_count': meta.get('wear_count', 0),
+                            'last_used': meta.get('last_worn') or '',
+                            'is_key': meta.get('is_key_piece', False),
+                            'is_statement': meta.get('is_statement_piece', False),
+                            'thumb': _find_item_thumb(cid),
+                            '_archived': meta.get('archived', False),
+                        })
                 self._json_resp(200, {'items': items, 'total': len(items)})
                 return
             except Exception as e:
@@ -5085,6 +5179,12 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # 月度统计
         if parsed.path == '/api/wardrobe/stats':
             try:
+                # 🆕 注入用户路径到 legacy wardrobe_advisor 模块
+                import wardrobe_advisor
+                _uid = getattr(self, 'user_id', 'default')
+                if _uid != 'default':
+                    wardrobe_advisor.TAGS_DIR = resolve_tags_dir(_uid)
+                    wardrobe_advisor.OUTFITS_DIR = resolve_outfits_dir(_uid)
                 from wardrobe_advisor import (load_all_clothing, load_state,
                     analyze_utilization, load_all_outfits, normalize_style)
                 wardrobe = load_all_clothing()
@@ -5170,9 +5270,15 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # 周报/月报 API
         if parsed.path == '/api/report':
             try:
+                # 🆕 注入用户路径到 legacy rating_analyzer 模块
+                import rating_analyzer
+                _uid = getattr(self, 'user_id', 'default')
+                if _uid != 'default':
+                    rating_analyzer.TAGS_DIR = resolve_tags_dir(_uid)
+                    rating_analyzer.OUTFITS_DIR = resolve_outfits_dir(_uid)
                 from rating_analyzer import (load_all_ratings, analyze, filter_ratings_by_days,
                                              find_neutral_patterns, STYLE_NAMES)
-                TAGS_DIR = os.path.join(PROJECT_DIR, 'wardrobe', 'tags')
+                TAGS_DIR = rating_analyzer.TAGS_DIR  # 🆕 使用已注入的用户路径
                 params = parse_qs(parsed.query or '')
                 period = params.get('period', ['weekly'])[0]
 
@@ -5581,8 +5687,9 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                             m = re.search(r'[：:]\s*(.+)', line)
                             if m: profile['occupation'] = m.group(1).strip()[:30]
 
-                # Also load stats
-                outfits_dir = os.path.join(PROJECT_DIR, 'outfits')
+                # Also load stats — 🆕 使用用户专属 outfits 目录
+                _uid = getattr(self, 'user_id', 'default')
+                outfits_dir = resolve_outfits_dir(None if _uid == 'default' else _uid)
                 total_outfits = 0
                 rated_list = []
                 if os.path.isdir(outfits_dir):
@@ -6213,8 +6320,11 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             except: self._json_resp(400, {"error": "invalid json"}); return
             ids = data.get('ids', [])
             ratings = {}
+            # 🆕 使用用户专属 outfits 目录
+            _uid = getattr(self, 'user_id', 'default')
+            _outfits_dir = resolve_outfits_dir(None if _uid == 'default' else _uid)
             for oid in ids:
-                d = os.path.join(PROJECT_DIR, 'outfits', oid)
+                d = os.path.join(_outfits_dir, oid)
                 rf = os.path.join(d, 'rating.json')
                 if os.path.exists(rf):
                     try:

@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-07-07T11:02:22Z",
+  "user_id": "nan",
+  "items_used": [
+    "TS-005",
+    "PT-004",
+    "SHOE-002",
+    "HAT-010",
+    "SUN-001"
+  ],
+  "style_matched": "户外机能探索版·同色异材质",
+  "occasion": "户外",
+  "explore_level": 0.5,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 65347,
+  "api_calls": 2
+}

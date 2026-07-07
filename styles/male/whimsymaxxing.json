@@ -1,0 +1,151 @@
+{
+  "style_id": "whimsymaxxing",
+  "name_zh": "趣乐极繁",
+  "name_en": "Whimsymaxxing",
+  "description": "用胸针、撞色袜、丝巾、复古珠宝等俏皮配饰给穿搭加上\"有趣\"的滤镜——是\"安静奢华\"的反义词。",
+  "category": "休闲",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "蓝",
+        "绿",
+        "红",
+        "黄"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "格纹",
+        "条纹",
+        "碎花"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "薄纱"
+      ],
+      "acceptable": [
+        "丹宁"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "发源年代",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "发源年代"
+    },
+    {
+      "name": "发源地",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "发源地"
+    },
+    {
+      "name": "风格关键词",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "风格关键词"
+    },
+    {
+      "name": "一句话定义",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "一句话定义"
+    },
+    {
+      "name": "配饰是主角",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "配饰是主角"
+    },
+    {
+      "name": "胸针复兴",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "胸针复兴"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "pattern.type",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "碎花",
+        "花卉"
+      ],
+      "reason": "碎花元素加分"
+    }
+  ],
+  "body_modifier_bonus": {
+    "颜色显白": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

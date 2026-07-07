@@ -1,0 +1,158 @@
+{
+  "style_id": "american_preppy",
+  "name_zh": "美式预科风",
+  "name_en": "American Preppy",
+  "description": "",
+  "category": "半正式",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "海军蓝",
+        "红",
+        "猎人绿",
+        "奶油",
+        "黄",
+        "绿"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "条纹",
+        "刺绣"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "灯芯绒"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛",
+        "皮革"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "自然肩西装夹克",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "自然肩西装夹克（Natural Shoulder Blazer），金色金属纽扣"
+    },
+    {
+      "name": "牛津布纽扣领衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "牛津布纽扣领衬衫（OCBD Shirt）"
+    },
+    {
+      "name": "卡其斜纹裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "卡其斜纹裤（Khaki Chinos）"
+    },
+    {
+      "name": "雷普条纹领带",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "雷普条纹领带（Repp Tie）"
+    },
+    {
+      "name": "设得兰羊毛衫",
+      "category_code": "KNIT",
+      "bonus": 10,
+      "description": "设得兰羊毛衫（Shetland Sweater），常披在肩上打结"
+    },
+    {
+      "name": "便士乐福鞋",
+      "category_code": "SHOE",
+      "bonus": 5,
+      "description": "便士乐福鞋（Penny Loafer）"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "颜色显白": 3,
+    "遮盖臀胯": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

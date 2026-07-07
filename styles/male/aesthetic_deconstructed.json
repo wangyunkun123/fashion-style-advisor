@@ -1,0 +1,141 @@
+{
+  "style_id": "aesthetic_deconstructed",
+  "name_zh": "解构主义",
+  "name_en": "Deconstructed Fashion",
+  "description": "",
+  "category": "日常休闲",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "层叠"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "红",
+        "金",
+        "栗",
+        "裸",
+        "白",
+        "黑"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "蕾丝"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "蕾丝"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "高跟鞋、精致妆容",
+      "category_code": "SHOE",
+      "bonus": 20,
+      "description": "高跟鞋、精致妆容"
+    },
+    {
+      "name": "曾在 CdG 和 Junya Watanabe 工作。以\"混",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "曾在 CdG 和 Junya Watanabe 工作。以\"混血设计\"（hybrid）著称——一件衣服同时是两件衣服（前身"
+    },
+    {
+      "name": "公认的日本解构主义在欧洲最直接的精神继承者。不露面、不鞠躬、",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "公认的日本解构主义在欧洲最直接的精神继承者。不露面、不鞠躬、不用 logo——将川久保玲的\"提问\"精神转化为完整的方法论"
+    },
+    {
+      "name": "川久保玲最真诚的国际崇拜者之一。他的超低腰裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "川久保玲最真诚的国际崇拜者之一。他的超低腰裤（bumsters）、\"高地强奸\"系列（Highland Rape），都是在"
+    },
+    {
+      "name": "不对称结构的衬衫/夹克",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "不对称结构的衬衫/夹克——至少有一个细节让你犹豫\"这是对的吗？\""
+    },
+    {
+      "name": "阔腿的、有不对称褶裥的深色长裤",
+      "category_code": "PT",
+      "bonus": 5,
+      "description": "阔腿的、有不对称褶裥的深色长裤"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "颜色显白": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

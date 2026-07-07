@@ -30,7 +30,7 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 
 > 📖 完整操作手册: `styles_universal/README.md`
 
-### 女性风格库（styles_women/）
+### 女性风格库（styles/female/）
 | 操作 | 命令 |
 |------|------|
 | 研究风格 | `python3 tools/style_research_agent.py WF-01` |
@@ -38,8 +38,9 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 | 批量生成 | `python3 tools/style_research_agent.py --batch-female` |
 | 旧版研究 | `python3 tools/style_research.py <style_id>` (仅男性风格) |
 
-> 📖 完整操作手册: `styles_women/README.md`
-> 📚 共享知识层: `styles_women/_shared/` (3 集群品牌矩阵+文化背景)
+> 📖 完整操作手册: `styles/female/README.md`
+> 📚 共享知识层: `styles/female/_shared/` (3 集群品牌矩阵+文化背景)
+> ⚠️ 旧目录 `styles_women/` 已于迁移中并入 `styles/female/`（每风格含 encyclopedia.md + fingerprint.json + images/）
 
 ### 趋势分类（trend_category）— 六维分类体系
 每个风格自动标注三级趋势分类：🔥 流行趋势 / 🏛️ 经典风格 / 🎭 小众领域。
@@ -48,7 +49,7 @@ AI 时尚顾问，专攻亚洲男性穿搭。用户画像和身形分析在 memo
 |------|------|
 | 查看趋势分布 | `python3 tools/style_research.py --list` (男性) / `python3 tools/style_research_agent.py --list-clusters` (女性) |
 | 自动归类 | 研究工具内置 `auto_classify_trend_category()` |
-| 手动归类 | 编辑 `styles_universal/categories.json` 或 `styles_women/categories.json` 的 `trend_category` 字段 |
+| 手动归类 | 编辑 `styles_universal/categories.json` 或 `styles/female/categories.json` 的 `trend_category` 字段 |
 | 重新生成 HTML | `python3 tools/generate_encyclopedia_html.py` (含彩色趋势标签) |
 
 分类决策树：`aesthetic==avant_garde → niche` > `era==classic → classic` > `复古+street→niche` > `2020s+TikTok原生集群→trend`

@@ -1,0 +1,136 @@
+{
+  "style_id": "torpedo_sneakers",
+  "name_zh": "薄底跑鞋风",
+  "name_en": "Torpedo Sneakers",
+  "description": "告别厚底老爹鞋的\"笨重时代\"——超薄鞋底的复古跑鞋成为新的鞋履身份符号。",
+  "category": "休闲",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "略宽松"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "海军蓝",
+        "蓝",
+        "灰",
+        "白",
+        "黑"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "中性",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "真丝"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "鞋款",
+      "category_code": "SHOE",
+      "bonus": 20,
+      "description": "鞋款"
+    },
+    {
+      "name": "1972奥运马拉松鞋",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "1972奥运马拉松鞋"
+    },
+    {
+      "name": "奢侈薄底跑鞋开创者",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "奢侈薄底跑鞋开创者"
+    },
+    {
+      "name": "室内足球鞋→时尚符号",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "室内足球鞋→时尚符号"
+    },
+    {
+      "name": "1972元年跑鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "1972元年跑鞋"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 9,
+    "遮盖臀胯": 6
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

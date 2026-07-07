@@ -1,0 +1,169 @@
+{
+  "style_id": "chinese_new_traditional",
+  "name_zh": "新中式",
+  "name_en": "New Chinese Traditional",
+  "description": "将中国传统服饰元素（立领、盘扣、对襟、汉服廓形）用现代设计语言重新编码——不是穿古装，而是穿中国文化。",
+  "category": "半正式",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "靛蓝",
+        "蓝",
+        "红",
+        "白",
+        "黑"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "从中国传统色卡提取，低饱和为主",
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "碎花",
+        "Logo",
+        "刺绣"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "绸缎",
+        "亚麻",
+        "麻",
+        "真丝"
+      ],
+      "acceptable": [
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "立领衬衫",
+      "category_code": "SHIRT",
+      "bonus": 20,
+      "description": ""
+    },
+    {
+      "name": "盘扣夹克",
+      "category_code": "JK",
+      "bonus": 15,
+      "description": ""
+    },
+    {
+      "name": "真丝/绸缎衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": ""
+    },
+    {
+      "name": "对襟长外套",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": ""
+    },
+    {
+      "name": "亚麻长裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": ""
+    },
+    {
+      "name": "布鞋/千层底",
+      "category_code": "SHOE",
+      "bonus": 5,
+      "description": ""
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 6
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

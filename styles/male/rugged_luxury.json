@@ -1,0 +1,149 @@
+{
+  "style_id": "rugged_luxury",
+  "name_zh": "粗砺奢华",
+  "name_en": "Rugged Luxury",
+  "description": "把探险家的装备用奢侈品的工艺重新做一遍——Safari 夹克+高性能面料+巧克力棕皮件，精致冒险家造型。",
+  "category": "半正式",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "棕",
+        "卡其",
+        "橄榄绿"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "亚麻",
+        "麻"
+      ],
+      "acceptable": [
+        "羊毛",
+        "皮质"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "Safari 夹克",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "四口袋+腰带，亚麻或技术棉"
+    },
+    {
+      "name": "高性能卡其裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "防水+弹力+经典外观"
+    },
+    {
+      "name": "棕色皮质旅行包",
+      "category_code": "BAG",
+      "bonus": 15,
+      "description": "大容量+手工做旧"
+    },
+    {
+      "name": "技术面料衬衫",
+      "category_code": "SHIRT",
+      "bonus": 10,
+      "description": "防皱+透气+正装剪裁"
+    },
+    {
+      "name": "徒步靴×德比鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "户外鞋底+正装鞋面"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

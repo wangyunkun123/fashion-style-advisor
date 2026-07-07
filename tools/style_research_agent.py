@@ -23,7 +23,7 @@ PROJ_DIR = os.path.join(BASE_DIR, '..')
 FEMALE_CLUSTERS = {
     'east_asian': {
         'name': '东亚',
-        'shared': 'styles_women/_shared/east_asian.md',
+        'shared': 'styles/female/_shared/east_asian.md',
         'styles': ['WF-02', 'WF-03', 'WF-04'],
         'style_names': {
             'WF-02': '韩系少女 Korean Girlie',
@@ -33,7 +33,7 @@ FEMALE_CLUSTERS = {
     },
     'european_classic': {
         'name': '欧洲经典',
-        'shared': 'styles_women/_shared/european_classic.md',
+        'shared': 'styles/female/_shared/european_classic.md',
         'styles': ['WF-01', 'WF-06', 'WF-07', 'WF-09', 'WF-12'],
         'style_names': {
             'WF-01': '法式慵懒 French Effortless',
@@ -45,7 +45,7 @@ FEMALE_CLUSTERS = {
     },
     'modern_urban': {
         'name': '现代都市',
-        'shared': 'styles_women/_shared/modern_urban.md',
+        'shared': 'styles/female/_shared/modern_urban.md',
         'styles': ['WF-05', 'WF-08', 'WF-10', 'WF-11'],
         'style_names': {
             'WF-05': '美式休闲 American Casual',
@@ -206,7 +206,7 @@ def auto_classify_trend_category(style_info):
 def load_trend_from_categories(style_id, gender='female'):
     """从 categories.json 读取已存储的趋势分类"""
     if gender == 'female':
-        cat_path = os.path.join(PROJ_DIR, 'styles_women', 'categories.json')
+        cat_path = os.path.join(PROJ_DIR, 'styles/female', 'categories.json')
     else:
         cat_path = os.path.join(PROJ_DIR, 'styles_universal', 'categories.json')
     if os.path.exists(cat_path):
@@ -371,7 +371,7 @@ def build_smart_prompt(style_id, style_info, shared_knowledge, cluster_info, mod
 
 ---
 格式要求：使用 WebSearch 搜索最新信息。提供具体的人名、品牌名、年份、事件。
-保存到: styles_women/{style_dir_name}/encyclopedia.md
+保存到: styles/female/{style_dir_name}/encyclopedia.md
 """
     return prompt.strip()
 
@@ -391,7 +391,7 @@ def write_template(style_id, style_info, cluster_info, gender='female'):
     trend_label = TREND_LABELS.get(trend_cat, '待分类')
 
     # 确定输出路径
-    base_dir = 'styles_women' if gender == 'female' else 'styles_universal'
+    base_dir = 'styles/female' if gender == 'female' else 'styles_universal'
     style_dir_name = get_style_dir(style_id, gender)
     out_dir = os.path.join(PROJ_DIR, base_dir, style_dir_name)
     os.makedirs(out_dir, exist_ok=True)
@@ -454,7 +454,7 @@ def cmd_research(style_id, gender='female'):
     # 1. 生成智能 prompt
     prompt = build_smart_prompt(style_id, info, shared, cluster_info, 'full')
     style_dir_name = get_style_dir(style_id, gender)
-    prompt_path = os.path.join(PROJ_DIR, 'styles_women', style_dir_name, '_research_prompt.txt')
+    prompt_path = os.path.join(PROJ_DIR, 'styles/female', style_dir_name, '_research_prompt.txt')
     os.makedirs(os.path.dirname(prompt_path), exist_ok=True)
     with open(prompt_path, 'w', encoding='utf-8') as f:
         f.write(prompt)
@@ -481,7 +481,7 @@ def cmd_list_clusters():
         for sid in ci['styles']:
             name = ci['style_names'].get(sid) or FEMALE_STYLE_INFO.get(sid, {}).get('name_zh', sid)
             style_dir_name = get_style_dir(sid, 'female')
-            encyc_exists = os.path.exists(os.path.join(PROJ_DIR, 'styles_women', style_dir_name, 'encyclopedia.md'))
+            encyc_exists = os.path.exists(os.path.join(PROJ_DIR, 'styles/female', style_dir_name, 'encyclopedia.md'))
             status = '📝' if encyc_exists else '⬜'
             print(f"   {status} {sid} — {name}")
 
@@ -506,7 +506,7 @@ def cmd_batch_female():
                 continue
             prompt = build_smart_prompt(sid, info, shared, ci, 'full')
             style_dir_name = get_style_dir(sid, 'female')
-            prompt_path = os.path.join(PROJ_DIR, 'styles_women', style_dir_name, '_research_prompt.txt')
+            prompt_path = os.path.join(PROJ_DIR, 'styles/female', style_dir_name, '_research_prompt.txt')
             os.makedirs(os.path.dirname(prompt_path), exist_ok=True)
             with open(prompt_path, 'w', encoding='utf-8') as f:
                 f.write(prompt)

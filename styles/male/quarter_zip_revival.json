@@ -1,0 +1,145 @@
+{
+  "style_id": "quarter_zip_revival",
+  "name_zh": "1/4拉链复兴",
+  "name_en": "Quarter-Zip Revival",
+  "description": "一度被视为\"爸爸工装\"的 Quarter-Zip 针织衫，被 Gen Z 重新发现为\"知识分子穿搭\"的新符号。",
+  "category": "半正式",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "海军蓝",
+        "蓝",
+        "橄榄绿",
+        "绿",
+        "驼",
+        "卡其",
+        "咖啡",
+        "奶油",
+        "深灰",
+        "灰"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "羊绒"
+      ],
+      "acceptable": [
+        "牛仔",
+        "针织",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "Quarter-Zip + 卡其裤 + 乐福鞋",
+      "category_code": "PT",
+      "bonus": 20,
+      "description": "Quarter-Zip + 卡其裤 + 乐福鞋"
+    },
+    {
+      "name": "Quarter-Zip + 水洗牛仔裤 + 德训鞋",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "Quarter-Zip + 水洗牛仔裤 + 德训鞋"
+    },
+    {
+      "name": "Quarter-Zip + 西装外套 + 西裤",
+      "category_code": "JK",
+      "bonus": 15,
+      "description": "Quarter-Zip + 西装外套 + 西裤"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3,
+    "颜色显白": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

@@ -1,0 +1,176 @@
+{
+  "style_id": "korean_clean_fit",
+  "name_zh": "韩系 Clean Fit",
+  "name_en": "Korean Clean Fit",
+  "description": "",
+  "category": "日常休闲",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "宽松",
+        "合身",
+        "略宽松",
+        "层叠"
+      ],
+      "acceptable": [],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "米白",
+        "奶油",
+        "燕麦",
+        "浅灰",
+        "炭灰",
+        "藏蓝",
+        "卡其",
+        "军绿"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "冷色",
+        "暖色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "渐变",
+        "碎花",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "麻"
+      ],
+      "acceptable": [
+        "针织",
+        "牛仔",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "纯色重磅短袖 T 恤",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "纯色重磅短袖 T 恤（白/黑/灰/藏青）"
+    },
+    {
+      "name": "牛津纺衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "牛津纺衬衫（白色/浅蓝）"
+    },
+    {
+      "name": "针织开衫/圆领针织衫",
+      "category_code": "KNIT",
+      "bonus": 15,
+      "description": "针织开衫/圆领针织衫（燕麦色/灰色）"
+    },
+    {
+      "name": "直筒/微锥形牛仔裤",
+      "category_code": "PT",
+      "bonus": 10,
+      "description": "直筒/微锥形牛仔裤（浅蓝至深蓝水洗）"
+    },
+    {
+      "name": "宽松西装裤/西裤式休闲裤",
+      "category_code": "JK",
+      "bonus": 10,
+      "description": "宽松西装裤/西裤式休闲裤"
+    },
+    {
+      "name": "无领教练夹克/棒球夹克",
+      "category_code": "JK",
+      "bonus": 5,
+      "description": "无领教练夹克/棒球夹克"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    },
+    {
+      "field": "silhouette.length_ratio",
+      "operator": "in",
+      "weight": 3,
+      "value": [
+        "长款",
+        "及踝"
+      ],
+      "reason": "长款优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "拉长腿部": 9,
+    "颜色显白": 6,
+    "遮盖臀胯": 6
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

@@ -1,0 +1,165 @@
+{
+  "style_id": "scene_cocktail",
+  "name_zh": "鸡尾酒礼服",
+  "name_en": "Cocktail Attire",
+  "description": "",
+  "category": "半正式",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "浅蓝",
+        "深蓝",
+        "蓝",
+        "深绿",
+        "绿",
+        "酒红",
+        "红",
+        "金",
+        "黄",
+        "棕"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "碎花"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "羊绒",
+        "真丝",
+        "亚麻",
+        "麻",
+        "编织",
+        "棉"
+      ],
+      "acceptable": [
+        "牛仔",
+        "针织",
+        "羊毛",
+        "皮质"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "西装",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "**西装**"
+    },
+    {
+      "name": "衬衫",
+      "category_code": "SHIRT",
+      "bonus": 15,
+      "description": "**衬衫**"
+    },
+    {
+      "name": "鞋履",
+      "category_code": "SHOE",
+      "bonus": 15,
+      "description": "**鞋履**"
+    },
+    {
+      "name": "口袋巾",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "**口袋巾**（不戴也要）、经典腕表、袖扣、与鞋子同色的皮带"
+    },
+    {
+      "name": "精细针织长袜",
+      "category_code": "KNIT",
+      "bonus": 10,
+      "description": "精细针织长袜，颜色匹配裤子（而非鞋子）"
+    },
+    {
+      "name": "西装面料",
+      "category_code": "JK",
+      "bonus": 5,
+      "description": "西装面料"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "fabric.primary",
+      "operator": "in",
+      "weight": 8,
+      "value": [
+        "棉",
+        "麻",
+        "亚麻",
+        "真丝",
+        "羊绒"
+      ],
+      "reason": "天然面料加分"
+    },
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 3,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

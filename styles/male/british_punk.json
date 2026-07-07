@@ -1,0 +1,140 @@
+{
+  "style_id": "british_punk",
+  "name_zh": "英式朋克",
+  "name_en": "British Punk",
+  "description": "用撕裂、别针和涂鸦宣告\"我们不玩了\"——朋克不是一种穿搭公式，而是反时尚的时尚宣言。",
+  "category": "极休闲",
+  "intensity": 1,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "紧身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "红",
+        "金",
+        "白",
+        "黑"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "暖色",
+        "中性"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "格纹",
+        "Logo"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "棉",
+        "真丝"
+      ],
+      "acceptable": [
+        "牛仔"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "皮夹克",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "AllSaints, Saint Laurent"
+    },
+    {
+      "name": "撕裂紧身牛仔裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "R13, Balmain"
+    },
+    {
+      "name": "乐队T恤",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "古着店淘"
+    },
+    {
+      "name": "格纹绑腰衬衫",
+      "category_code": "SHIRT",
+      "bonus": 10,
+      "description": "Vivienne Westwood 经典"
+    },
+    {
+      "name": "Dr. Martens 1460",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "经典不变"
+    },
+    {
+      "name": "安全别针/狗项圈",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "朋克符号"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格偏好宽松/合身"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "拉长腿部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

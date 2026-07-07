@@ -1,0 +1,148 @@
+{
+  "style_id": "italian_sprezzatura",
+  "name_zh": "意式 Sprezzatura",
+  "name_en": "Italian Sprezzatura",
+  "description": "把西装穿出\"我根本没花心思\"的效果——每一个\"随意\"的细节都是精心设计的。",
+  "category": "半正式",
+  "intensity": 3,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "海军蓝",
+        "灰",
+        "棕",
+        "米白",
+        "酒红",
+        "森林绿",
+        "芥末黄"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "中性底色 + 一个出人意料的色彩跳跃",
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "亚麻",
+        "麻",
+        "丝绸"
+      ],
+      "acceptable": [
+        "针织",
+        "羊毛混纺"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "无结构西装",
+      "category_code": "JK",
+      "bonus": 20,
+      "description": "翻领别花/别针"
+    },
+    {
+      "name": "高腰打褶西裤",
+      "category_code": "PT",
+      "bonus": 15,
+      "description": "不穿皮带，用侧调节袢"
+    },
+    {
+      "name": "口袋方巾",
+      "category_code": "ACC",
+      "bonus": 15,
+      "description": "\"随意塞入\"——越不像精心折叠越好"
+    },
+    {
+      "name": "领带",
+      "category_code": "ACC",
+      "bonus": 10,
+      "description": "打得微短/微歪，前片比后片略长"
+    },
+    {
+      "name": "乐福鞋",
+      "category_code": "SHOE",
+      "bonus": 10,
+      "description": "麂皮款最意大利"
+    },
+    {
+      "name": "墨镜",
+      "category_code": "SUN",
+      "bonus": 5,
+      "description": "不摘墨镜是 Pitti 标配"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "显腰线": 6,
+    "拉长腿部": 6,
+    "修饰肩部": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

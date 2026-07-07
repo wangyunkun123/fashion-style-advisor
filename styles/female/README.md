@@ -122,7 +122,7 @@
 ## 目录结构
 
 ```
-styles_women/
+styles/female/
 ├── README.md
 ├── categories.json                # 50风格注册表 + 11集群 + 六维分类
 ├── _shared/                       # 共享知识层

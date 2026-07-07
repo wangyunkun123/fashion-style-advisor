@@ -1,0 +1,143 @@
+{
+  "style_id": "regency_romantic",
+  "name_zh": "摄政浪漫风",
+  "name_en": "Regency Romantic",
+  "description": "19世纪欧洲贵族男装的浪漫元素被重新编码为2026的时尚表达——拿破仑领+克拉巴特领巾+丝绒外套。",
+  "category": "半正式",
+  "intensity": 2,
+  "fingerprint": {
+    "silhouette": {
+      "preferred": [
+        "合身",
+        "略宽松"
+      ],
+      "acceptable": [
+        "宽松"
+      ],
+      "rejected": [
+        "紧身",
+        "超宽松"
+      ]
+    },
+    "color_rules": {
+      "allowed_hues": [
+        "深蓝",
+        "酒红",
+        "黑",
+        "象牙"
+      ],
+      "forbidden_hues": [],
+      "max_saturation": "中饱和",
+      "min_lightness": "低明度",
+      "max_lightness": "高明度",
+      "max_colors_per_outfit": 3,
+      "color_logic": "自然协调色调为主",
+      "allowed_hue_families": [
+        "中性",
+        "暖色",
+        "冷色"
+      ]
+    },
+    "pattern": {
+      "preferred": [
+        "纯色",
+        "条纹"
+      ],
+      "acceptable": [
+        "格纹",
+        "碎花"
+      ],
+      "rejected": [
+        "Logo",
+        "动物纹"
+      ]
+    },
+    "fabric": {
+      "preferred": [
+        "丝绒",
+        "丝绸"
+      ],
+      "acceptable": [
+        "牛仔",
+        "羊毛"
+      ],
+      "rejected": []
+    },
+    "layering": {
+      "level": "中",
+      "min_layers": 1,
+      "max_layers": 2
+    },
+    "formality_range": {
+      "min": 1,
+      "max": 4
+    }
+  },
+  "key_items": [
+    {
+      "name": "发源年代",
+      "category_code": "TS",
+      "bonus": 20,
+      "description": "发源年代"
+    },
+    {
+      "name": "发源地",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "发源地"
+    },
+    {
+      "name": "风格关键词",
+      "category_code": "TS",
+      "bonus": 15,
+      "description": "风格关键词"
+    },
+    {
+      "name": "一句话定义",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "一句话定义"
+    },
+    {
+      "name": "领巾",
+      "category_code": "TS",
+      "bonus": 10,
+      "description": "领巾"
+    },
+    {
+      "name": "高领",
+      "category_code": "TS",
+      "bonus": 5,
+      "description": "高领"
+    }
+  ],
+  "hard_constraints": [
+    {
+      "field": "silhouette.fit",
+      "operator": "not_in",
+      "value": [
+        "紧身"
+      ],
+      "reason": "风格排斥紧身廓形"
+    }
+  ],
+  "soft_constraints": [
+    {
+      "field": "color.saturation",
+      "operator": "in",
+      "weight": 5,
+      "value": [
+        "低饱和",
+        "无彩色"
+      ],
+      "reason": "低饱和色系优先"
+    }
+  ],
+  "body_modifier_bonus": {
+    "颜色显白": 3
+  },
+  "related_styles": [],
+  "conflicting_styles": [],
+  "tier": "explore",
+  "trend_category": "classic"
+}

@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-07-07T14:32:01Z",
+  "generated_at": "2026-07-07T15:13:56Z",
   "user_id": "nan",
   "items_used": [
-    "TANK-002",
-    "PT-007",
-    "SHOE-004",
-    "BAG-003"
+    "TS-003",
+    "PT-008",
+    "SHOE-005",
+    "BAG-008"
   ],
-  "style_matched": "法式慵懒WF-01",
+  "style_matched": "法式慵懒（WF-01）",
   "occasion": "日常",
   "explore_level": 0.0,
   "user_tap": null,
   "user_rating": null,
   "user_wore": null,
-  "generation_time_ms": 78995,
+  "generation_time_ms": 108920,
   "api_calls": 3
 }

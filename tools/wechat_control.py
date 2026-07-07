@@ -3497,6 +3497,16 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         _gen_cmd = ['python3', 'tools/generate.py', style_hint]
         if pipeline_user and pipeline_user != 'default':
             _gen_cmd += ['--user', pipeline_user]
+        # 🆕 女性用户启用锚点模式（--anchor）：弱化服装文字描述，强化参考图还原度
+        #    女装款式差异细腻，详细文字描述会导致「平均化坍塌」，锚点模式让模型以参考图为准
+        try:
+            from tools.user_manager import get_user_gender as _gug2
+            _gen_gender = (_gug2(pipeline_user) or 'male') if (pipeline_user and pipeline_user != 'default') else 'male'
+        except Exception:
+            _gen_gender = 'male'
+        if _gen_gender == 'female':
+            _gen_cmd += ['--anchor']
+            log('🎯 女性用户 → 启用 --anchor 锚点生图模式')
         out2 = run_cli(_gen_cmd, timeout=300)
         # 检测生图失败：空输出/超时/错误标记
         if not out2 or '⏰' in out2 or '❌' in out2[:200] or '失败' in out2[:200]:

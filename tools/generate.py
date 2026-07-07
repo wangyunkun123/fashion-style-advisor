@@ -251,10 +251,18 @@ def main():
     # ── 参数解析 ──
     anchor_mode = False
     keyword = None
-    for arg in sys.argv[1:]:
+    _skip_next = False
+    for _idx, arg in enumerate(sys.argv[1:]):
+        if _skip_next:
+            _skip_next = False
+            continue
         if arg == '--anchor':
             anchor_mode = True
-        elif not arg.startswith('--'):
+        elif arg == '--user':
+            _skip_next = True  # 跳过 --user 后面的值，避免被当成 keyword
+        elif arg.startswith('--'):
+            continue
+        elif keyword is None:
             keyword = arg
 
     outfit_dir = None

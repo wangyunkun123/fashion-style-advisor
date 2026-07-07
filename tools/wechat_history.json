@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-07-07 22:30:06",
+    "style": "明日穿搭",
+    "status": "done",
+    "image_url": "/api/image?f=users/male/kun/outfits/2026-07-07_%E6%98%8E%E6%97%A5%E7%A9%BF%E6%90%AD/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1_900w.jpg&w=900",
+    "stats": "⏱️ ~85s · 📊 ~3951 tokens · 🔄 2次AI"
+  },
+  {
     "time": "2026-07-07 19:39:55",
     "style": "法式穿搭",
     "status": "done",

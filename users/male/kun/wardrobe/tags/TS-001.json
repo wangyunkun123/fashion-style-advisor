@@ -1,7 +1,7 @@
 {
   "clothing_id": "TS-001",
-  "category": "女士衬衫",
-  "category_code": "BLOUSE",
+  "category": "短袖上衣",
+  "category_code": "TS",
   "color": {
     "hue_family": "暖色",
     "hue_name": "焦糖色",
@@ -44,7 +44,7 @@
     "is_statement_piece": true,
     "wear_count": 0,
     "last_worn": null,
-    "claude_fit_comment": "HLA焦糖色无明显修饰女士衬衫，但版型贴身对小肚子无遮盖作用",
+    "claude_fit_comment": "HLA焦糖色合身POLO衫，温暖显白，但版型贴身对小肚子无遮盖作用",
     "_statement_score": 0.45
   },
   "occasions": [

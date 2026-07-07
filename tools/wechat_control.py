@@ -1491,6 +1491,21 @@ def _finalize_add_item(item_data):
     # 防止多批次并发时的 ID 碰撞：入库前重新检查 ID 是否已被占用
     # 加锁确保 check → assign → write 在同一临界区内
     category_code = item_data.get('category_code', '')
+    # 🔒 性别校验第二道防线：男性用户入库女性专属品类 → 自动修正为 TS
+    _FEMALE_ONLY_CATS = {'DRESS', 'SKIRT', 'JMP', 'SUIT', 'BLOUSE'}
+    if category_code in _FEMALE_ONLY_CATS:
+        _add_gender = item_data.get('_user_gender', '')
+        if not _add_gender:
+            try:
+                from tools.user_manager import get_user_gender as _gug2
+                _add_gender = _gug2(uid) or 'male'
+            except Exception:
+                _add_gender = 'male'
+        if _add_gender != 'female':
+            log(f"⚠️ 性别拦截: {cid} category_code={category_code} 仅限女性，自动修正为 TS")
+            category_code = 'TS'
+            item_data['category_code'] = 'TS'
+            item_data['category'] = '短袖上衣'
     with _wardrobe_lock:
         if category_code and _id_exists_on_disk(cid, uid):
             prefix = category_code
@@ -2543,6 +2558,19 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
             })
 
         # 构建分析指令 — 🆕 品类自由输出 + fuzzy dedup + 电商图抗噪
+        # 🔒 性别感知：男性用户不展示女性专属品类，防止 AI 串数据
+        _is_female_analysis = (_g == 'female')
+        _cat_list = (
+            'TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), '
+            'SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰), KNIT(针织衫)'
+        )
+        _female_cat_extras = (
+            '\n      （女性专属品类也可选：DRESS(连衣裙), SKIRT(半身裙), JMP(连体裤), BLOUSE(女士衬衫)）'
+        ) if _is_female_analysis else ''
+        _female_note = (
+            '\n- 对于女性服装，请区分：连衣裙(一件式连身裙) vs 半身裙(只有下半身)；连体裤(上下连身) vs 背心+长裤(两件分开)'
+            '\n- 针织衫/毛衣/开衫请归类为"针织衫"，雪纺/真丝/荷叶边女士衬衫归类为"女士衬衫"'
+        ) if _is_female_analysis else ''
         analysis_prompt = """你是一位专业的服装鉴定师。请仔细分析以上每张图片中的服装单品，输出严格的JSON格式结果。
 
 🛒 图片类型识别（电商场景兼容）：
@@ -2556,7 +2584,8 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 {
   "items": [
     {
-      "category_code": "品类简称（建议填，但不确定可以填'??'），如 TS(短袖T恤), LS(长袖上衣), SHIRT(衬衣), TANK(背心), JK(外套/夹克), PT(长裤), SH(短裤), SHOE(鞋子), BAG(包), HAT(帽子), SOCK(袜子), SUN(墨镜), ACC(配饰), DRESS(连衣裙), SKIRT(半身裙), JMP(连体裤), BLOUSE(女士衬衫), KNIT(针织衫)。\n      如果不确定或品类不在以上列表中，填'??'，系统会自动归类。",
+      "category_code": "品类简称（建议填，但不确定可以填'??'），如 """ + _cat_list + """。""" + _female_cat_extras + """
+      如果不确定或品类不在以上列表中，填'??'，系统会自动归类。",
       "category": "中文品类名。这是最重要的字段，请尽量准确描述这是哪种服装，如：短袖上衣、连衣裙、百褶裙、针织开衫、阔腿裤、连体短裤、雪纺衬衫。系统会根据此字段自动分类。",
       "color": {
         "hue_family": "暖色/冷色/中性色",
@@ -2604,9 +2633,7 @@ def _run_add_analysis(task_id, image_b64_list, uid=None, req_id=None):
 - 严格只输出JSON，不要包含markdown代码块标记或解释文字
 - 如果图片中没有服装单品，返回 {"items": []}
 - source_image 必须是该单品所在图片的编号（1-based，对应【图片 N】标注），一件单品只能属于一张图片
-- category字段必须填准确的中文品类名，系统会用此字段自动分类到衣橱
-- 对于女性服装，请区分：连衣裙(一件式连身裙) vs 半身裙(只有下半身)；连体裤(上下连身) vs 背心+长裤(两件分开)
-- 针织衫/毛衣/开衫请归类为"针织衫"，雪纺/真丝/荷叶边女士衬衫归类为"女士衬衫"
+- category字段必须填准确的中文品类名，系统会用此字段自动分类到衣橱{_female_note}
 - 如果服装有遮挡或不完整，在 meta.claude_fit_comment 中注明"部分遮挡"或"不完整可见"
 - 🛒 电商图：促销文字、价格、尺码信息不是服装属性，不要填进颜色/图案/面料字段
 - 🛒 水印中的品牌名可作为 brand.name 的线索（confidence=推测），但水印本身不是服装图案
@@ -6560,8 +6587,26 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
 
                 _deep_merge(current, updates)
 
-                # 🆕 品类修改：验证并同步 category_code ↔ category
+                # 🔒 性别校验：禁止男性用户使用女性专属品类
                 _cat_code = current.get('category_code', '')
+                _FEMALE_ONLY_CATS = {'DRESS', 'SKIRT', 'JMP', 'SUIT', 'BLOUSE'}
+                if _cat_code in _FEMALE_ONLY_CATS:
+                    _user_gender = 'male'
+                    try:
+                        _uid2 = getattr(self, 'user_id', 'default')
+                        if _uid2 and _uid2 != 'default':
+                            from common import resolve_user_dir
+                            _prof = os.path.join(resolve_user_dir(_uid2), 'profile.json')
+                            if os.path.exists(_prof):
+                                with open(_prof) as _pf:
+                                    _user_gender = json.load(_pf).get('gender', 'male')
+                    except Exception:
+                        pass
+                    if _user_gender != 'female':
+                        self._json_resp(400, {"error": f"品类 {_cat_code} 仅限女性用户使用，男性衣橱不可设置"})
+                        return
+
+                # 🆕 品类修改：验证并同步 category_code ↔ category
                 _cat_name = current.get('category', '')
                 if _cat_code in CATEGORY_CODE_TO_NAME:
                     # category_code 有效 → 同步 category 中文名

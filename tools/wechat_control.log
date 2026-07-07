@@ -319,6 +319,8 @@
 [16:02:45] [INFO] ✅ 验证通过 (⚠️ 2条提醒)
 [16:02:45] [INFO] 📊 R1 选品评分: 60分 — 🧪 探索向，可能惊喜可能翻车
 [16:02:45] [INFO] 📍 ✍️ AI 创作叙事+生图
+💇‍♀️ 美妆方向: 647字符
+👗 服装构造参考: 1703字符
 [16:03:19] [INFO] ✅ R2 创作完成: seedream_prompt=1080字符, tips=2条, beauty=440字符
 [16:03:19] [INFO] 👤 人物照: 1张（原图）
 [16:03:19] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-07-07_晚上要去约会
@@ -326,3 +328,40 @@
 [16:04:01] [INFO] 📍 🎨 预压缩生图
 [16:04:01] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [16:04:01] [INFO] 📍 📤 推送 + 刷新
+[16:04:07] [INFO] 📤 Git push 成功 (尝试 1/3)
+[16:04:07] [INFO] 📱 主原型: 重建
+[16:04:11] [INFO] 📤 后台推送完成: 晚上要去约会
+[16:04:22] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=201, CT=application/json)
+[16:14:24] [INFO] 收到信号 SIGTERM，优雅关闭中...
+[16:14:24] [INFO] 所有任务已结束（等待 0s）
+[16:14:24] [INFO] Watchdog 已停止
+[16:14:24] [INFO] 👋 服务已关闭
+[16:15:36] [INFO] =======================================================
+[16:15:36] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[16:15:36] [INFO] 📡 服务: http://0.0.0.0:8765
+[16:15:36] [INFO] 💬 面板: http://localhost:8765/
+[16:15:36] [INFO] 🌐 Funnel: 已就绪
+[16:15:36] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[16:15:36] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[16:17:54] [INFO] 📨 POST /api/chat?user=nan (Content-Length=32, CT=application/json)
+[16:17:54] [INFO] 💬 聊天: recommend | 今日要去约会
+[16:17:54] [INFO] 🚀 管线启动: 今日要去约会
+[16:17:59] [INFO] 🎯 意图解析: occasion=约会 city=默认 ids=[] date_offset=0 new_items=False explore=normal (5657ms)
+[16:17:59] [INFO] 📍 探索度: 微调探索 🧪
+[16:18:02] [INFO] 📍 天气(北京): 35°C 雨
+[16:18:02] [INFO] 📍 场景: '今日要去约会' → occasion=约会 activity=今日要去约会 vibe=浪漫、温柔、轻松
+[16:18:02] [INFO] 📍 📊 预计 ~60-100s · ~4069 tokens
+[16:18:02] [INFO] 📍 🤖 AI 智能选品
+[16:18:23] [WARN] ⚠️ 验证未通过: ['禁止2件上衣（只能选1件上衣，不要叠穿长短袖/衬衫）', 'SHIRT-002: 气温≥35°C禁止长袖上衣', 'SHOE-002: 雨天禁止皮质鞋', 'TANK-002: 场景"约会"避雷品类TANK']
+[16:18:49] [INFO] ✅ 修正后验证通过
+[16:18:49] [INFO] ✅ 验证通过 (⚠️ 1条提醒)
+[16:18:49] [INFO] 📊 R1 选品评分: 56分 — ⚠️ 评分偏低，建议重新选品
+[16:18:49] [INFO] 📍 ✍️ AI 创作叙事+生图
+[16:19:08] [INFO] ✅ R2 创作完成: seedream_prompt=1209字符, tips=1条, beauty=344字符
+[16:19:08] [INFO] 👤 人物照: 1张（原图）
+[16:19:08] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-07-07_今日要去约会
+[16:19:08] [INFO] 📍 🎨 Seedream AI 生图
+[16:19:08] [INFO] 🎯 女性用户 → 启用 --anchor 锚点生图模式
+[16:21:00] [INFO] 📍 🎨 预压缩生图
+[16:21:00] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
+[16:21:00] [INFO] 📍 📤 推送 + 刷新

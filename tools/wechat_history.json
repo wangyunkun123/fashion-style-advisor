@@ -1,5 +1,12 @@
 [
   {
+    "time": "2026-07-07 16:21:00",
+    "style": "今日要去约会",
+    "status": "done",
+    "image_url": "/api/image?f=users/female/nan/outfits/2026-07-07_%E4%BB%8A%E6%97%A5%E8%A6%81%E5%8E%BB%E7%BA%A6%E4%BC%9A/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C/%E4%B8%8A%E8%BA%AB%E6%95%88%E6%9E%9C_1_900w.jpg&w=900",
+    "stats": "⏱️ ~187s · 📊 ~4169 tokens · 🔄 3次AI"
+  },
+  {
     "time": "2026-07-07 16:04:01",
     "style": "晚上要去约会",
     "status": "done",

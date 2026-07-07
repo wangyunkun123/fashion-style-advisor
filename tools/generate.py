@@ -54,8 +54,11 @@ if _USER_ID:
 else:
     OUTFIT_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'outfits')
 
-# 中性灰背景色（用于抠图抗锯齿边缘融合）
-NEUTRAL_GRAY = (217, 217, 217)
+# 抠图补底色：浅色单品用深灰、深色单品用浅灰，保证参考图始终有足够对比度
+# （浅色单品贴近白灰底会糊掉细节，导致 Seedream 看不清单品 → 还原度低）
+LIGHT_BG = (217, 217, 217)   # 浅灰，衬深色单品
+DARK_BG = (64, 64, 64)       # 深灰，衬浅色单品
+BRIGHTNESS_THRESHOLD = 130   # 单品不透明区平均亮度高于此值 → 判为浅色 → 用深灰底
 
 
 def find_latest_outfit():
@@ -65,13 +68,26 @@ def find_latest_outfit():
 
 
 def compress_image(path, max_size=1024, quality=70):
-    """压缩图片为 base64。透明 PNG 自动补中性灰底"""
+    """压缩图片为 base64。透明 PNG 自适应补底：浅色单品补深灰、深色单品补浅灰"""
     img = Image.open(path)
-    # 处理透明通道：在中性灰背景上合成
+    # 处理透明通道：根据单品自身亮度选补底色，保证对比度
     if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
         if img.mode != 'RGBA':
             img = img.convert('RGBA')
-        bg = Image.new('RGB', img.size, NEUTRAL_GRAY)
+        # 计算不透明区域（单品本体）的平均亮度
+        px = img.load()
+        w0, h0 = img.size
+        step = max(1, min(w0, h0) // 100)  # 采样步长，避免大图逐像素太慢
+        total, count = 0, 0
+        for y in range(0, h0, step):
+            for x in range(0, w0, step):
+                r, g, b, a = px[x, y]
+                if a > 30:  # 只统计不透明像素
+                    total += 0.299 * r + 0.587 * g + 0.114 * b
+                    count += 1
+        avg_lum = total / count if count else 128
+        bg_color = DARK_BG if avg_lum > BRIGHTNESS_THRESHOLD else LIGHT_BG
+        bg = Image.new('RGB', img.size, bg_color)
         bg.paste(img, mask=img.split()[3])
         img = bg
     elif img.mode not in ('RGB',):
@@ -137,6 +153,27 @@ def load_prompt(doubao_dir):
         with open(pf, 'r', encoding='utf-8') as f:
             return f.read().strip()
     return ""
+
+
+def convert_to_anchor_prompt(prompt):
+    """女装专用锚点模式：将服装详细描述替换为最小锚点，让参考图主导还原。
+    解决问题：女装的剪裁/廓形/细节用文字描述不准确，反而导致"平均化坍缩"。
+    策略：摄影/人物/场景 详细写 → 稳定锚；服装 → 交给参考图。"""
+    import re
+    ANCHOR = (
+        "She wears exactly the dress, top, bottom, sneakers, hat and bag shown in the reference images. "
+        "Match their color, shape, fabric texture, button details, cut lines, seams and brand logos precisely. "
+    )
+    # 识别服装段：从 (She|she) (wears|is wearing) 或 [Pp]aired with 开始，到句子末
+    garment_pattern = re.compile(
+        r'\b([Ss]he (wears|is wearing)|[Pp]aired with).*?\.\s*',
+        re.DOTALL
+    )
+    prompt = garment_pattern.sub(ANCHOR, prompt, count=1)
+    # 兜底：如果没匹配到，在 "full body shot" 前插入
+    if ANCHOR[:40] not in prompt and "full body shot" in prompt:
+        prompt = prompt.replace("full body shot", ANCHOR + "full body shot")
+    return prompt
 
 
 def call_seedream(prompt, image_paths, max_images=None):
@@ -211,15 +248,24 @@ def main():
     print("🎨 Seedream API 两轮接力生图")
     print("=" * 60)
 
+    # ── 参数解析 ──
+    anchor_mode = False
+    keyword = None
+    for arg in sys.argv[1:]:
+        if arg == '--anchor':
+            anchor_mode = True
+        elif not arg.startswith('--'):
+            keyword = arg
+
     outfit_dir = None
-    if len(sys.argv) > 1:
-        keyword = sys.argv[1]
+    if keyword:
         dirs = sorted([d for d in os.listdir(OUTFIT_BASE)
                        if os.path.isdir(os.path.join(OUTFIT_BASE, d)) and keyword in d],
                       key=lambda d: os.path.getctime(os.path.join(OUTFIT_BASE, d)))
         if dirs:
             outfit_dir = os.path.join(OUTFIT_BASE, dirs[-1])
             print(f"🔍 关键词匹配: {dirs[-1]}")
+
     if not outfit_dir:
         outfit_dir = find_latest_outfit()
     if not outfit_dir:
@@ -242,6 +288,12 @@ def main():
     if not prompt:
         print("❌ 未找到提示词")
         return
+
+    # ── 锚点模式（女装专用）：替换服装详细描述为最小锚点 ──
+    if anchor_mode:
+        prompt = convert_to_anchor_prompt(prompt)
+        print(f"\n🔧 锚点模式已激活：服装描述 → 最小锚点")
+        print(f"   prompt 服装段已替换为: \"Match their color, shape, fabric texture...\"")
 
     print(f"\n🧥 核心参考图: {len(core_images)} 张")
     for img in core_images:
@@ -335,7 +387,8 @@ def main():
         pass2_prompt = (
             f"Image 1 is a base outfit photo serving as the identity and style anchor. "
             f"Preserve the person's facial identity, skin tone, and the overall outfit "
-            f"(top, pants, shoes) shown in image 1 — these are the core to keep. "
+            f"(top, dress, pants, shoes) shown in image 1 — these are the core to keep. "
+            f"Match their exact cut, texture, and color. "
             f"However, you may subtly improve the pose, expression, camera angle, or "
             f"background to make the image more dynamic and editorial — avoid stiff "
             f"standing posture. A slight change in stance, hand position, or head tilt "
@@ -343,7 +396,7 @@ def main():
             f"Images 2-{len(pass2_images)} are reference cutouts of accessories to ADD or REFINE: "
             f"{'; '.join(accessory_hints)}. "
             f"Accurately render these specific accessories onto the person, matching "
-            f"the lighting and style of image 1. "
+            f"their exact shape, brand logo, color, material and size. Preserve all details. "
             f"The output should feel like a natural, more polished evolution of image 1 "
             f"— same person, same outfit, but more alive and editorial. "
             f"Fashion editorial photography, high quality, photorealistic."

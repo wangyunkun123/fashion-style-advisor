@@ -2412,7 +2412,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 # ============================================================
 
 def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', all_clothes=None,
-                    mandatory_items=None):
+                    mandatory_items=None, target_styles=None, explore_level=0.0):
     """验证 AI 选品是否通过所有规则门
 
     mandatory_items: [(item_id, confidence, reason), ...] 用户指定必须使用的单品
@@ -2552,6 +2552,34 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
             if cat == 'SHOE' and ('皮质' in fabric or '皮' in fabric):
                 violations.append(f'{cid}: 雨天禁止皮质鞋')
 
+    # ── 4.5. 面料季节硬阻断（高温禁秋冬面料）──
+    for d in outfit_details:
+        cid = d['id']
+        cat = d['detail'].get('category_code', '')
+        fabric = d['detail'].get('fabric', {}) or {}
+        seasonality = fabric.get('seasonality', [])
+        fabric_primary = fabric.get('primary', '')
+        fabric_weight = fabric.get('weight', '')
+
+        # ≥28°C 禁止纯秋冬面料（羊毛/灯芯绒/羊绒/呢子/厚针织）
+        winter_fabrics = ['羊毛', '灯芯绒', '羊绒', '呢子', '羊毛混纺', '厚针织', '抓绒']
+        is_winter_fabric = any(w in fabric_primary for w in winter_fabrics)
+        is_winter_weight = fabric_weight in ('厚', '中厚', '加厚')
+        is_cold_season = seasonality and all(s in ('秋', '冬') for s in seasonality)
+
+        if temp_high >= 28:
+            if is_cold_season and cat in ('PT', 'SH', 'JK', 'TS', 'LS', 'SHIRT', 'KNIT', 'TANK'):
+                violations.append(f'{cid}: 气温≥28°C禁止纯秋冬面料（{fabric_primary}/seasonality={seasonality}），请选春夏透气单品')
+            elif is_winter_fabric and cat in ('PT', 'JK'):
+                violations.append(f'{cid}: 气温≥28°C禁止{fabric_primary}面料下装/外套，高温不适用')
+            elif is_winter_weight and cat in ('PT', 'JK'):
+                violations.append(f'{cid}: 气温≥28°C禁止{fabric_weight}面料下装/外套，请选轻薄款')
+
+        # ≥30°C 进一步收窄：仅允许春夏面料
+        if temp_high >= 30 and cat in ('TS', 'LS', 'SHIRT', 'KNIT', 'TANK'):
+            if is_cold_season:
+                violations.append(f'{cid}: 气温≥30°C上衣必须是春夏面料（{fabric_primary}/seasonality={seasonality}不适合）')
+
     # ── 5. 场合硬阻断 ──
     for d in outfit_details:
         cid = d['id']
@@ -2644,19 +2672,61 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
             if cat in avoid:
                 violations.append(f'{d["id"]}: 场景"{occasion}"避雷品类{cat}')
 
-    # ── 7. 风格匹配最低分检查 ──
+    # ── 7. 风格匹配最低分检查（2026-07-07 增强：按探索度分级 + 目标风格定向）──
     cache = load_score_cache()
-    # 从 style_hint 或 target_styles 中提取主风格
-    for d in outfit_details:
-        cid = d['id']
-        cat = d['detail'].get('category_code', '')
-        if cat in CORE_CATS:
-            # 检查是否有至少一个风格匹配分 ≥ 20
+
+    # 阈值按探索度分级：指定风格 ≥30 / 微调 ≥20 / 大胆混搭 ≥10
+    if explore_level <= 0:
+        STYLE_MATCH_MIN = 30   # 安全推荐/指定风格：严格匹配
+    elif explore_level < 0.5:
+        STYLE_MATCH_MIN = 20   # 微调探索：适度放宽
+    else:
+        STYLE_MATCH_MIN = 10   # 大胆混搭：大幅放宽
+
+    if target_styles:
+        # 定向检查：核心单品对目标风格的匹配分
+        for d in outfit_details:
+            cid = d['id']
+            cat = d['detail'].get('category_code', '')
+            if cat not in CORE_CATS:
+                continue
             style_entries = cache.get(cid, {})
-            if style_entries:
-                best = max(e.get('score', 0) for e in style_entries.values() if not isinstance(e, str))
-                if best < 20:
-                    warnings.append(f'{cid}: 风格匹配分偏低({best})')
+            if not style_entries:
+                warnings.append(f'{cid}: 无风格匹配数据，无法验证')
+                continue
+            # 取对目标风格的最佳匹配分
+            best_target = 0
+            best_target_name = ''
+            for sid in target_styles:
+                entry = style_entries.get(sid, {})
+                s = entry.get('score', 0) if isinstance(entry, dict) else 0
+                if s > best_target:
+                    best_target = s
+                    best_target_name = sid
+            if best_target < STYLE_MATCH_MIN:
+                # 检查这件单品真正适合什么风格（提供诊断信息）
+                real_styles = sorted(
+                    [(k, v.get('score', 0)) for k, v in style_entries.items()
+                     if isinstance(v, dict) and v.get('score', 0) >= 40],
+                    key=lambda x: -x[1]
+                )[:3]
+                real_hint = f'（实际适合: {", ".join(f"{s}={sc}" for s,sc in real_styles)}）' if real_styles else ''
+                mode_label = '指定风格' if explore_level <= 0 else ('微调探索' if explore_level < 0.5 else '大胆混搭')
+                violations.append(
+                    f'{cid}: 对目标风格"{best_target_name}"仅{best_target}分 < {STYLE_MATCH_MIN}分'
+                    f'（{mode_label}阈值）{real_hint}'
+                )
+    else:
+        # 无目标风格时，保持旧的宽松检查：任意风格最低分 ≥ 20
+        for d in outfit_details:
+            cid = d['id']
+            cat = d['detail'].get('category_code', '')
+            if cat in CORE_CATS:
+                style_entries = cache.get(cid, {})
+                if style_entries:
+                    best = max(e.get('score', 0) for e in style_entries.values() if not isinstance(e, str))
+                    if best < 20:
+                        warnings.append(f'{cid}: 风格匹配分偏低({best})')
 
     # ── 8. 基本颜色冲突检测 ──
     colors = []
@@ -2671,6 +2741,39 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
     greens = [c for c in colors if '绿' in c]
     if reds and greens:
         warnings.append(f'颜色冲突: 红色系({"/".join(reds)})与绿色系({"/".join(greens)})')
+
+    # ── 8.5. Formality 一致性检查（2026-07-07 新增）──
+    formality_scores = []
+    for d in outfit_details:
+        cid = d['id']
+        cat = d['detail'].get('category_code', '')
+        if cat in CORE_CATS:
+            f = d['detail'].get('formality')
+            if f is not None:
+                formality_scores.append((cid, cat, f))
+
+    if len(formality_scores) >= 2:
+        f_min = min(formality_scores, key=lambda x: x[2])
+        f_max = max(formality_scores, key=lambda x: x[2])
+        f_spread = f_max[2] - f_min[2]
+
+        if f_spread > 2:
+            violations.append(
+                f'Formality断层({f_spread}级): {f_min[0]}(formality={f_min[2]}) ↔ {f_max[0]}(formality={f_max[2]})，'
+                f'跨度过大导致穿搭逻辑不自洽'
+            )
+        elif f_spread == 2:
+            # 极低+极高搭配警告（如 formality=1 运动鞋 + formality=4 西裤）
+            if f_min[2] <= 1 and f_max[2] >= 4:
+                violations.append(
+                    f'Formality冲突({f_spread}级): {f_min[0]}(formality={f_min[2]})为纯运动/居家 ↔ '
+                    f'{f_max[0]}(formality={f_max[2]})为半正式，风格完全冲突'
+                )
+            else:
+                warnings.append(
+                    f'Formality跨度({f_spread}级): {f_min[0]}(formality={f_min[2]}) ↔ {f_max[0]}(formality={f_max[2]})，'
+                    f'建议缩小差距'
+                )
 
     # ── 9. 强制单品校验（用户显式指定的单品必须出现在输出中）──
     if mandatory_items:

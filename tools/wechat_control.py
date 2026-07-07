@@ -3309,7 +3309,8 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
     # ── 探测探索度 ──
     from tools.unified_pipeline import (
         determine_explore_level, determine_daily_mode, _record_daily_mode,
-        build_enhanced_prompt, validate_outfit, score_outfit, update_lab_state
+        build_enhanced_prompt, validate_outfit, score_outfit, update_lab_state,
+        load_score_cache, CORE_CATS
     )
 
     # 判断是否为每日自动推荐触发（cron / 定时任务）
@@ -3487,7 +3488,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
 
         # ── Step 3: 规则验证 ──
         items = plan.get('items', [])
-        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items)
+        passed, violations, warnings = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items, target_styles=target_styles, explore_level=explore_level)
 
         if not passed:
             log(f"⚠️ 验证未通过: {violations}", "WARN")
@@ -3504,7 +3505,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             warnings2 = warnings  # 初始化默认值，防止 plan is None 时 2744 行 NameError
             if plan:
                 items = plan.get('items', [])
-                passed2, violations2, warnings2 = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items)
+                passed2, violations2, warnings2 = validate_outfit(items, occasion, temp_high, weather_cond, all_clothes=all_clothes, mandatory_items=mandatory_items, target_styles=target_styles, explore_level=explore_level)
                 if not passed2:
                     log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
                     # 检查是否有致命违规（场景/天气相关），有则中止管线
@@ -3526,9 +3527,122 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         else:
             log(f'⚠️ 验证有{len(violations)}项违规（继续执行，请人工检查）')
 
-        # ── R1 穿搭评分 ──
+        # ── R1 穿搭评分 + 低分重选（2026-07-07 新增：<50分强制重选，最多2次）──
         outfit_score = score_outfit(items, target_styles, occasion, temp_high, weather_cond, all_clothes=all_clothes)
         log(f"📊 R1 选品评分: {outfit_score['total']}分 — {outfit_score['label']}")
+
+        R1_RETRY_THRESHOLD = 50
+        MAX_R1_RETRIES = 2
+        best_plan = plan
+        best_items = items
+        best_score = outfit_score
+
+        if outfit_score['total'] < R1_RETRY_THRESHOLD:
+            log(f"⚠️ R1评分{outfit_score['total']}分 < {R1_RETRY_THRESHOLD}分，启动强制重选（最多{MAX_R1_RETRIES}次）")
+
+            # 分析低分原因：逐件检查风格匹配分
+            style_cache = load_score_cache()
+            low_items = []
+            for it in items:
+                cid = it.get('id', '')
+                detail = all_clothes.get(cid, {})
+                cat = detail.get('category_code', '')
+                if cat not in CORE_CATS:
+                    continue
+                best_style_score = 0
+                best_style_name = ''
+                for sid in target_styles:
+                    entry = style_cache.get(cid, {}).get(sid, {})
+                    s = entry.get('score', 0) if isinstance(entry, dict) else 0
+                    if s > best_style_score:
+                        best_style_score = s
+                        best_style_name = sid
+                if best_style_score < 30:
+                    # 找这件单品真正适合的风格
+                    all_entries = style_cache.get(cid, {})
+                    real_styles = sorted(
+                        [(k, v.get('score', 0)) for k, v in all_entries.items()
+                         if isinstance(v, dict) and v.get('score', 0) >= 40],
+                        key=lambda x: -x[1]
+                    )[:3]
+                    real_hint = f"（真正适合: {', '.join(f'{s}={sc}' for s,sc in real_styles)}）" if real_styles else "（无可匹配风格）"
+                    low_items.append(f'{cid}({cat}): 对{best_style_name}仅{best_style_score}分 {real_hint}')
+
+            low_feedback = '\n'.join(f'  ❌ {li}' for li in low_items) if low_items else '（风格数据不足，无法逐件诊断）'
+            retry_feedback = (
+                f"\n\n⚠️ 你的选品评分仅{outfit_score['total']}分（满分100），远低于合格线{R1_RETRY_THRESHOLD}分。\n"
+                f"主要问题单品（对目标风格匹配分<30）：\n{low_feedback}\n\n"
+                f"请重新选品：\n"
+                f"1. 优先选择对目标风格匹配分≥40的单品（匹配分在衣柜表格中已标注）\n"
+                f"2. 每件核心单品（上衣/下装/鞋子）对至少一个目标风格的分值需≥30\n"
+                f"3. 检查面料季节适配性（当前{temp_high}°C，禁止秋冬面料）\n"
+                f"4. 检查配色协调性和formality一致性\n"
+                f"5. 如果衣橱中确实没有高匹配分的单品，宁可选择基础百搭款（纯色/中性色/基础廓形）"
+            )
+
+            for retry_round in range(MAX_R1_RETRIES):
+                log(f"🔄 R1重选 第{retry_round+1}/{MAX_R1_RETRIES}次...")
+                retry_prompt = user_prompt + retry_feedback + (
+                    f"\n\n（这是第{retry_round+1}次重选，上一次评分仅{best_score['total'] if isinstance(best_score, dict) else best_score}分）"
+                )
+                retry_content = call_doubao_chat([
+                    {'role': 'system', 'content': system_prompt},
+                    {'role': 'user', 'content': retry_prompt},
+                ], max_tokens=8192, timeout=180)
+                _api_calls += 1
+
+                retry_plan = extract_json(retry_content)
+                if not retry_plan:
+                    log(f"⚠️ 重选{retry_round+1} JSON解析失败，跳过", "WARN")
+                    continue
+
+                retry_items = retry_plan.get('items', [])
+                # 验证重选结果
+                rpassed, rviolations, rwarnings = validate_outfit(
+                    retry_items, occasion, temp_high, weather_cond,
+                    all_clothes=all_clothes, mandatory_items=mandatory_items,
+                    target_styles=target_styles, explore_level=explore_level
+                )
+                if not rpassed:
+                    log(f"⚠️ 重选{retry_round+1} 验证未通过: {rviolations[:3]}", "WARN")
+                    # 非致命违规继续，致命违规跳过
+                    critical_kw = ['禁止', '缺少', '运动场景']
+                    if any(any(kw in v for kw in critical_kw) for v in rviolations):
+                        continue
+
+                retry_score = score_outfit(
+                    retry_items, target_styles, occasion, temp_high, weather_cond,
+                    all_clothes=all_clothes
+                )
+                log(f"📊 重选{retry_round+1} 评分: {retry_score['total']}分")
+
+                if retry_score['total'] > best_score['total']:
+                    best_plan = retry_plan
+                    best_items = retry_items
+                    best_score = retry_score
+                    log(f"✅ 重选{retry_round+1} 提升至 {retry_score['total']}分，采纳")
+
+                if retry_score['total'] >= R1_RETRY_THRESHOLD:
+                    log(f"✅ 重选达标（≥{R1_RETRY_THRESHOLD}分），停止重试")
+                    break
+            else:
+                # 循环正常结束（未break）
+                log(f"⚠️ {MAX_R1_RETRIES}次重选后最高分{best_score['total']}仍低于{R1_RETRY_THRESHOLD}分")
+
+            # 最终检查
+            if best_score['total'] < R1_RETRY_THRESHOLD:
+                log(f"❌ R1重选失败：最高分{best_score['total']} < {R1_RETRY_THRESHOLD}分，中止管线",
+                    "ERROR")
+                raise ValueError(
+                    f"AI无法选出合格搭配（最高{best_score['total']}分，需≥{R1_RETRY_THRESHOLD}分）。"
+                    f"请检查衣橱是否缺少适合「{style_hint}」风格的单品，或尝试更换风格/场景。"
+                )
+
+            # 采用最佳方案
+            plan = best_plan
+            items = best_items
+            outfit_score = best_score
+            log(f"📊 最终R1评分: {outfit_score['total']}分 — 重选后采纳")
 
         # ── Round 2: AI 创作（基于已选单品生成叙事/技巧/生图 prompt）──
         progress('✍️ AI 创作叙事+生图')

@@ -1,18 +1,17 @@
 {
-  "generated_at": "2026-07-07T14:35:06Z",
+  "generated_at": "2026-07-07T15:10:08Z",
   "user_id": "kun",
   "items_used": [
-    "TS-010",
-    "PT-005",
-    "SHOE-003",
-    "SOCK-002"
+    "TS-004",
+    "PT-008",
+    "SHOE-010"
   ],
-  "style_matched": "japanese_city_boy, contemporary_genderless",
+  "style_matched": "contemporary_genderless, clean_fit",
   "occasion": "日常",
-  "explore_level": 0.0,
+  "explore_level": 0.5,
   "user_tap": null,
   "user_rating": null,
   "user_wore": null,
-  "generation_time_ms": 57292,
+  "generation_time_ms": 89988,
   "api_calls": 3
 }

@@ -11,13 +11,19 @@
           "url": "https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris",
           "caption": "Vogue — 2026秋冬巴黎男装周街拍：Phill Oh 镜头下的322张街拍，Pharrell x LV、Jonathan Anderson x Dior",
           "source": "Vogue",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-01"
         },
         {
           "url": "https://vogue.sg/street-style-paris-mens-fall-winter-2026-shows/",
           "caption": "Vogue Singapore — 2026秋冬巴黎男装周街拍：Ami Paris、Louis Vuitton、Amiri 前排明星",
           "source": "Vogue Singapore",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -28,7 +34,8 @@
           "url": "https://www.vogue.com/fashion-shows/fall-2024-menswear/officine-generale",
           "caption": "Officine Générale Fall 2024 — Pierre Mahéo 呈现左岸富裕居民的真实巴黎风格",
           "source": "Vogue Runway",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true
         },
         {
           "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/ami",
@@ -49,5 +56,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

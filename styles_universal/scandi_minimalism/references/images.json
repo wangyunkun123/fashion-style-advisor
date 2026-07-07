@@ -11,7 +11,10 @@
           "url": "https://fashionmagazine.com/style/scandi-mens-style-outfits/",
           "caption": "FASHION Magazine — 北欧男装可持续时尚：简约但不简单的斯堪的纳维亚风格",
           "source": "FASHION Magazine",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://masculinesynergy.com/heliot-emil-fashion-brand/",
@@ -34,7 +37,10 @@
           "url": "https://www.mrporter.com/en-tw/journal/fashion/nn07-men-style-25340828",
           "caption": "MR PORTER — NN07「无国籍」理念：提升日常单品的极简哲学",
           "source": "MR PORTER",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -45,9 +51,11 @@
           "url": "https://www.lyst.co.uk/stories/contemporary-scandinavian-brands-to-know/",
           "caption": "Lyst — 当代北欧品牌崛起：Our Legacy、Filippa K、Mfpen 死库存面料极简美学",
           "source": "Lyst",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

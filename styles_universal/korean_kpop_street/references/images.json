@@ -40,7 +40,10 @@
         {
           "url": "https://www.tenasia.com/entertainment/2025020817534",
           "caption": "n.SSign 成员 Lawrence、Doha、Han Jun 出席 Duck Dive 秀场— 新晋 idol 首次 SFW 造型",
-          "source": "TenAsia"
+          "source": "TenAsia",
+          "_broken": true,
+          "_broken_reason": "<urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -104,5 +107,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

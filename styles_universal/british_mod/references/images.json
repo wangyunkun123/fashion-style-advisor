@@ -31,7 +31,10 @@
         {
           "url": "https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e",
           "caption": "Oasis Britpop 风格档案 - Mod文化30年经典回顾",
-          "source": "GQ Australia, 2025"
+          "source": "GQ Australia, 2025",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -75,5 +78,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

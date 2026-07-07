@@ -28,7 +28,10 @@
           "url": "https://www.fashiongonerogue.com/massimo-dutti-minimal-summer-2024/",
           "caption": "Massimo Dutti Summer 2024 — 海滩极简大片：橄榄绿、象牙白亚麻廓形",
           "source": "Fashion Gone Rogue",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://musemagazine.it/articles/armani-mare-en/",
@@ -49,5 +52,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

@@ -80,7 +80,10 @@
         {
           "url": "https://gangnamusa.com/korean-street-style-outfit-combos-that-work/",
           "caption": "Gangnam USA: 韩式街拍不败公式— 落肩针织+奶油色罗纹裤+乐福鞋/帆布鞋，首尔各区域风格解析",
-          "source": "Gangnam USA"
+          "source": "Gangnam USA",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -104,5 +107,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

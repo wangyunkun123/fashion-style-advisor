@@ -31,7 +31,10 @@
         {
           "url": "https://www.thefashionisto.com/story/mango-richard-james-2026/",
           "caption": "Mango x Richard James 2026 - 萨维尔街民主化, Kit Butler 出镜",
-          "source": "The Fashionisto, 2026"
+          "source": "The Fashionisto, 2026",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -61,7 +64,10 @@
         {
           "url": "https://www.cutlerandgross.com/en-us/blogs/news/secret-codes-of-savile-row",
           "caption": "萨维尔街秘密符号 - 定制西装的细节密码街拍解读",
-          "source": "Cutler and Gross"
+          "source": "Cutler and Gross",
+          "_broken": true,
+          "_broken_reason": "<urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+          "_checked": "2026-07-01"
         }
       ]
     },
@@ -71,9 +77,13 @@
         {
           "url": "https://guardian.ng/life/spotlight/the-james-akinyemi-story-from-savile-row-to-royal-residences/",
           "caption": "James Akinyemi - 从萨维尔街到皇室住宅, Skepta 御用裁缝社交媒体影响",
-          "source": "The Guardian Nigeria, 2025"
+          "source": "The Guardian Nigeria, 2025",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

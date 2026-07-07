@@ -26,7 +26,8 @@
         {
           "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/prada",
           "caption": "Prada 2025春夏男装 - Miuccia Prada x Raf Simons 街潮更新",
-          "source": "Vogue Runway, 2024"
+          "source": "Vogue Runway, 2024",
+          "_broken": true
         },
         {
           "url": "https://www.vogue.com/fashion-shows/fall-2024-menswear/louis-vuitton",
@@ -41,7 +42,10 @@
         {
           "url": "https://www.gq.com.au/style/celebrity/oasis-style-fashion/image-gallery/2819e2af1cb102cd08e2c6adc1ec992e",
           "caption": "Oasis Britpop 街头风格 - Noel & Liam Gallagher 90年代街潮档案",
-          "source": "GQ Australia, 2025"
+          "source": "GQ Australia, 2025",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://result.gq.com/gallery/men-of-the-year-party-2024",
@@ -56,7 +60,10 @@
         {
           "url": "https://www.designscene.net/2017/08/how-workwear-became-popular-in-street-cultures.html",
           "caption": "工装街潮文化演进 - 从工厂到滑板场到T台",
-          "source": "Design Scene"
+          "source": "Design Scene",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.thefader.com/2026/02/20/boy-london-fall-2026-collection-creative-director-can-tran-interview",
@@ -75,5 +82,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

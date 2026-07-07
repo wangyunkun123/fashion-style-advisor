@@ -28,13 +28,17 @@
           "url": "https://www.lemon8-app.com/@_lesx97/7275851291350336006",
           "caption": "90s Black Men's Fashion — 从Tupac到Will Smith的标志性风格：Gangsta与Bling的融合",
           "source": "Lemon8",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://zmj.unibo.it/article/download/19563/18128",
           "caption": "Vibe Magazine (1992-1997) — 嘻哈男性气质通过意大利电影与时尚的重新思考",
           "source": "ZoneModa Journal",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true
         }
       ]
     },
@@ -45,9 +49,13 @@
           "url": "https://www.si.edu/object/roxanne-shante-nyc-1990:nmaahc_2015.132.66",
           "caption": "Smithsonian NMAAHC — Janette Beckman 1990年拍摄 Roxanne Shanté NYC，Eyejammie嘻哈摄影收藏",
           "source": "Smithsonian",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

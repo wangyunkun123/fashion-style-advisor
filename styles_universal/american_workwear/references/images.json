@@ -41,7 +41,10 @@
         {
           "url": "https://www.gq.com.au/style/celebrity/austin-butler-proves-again-hes-the-king-of-underrated-carhartt-pieces/news-story/d0ece76880c0b02b161e7525b7858295",
           "caption": "Austin Butler Carhartt 工装穿搭 - 底特律夹克 + 直筒牛仔裤",
-          "source": "GQ Australia, 2025"
+          "source": "GQ Australia, 2025",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.hollywoodreporter.com/lifestyle/shopping/adrien-brody-j-crew-menswear-campaign-collection-pricing-1236132990/",
@@ -61,7 +64,10 @@
         {
           "url": "https://www.mrporter.com/en-sg/journal/fashion/vintage-workwear-trend-25186518",
           "caption": "MR PORTER 复古工装趋势 - 全球街拍摄影精选",
-          "source": "MR PORTER Journal, 2025"
+          "source": "MR PORTER Journal, 2025",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -75,5 +81,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

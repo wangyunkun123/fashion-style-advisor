@@ -42,7 +42,10 @@
         {
           "url": "https://www.vogue.com/fashion-shows/fall-2025-ready-to-wear/junya-watanabe",
           "caption": "Junya Watanabe 2025秋冬女装 — 美式复古工装元素参考",
-          "source": "Vogue Runway"
+          "source": "Vogue Runway",
+          "_broken": true,
+          "_broken_reason": "<urlopen error _ssl.c:1112: The handshake operation timed out>",
+          "_checked": "2026-07-01"
         }
       ]
     },
@@ -53,17 +56,26 @@
         {
           "url": "https://lifestyle.inquirer.net/545219/amekaji-manila-kiichiro-shibue/",
           "caption": "Kiichiro Shibue — 大阪造型师的阿美咔叽穿搭哲学",
-          "source": "Inquirer Lifestyle"
+          "source": "Inquirer Lifestyle",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://vogue.ph/fashion/amekaji-spirit-subculture-history-and-character/",
           "caption": "Amekaji Philippines 社群 — 复古工装迷真实穿搭",
-          "source": "Vogue Philippines"
+          "source": "Vogue Philippines",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.esquiremag.ph/style/fashion/the-best-dressed-men-of-2025-a7970-20251230-dyn",
           "caption": "2025最佳穿搭男性 — 含阿美咔叽风格穿搭案例",
-          "source": "Esquire Philippines"
+          "source": "Esquire Philippines",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -74,17 +86,26 @@
         {
           "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
           "caption": "TokyoFashion 东京街拍 — 复古/工装/美式风格街拍合集",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.spot.ph/arts-culture/arts-culture-peopleparties/110831/amekaji-the-style-taking-over-the-closets-of-modern-manile-os-a2962-20250112-lfrm2",
           "caption": "Amekaji征服马尼拉 — 亚洲街头阿美咔叽实拍图集",
-          "source": "Spot.ph"
+          "source": "Spot.ph",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://web-japan.org/trends/fashion/fas060616.html",
           "caption": "Shibuya Men Change Style — 涩谷男生穿搭变迁（含阿美咔叽）",
-          "source": "Trends in Japan"
+          "source": "Trends in Japan",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -100,14 +121,21 @@
         {
           "url": "https://www.ssense.com/zh-tj/men/designers/f-lagstuf-f",
           "caption": "F-LAGSTUF-F — 新一代阿美咔叽 x 90年代滑板音乐风格",
-          "source": "SSENSE"
+          "source": "SSENSE",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://aesthetics.fandom.com/wiki/Amekaji",
           "caption": "Amekaji Wiki — 风格定义、品牌图谱、穿搭图例",
-          "source": "Aesthetics Wiki"
+          "source": "Aesthetics Wiki",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

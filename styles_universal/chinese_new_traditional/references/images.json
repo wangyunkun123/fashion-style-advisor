@@ -10,7 +10,10 @@
         {
           "url": "https://models.com/work/vogue-china-vogue-china-may-2025-covers/2680964",
           "caption": "王一博 VOGUE China 2025年5月刊封面— 首位华语男星单人封面：Balenciaga 皮风衣/Gucci 刺绣套装/Prada 未来感，Steven Meisel 拍摄",
-          "source": "VOGUE China / Models.com"
+          "source": "VOGUE China / Models.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://3g.china.com/act/ent/11005281/20250922/48846026.html",
@@ -35,7 +38,10 @@
         {
           "url": "https://www.shh-shrhmuseum.org.cn/lsbwgywwz/historymuseum/allNews/2025/10/16/3419955b981652460199f1ace67665d0.html",
           "caption": "上海时装周「东方·新中式 2025秋」— 上海市历史博物馆大秀：中元素十周年/苏小乔宋锦昆曲/十二花神",
-          "source": "上海历史博物馆"
+          "source": "上海历史博物馆",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://kendam.com/news/lookbooks/uma-wang-fall-winter-2026-27-men-outfits",
@@ -104,5 +110,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

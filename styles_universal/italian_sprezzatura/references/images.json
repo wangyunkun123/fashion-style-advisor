@@ -45,9 +45,13 @@
           "url": "https://www.gq.com.au/style/trends/how-to-dress-like-a-stylish-italian-according-to-stylish-italians/image-gallery/5c22ae5aeb7785c5b410350fb1331b77",
           "caption": "GQ Australia — 意大利风格男士穿搭指南，Gianni Agnelli 式非刻意优雅",
           "source": "GQ Australia",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

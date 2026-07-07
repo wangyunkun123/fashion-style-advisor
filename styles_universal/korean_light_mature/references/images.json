@@ -60,7 +60,10 @@
         {
           "url": "https://vogue.sg/calvin-klein-cha-eun-woo/",
           "caption": "Cha Eunwoo × Calvin Klein— 从花美男到轻熟男士蜕变：皮夹克+直筒牛仔裤+战壕风衣，克制性感",
-          "source": "Vogue Singapore"
+          "source": "Vogue Singapore",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -80,7 +83,10 @@
         {
           "url": "https://gangnamusa.com/korean-street-style-outfit-combos-that-work/",
           "caption": "Gangnam USA: 韩式街拍不败公式— 结构化休闲：宽松西装+白Tee+直筒裤，江南区清潭洞轻熟风",
-          "source": "Gangnam USA"
+          "source": "Gangnam USA",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -90,7 +96,10 @@
         {
           "url": "https://view.asiae.co.kr/en/print.htm?idxno=2025022008333035034",
           "caption": "Shinsegae Inter 'Man on the Boon' 品牌重塑— 10周年韩式轻熟男装方向：沉稳中性色+高级面料",
-          "source": "Asia Economy"
+          "source": "Asia Economy",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.moderngentlemanmagazine.com/42-korean-casual-outfits-men/",
@@ -100,9 +109,11 @@
         {
           "url": "https://timesofindia.indiatimes.com/life-style/fashion/celeb-style/korean-star-han-ji-mins-understated-luxury-is-a-guide-to-timeless-minimalist-style/articleshowprint/123545910.cms",
           "caption": "Times of India: Han Ji-min 低调奢华穿搭— 成熟精致：质感针织+结构大衣+真丝衬衫，30+轻熟范本",
-          "source": "Times of India"
+          "source": "Times of India",
+          "_broken": true
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

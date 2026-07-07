@@ -17,7 +17,10 @@
           "url": "https://www.mrporter.com/en-tw/journal/fashion/heritage-checks-25373990",
           "caption": "MR PORTER — 现代穿搭中的传统格纹：人字纹、千鸟格、威尔士亲王格",
           "source": "MR PORTER",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -49,5 +52,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

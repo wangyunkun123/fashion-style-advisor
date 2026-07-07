@@ -11,7 +11,10 @@
           "url": "https://www.thecoolhour.com/10-undeniably-cool-looks-to-nail-the-blokecore-aesthetic/",
           "caption": "The Cool Hour — 10个教科书级Blokecore造型：返校风、90s丹宁、Bella Hadid秋季演绎",
           "source": "The Cool Hour",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://kvia.com/lifestyle/stacker-lifestyle/2024/08/30/beyond-blokecore-why-the-intersection-of-football-and-fashion-is-more-than-a-fad/",
@@ -49,5 +52,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

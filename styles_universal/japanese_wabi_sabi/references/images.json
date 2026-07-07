@@ -11,7 +11,10 @@
         {
           "url": "https://www.tokyoweekender.com/art_and_culture/fashion/the-eternal-vision-of-yohji-yamamoto/",
           "caption": "Yohji Yamamoto 永恒愿景 — 2018-2025 男装档案大片",
-          "source": "Tokyo Weekender"
+          "source": "Tokyo Weekender",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://paternaldamnation.com/how-to-style-japanese-inspired-clothing/",
@@ -21,7 +24,10 @@
         {
           "url": "https://harrods.com/en-an/designers/yohji-yamamoto",
           "caption": "Harrods Yohji Yamamoto — 侘寂美学男装精选图集",
-          "source": "Harrods"
+          "source": "Harrods",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -74,12 +80,18 @@
         {
           "url": "https://tokyofashion.com/brands/yohji-yamamoto/",
           "caption": "TokyoFashion Yohji Yamamoto 品牌街拍 — 黑色极简穿搭合集",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://tokyofashion.com/tag/monochrome-fashion/",
           "caption": "Monochrome Fashion — 东京单色极简时尚街拍",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.vogue.com/slideshow/the-best-tokyo-street-style-photos-from-the-fall-2024-shows",
@@ -95,7 +107,10 @@
         {
           "url": "https://www.ssense.com/en-tz/men/designers/tanaka",
           "caption": "Tanaka — 前 Uniqlo/Yohji 设计师的侘寂极简男装线",
-          "source": "SSENSE"
+          "source": "SSENSE",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://en.pinkoi.com/product/wXyvqBHU",
@@ -109,5 +124,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

@@ -11,7 +11,10 @@
           "url": "https://www.tennis.com/baseline/articles/best-tennis-fashion-moments-2024-federer-nadal-louis-vuitton-kostyuk-wimbledon-wedding-dress-osaka-us-open",
           "caption": "Tennis.com — 2024最佳网球时尚时刻：Federer & Nadal LV「核心价值」Annie Leibovitz大片",
           "source": "Tennis.com",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 308: Permanent Redirect",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://liveblogging-dapi.tennis.com/baseline/articles/year-tenniscore-zendaya-challengers-effect-transform-tennis-fashion-loewe-sinner-osaka-federer-nadal",
@@ -28,13 +31,19 @@
           "url": "https://www.voguehk.com/en/article/fashion/tenniscore-trend/",
           "caption": "Vogue HK — Tenniscore终极指南：从运动场到日常的Polo衫与网球裙搭配",
           "source": "Vogue HK",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.flannels.com/stylenews/post/sports-club-90s-style",
           "caption": "Flannels — Casablanca 网球俱乐部美学、Lacoste AW24巴黎时装周网球元素",
           "source": "Flannels",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -49,5 +58,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

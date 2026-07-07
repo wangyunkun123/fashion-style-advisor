@@ -63,7 +63,10 @@
         {
           "url": "https://www.goxip.com/sg/en/magazine/takuya-kimura-s-new-tv-drama-is-a-hit-sleek-and-chic-bodyguard-style-is-now-a-trend",
           "caption": "木村拓哉日剧造型 — 《BG》保镖风格时尚解析",
-          "source": "Goxip"
+          "source": "Goxip",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -74,12 +77,18 @@
         {
           "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
           "caption": "TokyoFashion 东京街拍档案 — 原宿/涉谷男生街拍合集",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://tokyofashion.com/tag/harajuku-guys/",
           "caption": "Harajuku Guys 标签 — 原宿男生街拍专门分类",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://post.smzdm.com/p/a6zgrx0n/",
@@ -109,5 +118,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

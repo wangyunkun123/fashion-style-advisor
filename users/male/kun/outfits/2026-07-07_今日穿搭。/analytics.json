@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-07-07T06:28:25Z",
+  "user_id": "kun",
+  "items_used": [
+    "TS-008",
+    "SH-006",
+    "SHOE-001",
+    "HAT-003"
+  ],
+  "style_matched": "resort_vacation",
+  "occasion": "日常",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 57663,
+  "api_calls": 2
+}

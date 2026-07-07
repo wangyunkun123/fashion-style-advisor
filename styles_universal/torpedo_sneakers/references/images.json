@@ -1,23 +1,84 @@
 {
   "style_id": "torpedo_sneakers",
-  "_last_updated": "2026-06-13", "_status": "collected",
+  "_last_updated": "2026-06-13",
+  "_status": "collected",
   "categories": {
-    "editorial": {"label": "杂志大片", "images": [
-      {"url": "https://www.vogue.com/article/prada-collapse-sneakers-trend", "caption": "Prada Collapse 薄底跑鞋 — 奢侈薄底时代的开启", "source": "Vogue"},
-      {"url": "https://www.gq.com/story/adidas-sl72-sneaker-comeback", "caption": "Adidas SL72 — 1972奥运马拉松鞋的2024复兴", "source": "GQ"}
-    ]},
-    "runway": {"label": "秀场T台", "images": [
-      {"url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/prada", "caption": "Prada SS25 男装 — Collapse薄底跑鞋秀场亮相", "source": "Vogue Runway"},
-      {"url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/dries-van-noten", "caption": "Dries Van Noten SS25 — 薄底跑鞋配宽松西装", "source": "Vogue Runway"}
-    ]},
-    "celebrity": {"label": "明星名人", "images": [
-      {"url": "https://www.gq.com/story/adidas-samba-gazelle-trend-2024", "caption": "Adidas Samba/Gazelle — 被明星穿成2024年度鞋款", "source": "GQ"}
-    ]},
-    "streetstyle": {"label": "街拍造型", "images": [
-      {"url": "https://www.vogue.com/slideshow/best-street-style-paris-menswear-spring-2025", "caption": "巴黎男装周街拍 — 薄底跑鞋×直筒裤的标准公式", "source": "Vogue"}
-    ]},
-    "social": {"label": "社交平台", "images": [
-      {"url": "https://www.highsnobiety.com/p/best-adidas-samba-outfits-men/", "caption": "Highsnobiety — Samba/Gazelle/SL72 薄底三件套穿搭合集", "source": "Highsnobiety"}
-    ]}
-  }
+    "editorial": {
+      "label": "杂志大片",
+      "images": [
+        {
+          "url": "https://www.vogue.com/article/prada-collapse-sneakers-trend",
+          "caption": "Prada Collapse 薄底跑鞋 — 奢侈薄底时代的开启",
+          "source": "Vogue",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
+        },
+        {
+          "url": "https://www.gq.com/story/adidas-sl72-sneaker-comeback",
+          "caption": "Adidas SL72 — 1972奥运马拉松鞋的2024复兴",
+          "source": "GQ",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
+        }
+      ]
+    },
+    "runway": {
+      "label": "秀场T台",
+      "images": [
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/prada",
+          "caption": "Prada SS25 男装 — Collapse薄底跑鞋秀场亮相",
+          "source": "Vogue Runway",
+          "_broken": true
+        },
+        {
+          "url": "https://www.vogue.com/fashion-shows/spring-2025-menswear/dries-van-noten",
+          "caption": "Dries Van Noten SS25 — 薄底跑鞋配宽松西装",
+          "source": "Vogue Runway"
+        }
+      ]
+    },
+    "celebrity": {
+      "label": "明星名人",
+      "images": [
+        {
+          "url": "https://www.gq.com/story/adidas-samba-gazelle-trend-2024",
+          "caption": "Adidas Samba/Gazelle — 被明星穿成2024年度鞋款",
+          "source": "GQ",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
+        }
+      ]
+    },
+    "streetstyle": {
+      "label": "街拍造型",
+      "images": [
+        {
+          "url": "https://www.vogue.com/slideshow/best-street-style-paris-menswear-spring-2025",
+          "caption": "巴黎男装周街拍 — 薄底跑鞋×直筒裤的标准公式",
+          "source": "Vogue",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
+        }
+      ]
+    },
+    "social": {
+      "label": "社交平台",
+      "images": [
+        {
+          "url": "https://www.highsnobiety.com/p/best-adidas-samba-outfits-men/",
+          "caption": "Highsnobiety — Samba/Gazelle/SL72 薄底三件套穿搭合集",
+          "source": "Highsnobiety",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 404: Not Found",
+          "_checked": "2026-07-02"
+        }
+      ]
+    }
+  },
+  "_last_checked": "2026-07-02"
 }

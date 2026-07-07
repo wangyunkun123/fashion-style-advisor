@@ -39,9 +39,11 @@
           "url": "https://www.vogue.com/slideshow/the-best-street-style-photos-from-the-fall-2026-menswear-shows-in-paris",
           "caption": "Vogue — 2026秋冬巴黎男装周街拍：Dior 宽松卡其裤×条纹领带的学院解构街头演绎",
           "source": "Vogue",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

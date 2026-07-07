@@ -17,7 +17,10 @@
           "url": "https://www.thecrimson.com/article/2025/2/18/a-potts-review-nyfw/",
           "caption": "A. Potts NYFW AW25 — 纽约男装日：动物印花×几何星系迷彩融合，流苏连衣裙×不对称打结镂空",
           "source": "The Harvard Crimson",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "<urlopen error _ssl.c:1112: The handshake operation timed out>",
+          "_checked": "2026-07-01"
         }
       ]
     },
@@ -49,5 +52,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-01"
 }

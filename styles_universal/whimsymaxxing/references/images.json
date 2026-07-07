@@ -28,7 +28,10 @@
           "url": "https://www.usnews.com/news/entertainment/articles/2025-01-22/van-beirendonck-offers-a-theatrical-ode-to-surreal-sartorialism-in-paris-menswear-collection",
           "caption": "Walter Van Beirendonck FW2025 — 巴黎男装周超现实戏剧颂歌：Edward Scissorhands解构西装、骷髅与毛毛虫雕塑",
           "source": "US News/AP",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "The read operation timed out",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.vogue.com/fashion-shows/spring-2026-couture/germanier",
@@ -45,9 +48,13 @@
           "url": "https://www.showstudio.com/cms/documents/3607/DVN_PRESS_RELEASE__MEN_AW_25-26.pdf",
           "caption": "Dries Van Noten AW25 — 蓟花喷绘×金属尖鞋带系腰：贵族的顽皮不羁",
           "source": "SHOWstudio",
-          "type": "gallery_page"
+          "type": "gallery_page",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

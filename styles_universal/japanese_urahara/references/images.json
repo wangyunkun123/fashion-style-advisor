@@ -37,7 +37,10 @@
         {
           "url": "https://en.jp.bape.com/blogs/news/mr-24fw-lookbook",
           "caption": "Mr. BATHING APE 2024秋冬 Lookbook — 成熟Ape绅士线",
-          "source": "BAPE Official"
+          "source": "BAPE Official",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://hypebeast.com/2026/6/new-arrivals-from-hbx-neighborhood-2",
@@ -53,7 +56,10 @@
         {
           "url": "https://www.discogs.com/digs/music/japan-urahara-streetwear",
           "caption": "里原宿与黑胶文化 — 藤原浩/Nigo 等潮流教父的音乐时尚",
-          "source": "Discogs"
+          "source": "Discogs",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://clarks-frca.onelink-translations.com/en-it/originals/harajuku-collection",
@@ -74,12 +80,18 @@
         {
           "url": "https://tokyofashion.com/tag/harajuku-guys/",
           "caption": "Harajuku Guys — 原宿男生街拍（含里原宿风格）",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
           "caption": "Tokyo Street Snaps — 东京街拍全档案",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://ar.japantravel.com/tokyo/urahara/29228",
@@ -109,5 +121,6 @@
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

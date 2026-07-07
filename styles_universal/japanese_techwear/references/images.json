@@ -16,7 +16,10 @@
         {
           "url": "https://hypebeast.cn/2024/1/y-3-fall-winter-2024-collection-lookbook",
           "caption": "Y-3 2024秋冬 Lookbook — 山本耀司 adidas 机能风",
-          "source": "Hypebeast CN"
+          "source": "Hypebeast CN",
+          "_broken": true,
+          "_broken_reason": "<urlopen error _ssl.c:1112: The handshake operation timed out>",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://voidline.co.uk/products/noragi-techwear",
@@ -53,7 +56,10 @@
         {
           "url": "https://www.gq.com.tw/tag/greg-han-hsu-許光漢",
           "caption": "许光汉 GQ台湾 — 机能/暗黑风格穿搭大片",
-          "source": "GQ Taiwan"
+          "source": "GQ Taiwan",
+          "_broken": true,
+          "_broken_reason": "'ascii' codec can't encode characters in position 23-25: ordinal not in range(12",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.vogue.com.tw/article/best-dressed-2025",
@@ -74,17 +80,26 @@
         {
           "url": "https://tokyofashion.com/tag/harajuku-guys/",
           "caption": "Harajuku Guys — 原宿暗黑/机能风男生街拍",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://tokyofashion.com/category/tokyo-street-snaps/",
           "caption": "Tokyo Street Snaps — 东京街拍（含机能风）",
-          "source": "TokyoFashion.com"
+          "source": "TokyoFashion.com",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://vogue.sg/tokyo-fashion-week-fall-winter-2024-street-style/",
           "caption": "Vogue SG 东京2024秋冬时装周街拍 — 机能风合集",
-          "source": "Vogue Singapore"
+          "source": "Vogue Singapore",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         }
       ]
     },
@@ -105,9 +120,13 @@
         {
           "url": "https://voidline.co.uk/products/kurosenshi-黒戦士-urban-cyperpunk-hoodie",
           "caption": "Kurosenshi 黒戦士 Urban Cyberpunk Hoodie — 日系机能忍者风",
-          "source": "Voidline"
+          "source": "Voidline",
+          "_broken": true,
+          "_broken_reason": "'ascii' codec can't encode characters in position 26-28: ordinal not in range(12",
+          "_checked": "2026-07-02"
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

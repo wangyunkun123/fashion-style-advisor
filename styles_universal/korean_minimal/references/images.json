@@ -50,7 +50,10 @@
         {
           "url": "https://vogue.sg/calvin-klein-cha-eun-woo/",
           "caption": "Cha Eunwoo × Calvin Klein 2024秋冬— 白色衬衫、靛蓝牛仔、黑色风衣，90s极简主义回归",
-          "source": "Vogue Singapore"
+          "source": "Vogue Singapore",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://www.mens-folio.com/style/cha-eun-woos-spring-date-with-calvin-klein/",
@@ -95,14 +98,19 @@
         {
           "url": "https://gangnamusa.com/korean-street-style-outfit-combos-that-work/",
           "caption": "Gangnam USA: 韩式街拍经典组合— 单色极简、柔软男孩层搭、结构化休闲，首尔各区风格地图",
-          "source": "Gangnam USA"
+          "source": "Gangnam USA",
+          "_broken": true,
+          "_broken_reason": "HTTP Error 403: Forbidden",
+          "_checked": "2026-07-02"
         },
         {
           "url": "https://timesofindia.indiatimes.com/life-style/fashion/celeb-style/korean-star-han-ji-mins-understated-luxury-is-a-guide-to-timeless-minimalist-style/articleshowprint/123545910.cms",
           "caption": "Times of India: 韩星 Han Ji-min 低调奢华极简穿搭指南— timeless neutral palette + 好质感面料",
-          "source": "Times of India"
+          "source": "Times of India",
+          "_broken": true
         }
       ]
     }
-  }
+  },
+  "_last_checked": "2026-07-02"
 }

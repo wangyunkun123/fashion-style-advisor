@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-07-07T15:20:41Z",
+  "user_id": "kun",
+  "items_used": [
+    "TS-010",
+    "PT-005",
+    "SHOE-003"
+  ],
+  "style_matched": "smart_casual,korean_minimal",
+  "occasion": "通勤",
+  "explore_level": 0.0,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 83164,
+  "api_calls": 3
+}

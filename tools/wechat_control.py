@@ -55,6 +55,10 @@ install_excepthook()
 # 兼容旧代码的别名（逐步迁移中）
 _proto_rebuild_lock = shared_state.proto_rebuild_lock
 
+# 🔒 全局 git 串行锁：所有后台线程的 git add/commit/push 必须串行，
+#    否则并发时 .git/index.lock 冲突、push 相互竞争，导致提交丢失或推送失败
+_git_lock = threading.Lock()
+
 # ── 天气模块 ──────────────────────────────────────────
 from tools.weather_advisor import fetch_weather, analyze_weather
 
@@ -1180,13 +1184,15 @@ def get_wardrobe_summary():
     # 先从 markdown 读取文件名映射（保持向后兼容）
     filename_map = {}
     try:
-        with open(wardrobe_md, 'r') as f:
+        with open(wardrobe_md, 'r', encoding='utf-8') as f:
             for line in f:
                 m = re.match(r'^\|\s*(\w+-\d+)\s*\|\s*([^|]+?)\s*\|', line)
                 if m:
                     filename_map[m.group(1)] = m.group(2).strip()
-    except:
+    except FileNotFoundError:
         pass
+    except Exception as _e:
+        log(f"⚠️ 读取服装档案.md 失败: {_e}", "WARN")
 
     # 从 JSON 标签读取所有单品
     cats = {}
@@ -1194,9 +1200,11 @@ def get_wardrobe_summary():
         if fname == 'SCORE_CACHE.json' or not fname.endswith('.json'):
             continue
         try:
-            with open(os.path.join(tags_dir, fname)) as f:
+            with open(os.path.join(tags_dir, fname), encoding='utf-8') as f:
                 d = json.load(f)
-        except:
+        except Exception as _e:
+            # ⚠️ 损坏的标签文件不能静默跳过——会导致 AI 看不到这件衣服却无任何提示
+            log(f"⚠️ 标签文件损坏，已跳过: {fname} ({_e})", "WARN")
             continue
         cid = d.get('clothing_id', '')
         if not cid:
@@ -1273,6 +1281,42 @@ def _get_next_id(category_code, uid=None):
 
 
 _wardrobe_lock = threading.Lock()  # 保护服装档案.md 和 new_items.json 的并发写入
+
+# 🔒 profile.json 并发保护：按路径分锁 + 原子替换，防止 onboarding 快速连点丢字段
+import threading as _threading_mod
+_profile_locks = {}
+_profile_locks_guard = _threading_mod.Lock()
+
+def _get_profile_lock(path):
+    key = os.path.abspath(path)
+    with _profile_locks_guard:
+        lk = _profile_locks.get(key)
+        if lk is None:
+            lk = _threading_mod.Lock()
+            _profile_locks[key] = lk
+        return lk
+
+def _update_profile(path, mutator):
+    """原子更新 profile.json：加锁 → 读 → mutator 修改 → tempfile+os.replace 落盘。
+    mutator(dict) 就地修改传入的 dict（或返回新 dict）。返回最终写入的 dict。"""
+    lock = _get_profile_lock(path)
+    with lock:
+        p = {}
+        if os.path.exists(path):
+            try:
+                with open(path, encoding='utf-8') as f:
+                    p = json.load(f)
+            except Exception:
+                p = {}
+        ret = mutator(p)
+        if isinstance(ret, dict):
+            p = ret
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        tmp = f'{path}.tmp.{os.getpid()}'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(p, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+        return p
 
 def _ensure_wardrobe_md(user_dir, uid=None):
     """确保 服装档案.md 存在，不存在则自动生成（自愈）"""
@@ -2106,13 +2150,40 @@ def _run_preview_outfit(task_id, new_item, selected_ids, uid=None):
             cat = oi.get('category', '')
             item_descs.append(f"{tag}{brand_name} {color_name}{cat}".strip())
 
-        prompt = f"""一位亚洲年轻男性，身高178cm偏瘦，肤色偏白。身穿{','.join(item_descs)}。
+        # 🔒 从用户 profile 生成性别化人物描述（历史 bug：硬编码"178cm 亚洲男性"，
+        #    导致女性用户预览图变成男模特穿她的裙子）
+        _person_desc = "一位亚洲年轻人"
+        try:
+            _pf_gender = _g if (uid and uid != 'default') else 'male'
+            _pf_path = os.path.join(resolve_user_dir(_pf_gender, uid), 'profile.json') if (uid and uid != 'default') else None
+            _body = {}
+            if _pf_path and os.path.exists(_pf_path):
+                with open(_pf_path, encoding='utf-8') as _pf:
+                    _pfd = json.load(_pf)
+                _pf_gender = _pfd.get('gender', _pf_gender) or _pf_gender
+                _body = _pfd.get('body', {}) or {}
+            _sex_word = '女性' if _pf_gender == 'female' else '男性'
+            _h = _body.get('height', '')
+            _shape = _body.get('shape', '')
+            _skin = _body.get('skin_tone', '')
+            _bits = [f"亚洲年轻{_sex_word}"]
+            if _h:
+                _bits.append(f"身高{_h}cm")
+            if _shape:
+                _bits.append(_shape)
+            if _skin:
+                _bits.append(f"肤色{_skin}")
+            _person_desc = "一位" + "，".join(_bits)
+        except Exception:
+            pass
+
+        prompt = f"""{_person_desc}。身穿{','.join(item_descs)}。
 全身站立穿搭照，自然光线，干净简约背景，时尚杂志风格。
 展示完整穿搭效果，包含上衣、下装、鞋子和配饰的搭配。
 服装版型合身，配色协调，风格统一。
 高画质，真实感强，专业时尚摄影。"""
 
-        with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w') as f:
+        with open(os.path.join(shengtu_dir, '豆包提示词.txt'), 'w', encoding='utf-8') as f:
             f.write(prompt)
 
         tasks.update(task_id, status='running', message='正在调用 AI 生图（约30秒）...')
@@ -3056,15 +3127,19 @@ def _build_admin_html():
 
     # 首次满意度
     first_ratings = []
-    for uid in reg:
-        outfits_dir = os.path.join(PROJECT_DIR, 'users', uid, 'outfits')
-        if os.path.isdir(outfits_dir):
-            dirs = sorted([d for d in os.listdir(outfits_dir) if os.path.isdir(os.path.join(outfits_dir, d)) and not d.startswith('.')])
-            if dirs:
-                rp = os.path.join(outfits_dir, dirs[0], 'rating.json')
-                if os.path.exists(rp):
-                    with open(rp) as f:
-                        first_ratings.append(json.load(f).get('rating', 0))
+    for gender, g_users in reg.items():
+        for uid in g_users:
+            outfits_dir = os.path.join(PROJECT_DIR, 'users', gender, uid, 'outfits')
+            if os.path.isdir(outfits_dir):
+                dirs = sorted([d for d in os.listdir(outfits_dir) if os.path.isdir(os.path.join(outfits_dir, d)) and not d.startswith('.')])
+                if dirs:
+                    rp = os.path.join(outfits_dir, dirs[0], 'rating.json')
+                    if os.path.exists(rp):
+                        try:
+                            with open(rp, encoding='utf-8') as f:
+                                first_ratings.append(json.load(f).get('rating', 0))
+                        except Exception:
+                            pass
     first_satisfaction = f"{round(sum(1 for r in first_ratings if r >= 3)/max(len(first_ratings),1)*100)}%"
 
     # 用户行
@@ -3081,15 +3156,17 @@ def _build_admin_html():
 
     # 统计性别分布
     male_count = 0; female_count = 0
-    for uid in reg:
-        try:
-            up = os.path.join(PROJ_DIR, 'users', uid, 'profile.json')
-            if os.path.exists(up):
-                with open(up) as f:
-                    g = json.load(f).get('gender', '')
-                if g == 'male': male_count += 1
-                elif g == 'female': female_count += 1
-        except: pass
+    for gender, g_users in reg.items():
+        for uid in g_users:
+            try:
+                up = os.path.join(PROJECT_DIR, 'users', gender, uid, 'profile.json')
+                if os.path.exists(up):
+                    with open(up, encoding='utf-8') as f:
+                        g = json.load(f).get('gender', '') or gender
+                    if g == 'male': male_count += 1
+                    elif g == 'female': female_count += 1
+            except Exception:
+                pass
     unknown_count = len(users_data) - male_count - female_count
 
     return f"""<!DOCTYPE html>
@@ -3164,10 +3241,14 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
 
     # ── 多用户上下文（必须在所有数据加载之前设置！后台线程不继承父线程的 threading.local()）──
     pipeline_user = user_id
+    _pipeline_gender = 'male'  # 单用户/无用户时的兜底
     if pipeline_user and pipeline_user != 'default':
         from tools.common import set_thread_user as _set_thread_user
         from tools.user_manager import get_user_gender as _gug
-        _pipeline_gender = pipeline_gender if 'pipeline_gender' in dir() else (_gug(pipeline_user) or 'male')
+        _looked = _gug(pipeline_user)
+        if not _looked:
+            log(f"⚠️ 无法确定用户 {pipeline_user} 的性别，回退 male（请检查注册表）")
+        _pipeline_gender = _looked or 'male'
         _set_thread_user(_pipeline_gender, pipeline_user)
 
     # ── 🆕 统一意图解析（Phase 1 正则 + Phase 2 LLM）──
@@ -3499,12 +3580,8 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
             _gen_cmd += ['--user', pipeline_user]
         # 🆕 女性用户启用锚点模式（--anchor）：弱化服装文字描述，强化参考图还原度
         #    女装款式差异细腻，详细文字描述会导致「平均化坍塌」，锚点模式让模型以参考图为准
-        try:
-            from tools.user_manager import get_user_gender as _gug2
-            _gen_gender = (_gug2(pipeline_user) or 'male') if (pipeline_user and pipeline_user != 'default') else 'male'
-        except Exception:
-            _gen_gender = 'male'
-        if _gen_gender == 'female':
+        #    复用函数开头已解析的 _pipeline_gender，避免重复查询/fallback 分歧
+        if _pipeline_gender == 'female':
             _gen_cmd += ['--anchor']
             log('🎯 女性用户 → 启用 --anchor 锚点生图模式')
         out2 = run_cli(_gen_cmd, timeout=300)
@@ -3563,6 +3640,8 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
         def _background_push():
             _step_errors = []
             try:
+              # 🔒 串行化整个 git 工作树操作，避免与其他后台推送线程冲突
+              with _git_lock:
                 # ── Step 1: git add + commit + push（带重试）──
                 run_cli(['git', 'add', '-A'], timeout=30)
                 _commit_out = run_cli(['git', 'commit', '-m', f'🎨 {style_hint} — 远程操控'], timeout=30)
@@ -4937,6 +5016,21 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             if not file_abs.startswith(PROJECT_DIR):
                 self._json_resp(403, {"error": "forbidden"})
                 return
+            # 🔒 跨用户 ACL：users/ 下的图片只允许当前登录用户访问自己的目录
+            #    防止 A 用户通过构造 f=users/male/kun/... 窥探 B 用户的身形照/穿搭图
+            _rel_norm = os.path.relpath(file_abs, PROJECT_DIR).replace(os.sep, '/')
+            if _rel_norm.startswith('users/'):
+                _parts = _rel_norm.split('/')
+                # 期望结构: users/{gender}/{uid}/...
+                if len(_parts) >= 3:
+                    _owner_gender, _owner_uid = _parts[1], _parts[2]
+                    _cur_uid = self.user_id if self.user_id and self.user_id != 'default' else None
+                    if _cur_uid is None or _owner_gender != (self.user_gender or '') or _owner_uid != _cur_uid:
+                        self._json_resp(403, {"error": "forbidden: cross-user access denied"})
+                        return
+                else:
+                    self._json_resp(403, {"error": "forbidden"})
+                    return
             if not os.path.isfile(file_abs):
                 self._json_resp(404, {"error": "file not found"})
                 return
@@ -5909,23 +6003,27 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # Onboarding Step 0: 选择性别
         if parsed.path == '/api/onboarding/gender':
             body = self._read_post_body()
-            data = json.loads(body)
-            gender = data.get('gender', 'female')
+            try:
+                data = json.loads(body) if body else {}
+            except Exception:
+                self._json_resp(400, {"error": "invalid json"})
+                return
+            gender = data.get('gender', '')
+            # 🔒 性别选择端点：gender 必填且必须合法，绝不静默猜测
+            if gender not in ('male', 'female'):
+                self._json_resp(400, {"error": "gender must be 'male' or 'female'"})
+                return
             up = os.path.join(self.user_dir, 'profile.json')
             os.makedirs(self.user_dir, exist_ok=True)
-            p = {}
-            if os.path.exists(up):
-                with open(up) as f:
-                    p = json.load(f)
-            p['gender'] = gender
-            p['onboarding_step'] = 1
-            with open(up, 'w') as f:
-                json.dump(p, f, ensure_ascii=False, indent=2)
+            def _mut0(p):
+                p['gender'] = gender
+                p['onboarding_step'] = 1
+            _update_profile(up, _mut0)
             log(f"🚻 Onboarding Step0: {user_id} → {gender}")
 
             # 返回性别对应的风格卡片（精选）和身形选项
             from tools.user_manager import GENDER_DEFAULTS
-            gd = GENDER_DEFAULTS.get(gender, GENDER_DEFAULTS.get('female', {}))
+            gd = GENDER_DEFAULTS.get(gender, {})
             default_styles = gd.get('default_styles', [])
 
             # 加载 trend_category 映射
@@ -5933,12 +6031,13 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
             cat_path = os.path.join(PROJECT_DIR, 'styles/female' if gender == 'female' else 'styles_universal', 'categories.json')
             if os.path.exists(cat_path):
                 try:
-                    with open(cat_path) as f:
+                    with open(cat_path, encoding='utf-8') as f:
                         cat_data = json.load(f)
                     for sid, sinfo in cat_data.get('style_registry', {}).items():
                         if 'trend_category' in sinfo:
                             tc_map[sid] = sinfo['trend_category']
-                except: pass
+                except Exception:
+                    pass
 
             cards = []
             styles_dir = os.path.join(PROJECT_DIR, 'styles_universal' if gender == 'male' else 'styles/female')
@@ -5991,24 +6090,24 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # Onboarding Step 1: 保存身形
         if parsed.path == '/api/onboarding/step1':
             body = self._read_post_body()
-            data = json.loads(body)
+            try:
+                data = json.loads(body) if body else {}
+            except Exception:
+                self._json_resp(400, {"error": "invalid json"})
+                return
             is_skip = data.get('skip', False)
             up = os.path.join(self.user_dir, 'profile.json')
-            p = {}
-            if os.path.exists(up):
-                with open(up) as f:
-                    p = json.load(f)
-            p['body'] = {
-                'height': data.get('height', ''),
-                'weight': data.get('weight', ''),
-                'shape': data.get('shape', ''),
-                'skin_tone': data.get('skin_tone', ''),
-                'concern': data.get('concern', ''),
-                'skipped': is_skip,
-            }
-            p['onboarding_step'] = 2
-            with open(up, 'w') as f:
-                json.dump(p, f, ensure_ascii=False, indent=2)
+            def _mut1(p):
+                p['body'] = {
+                    'height': data.get('height', ''),
+                    'weight': data.get('weight', ''),
+                    'shape': data.get('shape', ''),
+                    'skin_tone': data.get('skin_tone', ''),
+                    'concern': data.get('concern', ''),
+                    'skipped': is_skip,
+                }
+                p['onboarding_step'] = 2
+            _update_profile(up, _mut1)
             log(f"👤 Onboarding Step1: {user_id} — {data.get('shape','?')} {'(跳过)' if is_skip else ''}")
             self._json_resp(200, {'ok': True, 'next_step': 2})
             return
@@ -6016,18 +6115,18 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # Onboarding Step 2: 保存风格偏好
         if parsed.path == '/api/onboarding/step2':
             body = self._read_post_body()
-            data = json.loads(body)
+            try:
+                data = json.loads(body) if body else {}
+            except Exception:
+                self._json_resp(400, {"error": "invalid json"})
+                return
             style_ids = data.get('style_ids', [])
             is_skip = data.get('skip', False)
             up = os.path.join(self.user_dir, 'profile.json')
-            p = {}
-            if os.path.exists(up):
-                with open(up) as f:
-                    p = json.load(f)
-            p['style_prefs'] = style_ids
-            p['onboarding_step'] = 3
-            with open(up, 'w') as f:
-                json.dump(p, f, ensure_ascii=False, indent=2)
+            def _mut2(p):
+                p['style_prefs'] = style_ids
+                p['onboarding_step'] = 3
+            _update_profile(up, _mut2)
             log(f"🎨 Onboarding Step2: {user_id} — {len(style_ids)} 风格 {'(跳过)' if is_skip else ''}")
             self._json_resp(200, {'ok': True, 'next_step': 3})
             return
@@ -6192,18 +6291,15 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
         # Onboarding 完成
         if parsed.path == '/api/onboarding/complete':
             up = os.path.join(self.user_dir, 'profile.json')
-            p = {}
-            if os.path.exists(up):
-                with open(up) as f:
-                    p = json.load(f)
-            p['onboarding_step'] = 4
-            p['onboarding_complete'] = True
-            p['onboarding_done_at'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-            with open(up, 'w') as f:
-                json.dump(p, f, ensure_ascii=False, indent=2)
+            def _mutc(p):
+                p['onboarding_step'] = 4
+                p['onboarding_complete'] = True
+                p['onboarding_done_at'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+            p = _update_profile(up, _mutc)
             # 更新注册表状态（不存在则创建）
             reg = _load_user_registry()
-            g = gender or 'male'
+            # 🔒 以 profile 中 Step0 存入的 gender 为权威，其次请求上下文，最后才兜底
+            g = p.get('gender') or gender or self.user_gender or 'male'
             if g not in reg:
                 reg[g] = {}
             if user_id not in reg[g]:

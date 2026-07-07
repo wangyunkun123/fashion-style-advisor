@@ -9,58 +9,43 @@ _PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def get_person_photos():
     """多用户感知：获取当前活跃用户的个人照片路径列表。
-    - 多用户模式：users/<uid>/profile.json
-    - 单人模式：config/user_profile.json
-    返回: [photo_path, ...] 或空列表（无照片/关闭形象）
+    - 多用户模式：users/<gender>/<uid>/profile.json
+    返回: [photo_path, ...] 或空列表（无照片/关闭形象/无用户上下文）
+
+    ⚠️ 安全铁律：绝不 fallback 到任何具体用户的照片。
+       线程用户上下文缺失时返回空列表 —— 生图流程会降级为「无人物参考图」，
+       而不是把别人的脸打到当前用户的效果图上（历史 bug：默认回退 kun）。
     """
-    # 🆕 多用户感知 — users/<gender>/<user_id>/profile.json
     try:
         from tools.common import get_thread_user, resolve_user_dir
         gender, uid = get_thread_user()
-        if uid and uid != 'default':
-            user_dir = resolve_user_dir(gender, uid)
-            up_path = os.path.join(user_dir, 'profile.json')
-            if os.path.exists(up_path):
-                with open(up_path) as f:
-                    up = json.load(f)
-                if up.get('use_my_image') is not False:
-                    photos = up.get('photos', {})
-                    result = []
-                    slot_order = ['full_body_front', 'face_closeup', 'full_body_side']
-                    for slot in slot_order:
-                        rel_path = photos.get(slot, '')
-                        if rel_path:
-                            abs_path = os.path.join(_PROJ_DIR, rel_path)
-                            if os.path.exists(abs_path):
-                                result.append(abs_path)
-                    if result:
-                        return result
     except Exception:
-        pass
+        return []
 
-    # ── 回退：kun 的照片（默认男性用户）──
-    up_path = os.path.join(_PROJ_DIR, 'users', 'male', 'kun', 'profile.json')
-    if os.path.exists(up_path):
-        try:
-            with open(up_path) as f:
-                up = json.load(f)
-            if up.get('use_my_image') is not False:
-                photos = up.get('photos', {})
-                result = []
-                for slot in ['full_body_front', 'face_closeup', 'full_body_side']:
-                    rel_path = photos.get(slot, '')
-                    if rel_path:
-                        abs_path = os.path.join(_PROJ_DIR, rel_path)
-                        if os.path.exists(abs_path):
-                            result.append(abs_path)
-                if result:
-                    return result
-        except Exception:
-            pass
+    if not uid or uid == 'default':
+        # 无明确用户上下文 → 不猜，直接返回空
+        return []
 
-    # ── 最后回退：旧文件路径 ──
-    old = os.path.join(_PROJ_DIR, 'profile', 'photos', 'IMG_8493.jpg')
-    return [old] if os.path.exists(old) else []
+    try:
+        user_dir = resolve_user_dir(gender, uid)
+        up_path = os.path.join(user_dir, 'profile.json')
+        if not os.path.exists(up_path):
+            return []
+        with open(up_path, encoding='utf-8') as f:
+            up = json.load(f)
+        if up.get('use_my_image') is False:
+            return []
+        photos = up.get('photos', {})
+        result = []
+        for slot in ['full_body_front', 'face_closeup', 'full_body_side']:
+            rel_path = photos.get(slot, '')
+            if rel_path:
+                abs_path = os.path.join(_PROJ_DIR, rel_path)
+                if os.path.exists(abs_path):
+                    result.append(abs_path)
+        return result
+    except Exception:
+        return []
 
 
 def remove_person_background(src_path):

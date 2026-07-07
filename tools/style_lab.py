@@ -80,6 +80,25 @@ def save_state(state):
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 
+def _resolve_user_paths(outfit_dir):
+    """从 outfit_dir 反推所属用户的缓存/配置路径，实现多用户隔离。
+    outfit_dir 形如 users/{gender}/{uid}/outfits/xxx → 用户根 = 上两级。
+    找不到用户结构时回退到主项目路径（单用户兼容）。
+    返回 (cache_file, scene_prefs_file)。
+    """
+    ao = os.path.abspath(outfit_dir)
+    parts = ao.replace(os.sep, '/').split('/')
+    if 'users' in parts:
+        ui = parts.index('users')
+        # users/{gender}/{uid}/...
+        if len(parts) >= ui + 3:
+            user_root = '/'.join(parts[:ui + 3])
+            cache = os.path.join(user_root, 'wardrobe', 'tags', 'SCORE_CACHE.json')
+            prefs = os.path.join(user_root, 'config', 'scene_prefs.json')
+            return cache, prefs
+    return CACHE_FILE, os.path.join(PROJ_DIR, 'config', 'scene_prefs.json')
+
+
 def apply_rating_feedback(outfit_dir, rating, feedback=None):
     """
     用户评分反馈到评分缓存，根据反馈类型精准调整。
@@ -90,9 +109,14 @@ def apply_rating_feedback(outfit_dir, rating, feedback=None):
     ⭐ + 搭配不满意  → 该搭配涉及的单品 -8
     ⭐ + 单品问题    → 特定单品 -15
     ⭐ + 场景不合适  → 单品不罚（记录偏好，后续避免该场景推此风格）
+
+    🔒 多用户隔离：缓存/偏好文件从 outfit_dir 反推所属用户，绝不写主项目全局缓存。
     """
     if rating not in (1, 2, 3, -1, -2, -3):
         return
+
+    # 🔒 按用户解析缓存路径（防止男女评分互相污染主项目 SCORE_CACHE）
+    cache_file, scene_prefs = _resolve_user_paths(outfit_dir)
 
     # 评分逆转：负数表示取消之前的评分
     sign = -1 if rating < 0 else 1
@@ -123,9 +147,9 @@ def apply_rating_feedback(outfit_dir, rating, feedback=None):
     if not style_id or not item_ids:
         return
 
-    if not os.path.exists(CACHE_FILE):
+    if not os.path.exists(cache_file):
         return
-    with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+    with open(cache_file, 'r', encoding='utf-8') as f:
         cache = json.load(f)
 
     def adjust(items, delta, log_msg):
@@ -173,23 +197,23 @@ def apply_rating_feedback(outfit_dir, rating, feedback=None):
 
         elif reason == 'scene_mismatch':
             # 场景不合适 → 不罚单品，记录偏好
-            scene_prefs = os.path.join(PROJ_DIR, 'config', 'scene_prefs.json')
             prefs = {}
             if os.path.exists(scene_prefs):
-                with open(scene_prefs) as f2:
+                with open(scene_prefs, encoding='utf-8') as f2:
                     prefs = json.load(f2)
             prefs[style_id] = prefs.get(style_id, {})
             prefs[style_id]['avoid_scenes'] = prefs[style_id].get('avoid_scenes', [])
             if detail:
                 prefs[style_id]['avoid_scenes'].append(detail)
-            with open(scene_prefs, 'w') as f2:
+            os.makedirs(os.path.dirname(scene_prefs), exist_ok=True)
+            with open(scene_prefs, 'w', encoding='utf-8') as f2:
                 json.dump(prefs, f2, ensure_ascii=False, indent=2)
 
         else:
             # 未指定原因 → 默认 -10
             adjust(item_ids, -10, f'{style_id} 1星(无原因) -10')
 
-    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+    with open(cache_file, 'w', encoding='utf-8') as f:
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
 
@@ -524,9 +548,73 @@ def _eval_rule(check_str, item, outfit_items, weather_temp, weather_cond, occasi
         'is_neutral': color.get('is_neutral', False),
     }
     try:
-        return bool(eval(check_str, {"__builtins__": {}}, ns))
+        return bool(_safe_eval(check_str, ns))
     except Exception:
         return False
+
+
+# ── 安全表达式求值：AST 白名单，替代 eval（防 rules.json 被污染导致 RCE）──
+import ast as _ast
+import operator as _op
+
+_SAFE_BINOPS = {
+    _ast.Add: _op.add, _ast.Sub: _op.sub, _ast.Mult: _op.mul,
+    _ast.Div: _op.truediv, _ast.Mod: _op.mod, _ast.FloorDiv: _op.floordiv,
+}
+_SAFE_CMPOPS = {
+    _ast.Eq: _op.eq, _ast.NotEq: _op.ne, _ast.Lt: _op.lt, _ast.LtE: _op.le,
+    _ast.Gt: _op.gt, _ast.GtE: _op.ge, _ast.In: lambda a, b: a in b,
+    _ast.NotIn: lambda a, b: a not in b,
+}
+
+def _safe_eval(expr, ns):
+    """只允许：字面量/变量(来自 ns)/比较/布尔/算术/属性访问/一元非。
+    禁止函数调用、下标、导入、dunder 等一切可逃逸手法。"""
+    tree = _ast.parse(expr, mode='eval')
+
+    def _ev(node):
+        if isinstance(node, _ast.Expression):
+            return _ev(node.body)
+        if isinstance(node, _ast.BoolOp):
+            vals = [_ev(v) for v in node.values]
+            if isinstance(node.op, _ast.And):
+                return all(vals)
+            return any(vals)
+        if isinstance(node, _ast.UnaryOp) and isinstance(node.op, _ast.Not):
+            return not _ev(node.operand)
+        if isinstance(node, _ast.UnaryOp) and isinstance(node.op, _ast.USub):
+            return -_ev(node.operand)
+        if isinstance(node, _ast.BinOp) and type(node.op) in _SAFE_BINOPS:
+            return _SAFE_BINOPS[type(node.op)](_ev(node.left), _ev(node.right))
+        if isinstance(node, _ast.Compare):
+            left = _ev(node.left)
+            for op, comp in zip(node.ops, node.comparators):
+                right = _ev(comp)
+                if type(op) not in _SAFE_CMPOPS:
+                    raise ValueError(f'不支持的比较符: {type(op).__name__}')
+                if not _SAFE_CMPOPS[type(op)](left, right):
+                    return False
+                left = right
+            return True
+        if isinstance(node, _ast.Name):
+            if node.id in ns:
+                return ns[node.id]
+            if node.id in ('True', 'False', 'None'):
+                return {'True': True, 'False': False, 'None': None}[node.id]
+            raise ValueError(f'未知变量: {node.id}')
+        if isinstance(node, _ast.Attribute):
+            # 只允许在 ns 变量上访问属性（如 item.fabric.primary），禁止 dunder
+            if node.attr.startswith('_'):
+                raise ValueError('禁止访问 dunder/私有属性')
+            obj = _ev(node.value)
+            return getattr(obj, node.attr, '')
+        if isinstance(node, _ast.Constant):
+            return node.value
+        if isinstance(node, (_ast.Tuple, _ast.List)):
+            return tuple(_ev(e) for e in node.elts)
+        raise ValueError(f'不支持的语法节点: {type(node).__name__}')
+
+    return _ev(tree)
 
 
 def _eval_outfit_rule(expr, outfit_items, weather_temp, weather_cond, occasion):

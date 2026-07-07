@@ -33,6 +33,8 @@ wardrobe/enhanced/*_cutout.png
 # Claude
 .claude/
 outfits/*/rating.json
+# 用户私密评分（多用户结构）— 绝不提交到公开仓库
+users/**/rating.json
 tools/wechat_history.json
 tools/wechat_control.log
 outfits/_bline_temp/

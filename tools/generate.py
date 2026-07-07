@@ -206,16 +206,25 @@ def call_seedream(prompt, image_paths, max_images=None):
         'Authorization': f'Bearer {API_KEY}',
     })
 
-    try:
-        with urllib.request.urlopen(req, timeout=600) as resp:
-            return json.loads(resp.read().decode('utf-8'))
-    except urllib.request.HTTPError as e:
-        body = e.read().decode('utf-8')[:500]
-        print(f"❌ API 错误 ({e.code}): {body}")
-        return None
-    except Exception as e:
-        print(f"❌ 请求失败: {e}")
-        return None
+    # 网络抖动/超时/5xx 时重试（4xx 参数错误不重试）
+    last_err = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=600) as resp:
+                return json.loads(resp.read().decode('utf-8'))
+        except urllib.request.HTTPError as e:
+            body = e.read().decode('utf-8')[:500]
+            print(f"❌ API 错误 ({e.code}): {body}")
+            if e.code and 400 <= e.code < 500:
+                return None  # 客户端错误重试无意义
+            last_err = f"HTTP {e.code}"
+        except Exception as e:
+            print(f"❌ 请求失败 (尝试 {attempt+1}/3): {e}")
+            last_err = str(e)
+        if attempt < 2:
+            time.sleep(3 * (attempt + 1))
+    print(f"❌ Seedream 3 次尝试均失败: {last_err}")
+    return None
 
 
 def download_results(result, output_dir, prefix="上身效果"):

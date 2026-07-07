@@ -1026,7 +1026,7 @@ def get_photo_direction(style_ids):
     # 取第一个匹配的风格作为主方向
     d = directions[0]
     return (
-        f"📷 摄影指导（用于 seedream_prompt 创作）：\n"
+        f"📷 摄影指导（HARD LOCK — seedream_prompt 必须忠实还原，不可替换）：\n"
         f"  相机: {d.get('camera', 'Sony A7IV 50mm f/1.4')}\n"
         f"  构图: {d.get('angle', 'low angle, rule of thirds')}\n"
         f"  光影: {d.get('light', 'golden hour backlight, warm rim light')}\n"
@@ -1034,8 +1034,10 @@ def get_photo_direction(style_ids):
         f"  场景: {d.get('scene', 'modern urban street, soft afternoon light')}\n"
         f"  情绪: {d.get('vibe', 'editorial fashion photography, candid energy')}\n"
         f"  表情: natural relaxed expression, slight smile or soft neutral, not stiff editorial blank stare\n"
-        f"  ⚠️ 这些参数要融入 seedream_prompt，但不要逐字复制，要自然改写。\n"
-        f"  ⚠️ 姿势必须动态（禁止 standing），场景必须具体有辨识度。\n"
+        f"  🔒 场景是硬性设定：seedream_prompt 的拍摄地点/环境必须就是上面『场景』描述的地方，"
+        f"严禁替换成其他城市/街道（如北京街道、都市天际线等）——上文的天气仅用于决定穿什么，不是拍摄地点。\n"
+        f"  🔒 相机/胶片/光影/构图同样是硬性设定：必须原样体现（如指定 Kodak Portra 胶片就要写进去），只能润色英文措辞，不能改换器材或风格。\n"
+        f"  ⚠️ 姿势必须动态（禁止 standing），忠实使用上面『姿势』描述的动作。\n"
         f"  🚫 姿势/场景中若出现任何服饰配饰（包/墨镜/帽子/首饰等），一律不得画入——只呈现单品清单里的真实单品。"
     )
 
@@ -2356,7 +2358,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
   "reasoning": "整体搭配理由（100-200字）：搭配逻辑阐述，解释为什么这些单品能组合在一起",
   "rationale": "推荐理由（100-200字）：消费者视角的一段话，从场景/风格/体型/单品特征角度说明为什么这套穿搭适合用户。用自然口语化句子，不编号不要点，强调「穿上为什么好看/合适」。与reasoning区别：reasoning是搭配逻辑，rationale是消费者话术",
   "dressing_tips": ["穿搭技巧1：基于所选单品的独特特征（特定颜色/面料/廓形/品牌设计细节/鞋型/领型），而非通用建议", "穿搭技巧2：必须与技巧1来自不同类别，数组长度1-2"],
-  "seedream_prompt": "英文 Seedream 生图提示词(250-400字符)，必须融合下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情，用自己的语言自然改写。⚡姿势必须动态(禁止standing)，场景必须具体有辨识度。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。🚫【严禁虚构配饰】只能描述上方「单品清单」中真实存在的服饰单品，绝对禁止添加清单中没有的任何包/手袋/斜挎包、帽子、墨镜/眼镜、项链/耳环/手表/首饰、围巾、腰带等配饰——即使摄影指导的姿势里提到手持或佩戴某物，也必须改写成不涉及该物品的动作(如'手插口袋'/'拨头发'/'扶栏杆')。画面中人物携带/佩戴的每一件东西都必须能在单品清单里找到对应ID。{'💇‍♀️💄必须自然融入下方发型与妆容指导中的发型和妆容描述。' if is_female else ''}{'👗必须精确还原下方 Garment Construction Reference 中每件单品的服装构造：领型、袖型、腰线、裙型/裤型、面料质感必须与描述一致，不可随意改变。' if is_female else ''}详细描述服装细节和场景氛围，营造时尚大片的摄影感"{beauty_schema}
+  "seedream_prompt": "英文 Seedream 生图提示词(250-400字符)，必须忠实还原下方📷摄影指导中的相机/构图/光影/姿势/场景/情绪/表情。🔒场景锁定：拍摄地点必须就是摄影指导『场景』写的那个地方，严禁改成其他城市/街道（尤其禁止写成北京街道/都市天际线）；🔒器材锁定：摄影指导指定的相机/胶片/光影必须原样写进 prompt（如 Kodak Portra 400 film look）。你只能润色英文措辞让句子通顺，不能替换地点或器材。⚡姿势必须动态(禁止standing)，用摄影指导『姿势』的具体动作。👟构图必须为全身照(full body shot from head to toe)，确保鞋子完整可见不被裁切。😊表情必须自然松弛（slight smile或relaxed neutral），严禁死板面瘫脸。🚫【严禁虚构配饰】只能描述上方「单品清单」中真实存在的服饰单品，绝对禁止添加清单中没有的任何包/手袋/斜挎包、帽子、墨镜/眼镜、项链/耳环/手表/首饰、围巾、腰带等配饰——即使摄影指导的姿势里提到手持或佩戴某物，也必须改写成不涉及该物品的动作(如'手插口袋'/'拨头发'/'扶栏杆')。画面中人物携带/佩戴的每一件东西都必须能在单品清单里找到对应ID。{'💇‍♀️💄必须自然融入下方发型与妆容指导中的发型和妆容描述。' if is_female else ''}{'👗必须精确还原下方 Garment Construction Reference 中每件单品的服装构造：领型、袖型、腰线、裙型/裤型、面料质感必须与描述一致，不可随意改变。' if is_female else ''}详细描述服装细节和场景氛围，营造时尚大片的摄影感"{beauty_schema}
 }}
 
 注意：
@@ -2378,7 +2380,7 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 📐 面料处理：亚麻的自然褶皱感、丹宁的折痕养成、速干面料的透气穿法"""
 
     sep = chr(10)
-    user_prompt = f"""今天是{today}，北京天气：{temp_high}°C {weather_cond}。
+    user_prompt = f"""今天是{today}。当前天气：{temp_high}°C {weather_cond}（⚠️ 天气只用于判断穿着舒适度，不是拍摄地点；实际拍摄场景以下方📷摄影指导为准）。
 风格需求：「{style_hint}」| 场合：{occasion}{explore_note}
 目标风格参考：
 {sep.join(style_descs)}
@@ -2395,7 +2397,8 @@ def build_creation_prompt(selection, photo_direction, target_styles, style_hint,
 {photo_direction}
 {beauty_context}
 
-─── 请基于以上已确定的单品，输出 JSON 格式的创作内容（keywords/reasoning/rationale/dressing_tips/seedream_prompt{'/beauty_direction' if is_female else ''}）。───"""
+─── 请基于以上已确定的单品，输出 JSON 格式的创作内容（keywords/reasoning/rationale/dressing_tips/seedream_prompt{'/beauty_direction' if is_female else ''}）。
+🔒 再次强调：seedream_prompt 的拍摄场景必须忠实还原上方📷摄影指导的『场景』，相机/胶片/光影必须原样体现，严禁替换成北京街道或其他都市场景。───"""
 
     return {
         'system_prompt': system_prompt,
@@ -2459,20 +2462,44 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
     shoe_count = cat_codes.count('SHOE')
     pt_count = cat_codes.count('PT')
     sh_count = cat_codes.count('SH')
-    top_count = sum(1 for c in cat_codes if c in ('TS', 'LS', 'SHIRT', 'TANK'))
+    skirt_count = cat_codes.count('SKIRT')
+    onepiece_count = sum(1 for c in cat_codes if c in ('DRESS', 'SUIT', 'JMP'))
+    # 上衣品类：含针织衫(KNIT)与女士衬衫(BLOUSE)，与 has_top 口径一致，避免叠穿漏检
+    top_count = sum(1 for c in cat_codes if c in ('TS', 'LS', 'SHIRT', 'TANK', 'KNIT', 'BLOUSE'))
+    # 下装品类：长裤/短裤/半身裙合计
+    bottom_count = pt_count + sh_count + skirt_count
+
     if jk_count > 1:
         violations.append('禁止两件外套')
     if shoe_count > 1:
         violations.append('禁止两双鞋')
-    if top_count > 1:
-        violations.append(f'禁止{top_count}件上衣（只能选1件上衣，不要叠穿长短袖/衬衫）')
-    if pt_count > 1 and sh_count > 0:
-        warnings.append('同时有长裤和短裤，建议只选一种下装')
-    if pt_count > 1 or sh_count > 1:
-        if pt_count > 1:
-            violations.append('禁止两条长裤')
-        if sh_count > 1:
-            violations.append('禁止两条短裤')
+
+    # ── 2.1 一体式单品互斥（连衣裙/套装/连体裤 = 上衣+下装一体）──
+    if onepiece_count > 1:
+        violations.append(f'禁止{onepiece_count}件一体式单品（连衣裙/套装/连体裤只能选1件）')
+    if has_dress or has_suit or has_jmp:
+        # 选了一体式，就不该再出现独立上衣/下装
+        if has_top:
+            violations.append('禁止一体式单品（连衣裙/套装/连体裤）再叠穿独立上衣——连衣裙已含上衣，请去掉上衣或改用分体式')
+        if has_bottom:
+            violations.append('禁止一体式单品（连衣裙/套装/连体裤）再叠穿独立下装——连衣裙已含下装，请去掉下装或改用分体式')
+    else:
+        # ── 2.2 分体式：上衣/下装各不超过1件 ──
+        if top_count > 1:
+            violations.append(f'禁止{top_count}件上衣（只能选1件上衣，不要叠穿长短袖/衬衫/针织衫）')
+        if bottom_count > 1:
+            _parts = []
+            if pt_count > 1:
+                _parts.append(f'{pt_count}条长裤')
+            if sh_count > 1:
+                _parts.append(f'{sh_count}条短裤')
+            if skirt_count > 1:
+                _parts.append(f'{skirt_count}条半身裙')
+            _mix = [n for n, c in (('长裤', pt_count), ('短裤', sh_count), ('半身裙', skirt_count)) if c > 0]
+            if _parts:
+                violations.append(f'禁止{" + ".join(_parts)}（下装只能选1件）')
+            elif len(_mix) > 1:
+                violations.append(f'禁止同时选 {" + ".join(_mix)}（下装只能选1件，长裤/短裤/半身裙三选一）')
 
     # ── 3. 温度硬阻断 ──
     for d in outfit_details:

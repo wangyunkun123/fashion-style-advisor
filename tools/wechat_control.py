@@ -2810,9 +2810,28 @@ def execute_outfit_plan(plan, today, style_hint, user_id=None):
     items = plan.get('items', [])
     item_ids = [it['id'] for it in items]
 
+    # ── 0. 字段兜底：AI 修正重选时可能只回 id/category，缺 name/color ──
+    #    从衣柜档案（真相源）补全，避免因 AI 少回字段导致 KeyError 崩溃
+    def _item_field(it, key):
+        v = it.get(key)
+        if v:
+            return v
+        w = wardrobe.get(it.get('id', ''), {}) or {}
+        if key == 'name':
+            brand = (w.get('brand') or {}).get('name', '') or ''
+            hue = (w.get('color') or {}).get('hue_name', '') or ''
+            fabric = (w.get('fabric') or {}).get('primary', '') or ''
+            parts = [p for p in (brand or '未知', hue, fabric) if p]
+            return '·'.join(parts) if parts else it.get('id', '')
+        if key == 'color':
+            return (w.get('color') or {}).get('hue_name', '') or '—'
+        if key == 'category':
+            return w.get('category', '') or '单品'
+        return it.get(key, '')
+
     # ── 1. 写入 outfit.md ──
     items_table = '\n'.join(
-        f"| {it['category']} | **{it['id']}** | {it['name']} | {it['color']} |"
+        f"| {_item_field(it, 'category')} | **{it.get('id', '?')}** | {_item_field(it, 'name')} | {_item_field(it, 'color')} |"
         for it in items
     )
     outfit_md = f"""---

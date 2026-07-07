@@ -11,13 +11,13 @@
     "friendly_for_pale_skin": true
   },
   "silhouette": {
-    "fit": "宽松",
+    "fit": "紧身",
     "shoulder_effect": "落肩",
-    "torso_effect": "无特殊效果",
+    "torso_effect": "露腰",
     "length_ratio": "短款"
   },
   "pattern": {
-    "type": "文字",
+    "type": "数字",
     "density": "稀疏",
     "logo_visible": false
   },
@@ -32,16 +32,17 @@
   },
   "formality": 2,
   "brand": {
-    "name": "未知",
+    "name": "Cutton on",
     "collection": "",
     "confidence": "未知"
   },
   "style_modifiers": [
     "休闲",
-    "运动"
+    "运动",
+    "韩式"
   ],
   "meta": {
-    "claude_fit_comment": "短款宽松版型，适合休闲运动场景",
+    "claude_fit_comment": "Cutton on深灰色休闲",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -49,7 +50,8 @@
     "运动"
   ],
   "recommended_styles": [
-    "athleisure_sport",
-    "minimalist_monochrome"
+    "韩系潮流",
+    "运动休闲",
+    "意式运动"
   ]
 }

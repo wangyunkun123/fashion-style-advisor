@@ -40,13 +40,15 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "宽松版型，适合日常休闲",
+    "claude_fit_comment": "灰色休闲外套",
     "image_type": "product_shot"
   },
   "occasions": [
     "日常休闲"
   ],
   "recommended_styles": [
-    "clean_fit"
+    "City Boy",
+    "Clean Fit",
+    "极简主义"
   ]
 }

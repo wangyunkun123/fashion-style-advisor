@@ -11,7 +11,7 @@
     "friendly_for_pale_skin": true
   },
   "silhouette": {
-    "fit": "宽松",
+    "fit": "修身",
     "shoulder_effect": "落肩",
     "torso_effect": "无特殊效果",
     "length_ratio": "标准"
@@ -41,11 +41,15 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "基础宽松版型，适合日常穿着",
+    "claude_fit_comment": "淡紫色基础款",
     "image_type": "product_shot"
   },
   "occasions": [
     "日常休闲",
     "居家"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "极简主义"
   ]
 }

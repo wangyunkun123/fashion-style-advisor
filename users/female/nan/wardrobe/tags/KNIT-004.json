@@ -32,7 +32,7 @@
   },
   "formality": 3,
   "brand": {
-    "name": "未知",
+    "name": "CDG",
     "collection": "",
     "confidence": "未知"
   },
@@ -41,10 +41,14 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "经典针织开衫版型，适合日常搭配",
+    "claude_fit_comment": "CDG藏青色学院风针织衫",
     "image_type": "product_shot"
   },
   "occasions": [
     "日常休闲"
+  ],
+  "recommended_styles": [
+    "Clean Fit",
+    "高街暗黑"
   ]
 }

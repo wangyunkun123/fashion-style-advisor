@@ -40,7 +40,7 @@
     "简约"
   ],
   "meta": {
-    "claude_fit_comment": "合身短款，适合日常或运动",
+    "claude_fit_comment": "深灰色简约",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -48,8 +48,10 @@
     "运动"
   ],
   "recommended_styles": [
-    "clean_fit",
-    "athleisure_sport",
-    "minimalist_monochrome"
+    "日系简约",
+    "Clean Fit",
+    "运动休闲",
+    "意式运动",
+    "极简主义"
   ]
 }

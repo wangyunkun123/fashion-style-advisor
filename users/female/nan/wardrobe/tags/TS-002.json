@@ -40,7 +40,7 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "合身版型，适合日常穿着",
+    "claude_fit_comment": "白色基础款",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -48,7 +48,9 @@
     "运动"
   ],
   "recommended_styles": [
-    "athleisure_sport",
-    "minimalist_monochrome"
+    "Clean Fit",
+    "运动休闲",
+    "意式运动",
+    "极简主义"
   ]
 }

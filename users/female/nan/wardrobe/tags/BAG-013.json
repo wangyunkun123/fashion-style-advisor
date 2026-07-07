@@ -4,7 +4,7 @@
   "category_code": "BAG",
   "color": {
     "hue_family": "中性色",
-    "hue_name": "深灰色",
+    "hue_name": "深绿色",
     "saturation": "低饱和",
     "lightness": "中明度",
     "is_neutral": true,
@@ -43,7 +43,7 @@
     "简约"
   ],
   "meta": {
-    "claude_fit_comment": "简约运动托特包，大容量实用，适合日常及运动场景",
+    "claude_fit_comment": "Nike深绿色运动包",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -52,7 +52,10 @@
     "通勤"
   ],
   "recommended_styles": [
-    "athleisure_sport",
-    "clean_fit"
+    "日系简约",
+    "City Boy",
+    "Clean Fit",
+    "街头潮流",
+    "轻熟商务"
   ]
 }

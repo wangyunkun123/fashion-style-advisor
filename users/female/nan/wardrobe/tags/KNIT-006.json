@@ -4,7 +4,7 @@
   "category_code": "KNIT",
   "color": {
     "hue_family": "中性色",
-    "hue_name": "浅灰色",
+    "hue_name": "米色",
     "saturation": "低饱和",
     "lightness": "中明度",
     "is_neutral": true,
@@ -41,7 +41,7 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "直筒版型，适合叠穿或单穿",
+    "claude_fit_comment": "米色简约针织衫",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -49,6 +49,8 @@
     "办公"
   ],
   "recommended_styles": [
-    "clean_fit"
+    "日系简约",
+    "Clean Fit",
+    "极简主义"
   ]
 }

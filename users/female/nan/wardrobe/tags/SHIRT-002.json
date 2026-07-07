@@ -41,7 +41,7 @@
     "商务通勤"
   ],
   "meta": {
-    "claude_fit_comment": "标准合身版型，适配多种场合",
+    "claude_fit_comment": "白色休闲衬衣",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -49,7 +49,8 @@
     "商务办公"
   ],
   "recommended_styles": [
-    "business_casual",
-    "clean_fit"
+    "Clean Fit",
+    "轻熟商务",
+    "极简主义"
   ]
 }

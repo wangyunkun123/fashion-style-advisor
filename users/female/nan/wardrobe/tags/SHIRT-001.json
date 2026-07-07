@@ -4,7 +4,7 @@
   "category_code": "SHIRT",
   "color": {
     "hue_family": "冷色",
-    "hue_name": "灰紫色",
+    "hue_name": "深紫色",
     "saturation": "中低饱和",
     "lightness": "中明度",
     "is_neutral": false,
@@ -32,7 +32,7 @@
   },
   "formality": 3,
   "brand": {
-    "name": "未知",
+    "name": "优衣库",
     "collection": "",
     "confidence": "未知"
   },
@@ -41,11 +41,18 @@
     "随性"
   ],
   "meta": {
-    "claude_fit_comment": "宽松版型，休闲随性，适合日常",
+    "claude_fit_comment": "优衣库深紫色休闲衬衣",
     "image_type": "product_shot"
   },
   "occasions": [
     "日常休闲",
     "通勤"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "Clean Fit",
+    "轻熟商务",
+    "夏日度假",
+    "极简主义"
   ]
 }

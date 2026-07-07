@@ -22,7 +22,7 @@
     "logo_visible": false
   },
   "fabric": {
-    "primary": "棉",
+    "primary": "亚麻",
     "texture": "平纹",
     "weight": "轻薄",
     "seasonality": [
@@ -41,7 +41,7 @@
     "居家"
   ],
   "meta": {
-    "claude_fit_comment": "宽松阔腿版型，穿着舒适",
+    "claude_fit_comment": "浅灰色休闲",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -49,6 +49,8 @@
     "居家"
   ],
   "recommended_styles": [
-    "minimalist_monochrome"
+    "Clean Fit",
+    "夏日度假",
+    "极简主义"
   ]
 }

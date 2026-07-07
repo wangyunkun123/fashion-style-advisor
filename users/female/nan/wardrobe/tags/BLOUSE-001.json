@@ -41,11 +41,15 @@
     "通勤"
   ],
   "meta": {
-    "claude_fit_comment": "宽松版型，条纹元素，休闲通勤皆宜",
+    "claude_fit_comment": "浅蓝色（带深色条纹）休闲女士衬衫",
     "image_type": "product_shot"
   },
   "occasions": [
     "日常休闲",
     "通勤"
+  ],
+  "recommended_styles": [
+    "City Boy",
+    "轻熟商务"
   ]
 }

@@ -43,7 +43,7 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "短款修身长袖上衣，罗纹面料，适合运动或日常穿搭，露出腰腹线条",
+    "claude_fit_comment": "焦糖色运动风长袖上衣",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -51,6 +51,9 @@
     "日常休闲"
   ],
   "recommended_styles": [
-    "athleisure_sport"
+    "Clean Fit",
+    "运动休闲",
+    "意式运动",
+    "极简主义"
   ]
 }

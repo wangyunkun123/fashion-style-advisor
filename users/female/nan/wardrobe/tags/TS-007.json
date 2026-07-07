@@ -4,7 +4,7 @@
   "category_code": "TS",
   "color": {
     "hue_family": "冷色",
-    "hue_name": "浅蓝色",
+    "hue_name": "浅灰色",
     "saturation": "低饱和",
     "lightness": "高明度",
     "is_neutral": false,
@@ -41,7 +41,7 @@
     "休闲"
   ],
   "meta": {
-    "claude_fit_comment": "插肩袖设计，适合运动或休闲场景",
+    "claude_fit_comment": "浅灰色运动风",
     "image_type": "product_shot"
   },
   "occasions": [
@@ -49,6 +49,10 @@
     "日常休闲"
   ],
   "recommended_styles": [
-    "athleisure_sport"
+    "City Boy",
+    "Clean Fit",
+    "运动休闲",
+    "意式运动",
+    "极简主义"
   ]
 }

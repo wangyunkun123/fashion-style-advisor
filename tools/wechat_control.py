@@ -4382,121 +4382,130 @@ def _get_dynamic_mode_styles(mode, user_id=None):
     # ── 6. 判断数据可用性 ──
     has_any_data = bool(style_prefs) or ctx.get('has_clothing') or ctx.get('has_ratings')
 
-    # ── 7. 按模式过滤 ──
+    # ── 6.5. 各模式展示数量上限（收窄，避免"给太多冲淡精准度"）──
+    MODE_LIMIT = {'tweak': 6, 'transform': 8, 'cross': 8}
+    limit = MODE_LIMIT.get(mode, 8)
+
+    # ── 6.6. 衣橱亲和度（全候选算一次，带缓存；用于加权排序）──
+    all_style_ids = [s['id'] for s in styles]
+    _aff_map = {}
+    if ctx.get('has_clothing'):
+        try:
+            _aff_map = _compute_wardrobe_style_affinity(user_id, gender, all_style_ids)
+        except Exception:
+            _aff_map = {}
+
+    def _wardrobe_score(sid):
+        return _aff_map.get(sid, {}).get('avg_score', 0.0)
+
+    # knowledge-only 不参与任何模式
+    def _is_recommendable(sid):
+        return all_fps.get(sid, {}).get('tier') != 'knowledge-only'
+
+    # ── 6.7. 计算三模式的"语义候选集"（用于跨模式互斥）──
+    #    tweak: 用户偏好 + 舒适区（最稳）
+    #    transform: 偏好的 related + 流行趋势（邻接）
+    #    cross: 偏好的 conflicting + 未探索 + 小众（反差）
+    related_set = _related_of(core) if core else set()
+    conflicting_set = _conflicting_of(core) if core else set()
+    popular_set = {s['id'] for s in styles if trend_map.get(s['id']) == 'popular_trend'}
+    niche_set = {s['id'] for s in styles if trend_map.get(s['id']) == 'niche'}
+
+    tweak_core = set(style_prefs) | set(comfort_styles)
+    transform_core = (related_set | popular_set) - tweak_core
+    # cross 占用：conflicting + unexplored + niche，去掉前两模式已占的
+    cross_core = (conflicting_set | set(unexplored_styles) | niche_set) - tweak_core - transform_core
+
+    # ── 7. 按模式选候选 + 加权排序 + 截断 ──
+    #    tier_weight: 语义命中(偏好/related/conflicting) > 趋势命中，同层再按衣橱分排序
     filtered = []
 
     if mode == 'tweak':
-        candidate_ids = set()
-
-        # Tier 1: style_prefs (引导阶段选择的风格)
+        # 候选：偏好 > 舒适区 > (无引导时) 衣橱高分 > classic 兜底
+        cand = set()
         if style_prefs:
-            candidate_ids |= style_prefs
-
-        # Tier 2: comfort_styles (评分舒适区)
+            cand |= style_prefs
         if comfort_styles:
-            candidate_ids |= comfort_styles
+            cand |= comfort_styles
+        if not cand and ctx.get('has_clothing') and _aff_map:
+            top = sorted(_aff_map.items(), key=lambda x: -x[1]['avg_score'])[:limit]
+            cand |= {sid for sid, _ in top}
+        if not cand:
+            cand |= {s['id'] for s in styles if trend_map.get(s['id']) == 'classic'}
 
-        # Tier 3: 衣橱高匹配
-        if ctx.get('has_clothing') and not candidate_ids:
-            all_ids = [s['id'] for s in styles]
-            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
-            top = sorted(aff.items(), key=lambda x: -x[1]['avg_score'])[:5]
-            candidate_ids |= {sid for sid, _ in top}
+        def _tw_weight(sid):
+            w = 2 if sid in style_prefs else (1 if sid in comfort_styles else 0)
+            return w * 1000 + _wardrobe_score(sid)
 
-        # 过滤
-        if candidate_ids:
-            filtered = [s for s in styles if s['id'] in candidate_ids]
-        else:
-            filtered = [s for s in styles if trend_map.get(s['id']) == 'classic']
-
+        picked = [sid for sid in cand if _is_recommendable(sid) and sid not in disliked_styles]
+        picked.sort(key=lambda sid: -_tw_weight(sid))
+        picked = picked[:limit]
+        filtered = [s for s in styles if s['id'] in picked]
+        filtered.sort(key=lambda s: -_tw_weight(s['id']))
         for s in filtered:
             s['comfort_distance'] = 'adjacent'
 
     elif mode == 'transform':
-        candidate_ids = set()
+        # 候选：related + 流行趋势，排除 tweak 已占，排除不喜欢
+        cand = set(transform_core)
+        if not cand and ctx.get('has_clothing') and _aff_map:
+            sorted_aff = sorted(_aff_map.items(), key=lambda x: -x[1]['avg_score'])
+            mid = sorted_aff[3:3 + limit] if len(sorted_aff) > 3 else sorted_aff
+            cand |= {sid for sid, _ in mid}
+        if not cand:
+            cand |= (popular_set - tweak_core)
 
-        # Tier 1: core 的 related_styles
-        if core:
-            candidate_ids |= _related_of(core)
+        def _tr_weight(sid):
+            w = 1 if sid in related_set else 0  # related 优先于纯流行
+            return w * 1000 + _wardrobe_score(sid)
 
-        # Tier 2: popular_trend（排除已在 core 的）
-        candidate_ids |= {s['id'] for s in styles
-                          if trend_map.get(s['id']) == 'popular_trend'
-                          and s['id'] not in core}
-
-        # Tier 3: 衣橱中分匹配
-        if ctx.get('has_clothing') and not candidate_ids:
-            all_ids = [s['id'] for s in styles]
-            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
-            sorted_aff = sorted(aff.items(), key=lambda x: -x[1]['avg_score'])
-            mid = sorted_aff[3:10] if len(sorted_aff) > 3 else sorted_aff
-            candidate_ids |= {sid for sid, _ in mid}
-
-        if candidate_ids:
-            filtered = [s for s in styles if s['id'] in candidate_ids
-                        and s['id'] not in disliked_styles]
-        else:
-            filtered = [s for s in styles if trend_map.get(s['id']) == 'popular_trend']
-
+        picked = [sid for sid in cand
+                  if _is_recommendable(sid) and sid not in disliked_styles and sid not in tweak_core]
+        picked.sort(key=lambda sid: -_tr_weight(sid))
+        picked = picked[:limit]
+        filtered = [s for s in styles if s['id'] in picked]
+        filtered.sort(key=lambda s: -_tr_weight(s['id']))
         for s in filtered:
-            is_related = core and s['id'] in _related_of(core)
-            s['comfort_distance'] = 'step' if is_related else 'adjacent'
+            s['comfort_distance'] = 'step' if s['id'] in related_set else 'adjacent'
 
     elif mode == 'cross':
-        candidate_ids = set()
+        # 候选：conflicting + 未探索 + 小众，排除 tweak/transform 已占，排除不喜欢
+        cand = set(cross_core)
+        if not cand and ctx.get('has_clothing') and _aff_map:
+            sorted_aff = sorted(_aff_map.items(), key=lambda x: x[1]['avg_score'])  # 升序=最不搭
+            cand |= {sid for sid, _ in sorted_aff[:limit]}
+        if not cand:
+            cand |= (niche_set - tweak_core - transform_core)
 
-        # Tier 1: core 的 conflicting_styles
-        if core:
-            candidate_ids |= _conflicting_of(core)
+        def _cr_weight(sid):
+            # conflicting(真反差) 最高，其次 niche(小众)，unexplored 用负衣橱分(越不搭越前)
+            w = 2 if sid in conflicting_set else (1 if sid in niche_set else 0)
+            return w * 1000 - _wardrobe_score(sid)  # 减：跨界偏好衣橱不匹配的
 
-        # Tier 2: unexplored + niche
-        candidate_ids |= set(unexplored_styles)
-        candidate_ids |= {s['id'] for s in styles
-                          if trend_map.get(s['id']) == 'niche'
-                          and s['id'] not in core}
-
-        # Tier 3: 衣橱低分匹配（远距离风格）
-        if ctx.get('has_clothing') and not candidate_ids:
-            all_ids = [s['id'] for s in styles]
-            aff = _compute_wardrobe_style_affinity(user_id, gender, all_ids[:20])
-            sorted_aff = sorted(aff.items(), key=lambda x: x[1]['avg_score'])  # 升序
-            candidate_ids |= {sid for sid, _ in sorted_aff[:5]}
-
-        # 排除不喜欢的
-        candidate_ids -= disliked_styles
-
-        if candidate_ids:
-            filtered = [s for s in styles if s['id'] in candidate_ids]
-        else:
-            filtered = [s for s in styles if trend_map.get(s['id']) == 'niche']
-
+        exclude = tweak_core | transform_core | style_prefs
+        picked = [sid for sid in cand
+                  if _is_recommendable(sid) and sid not in disliked_styles and sid not in exclude]
+        picked.sort(key=lambda sid: -_cr_weight(sid))
+        picked = picked[:limit]
+        filtered = [s for s in styles if s['id'] in picked]
+        filtered.sort(key=lambda s: -_cr_weight(s['id']))
         for s in filtered:
             s['comfort_distance'] = 'leap' if s['id'] in unexplored_styles else 'step'
 
     else:
-        filtered = styles
+        filtered = [s for s in styles if _is_recommendable(s['id'])][:limit]
 
-    # ── 7.5. 过滤 knowledge-only 风格（不参与任何推荐模式）──
-    filtered = [s for s in filtered if all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
-
-    # ── 7.6. 交叉模式排重：大胆跨界不应包含已在 tweak 中展示的风格 ──
-    if mode == 'cross' and core:
-        # 只排除用户显式偏好 (style_prefs)，保留舒适区风格作为跨界候选
-        filtered = [s for s in filtered if s['id'] not in style_prefs]
-
-    # ── 8. 最终兜底：使用小众/未探索风格而非裸奔前N个 ──
+    # ── 8. 最终兜底：无候选时用小众/未探索（不裸奔前N个），也截断 ──
     if not filtered:
-        fallback = [s for s in styles
-                    if trend_map.get(s['id']) == 'niche'
-                    and all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
-        if not fallback:
-            fallback = [s for s in styles
-                        if s['id'] in unexplored_styles
-                        and all_fps.get(s['id'], {}).get('tier') != 'knowledge-only']
-        if not fallback:
-            fallback = [s for s in styles
-                        if all_fps.get(s['id'], {}).get('tier') != 'knowledge-only'][:6]
-        filtered = fallback
+        fallback_ids = [s['id'] for s in styles
+                        if trend_map.get(s['id']) == 'niche' and _is_recommendable(s['id'])]
+        if not fallback_ids:
+            fallback_ids = [s['id'] for s in styles
+                            if s['id'] in unexplored_styles and _is_recommendable(s['id'])]
+        if not fallback_ids:
+            fallback_ids = [s['id'] for s in styles if _is_recommendable(s['id'])]
+        fallback_ids = fallback_ids[:limit]
+        filtered = [s for s in styles if s['id'] in fallback_ids]
 
     # ── 9. 空状态提示 ──
     if not has_any_data:

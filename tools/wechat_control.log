@@ -1,31 +1,10 @@
-[19:36:44] [INFO] =======================================================
-[19:36:44] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
-[19:36:44] [INFO] 📡 服务: http://0.0.0.0:8765
-[19:36:44] [INFO] 💬 面板: http://localhost:8765/
-[19:36:44] [INFO] 🌐 Funnel: 已就绪
-[19:36:44] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
-[19:36:44] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
-[19:38:09] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=326, CT=application/json)
-[19:38:14] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=326, CT=application/json)
-[19:38:19] [INFO] 📨 POST /api/chat?user=nan (Content-Length=32, CT=application/json)
-[19:38:19] [INFO] 💬 聊天: generate | 法式穿搭
-[19:38:19] [INFO] 🚀 管线启动: 法式穿搭
-[19:38:24] [INFO] 🎯 意图解析: occasion=日常 city=默认 ids=[] date_offset=0 new_items=False explore=normal (4570ms)
-[19:38:24] [INFO] 📍 探索度: 微调探索 🧪
-[19:38:27] [INFO] 📍 天气(北京): 35°C 雨
-[19:38:27] [INFO] 📍 场景: '法式穿搭' → occasion=日常 vibe=优雅、慵懒、简约
-[19:38:27] [INFO] 📍 📊 预计 ~60-100s · ~3997 tokens
-[19:38:27] [INFO] 📍 🤖 AI 智能选品
-[19:38:44] [WARN] ⚠️ 验证未通过: ['SHIRT-002: 气温≥35°C禁止长袖上衣', 'SHOE-002: 雨天禁止皮质鞋']
-[19:38:58] [INFO] ✅ 修正后验证通过
-[19:38:58] [INFO] ✅ 验证通过
-[19:38:58] [INFO] 📊 R1 选品评分: 56分 — ⚠️ 评分偏低，建议重新选品
-[19:38:58] [INFO] 📍 ✍️ AI 创作叙事+生图
-[19:39:19] [INFO] ✅ R2 创作完成: seedream_prompt=1089字符, tips=2条, beauty=401字符
-[19:39:19] [INFO] 👤 人物照: 1张（原图）
-[19:39:19] [INFO] ✅ 穿搭方案已创建: /Users/rabbit/Claude code/Fashion/users/female/nan/outfits/2026-07-07_法式穿搭
-[19:39:19] [INFO] 📍 🎨 Seedream AI 生图
-[19:39:19] [INFO] 🎯 女性用户 → 启用 --anchor 锚点生图模式
-[19:39:55] [INFO] 📍 🎨 预压缩生图
-[19:39:55] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
-[19:39:55] [INFO] 📍 📤 推送 + 刷新
+[19:55:21] [INFO] =======================================================
+[19:55:21] [INFO] 👔 Fashion 穿搭助手 — 交互式聊天
+[19:55:21] [INFO] 📡 服务: http://0.0.0.0:8765
+[19:55:21] [INFO] 💬 面板: http://localhost:8765/
+[19:55:21] [INFO] 🌐 Funnel: 已就绪
+[19:55:21] [INFO] 🔄 Watchdog 已启动（超时=300s，间隔=30s）
+[19:55:21] [INFO] 🛡️ 信号处理已注册 (SIGTERM/SIGHUP/SIGINT → 优雅关闭)
+[19:56:07] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=326, CT=application/json)
+[19:56:07] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=403, CT=application/json)
+[19:57:17] [INFO] 📨 POST /api/ratings?user=kun (Content-Length=403, CT=application/json)

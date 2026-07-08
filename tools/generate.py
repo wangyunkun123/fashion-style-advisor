@@ -329,15 +329,34 @@ def main():
     print(f"🔄 Pass 1/2: 基础穿搭（{len(core_images)} 张参考图）")
     print(f"{'─' * 60}")
 
-    # ── 人物身份保持：如果参考图包含人物照，在 prompt 前注入身份保持指令 ──
+    # ── 人物身份保持：插入到场景描述之后、服装描述之前 ──
+    # ⚠️ 不能 prepend 到 prompt 最前面！那样 Seedream 会把参考图背景也一起保留，
+    #    导致后面的场景/光影/构图描述被忽略，照片风格出不来。
+    #    正确做法：场景→身份→服装，场景保持最高权重。
     has_person_ref = any('人物_' in os.path.basename(img) for img in core_images)
     if has_person_ref:
         identity_clause = (
-            f"Image 1 is a reference photo of the person to portray. "
-            f"Preserve their facial identity, skin tone, and body shape — "
-            f"they are the model wearing this outfit. "
+            f"Image 1 is a reference photo — preserve ONLY the person's facial features, "
+            f"skin tone, and body shape. Do NOT preserve the background, lighting, or pose "
+            f"from image 1 — use the scene, lighting, and pose described in the prompt. "
         )
-        prompt = identity_clause + prompt
+        # 找到服装描述起始位置，在它前面插入身份保持
+        # 匹配 "wearing/wears/dressed in" 关键词定位服装描述段
+        import re as _re
+        _wear_match = (
+            _re.search(r'\bwearing\b', prompt) or
+            _re.search(r'\bwears\b', prompt) or
+            _re.search(r'\bdressed in\b', prompt)
+        )
+        if _wear_match:
+            _idx = _wear_match.start()
+            # 切除尾部逗号/空格，干净插入
+            _before = prompt[:_idx].rstrip(', ')
+            _after = prompt[_idx:]
+            prompt = _before + '. ' + identity_clause + 'The person is ' + _after
+        else:
+            # 兜底：找不到服装关键词就追加到末尾（好过 prepend 覆盖场景）
+            prompt = prompt + '. ' + identity_clause
 
     start = time.time()
     result1 = call_seedream(prompt, core_images)

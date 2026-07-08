@@ -6709,7 +6709,6 @@ else{{document.getElementById('status').innerHTML='❌ '+d.error;}}
                     try:
                         _uid2 = getattr(self, 'user_id', 'default')
                         if _uid2 and _uid2 != 'default':
-                            from common import resolve_user_dir
                             _prof = os.path.join(resolve_user_dir(_uid2), 'profile.json')
                             if os.path.exists(_prof):
                                 with open(_prof) as _pf:

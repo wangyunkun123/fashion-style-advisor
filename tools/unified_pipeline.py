@@ -2596,7 +2596,7 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
         # ≥28°C 禁止纯秋冬面料（羊毛/灯芯绒/羊绒/呢子/厚针织）
         winter_fabrics = ['羊毛', '灯芯绒', '羊绒', '呢子', '羊毛混纺', '厚针织', '抓绒']
         is_winter_fabric = any(w in fabric_primary for w in winter_fabrics)
-        is_winter_weight = fabric_weight in ('厚', '中厚', '加厚')
+        is_winter_weight = fabric_weight in ('厚', '加厚')  # 中厚（如牛仔）夏天正常穿，只禁真正的厚料
         is_cold_season = seasonality and all(s in ('秋', '冬') for s in seasonality)
 
         if temp_high >= 28:

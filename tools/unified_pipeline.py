@@ -300,7 +300,7 @@ STYLE_PHOTO_MAP = {
         'camera': 'Sony A7IV 50mm f/1.4, clean neutral rendering, soft muted grade',
         'angle': 'eye-level, clean centered framing, silhouette-forward composition',
         'light': 'soft even studio-daylight, neutral shadow, calm illumination',
-        'pose': 'standing relaxed in a fluid oversized silhouette, hands loose at sides, calm neutral gaze, unposed ease',
+        'pose': 'walking slowly through the space, weight shifting fluidly from one foot to the other, hands brushing lightly against clothing fabric, calm unposed movement',
         'scene': 'minimalist concrete-and-white gallery space, soft diffused light, single sculptural bench, uncluttered negative space',
         'vibe': 'genderless fluidity, silhouette-over-labels calm, quiet contemporary neutrality',
     },
@@ -1037,7 +1037,7 @@ def get_photo_direction(style_ids):
         f"  🔒 场景是硬性设定：seedream_prompt 的拍摄地点/环境必须就是上面『场景』描述的地方，"
         f"严禁替换成其他城市/街道（如北京街道、都市天际线等）——上文的天气仅用于决定穿什么，不是拍摄地点。\n"
         f"  🔒 相机/胶片/光影/构图同样是硬性设定：必须原样体现（如指定 Kodak Portra 胶片就要写进去），只能润色英文措辞，不能改换器材或风格。\n"
-        f"  ⚠️ 姿势必须动态（禁止 standing），忠实使用上面『姿势』描述的动作。\n"
+        f"  ⚠️ 姿势必须动态（禁止静态站立）：如果上面姿势以 standing 开头，必须改写为动态动作（walking / shifting weight / mid-stride / leaning / reaching / adjusting clothing），但要保留姿势中的情绪、手部动作和视线方向。\n"
         f"  🚫 姿势/场景中若出现任何服饰配饰（包/墨镜/帽子/首饰等），一律不得画入——只呈现单品清单里的真实单品。"
     )
 
@@ -1719,6 +1719,15 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
         best_style = max(style_matches.values(), key=lambda x: x['score']) if style_matches else {'score': 0, 'is_key': False}
         best_style_id = max(style_matches, key=lambda x: style_matches[x]['score']) if style_matches else '—'
 
+        # 各目标风格的独立匹配分（2026-07-08：按风格分列显示，避免 MAX 聚合虚假高分）
+        per_style_scores = {}
+        for sid in target_styles[:3]:
+            entry = style_matches.get(sid, {})
+            per_style_scores[sid] = {
+                'score': entry.get('score', 0) if isinstance(entry, dict) else 0,
+                'is_key': entry.get('is_key', False) if isinstance(entry, dict) else False,
+            }
+
         cats[cat].append({
             'id': cid,
             'brand': ((item.get('brand') or {}).get('name') or '—')[:20],
@@ -1730,6 +1739,7 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
             'style_score': best_style['score'],
             'style_key': best_style['is_key'],
             'best_style': best_style_id,
+            'per_style_scores': per_style_scores,  # NEW: {sid: {score, is_key}}
             'scene_fit': scene_fit['score'],
             'scene_reason': scene_fit['reason'],
             'freshness': freshness,
@@ -1815,22 +1825,43 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
     cat_order = ['短袖上衣', '长袖上衣', '衬衣', '背心', '外套', '针织衫', '连衣裙', '套装',
                  '长裤', '短裤', '短裙', '半身裙',
                  '鞋子', '帽子', '包', '墨镜', '手部配饰', '袜子']
+
+    # 生成短标签（截断 10 字符，去下划线）
+    style_short_labels = []
+    for sid in target_styles[:3]:
+        label = sid.replace('_', ' ')[:10]
+        style_short_labels.append(label)
+
     lines = []
     for cat in cat_order:
         if cat not in cats:
             continue
         lines.append(f'## {cat}')
-        # 合并评分列：风格40% + 场景30% + 新鲜30% → 综合分
-        lines.append('| ID | 品牌 | 颜色·面料 | 场景用途 | 综合 | 冷却 |')
-        lines.append('|-----|------|----------|---------|------|------|')
+        # 按风格分列显示：每个目标风格独立一列
+        header_cols = ' | '.join(style_short_labels)
+        lines.append(f'| ID | 品牌 | 颜色·面料 | 场景用途 | {header_cols} | 冷却 |')
+        lines.append(f'|-----|------|----------|---------|{"|".join("---:" for _ in style_short_labels)}|------|')
         for it in sorted(cats[cat], key=lambda x: -x['style_score']):
             brand = it['brand']
             if it['collection']:
                 brand += ' ' + it['collection']
-            # 综合分 = 风格×0.4 + 场景×0.3 + 新鲜×0.3
-            composite = int(it['style_score'] * 0.4 + it['scene_fit'] * 0.3 + it['freshness'] * 0.3)
-            key_mark = '⭐' if it['style_key'] else ''
-            comp_str = f'{composite}{key_mark}'
+            # 各风格得分
+            score_cells = []
+            for sid in target_styles[:3]:
+                ps = it['per_style_scores'].get(sid, {})
+                s = ps.get('score', 0)
+                is_key = ps.get('is_key', False)
+                if s >= 40:
+                    cell = f'**{s}**{"⭐" if is_key else ""}'
+                elif s >= 20:
+                    cell = f'{s}'
+                elif s > 0:
+                    cell = f'*{s}*'
+                else:
+                    cell = '—'  # 0 = 完全不适配，醒目显示
+                score_cells.append(cell)
+            score_str = ' | '.join(score_cells)
+
             cd = it['cooldown']
             if cd['status'] == 'sameday_blocked':
                 cd_str = '🚫同天'
@@ -1844,7 +1875,7 @@ def build_wardrobe_table(target_styles, occasion, recent_outfits, banned_items,
                 cd_str = '🟢'
             lines.append(
                 f'| {it["id"]} | {brand[:22]} | {it["color"]}·{it["fabric"][:8]} | '
-                f'{it["scenes"][:12]} | {comp_str:>4} | {cd_str} |'
+                f'{it["scenes"][:12]} | {score_str} | {cd_str} |'
             )
         lines.append('')
 
@@ -2148,13 +2179,14 @@ def build_enhanced_prompt(style_hint, occasion='日常', temp_high=30, weather_c
     quality_checklist = f"""⚠️ 推荐质量检查（请在选品时逐项确认）：
 □ 核心单品齐全：{'女士：连衣裙/套装/连体裤+鞋子（一体式） 或 上衣+下装/半身裙+鞋子（分体式）' if is_female else '上衣+下装+鞋子（或连衣裙+鞋子），缺一不可'}
 □ 配色协调：无红绿/橙蓝等冲突撞色，整体色调统一
-□ 风格连贯：每件单品对目标风格的匹配分 ≥ 30
+□ 风格连贯：每件核心单品对至少一个目标风格的匹配分 ≥ 30（表格中显示为 — 的单品表示对该风格完全不适配，严禁选用！）
 □ 廓形平衡：上宽下窄 或 外松内紧，避免全身同宽
 □ 体型修饰：{persona_desc}
 {persona_modifier}
 □ 面料匹配场景：夏季上衣→透气(棉/麻/速干)，运动→速干，下装/鞋/配件不受面料限制
 □ 衬肤色：根据用户肤色选择合适颜色
 {'''□ ⚠️ 一体式单品规则：选了连衣裙(DRESS)/套装(SUIT)/连体裤(JMP)后，禁止再选裤子/裙子/上衣，只需鞋子+配件''' if is_female else ''}
+□ 📊 风格分列解读：**粗体**=高分匹配(≥40) ⭐=核心件 | 普通=一般(20-39) | *斜体*=勉强(1-19) | — = 完全不适配(0分) — 选品时优先选粗体列多的单品
 """
 
     # ── 10. 组装 system prompt ──

@@ -28,3 +28,8 @@
 [11:17:14] [INFO] 📍 🎨 预压缩生图
 [11:17:14] [INFO] 📐 预压缩: 1 张 900w JPEG（上身效果）
 [11:17:14] [INFO] 📍 📤 推送 + 刷新
+[11:17:20] [INFO] 📤 Git push 成功 (尝试 1/3)
+[11:17:20] [INFO] 📱 主原型: 重建
+[11:17:24] [INFO] 📤 后台推送完成: 都市通勤穿搭
+[11:17:26] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=120, CT=application/json)
+[11:18:52] [INFO] 📨 POST /api/ratings?user=nan (Content-Length=120, CT=application/json)

@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-07-08T03:16:29Z",
+  "user_id": "nan",
+  "items_used": [
+    "TS-005",
+    "SKIRT-006",
+    "SHOE-002"
+  ],
+  "style_matched": "都市通勤、极简",
+  "occasion": "通勤",
+  "explore_level": 0.5,
+  "user_tap": null,
+  "user_rating": null,
+  "user_wore": null,
+  "generation_time_ms": 68968,
+  "api_calls": 3
+}

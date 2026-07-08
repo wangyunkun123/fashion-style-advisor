@@ -2544,13 +2544,19 @@ def validate_outfit(items, occasion='日常', temp_high=30, weather_cond='晴', 
             if temp_high >= 25:
                 violations.append(f'{cid}: 运动场景+气温≥25°C禁止长袖/衬衫')
 
-        # ≥35°C 禁长袖上衣
+        # ≥35°C 禁长袖上衣（但轻薄面料除外：雪纺/丝绸/亚麻/棉麻/薄棉）
         if temp_high >= 35 and cat in ('LS', 'SHIRT'):
-            violations.append(f'{cid}: 气温≥35°C禁止长袖上衣')
+            light_fabrics = ['雪纺', '丝绸', '亚麻', '棉麻', '薄棉', '真丝', '蕾丝', '网纱', '莫代尔']
+            is_light = any(lf in fabric for lf in light_fabrics)
+            if not is_light:
+                violations.append(f'{cid}: 气温≥35°C禁止长袖上衣（轻薄面料除外）')
 
-        # ≥35°C 禁止任何外套
+        # ≥35°C 禁止外套（但轻薄面料除外：亚麻/棉麻/雪纺/丝绸/薄棉）
         if temp_high >= 35 and cat == 'JK':
-            violations.append(f'{cid}: 气温≥35°C禁止外套')
+            light_jk_fabrics = ['亚麻', '棉麻', '雪纺', '丝绸', '真丝', '薄棉', '蕾丝', '网纱', '莫代尔', '天丝']
+            is_light_jk = any(lf in fabric for lf in light_jk_fabrics)
+            if not is_light_jk:
+                violations.append(f'{cid}: 气温≥35°C禁止外套（轻薄面料除外）')
 
         # ≥32°C 禁止靴子
         if temp_high >= 32 and cat == 'SHOE' and '靴' in fabric:

@@ -3509,7 +3509,7 @@ def _run_pipeline_impl(style_hint, task_id=None, user_id=None):
                 if not passed2:
                     log(f"⚠️ 修正后仍不通过: {violations2}", "WARN")
                     # 检查是否有致命违规（场景/天气相关），有则中止管线
-                    critical_keywords = ['运动场景', '避雷品类', '禁止', '缺少']
+                    critical_keywords = ['运动场景', '避雷品类', '禁止', '缺少', '风格匹配', '指定风格']
                     critical = [v for v in violations2 if any(kw in v for kw in critical_keywords)]
                     if critical:
                         err_msg = f"AI 修正后仍有{len(critical)}项致命违规，中止管线: {'; '.join(critical)}"
